@@ -612,55 +612,75 @@ function createCookieSettings() {
     /* cookieSettings.style.opacity = "0"; */
     /* bannerContent.setAttribute("class","cookie-settingsContainer");
     bannerContent.setAttribute("title", "Cookie Settings"); */
-    let lang = window.lang = document.querySelector("html").getAttribute("lang");
-    let policy;
 
 
-    if (getCookie("region") == "da-DK" || lang != null && lang == "da" || lang == "da-DK") {
-        if (typeof window.INT.policy_link === "object") {
-            policy = "<a href='" + window.INT.policy_link.url + "' target='" + window.INT.policy_link.target + "' class='cookie-settings__privacyLink'>Vores privat og cookie politik</a>"
-        } else if (typeof window.INT.policy_link === "string") {
-            policy = "<a href='" + window.INT.policy_link + "' class='cookie-settings__privacyLink'>Vores privat og cookie politik</a>";
+
+
+
+/* - - - Set the language dependent messages */
+
+    const lang = window.lang = document.querySelector("html").getAttribute("lang");
+    const region = getCookie("region");
+    const messages = {
+        danish: "Ved at acceptere alle cookies understøtter du " + document.domain + " med at udvikle en bedre løsning til dig.</p><p>Vælg om du vil tillade kun de nødvendige cookies eller om du vil tillade alle cookies.",
+        german: "Wenn Sie auf akzeptieren klicken, unterstützen Sie " + document.domain + " bei der Weiterentwicklung von unserer Webseite.</p><p>Wählen Sie zwischen allen Cookies akzeptieren oder ob Sie nur notwendige cookies unterstützen wollen.",
+        english: "By accepting all cookies, you support "+ document.domain +" in developing a better solution for you. </p><p> Select whether you want to allow only the necessary cookies or whether you want to allow all cookies."
+    };
+    const messageWrapStart = "<div class='cookie-settings__contentConatiner'><p>";
+    const messageWrapEnd = "</p></div>";
+
+    function generatePolicyUrl(policy_link_text) {
+        let url = "";
+        if(typeof window.INT.policy_link === 'undefined') {
+            console.log("Error: Policy URL has not been defined.");
+            return;
         }
-
-        message = "<div class='cookie-settings__contentConatiner'><p>Ved at acceptere alle cookies understøtter du " + document.domain + " med at udvikle en bedre løsning til dig.</p>" +
-            "<p>Vælg om du vil tillade kun de nødvendige cookies eller om du vil tillade alle cookies.</p></div>" + policy;
-        cookieBtn = '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">Accepter alle</button>' +
-            '<button class="cookie-settings__btn nesse">Kun nødvendige cookies</button>';
-    } else if (getCookie("region") == "de-DE" || lang != null && lang == "de-DE" || lang == "de") {
         if (typeof window.INT.policy_link === "object") {
-            policy = "<a href='" + window.INT.policy_link.url + "' target='" + window.INT.policy_link.target + "' class='cookie-settings__privacyLink'>Unsere Datenschutz Erklährung und Cookie politik</a>"
+            url = "<a href='" + window.INT.policy_link.url + "' target='" + window.INT.policy_link.target + "' class='cookie-settings__privacyLink'>"+ policy_link_text +"</a>"
         } else if (typeof window.INT.policy_link === "string") {
-            policy = "<a href='" + window.INT.policy_link + "' class='cookie-settings__privacyLink'>Unsere Datenschutz Erklährung und Cookie politik</a>";
+            url = "<a href='" + window.INT.policy_link + "' class='cookie-settings__privacyLink'>"+ policy_link_text +"</a>";
         }
-
-        message = "<div class='cookie-settings__contentConatiner'><p>Wenn Sie auf akzeptieren klicken, unterstützen Sie " + document.domain + " bei der Weiterentwicklung von unserer Webseite.</p>" +
-            "<p>Wählen Sie zwischen allen Cookies akzeptieren oder ob Sie nur notwendige cookies unterstützen wollen.</p></div>" + policy;
-        cookieBtn = '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">Alle akzeptieren</button>' +
-            '<button class="cookie-settings__btn nesse">Nur notwendige cookies</button>';
-    } else if (getCookie("region") == "en-GB" || lang != null && lang == "en" || lang == "en-GB" || lang == "en-US") {
-        if (typeof window.INT.policy_link === "object") {
-            policy = "<a href='" + window.INT.policy_link.url + "' target='" + window.INT.policy_link.target + "' class='cookie-settings__privacyLink'>Our Privacy and cookie Policy</a>"
-        } else if (typeof window.INT.policy_link === "string") {
-            policy = "<a href='" + window.INT.policy_link + "' class='cookie-settings__privacyLink'>Our Privacy and cookie Policy</a>";
-        }
-
-        message = "<div class='cookie-settings__contentConatiner'><p>By accepting all cookies, you support "+ document.domain +" in developing a better solution for you. </p> "+
-        "<p> Select whether you want to allow only the necessary cookies or whether you want to allow all cookies.</p></div>" + policy;
-        cookieBtn = '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">Allow all</button>' +
-            '<button class="cookie-settings__btn nesse">Necessary cookies only</button>';
-    } else {
-        if (typeof window.INT.policy_link === "object") {
-            policy = "<a href='" + window.INT.policy_link.url + "' target='" + window.INT.policy_link.target + "' class='cookie-settings__privacyLink'>Vores privat og cookie politik</a>"
-        } else if (typeof window.INT.policy_link === "string") {
-            policy = "<a href='" + window.INT.policy_link + "' class='cookie-settings__privacyLink'>Vores privat og cookie politik</a>";
-        }
-
-        message = "<div class='cookie-settings__contentConatiner'><p>Ved at acceptere alle cookies understøtter du " + document.domain + " med at udvikle en bedre løsning til dig.</p>" +
-            "<p>Vælg om du vil tillade kun de nødvendige cookies eller om du vil tillade alle cookies.</p></div>" + policy;
-        cookieBtn = '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">Accepter alle</button>' +
-            '<button class="cookie-settings__btn nesse">Kun nødvendige cookies</button>';
+        return url;
     }
+    function generateCookieButtons(allCookiesText,necessaryCookiesText) {
+        return '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">'+ allCookiesText +'</button>' 
+        + '<button class="cookie-settings__btn nesse">' + necessaryCookiesText + '</button>';
+    }
+
+
+    if (region === "da-DK" || lang != null && lang === "da" || lang === "da-DK") {
+        message = 
+            messageWrapStart 
+            + messages.danish 
+            + messageWrapEnd 
+            + generatePolicyUrl('Vores privat og cookie politik');
+        cookieBtn = generateCookieButtons('Accepter alle','Kun nødvendige cookies');
+    } else if (region === "de-DE" || lang != null && lang === "de-DE" || lang === "de") {
+        message = messageWrapStart 
+            + messages.german 
+            + messageWrapEnd 
+            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
+        cookieBtn = generateCookieButtons('Alle akzeptieren','Nur notwendige cookies');
+    } else if (region === "en-GB" || lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
+        message = 
+            messageWrapStart 
+            + messages.english 
+            + messageWrapEnd 
+            + generatePolicyUrl('Our Privacy and cookie Policy');
+        cookieBtn = generateCookieButtons('Allow all', 'Necessary cookies only');
+    } else {
+        /* Default */
+        message = 
+            messageWrapStart 
+            + messages.danish 
+            + messageWrapEnd 
+            + generatePolicyUrl('Vores privat og cookie politik');
+        cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies');
+    }
+
+
+
+    
 
     let cookieColor = window.INT.settings === undefined || window.INT.settings.color === undefined || window.INT.settings.color === "" ? "rgba(0, 51, 153, 1)" : window.INT.settings.color;
     let cookieLogo = window.INT.settings === undefined || window.INT.settings.logo === undefined || window.INT.settings.logo === "" ? "https://img.icons8.com/ios-filled/50/000000/cookie.png" : window.INT.settings.logo;
