@@ -20,7 +20,7 @@ const INT = window.INT = {
 const allowAllCookieName = "__all__cookies";
 const essentialsCookieName = "__essential__cookies";
 const blockTrackingCookies = "__hideTrackingCookies";
-const blockAdvertismentCookies = "__hideAdvertismentCookies";
+const blockAdvertismentCookies = "__hideAdvertisementCookies";
 const head = document.querySelector("head");
 
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
@@ -772,8 +772,8 @@ window.addEventListener("DOMContentLoaded", function () {
 
         var cookiesOn = getCookie(cookieName);
 
-        if(document.querySelector(".intastellarCookieBanner__accpetAll") != null || document.querySelector(".intastellarCookieBanner__accpetAll") != undefined){
-            document.querySelector(".intastellarCookieBanner__accpetAll").addEventListener("click", function () {
+        if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
+            document.querySelector(".intastellarCookieBanner__acceptAll").addEventListener("click", function () {
                 var cV = 0;
 
                 document.cookie =
@@ -837,8 +837,8 @@ window.addEventListener("DOMContentLoaded", function () {
         } else if (cookiesOn == "no-set") {
         }
 
-        if(document.querySelector(".intastellarCookieBanner__accpetAll") != null || document.querySelector(".intastellarCookieBanner__accpetAll") != undefined){
-            document.querySelector(".intastellarCookieBanner__accpetAll").addEventListener("click", function () {
+        if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
+            document.querySelector(".intastellarCookieBanner__acceptAll").addEventListener("click", function () {
                 var cV = 1;
                 document.cookie =
                     hideCookieBannerName+"=1; expires=" + cookieLifeTime +
@@ -870,8 +870,8 @@ window.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        if(document.querySelector(".intastellarCookieBanner__accpetAll") != null || document.querySelector(".intastellarCookieBanner__accpetAll") != undefined){
-            document.querySelector(".intastellarCookieBanner__accpetNecssery").addEventListener("click", function () {
+        if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
+            document.querySelector(".intastellarCookieBanner__acceptNecessary").addEventListener("click", function () {
                 var cV = 1;
                 document.cookie =
                     hideCookieBannerName+"=1; expires=" + cookieLifeTime +
@@ -896,7 +896,7 @@ window.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        if(document.querySelector(".intastellarCookieBanner__accpetAll") != null || document.querySelector(".intastellarCookieBanner__accpetAll") != undefined){
+        if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
             const configBtn = document.querySelectorAll(".cookie-settingsContainer");
             const config = document.querySelectorAll(".config");
 
