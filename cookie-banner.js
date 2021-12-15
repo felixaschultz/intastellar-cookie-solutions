@@ -1,3 +1,11 @@
+/*
+ *  Intastellar Cookie Banner
+ *  intastellarsolutions.com/gdpr-cookiebanner
+ *  @copy 2021 intastellarsolutions.com
+ *
+*/ 
+
+/* - - - Setup - - - */
 const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
 const settingsCheckboxes = document.querySelectorAll(".cookie-settings-checkbox");
 const cookieName = "__inta_ac_cookie";
@@ -771,6 +779,8 @@ window.addEventListener("DOMContentLoaded", function () {
         }
 
         var cookiesOn = getCookie(cookieName);
+
+
 
         if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
             document.querySelector(".intastellarCookieBanner__acceptAll").addEventListener("click", function () {
