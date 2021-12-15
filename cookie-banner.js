@@ -11,6 +11,8 @@ const settingsCheckboxes = document.querySelectorAll(".cookie-settings-checkbox"
 const cookieName = "__inta_ac_cookie";
 const hideCookieBannerName = "__inta";
 const analytic = "__inta__analytics";
+const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
+
 
 const INT = window.INT = {
     key: "",
@@ -782,8 +784,8 @@ window.addEventListener("DOMContentLoaded", function () {
 
 
 
-        if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
-            document.querySelector(".intastellarCookieBanner__acceptAll").addEventListener("click", function () {
+        if(button__acceptAll != null || button__acceptAll != undefined){
+            button__acceptAll.addEventListener("click", function () {
                 var cV = 0;
 
                 document.cookie =
@@ -847,8 +849,8 @@ window.addEventListener("DOMContentLoaded", function () {
         } else if (cookiesOn == "no-set") {
         }
 
-        if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
-            document.querySelector(".intastellarCookieBanner__acceptAll").addEventListener("click", function () {
+        if(button__acceptAll != null || button__acceptAll != undefined){
+            button__acceptAll.addEventListener("click", function () {
                 var cV = 1;
                 document.cookie =
                     hideCookieBannerName+"=1; expires=" + cookieLifeTime +
@@ -880,8 +882,8 @@ window.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
-            document.querySelector(".intastellarCookieBanner__acceptNecessary").addEventListener("click", function () {
+        if(button__acceptAll != null || button__acceptAll != undefined){
+            button__acceptAllsary").addEventListener("click", function () {
                 var cV = 1;
                 document.cookie =
                     hideCookieBannerName+"=1; expires=" + cookieLifeTime +
@@ -906,8 +908,8 @@ window.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        if(document.querySelector(".intastellarCookieBanner__acceptAll") != null || document.querySelector(".intastellarCookieBanner__acceptAll") != undefined){
-            const configBtn = document.querySelectorAll(".cookie-settingsContainer");
+        if(button__acceptAll != null || button__acceptAll != undefined){
+            button__acceptAllContainer");
             const config = document.querySelectorAll(".config");
 
             const ness = document.querySelector(".nesse");
