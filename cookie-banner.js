@@ -40,7 +40,7 @@ const notExternalCookies = [
     "_visit_opt",
     "region",
     "PHPSESSID",
-    cookieName,
+    int_cookieName,
     int_hideCookieBannerName
 ];
 const noCookies = new RegExp(notExternalCookies.join("|"), "i");
@@ -121,7 +121,7 @@ function checkCookieStatus() {
     const reg = new RegExp(expression);
     const notRequired = new RegExp(findScripts.join("|"), "ig");
     const allowAnalytics = new RegExp(allowAna.join("|"), "i");
-    const dc = getCookie(cookieName);
+    const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(analytic);
     const thirdC = getCookie("_vis_opt");
 
@@ -548,7 +548,7 @@ function listCookies() {
 } */
 
 function allCookiesAllowed(){
-    if(getCookie(cookieName) == allowAllCookieName){
+    if(getCookie(int_cookieName) == allowAllCookieName){
         return true;
     }else{
         return false;
@@ -710,7 +710,7 @@ function createCookieSettings() {
         cookieSize = "25%";
     }
     s.innerHTML = ".cookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .cookie-settings__btn.--bg{background: "+cookieColor+" !important;color: #fff !important;} .cookie-settings__btn.--bg:hover{background: "+brightColor+" !important;}.cookie-settings__close:hover{background: "+brightColor+" !important;} .cookie-settings__privacyLink{color: "+cookieColor+" !important;}.cookie-settings__content p{color: "+cookieTextColor+" !important;}.cookie-settings__intHeader{color:"+cookieTextColor+" !important;}.cookie-settings__container{background-color: "+backgroundColor+" !important;} .cookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}"+withText;
-    document.intHead.appendChild(s);
+    intHead.appendChild(s);
 
     cookieSettingsContent.setAttribute("class", "cookie-settings__content");
     /* <button class="analytics">Analytics</button> */
@@ -806,7 +806,7 @@ window.addEventListener("DOMContentLoaded", function () {
             elem.style.display = "block";
         }
 
-        var cookiesOn = getCookie(cookieName);
+        var cookiesOn = getCookie(int_cookieName);
 
 
 
@@ -820,7 +820,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     domain +
                     "";
                 document.cookie =
-                    cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
+                    int_cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -867,7 +867,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 document.body.style.overflow = "auto";
             }
         } else if (cookiesOn == allowAllCookieName) {
-            document.cookie = cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
+            document.cookie = int_cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
                 "; path=/; domain=." +
                 domain +
                 "";
@@ -884,7 +884,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     domain +
                     "";
                 document.cookie =
-                    cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
+                    int_cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -917,7 +917,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     domain +
                     "";
                     document.cookie =
-                    cookieName+"="+essentialsCookieName+"; expires=" + cookieLifeTime +
+                    int_cookieName+"="+essentialsCookieName+"; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -973,7 +973,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         domain +
                         "";
                         document.cookie =
-                        cookieName+"=analytics; expires=" + cookieLifeTime +
+                        int_cookieName+"=analytics; expires=" + cookieLifeTime +
                         "; path=/; domain=." +
                         domain +
                         "";
@@ -998,7 +998,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     domain +
                     "";
                     document.cookie =
-                    cookieName+"="+essentialsCookieName+"; expires=" + cookieLifeTime +
+                    int_cookieName+"="+essentialsCookieName+"; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -1024,7 +1024,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         domain +
                         "";
                     document.cookie =
-                        cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
+                        int_cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
                         "; path=/; domain=." +
                         domain +
                         "";
@@ -1086,7 +1086,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     domain +
                     "";
                     document.cookie =
-                    cookieName+"="+essentialsCookieName+"; expires=" + cookieLifeTime +
+                    int_cookieName+"="+essentialsCookieName+"; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -1111,7 +1111,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         domain +
                         "";
                     document.cookie =
-                        cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
+                        int_cookieName+"="+allowAllCookieName+"; expires=" + cookieLifeTime +
                         "; path=/; domain=." +
                         domain +
                         "";
