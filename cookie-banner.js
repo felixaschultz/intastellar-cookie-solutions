@@ -565,7 +565,7 @@ function createCookieSettings() {
 
     const moreSettings = document.createElement("article");
     const moreSettingsContent = document.createElement("section");
-    const moreintHeader = document.createElement("intHeader");
+    const moreintHeader = document.createElement("header");
     const moreContentText = document.createElement("section");
     const moreFooter = document.createElement("footer");
 
