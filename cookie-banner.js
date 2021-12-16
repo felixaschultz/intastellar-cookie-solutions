@@ -753,7 +753,7 @@ function generatePolicyUrl(policy_link_text) {
 }
 function generateCookieButtons(allCookiesText,necessaryCookiesText) {
     return '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">'+ allCookiesText +'</button>' 
-    + '<button class="cookie-settings__btn nesse">' + necessaryCookiesText + '</button>';
+    + '<button class="cookie-settings__btn intastellarCookieBanner__accpetNecssery">' + necessaryCookiesText + '</button>';
 }
 
 /* - - - END - - - */
@@ -939,7 +939,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
             const config = document.querySelectorAll(".config");
 
-            const ness = document.querySelector(".nesse");
+            const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
             const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
 
             const analyticsBTN = document.querySelector(".analytics");
@@ -990,31 +990,32 @@ window.addEventListener("DOMContentLoaded", function () {
                 })
             }
 
-            ness.addEventListener("click", function(){
-                var cV = 1;
-                document.cookie =
-                    int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
-                    "";
+            ness.forEach((n) => {
+                n.addEventListener("click", function () {
+                    var cV = 1;
                     document.cookie =
-                    int_cookieName+"="+essentialsCookieName+"; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
-                    "";
-                document.cookie =
-                    "_vis_opt=" +
-                    cV +
-                    "; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
-                    "";
-                document.cookie = analytic+"=no;expires="+cookieLifeTime+";path=/;domain=."+domain+"";
-                document.body.style.overflow = "auto";
-                slideUp(".intastellarCookieBanner");
-                window.location.reload();
+                        int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
+                        "; path=/; domain=." +
+                        domain +
+                        "";
+                    document.cookie =
+                        int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
+                        "; path=/; domain=." +
+                        domain +
+                        "";
+                    document.cookie =
+                        "_vis_opt=" +
+                        cV +
+                        "; expires=" + cookieLifeTime +
+                        "; path=/; domain=." +
+                        domain +
+                        "";
+                    document.cookie = analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+                    document.body.style.overflow = "auto";
+                    slideUp(".intastellarCookieBanner");
+                    window.location.reload();
+                });
             });
-
             all.forEach((a)=>{
                 a.addEventListener("click", function(){
                     var cV = 1;
@@ -1049,7 +1050,7 @@ window.addEventListener("DOMContentLoaded", function () {
             const configBtn = document.querySelectorAll(".cookie-settingsContainer");
             const config = document.querySelectorAll(".config");
 
-            const ness = document.querySelector(".nesse");
+            const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
             const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
 
             const analyticsBTN = document.querySelector(".analytics");
@@ -1078,28 +1079,31 @@ window.addEventListener("DOMContentLoaded", function () {
                 settings.classList.toggle("cookie-settings__container--expand");
             })
 
-            ness.addEventListener("click", function(){
-                var cV = 1;
-                document.cookie =
-                    int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
-                    "";
+            ness.forEach((n) => {
+                n.addEventListener("click", function () {
+                    var cV = 1;
                     document.cookie =
-                    int_cookieName+"="+essentialsCookieName+"; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
-                    "";
-                document.cookie =
-                    "_vis_opt=" +
-                    cV +
-                    "; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
-                    "";
-                document.cookie = analytic+"=no;expires="+cookieLifeTime+";path=/;domain=."+domain+"";
-                document.body.style.overflow = "auto";
-                window.location.reload();
+                        int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
+                        "; path=/; domain=." +
+                        domain +
+                        "";
+                    document.cookie =
+                        int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
+                        "; path=/; domain=." +
+                        domain +
+                        "";
+                    document.cookie =
+                        "_vis_opt=" +
+                        cV +
+                        "; expires=" + cookieLifeTime +
+                        "; path=/; domain=." +
+                        domain +
+                        "";
+                    document.cookie = analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+                    document.body.style.overflow = "auto";
+                    slideUp(".intastellarCookieBanner");
+                    window.location.reload();
+                });
             });
 
             all.forEach((a)=>{
