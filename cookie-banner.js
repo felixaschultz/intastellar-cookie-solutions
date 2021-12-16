@@ -620,7 +620,7 @@ function createCookieSettings() {
 
     /* - - - Set the language dependent messages */
 
-    let lang = window.INT.settings === undefined || window.INT.settings.language === "auto" || window.INT.settings.language === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : document.querySelector("html").getAttribute("lang");
+    let lang = window.INT.settings === undefined || window.INT.settings.language === "auto" || window.INT.settings.language === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : window.INT.settings.language == "english" ? document.querySelector("html").getAttribute("lang");
     const messages = {
         danish: "Ved at acceptere alle cookies understøtter du " + document.domain + " med at udvikle en bedre løsning til dig.</p><p>Vælg om du vil tillade kun de nødvendige cookies eller om du vil tillade alle cookies.",
         german: "Wenn Sie auf akzeptieren klicken, unterstützen Sie " + document.domain + " bei der Weiterentwicklung von unserer Webseite.</p><p>Wählen Sie zwischen allen Cookies akzeptieren oder ob Sie nur notwendige cookies unterstützen wollen.",
