@@ -617,7 +617,7 @@ function createCookieSettings() {
 
 
 
-/* - - - Set the language dependent messages */
+    /* - - - Set the language dependent messages */
 
     const lang = window.lang = document.querySelector("html").getAttribute("lang");
     const region = getCookie("region");
@@ -628,25 +628,6 @@ function createCookieSettings() {
     };
     const messageWrapStart = "<div class='cookie-settings__contentConatiner'><p>";
     const messageWrapEnd = "</p></div>";
-
-    function generatePolicyUrl(policy_link_text) {
-        let url = "";
-        if(typeof window.INT.policy_link === 'undefined') {
-            console.log("Error: Policy URL has not been defined.");
-            return;
-        }
-        if (typeof window.INT.policy_link === "object") {
-            url = "<a href='" + window.INT.policy_link.url + "' target='" + window.INT.policy_link.target + "' class='cookie-settings__privacyLink'>"+ policy_link_text +"</a>"
-        } else if (typeof window.INT.policy_link === "string") {
-            url = "<a href='" + window.INT.policy_link + "' class='cookie-settings__privacyLink'>"+ policy_link_text +"</a>";
-        }
-        return url;
-    }
-    function generateCookieButtons(allCookiesText,necessaryCookiesText) {
-        return '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">'+ allCookiesText +'</button>' 
-        + '<button class="cookie-settings__btn nesse">' + necessaryCookiesText + '</button>';
-    }
-
 
     if (region === "da-DK" || lang != null && lang === "da" || lang === "da-DK") {
         message = 
@@ -677,6 +658,7 @@ function createCookieSettings() {
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies');
     }
+
 
 
 
@@ -754,6 +736,30 @@ function createCookieSettings() {
     document.body.appendChild(banner);
     /* document.body.appendChild(moreSettings); */
 }
+
+/* - - - Helper functions for Messages */
+function generatePolicyUrl(policy_link_text) {
+    let url = "";
+    if(typeof window.INT.policy_link === 'undefined') {
+        console.log("Error: Policy URL has not been defined.");
+        return;
+    }
+    if (typeof window.INT.policy_link === "object") {
+        url = "<a href='" + window.INT.policy_link.url + "' target='" + window.INT.policy_link.target + "' class='cookie-settings__privacyLink'>"+ policy_link_text +"</a>"
+    } else if (typeof window.INT.policy_link === "string") {
+        url = "<a href='" + window.INT.policy_link + "' class='cookie-settings__privacyLink'>"+ policy_link_text +"</a>";
+    }
+    return url;
+}
+function generateCookieButtons(allCookiesText,necessaryCookiesText) {
+    return '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">'+ allCookiesText +'</button>' 
+    + '<button class="cookie-settings__btn nesse">' + necessaryCookiesText + '</button>';
+}
+
+/* - - - END - - - */
+
+
+
 
 window.addEventListener("DOMContentLoaded", function () {
     if(window.INT.policy_link != undefined && isURL(window.INT.policy_link) && window.INT.policy_link.length > 0 || typeof window.INT.policy_link === "object" && window.INT.policy_link.url.length > 0){
