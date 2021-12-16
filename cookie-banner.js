@@ -8,16 +8,16 @@
 /* - - - Setup - - - */
 const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
 const settingsCheckboxes = document.querySelectorAll(".cookie-settings-checkbox");
-const cookieName = "__inta_ac_cookie";
-const hideCookieBannerName = "__inta";
+const int_cookieName = "__inta_ac_cookie";
+const int_hideCookieBannerName = "__inta";
 const analytic = "__inta__analytics";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 
 
 const INT = window.INT = {
-    key: "",
     policy_link: undefined,
     settings: {
+        language: "auto",
         color: "rgba(0, 51, 153, 1)",
         keepInLocalStorage: [],
         arrange: "ltr",
@@ -31,7 +31,7 @@ const allowAllCookieName = "__all__cookies";
 const essentialsCookieName = "__essential__cookies";
 const blockTrackingCookies = "__hideTrackingCookies";
 const blockAdvertismentCookies = "__hideAdvertisementCookies";
-const head = document.querySelector("head");
+const intHead = document.querySelector("head");
 
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 
@@ -40,7 +40,7 @@ const notExternalCookies = [
     "region",
     "PHPSESSID",
     cookieName,
-    hideCookieBannerName
+    int_hideCookieBannerName
 ];
 const noCookies = new RegExp(notExternalCookies.join("|"), "i");
 
@@ -128,7 +128,7 @@ function checkCookieStatus() {
         if (analyticsCookies == "yes") {
             let s = document.createElement("script");
             s.src = "https://www.intastellarsolutions.com/js/analytics.js?v="+ new Date().getTime();
-            head.appendChild(s);
+            intHead.appendChild(s);
         }
     /* })(); */
 
@@ -257,7 +257,7 @@ function checkCookieStatus() {
                             if (analyticsCookies == "yes") {
                                 let s = document.createElement("script");
                                 s.src = "https://www.intastellarsolutions.com/js/analytics.js";
-                                head.appendChild(s);
+                                intHead.appendChild(s);
                             }
     
                             if (node.getAttribute("type") === "text/plain")
@@ -385,14 +385,14 @@ link.rel  = 'stylesheet';
 link.type = 'text/css';
 link.href = 'https://www.intastellarsolutions.com/components/css/jsCookieBannerinfo.css?v=' + new Date().getTime();
 link.media = 'all';
-head.appendChild(link);
+intHead.appendChild(link);
 
 domain = (function () {
     "use strict";
     var i = 0,
         d = document.domain || window.location.host,
         p = d.split("."),
-        s = hideCookieBannerName + "" + new Date().getTime();
+        s = int_hideCookieBannerName + "" + new Date().getTime();
     while (i < p.length - 1 && document.cookie.indexOf(s + "=" + s) === -1) {
         d = p.slice(-1 - ++i).join(".");
         document.cookie = s + "=" + s + ";domain=" + d + "; path=/;";
@@ -564,13 +564,13 @@ function createCookieSettings() {
 
     const moreSettings = document.createElement("article");
     const moreSettingsContent = document.createElement("section");
-    const moreHeader = document.createElement("header");
+    const moreintHeader = document.createElement("intHeader");
     const moreContentText = document.createElement("section");
     const moreFooter = document.createElement("footer");
 
     moreSettings.setAttribute("class", "intastellarCookieConstents");
     moreSettingsContent.setAttribute("class", "intastellarCookieConstents__content");
-    moreHeader.setAttribute("class", "intastellarCookieConstents__content-header");
+    moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
     moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer");
 
     moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");
@@ -579,11 +579,11 @@ function createCookieSettings() {
         <p></p>
     `;
 
-    moreSettingsContent.appendChild(moreHeader);
+    moreSettingsContent.appendChild(moreintHeader);
     moreSettingsContent.appendChild(moreContentText);
     moreSettingsContent.appendChild(moreFooter);
 
-    moreHeader.innerHTML = "<h2>Cookie Settings</h2>";
+    moreintHeader.innerHTML = "<h2>Cookie Settings</h2>";
     moreFooter.innerHTML = "<button class='cookie-settings__btn --save'>Save settings</button><button class='cookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll'>Accept all</button>";
 
     const cookieSettings = document.createElement("article");
@@ -619,8 +619,7 @@ function createCookieSettings() {
 
     /* - - - Set the language dependent messages */
 
-    const lang = window.lang = document.querySelector("html").getAttribute("lang");
-    const region = getCookie("region");
+    let lang = window.INT.settings === undefined || window.INT.settings.language === "auto" || window.INT.settings.language === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : "gb";
     const messages = {
         danish: "Ved at acceptere alle cookies understøtter du " + document.domain + " med at udvikle en bedre løsning til dig.</p><p>Vælg om du vil tillade kun de nødvendige cookies eller om du vil tillade alle cookies.",
         german: "Wenn Sie auf akzeptieren klicken, unterstützen Sie " + document.domain + " bei der Weiterentwicklung von unserer Webseite.</p><p>Wählen Sie zwischen allen Cookies akzeptieren oder ob Sie nur notwendige cookies unterstützen wollen.",
@@ -629,20 +628,20 @@ function createCookieSettings() {
     const messageWrapStart = "<div class='cookie-settings__contentConatiner'><p>";
     const messageWrapEnd = "</p></div>";
 
-    if (region === "da-DK" || lang != null && lang === "da" || lang === "da-DK") {
+    if (lang != null && lang === "da" || lang === "da-DK") {
         message = 
             messageWrapStart 
             + messages.danish 
             + messageWrapEnd 
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter alle','Kun nødvendige cookies');
-    } else if (region === "de-DE" || lang != null && lang === "de-DE" || lang === "de") {
+    } else if (lang != null && lang === "de-DE" || lang === "de") {
         message = messageWrapStart 
             + messages.german 
             + messageWrapEnd 
             + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
         cookieBtn = generateCookieButtons('Alle akzeptieren','Nur notwendige cookies');
-    } else if (region === "en-GB" || lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
+    } else if (lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
         message = 
             messageWrapStart 
             + messages.english 
@@ -709,8 +708,8 @@ function createCookieSettings() {
         text = " Cookie notice";
         cookieSize = "25%";
     }
-    s.innerHTML = ".cookie-settingsContainer,.intastellarCookieConstents__content-header, .cookie-settings__btn.--bg{background: "+cookieColor+" !important;color: #fff !important;} .cookie-settings__btn.--bg:hover{background: "+brightColor+" !important;}.cookie-settings__close:hover{background: "+brightColor+" !important;} .cookie-settings__privacyLink{color: "+cookieColor+" !important;}.cookie-settings__content p{color: "+cookieTextColor+" !important;}.cookie-settings__header{color:"+cookieTextColor+" !important;}.cookie-settings__container{background-color: "+backgroundColor+" !important;} .cookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}"+withText;
-    document.head.appendChild(s);
+    s.innerHTML = ".cookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .cookie-settings__btn.--bg{background: "+cookieColor+" !important;color: #fff !important;} .cookie-settings__btn.--bg:hover{background: "+brightColor+" !important;}.cookie-settings__close:hover{background: "+brightColor+" !important;} .cookie-settings__privacyLink{color: "+cookieColor+" !important;}.cookie-settings__content p{color: "+cookieTextColor+" !important;}.cookie-settings__intHeader{color:"+cookieTextColor+" !important;}.cookie-settings__container{background-color: "+backgroundColor+" !important;} .cookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}"+withText;
+    document.intHead.appendChild(s);
 
     cookieSettingsContent.setAttribute("class", "cookie-settings__content");
     /* <button class="analytics">Analytics</button> */
@@ -719,7 +718,7 @@ function createCookieSettings() {
         poweredBy = "<span class='cookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='cookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_link="+document.domain+"&utm_source=Intastellar+Solutions+Cookiebanner' target='_blank' rel='noopener'><img class='cookie-settings__poweredByImg' src='https://assets.intastellar-clients.net/bG9nb3MvaW50YXN0ZWxsYXJfc29sdXRpb25zQDJ4LnBuZw==' alt='Intastellar Solutions, International'></a></span>";
     }
 
-    cookieSettingsContent.innerHTML = '<header class="cookie-settings__header"><img src="'+cookieLogo+'" alt="'+document.domain+' logo" title="'+document.domain+' logo" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="cookie-settings__close" style="background-color: '+cookieColor+';"></button></header>'+
+    cookieSettingsContent.innerHTML = '<intHeader class="cookie-settings__intHeader"><img src="'+cookieLogo+'" alt="'+document.domain+' logo" title="'+document.domain+' logo" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="cookie-settings__close" style="background-color: '+cookieColor+';"></button></intHeader>'+
     message + cookieBtn + "" + poweredBy;
 
     cookieSettings.appendChild(cookieSettingsContent);
@@ -764,7 +763,7 @@ function generateCookieButtons(allCookiesText,necessaryCookiesText) {
 window.addEventListener("DOMContentLoaded", function () {
     if(window.INT.policy_link != undefined && isURL(window.INT.policy_link) && window.INT.policy_link.length > 0 || typeof window.INT.policy_link === "object" && window.INT.policy_link.url.length > 0){
         createCookieSettings();
-        if (getCookie(hideCookieBannerName) == "") {
+        if (getCookie(int_hideCookieBannerName) == "") {
             document.body.style.overflow = "hidden";
             document.querySelector("html").style.overflow = "hidden";
         } else {
@@ -773,12 +772,12 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     
         if(document.querySelector(".intastellarCookieBanner") != null){
-            if(getCookie(hideCookieBannerName) == "1"){
+            if(getCookie(int_hideCookieBannerName) == "1"){
                 document.querySelector(".intastellarCookieBanner").style.display = "none";
             }else{
                 document.querySelector(".intastellarCookieBanner").style.display = "";
             }
-        }else if(getCookie(hideCookieBannerName) == "1"){
+        }else if(getCookie(int_hideCookieBannerName) == "1"){
             let settings = document.querySelector(".cookie-settings__container");
             settings.classList.toggle("cookie-settings__container--expand");
         }
@@ -815,7 +814,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 var cV = 0;
 
                 document.cookie =
-                    hideCookieBannerName + "=1; expires=" + cookieLifeTime +
+                    int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -879,7 +878,7 @@ window.addEventListener("DOMContentLoaded", function () {
             button__acceptAll.addEventListener("click", function () {
                 var cV = 1;
                 document.cookie =
-                    hideCookieBannerName+"=1; expires=" + cookieLifeTime +
+                    int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -909,10 +908,10 @@ window.addEventListener("DOMContentLoaded", function () {
         }
 
         if(button__acceptAll != null || button__acceptAll != undefined){
-            button__acceptAllsary").addEventListener("click", function () {
+            (button__acceptAllsary).addEventListener("click", function () {
                 var cV = 1;
                 document.cookie =
-                    hideCookieBannerName+"=1; expires=" + cookieLifeTime +
+                    int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -935,7 +934,7 @@ window.addEventListener("DOMContentLoaded", function () {
         }
 
         if(button__acceptAll != null || button__acceptAll != undefined){
-            button__acceptAllContainer");
+            button__acceptAllContainer;
             const config = document.querySelectorAll(".config");
 
             const ness = document.querySelector(".nesse");
@@ -967,7 +966,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 analyticsBTN.addEventListener("click", function(){
                     var cV = 1;
                     document.cookie =
-                        hideCookieBannerName+"=1; expires=" + cookieLifeTime +
+                        int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
                         "; path=/; domain=." +
                         domain +
                         "";
@@ -992,7 +991,7 @@ window.addEventListener("DOMContentLoaded", function () {
             ness.addEventListener("click", function(){
                 var cV = 1;
                 document.cookie =
-                    hideCookieBannerName+"=1; expires=" + cookieLifeTime +
+                    int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -1018,7 +1017,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 a.addEventListener("click", function(){
                     var cV = 1;
                     document.cookie =
-                        hideCookieBannerName+"=1; expires=" + cookieLifeTime +
+                        int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
                         "; path=/; domain=." +
                         domain +
                         "";
@@ -1080,7 +1079,7 @@ window.addEventListener("DOMContentLoaded", function () {
             ness.addEventListener("click", function(){
                 var cV = 1;
                 document.cookie =
-                    hideCookieBannerName+"=1; expires=" + cookieLifeTime +
+                    int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
                     "; path=/; domain=." +
                     domain +
                     "";
@@ -1105,7 +1104,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 a.addEventListener("click", function(){
                     var cV = 1;
                     document.cookie =
-                        hideCookieBannerName+"=1; expires=" + cookieLifeTime +
+                        int_hideCookieBannerName+"=1; expires=" + cookieLifeTime +
                         "; path=/; domain=." +
                         domain +
                         "";
