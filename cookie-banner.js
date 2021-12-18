@@ -10,7 +10,7 @@ const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z
 const settingsCheckboxes = document.querySelectorAll(".cookie-settings-checkbox");
 const int_cookieName = "__inta_ac_cookie";
 const int_hideCookieBannerName = "__inta";
-const analytic = "__inta__analytics";
+const int_analytic = "__inta__analytics";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 
@@ -122,7 +122,7 @@ function checkCookieStatus() {
     const notRequired = new RegExp(findScripts.join("|"), "ig");
     const allowAnalytics = new RegExp(allowAna.join("|"), "i");
     const dc = getCookie(int_cookieName);
-    const analyticsCookies = getCookie(analytic);
+    const analyticsCookies = getCookie(int_analytic);
     const thirdC = getCookie("_vis_opt");
 
     /* (function () { */
@@ -1010,7 +1010,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         "; path=/; domain=." +
                         domain +
                         "";
-                    document.cookie = analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+                    document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
                     document.body.style.overflow = "auto";
                     slideUp(".intastellarCookieBanner");
                     window.location.reload();
@@ -1036,7 +1036,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         "; path=/; domain=." +
                         domain +
                         "";
-                    document.cookie = analytic+"=yes;expires="+cookieLifeTime+";path=/;domain=."+domain+"";
+                    document.cookie = int_analytic+"=yes;expires="+cookieLifeTime+";path=/;domain=."+domain+"";
                     document.body.style.overflow = "auto";
                     var addedNodes = document.getElementsByTagName("script");
                     for (var i = 0; i < addedNodes.length; i++) {
@@ -1099,7 +1099,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         "; path=/; domain=." +
                         domain +
                         "";
-                    document.cookie = analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+                    document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
                     document.body.style.overflow = "auto";
                     slideUp(".intastellarCookieBanner");
                     window.location.reload();
@@ -1126,7 +1126,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         "; path=/; domain=." +
                         domain +
                         "";
-                    document.cookie = analytic+"=yes;expires="+cookieLifeTime+";path=/;domain=."+domain+"";
+                    document.cookie = int_analytic+"=yes;expires="+cookieLifeTime+";path=/;domain=."+domain+"";
                     document.body.style.overflow = "auto";
                     var addedNodes = document.getElementsByTagName("script");
                     for (var i = 0; i < addedNodes.length; i++) {
