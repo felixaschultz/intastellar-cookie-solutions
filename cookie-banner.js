@@ -792,20 +792,6 @@ window.addEventListener("DOMContentLoaded", function () {
             return cookieEnabled;
         }
 
-        function slideUp(el) {
-            var elem = document.querySelector(el);
-            elem.style.transition = "all 2s ease-in-out";
-            /* elem.style.bottom = "-1500px"; */
-            elem.style.display = "none";
-        }
-
-        function slideDown(el) {
-            var elem = document.querySelector(el);
-            elem.style.transition = "all 2s ease-in-out";
-            /* elem.style.bottom = "0"; */
-            elem.style.display = "block";
-        }
-
         var cookiesOn = getCookie(int_cookieName);
 
 
@@ -835,8 +821,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     domain +
                     "";
                 document.body.style.overflow = "auto";
-                slideUp(".intastellarCookieBanner");
-                //window.location.reload();
+                window.location.reload();
             });
         }
 
@@ -903,7 +888,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 for (var i = 0; i < addedNodes.length; i++) {
                     addedNodes.type = "";
                 }
-                slideUp(".intastellarCookieBanner");
                 window.location.reload();
             });
         }
@@ -929,7 +913,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     domain +
                     "";
                 document.body.style.overflow = "auto";
-                slideUp(".intastellarCookieBanner");
                 window.location.reload();
             });
         }
@@ -985,7 +968,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         domain +
                         "";
                     document.body.style.overflow = "auto";
-                    slideUp(".intastellarCookieBanner");
                     window.location.reload();
                 })
             }
@@ -1012,7 +994,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         "";
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
                     document.body.style.overflow = "auto";
-                    slideUp(".intastellarCookieBanner");
                     window.location.reload();
                 });
             });
@@ -1042,7 +1023,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
                     }
-                    slideUp(".intastellarCookieBanner");
                     window.location.reload();
                 })
             });
@@ -1101,7 +1081,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         "";
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
                     document.body.style.overflow = "auto";
-                    slideUp(".intastellarCookieBanner");
                     window.location.reload();
                 });
             });
