@@ -5,4 +5,4 @@ As an indie Webdev and front-end developer I´ve decided to start building my ow
 
 ## Technologies
 This project i created with:
-*JavaScript
+* JavaScript
