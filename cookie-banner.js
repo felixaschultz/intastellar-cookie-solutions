@@ -562,9 +562,9 @@ function findScriptParameter(value) {
 
     if (currentURL.indexOf(value) > -1) {
         let url = new URL(currentURL);
-        let search_params = url.searchParams; 
+        let param = url.searchParams; 
         /* Getting the passed value from the current Script file */
-        return search_params.get(value);
+        return param.get(value);
     }
 
     return undefined;
