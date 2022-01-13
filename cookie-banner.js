@@ -682,8 +682,8 @@ function createCookieSettings() {
 
 
 
-    let cookieColor = window.INT.settings === undefined || window.INT.settings.color === undefined || window.INT.settings.color === "" || window.INT.settings.color.indexOf("[") > -1 ? "rgba(0, 51, 153, 1)" : window.INT.settings.color;
-    let cookieLogo = window.INT.settings === undefined || window.INT.settings.logo === undefined || window.INT.settings.logo === "" || window.INT.settings.color.indexOf("[") > -1 ? "https://img.icons8.com/ios-filled/50/000000/cookie.png" : window.INT.settings.logo;
+    let cookieColor = window.INT.settings === undefined || window.INT.settings.color === undefined || window.INT.settings.color.indexOf("[") > -1 || window.INT.settings.color === ""  ? "rgba(0, 51, 153, 1)" : window.INT.settings.color;
+    let cookieLogo = window.INT.settings === undefined || window.INT.settings.logo === undefined || window.INT.settings.logo === "" || window.INT.settings.logo.indexOf("[") > -1 ? "https://img.icons8.com/ios-filled/50/000000/cookie.png" : window.INT.settings.logo;
     let backgroundColor = window.INT.settings === undefined || window.INT.settings.background_color === undefined ? "#fff" : window.INT.settings.background_color;
     let cookieTextColor = invertColor(backgroundColor);
 
