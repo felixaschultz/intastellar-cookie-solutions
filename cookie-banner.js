@@ -137,19 +137,15 @@ function checkCookieStatus() {
         mutations.forEach(({ addedNodes }) => {
             addedNodes.forEach((node) => {
 
-                if (allCookiesAllowed() == false) {
+                const iframe = document.querySelectorAll("iframe");
+                iframe.forEach((frae) => {
+                    if (!allCookiesAllowed()) {
+                        frae.src = "about:blank";
+                    }
+                })
+
+                if (!allCookiesAllowed()) {
                     deleteAllCookies();
-                }
-
-                if (allCookiesAllowed()) {
-                    const iframe = document.querySelectorAll("iframe");
-                    iframe.forEach((frae) => {
-                        if (frae.hasAttribute("data-src")) {
-                            const iframeSrc = frae.getAttribute("data-src");
-
-                            frae.src = iframeSrc;
-                        }
-                    })
                 }
 
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
