@@ -644,7 +644,7 @@ function createCookieSettings() {
 
     const moreSettings = document.createElement("article");
     const moreSettingsContent = document.createElement("section");
-    const moreintHeader = document.createElement("header");
+    const moreintHeader = document.createElement("intheader");
     const moreContentText = document.createElement("section");
     const moreFooter = document.createElement("footer");
 
@@ -703,7 +703,7 @@ function createCookieSettings() {
         Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
         <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
         <form>
-            <label>
+            <label class="intSettingDisabled">
                 Nødvendige
                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                 <span class="checkmark"></span>
@@ -734,7 +734,7 @@ function createCookieSettings() {
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
         <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
         <form>
-            <label>
+            <label class="intSettingDisabled">
                 Unbedingt erforderlich
                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                 <span class="checkmark"></span>
@@ -765,7 +765,7 @@ function createCookieSettings() {
         <p>By clicking 'Accpet', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
         <form>
-            <label>
+            <label class="intSettingDisabled">
                 Necessary
                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                 <span class="checkmark"></span>
@@ -851,10 +851,6 @@ function createCookieSettings() {
         brightColor = pSBC(-0.60, cookieColor);
     }
 
-    moreintHeader.innerHTML = `
-        <img src="${cookieLogo}">
-        <h2> Cookie Settings</h2>`;
-
     const s = document.createElement("style");
 
     let textSettings = window.INT.settings === undefined || window.INT.settings.text === undefined ? false : window.INT.settings.text;
@@ -879,7 +875,7 @@ function createCookieSettings() {
         text = " Cookie notice";
         cookieSize = "25%";
     }
-    s.innerHTML = ".cookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .cookie-settings__btn.--bg{background: " + cookieColor + " !important;color: #fff !important;} .cookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.cookie-settings__close:hover{background: " + brightColor + " !important;} .cookie-settings__privacyLink{color: " + cookieColor + " !important;}.cookie-settings__content p{color: " + cookieTextColor + " !important;}.cookie-settings__intHeader{color:" + cookieTextColor + " !important;}.cookie-settings__container{background-color: " + backgroundColor + " !important;} .cookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
+    s.innerHTML = ".cookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .cookie-settings__btn.--bg, .intCookieSetting__checkbox:checked ~ .checkmark{background: " + cookieColor + " !important;color: #fff !important;} .cookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.cookie-settings__close:hover{background: " + brightColor + " !important;} .cookie-settings__privacyLink{color: " + cookieColor + " !important;}.cookie-settings__content p{color: " + cookieTextColor + " !important;}.cookie-settings__intHeader{color:" + cookieTextColor + " !important;}.cookie-settings__container{background-color: " + backgroundColor + " !important;} .cookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
     intHead.appendChild(s);
 
     cookieSettingsContent.setAttribute("class", "cookie-settings__content");
@@ -888,7 +884,10 @@ function createCookieSettings() {
     if (window.location.host.indexOf("intastellarsolutions") == -1) {
         poweredBy = "<span class='cookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='cookie-settings__poweredByLink' href='https://www.intastellarsolutions.com?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='cookie-settings__poweredByImg' src='https://assets.intastellar-clients.net/bG9nb3MvaW50YXN0ZWxsYXJfc29sdXRpb25zQDJ4LnBuZw==' alt='Intastellar Solutions, International'></a></span>";
     }
-
+    
+    moreintHeader.innerHTML = `
+        <img class="intSettingsCompanyLogo" src="${cookieLogo}">
+        <section class="intSettingsPoweredBy">${poweredBy}</section>`;
     cookieSettingsContent.innerHTML = '<intHeader class="cookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + document.domain + ' logo" title="' + document.domain + ' logo" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="cookie-settings__close" style="background-color: ' + cookieColor + ';"></button></intHeader>' +
         message + cookieBtn + "" + poweredBy;
 
