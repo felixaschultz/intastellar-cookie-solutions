@@ -1,7 +1,7 @@
 /*
  *  Intastellar Cookie Banner
  *  intastellarsolutions.com/gdpr-cookiebanner
- *  @copy 2021 intastellarsolutions.com
+ *  @copy 2021 Intastellar Solutions, International
  *
 */
 
@@ -148,7 +148,7 @@ function checkCookieStatus() {
     let notRequired = new RegExp(findScripts.join("|"), "ig");
 
     for (let i = 0; i < allScripts.length; i++){
-        
+        /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
         if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intMarketing") == "false" && localStorage.getItem("intStatics") == "false") {
             if (allScripts[i].type != "functional") {
                 notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
