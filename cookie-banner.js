@@ -655,40 +655,9 @@ function createCookieSettings() {
 
     moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");
 
-    moreContentText.innerHTML = `<h3>You´re in control</h3>
-        <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
-        <ol>
-            <li>Functional</li>
-            <li>Statistical</li>
-            <li>Marketing</li>
-        </ol>
-        <p>By clicking 'Accpet', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
-        <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
-        <form>
-            <label>
-                <input type="checkbox" disabled checked>
-                Necessary
-            </label>
-            <label>
-                <input id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
-                Functional
-            </label>
-            <label>
-                <input id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
-                Statics
-            </label>
-            <label>
-                <input id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
-                Marketing
-            </label>
-        </form>
-    `;
-
     moreSettingsContent.appendChild(moreintHeader);
     moreSettingsContent.appendChild(moreContentText);
     moreSettingsContent.appendChild(moreFooter);
-
-    moreFooter.innerHTML = "<button class='cookie-settings__btn --save'>Save settings</button><button class='cookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll'>Accept all</button>";
 
     const cookieSettings = document.createElement("article");
     const cookieSettingsContent = document.createElement("section");
@@ -722,39 +691,143 @@ function createCookieSettings() {
     const messageWrapStart = "<div class='cookie-settings__contentConatiner'><p>";
     const messageWrapEnd = "</p></div>";
 
+    const settingsMessages = {
+        danish: `<h3>Du bestemmer over dine data</h3>
+        <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
+        <ol>
+            <li>Funktionelle</li>
+            <li>Statistiske</li>
+            <li>Marketing</li>
+        </ol>
+        <p>Ved at trykke på 'Accepter alle' giver du samtykke til alle disse formål. Du kan også vælge at tilkendegive, hvilke formål du vil give samtykke til ved at benytte checkboksene ud for formålet, og derefter trykke på 'Gem indstillinger'.
+        Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
+        <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
+        <form>
+            <label>
+                Nødvendige
+                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                <span class="checkmark"></span>
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                <span class="checkmark"></span>
+                Funktionelle
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                <span class="checkmark"></span>
+                Statistiske
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                <span class="checkmark"></span>
+                Marketing
+            </label>
+        </form>`,
+        german: `<h3>Sie haben die Kontrolle über Ihre Daten</h3>
+        <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
+        <ol>
+            <li>Funktional</li>
+            <li>Statistik</li>
+            <li>Werbung</li>
+        </ol>
+        <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
+        <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
+        <form>
+            <label>
+                Unbedingt erforderlich
+                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                <span class="checkmark"></span>
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                <span class="checkmark"></span>
+                Funktional
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                <span class="checkmark"></span>
+                Statistik
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                <span class="checkmark"></span>
+                Werbung
+            </label>
+        </form>`,
+        english: `<h3>You´re in control</h3>
+        <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
+        <ol>
+            <li>Functional</li>
+            <li>Statistical</li>
+            <li>Marketing</li>
+        </ol>
+        <p>By clicking 'Accpet', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
+        <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
+        <form>
+            <label>
+                Necessary
+                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                <span class="checkmark"></span>
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                <span class="checkmark"></span>
+                Functional
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                <span class="checkmark"></span>
+                Statics
+            </label>
+            <label>
+                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                <span class="checkmark"></span>
+                Marketing
+            </label>
+        </form>`
+    }
+
     if (lang != null && lang === "da" || lang === "da-DK") {
+        settingsMessage = settingsMessages.danish;
         message =
             messageWrapStart
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies', 'Indstillinger');
+        moreFooter.innerHTML = generateCookieSettingsButton('Gem indstillinger', 'Accepter alle');
     } else if (lang != null && lang === "de-DE" || lang === "de") {
+        settingsMessage = settingsMessages.german;
         message = messageWrapStart
             + messages.german
             + messageWrapEnd
             + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
         cookieBtn = generateCookieButtons('Alle akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
+        moreFooter.innerHTML = generateCookieSettingsButton('Einstellungen Speichern','Alle akzeptieren');
     } else if (lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
+        settingsMessage = settingsMessages.english;
         message =
             messageWrapStart
             + messages.english
             + messageWrapEnd
             + generatePolicyUrl('Our Privacy and cookie Policy');
         cookieBtn = generateCookieButtons('Allow all', 'Necessary cookies only', 'Settings');
+        moreFooter.innerHTML = generateCookieSettingsButton('Save settings','Allow all');
     } else {
         /* Default */
+        settingsMessage = settingsMessages.danish;
+
         message =
             messageWrapStart
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies', 'Indstillinger');
+        moreFooter.innerHTML = generateCookieSettingsButton('Gem indstillinger', 'Accepter alle');
     }
 
-
-
-
+    moreContentText.innerHTML = settingsMessage;
 
 
     let cookieColor = window.INT.settings === undefined || window.INT.settings.color === undefined || window.INT.settings.color.indexOf("[") > -1 || window.INT.settings.color === ""  ? "rgba(0, 51, 153, 1)" : window.INT.settings.color;
@@ -852,6 +925,12 @@ function generateCookieButtons(allCookiesText, necessaryCookiesText,cookieSettin
     return '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">' + allCookiesText + '</button>'
         + '<button class="cookie-settings__btn intastellarCookieBanner__accpetNecssery">' + necessaryCookiesText + '</button>'
         + '<button class="cookie-settings__btn intastellarCookieBanner__settings">'+ cookieSettingsText +'</button>';
+}
+
+function generateCookieSettingsButton(settingsText, allCookiesText) {
+    return '<button class="cookie-settings__btn --save">'+settingsText+'</button>'
+        +   '<button class="cookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll">'+allCookiesText+'</button>'
+        ;
 }
 
 /* - - - Helper functions for Validate policy link */
