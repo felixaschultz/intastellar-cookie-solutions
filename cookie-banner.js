@@ -72,56 +72,56 @@ const pSBC = (p, c0, c1, l) => {
 }
 
 function checkCookieStatus() {
-    const findScripts = [
-        "(?=linkedin|gtag)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
-        "(google-analytics+)",
-        "(!fontawesome+)",
-        "(facebook+)",
-        "(googlesyndication+)",
-        "(googleapis+)",
-        "(googletagmanager+)",
-        "(googleoptimize+)",
-        "(trustpilot+)",
-        "(piwik+)",
-        "(matomo+)",
-        "(twitter+)",
-        "(chimpstatic+)",
-        "(mailchimp+)",
-        "(linkedin+)",
-        "(licdn+)",
-        "(bing+)",
-        "(doubleclick+)",
-        "(pinterest+)",
-        "(clarity+)",
-        "(googleadservices+)",
-        "(consensu+)",
-        "(disqus+)",
-        "(quantserve+)",
-        "[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
-    ];
 
-    const allowAna = [
-        "(?=linkedin)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
-        "([\-\]|facebook+)",
-        "([\-\]|googlesyndication+)",
-        "([\-\]|googleapis+)",
-        "([\-\]|trustpilot+)",
-        "([\-\]|twitter+)",
-        "([\-\]|chimpstatic+)",
-        "([\-\]|mailchimp+)",
-        "([\-\]|linkedin+)",
-        "([\-\]|licdn+)",
-        "([\-\]|bing+)",
-        "([\-\]|doubleclick+)",
-        "([\-\]|pinterest+)",
-        "([\-\]|googleadservices+)",
-        "\.[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
-    ];
+    const findScripts = [
+        {
+            type: "functional",
+            scripts: [
+                "(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
+                "(googleapis+)",
+                "(googletagmanager+)",
+                "(disqus+)",
+                "[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
+            ]
+        },
+        {
+            type: "marketing",
+            scripts: [
+                "(?=linkedin|gtag)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
+                "(facebook+)",
+                "(googlesyndication+)",
+                "(trustpilot+)",
+                "(twitter+)",
+                "(chimpstatic+)",
+                "(mailchimp+)",
+                "(linkedin+)",
+                "(licdn+)",
+                "(doubleclick+)",
+                "(pinterest+)",
+                "(googleadservices+)",
+                "[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
+            ]
+        },
+        {
+            type: "statics",
+            scripts: [
+                "(?=linkedin|gtag)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
+                "(google-analytics+)",
+                "(googleoptimize+)",
+                "(piwik+)",
+                "(matomo+)",
+                "(bing+)",
+                "(clarity+)",
+                "(consensu+)",
+                "(quantserve+)",
+                "[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
+            ]
+        }
+    ]
 
 
     const reg = new RegExp(expression);
     const notRequired = new RegExp(findScripts.join("|"), "ig");
-    const allowAnalytics = new RegExp(allowAna.join("|"), "i");
     const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
     const thirdC = getCookie("_vis_opt");
@@ -148,6 +148,11 @@ function checkCookieStatus() {
                     deleteAllCookies();
                 }
 
+                /* Checking what cookies are allowed via settings page */
+                const intFunctional = localStorage.getItem("intFunctional");
+                const intStatics = localStorage.getItem("intStatics");
+                const intMarketing = localStorage.getItem("intMarketing");
+
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     let src = node.src || "";
                     node.async = false;
@@ -156,7 +161,7 @@ function checkCookieStatus() {
                     addedNodes.forEach((node) => {
                         src = node.src;
 
-                        if (dc == essentialsCookieName || dc == "") {
+                        if (dc == essentialsCookieName || dc == "" || !intFunctional && !intStatics && !intMarketing) {
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -591,28 +596,42 @@ function createCookieSettings() {
     moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");
 
     moreContentText.innerHTML = `<h3>You´re in control</h3>
-        <p></p>
+        <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
+        <ol>
+            <li>Functional</li>
+            <li>Statistical</li>
+            <li>Marketing</li>
+        </ol>
+        <p>By clicking 'Accpet', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
+        <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
+        <form>
+            <label>
+                Necessary
+                <input type="checkbox" disabled checked>
+            </label>
+            <label>
+                Functional
+                <input id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+            </label>
+            <label>
+                Statics
+                <input id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+            </label>
+            <label>
+                Marketing
+                <input id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+            </label>
+        </form>
     `;
 
     moreSettingsContent.appendChild(moreintHeader);
     moreSettingsContent.appendChild(moreContentText);
     moreSettingsContent.appendChild(moreFooter);
 
-    moreintHeader.innerHTML = "<h2>Cookie Settings</h2>";
     moreFooter.innerHTML = "<button class='cookie-settings__btn --save'>Save settings</button><button class='cookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll'>Accept all</button>";
 
     const cookieSettings = document.createElement("article");
     const cookieSettingsContent = document.createElement("section");
-
-    const cookieSettingMore = document.createElement("article");
-    const cookieSettingMoreContent = document.createElement("section");
-
-    cookieSettingMore.setAttribute("class", "cookie-settingsMoreContainer");
-    cookieSettingMoreContent.setAttribute("class", "cookie-settingsMoreContent");
-
-    cookieSettingMoreContent.innerHTML = `
-        Allow Analytics <input type="checkbox" class="cookie-settingsBtn cookie-settingsBtn--allowAnalytics">
-    `;
 
     bannerContent.setAttribute("class", "cookie-settingsContainer");
     bannerContent.setAttribute("title", "Cookie Settings");
@@ -649,20 +668,20 @@ function createCookieSettings() {
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
-        cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies');
+        cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies', 'Indstillinger');
     } else if (lang != null && lang === "de-DE" || lang === "de") {
         message = messageWrapStart
             + messages.german
             + messageWrapEnd
             + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
-        cookieBtn = generateCookieButtons('Alle akzeptieren', 'Nur notwendige cookies');
+        cookieBtn = generateCookieButtons('Alle akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
     } else if (lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
         message =
             messageWrapStart
             + messages.english
             + messageWrapEnd
             + generatePolicyUrl('Our Privacy and cookie Policy');
-        cookieBtn = generateCookieButtons('Allow all', 'Necessary cookies only');
+        cookieBtn = generateCookieButtons('Allow all', 'Necessary cookies only', 'Settings');
     } else {
         /* Default */
         message =
@@ -670,7 +689,7 @@ function createCookieSettings() {
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
-        cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies');
+        cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies', 'Indstillinger');
     }
 
 
@@ -698,6 +717,10 @@ function createCookieSettings() {
     } else {
         brightColor = pSBC(-0.60, cookieColor);
     }
+
+    moreintHeader.innerHTML = `
+        <img src="${cookieLogo}">
+        <h2> Cookie Settings</h2>`;
 
     const s = document.createElement("style");
 
@@ -733,8 +756,10 @@ function createCookieSettings() {
         poweredBy = "<span class='cookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='cookie-settings__poweredByLink' href='https://www.intastellarsolutions.com?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='cookie-settings__poweredByImg' src='https://assets.intastellar-clients.net/bG9nb3MvaW50YXN0ZWxsYXJfc29sdXRpb25zQDJ4LnBuZw==' alt='Intastellar Solutions, International'></a></span>";
     }
 
+    let intCookieSettingsBtn = "<span class='intSettingsBtn'>Settings</span>"
+
     cookieSettingsContent.innerHTML = '<intHeader class="cookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + document.domain + ' logo" title="' + document.domain + ' logo" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="cookie-settings__close" style="background-color: ' + cookieColor + ';"></button></intHeader>' +
-        message + cookieBtn + "" + poweredBy;
+        message + cookieBtn + "" + intCookieSettingsBtn + "" + poweredBy;
 
     cookieSettings.appendChild(cookieSettingsContent);
 
@@ -748,7 +773,7 @@ function createCookieSettings() {
     moreSettings.appendChild(moreSettingsContent);
 
     document.body.appendChild(banner);
-    /* document.body.appendChild(moreSettings); */
+    document.body.appendChild(moreSettings);
 }
 
 /* - - - Helper functions for Messages */
@@ -765,9 +790,10 @@ function generatePolicyUrl(policy_link_text) {
     }
     return url;
 }
-function generateCookieButtons(allCookiesText, necessaryCookiesText) {
+function generateCookieButtons(allCookiesText, necessaryCookiesText,cookieSettingsText) {
     return '<button class="cookie-settings__btn --bg intastellarCookieSettings--acceptAll">' + allCookiesText + '</button>'
-        + '<button class="cookie-settings__btn intastellarCookieBanner__accpetNecssery">' + necessaryCookiesText + '</button>';
+        + '<button class="cookie-settings__btn intastellarCookieBanner__accpetNecssery">' + necessaryCookiesText + '</button>'
+        + '<button class="cookie-settings__btn intastellarCookieBanner__settings">'+ cookieSettingsText +'</button>';
 }
 
 /* - - - Helper functions for Validate policy link */
@@ -785,6 +811,33 @@ function isValidPolicyLink() {
     }
 
     return false;
+}
+
+/* - - - Helper function for saving settings - - - */
+function saveINTCookieSettings() {
+    const FunctionalCheckbox = document.querySelector("#functional");
+    const StaticsCheckBox = document.querySelector("#statics");
+    const MarketingCheckBox = document.querySelector("#marketing");
+
+    if (FunctionalCheckbox.checked) {
+        localStorage.setItem("intFunctional", "checked");
+    } else {
+        localStorage.setItem("intFunctional", false);
+    }
+
+    if (StaticsCheckBox.checked) {
+        localStorage.setItem("intStatics", "checked");
+    } else {
+        localStorage.setItem("intStatics", false);
+    }
+
+    if (MarketingCheckBox.checked) {
+        localStorage.setItem("intMarketing", "checked");
+    } else {
+        localStorage.setItem("intMarketing", false);
+    }
+
+    window.location.reload();
 }
 
 /* - - - END - - - */
@@ -823,7 +876,16 @@ window.addEventListener("DOMContentLoaded", function () {
 
         var cookiesOn = getCookie(int_cookieName);
 
+        document.querySelector(".intastellarCookieBanner__settings").addEventListener("click", () => {
+            let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
+            if (!intCookieSettingsMore.classList.contains("--active")) {
+                intCookieSettingsMore.classList.add("--active");
+            }
+        });
 
+        document.querySelector(".--save").addEventListener("click",() => {
+            saveINTCookieSettings();
+        });
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
@@ -849,6 +911,9 @@ window.addEventListener("DOMContentLoaded", function () {
                     "; path=/; domain=." +
                     domain +
                     "";
+                localStorage.setItem("intFunctional", "checked");
+                localStorage.setItem("intStatics", "checked");
+                localStorage.setItem("intMarketing", "checked");
                 document.body.style.overflow = "auto";
                 window.location.reload();
             });
@@ -917,6 +982,11 @@ window.addEventListener("DOMContentLoaded", function () {
                 for (var i = 0; i < addedNodes.length; i++) {
                     addedNodes.type = "";
                 }
+
+                localStorage.setItem("intFunctional", "checked");
+                localStorage.setItem("intStatics", "checked");
+                localStorage.setItem("intMarketing", "checked");
+
                 window.location.reload();
             });
         }
@@ -942,6 +1012,11 @@ window.addEventListener("DOMContentLoaded", function () {
                     domain +
                     "";
                 document.body.style.overflow = "auto";
+
+                localStorage.setItem("intFunctional", "checked");
+                localStorage.setItem("intStatics", "checked");
+                localStorage.setItem("intMarketing", "checked");
+
                 window.location.reload();
             });
         }
@@ -1052,6 +1127,11 @@ window.addEventListener("DOMContentLoaded", function () {
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
                     }
+
+                    localStorage.setItem("intFunctional", "checked");
+                    localStorage.setItem("intStatics", "checked");
+                    localStorage.setItem("intMarketing", "checked");
+
                     window.location.reload();
                 })
             });
@@ -1140,6 +1220,11 @@ window.addEventListener("DOMContentLoaded", function () {
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
                     }
+
+                    localStorage.setItem("intFunctional", "checked");
+                    localStorage.setItem("intStatics", "checked");
+                    localStorage.setItem("intMarketing", "checked");
+
                     window.location.reload();
                 })
             });
