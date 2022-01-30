@@ -759,6 +759,12 @@ function createCookieSettings() {
         </form>`
     }
 
+    let saveSettings = {
+        danish: localStorage.getItem("intFunctional") == "checked" ? "Gem indstillinger" : "Nødvendige",
+        german: localStorage.getItem("intFunctional") == "checked" ? "Einstellungen Speichern" : "Nur notwendige cookies",
+        english: localStorage.getItem("intFunctional") == "checked" ? "Save settings" : "Necessary cookies only"
+    }
+
     if (lang != null && lang === "da" || lang === "da-DK") {
         settingsMessage = settingsMessages.danish;
         message =
@@ -767,7 +773,7 @@ function createCookieSettings() {
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies', 'Indstillinger');
-        moreFooter.innerHTML = generateCookieSettingsButton('Gem indstillinger', 'Accepter alle');
+        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.danish, 'Accepter alle');
     } else if (lang != null && lang === "de-DE" || lang === "de") {
         settingsMessage = settingsMessages.german;
         message = messageWrapStart
@@ -775,7 +781,7 @@ function createCookieSettings() {
             + messageWrapEnd
             + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
         cookieBtn = generateCookieButtons('Alle akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
-        moreFooter.innerHTML = generateCookieSettingsButton('Einstellungen Speichern','Alle akzeptieren');
+        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.german,'Alle akzeptieren');
     } else if (lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
         settingsMessage = settingsMessages.english;
         message =
@@ -784,7 +790,7 @@ function createCookieSettings() {
             + messageWrapEnd
             + generatePolicyUrl('Our Privacy and cookie Policy');
         cookieBtn = generateCookieButtons('Allow all', 'Necessary cookies only', 'Settings');
-        moreFooter.innerHTML = generateCookieSettingsButton('Save settings','Allow all');
+        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.english,'Allow all');
     } else {
         /* Default */
         settingsMessage = settingsMessages.danish;
