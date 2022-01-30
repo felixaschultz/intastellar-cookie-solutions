@@ -673,6 +673,7 @@ function createCookieSettings() {
         <p>Ved at trykke på 'Accepter alle' giver du samtykke til alle disse formål. Du kan også vælge at tilkendegive, hvilke formål du vil give samtykke til ved at benytte checkboksene ud for formålet, og derefter trykke på 'Gem indstillinger'.
         Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
         <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
+        ${generatePolicyUrl('Læs mere om cookies')}
         <form>
             <label class="intSettingDisabled">
                 Nødvendige
@@ -704,6 +705,7 @@ function createCookieSettings() {
         </ol>
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
         <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
+        ${generatePolicyUrl('Mehr über cookies erfahren')}
         <form>
             <label class="intSettingDisabled">
                 Unbedingt erforderlich
@@ -735,6 +737,7 @@ function createCookieSettings() {
         </ol>
         <p>By clicking 'Accpet', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
+        ${generatePolicyUrl('Learn more')}
         <form>
             <label class="intSettingDisabled">
                 Necessary
@@ -772,16 +775,16 @@ function createCookieSettings() {
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
-        cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies', 'Indstillinger');
-        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.danish, 'Accepter alle');
+        cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
+        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.danish, 'Accepter');
     } else if (lang != null && lang === "de-DE" || lang === "de") {
         settingsMessage = settingsMessages.german;
         message = messageWrapStart
             + messages.german
             + messageWrapEnd
             + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
-        cookieBtn = generateCookieButtons('Alle akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
-        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.german,'Alle akzeptieren');
+        cookieBtn = generateCookieButtons('Akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
+        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.german,'Akzeptieren');
     } else if (lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
         settingsMessage = settingsMessages.english;
         message =
@@ -789,8 +792,8 @@ function createCookieSettings() {
             + messages.english
             + messageWrapEnd
             + generatePolicyUrl('Our Privacy and cookie Policy');
-        cookieBtn = generateCookieButtons('Allow all', 'Necessary cookies only', 'Settings');
-        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.english,'Allow all');
+        cookieBtn = generateCookieButtons('Accpet', 'Necessary cookies only', 'Settings');
+        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.english,'Accpet');
     } else {
         /* Default */
         settingsMessage = settingsMessages.danish;
@@ -800,8 +803,8 @@ function createCookieSettings() {
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
-        cookieBtn = generateCookieButtons('Accepter alle', 'Kun nødvendige cookies', 'Indstillinger');
-        moreFooter.innerHTML = generateCookieSettingsButton('Gem indstillinger', 'Accepter alle');
+        cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
+        moreFooter.innerHTML = generateCookieSettingsButton('Gem indstillinger', 'Accepter');
     }
 
     moreContentText.innerHTML = settingsMessage;
