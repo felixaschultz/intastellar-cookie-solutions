@@ -94,9 +94,9 @@ function checkCookieStatus() {
             scripts: [
                 "(?=linkedin|gtag)(facebook+)",
                 "(googlesyndication+)",
-                "(trustpilot+)",
                 "(twitter+)",
                 "(chimpstatic+)",
+                "(trustpilot+)",
                 "(mailchimp+)",
                 "(linkedin+)",
                 "(licdn+)",
@@ -666,7 +666,7 @@ function createCookieSettings() {
         danish: `<h3>Du bestemmer over dine data</h3>
         <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
         <ol>
-            <li>Funktionelle</li>
+            <li>Funktionel</li>
             <li>Statistiske</li>
             <li>Marketing</li>
         </ol>
@@ -674,27 +674,39 @@ function createCookieSettings() {
         Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
         <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
         ${generatePolicyUrl('Læs mere om cookies')}
-        <form>
-            <label class="intSettingDisabled">
-                Nødvendige
-                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                <span class="checkmark"></span>
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
-                <span class="checkmark"></span>
-                Funktionelle
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
-                <span class="checkmark"></span>
-                Statistiske
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
-                <span class="checkmark"></span>
-                Marketing
-            </label>
+        <form class="intCookieSetting__form">
+            <section>
+                <label class="intSettingDisabled checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                    <span class="checkmark"></span>
+                    Nødvendige
+                </label>
+                <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                    <span class="checkmark"></span>
+                    Funktionel
+                </label>
+                <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                    <span class="checkmark"></span>
+                    Statistiske
+                </label>
+                <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                    <span class="checkmark"></span>
+                    Marketing
+                </label>
+                <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
+            </section>
         </form>`,
         german: `<h3>Sie haben die Kontrolle über Ihre Daten</h3>
         <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
@@ -706,27 +718,39 @@ function createCookieSettings() {
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
         <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
         ${generatePolicyUrl('Mehr über cookies erfahren')}
-        <form>
-            <label class="intSettingDisabled">
-                Unbedingt erforderlich
-                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                <span class="checkmark"></span>
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
-                <span class="checkmark"></span>
-                Funktional
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
-                <span class="checkmark"></span>
-                Statistik
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
-                <span class="checkmark"></span>
-                Werbung
-            </label>
+        <form class="intCookieSetting__form">
+            <section>
+                <label class="intSettingDisabled checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                    <span class="checkmark"></span>
+                    Unbedingt erforderlich
+                </label>
+                <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                    <span class="checkmark"></span>
+                    Funktional
+                </label>
+                <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                    <span class="checkmark"></span>
+                    Statistik
+                </label>
+                <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                    <span class="checkmark"></span>
+                    Werbung
+                </label>
+                <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
+            </section>
         </form>`,
         english: `<h3>You´re in control</h3>
         <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
@@ -738,27 +762,39 @@ function createCookieSettings() {
         <p>By clicking 'Accpet', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
         ${generatePolicyUrl('Learn more')}
-        <form>
-            <label class="intSettingDisabled">
-                Necessary
-                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                <span class="checkmark"></span>
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
-                <span class="checkmark"></span>
-                Functional
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
-                <span class="checkmark"></span>
-                Statics
-            </label>
-            <label>
-                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
-                <span class="checkmark"></span>
-                Marketing
-            </label>
+        <form class="intCookieSetting__form">
+            <section>
+                <label class="intSettingDisabled checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                    <span class="checkmark"></span>
+                    Strictly required
+                </label>
+                <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                    <span class="checkmark"></span>
+                    Functional
+                </label>
+                <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                    <span class="checkmark"></span>
+                    Statics
+                </label>
+                <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
+            </section>
+            <section>
+                <label class="checkMarkContainer">
+                    <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                    <span class="checkmark"></span>
+                    Marketing
+                </label>
+                <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
+            </section>
         </form>`
     }
 
