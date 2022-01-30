@@ -77,7 +77,8 @@ function checkCookieStatus() {
         {
             type: "statics",
             scripts: [
-                "(?=linkedin|gtag)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?(google-analytics+)",
+                "(?=linkedin|gtag)",
+                "(google-analytics+)",
                 "(googletagmanager+)",
                 "(googleoptimize+)",
                 "(piwik+)",
@@ -85,14 +86,13 @@ function checkCookieStatus() {
                 "(bing+)",
                 "(clarity+)",
                 "(consensu+)",
-                "(quantserve+)",
-                "(:[0-9]{1,5})?(\\/\\/.*)?$"
+                "(quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
             ]
         },
         {
             type: "marketing",
             scripts: [
-                "(?=linkedin|gtag)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?(facebook+)",
+                "(?=linkedin|gtag)(facebook+)",
                 "(googlesyndication+)",
                 "(trustpilot+)",
                 "(twitter+)",
@@ -100,19 +100,18 @@ function checkCookieStatus() {
                 "(mailchimp+)",
                 "(linkedin+)",
                 "(licdn+)",
+                "(facebook+)",
                 "(doubleclick+)",
                 "(pinterest+)",
                 "(googleadservices+)",
-                "(googletagmanager+)",
-                "(:[0-9]{1,5})?(\\/\\/.*)?$"
+                "(googletagmanager+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
             ]
         },
         {
             type: "functional",
             scripts: [
-                "(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?(googleapis+)",
-                "(disqus+)",
-                "(:[0-9]{1,5})?(\\/\\/.*)?$"
+                "(googleapis+)",
+                "(disqus+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
             ] 
         }
     ];
@@ -142,65 +141,42 @@ function checkCookieStatus() {
         "(consensu+)",
         "(disqus+)",
         "(quantserve+)",
-        "(:[0-9]{1,5})?(\\/\\/.*)?$"
+        "[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
     ];
 
-    let notRequired = new RegExp(findScripts.join("|"), "ig");
-
-    for (let i = 0; i < allScripts.length; i++){
-        /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
-        if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intMarketing") == "false" && localStorage.getItem("intStatics") == "false") {
-            if (allScripts[i].type != "functional") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }    
-        } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intFunctional") == "false" && localStorage.getItem("intStatics") == "false") {
-            if (allScripts[i].type != "marketing") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }
-        } else if (localStorage.getItem("intStatics") == "checked" && localStorage.getItem("intMarketing") == "false" && localStorage.getItem("intFunctional") == "false") {
-            if (allScripts[i].type != "statics") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }
-        } else if(localStorage.getItem("intMarketing") == "false" && localStorage.getItem("intStatics") == "false" && localStorage.getItem("intFunctional") == "false") {
-            if (allScripts[i].type == "default") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type); 
-            }
-        } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") == "false" && localStorage.getItem("intFunctional") == "false") {
-            if (allScripts[i].type != "marketing") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }
-        } else if (localStorage.getItem("intMarketing") == "false" && localStorage.getItem("intStatics") == "checked" && localStorage.getItem("intFunctional") == "false") {
-            if (allScripts[i].type != "statics") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }
-        } else if (localStorage.getItem("intMarketing") == "false" && localStorage.getItem("intStatics") == "false" && localStorage.getItem("intFunctional") == "checked") {
-            if (allScripts[i].type != "functional") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }
-        } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") == "false" && localStorage.getItem("intFunctional") == "checked") {
-            if (allScripts[i].type != "functional" && allScripts[i].type != "marketing") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }
-        } else if (localStorage.getItem("intMarketing") == "false" && localStorage.getItem("intStatics") == "checked" && localStorage.getItem("intFunctional") == "checked") {
-            if (allScripts[i].type != "functional" && allScripts[i].type != "statics") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }
-        } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") == "checked" && localStorage.getItem("intFunctional") == "false") {
-            if (allScripts[i].type != "marketing" && allScripts[i].type != "statics") {
-                notRequired = new RegExp(allScripts[i].scripts.join("|"), "ig");
-                console.log(allScripts[i].type);
-            }
+    /* Helper function to merge arrays */
+    const merge = (first, second) => {
+        for(let i=0; i<second.length; i++) {
+          first.push(second[i]);
         }
+        return first;
     }
+
+    let notRequired;
+    /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
+    if (localStorage.getItem("intFunctional") == "checked") {
+        let m = merge(allScripts[1].scripts, allScripts[0].scripts)
+        notRequired = new RegExp(m.join("|"), "ig"); 
+    } else if (localStorage.getItem("intMarketing") == "checked") {
+        let m = merge(allScripts[2].scripts, allScripts[0].scripts)
+        notRequired = new RegExp(m.join("|"), "ig");
+    } else if (localStorage.getItem("intStatics") == "checked") {
+        let m = merge(allScripts[1].scripts, allScripts[2].scripts)
+        notRequired = new RegExp(m.join("|"), "ig");
+    } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intStatics") == "checked") {
+        let m = allScripts[1].scripts;
+        notRequired = new RegExp(m.join("|"), "ig");
+    } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intMarketing") == "checked") {
+        let m = allScripts[0].scripts;
+        notRequired = new RegExp(m.join("|"), "ig");
+    } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") == "checked") {
+        let m = allScripts[2].scripts;
+        notRequired = new RegExp(m.join("|"), "ig");
+    } else {
+        notRequired = new RegExp(findScripts.join("|"), "ig");
+    }
+    
+    console.log(notRequired);
 
     const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
@@ -211,7 +187,6 @@ function checkCookieStatus() {
         intHead.appendChild(s);
     }
     /* })(); */
-
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(({ addedNodes }) => {
@@ -235,6 +210,7 @@ function checkCookieStatus() {
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.src;
+
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -257,8 +233,7 @@ function checkCookieStatus() {
                                 node.parentElement.removeChild(node);
                                 deleteAllCookies();
                             }
-                        } else if (dc == allowAllCookieName) {
-                            console.log(notRequired.test(src), src, notRequired);
+                        } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -270,14 +245,15 @@ function checkCookieStatus() {
                                     node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 }
+                            }
 
-                                if (
-                                    notRequired.test(node.innerText)
-                                ) {
-                                    node.type = "text/plain";
-                                    node.parentElement.removeChild(node);
-                                    deleteAllCookies();
-                                }
+                            if (
+                                notRequired.test(node.innerText)
+                                && node.innerText.toLowerCase().indexOf("elementor") == -1
+                            ) {
+                                node.type = "text/plain";
+                                node.parentElement.removeChild(node);
+                                deleteAllCookies();
                             }
                         }
 
@@ -305,29 +281,27 @@ function checkCookieStatus() {
                                     node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 }
-                            } else if (dc == allowAllCookieName) {
+                            } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
                                 if (
                                     src.indexOf(window.location.hostname) == -1
                                     && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
                                 ) {
-
                                     if (
                                         notRequired.test(src)
-                                        && node.innerText.toLowerCase().indexOf("elementor") == -1
                                     ) {
                                         node.type = "text/plain";
                                         node.parentElement.removeChild(node);
                                         deleteAllCookies();
                                     }
-
-                                    if (
-                                        notRequired.test(node.innerText)
-                                        && node.innerText.toLowerCase().indexOf("elementor") == -1
-                                    ) {
-                                        node.type = "text/plain";
-                                        node.parentElement.removeChild(node);
-                                        deleteAllCookies();
-                                    }
+                                }
+    
+                                if (
+                                    notRequired.test(node.innerText)
+                                    && node.innerText.toLowerCase().indexOf("elementor") == -1
+                                ) {
+                                    node.type = "text/plain";
+                                    node.parentElement.removeChild(node);
+                                    deleteAllCookies();
                                 }
                             }
 
@@ -361,8 +335,8 @@ function checkCookieStatus() {
                             node.parentElement.removeChild(node);
                             deleteAllCookies();
                         }
-                    } else if (dc == allowAllCookieName) {
-
+                    } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
+                        
                         if (
                             notRequired.test(node.innerText)
                             && node.innerText.toLowerCase().indexOf("elementor") == -1
@@ -387,34 +361,31 @@ function checkCookieStatus() {
                                     && node.innerText.toLowerCase().indexOf("elementor") == -1
                                 ) {
                                     node.type = "text/plain";
-                                    /* node.parentElement.removeChild(node); */
+                                    node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 }
                             }
-                        } else if (dc == allowAllCookieName) {
+                        } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
                             if (
                                 src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == -1
-                                && src.indexOf("elementor") == -1
+                                && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
                             ) {
-
                                 if (
                                     notRequired.test(src)
-                                    && node.innerText.toLowerCase().indexOf("elementor") == -1
                                 ) {
                                     node.type = "text/plain";
                                     node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 }
+                            }
 
-                                if (
-                                    notRequired.test(node.innerText)
-                                    && node.innerText.toLowerCase().indexOf("elementor") == -1
-                                ) {
-                                    node.type = "text/plain";
-                                    node.parentElement.removeChild(node);
-                                    deleteAllCookies();
-                                }
+                            if (
+                                notRequired.test(node.innerText)
+                                && node.innerText.toLowerCase().indexOf("elementor") == -1
+                            ) {
+                                node.type = "text/plain";
+                                node.parentElement.removeChild(node);
+                                deleteAllCookies();
                             }
                         }
 
