@@ -616,7 +616,7 @@ function findScriptParameter(value) {
 }
 
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
-
+let lang = window.INT.settings === undefined || window.INT.settings.language === "auto" || window.INT.settings.language === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : window.INT.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
 function createCookieSettings() {
 
     let message = "";
@@ -663,7 +663,6 @@ function createCookieSettings() {
 
     /* - - - Set the language dependent messages */
 
-    let lang = window.INT.settings === undefined || window.INT.settings.language === "auto" || window.INT.settings.language === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : window.INT.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
     const messages = {
         danish: "Ved at acceptere alle cookies understøtter du " + document.domain + " med at udvikle en bedre løsning til dig.</p><p>Vælg om du vil tillade kun de nødvendige cookies eller om du vil tillade alle cookies.",
         german: "Wenn Sie auf akzeptieren klicken, unterstützen Sie " + document.domain + " bei der Weiterentwicklung von unserer Webseite.</p><p>Wählen Sie zwischen alle Cookies akzeptieren oder nur notwendige cookies.",
@@ -1121,6 +1120,7 @@ function saveINTCookieSettings() {
 window.addEventListener("DOMContentLoaded", function () {
     if (isValidPolicyLink()) {
         createCookieSettings();
+
         if (getCookie(int_hideCookieBannerName) == "") {
             document.body.style.overflow = "hidden";
             document.querySelector("html").style.overflow = "hidden";
@@ -1161,6 +1161,36 @@ window.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".--save").addEventListener("click",() => {
             saveINTCookieSettings();
         });
+
+        document.querySelectorAll(".intCookieSetting__checkbox").forEach((checkbox) => {
+            checkbox.addEventListener("change", function () {
+                if (lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
+                    if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
+                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Save settings";
+                    } else {
+                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Necessary cookies only";
+                    }
+                } else if (lang != null && lang === "de-DE" || lang === "de") {
+                    if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
+                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Speichern";
+                    } else {
+                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Nur notwendige cookies";
+                    }
+                } else if (lang != null && lang === "da" || lang === "da-DK") {
+                    if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
+                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Gem indstillinger";
+                    } else {
+                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Nødvendige";
+                    }
+                } else {
+                    if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
+                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Gem indstillinger";
+                    } else {
+                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Nødvendige";
+                    }
+                }
+            })
+        })
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
