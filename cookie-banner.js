@@ -776,8 +776,7 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
         moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.danish, 'Accepter') +
             `<article class="intCookieSetting__form">
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">Nødvendige</span>
                         <span class="intCheckmarkSliderContainer">
@@ -786,8 +785,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Funktionel</span>
                         <span class="intCheckmarkSliderContainer">
@@ -796,8 +794,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statistiske</span>
                         <span class="intCheckmarkSliderContainer">
@@ -806,8 +803,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Marketing</span>
                         <span class="intCheckmarkSliderContainer">
@@ -827,8 +823,7 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         generateCookieSettingsButton(saveSettings.german, 'Akzeptieren') +
         `<article class="intCookieSetting__form">
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">Unbedingt Erforderliche</span>
                         <span class="intCheckmarkSliderContainer">
@@ -837,8 +832,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Funktional</span>
                         <span class="intCheckmarkSliderContainer">
@@ -847,8 +841,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statistik</span>
                         <span class="intCheckmarkSliderContainer">
@@ -857,8 +850,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Werbung</span>
                         <span class="intCheckmarkSliderContainer">
@@ -879,8 +871,7 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         generateCookieSettingsButton(saveSettings.english, 'Accept') +
         `<article class="intCookieSetting__form">
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">Strictly required</span>
                         <span class="intCheckmarkSliderContainer">
@@ -889,8 +880,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Functional</span>
                         <span class="intCheckmarkSliderContainer">
@@ -899,8 +889,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statics</span>
                         <span class="intCheckmarkSliderContainer">
@@ -909,8 +898,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Marketing</span>
                         <span class="intCheckmarkSliderContainer">
@@ -942,8 +930,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Funktionel</span>
                         <span class="intCheckmarkSliderContainer">
@@ -952,8 +939,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statistiske</span>
                         <span class="intCheckmarkSliderContainer">
@@ -962,8 +948,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Marketing</span>
                         <span class="intCheckmarkSliderContainer">
