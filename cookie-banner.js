@@ -175,8 +175,6 @@ function checkCookieStatus() {
     } else {
         notRequired = new RegExp(findScripts.join("|"), "ig");
     }
-    
-    console.log(notRequired);
 
     const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
@@ -672,7 +670,7 @@ function createCookieSettings() {
     const messageWrapEnd = "</p></div>";
 
     const settingsMessages = {
-        danish: `<h3>Du bestemmer over dine data</h3>
+        danish: `<h3 style="    font-size: 25px;">Du bestemmer over dine data</h3>
         <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
         <ol>
             <li>Funktionel</li>
@@ -693,7 +691,6 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
-                <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -704,7 +701,6 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
-                <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -715,7 +711,6 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
-                <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -726,10 +721,27 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
+            </section>
+        </article>
+        <article class="intReadMore">
+            <section>
+                <h3>Nødvendige</h3>
+                <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
+            </section>
+            <section>
+                <h3>Funktional</h3>
+                <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
+            </section>
+            <section>
+                <h3>Statistik</h3>
+                <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
+            </section>
+            <section>
+                <h3>Marketing</h3>
                 <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
             </section>
         </article>`,
-        german: `<h3>Sie haben die Kontrolle über Ihre Daten</h3>
+        german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
         <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
         <ol>
             <li>Funktional</li>
@@ -739,15 +751,16 @@ function createCookieSettings() {
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
         <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
         ${generatePolicyUrl('Mehr über cookies erfahren')}
-        <form class="intCookieSetting__form">
+        <article class="intCookieSetting__form">
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
                 <label class="intSettingDisabled checkMarkContainer">
-                    <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                    <span class="checkmark round"></span>
-                    Unbedingt erforderlich
+                    <span class="intSettingsTitle">Unbedingt erforderlich</span>
+                    <span class="intCheckmarkSliderContainer">
+                        <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                        <span class="checkmark round"></span>
+                    </span>
                 </label>
-                <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -758,7 +771,6 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
-                <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -769,7 +781,6 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
-                <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -780,10 +791,27 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
+            </section>
+        </article>
+        <article class="intReadMore">
+            <section>
+                <h3>Erforderliche</h3>
+                <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
+            </section>
+            <section>
+                <h3>Funktional</h3>
+                <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
+            </section>
+            <section>
+                <h3>Statistik</h3>
+                <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
+            </section>
+            <section>
+                <h3>Marketing</h3>
                 <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
             </section>
-        </form>`,
-        english: `<h3>You´re in control</h3>
+        </article>`,
+        english: `<h3 style="    font-size: 25px;">You´re in control</h3>
         <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
         <ol>
             <li>Functional</li>
@@ -797,11 +825,12 @@ function createCookieSettings() {
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
                 <label class="intSettingDisabled checkMarkContainer">
-                    <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                    <span class="checkmark round"></span>
-                    Strictly required
+                    <span class="intSettingsTitle">Strictly required</span>
+                    <span class="intCheckmarkSliderContainer">
+                        <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                        <span class="checkmark round"></span>
+                    </span>
                 </label>
-                <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -812,7 +841,6 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
-                <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -823,7 +851,6 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
-                <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
             </section>
             <section style="padding: 10px 0px;
             margin: 10px 0px;">
@@ -834,15 +861,32 @@ function createCookieSettings() {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
+            </section>
+        </article>
+        <article class="intReadMore">
+            <section>
+                <h3>Strictly required</h3>
+                <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
+            </section>
+            <section>
+                <h3>Functional</h3>
+                <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
+            </section>
+            <section>
+                <h3>Statics</h3>
+                <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
+            </section>
+            <section>
+                <h3>Marketing</h3>
                 <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
             </section>
         </article>`
     }
 
     let saveSettings = {
-        danish: localStorage.getItem("intFunctional") == "checked" ? "Gem indstillinger" : "Nødvendige",
-        german: localStorage.getItem("intFunctional") == "checked" ? "Einstellungen Speichern" : "Nur notwendige cookies",
-        english: localStorage.getItem("intFunctional") == "checked" ? "Save settings" : "Necessary cookies only"
+        danish: localStorage.getItem("intFunctional") == "checked" || localStorage.getItem("intStatics") == "checked" || localStorage.getItem("intMarketing") == "checked" ? "Gem indstillinger" : "Nødvendige",
+        german: localStorage.getItem("intFunctional") == "checked" || localStorage.getItem("intStatics") == "checked" || localStorage.getItem("intMarketing") == "checked" ? "Einstellungen Speichern" : "Nur notwendige cookies",
+        english: localStorage.getItem("intFunctional") == "checked" || localStorage.getItem("intStatics") == "checked" || localStorage.getItem("intMarketing") == "checked" ? "Save settings" : "Necessary cookies only"
     }
 
     if (lang != null && lang === "da" || lang === "da-DK") {
