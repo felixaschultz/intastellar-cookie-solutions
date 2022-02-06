@@ -1109,7 +1109,13 @@ function saveINTCookieSettings() {
     int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
     "; path=/; domain=." +
     domain +
-    "";
+        "";
+    
+        document.cookie =
+        int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
+        "; path=/; domain=." +
+        domain +
+        "";
 
     window.location.reload();
 }
