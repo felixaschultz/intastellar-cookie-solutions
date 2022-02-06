@@ -18,7 +18,7 @@ const button__acceptAllNecessary = document.querySelector(".intastellarCookieBan
 const INT = window.INT = {
     policy_link: undefined,
     settings: {
-        language: "auto",
+        lang: "auto",
         color: "rgba(0, 51, 153, 1)",
         keepInLocalStorage: [],
         arrange: "ltr",
@@ -513,7 +513,7 @@ function allStorage() {
 }
 
 function clearLocalStorage(ls) {
-    if (ls != null) {
+    if (ls != null && ls != "intFunctional" && ls != "intStatics" && ls != "intMarketing") {
         let lsA = Object.values(ls);
         if (lsA.length != 0 || lsA != null) {
             for (let i = 0; i < lsA.length; i++) {
@@ -616,7 +616,7 @@ function findScriptParameter(value) {
 }
 
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
-let lang = window.INT.settings === undefined || window.INT.settings.language === "auto" || window.INT.settings.language === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : window.INT.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
+let intastellarCookieLanguage = window.INT.settings === undefined || window.INT.settings.lang === "auto" || window.INT.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : window.INT.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
 function createCookieSettings() {
 
     let message = "";
@@ -661,7 +661,7 @@ function createCookieSettings() {
     /* bannerContent.setAttribute("class","intastellarCookie-settingsContainer");
     bannerContent.setAttribute("title", "Cookie Settings"); */
 
-    /* - - - Set the language dependent messages */
+    /* - - - Set the intastellarCookieLanguageuage dependent messages */
 
     const messages = {
         danish: "Ved at acceptere alle cookies understøtter du " + document.domain + " med at udvikle en bedre løsning til dig.</p><p>Vælg om du vil tillade kun de nødvendige cookies eller om du vil tillade alle cookies.",
@@ -765,7 +765,7 @@ function createCookieSettings() {
         english: localStorage.getItem("intFunctional") == "checked" || localStorage.getItem("intStatics") == "checked" || localStorage.getItem("intMarketing") == "checked" ? "Save settings" : "Necessary cookies only"
     }
 
-    if (lang != null && lang === "da" || lang === "da-DK") {
+    if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
         settingsMessage = settingsMessages.danish;
         message =
             messageWrapStart
@@ -812,7 +812,7 @@ function createCookieSettings() {
                     </label>
                 </section>
             </article>`;
-    } else if (lang != null && lang === "de-DE" || lang === "de") {
+    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
         settingsMessage = settingsMessages.german;
         message = messageWrapStart
             + messages.german
@@ -859,7 +859,7 @@ function createCookieSettings() {
                     </label>
                 </section>
             </article>`;
-    } else if (lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
+    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
         settingsMessage = settingsMessages.english;
         message =
             messageWrapStart
@@ -1164,19 +1164,19 @@ window.addEventListener("DOMContentLoaded", function () {
 
         document.querySelectorAll(".intCookieSetting__checkbox").forEach((checkbox) => {
             checkbox.addEventListener("change", function () {
-                if (lang != null && lang === "en" || lang === "en-GB" || lang === "en-US") {
+                if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
                     if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
                         document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Save settings";
                     } else {
                         document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Necessary cookies only";
                     }
-                } else if (lang != null && lang === "de-DE" || lang === "de") {
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
                     if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
                         document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Speichern";
                     } else {
                         document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Nur notwendige cookies";
                     }
-                } else if (lang != null && lang === "da" || lang === "da-DK") {
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
                     if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
                         document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Gem indstillinger";
                     } else {
