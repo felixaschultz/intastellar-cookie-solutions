@@ -569,6 +569,22 @@ function isURL(str) {
     }
 }
 
+/* const isExternal = function (url) {
+    const domain = function (url) {
+        return url.replace("http://", "").replace("https://", "").split("/")[0];
+    };
+    return domain(window.location.href) !== domain(url);
+};
+
+function listCookies() {
+    var theCookies = document.cookie.split(";");
+    var aString = "";
+    for (var i = 1; i <= theCookies.length; i++) {
+        aString += i + " " + theCookies[i - 1] + "\n";
+    }
+    return aString;
+} */
+
 /* Helper function to get list of cookies */
 
 function getCookies() {
@@ -1078,27 +1094,37 @@ function saveINTCookieSettings() {
 
     if (FunctionalCheckbox.checked) {
         localStorage.setItem("intFunctional", "checked");
+        document.cookie =
+        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
+        "; path=/; domain=." +
+        domain +
+            "";
     } else {
         localStorage.setItem("intFunctional", false);
     }
 
     if (StaticsCheckBox.checked) {
         localStorage.setItem("intStatics", "checked");
+        document.cookie =
+        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
+        "; path=/; domain=." +
+        domain +
+            "";
     } else {
         localStorage.setItem("intStatics", false);
     }
 
     if (MarketingCheckBox.checked) {
         localStorage.setItem("intMarketing", "checked");
+        document.cookie =
+        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
+        "; path=/; domain=." +
+        domain +
+            "";
     } else {
         localStorage.setItem("intMarketing", false);
     }
 
-    document.cookie =
-    int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-    "; path=/; domain=." +
-    domain +
-        "";
     document.cookie =
         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
         "; path=/; domain=." +
