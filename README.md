@@ -9,6 +9,8 @@ With this project I wanted to build my own cookie banner witch is free to use. I
 
 As an indie webdev and front-end developer I´ve decided to start building my own little banner and it evolved to this project.
 This cookie banner is also available in diffrent language:
+
+Available language:
 * German
 * Danish
 * English
