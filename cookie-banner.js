@@ -26,8 +26,6 @@ const INT = window.INT = {
     }
 }
 
-/* [\-\]| */
-
 const allowAllCookieName = "__all__cookies";
 const essentialsCookieName = "__essential__cookies";
 const blockTrackingCookies = "__hideTrackingCookies";
@@ -153,24 +151,25 @@ function checkCookieStatus() {
     }
 
     let notRequired;
+    let m;
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
     if (localStorage.getItem("intFunctional") == "checked") {
-        let m = merge(allScripts[1].scripts, allScripts[0].scripts)
+        m = merge(allScripts[1].scripts, allScripts[0].scripts)
         notRequired = new RegExp(m.join("|"), "ig"); 
     } else if (localStorage.getItem("intMarketing") == "checked") {
-        let m = merge(allScripts[2].scripts, allScripts[0].scripts)
+        m = merge(allScripts[2].scripts, allScripts[0].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intStatics") == "checked") {
-        let m = merge(allScripts[1].scripts, allScripts[2].scripts)
+        m = merge(allScripts[1].scripts, allScripts[2].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intStatics") == "checked") {
-        let m = allScripts[1].scripts;
+        m = allScripts[1].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intMarketing") == "checked") {
-        let m = allScripts[0].scripts;
+        m = allScripts[0].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") == "checked") {
-        let m = allScripts[2].scripts;
+        m = allScripts[2].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
     } else {
         notRequired = new RegExp(findScripts.join("|"), "ig");
@@ -555,8 +554,15 @@ function isURL(str) {
     tmp.href = str;
 
     if (tmp.host !== window.location.host || tmp.host == window.location.host) {
-        if (pattern.test(str)) {
+        if (pattern.test(str) && str.indexOf("policy") != -1 ||
+            pattern.test(str) && str.indexOf("cookie") != -1 ||
+            pattern.test(str) && str.indexOf("privat") != -1 ||
+            pattern.test(str) && str.indexOf("privacy") != -1 ||
+            pattern.test(str) && str.indexOf("datenschutz") != -1 ||
+            pattern.test(str) && str.indexOf("handelsbetingelser") != -1) {
             return true;
+        } else {
+            return false;
         }
     } else {
         return false;
@@ -689,7 +695,7 @@ function createCookieSettings() {
                 <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
             </section>
             <section>
-                <h3>Funktional</h3>
+                <h3>Funktionel</h3>
                 <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
             </section>
             <section>
@@ -919,8 +925,7 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
         moreFooter.innerHTML =generateCookieSettingsButton('Gem indstillinger', 'Accepter')+
         `<article class="intCookieSetting__form">
-                <section style="padding: 10px 0px;
-                margin: 10px 0px;">
+                <section style="padding: 10px 0px;">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">Nødvendige</span>
                         <span class="intCheckmarkSliderContainer">
@@ -1110,8 +1115,7 @@ function saveINTCookieSettings() {
     "; path=/; domain=." +
     domain +
         "";
-    
-        document.cookie =
+    document.cookie =
         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
         "; path=/; domain=." +
         domain +
@@ -1147,7 +1151,7 @@ window.addEventListener("DOMContentLoaded", function () {
         }
 
         function cookieEnabled() {
-            var cookieEnabled = navigator.cookieEnabled;
+            let cookieEnabled = navigator.cookieEnabled;
             if (!cookieEnabled) {
                 document.cookie = "test";
                 cookieEnabled = document.cookie.indexOf("test") !== -1;
@@ -1155,12 +1159,14 @@ window.addEventListener("DOMContentLoaded", function () {
             return cookieEnabled;
         }
 
-        var cookiesOn = getCookie(int_cookieName);
+        const cookiesOn = getCookie(int_cookieName);
 
         document.querySelector(".intastellarCookieBanner__settings").addEventListener("click", () => {
             let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
             if (!intCookieSettingsMore.classList.contains("--active")) {
                 intCookieSettingsMore.classList.add("--active");
+                document.body.style.overflow = "hidden";
+                document.querySelector("html").style.overflow = "hidden";
             }
         });
 
@@ -1546,6 +1552,6 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     } else {
         checkCookieStatus();
-        console.error("Intastellar Cookie Banner SDK: Please add a privacy & cookie policy to the banner: https://www.intastellarsolutions.com/gdpr-cookiebanner")
+        console.error("Intastellar Cookie Banner SDK: Please add a valid privacy & cookie policy to the banner: https://www.intastellarsolutions.com/gdpr-cookiebanner")
     }
 });
