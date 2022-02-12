@@ -569,22 +569,6 @@ function isURL(str) {
     }
 }
 
-/* const isExternal = function (url) {
-    const domain = function (url) {
-        return url.replace("http://", "").replace("https://", "").split("/")[0];
-    };
-    return domain(window.location.href) !== domain(url);
-};
-
-function listCookies() {
-    var theCookies = document.cookie.split(";");
-    var aString = "";
-    for (var i = 1; i <= theCookies.length; i++) {
-        aString += i + " " + theCookies[i - 1] + "\n";
-    }
-    return aString;
-} */
-
 /* Helper function to get list of cookies */
 
 function getCookies() {
