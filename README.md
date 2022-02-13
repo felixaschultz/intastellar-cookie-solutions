@@ -1,5 +1,5 @@
 # GDPR Cookie banner by Intastellar Solutions, International
-
+<img width="460" src="https://www.intastellarsolutions.com/assets/cookiebanner_image--new.png">
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
