@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="dk">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -13,7 +13,7 @@
         display: grid;
         place-content: center;
       }
-      h1 {
+      h1, h2, p {
         color: inherit;
         font-weight: lighter;
         text-align: center;
@@ -24,6 +24,11 @@
         color: inherit;
         text-align: center;
         padding: 15px 0px;
+      }
+
+      .grid{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
       }
     </style>
     <script src="../../cookie-banner.js"></script>
@@ -63,7 +68,13 @@
     <a href="https://www.intastellarsolutions.com/gdpr-cookiebanner"
       >Read about the banner</a
     >
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/TuAuJM9S6RY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/55iwMYv8tGI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <h2>Embedded Videos</h2>
+    <p>Try to accpet only Marketing cookies to see below some embedded Videos</p>
+    <section class="grid">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/TuAuJM9S6RY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/55iwMYv8tGI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe width="560" height="315" title="Tak til 500 Likes - Cykelfærgen Rødsand" src="https://www.facebook.com/plugins/video.php?height=314&amp;href=https%3A%2F%2Fwww.facebook.com%2Fcykelfargen%2Fvideos%2F995001181027571%2F&amp;show_text=false&amp;width=560&amp;t=0" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+      <iframe width="560" height="315" title="Intastellar Solutions, International Intro - Intastellar Solutions, International" src="https://www.facebook.com/plugins/video.php?height=314&amp;href=https%3A%2F%2Fwww.facebook.com%2Fintastellarsolutions%2Fvideos%2F658972021731843%2F&amp;show_text=false&amp;width=560&amp;t=0" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+    </section>
   </body>
 </html>
