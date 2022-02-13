@@ -767,6 +767,7 @@ function createCookieSettings() {
             <section>
                 <h3>Marketing</h3>
                 <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
+                <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
             </section>
         </article>`
     }
@@ -1018,7 +1019,7 @@ function createCookieSettings() {
         text = " Cookie notice";
         cookieSize = "25%";
     }
-    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .intastellarCookie-settings__btn.--bg, .intastellarCookieConstents__content-main{background: " + cookieColor + " !important;color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookie-settings__privacyLink{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
+    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .intastellarCookie-settings__btn.--bg, .intastellarCookieConstents__content-main{background: " + cookieColor + " !important;color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
     intHead.appendChild(s);
 
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
@@ -1098,12 +1099,20 @@ function saveINTCookieSettings() {
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
 
+    if (MarketingCheckBox.checked === false && StaticsCheckBox.checked === false && FunctionalCheckbox.checked === false) {
+        document.cookie = int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
+                    "; path=/; domain=." +
+                    domain +
+                    "";
+        document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+    }
+
     if (FunctionalCheckbox.checked) {
         localStorage.setItem("intFunctional", "checked");
         document.cookie =
-        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-        "; path=/; domain=." +
-        domain +
+            int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
+            "; path=/; domain=." +
+            domain +
             "";
     } else {
         localStorage.setItem("intFunctional", false);
@@ -1112,9 +1121,9 @@ function saveINTCookieSettings() {
     if (StaticsCheckBox.checked) {
         localStorage.setItem("intStatics", "checked");
         document.cookie =
-        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-        "; path=/; domain=." +
-        domain +
+            int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
+            "; path=/; domain=." +
+            domain +
             "";
     } else {
         localStorage.setItem("intStatics", false);
@@ -1123,19 +1132,19 @@ function saveINTCookieSettings() {
     if (MarketingCheckBox.checked) {
         localStorage.setItem("intMarketing", "checked");
         document.cookie =
-        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-        "; path=/; domain=." +
-        domain +
+            int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
+            "; path=/; domain=." +
+            domain +
             "";
     } else {
         localStorage.setItem("intMarketing", false);
     }
 
     document.cookie =
-        int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-        "; path=/; domain=." +
-        domain +
-        "";
+    int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
+    "; path=/; domain=." +
+    domain +
+    "";
 
     window.location.reload();
 }
@@ -1344,9 +1353,9 @@ window.addEventListener("DOMContentLoaded", function () {
                     "";
                 document.body.style.overflow = "auto";
 
-                localStorage.setItem("intFunctional", "checked");
-                localStorage.setItem("intStatics", "checked");
-                localStorage.setItem("intMarketing", "checked");
+                localStorage.setItem("intFunctional", "false");
+                localStorage.setItem("intStatics", "false");
+                localStorage.setItem("intMarketing", "false");
 
                 window.location.reload();
             });
