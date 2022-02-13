@@ -197,7 +197,7 @@ function checkCookieStatus() {
             addedNodes.forEach((node) => {
                 const iframe = document.querySelectorAll("iframe");
                 iframe.forEach((frae) => {
-                    if (!intaCookieType("intMarketing")) {
+                    if (!intaCookieType("intMarketing") || !isValidPolicyLink()) {
                         frae.src = "about:blank";
                     }
                 })
