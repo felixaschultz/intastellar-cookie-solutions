@@ -989,7 +989,7 @@ function createCookieSettings() {
     let cookieLogo = window.INT.settings === undefined || window.INT.settings.logo === undefined || window.INT.settings.logo === "" || window.INT.settings.logo.indexOf("[") > -1 ? "https://img.icons8.com/ios-filled/50/000000/cookie.png" : window.INT.settings.logo;
     let backgroundColor = window.INT.settings === undefined || window.INT.settings.background_color === undefined ? "#fff" : window.INT.settings.background_color;
     let cookieTextColor = invertColor(backgroundColor);
-    const checkMarkColor = "";
+    const checkMarkColor = cookieColor;
     let brightColor = "";
     if (cookieColor.indexOf("var") != -1) {
         /* document.documentElement.style
