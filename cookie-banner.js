@@ -1046,8 +1046,13 @@ function createCookieSettings() {
         intastellarCCPAContainer.appendChild(intastellarCCPAContainer__content);
         document.body.appendChild(intastellarCCPAContainer);
 
+        const intastellarCCPApopup = document.createElement("article");
+        intastellarCCPApopup.setAttribute("class", "intastellarCCPApopup");
+        document.body.appendChild(intastellarCCPApopup);
+
         document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
-            alert("Do not sell my personal data!");
+            /* document.querySelector(".intastellarCCPApopup").classList.toggle("--active"); */
+            window.open("https://optout.aboutads.info/?c=2&lang=EN", '_blank').focus();
         })
     }
 
