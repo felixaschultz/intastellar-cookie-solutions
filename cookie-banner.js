@@ -184,6 +184,12 @@ function checkCookieStatus() {
         intHead.appendChild(s);
     }
     /* })(); */
+
+    /* - - - Helper function to get cookie type*/
+    function intaCookieType(type) {
+        return localStorage.getItem(type);
+    }
+
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(({ addedNodes }) => {
@@ -191,7 +197,7 @@ function checkCookieStatus() {
 
                 const iframe = document.querySelectorAll("iframe");
                 iframe.forEach((frae) => {
-                    if (!allCookiesAllowed()) {
+                    if (!allCookiesAllowed() || !intaCookieType("intMarketing")) {
                         frae.src = "about:blank";
                     }
                 })
