@@ -984,7 +984,7 @@ function createCookieSettings() {
 
     moreContentText.innerHTML = settingsMessage;
 
-
+    let ccpa = window.INT.settings === undefined || window.INT.settings.ccpa === undefined ? false : window.INT.settings.ccpa;
     let cookieColor = window.INT.settings === undefined || window.INT.settings.color === undefined || window.INT.settings.color.indexOf("[") > -1 || window.INT.settings.color === ""  ? "rgba(0, 51, 153, 1)" : window.INT.settings.color;
     let cookieLogo = window.INT.settings === undefined || window.INT.settings.logo === undefined || window.INT.settings.logo === "" || window.INT.settings.logo.indexOf("[") > -1 ? "https://img.icons8.com/ios-filled/50/000000/cookie.png" : window.INT.settings.logo;
     let backgroundColor = window.INT.settings === undefined || window.INT.settings.background_color === undefined ? "#fff" : window.INT.settings.background_color;
@@ -1032,6 +1032,20 @@ function createCookieSettings() {
     }
     s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .intastellarCookie-settings__btn.--bg, .intastellarCookieConstents__content-main{background: " + cookieColor + " !important;color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
     intHead.appendChild(s);
+
+    if (ccpa) {
+        const intastellarCCPAContainer = document.createElement("article");
+        const intastellarCCPAContainer__content = document.createElement("section");
+
+        intastellarCCPAContainer.setAttribute("class", "intastellarCCPAContainer");
+        
+        intastellarCCPAContainer__content.innerHTML = `
+            Do not sell my personal data!
+        `;
+
+        intastellarCCPAContainer.appendChild(intastellarCCPAContainer__content);
+        document.body.appendChild(intastellarCCPAContainer);
+    }
 
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
     /* <button class="analytics">Analytics</button> */
