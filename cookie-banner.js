@@ -518,14 +518,23 @@ function allStorage() {
 }
 
 function clearLocalStorage(ls) {
-    if (ls != null && ls != "intFunctional" && ls != "intStatics" && ls != "intMarketing") {
+    if (ls != null) {
         let lsA = Object.values(ls);
         if (lsA.length != 0 || lsA != null) {
             for (let i = 0; i < lsA.length; i++) {
                 let item = localStorage.getItem(lsA[i]);
                 let itemName = lsA[i];
+
+                const intMarketingLocalStorage = localStorage.getItem("intMarketing");
+                const intStaticsLocalStorage = localStorage.getItem("intStatics");
+                const intFunctionalLocalStorage = localStorage.getItem("intFunctional");
+
                 localStorage.clear();
                 localStorage.setItem(itemName, item);
+
+                localStorage.setItem("intMarketing",intMarketingLocalStorage);
+                localStorage.setItem("intStatics",intStaticsLocalStorage);
+                localStorage.setItem("intFunctional",intFunctionalLocalStorage);
             }
         } else {
             localStorage.clear();
@@ -711,12 +720,13 @@ function createCookieSettings() {
             <section>
                 <h3>Marketing</h3>
                 <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
+                <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
             </section>
         </article>`,
         german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
         <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
         <ol>
-            <li>Funktional</li>
+            <li>Funktionel</li>
             <li>Statistik</li>
             <li>Werbung</li>
         </ol>
@@ -729,7 +739,7 @@ function createCookieSettings() {
                 <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
             </section>
             <section>
-                <h3>Funktional</h3>
+                <h3>Funktionel</h3>
                 <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
             </section>
             <section>
@@ -737,8 +747,9 @@ function createCookieSettings() {
                 <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
             </section>
             <section>
-                <h3>Marketing</h3>
+                <h3>Werbung</h3>
                 <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
+                <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
             </section>
         </article>`,
         english: `<h3 style="    font-size: 25px;">You´re in control</h3>
@@ -837,7 +848,7 @@ function createCookieSettings() {
         `<article class="intCookieSetting__form">
                 <section style="padding: 10px 0px;">
                     <label class="intSettingDisabled checkMarkContainer">
-                        <span class="intSettingsTitle">Unbedingt Erforderliche</span>
+                        <span class="intSettingsTitle">Erforderliche</span>
                         <span class="intCheckmarkSliderContainer">
                             <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                             <span class="checkmark round"></span>
@@ -846,7 +857,7 @@ function createCookieSettings() {
                 </section>
                 <section style="padding: 10px 0px;">
                     <label class="checkMarkContainer">
-                        <span class="intSettingsTitle">Funktional</span>
+                        <span class="intSettingsTitle">Funktionel</span>
                         <span class="intCheckmarkSliderContainer">
                             <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
                             <span class="checkmark round"></span>
