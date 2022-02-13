@@ -1,5 +1,5 @@
 # GDPR Cookie banner by Intastellar Solutions, International
-![Alt text](https://www.intastellarsolutions.com/assets/cookiebanner_image--new.png "Title")
+![GDPR Cookie banner by Intastellar Solutions, International](/img/github__banner.jpg "GDPR Cookie banner by Intastellar Solutions, International")
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
