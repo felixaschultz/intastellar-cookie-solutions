@@ -1045,6 +1045,10 @@ function createCookieSettings() {
 
         intastellarCCPAContainer.appendChild(intastellarCCPAContainer__content);
         document.body.appendChild(intastellarCCPAContainer);
+
+        document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
+            alert("Do not sell my personal data!");
+        })
     }
 
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
