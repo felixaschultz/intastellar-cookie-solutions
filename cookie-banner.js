@@ -187,17 +187,17 @@ function checkCookieStatus() {
 
     /* - - - Helper function to get cookie type*/
     function intaCookieType(type) {
-        return localStorage.getItem(type);
+        if (localStorage.getItem(type) === "checked") return true;
+        return (localStorage.getItem(type) === "true")
     }
 
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(({ addedNodes }) => {
             addedNodes.forEach((node) => {
-
                 const iframe = document.querySelectorAll("iframe");
                 iframe.forEach((frae) => {
-                    if (!allCookiesAllowed() || !intaCookieType("intMarketing")) {
+                    if (!intaCookieType("intMarketing")) {
                         frae.src = "about:blank";
                     }
                 })
