@@ -35,8 +35,6 @@ const intHead = document.querySelector("head");
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 
 const notExternalCookies = [
-    "_visit_opt",
-    "region",
     "PHPSESSID",
     int_cookieName,
     int_hideCookieBannerName
