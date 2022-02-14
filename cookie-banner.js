@@ -93,6 +93,9 @@ function checkCookieStatus() {
                 "(piwik+)",
                 "(matomo+)",
                 "(bing+)",
+                "(slideshare+)",
+                "(poultons+)",
+                "(poultons+)",
                 "(clarity+)",
                 "(consensu+)",
                 "(quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
@@ -243,16 +246,15 @@ function checkCookieStatus() {
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(({ addedNodes }) => {
             addedNodes.forEach((node) => {
+                if (!allCookiesAllowed() || !intaCookieType("intFunctional")) {
+                    deleteAllCookies();
+                }
                 const iframe = document.querySelectorAll("iframe");
                 iframe.forEach((frae) => {
                     if (!intaCookieType("intMarketing") || !isValidPolicyLink()) {
                         frae.src = "about:blank";
                     }
                 })
-
-                if (!allCookiesAllowed()) {
-                    deleteAllCookies();
-                }
 
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     let src = node.src || "";
