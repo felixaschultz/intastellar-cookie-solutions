@@ -39,6 +39,19 @@ const notExternalCookies = [
     int_cookieName,
     int_hideCookieBannerName
 ];
+
+/* - - - Helper function to get cookie type*/
+function intaCookieType(type) {
+    if (localStorage.getItem(type) === "checked") return true;
+    return (localStorage.getItem(type) === "true")
+}
+
+if (intaCookieType("intFunctional")) {
+    notExternalCookies.push("region");
+    notExternalCookies.push("language");
+    notExternalCookies.push("lang");
+}
+
 const noCookies = new RegExp(notExternalCookies.join("|"), "i");
 
 const pSBC = (p, c0, c1, l) => {
@@ -225,12 +238,6 @@ function checkCookieStatus() {
         intHead.appendChild(s);
     }
     /* })(); */
-
-    /* - - - Helper function to get cookie type*/
-    function intaCookieType(type) {
-        if (localStorage.getItem(type) === "checked") return true;
-        return (localStorage.getItem(type) === "true")
-    }
 
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
