@@ -54,7 +54,7 @@ if (intaCookieType("intFunctional")) {
     int__cookiesToKeep.push("locale");
 }
 
-const noCookies = new RegExp(int__cookiesToKeep.join("|"), "i");
+const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.join("|"), "i");
 
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
@@ -601,7 +601,7 @@ function deleteAllCookies() {
         var cookie = cookies[i];
         var eqPos = cookie.indexOf("=");
         var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        if (!noCookies.test(name)) {
+        if (!int__cookiesToKeepReg.test(name)) {
             let localS = window.INT.settings === undefined || window.INT.settings.keepInLocalStorage === undefined ? "" : window.INT.settings.keepInLocalStorage;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=" + domain + "; path=/";
             clearLocalStorage(localS);
