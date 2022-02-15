@@ -34,7 +34,7 @@ const intHead = document.querySelector("head");
 
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 
-const notExternalCookies = [
+const int__cookiesToKeep = [
     "PHPSESSID",
     int_cookieName,
     int_hideCookieBannerName
@@ -47,12 +47,14 @@ function intaCookieType(type) {
 }
 
 if (intaCookieType("intFunctional")) {
-    notExternalCookies.push("region");
-    notExternalCookies.push("language");
-    notExternalCookies.push("lang");
+    int__cookiesToKeep.push("region");
+    int__cookiesToKeep.push("language");
+    int__cookiesToKeep.push("lang");
+    int__cookiesToKeep.push("hl");
+    int__cookiesToKeep.push("locale");
 }
 
-const noCookies = new RegExp(notExternalCookies.join("|"), "i");
+const noCookies = new RegExp(int__cookiesToKeep.join("|"), "i");
 
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
@@ -634,22 +636,6 @@ function isURL(str) {
     }
 }
 
-/* const isExternal = function (url) {
-    const domain = function (url) {
-        return url.replace("http://", "").replace("https://", "").split("/")[0];
-    };
-    return domain(window.location.href) !== domain(url);
-};
-
-function listCookies() {
-    var theCookies = document.cookie.split(";");
-    var aString = "";
-    for (var i = 1; i <= theCookies.length; i++) {
-        aString += i + " " + theCookies[i - 1] + "\n";
-    }
-    return aString;
-} */
-
 /* Helper function to get list of cookies */
 
 function getCookies() {
@@ -687,6 +673,8 @@ function findScriptParameter(value) {
 }
 
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
+window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
+
 let intastellarCookieLanguage = window.INT.settings === undefined || window.INT.settings.lang === "auto" || window.INT.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : window.INT.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
 function createCookieSettings() {
 
