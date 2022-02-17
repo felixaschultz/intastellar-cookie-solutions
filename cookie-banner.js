@@ -255,6 +255,15 @@ function checkCookieStatus() {
                 iframe.forEach((frae) => {
                     if (!intaCookieType("intMarketing") || !isValidPolicyLink()) {
                         frae.src = "about:blank";
+                        let info = document.createElement("button");
+                        info.setAttribute("class", "intastellarCookie-settings__btn");
+                        info.classList.add("--bg");
+                        info.classList.add("intastellarCookieBanner__settings");
+                        info.textContent = "Accept Marketing cookies!";
+                        if(window.getComputedStyle(frae).display != "none" || window.getComputedStyle(frae).visibility != "hidden"){
+                            frae.parentNode.appendChild(info);
+                        }
+                        frae.parentNode.removeChild(frae);
                     }
                 })
 
@@ -1253,13 +1262,15 @@ window.addEventListener("DOMContentLoaded", function () {
 
         const cookiesOn = getCookie(int_cookieName);
 
-        document.querySelector(".intastellarCookieBanner__settings").addEventListener("click", () => {
-            let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
-            if (!intCookieSettingsMore.classList.contains("--active")) {
-                intCookieSettingsMore.classList.add("--active");
-                document.body.style.overflow = "hidden";
-                document.querySelector("html").style.overflow = "hidden";
-            }
+        document.querySelectorAll(".intastellarCookieBanner__settings").forEach((setting) => {
+            setting.addEventListener("click", () => {
+                let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
+                if (!intCookieSettingsMore.classList.contains("--active")) {
+                    intCookieSettingsMore.classList.add("--active");
+                    document.body.style.overflow = "hidden";
+                    document.querySelector("html").style.overflow = "hidden";
+                }
+            });
         });
 
         document.querySelector(".--save").addEventListener("click",() => {
