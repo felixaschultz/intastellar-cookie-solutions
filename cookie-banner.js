@@ -298,7 +298,6 @@ function checkCookieStatus() {
                                 ) {
                                     node.type = "text/plain";
                                     node.parentElement.removeChild(node);
-                                    deleteAllCookies();
                                 }
                             }
 
@@ -308,7 +307,6 @@ function checkCookieStatus() {
                             ) {
                                 node.type = "text/plain";
                                 node.parentElement.removeChild(node);
-                                deleteAllCookies();
                             }
                         }
 
@@ -346,7 +344,6 @@ function checkCookieStatus() {
                                     ) {
                                         node.type = "text/plain";
                                         node.parentElement.removeChild(node);
-                                        deleteAllCookies();
                                     }
                                 }
     
@@ -356,7 +353,6 @@ function checkCookieStatus() {
                                 ) {
                                     node.type = "text/plain";
                                     node.parentElement.removeChild(node);
-                                    deleteAllCookies();
                                 }
                             }
 
@@ -398,7 +394,6 @@ function checkCookieStatus() {
                         ) {
                             node.type = "text/plain";
                             node.parentElement.removeChild(node);
-                            deleteAllCookies();
                         }
                     }
 
@@ -430,7 +425,6 @@ function checkCookieStatus() {
                                 ) {
                                     node.type = "text/plain";
                                     node.parentElement.removeChild(node);
-                                    deleteAllCookies();
                                 }
                             }
 
@@ -440,7 +434,6 @@ function checkCookieStatus() {
                             ) {
                                 node.type = "text/plain";
                                 node.parentElement.removeChild(node);
-                                deleteAllCookies();
                             }
                         }
 
