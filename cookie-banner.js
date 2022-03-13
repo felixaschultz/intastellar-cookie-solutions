@@ -1639,6 +1639,6 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     } else {
         checkCookieStatus();
-        console.error("Intastellar Cookie Banner SDK: Please add a valid privacy & cookie policy to the banner: https://www.intastellarsolutions.com/gdpr-cookiebanner")
+        console.error("Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner: https://www.intastellarsolutions.com/gdpr-cookiebanner")
     }
 });
