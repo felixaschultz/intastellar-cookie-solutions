@@ -1,7 +1,7 @@
 /*
  *  GDPR Cookie banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
- *  @copy 2021 Intastellar Solutions, International
+ *  @copy 2022 Intastellar Solutions, International
  *
 */
 
@@ -1232,14 +1232,6 @@ window.addEventListener("DOMContentLoaded", function () {
     if (isValidPolicyLink()) {
         createCookieSettings();
 
-        if (getCookie(int_hideCookieBannerName) == "") {
-            document.body.style.overflow = "hidden";
-            document.querySelector("html").style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-            document.querySelector("html").style.overflow = "";
-        }
-
         if (document.querySelector(".intastellarCookieBanner") != null) {
             if (getCookie(int_hideCookieBannerName) == "1") {
                 document.querySelector(".intastellarCookieBanner").style.display = "none";
@@ -1267,8 +1259,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
                 if (!intCookieSettingsMore.classList.contains("--active")) {
                     intCookieSettingsMore.classList.add("--active");
-                    document.body.style.overflow = "hidden";
-                    document.querySelector("html").style.overflow = "hidden";
                 }
             });
         });
@@ -1334,7 +1324,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem("intFunctional", "checked");
                 localStorage.setItem("intStatics", "checked");
                 localStorage.setItem("intMarketing", "checked");
-                document.body.style.overflow = "auto";
                 window.location.reload();
             });
         }
@@ -1361,14 +1350,12 @@ window.addEventListener("DOMContentLoaded", function () {
                     var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
                     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 }
-                document.body.style.overflow = "auto";
             }
         } else if (cookiesOn == allowAllCookieName) {
             document.cookie = int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
                 "; path=/; domain=." +
                 domain +
                 "";
-            document.body.style.overflow = "auto";
         } else if (cookiesOn == "no-set") {
         }
 
@@ -1395,7 +1382,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     "; path=/; domain=." +
                     domain +
                     "";
-                document.body.style.overflow = "auto";
                 var addedNodes = document.getElementsByTagName("script");
                 for (var i = 0; i < addedNodes.length; i++) {
                     addedNodes.type = "";
@@ -1429,7 +1415,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     "; path=/; domain=." +
                     domain +
                     "";
-                document.body.style.overflow = "auto";
 
                 localStorage.setItem("intFunctional", "false");
                 localStorage.setItem("intStatics", "false");
@@ -1489,7 +1474,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         "; path=/; domain=." +
                         domain +
                         "";
-                    document.body.style.overflow = "auto";
                     window.location.reload();
                 })
             }
@@ -1518,7 +1502,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         domain +
                         "";
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
-                    document.body.style.overflow = "auto";
+                    
                     window.location.reload();
                 });
             });
@@ -1543,7 +1527,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         domain +
                         "";
                     document.cookie = int_analytic + "=yes;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
-                    document.body.style.overflow = "auto";
+                    
                     var addedNodes = document.getElementsByTagName("script");
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
@@ -1613,7 +1597,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         domain +
                         "";
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
-                    document.body.style.overflow = "auto";
+                    
                     window.location.reload();
                 });
             });
@@ -1639,7 +1623,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         domain +
                         "";
                     document.cookie = int_analytic + "=yes;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
-                    document.body.style.overflow = "auto";
+                    
                     var addedNodes = document.getElementsByTagName("script");
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
