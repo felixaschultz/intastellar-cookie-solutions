@@ -7,7 +7,6 @@
 
 /* - - - Setup - - - */
 const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-const settingsCheckboxes = document.querySelectorAll(".intastellarCookie-settings-checkbox");
 const int_cookieName = "__inta_ac_cookie";
 const int_hideCookieBannerName = "__inta";
 const int_analytic = "__inta__analytics";
@@ -255,15 +254,6 @@ function checkCookieStatus() {
                 iframe.forEach((frae) => {
                     if (!intaCookieType("intMarketing") || !isValidPolicyLink()) {
                         frae.src = "about:blank";
-                        let info = document.createElement("button");
-                        info.setAttribute("class", "intastellarCookie-settings__btn");
-                        info.classList.add("--bg");
-                        info.classList.add("intastellarCookieBanner__settings");
-                        info.textContent = "Accept Marketing cookies!";
-                        if(window.getComputedStyle(frae).display != "none" || window.getComputedStyle(frae).visibility != "hidden"){
-                            frae.parentNode.appendChild(info);
-                        }
-                        frae.parentNode.removeChild(frae);
                     }
                 })
 
@@ -678,6 +668,17 @@ const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastel
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
 let intastellarCookieLanguage = window.INT.settings === undefined || window.INT.settings.lang === "auto" || window.INT.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : window.INT.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
+/* - - - Helper functions for Validate policy link - - - */
+function isValidCCPALink() {
+    if (typeof window.INT.settings.ccpa === "object" && isURL(window.INT.settings.ccpa.url)) {
+        if (window.INT.settings.ccpa.url.length > 0 && typeof window.INT.settings.ccpa.url != "undefined") {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function createCookieSettings() {
 
     let message = "";
@@ -823,10 +824,10 @@ function createCookieSettings() {
         </article>`
     }
 
-    let saveSettings = {
-        danish: localStorage.getItem("intFunctional") == "checked" || localStorage.getItem("intStatics") == "checked" || localStorage.getItem("intMarketing") == "checked" ? "Gem indstillinger" : "Nødvendige",
-        german: localStorage.getItem("intFunctional") == "checked" || localStorage.getItem("intStatics") == "checked" || localStorage.getItem("intMarketing") == "checked" ? "Einstellungen Speichern" : "Nur notwendige cookies",
-        english: localStorage.getItem("intFunctional") == "checked" || localStorage.getItem("intStatics") == "checked" || localStorage.getItem("intMarketing") == "checked" ? "Save settings" : "Necessary cookies only"
+    const saveSettings = {
+        danish: "Gem indstillinger",
+        german: "Einstellungen Speichern",
+        english: "Save settings"
     }
 
     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
@@ -981,7 +982,7 @@ function createCookieSettings() {
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
-        moreFooter.innerHTML =generateCookieSettingsButton('Gem indstillinger', 'Accepter')+
+        moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.danish, 'Accepter')+
         `<article class="intCookieSetting__form">
                 <section style="padding: 10px 0px;">
                     <label class="intSettingDisabled checkMarkContainer">
@@ -1075,27 +1076,44 @@ function createCookieSettings() {
     intHead.appendChild(s);
 
     /* Checking for CCPA "Do not sell my personal data" is enabled if so create an info link on the right side of the screen  */
-    if (ccpa) {
+    if (ccpa && isValidCCPALink()) {
         const intastellarCCPAContainer = document.createElement("article");
         const intastellarCCPAContainer__content = document.createElement("section");
 
         intastellarCCPAContainer.setAttribute("class", "intastellarCCPAContainer");
         intastellarCCPAContainer__content.setAttribute("class", "intastellarCCPAContainer__content")
         intastellarCCPAContainer__content.innerHTML = `
-        <svg class="intastellarCCPA__icon" height="14" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#fff"/></svg> Do not sell my personal data!
+            <svg class="intastellarCCPA__icon" height="14" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#fff"/></svg> Do not sell my personal data!
         `;
 
         intastellarCCPAContainer.appendChild(intastellarCCPAContainer__content);
         document.body.appendChild(intastellarCCPAContainer);
 
+
         const intastellarCCPApopup = document.createElement("article");
         intastellarCCPApopup.setAttribute("class", "intastellarCCPApopup");
+        
+        const instastellarCCPApopupContent = document.createElement("section");
+        instastellarCCPApopupContent.setAttribute("class", "intastellarCCPApopup__content");
+        instastellarCCPApopupContent.innerHTML = `
+            <h2><svg class="intastellarCCPA__icon" width="18px" height="19px" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#000"/></svg> Do not sell my personal data!</h2>
+            <p>This section is about our California Consumer Privacy Act.</p>
+            <h3>Personal data we collect:</h3>
+            <ul>
+                ${window.INT.settings.ccpa.collection.map(name => '<li>'+name.charAt(0).toUpperCase()+''+ name.slice(1)+'</li>').join('')}
+            </ul>
+        `;
+
+        intastellarCCPApopup.appendChild(instastellarCCPApopupContent);
+
         document.body.appendChild(intastellarCCPApopup);
 
         document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
-            /* document.querySelector(".intastellarCCPApopup").classList.toggle("--active"); */
-            window.open(ccpaUrl).focus();
+            document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
+           /*  window.open(ccpaUrl).focus(); */
         })
+    } else if (!isValidCCPALink() && "ccpa" in window.INT.settings) {
+        console.error("Intastellar Solutions SDK: Please add your valid 'California Consumer Privacy Act' url to the banner: https://www.intastellarsolutions.com/gdpr-cookiebanner");
     }
 
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
@@ -1152,7 +1170,7 @@ function generateCookieSettingsButton(settingsText, allCookiesText) {
         ;
 }
 
-/* - - - Helper functions for Validate policy link */
+/* - - - Helper functions for Validate policy link - - - */
 function isValidPolicyLink() {
     if (typeof window.INT.policy_link === "string" && isURL(window.INT.policy_link)) {
         if (window.INT.policy_link.length > 0) {
@@ -1224,7 +1242,6 @@ function saveINTCookieSettings() {
 
     window.location.reload();
 }
-
 /* - - - END - - - */
 
 
@@ -1266,36 +1283,6 @@ window.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".--save").addEventListener("click",() => {
             saveINTCookieSettings();
         });
-
-        document.querySelectorAll(".intCookieSetting__checkbox").forEach((checkbox) => {
-            checkbox.addEventListener("change", function () {
-                if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                    if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
-                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Save settings";
-                    } else {
-                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Necessary cookies only";
-                    }
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                    if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
-                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Speichern";
-                    } else {
-                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Nur notwendige cookies";
-                    }
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                    if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
-                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Gem indstillinger";
-                    } else {
-                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Nødvendige";
-                    }
-                } else {
-                    if (this.checked || this.checked && this.id == "statics" || this.checked && this.id == "functional" || this.checked && this.id == "marketing") {
-                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Gem indstillinger";
-                    } else {
-                        document.querySelector(".intastellarCookie-settings__btn.--save").innerText = "Nødvendige";
-                    }
-                }
-            })
-        })
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {

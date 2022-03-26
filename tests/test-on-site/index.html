@@ -41,10 +41,14 @@
         },
         settings: {
           color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)",
-          keepInLocalStorage: ["Hej"],
           ccpa: {
             on: true,
-            url: "https://www.intastellarsolutions.com/about/legal/privacy"
+            url: "https://www.intastellarsolutions.com/about/legal/privacy",
+            collection: [
+              "Email",
+              "Name",
+              "Phone number"
+            ]
           }
         }
       };
@@ -74,7 +78,6 @@
       >Read about the banner</a
     >
     <h2>Embedded Videos</h2>
-    <p>Try to accpet only Marketing cookies to see below some embedded Videos</p>
     <section class="grid">
       <iframe width="560" height="315" src="https://www.youtube.com/embed/TuAuJM9S6RY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       <iframe width="560" height="315" src="https://www.youtube.com/embed/55iwMYv8tGI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
