@@ -628,6 +628,33 @@ function isURL(str) {
     }
 }
 
+function isCCPAURL(str) {
+    const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+
+    const tmp = document.createElement('a');
+    tmp.href = str;
+
+    if (tmp.host !== window.location.host || tmp.host == window.location.host) {
+        if (pattern.test(str) && str.indexOf("policy") != -1 ||
+            pattern.test(str) && str.indexOf("ccpa") != -1 ||
+            pattern.test(str) && str.indexOf("california-consumer-privacy-act") != -1 ||
+            pattern.test(str) && str.indexOf("california") != -1 ||
+            pattern.test(str) && str.indexOf("privacy-act") != -1 ||
+            pattern.test(str) && str.indexOf("california-consumer") != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
 /* Helper function to get list of cookies */
 
 function getCookies() {
@@ -670,7 +697,7 @@ window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : f
 let intastellarCookieLanguage = window.INT.settings === undefined || window.INT.settings.lang === "auto" || window.INT.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INT.settings.language == "german" ? "de" : window.INT.settings.language == "danish" ? "da" : window.INT.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
 /* - - - Helper functions for Validate policy link - - - */
 function isValidCCPALink() {
-    if (typeof window.INT.settings.ccpa === "object" && isURL(window.INT.settings.ccpa.url)) {
+    if (typeof window.INT.settings.ccpa === "object" && isCCPAURL(window.INT.settings.ccpa.url)) {
         if (window.INT.settings.ccpa.url.length > 0 && typeof window.INT.settings.ccpa.url != "undefined") {
             return true;
         }
@@ -840,7 +867,7 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
         moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.danish, 'Accepter') +
             `<article class="intCookieSetting__form">
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">Nødvendige</span>
                         <span class="intCheckmarkSliderContainer">
@@ -849,7 +876,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Funktionel</span>
                         <span class="intCheckmarkSliderContainer">
@@ -858,7 +885,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statistiske</span>
                         <span class="intCheckmarkSliderContainer">
@@ -867,7 +894,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Marketing</span>
                         <span class="intCheckmarkSliderContainer">
@@ -887,7 +914,7 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         generateCookieSettingsButton(saveSettings.german, 'Akzeptieren') +
         `<article class="intCookieSetting__form">
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">Erforderliche</span>
                         <span class="intCheckmarkSliderContainer">
@@ -896,7 +923,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Funktionel</span>
                         <span class="intCheckmarkSliderContainer">
@@ -905,7 +932,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statistik</span>
                         <span class="intCheckmarkSliderContainer">
@@ -914,7 +941,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Werbung</span>
                         <span class="intCheckmarkSliderContainer">
@@ -935,7 +962,7 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         generateCookieSettingsButton(saveSettings.english, 'Accept') +
         `<article class="intCookieSetting__form">
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">Strictly required</span>
                         <span class="intCheckmarkSliderContainer">
@@ -944,7 +971,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Functional</span>
                         <span class="intCheckmarkSliderContainer">
@@ -953,7 +980,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statics</span>
                         <span class="intCheckmarkSliderContainer">
@@ -962,7 +989,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Marketing</span>
                         <span class="intCheckmarkSliderContainer">
@@ -984,7 +1011,7 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
         moreFooter.innerHTML = generateCookieSettingsButton(saveSettings.danish, 'Accepter')+
         `<article class="intCookieSetting__form">
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">Nødvendige</span>
                         <span class="intCheckmarkSliderContainer">
@@ -993,7 +1020,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Funktionel</span>
                         <span class="intCheckmarkSliderContainer">
@@ -1002,7 +1029,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statistiske</span>
                         <span class="intCheckmarkSliderContainer">
@@ -1011,7 +1038,7 @@ function createCookieSettings() {
                         </span>
                     </label>
                 </section>
-                <section style="padding: 10px 0px;">
+                <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Marketing</span>
                         <span class="intCheckmarkSliderContainer">
@@ -1072,7 +1099,7 @@ function createCookieSettings() {
         text = " Cookie notice";
         cookieSize = "25%";
     }
-    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .intastellarCookie-settings__btn.--bg, .intastellarCookieConstents__content-main, .intastellarCCPAContainer{background: " + cookieColor + " !important;color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
+    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .intastellarCookie-settings__btn.--bg, .intastellarCookieConstents__content-main, .intastellarCCPAContainer{background: " + cookieColor + " !important;color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";}.intastellarCCPA__popupClose{background:"+ cookieColor +"; color: #fff;} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
     intHead.appendChild(s);
 
     /* Checking for CCPA "Do not sell my personal data" is enabled if so create an info link on the right side of the screen  */
@@ -1095,29 +1122,38 @@ function createCookieSettings() {
         
         const instastellarCCPApopupContent = document.createElement("section");
         instastellarCCPApopupContent.setAttribute("class", "intastellarCCPApopup__content");
-        instastellarCCPApopupContent.innerHTML = `
-            <h2><svg class="intastellarCCPA__icon" width="18px" height="19px" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#000"/></svg> Do not sell my personal data!</h2>
+
+        if (window.INT.settings.ccpa.collection != undefined) {
+            instastellarCCPApopupContent.innerHTML = `
+            <h2><svg class="intastellarCCPA__icon" width="18px" height="19px" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#000"/></svg> Do not sell my personal data!</h2><button class="intastellarCCPA__popupClose">X</button>
             <p>This section is about our California Consumer Privacy Act.</p>
+            ${createCCPAPolicyLink(ccpaUrl)}
             <h3>Personal data we collect:</h3>
             <ul>
-                ${window.INT.settings.ccpa.collection.map(name => '<li>'+name.charAt(0).toUpperCase()+''+ name.slice(1)+'</li>').join('')}
+                <li>IP-Address</li>
+                ${window.INT.settings.ccpa.collection.map(name => '<li>' + name.charAt(0).toUpperCase() + '' + name.slice(1) + '</li>').join('')}
             </ul>
-        `;
-
+            `;
+        }else{
+            instastellarCCPApopupContent.innerHTML = `
+            <h2><svg class="intastellarCCPA__icon" width="18px" height="19px" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#000"/></svg> Do not sell my personal data!</h2><button class="intastellarCCPA__popupClose">X</button>
+            <h3>Personal data we collect:</h3>
+            <p>This section is about our California Consumer Privacy Act.</p>
+            <ul>
+                <li>IP-Address</li>
+            </ul>
+            `;
+        }
         intastellarCCPApopup.appendChild(instastellarCCPApopupContent);
-
         document.body.appendChild(intastellarCCPApopup);
-
         document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
             document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
-           /*  window.open(ccpaUrl).focus(); */
         })
-    } else if (!isValidCCPALink() && "ccpa" in window.INT.settings) {
+    } else if (!isValidCCPALink() && "ccpa" in window.INT.settings && window.INT.settings.ccpa.on === "true") {
         console.error("Intastellar Solutions SDK: Please add your valid 'California Consumer Privacy Act' url to the banner: https://www.intastellarsolutions.com/gdpr-cookiebanner");
     }
 
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
-    /* <button class="analytics">Analytics</button> */
     let poweredBy = "";
     if (window.location.host.indexOf("intastellarsolutions") == -1) {
         poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' src='https://assets.intastellar-clients.net/bG9nb3MvaW50YXN0ZWxsYXJfc29sdXRpb25zQDJ4LnBuZw==' alt='Intastellar Solutions, International'></a></span>";
@@ -1169,7 +1205,12 @@ function generateCookieSettingsButton(settingsText, allCookiesText) {
         +   '<button class="intastellarCookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll">'+allCookiesText+'</button></section>'
         ;
 }
-
+/* - - - Helper function for ccpa URL generator */
+function createCCPAPolicyLink(link){
+    let url = "";
+        url = "<a href='" + link + "' class='intastellarCookie-settings__privacyLink'>Read more about our ccpa</a>";
+    return url;
+}
 /* - - - Helper functions for Validate policy link - - - */
 function isValidPolicyLink() {
     if (typeof window.INT.policy_link === "string" && isURL(window.INT.policy_link)) {
@@ -1421,6 +1462,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
+            const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
 
             configBtn.forEach((configs) => {
                 configs.addEventListener("click", function () {
@@ -1440,6 +1482,12 @@ window.addEventListener("DOMContentLoaded", function () {
                 let settings = document.querySelector(".intastellarCookie-settings__container");
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
             })
+
+            if(window.INT.settings.ccpa.on === "true"){
+                closeCCPAButton.addEventListener("click", function(){
+                    document.querySelector(".intastellarCCPApopup").classList.remove("--active");
+                });
+            }
 
             if (analyticsBTN != null || analyticsBTN != undefined) {
                 analyticsBTN.addEventListener("click", function () {
@@ -1533,12 +1581,19 @@ window.addEventListener("DOMContentLoaded", function () {
 
             const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
             const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
+            const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
 
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
             let settings = document.querySelector(".intastellarCookie-settings__container");
             if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
+            }
+
+            if(window.INT.settings.ccpa.on === "true"){
+                closeCCPAButton.addEventListener("click", function(){
+                    document.querySelector(".intastellarCCPApopup").classList.remove("--active");
+                });
             }
 
             configBtn.forEach((configs) => {
