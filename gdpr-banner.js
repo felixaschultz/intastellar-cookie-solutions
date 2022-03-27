@@ -1326,6 +1326,14 @@ window.addEventListener("DOMContentLoaded", function () {
             saveINTCookieSettings();
         });
 
+        if (window.INTA.settings.ccpa.on) {
+            const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
+
+            closeCCPAButton.addEventListener("click", () => {
+                document.querySelector(".intastellarCCPApopup").classList.remove("--active");
+            });
+        }
+
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
                 var cV = 0;
@@ -1463,7 +1471,6 @@ window.addEventListener("DOMContentLoaded", function () {
 
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
-            const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
 
             configBtn.forEach((configs) => {
                 configs.addEventListener("click", function () {
@@ -1483,12 +1490,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 let settings = document.querySelector(".intastellarCookie-settings__container");
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
             })
-
-            if(window.INTA.settings.ccpa.on === "true"){
-                closeCCPAButton.addEventListener("click", function(){
-                    document.querySelector(".intastellarCCPApopup").classList.remove("--active");
-                });
-            }
 
             if (analyticsBTN != null || analyticsBTN != undefined) {
                 analyticsBTN.addEventListener("click", function () {
@@ -1589,12 +1590,6 @@ window.addEventListener("DOMContentLoaded", function () {
             let settings = document.querySelector(".intastellarCookie-settings__container");
             if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
-            }
-
-            if(window.INTA.settings.ccpa.on === "true"){
-                closeCCPAButton.addEventListener("click", function(){
-                    document.querySelector(".intastellarCCPApopup").classList.remove("--active");
-                });
             }
 
             configBtn.forEach((configs) => {
