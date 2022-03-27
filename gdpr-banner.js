@@ -257,7 +257,7 @@ function checkCookieStatus() {
                     }
                 })
 
-                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTAA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
+                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     let src = node.src || "";
                     node.async = false;
 
@@ -374,7 +374,7 @@ function checkCookieStatus() {
                             beforeScriptExecuteListener
                         );
                     });
-                } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTAA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
+                } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     if (dc == essentialsCookieName || dc == "") {
 
                         if (
@@ -1287,6 +1287,7 @@ function saveINTCookieSettings() {
 
 
 window.addEventListener("DOMContentLoaded", function () {
+    window.INTA = window.INT;
     if (isValidPolicyLink()) {
         createCookieSettings();
 
