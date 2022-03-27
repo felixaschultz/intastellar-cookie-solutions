@@ -1326,7 +1326,7 @@ window.addEventListener("DOMContentLoaded", function () {
             saveINTCookieSettings();
         });
 
-        if (window.INTA.settings.ccpa.on) {
+        if (window.INTA.settings.ccpa !== undefined && window.INTA.settings.ccpa.on) {
             const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
 
             closeCCPAButton.addEventListener("click", () => {
