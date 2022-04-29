@@ -252,7 +252,7 @@ function checkCookieStatus() {
                 }
                 const iframe = document.querySelectorAll("iframe");
                 iframe.forEach((frae) => {
-                    if (!intaCookieType("intMarketing") || !isValidPolicyLink()) {
+                    if (!intaCookieType("intMarketing")) {
                         frae.src = "about:blank";
                     }
                 })
@@ -711,7 +711,7 @@ function createCookieSettings() {
     let message = "";
     let cookieBtn = "";
     const banner = document.createElement("article");
-    const bannerContent = document.createElement("section");
+    const bannerContent = document.createElement("button");
 
     const moreSettings = document.createElement("article");
     const moreSettingsContent = document.createElement("section");
@@ -1108,6 +1108,7 @@ function createCookieSettings() {
         const intastellarCCPAContainer__content = document.createElement("section");
 
         intastellarCCPAContainer.setAttribute("class", "intastellarCCPAContainer");
+        intastellarCCPAContainer.setAttribute("title", "California Consumer Privacy Act: Do not sell my information!");
         intastellarCCPAContainer__content.setAttribute("class", "intastellarCCPAContainer__content")
         intastellarCCPAContainer__content.innerHTML = `
             <svg class="intastellarCCPA__icon" height="14" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#fff"/></svg> Do not sell my personal data!
@@ -1171,7 +1172,7 @@ function createCookieSettings() {
 
     banner.setAttribute("class", "intastellarCookie-settings");
 
-    bannerContent.innerHTML = '<span class="configs"><img src="https://img.icons8.com/ios-filled/50/000000/cookie.png" alt="Cookie" style="width: ' + cookieSize + ';filter: invert(100);"> ' + text + '</span>';
+    bannerContent.innerHTML = '<svg id="cookie__settingsIcon" width="90%" fill="#fff" data-name="cookie__settingsIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 234.9 235.16"><path d="M227.4,94.6a82.43,82.43,0,0,1-22,6.86,92.26,92.26,0,0,1-96.61,89.44C61.83,188.72,23.58,150.78,21,103.85A92.28,92.28,0,0,1,107.85,6.62l2.81-1.75A112.5,112.5,0,0,0,4.7,120.69c1.81,59.73,51,108.11,110.75,109A112.61,112.61,0,0,0,227.4,94.6Z"/><path d="M108.19,17.79A81.57,81.57,0,1,0,192.9,82.9a60,60,0,0,1-84.71-65.11Zm33.68,83.05a18.45,18.45,0,1,1-18.46,18.45A18.45,18.45,0,0,1,141.87,100.84ZM64.36,62.08a9.23,9.23,0,1,1,9.22,9.23A9.22,9.22,0,0,1,64.36,62.08Zm18.45,70.13a14.77,14.77,0,1,1,14.77-14.77A14.76,14.76,0,0,1,82.81,132.21Z"/></svg> ' + text;
 
     banner.appendChild(bannerContent);
     moreSettings.appendChild(moreSettingsContent);
@@ -1464,8 +1465,6 @@ window.addEventListener("DOMContentLoaded", function () {
         if (button__acceptAll != null || button__acceptAll != undefined) {
             const configBtn = document.querySelectorAll(".intastellarCookie-settingsContainer");
 
-            const config = document.querySelectorAll(".config");
-
             const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
             const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
 
@@ -1473,13 +1472,6 @@ window.addEventListener("DOMContentLoaded", function () {
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
 
             configBtn.forEach((configs) => {
-                configs.addEventListener("click", function () {
-                    let settings = document.querySelector(".intastellarCookie-settings__container");
-                    settings.classList.toggle("intastellarCookie-settings__container--expand");
-                });
-            })
-
-            config.forEach((configs) => {
                 configs.addEventListener("click", function () {
                     let settings = document.querySelector(".intastellarCookie-settings__container");
                     settings.classList.toggle("intastellarCookie-settings__container--expand");
