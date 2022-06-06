@@ -85,6 +85,7 @@ function checkCookieStatus() {
 
     const allScripts = [
         {
+            /* Analytics Scripts who are beeing blocked */
             type: "statics",
             scripts: [
                 "(?=gtag)",
@@ -102,6 +103,7 @@ function checkCookieStatus() {
             ]
         },
         {
+            /* Marketing Scripts who are beeing blocked */
             type: "marketing",
             scripts: [
                 "(?=gtag)",
@@ -143,6 +145,7 @@ function checkCookieStatus() {
             ]
         },
         {
+            /* Functional Scripts who are beeing blocked */
             type: "functional",
             scripts: [
                 "(googleapis+)",
@@ -150,9 +153,9 @@ function checkCookieStatus() {
             ] 
         }
     ];
-
+    /* All Scripts who are beeing blocked */
     const findScripts = [
-        "(?=linkedin|gtag|_linkedin_partner_id)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
+        "(?=linkedin|gtag)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
         "(google-analytics+)",
         "(!fontawesome+)",
         "(facebook+)",
