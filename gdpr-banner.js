@@ -257,12 +257,13 @@ function checkCookieStatus() {
                 iframe.forEach((frae) => {
                     if (!intaCookieType("intMarketing")) {
                         frae.src = "about:blank";
-                        frae.parentElement.innerHTML = `
-                            <section style="text-align: center;">
-                                <p>To view this content please accept marketing cookies!</p>
-                                <button class='intastellarCookie-settings__btn --changePermission'>Accept Marketing cookies</button>
-                            </section>
+                        let settingsContent = document.createElement("section");
+                        settingsContent.style = "text-align: center;  padding: 15px;";
+                        settingsContent.innerHTML = `
+                            <p>To view this content please accept marketing cookies!</p>
+                            <button class='intastellarCookie-settings__btn --changePermission'>Accept Marketing cookies</button>
                         `;
+                        frae.parentElement.appendChild(settingsContent);
                         frae.parentElement.removeChild(frae);
                     }
                 })
@@ -1109,7 +1110,7 @@ function createCookieSettings() {
         text = " Cookie notice";
         cookieSize = "25%";
     }
-    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .intastellarCookie-settings__btn.--bg, .intastellarCookieConstents__content-main, .intastellarCCPAContainer{background: " + cookieColor + " !important;color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";}.intastellarCCPA__popupClose{background:"+ cookieColor +"; color: #fff;} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
+    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__content-intHeader, .intastellarCookie-settings__btn.--bg, .intastellarCookieConstents__content-main, .intastellarCCPAContainer, .intastellarCookie-settings__btn.--changePermission{background: " + cookieColor + " !important;color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";}.intastellarCCPA__popupClose{background:"+ cookieColor +"; color: #fff;} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
     intHead.appendChild(s);
 
     /* Checking for CCPA "Do not sell my personal data" is enabled if so create an info link on the right side of the screen  */
