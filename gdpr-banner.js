@@ -258,9 +258,9 @@ function checkCookieStatus() {
                     if (!intaCookieType("intMarketing")) {
                         frae.src = "about:blank";
                         frae.parentElement.innerHTML = `
-                            <section>
+                            <section style="text-align: center;">
                                 <p>To view this content please accept marketing cookies!</p>
-                                <button class='intastellarCookie-settings__btn intastellarCookieBanner__settings'>Accept Marketing cookies</button>
+                                <button class='intastellarCookie-settings__btn --changePermission'>Accept Marketing cookies</button>
                             </section>
                         `;
                         frae.parentElement.removeChild(frae);
@@ -1480,6 +1480,18 @@ window.addEventListener("DOMContentLoaded", function () {
 
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
+            const changePermission = document.querySelectorAll(".--changePermission");
+
+            console.log(changePermission);
+
+            changePermission.forEach((change) => {
+                console.log(change);
+                change.addEventListener("click", function () {
+                    console.log(document.querySelector("#marketing"));
+                    document.querySelector("#marketing").checked = true;
+                    saveINTCookieSettings();
+                })
+            })
 
             configBtn.forEach((configs) => {
                 configs.addEventListener("click", function () {
@@ -1590,6 +1602,16 @@ window.addEventListener("DOMContentLoaded", function () {
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
             let settings = document.querySelector(".intastellarCookie-settings__container");
+
+            const changePermission = document.querySelectorAll(".--changePermission");
+
+            changePermission.forEach((change) => {
+                change.addEventListener("click", function () {
+                    document.querySelector("#marketing").checked = true;
+                    saveINTCookieSettings();
+                })
+            })
+
             if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
             }
