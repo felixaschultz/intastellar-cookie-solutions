@@ -257,6 +257,13 @@ function checkCookieStatus() {
                 iframe.forEach((frae) => {
                     if (!intaCookieType("intMarketing")) {
                         frae.src = "about:blank";
+                        frae.parentElement.innerHTML = `
+                            <section>
+                                <p>To view this content please accept marketing cookies!</p>
+                                <button class='intastellarCookie-settings__btn intastellarCookieBanner__settings'>Accept Marketing cookies</button>
+                            </section>
+                        `;
+                        frae.parentElement.removeChild(frae);
                     }
                 })
 
