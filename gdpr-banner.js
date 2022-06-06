@@ -87,7 +87,7 @@ function checkCookieStatus() {
         {
             type: "statics",
             scripts: [
-                "(?=linkedin|gtag)",
+                "(?=gtag)",
                 "(google-analytics+)",
                 "(googletagmanager+)",
                 "(googleoptimize+)",
@@ -95,7 +95,6 @@ function checkCookieStatus() {
                 "(matomo+)",
                 "(bing+)",
                 "(slideshare+)",
-                "(poultons+)",
                 "(poultons+)",
                 "(clarity+)",
                 "(consensu+)",
@@ -105,7 +104,8 @@ function checkCookieStatus() {
         {
             type: "marketing",
             scripts: [
-                "(?=linkedin|gtag)(facebook+)",
+                "(?=gtag)",
+                "(_linkedin_partner_id|_linkedin_data_partner_ids)",
                 "(googlesyndication+)",
                 "(twitter+)",
                 "(chimpstatic+)",
@@ -152,7 +152,7 @@ function checkCookieStatus() {
     ];
 
     const findScripts = [
-        "(?=linkedin|gtag)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
+        "(?=linkedin|gtag|_linkedin_partner_id)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
         "(google-analytics+)",
         "(!fontawesome+)",
         "(facebook+)",
