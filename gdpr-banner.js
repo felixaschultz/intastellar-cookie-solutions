@@ -12,7 +12,7 @@ const int_hideCookieBannerName = "__inta";
 const int_analytic = "__inta__analytics";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
-
+const foundScripts = [];
 
 const INTA = window.INTA = {
     policy_link: undefined,
@@ -88,7 +88,7 @@ function checkCookieStatus() {
             /* Analytics Scripts who are beeing blocked */
             type: "statics",
             scripts: [
-                "(?=gtag)",
+                "(?=gtag|gtm)",
                 "(google-analytics+)",
                 "(googletagmanager+)",
                 "(googleoptimize+)",
@@ -96,6 +96,10 @@ function checkCookieStatus() {
                 "(matomo+)",
                 "(bing+)",
                 "(slideshare+)",
+                "(siteimproveanalytics+)",
+                "(hotjar+)",
+                "(qualtrics+)",
+                "(pardot+)",
                 "(poultons+)",
                 "(clarity+)",
                 "(consensu+)",
@@ -106,7 +110,7 @@ function checkCookieStatus() {
             /* Marketing Scripts who are beeing blocked */
             type: "marketing",
             scripts: [
-                "(?=gtag)",
+                "(?=gtag|gtm)",
                 "(_linkedin_partner_id|_linkedin_data_partner_ids)",
                 "(googlesyndication+)",
                 "(twitter+)",
@@ -149,18 +153,22 @@ function checkCookieStatus() {
             type: "functional",
             scripts: [
                 "(googleapis+)",
+                "(recaptcha+)",
+                "(grecaptcha+)",
                 "(disqus+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
             ] 
         }
     ];
     /* All Scripts who are beeing blocked */
     const findScripts = [
-        "(?=linkedin|gtag)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
+        "(?=linkedin|gtag|grecaptcha|hotjar|gtm)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
         "(google-analytics+)",
         "(!fontawesome+)",
         "(facebook+)",
         "(googlesyndication+)",
         "(googleapis+)",
+        "(recaptcha+)",
+        "(hotjar+)",
         "(googletagmanager+)",
         "(googleoptimize+)",
         "(trustpilot+)",
@@ -196,6 +204,8 @@ function checkCookieStatus() {
         "(doubleclick+)",
         "(pinterest+)",
         "(clarity+)",
+        "(slideshare+)",
+        "(siteimproveanalytics+)",
         "(googleadservices+)",
         "(consensu+)",
         "(disqus+)",
@@ -216,35 +226,34 @@ function checkCookieStatus() {
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
     if (localStorage.getItem("intFunctional") == "checked") {
         m = merge(allScripts[1].scripts, allScripts[0].scripts)
-        notRequired = new RegExp(m.join("|"), "ig"); 
+        notRequired = new RegExp(m.join("|"), "i"); 
     } else if (localStorage.getItem("intMarketing") == "checked") {
         m = merge(allScripts[2].scripts, allScripts[0].scripts)
-        notRequired = new RegExp(m.join("|"), "ig");
+        notRequired = new RegExp(m.join("|"), "i");
     } else if (localStorage.getItem("intStatics") == "checked") {
         m = merge(allScripts[1].scripts, allScripts[2].scripts)
-        notRequired = new RegExp(m.join("|"), "ig");
+        notRequired = new RegExp(m.join("|"), "i");
     } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intStatics") == "checked") {
         m = allScripts[1].scripts;
-        notRequired = new RegExp(m.join("|"), "ig");
+        notRequired = new RegExp(m.join("|"), "i");
     } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intMarketing") == "checked") {
         m = allScripts[0].scripts;
-        notRequired = new RegExp(m.join("|"), "ig");
+        notRequired = new RegExp(m.join("|"), "i");
     } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") == "checked") {
         m = allScripts[2].scripts;
-        notRequired = new RegExp(m.join("|"), "ig");
+        notRequired = new RegExp(m.join("|"), "i");
     } else {
-        notRequired = new RegExp(findScripts.join("|"), "ig");
+        notRequired = new RegExp(findScripts.join("|"), "i");
     }
 
     const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
-    /* (function () { */
+
     if (analyticsCookies == "yes") {
         let s = document.createElement("script");
         s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
         intHead.appendChild(s);
     }
-    /* })(); */
 
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
@@ -271,11 +280,10 @@ function checkCookieStatus() {
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     let src = node.src || "";
                     node.async = false;
-
+                    foundScripts.push(src);
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.src;
-
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -285,6 +293,7 @@ function checkCookieStatus() {
                                     notRequired.test(src)
                                 ) {
                                     node.type = "text/plain";
+                                    
                                     node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 }
@@ -409,7 +418,6 @@ function checkCookieStatus() {
 
                     const beforeScriptExecuteListener = function (event) {
                         let src = node.src || "";
-
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -437,7 +445,7 @@ function checkCookieStatus() {
                                     node.parentElement.removeChild(node);
                                 }
                             }
-
+                            
                             if (
                                 notRequired.test(node.innerText)
                                 && node.innerText.toLowerCase().indexOf("elementor") == -1
@@ -771,6 +779,8 @@ function createCookieSettings() {
     const messageWrapStart = "<div class='intastellarCookie-settings__contentConatiner'><p>";
     const messageWrapEnd = "</p></div>";
 
+    /* console.log(foundScripts.filter(item => { return item != ''})); */
+
     const settingsMessages = {
         danish: `<h3 style="    font-size: 25px;">Du bestemmer over dine data</h3>
         <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
@@ -841,6 +851,7 @@ function createCookieSettings() {
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
         ${generatePolicyUrl('Learn more')}
+        ${foundScripts.filter(item => { return item != '' }).map(item => { return '<li>'+ item +'</li>' })}
         <article class="intReadMore">
             <section class="required">
                 <h3>Strictly required</h3>
@@ -1483,10 +1494,7 @@ window.addEventListener("DOMContentLoaded", function () {
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
             const changePermission = document.querySelectorAll(".--changePermission");
 
-            console.log(changePermission);
-
             changePermission.forEach((change) => {
-                console.log(change);
                 change.addEventListener("click", function () {
                     console.log(document.querySelector("#marketing"));
                     document.querySelector("#marketing").checked = true;
