@@ -14,6 +14,12 @@ const button__acceptAll = document.querySelector(".intastellarCookieBanner__acce
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 const foundScripts = [];
 
+const saveSettings = {
+    danish: "Kun nødvendige",
+    german: "Nur notwendige",
+    english: "Neccessary only"
+}
+
 const INTA = window.INTA = {
     policy_link: undefined,
     settings: {
@@ -21,7 +27,7 @@ const INTA = window.INTA = {
         color: "rgba(0, 51, 153, 1)",
         keepInLocalStorage: [],
         arrange: "ltr",
-        logo: "https://img.icons8.com/ios-filled/50/000000/cookie.png",
+        logo: "https://img.icons8.com/ios-filled/50/000000/cookie.png"
     }
 }
 
@@ -886,12 +892,6 @@ function createCookieSettings() {
         </article>`
     }
 
-    const saveSettings = {
-        danish: "Gem indstillinger",
-        german: "Einstellungen Speichern",
-        english: "Save settings"
-    }
-
     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
         settingsMessage = settingsMessages.danish;
         message =
@@ -1357,6 +1357,54 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
+
+        const FunctionalCheckbox = document.querySelector("#functional");
+        const StaticsCheckBox = document.querySelector("#statics");
+        const MarketingCheckBox = document.querySelector("#marketing");
+        const settingsSaveLang = {};
+        
+        if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+            settingsSaveLang.necessaryCookiesText = "Neccessary only";
+            settingsSaveLang.saveSettingsText = "Save settings";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+            settingsSaveLang.necessaryCookiesText = "Nur notwendige";
+            settingsSaveLang.saveSettingsText = "Speichern";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+            settingsSaveLang.necessaryCookiesText = "Kun nødvendige";
+            settingsSaveLang.saveSettingsText = "Gem indstillinger";
+        } else {
+            settingsSaveLang.necessaryCookiesText = "Kun nødvendige";
+            settingsSaveLang.saveSettingsText = "Gem indstillinger";
+        }
+
+        FunctionalCheckbox.addEventListener("change", () => {
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox.checked === false
+                && StaticsCheckBox.checked === false
+                && MarketingCheckBox.checked === false
+                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+        })
+
+        StaticsCheckBox.addEventListener("change", () => {
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox.checked === false
+                && StaticsCheckBox.checked === false
+                && MarketingCheckBox.checked === false
+                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+        })
+
+        MarketingCheckBox.addEventListener("change", () => {
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox.checked === false
+                && StaticsCheckBox.checked === false
+                && MarketingCheckBox.checked === false
+                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+        })
+
+        document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox.checked === true
+                && StaticsCheckBox.checked === true
+                && MarketingCheckBox.checked === true
+                || FunctionalCheckbox.checked === true
+                || StaticsCheckBox.checked === true
+                || MarketingCheckBox.checked === true
+            ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
 
         document.querySelector(".--save").addEventListener("click",() => {
             saveINTCookieSettings();
