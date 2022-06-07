@@ -1126,17 +1126,21 @@ function createCookieSettings() {
         border-radius: 50%;
     }
 
-    .configs{
+    .intCookieIcon-openSettings{
         width: 40px;
         height: 40px;
     }
-`;
+    `;
     let text = "";
     let cookieSize = "100%";
     if (textSettings) {
         withText = `
         .intastellarCookie-settingsContainer{
             border-radius: 20px;
+        }
+        .intCookieIcon-openSettings{
+            width: 40px;
+            height: 40px;
         }
         `;
         text = " Cookie notice";
@@ -1218,7 +1222,7 @@ function createCookieSettings() {
 
     banner.setAttribute("class", "intastellarCookie-settings");
 
-    bannerContent.innerHTML = '<img width="95%" style="filter: invert(1);" src="'+intCookieIcon+'"> ' + text;
+    bannerContent.innerHTML = '<img class="intCookieIcon-openSettings" style="filter: invert(1);" src="'+intCookieIcon+'"> ' + text;
 
     banner.appendChild(bannerContent);
     moreSettings.appendChild(moreSettingsContent);
