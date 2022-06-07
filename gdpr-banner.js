@@ -14,6 +14,8 @@ const button__acceptAll = document.querySelector(".intastellarCookieBanner__acce
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 const foundScripts = [];
 
+const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
+
 const saveSettings = {
     danish: "Kun nødvendige",
     german: "Nur notwendige",
@@ -27,7 +29,7 @@ const INTA = window.INTA = {
         color: "rgba(0, 51, 153, 1)",
         keepInLocalStorage: [],
         arrange: "ltr",
-        logo: "https://img.icons8.com/ios-filled/50/000000/cookie.png"
+        logo: intCookieIcon
     }
 }
 
@@ -875,7 +877,7 @@ function createCookieSettings() {
             <li>Marketing</li>
         </ol>
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
-        <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
+        <p>You may withdraw your consent at any time by clicking the small icon at the bottom left or right corner of the website.</p>
         ${generatePolicyUrl('Learn more')}
         <article class="intReadMore">
             <section class="required">
@@ -1096,7 +1098,7 @@ function createCookieSettings() {
     let ccpa = window.INTA.settings === undefined || window.INTA.settings.ccpa === undefined ? false : window.INTA.settings.ccpa.on;
     let ccpaUrl = window.INTA.settings === undefined || window.INTA.settings.ccpa === undefined ? false : window.INTA.settings.ccpa.url;
     let cookieColor = window.INTA.settings === undefined || window.INTA.settings.color === undefined || window.INTA.settings.color.indexOf("[") > -1 || window.INTA.settings.color === ""  ? "rgba(0, 51, 153, 1)" : window.INTA.settings.color;
-    let cookieLogo = window.INTA.settings === undefined || window.INTA.settings.logo === undefined || window.INTA.settings.logo === "" || window.INTA.settings.logo.indexOf("[") > -1 ? "https://img.icons8.com/ios-filled/50/000000/cookie.png" : window.INTA.settings.logo;
+    let cookieLogo = window.INTA.settings === undefined || window.INTA.settings.logo === undefined || window.INTA.settings.logo === "" || window.INTA.settings.logo.indexOf("[") > -1 ? intCookieIcon : window.INTA.settings.logo;
     let backgroundColor = window.INTA.settings === undefined || window.INTA.settings.background_color === undefined ? "#fff" : window.INTA.settings.background_color;
     let cookieTextColor = invertColor(backgroundColor);
     const checkMarkColor = cookieColor;
@@ -1201,9 +1203,12 @@ function createCookieSettings() {
         poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' src='https://assets.intastellar-clients.net/bG9nb3MvaW50YXN0ZWxsYXJfc29sdXRpb25zQDJ4LnBuZw==' alt='Intastellar Solutions, International'></a></span>";
     }
     
+    let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
+
     moreintHeader.innerHTML = `
-        <img class="intSettingsCompanyLogo" src="${cookieLogo}">
+        <img class="intSettingsCompanyLogo${intCookieIconSmallClass}" src="${cookieLogo}">
         <section class="intSettingsPoweredBy">${poweredBy}</section>`;
+    
     cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + document.domain + ' logo" title="' + document.domain + ' logo" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';"></button></intHeader>' +
         message + cookieBtn + "" + poweredBy;
 
@@ -1213,7 +1218,7 @@ function createCookieSettings() {
 
     banner.setAttribute("class", "intastellarCookie-settings");
 
-    bannerContent.innerHTML = '<svg id="cookie__settingsIcon" width="90%" fill="#fff" data-name="cookie__settingsIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 234.9 235.16"><path d="M227.4,94.6a82.43,82.43,0,0,1-22,6.86,92.26,92.26,0,0,1-96.61,89.44C61.83,188.72,23.58,150.78,21,103.85A92.28,92.28,0,0,1,107.85,6.62l2.81-1.75A112.5,112.5,0,0,0,4.7,120.69c1.81,59.73,51,108.11,110.75,109A112.61,112.61,0,0,0,227.4,94.6Z"/><path d="M108.19,17.79A81.57,81.57,0,1,0,192.9,82.9a60,60,0,0,1-84.71-65.11Zm33.68,83.05a18.45,18.45,0,1,1-18.46,18.45A18.45,18.45,0,0,1,141.87,100.84ZM64.36,62.08a9.23,9.23,0,1,1,9.22,9.23A9.22,9.22,0,0,1,64.36,62.08Zm18.45,70.13a14.77,14.77,0,1,1,14.77-14.77A14.76,14.76,0,0,1,82.81,132.21Z"/></svg> ' + text;
+    bannerContent.innerHTML = '<img width="95%" style="filter: invert(1);" src="'+intCookieIcon+'"> ' + text;
 
     banner.appendChild(bannerContent);
     moreSettings.appendChild(moreSettingsContent);
