@@ -125,6 +125,8 @@ function checkCookieStatus() {
                 "(mailchimp+)",
                 "(linkedin+)",
                 "(bing+)",
+                "(youtube+)",
+                "(vimeo+)",
                 "(licdn+)",
                 "(amazon-adsystem+)",
                 "(adfrom+)",
@@ -161,6 +163,7 @@ function checkCookieStatus() {
                 "(googleapis+)",
                 "(recaptcha+)",
                 "(grecaptcha+)",
+                "(maps.google+)",
                 "(disqus+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
             ] 
         }
@@ -177,6 +180,9 @@ function checkCookieStatus() {
         "(hotjar+)",
         "(googletagmanager+)",
         "(googleoptimize+)",
+        "(google+)",
+        "(youtube+)",
+        "(vimeo+)",
         "(trustpilot+)",
         "(piwik+)",
         "(matomo+)",
@@ -270,31 +276,31 @@ function checkCookieStatus() {
                 }
                 const iframe = document.querySelectorAll("iframe");
                 iframe.forEach((frae) => {
-                    if (frae.src.indexOf("maps.google.com") == -1) {
-                        if (!intaCookieType("intMarketing")) {
-                            frae.src = "about:blank";
-                            let settingsContent = document.createElement("section");
-                            settingsContent.style = "text-align: center;  padding: 15px;";
-                            settingsContent.innerHTML = `
-                            
-                            <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept Marketing cookies</button>
-                        `;
-                            frae.parentElement.appendChild(settingsContent);
-                            frae.parentElement.removeChild(frae);
+                    allScripts.map((script) => {
+                        if (!intaCookieType("intMarketing") && script.type == "marketing") {
+                            if (new RegExp(script.scripts.join("|"), "i").test(frae.src)){
+                                frae.src = "about:blank";
+                                let settingsContent = document.createElement("section");
+                                settingsContent.style = "text-align: center;  padding: 15px;";
+                                settingsContent.innerHTML = `
+                                <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept ${script.type} cookies</button>
+                                `;
+                                frae.parentElement.appendChild(settingsContent);
+                                frae.parentElement.removeChild(frae);
+                            }
+                        } else if (!intaCookieType("intFunctional") && script.type == "functional") {
+                            if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
+                                frae.src = "about:blank";
+                                let settingsContent = document.createElement("section");
+                                settingsContent.style = "text-align: center;  padding: 15px;";
+                                settingsContent.innerHTML = `
+                                <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept ${script.type} cookies</button>
+                                `;
+                                frae.parentElement.appendChild(settingsContent);
+                                frae.parentElement.removeChild(frae);
+                            }
                         }
-                    } else {
-                        if (!intaCookieType("intFunctional")) {
-                            frae.src = "about:blank";
-                            let settingsContent = document.createElement("section");
-                            settingsContent.style = "text-align: center;  padding: 15px;";
-                            settingsContent.innerHTML = `
-                            
-                            <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept Functional cookies</button>
-                        `;
-                            frae.parentElement.appendChild(settingsContent);
-                            frae.parentElement.removeChild(frae);
-                        }
-                    }
+                    });
                 })
 
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
