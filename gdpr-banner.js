@@ -264,16 +264,30 @@ function checkCookieStatus() {
                 }
                 const iframe = document.querySelectorAll("iframe");
                 iframe.forEach((frae) => {
-                    if (!intaCookieType("intMarketing")) {
-                        frae.src = "about:blank";
-                        let settingsContent = document.createElement("section");
-                        settingsContent.style = "text-align: center;  padding: 15px;";
-                        settingsContent.innerHTML = `
+                    if (frae.src.indexOf("maps.google.com") == -1) {
+                        if (!intaCookieType("intMarketing")) {
+                            frae.src = "about:blank";
+                            let settingsContent = document.createElement("section");
+                            settingsContent.style = "text-align: center;  padding: 15px;";
+                            settingsContent.innerHTML = `
                             <p>To view this content please accept marketing cookies!</p>
-                            <button class='intastellarCookie-settings__btn --changePermission'>Accept Marketing cookies</button>
+                            <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept Marketing cookies</button>
                         `;
-                        frae.parentElement.appendChild(settingsContent);
-                        frae.parentElement.removeChild(frae);
+                            frae.parentElement.appendChild(settingsContent);
+                            frae.parentElement.removeChild(frae);
+                        }
+                    } else {
+                        if (!intaCookieType("intFunctional")) {
+                            frae.src = "about:blank";
+                            let settingsContent = document.createElement("section");
+                            settingsContent.style = "text-align: center;  padding: 15px;";
+                            settingsContent.innerHTML = `
+                            <p>To view this content please accept functional cookies!</p>
+                            <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept Functional cookies</button>
+                        `;
+                            frae.parentElement.appendChild(settingsContent);
+                            frae.parentElement.removeChild(frae);
+                        }
                     }
                 })
 
@@ -1496,8 +1510,11 @@ window.addEventListener("DOMContentLoaded", function () {
 
             changePermission.forEach((change) => {
                 change.addEventListener("click", function () {
-                    console.log(document.querySelector("#marketing"));
-                    document.querySelector("#marketing").checked = true;
+                    if (this.getAttribute("data-type") == "intMarketing") {
+                        document.querySelector("#marketing").checked = true;
+                    } else if (this.getAttribute("data-type") == "intFunctional") {
+                        document.querySelector("#functional").checked = true;
+                    }
                     saveINTCookieSettings();
                 })
             })
@@ -1616,7 +1633,11 @@ window.addEventListener("DOMContentLoaded", function () {
 
             changePermission.forEach((change) => {
                 change.addEventListener("click", function () {
-                    document.querySelector("#marketing").checked = true;
+                    if (this.getAttribute("data-type") == "intMarketing") {
+                        document.querySelector("#marketing").checked = true;
+                    } else if (this.getAttribute("data-type") == "intFunctional") {
+                        document.querySelector("#functional").checked = true;
+                    }
                     saveINTCookieSettings();
                 })
             })
