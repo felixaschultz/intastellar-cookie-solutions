@@ -270,7 +270,7 @@ function checkCookieStatus() {
                             let settingsContent = document.createElement("section");
                             settingsContent.style = "text-align: center;  padding: 15px;";
                             settingsContent.innerHTML = `
-                            <p>To view this content please accept marketing cookies!</p>
+                            
                             <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept Marketing cookies</button>
                         `;
                             frae.parentElement.appendChild(settingsContent);
@@ -282,7 +282,7 @@ function checkCookieStatus() {
                             let settingsContent = document.createElement("section");
                             settingsContent.style = "text-align: center;  padding: 15px;";
                             settingsContent.innerHTML = `
-                            <p>To view this content please accept functional cookies!</p>
+                            
                             <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept Functional cookies</button>
                         `;
                             frae.parentElement.appendChild(settingsContent);
@@ -865,7 +865,6 @@ function createCookieSettings() {
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom left corner of the website.</p>
         ${generatePolicyUrl('Learn more')}
-        ${foundScripts.filter(item => { return item != '' }).map(item => { return '<li>'+ item +'</li>' })}
         <article class="intReadMore">
             <section class="required">
                 <h3>Strictly required</h3>
