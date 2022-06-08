@@ -951,7 +951,7 @@ function createCookieSettings() {
             + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
         cookieBtn = generateCookieButtons('Akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
         moreFooter.innerHTML =
-        `<article class="intCookieSetting__fixedTop">
+        `<article>
             ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
             <article class="intReadMore">
                 <section class="required">
@@ -1020,7 +1020,7 @@ function createCookieSettings() {
             + generatePolicyUrl('Our Privacy and cookie Policy');
         cookieBtn = generateCookieButtons('Accept', 'Necessary cookies only', 'Settings');
         moreFooter.innerHTML =
-        `<article class="intCookieSetting__fixedTop fixed">
+        `<article>
             ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
             <article class="intReadMore">
                 <section class="required">
