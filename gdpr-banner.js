@@ -1432,6 +1432,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
                 if (!intCookieSettingsMore.classList.contains("--active")) {
                     intCookieSettingsMore.classList.add("--active");
+                    document.querySelector(".intastellarCookie-settings__container").classList.remove("intastellarCookie-settings__container--expand")
                 }
             });
         });
