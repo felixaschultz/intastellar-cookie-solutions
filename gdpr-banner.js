@@ -111,6 +111,8 @@ function checkCookieStatus() {
                 "(poultons+)",
                 "(clarity+)",
                 "(consensu+)",
+                "(ip-only+)",
+                "(ggpht+)",
                 "(quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
             ]
         },
@@ -166,6 +168,10 @@ function checkCookieStatus() {
                 "(recaptcha+)",
                 "(grecaptcha+)",
                 "(maps.google+)",
+                "(cludo+)",
+                "(qbrick+)",
+                "(klarna+)",
+                "(paypal+)",
                 "(disqus+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
             ] 
         }
@@ -276,34 +282,54 @@ function checkCookieStatus() {
                 if (!allCookiesAllowed() || !intaCookieType("intFunctional")) {
                     deleteAllCookies();
                 }
-                const iframe = document.querySelectorAll("iframe");
-                iframe.forEach((frae) => {
+
+                if (node.nodeType === 1 && node.tagName === "IFRAME") {
                     allScripts.map((script) => {
-                        if (!intaCookieType("intMarketing") && script.type == "marketing") {
-                            if (new RegExp(script.scripts.join("|"), "i").test(frae.src)){
-                                frae.src = "about:blank";
+                        addedNodes.forEach((frae) => {
+                            if (!intaCookieType("intMarketing") && script.type == "marketing") {
+                                if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
+                                    frae.src = "about:blank";
+                                    let settingsContent = document.createElement("section");
+                                    settingsContent.style = "text-align: center;  padding: 15px;";
+                                    settingsContent.innerHTML = `
+                                    <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept ${script.type} cookies</button>
+                                    `;
+                                    if (frae.style.display !== "none") {
+                                        frae.parentElement.appendChild(settingsContent);
+                                    }
+                                    frae.parentElement.removeChild(frae);
+                                }
+                            } else if (!intaCookieType("intFunctional") && script.type == "functional") {
+                                if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
+                                    frae.src = "about:blank";
+                                    let settingsContent = document.createElement("section");
+                                    settingsContent.style = "text-align: center;  padding: 15px;";
+                                    settingsContent.innerHTML = `
+                                    <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept ${script.type} cookies</button>
+                                    `;
+                                    frae.parentElement.appendChild(settingsContent);
+                                    frae.parentElement.removeChild(frae);
+                                }
+                            }
+                        })
+                    });   
+                }
+
+                if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
+                    allScripts.map((script) => {
+                        addedNodes.forEach((tweet) => {
+                            if (!intaCookieType("intMarketing") && script.type == "marketing") {
                                 let settingsContent = document.createElement("section");
                                 settingsContent.style = "text-align: center;  padding: 15px;";
                                 settingsContent.innerHTML = `
-                                <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept ${script.type} cookies</button>
+                                    <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept ${script.type} cookies</button>
                                 `;
-                                frae.parentElement.appendChild(settingsContent);
-                                frae.parentElement.removeChild(frae);
+                                tweet.parentElement.appendChild(settingsContent);
+                                tweet.parentElement.removeChild(tweet);
                             }
-                        } else if (!intaCookieType("intFunctional") && script.type == "functional") {
-                            if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
-                                frae.src = "about:blank";
-                                let settingsContent = document.createElement("section");
-                                settingsContent.style = "text-align: center;  padding: 15px;";
-                                settingsContent.innerHTML = `
-                                <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept ${script.type} cookies</button>
-                                `;
-                                frae.parentElement.appendChild(settingsContent);
-                                frae.parentElement.removeChild(frae);
-                            }
-                        }
-                    });
-                })
+                        })
+                    });   
+                }
 
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     let src = node.src || "";
@@ -825,7 +851,7 @@ function createCookieSettings() {
         <p>Ved at trykke på 'Accepter alle' giver du samtykke til alle disse formål. Du kan også vælge at tilkendegive, hvilke formål du vil give samtykke til ved at benytte checkboksene ud for formålet, og derefter trykke på 'Gem indstillinger'.
         Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
         <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
-        <a onClick="learnMore()"">Læs mere om cookies</a>`,
+        <button class="intLearnMoreBtn" onClick="learnMore()"">Læs mere om cookies</button>`,
         german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
         <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
         <ol>
@@ -835,7 +861,7 @@ function createCookieSettings() {
         </ol>
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
         <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
-        <a onClick="learnMore()"">Mehr über cookies erfahren</a>`,
+        <button class="intLearnMoreBtn" onClick="learnMore()"">Mehr über cookies erfahren</button>`,
         english: `<h3 style="    font-size: 25px;">You´re in control</h3>
         <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
         <ol>
@@ -845,7 +871,7 @@ function createCookieSettings() {
         </ol>
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom left or right corner of the website.</p>
-        <a onClick="learnMore()">Learn more</a>`
+        <button class="intLearnMoreBtn" onClick="learnMore()">Learn more</button>`
     }
 
     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
@@ -859,6 +885,25 @@ function createCookieSettings() {
         moreFooter.innerHTML = 
             `<article>
                 ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
+                <article class="intReadMore">
+                    <section class="required">
+                        <h3>Nødvendige</h3>
+                        <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
+                    </section>
+                    <section>
+                        <h3>Funktionel</h3>
+                        <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
+                    </section>
+                    <section>
+                        <h3>Statistik</h3>
+                        <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
+                    </section>
+                    <section>
+                        <h3>Marketing</h3>
+                        <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
+                        <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
+                    </section>
+                </article>
                 <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
@@ -897,26 +942,6 @@ function createCookieSettings() {
                         </label>
                     </section>
                 </article>
-            </article>`
-            +
-            `<article class="intReadMore">
-                <section class="required">
-                    <h3>Nødvendige</h3>
-                    <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
-                </section>
-                <section>
-                    <h3>Funktionel</h3>
-                    <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
-                </section>
-                <section>
-                    <h3>Statistik</h3>
-                    <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
-                </section>
-                <section>
-                    <h3>Marketing</h3>
-                    <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
-                    <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
-                </section>
             </article>`;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
         settingsMessage = settingsMessages.german;
@@ -928,47 +953,7 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         `<article class="intCookieSetting__fixedTop">
             ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
-                <article class="intCookieSetting__form">
-                    <section class="intastellarSettings__control">
-                        <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Erforderliche</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Funktionel</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Statistik</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Werbung</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                </article>
-            </article>`
-            +
-            `<article class="intReadMore">
+            <article class="intReadMore">
                 <section class="required">
                     <h3>Erforderliche</h3>
                     <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
@@ -986,7 +971,46 @@ function createCookieSettings() {
                     <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
                     <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
                 </section>
-            </article>`;
+            </article>
+            <article class="intCookieSetting__form">
+                <section class="intastellarSettings__control">
+                    <label class="intSettingDisabled checkMarkContainer">
+                        <span class="intSettingsTitle">Erforderliche</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">Funktionel</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">Statistik</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">Werbung</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+            </article>
+        </article>`;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
         settingsMessage = settingsMessages.english;
         message =
