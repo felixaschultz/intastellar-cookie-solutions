@@ -825,7 +825,7 @@ function createCookieSettings() {
         <p>Ved at trykke på 'Accepter alle' giver du samtykke til alle disse formål. Du kan også vælge at tilkendegive, hvilke formål du vil give samtykke til ved at benytte checkboksene ud for formålet, og derefter trykke på 'Gem indstillinger'.
         Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
         <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
-        <a onClick="onClick="learnMore()"">Læs mere om cookies</a>`,
+        <a onClick="learnMore()"">Læs mere om cookies</a>`,
         german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
         <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
         <ol>
@@ -835,7 +835,7 @@ function createCookieSettings() {
         </ol>
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
         <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
-        <a onClick="onClick="learnMore()"">Mehr über cookies erfahren</a>`,
+        <a onClick="learnMore()"">Mehr über cookies erfahren</a>`,
         english: `<h3 style="    font-size: 25px;">You´re in control</h3>
         <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
         <ol>
