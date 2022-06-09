@@ -12,7 +12,6 @@ const int_hideCookieBannerName = "__inta";
 const int_analytic = "__inta__analytics";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
-const foundScripts = [];
 
 const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
 
@@ -121,9 +120,10 @@ function checkCookieStatus() {
             type: "marketing",
             scripts: [
                 "(?=gtag|gtm)",
-                "(_linkedin_partner_id|_linkedin_data_partner_ids)",
+                "(_linkedin_partner_id|_linkedin_data_partner_ids|lntrk)",
                 "(googlesyndication+)",
                 "(twitter+)",
+                "(ads-twitter+)",
                 "(chimpstatic+)",
                 "(trustpilot+)",
                 "(mailchimp+)",
@@ -230,6 +230,8 @@ function checkCookieStatus() {
         "(consensu+)",
         "(disqus+)",
         "(quantserve+)",
+        "(klarna+)",
+        "(paypal+)",
         "[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
     ];
 
@@ -246,24 +248,24 @@ function checkCookieStatus() {
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
     if (localStorage.getItem("intFunctional") == "checked") {
         m = merge(allScripts[1].scripts, allScripts[0].scripts)
-        notRequired = new RegExp(m.join("|"), "i"); 
+        notRequired = new RegExp(m.join("|"), "ig"); 
     } else if (localStorage.getItem("intMarketing") == "checked") {
         m = merge(allScripts[2].scripts, allScripts[0].scripts)
-        notRequired = new RegExp(m.join("|"), "i");
+        notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intStatics") == "checked") {
         m = merge(allScripts[1].scripts, allScripts[2].scripts)
-        notRequired = new RegExp(m.join("|"), "i");
+        notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intStatics") == "checked") {
         m = allScripts[1].scripts;
-        notRequired = new RegExp(m.join("|"), "i");
+        notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intMarketing") == "checked") {
         m = allScripts[0].scripts;
-        notRequired = new RegExp(m.join("|"), "i");
+        notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") == "checked") {
         m = allScripts[2].scripts;
-        notRequired = new RegExp(m.join("|"), "i");
+        notRequired = new RegExp(m.join("|"), "ig");
     } else {
-        notRequired = new RegExp(findScripts.join("|"), "i");
+        notRequired = new RegExp(findScripts.join("|"), "ig");
     }
 
     const dc = getCookie(int_cookieName);
@@ -330,14 +332,14 @@ function checkCookieStatus() {
                         })
                     });   
                 }
-
+                
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     let src = node.src || "";
                     node.async = false;
-                    foundScripts.push(src);
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.src;
+                        
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -837,8 +839,6 @@ function createCookieSettings() {
     };
     const messageWrapStart = "<div class='intastellarCookie-settings__contentConatiner'><p>";
     const messageWrapEnd = "</p></div>";
-
-    /* console.log(foundScripts.filter(item => { return item != ''})); */
 
     const settingsMessages = {
         danish: `<h3 style="    font-size: 25px;">Du bestemmer over dine data</h3>
