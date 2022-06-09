@@ -120,7 +120,7 @@ function checkCookieStatus() {
             type: "marketing",
             scripts: [
                 "(?=gtag|gtm)",
-                "(_linkedin_partner_id|_linkedin_data_partner_ids|lntrk)",
+                "(_linkedin_partner_id|_linkedin_data_partner_ids|lntrk|twitter|instagram)",
                 "(googlesyndication+)",
                 "(twitter+)",
                 "(ads-twitter+)",
@@ -133,11 +133,14 @@ function checkCookieStatus() {
                 "(amazon-adsystem+)",
                 "(adfrom+)",
                 "(demdex+)",
+                "(instagram+)",
                 "(stickyadstv+)",
                 "(mookie1+)",
                 "(bidswitch+)",
                 "(jnqsge+)",
                 "(syuh+)",
+                "(youtube+)",
+                "(vimeo+)",
                 "(ninthdecimal+)",
                 "(casalemedia+)",
                 "(adsymptotic+)",
@@ -166,8 +169,6 @@ function checkCookieStatus() {
                 "(recaptcha+)",
                 "(grecaptcha+)",
                 "(maps.google+)",
-                "(youtube+)",
-                "(vimeo+)",
                 "(cludo+)",
                 "(qbrick+)",
                 "(klarna+)",
@@ -178,7 +179,7 @@ function checkCookieStatus() {
     ];
     /* All Scripts who are beeing blocked */
     const findScripts = [
-        "(?=linkedin|gtag|grecaptcha|hotjar|gtm)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
+        "(?=linkedin|gtag|grecaptcha|hotjar|gtm|twitter|instagram)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
         "(google-analytics+)",
         "(!fontawesome+)",
         "(facebook+)",
@@ -194,6 +195,7 @@ function checkCookieStatus() {
         "(trustpilot+)",
         "(piwik+)",
         "(matomo+)",
+        "(instagram+)",
         "(twitter+)",
         "(chimpstatic+)",
         "(mailchimp+)",
@@ -320,7 +322,8 @@ function checkCookieStatus() {
                 if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
                     allScripts.map((script) => {
                         addedNodes.forEach((tweet) => {
-                            if (!intaCookieType("intMarketing") && script.type == "marketing") {
+                            
+                            if (!intaCookieType("intMarketing") && script.type == "marketing" && notRequired.test(tweet.className)) {
                                 let settingsContent = document.createElement("section");
                                 settingsContent.style = "text-align: center;  padding: 15px;";
                                 settingsContent.innerHTML = `
