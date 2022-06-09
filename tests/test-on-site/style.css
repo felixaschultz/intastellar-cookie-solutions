@@ -26,7 +26,7 @@
 }
 
 .intastellarCookie-settings {
-  z-index: 999989 !important;
+  z-index: 53147483647 !important;
   position: relative;
 }
 
@@ -113,7 +113,7 @@
   bottom: 110px;
   right: 12px;
   left: auto;
-  z-index: 3000;
+  z-index: 5314748364709090;
   border-radius: 18px;
   overflow: hidden;
   transition: all 0.25s ease-in-out;
