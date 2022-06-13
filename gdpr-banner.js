@@ -158,7 +158,7 @@ function checkCookieStatus() {
                 "(doubleclick+)",
                 "(pinterest+)",
                 "(googleadservices+)",
-                "(googletagmanager+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
+                "(googletagmanager+)([a-z]+){2,5}\/maps\/(:[0-9]{1,5})?(\\/\\/.*)"
             ]
         },
         {
@@ -168,12 +168,12 @@ function checkCookieStatus() {
                 "(googleapis+)",
                 "(recaptcha+)",
                 "(grecaptcha+)",
-                "(maps.google+)",
+                "(google+)",
                 "(cludo+)",
                 "(qbrick+)",
                 "(klarna+)",
                 "(paypal+)",
-                "(disqus+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
+                "(disqus+)([a-z]+){2,5}\/maps\/(:[0-9]{1,5})?(\\/\\/.*)"
             ] 
         }
     ];
@@ -234,7 +234,7 @@ function checkCookieStatus() {
         "(quantserve+)",
         "(klarna+)",
         "(paypal+)",
-        "[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
+        "[a-z]+\/maps\/{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
     ];
 
     /* Helper function to merge arrays */
