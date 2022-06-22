@@ -248,6 +248,16 @@
   text-transform: uppercase;
 }
 
+.intCookie_ConsentContainer{
+  width: 450px;
+  padding: 15px;
+  margin: auto;
+  border-radius: 10px;
+  color: #000;
+  background-color: #dbdbdb;
+  box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.49);
+}
+
 .intSettingsCompanyLogo {
   /* width: 100%; */
   max-width: 100px !important;
