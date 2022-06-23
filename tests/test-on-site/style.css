@@ -197,7 +197,7 @@
   left: 0;
   background: rgba(0, 0, 0, 0.49);
 
-  z-index: 9999890 !important;
+  z-index: 53147483647 !important;
   place-content: center;
 }
 

@@ -60,6 +60,10 @@ if (intaCookieType("intFunctional")) {
     int__cookiesToKeep.push("locale");
 }
 
+if (intaCookieType("intMarketing")) {
+    int__cookiesToKeep.push("_fbp");
+}
+
 const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.join("|"), "i");
 
 const pSBC = (p, c0, c1, l) => {
@@ -254,13 +258,13 @@ function checkCookieStatus() {
     let notRequired;
     let m;
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
-    if (localStorage.getItem("intFunctional") == "checked") {
+    if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intStatics") != "checked" && localStorage.getItem("intMarketing") != "checked") {
         m = merge(allScripts[1].scripts, allScripts[0].scripts)
         notRequired = new RegExp(m.join("|"), "ig"); 
-    } else if (localStorage.getItem("intMarketing") == "checked") {
+    } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") != "checked" && localStorage.getItem("intFunctional") != "checked") {
         m = merge(allScripts[2].scripts, allScripts[0].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (localStorage.getItem("intStatics") == "checked") {
+    } else if (localStorage.getItem("intStatics") == "checked" && localStorage.getItem("intFunctional") != "checked" && localStorage.getItem("intMarketing") != "checked") {
         m = merge(allScripts[1].scripts, allScripts[2].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
     } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intStatics") == "checked") {
@@ -417,7 +421,7 @@ function checkCookieStatus() {
                                 node.parentElement.removeChild(node);
                                 deleteAllCookies();
                             }
-                        } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
+                        } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false" || localStorage.getItem("intFunctional") == "null" || localStorage.getItem("intMarketing") == "null" || localStorage.getItem("intStatics") == "null"){
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -589,22 +593,16 @@ function checkCookieStatus() {
 
 checkCookieStatus();
 
-domain = (function () {
+const intCookieDomain = (function () {
     "use strict";
     var i = 0,
-        d = document.domain || window.location.host,
-        p = d.split("."),
-        s = int_hideCookieBannerName + "" + new Date().getTime();
-    while (i < p.length - 1 && document.cookie.indexOf(s + "=" + s) === -1) {
+        d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1") ? "" : "." + document.domain || window.location.host,
+        p = d.split(".")
+    
         d = p.slice(-1 - ++i).join(".");
-        document.cookie = s + "=" + s + ";domain=" + d + "; path=/;";
-    }
-    document.cookie =
-        s +
-        "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;domain=" +
-        d +
-        "; path=/;";
-    return d;
+        d = d;
+
+    return  "domain="+d +";";
 })();
 
 function getCookie(cname) {
@@ -691,9 +689,9 @@ function clearLocalStorage(ls) {
                 let item = localStorage.getItem(lsA[i]);
                 let itemName = lsA[i];
 
-                const intMarketingLocalStorage = localStorage.getItem("intMarketing");
-                const intStaticsLocalStorage = localStorage.getItem("intStatics");
-                const intFunctionalLocalStorage = localStorage.getItem("intFunctional");
+                const intMarketingLocalStorage = localStorage.getItem("intMarketing") === null ? false : localStorage.getItem("intMarketing");
+                const intStaticsLocalStorage = localStorage.getItem("intStatics") === null ? false : localStorage.getItem("intStatics");
+                const intFunctionalLocalStorage = localStorage.getItem("intFunctional") === null ? false : localStorage.getItem("intStatics");
 
                 localStorage.clear();
                 localStorage.setItem(itemName, item);
@@ -717,7 +715,7 @@ function deleteAllCookies() {
         var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
         if (!int__cookiesToKeepReg.test(name)) {
             let localS = window.INTA.settings === undefined || window.INTA.settings.keepInLocalStorage === undefined ? "" : window.INTA.settings.keepInLocalStorage;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=" + domain + "; path=/";
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; " + intCookieDomain + " path=/";
             clearLocalStorage(localS);
         }
     }
@@ -1397,18 +1395,18 @@ function saveINTCookieSettings() {
 
     if (MarketingCheckBox.checked === false && StaticsCheckBox.checked === false && FunctionalCheckbox.checked === false) {
         document.cookie = int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
-        document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+        document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain + "";
     }
 
     if (FunctionalCheckbox.checked) {
         localStorage.setItem("intFunctional", "checked");
         document.cookie =
             int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-            "; path=/; domain=." +
-            domain +
+            "; path=/; " +
+            intCookieDomain +
             "";
     } else {
         localStorage.setItem("intFunctional", false);
@@ -1418,8 +1416,8 @@ function saveINTCookieSettings() {
         localStorage.setItem("intStatics", "checked");
         document.cookie =
             int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-            "; path=/; domain=." +
-            domain +
+            "; path=/; " +
+            intCookieDomain +
             "";
     } else {
         localStorage.setItem("intStatics", false);
@@ -1429,8 +1427,8 @@ function saveINTCookieSettings() {
         localStorage.setItem("intMarketing", "checked");
         document.cookie =
             int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-            "; path=/; domain=." +
-            domain +
+            "; path=/; " +
+            intCookieDomain +
             "";
     } else {
         localStorage.setItem("intMarketing", false);
@@ -1438,8 +1436,8 @@ function saveINTCookieSettings() {
 
     document.cookie =
     int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-    "; path=/; domain=." +
-    domain +
+    "; path=/; " +
+    intCookieDomain +
     "";
 
     window.location.reload();
@@ -1451,7 +1449,7 @@ window.addEventListener("DOMContentLoaded", function () {
     window.INTA = window.INT;
     if (isValidPolicyLink()) {
         createCookieSettings();
-
+        let settings = document.querySelector(".intastellarCookie-settings__container");
         if (document.querySelector(".intastellarCookieBanner") != null) {
             if (getCookie(int_hideCookieBannerName) == "1") {
                 document.querySelector(".intastellarCookieBanner").style.display = "none";
@@ -1459,8 +1457,11 @@ window.addEventListener("DOMContentLoaded", function () {
                 document.querySelector(".intastellarCookieBanner").style.display = "";
             }
         } else if (getCookie(int_hideCookieBannerName) == "1") {
-            let settings = document.querySelector(".intastellarCookie-settings__container");
-            settings.classList.toggle("intastellarCookie-settings__container--expand");
+            if (window.INTA.settings.advanced === true) {
+                document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+            } else {
+                settings.classList.toggle("intastellarCookie-settings__container--expand");
+            }
         }
 
         function cookieEnabled() {
@@ -1550,13 +1551,13 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 document.cookie =
                     int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
                 document.cookie =
                     int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
                 document.cookie =
                     "_vis_opt=" +
@@ -1565,8 +1566,8 @@ window.addEventListener("DOMContentLoaded", function () {
                     new Date(
                         new Date().getTime() + 60 * 60 * 1000 * 24 * 100
                     ).toGMTString() +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
                 localStorage.setItem("intFunctional", "checked");
                 localStorage.setItem("intStatics", "checked");
@@ -1575,7 +1576,7 @@ window.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        if (cookiesOn == "no") {
+        /* if (cookiesOn == "no") {
             if (!document.__defineGetter__) {
                 Object.defineProperty(document, "cookie", {
                     get: function () {
@@ -1600,24 +1601,24 @@ window.addEventListener("DOMContentLoaded", function () {
             }
         } else if (cookiesOn == allowAllCookieName) {
             document.cookie = int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-                "; path=/; domain=." +
+                "; path=/; " +
                 domain +
                 "";
         } else if (cookiesOn == "no-set") {
-        }
+        } */
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
                 var cV = 1;
                 document.cookie =
                     int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
                 document.cookie =
                     int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
                 document.cookie =
                     "_vis_opt=" +
@@ -1626,8 +1627,8 @@ window.addEventListener("DOMContentLoaded", function () {
                     new Date(
                         new Date().getTime() + 60 * 60 * 1000 * 24 * 100
                     ).toGMTString() +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
                 var addedNodes = document.getElementsByTagName("script");
                 for (var i = 0; i < addedNodes.length; i++) {
@@ -1647,20 +1648,20 @@ window.addEventListener("DOMContentLoaded", function () {
                 var cV = 1;
                 document.cookie =
                     int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
                 document.cookie =
                     int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
                 document.cookie =
                     "_vis_opt=" +
                     cV +
                     "; expires=" + cookieLifeTime +
-                    "; path=/; domain=." +
-                    domain +
+                    "; path=/; " +
+                    intCookieDomain +
                     "";
 
                 localStorage.setItem("intFunctional", "false");
@@ -1692,12 +1693,21 @@ window.addEventListener("DOMContentLoaded", function () {
                 })
             })
 
-            configBtn.forEach((configs) => {
-                configs.addEventListener("click", function () {
-                    let settings = document.querySelector(".intastellarCookie-settings__container");
-                    settings.classList.toggle("intastellarCookie-settings__container--expand");
-                });
-            })
+            if (window.INTA.settings.advanced === false) {
+                configBtn.forEach((configs) => {
+                    configs.addEventListener("click", function () {
+                        let settings = document.querySelector(".intastellarCookie-settings__container");
+                        settings.classList.toggle("intastellarCookie-settings__container--expand");
+                    });
+                })
+            } else {
+                configBtn.forEach((configs) => {
+                    configs.addEventListener("click", function () {
+                        let settings = document.querySelector(".intastellarCookieConstents");
+                        settings.classList.toggle("--active");
+                    });
+                })
+            }
 
             closeSettings.addEventListener("click", function () {
                 let settings = document.querySelector(".intastellarCookie-settings__container");
@@ -1709,20 +1719,20 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         int_cookieName + "=analytics; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         "_vis_opt=" +
                         cV +
                         "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     window.location.reload();
                 })
@@ -1736,22 +1746,22 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         "_vis_opt=" +
                         cV +
                         "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
-                    document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+                    document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
                     
                     window.location.reload();
                 });
@@ -1761,22 +1771,22 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         "_vis_opt=" +
                         cV +
                         "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
-                    document.cookie = int_analytic + "=yes;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+                    document.cookie = int_analytic + "=yes;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
                     
                     var addedNodes = document.getElementsByTagName("script");
                     for (var i = 0; i < addedNodes.length; i++) {
@@ -1814,24 +1824,37 @@ window.addEventListener("DOMContentLoaded", function () {
                     saveINTCookieSettings();
                 })
             })
-
+            /* Showing default banner when no custom banner is set */
             if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
-                settings.classList.toggle("intastellarCookie-settings__container--expand");
+                if (window.INTA.settings.advanced === true) {
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                } else {
+                    settings.classList.toggle("intastellarCookie-settings__container--expand");
+                }
             }
 
-            configBtn.forEach((configs) => {
-                configs.addEventListener("click", function () {
-                    let settings = document.querySelector(".intastellarCookie-settings__container");
-                    settings.classList.toggle("intastellarCookie-settings__container--expand");
-                });
-            })
+            if (!window.INTA.settings.advanced) {
+                configBtn.forEach((configs) => {
+                    configs.addEventListener("click", function () {
+                        let settings = document.querySelector(".intastellarCookie-settings__container");
+                        settings.classList.toggle("intastellarCookie-settings__container--expand");
+                    });
+                })
 
-            config.forEach((configs) => {
-                configs.addEventListener("click", function () {
-                    let settings = document.querySelector(".intastellarCookie-settings__container");
-                    settings.classList.toggle("intastellarCookie-settings__container--expand");
-                });
-            })
+                config.forEach((configs) => {
+                    configs.addEventListener("click", function () {
+                        let settings = document.querySelector(".intastellarCookie-settings__container");
+                        settings.classList.toggle("intastellarCookie-settings__container--expand");
+                    });
+                })
+            } else {
+                configBtn.forEach((configs) => {
+                    configs.addEventListener("click", function () {
+                        let settings = document.querySelector(".intastellarCookieConstents");
+                        settings.classList.add("--active");
+                    });
+                })
+            }
 
             closeSettings.addEventListener("click", function () {
                 let settings = document.querySelector(".intastellarCookie-settings__container");
@@ -1846,22 +1869,22 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/;" +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         "_vis_opt=" +
                         cV +
                         "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
-                    document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+                    document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
                     
                     window.location.reload();
                 });
@@ -1872,22 +1895,22 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
                     document.cookie =
                         "_vis_opt=" +
                         cV +
                         "; expires=" + cookieLifeTime +
-                        "; path=/; domain=." +
-                        domain +
+                        "; path=/; " +
+                        intCookieDomain +
                         "";
-                    document.cookie = int_analytic + "=yes;expires=" + cookieLifeTime + ";path=/;domain=." + domain + "";
+                    document.cookie = int_analytic + "=yes;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain + "";
                     
                     var addedNodes = document.getElementsByTagName("script");
                     for (var i = 0; i < addedNodes.length; i++) {
