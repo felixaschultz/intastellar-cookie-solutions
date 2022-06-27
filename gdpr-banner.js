@@ -187,7 +187,8 @@ function checkCookieStatus() {
             ] 
         }
     ];
-    /* All Scripts who are beeing blocked */
+
+    /*
     const findScripts = [
         "(?=linkedin|gtag|grecaptcha|hotjar|gtm|twitter|instagram)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
         "(google-analytics+)",
@@ -245,7 +246,7 @@ function checkCookieStatus() {
         "(klarna+)",
         "(paypal+)",
         "[a-z]+\/maps\/{2,5}(:[0-9]{1,5})?(\\/\\/.*)?$"
-    ];
+    ]; */
 
     /* Helper function to merge arrays */
     const merge = (first, second) => {
@@ -277,7 +278,9 @@ function checkCookieStatus() {
         m = allScripts[2].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
     } else {
-        notRequired = new RegExp(findScripts.join("|"), "ig");
+        m = merge(allScripts[1].scripts, allScripts[0].scripts)
+        let findS = merge(m, allScripts[2].scripts);
+        notRequired = new RegExp(findS.join("|"), "ig");
     }
 
     const dc = getCookie(int_cookieName);
