@@ -6,7 +6,6 @@
 */
 
 /* - - - Setup - - - */
-const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
 const int_cookieName = "__inta_ac_cookie";
 const int_hideCookieBannerName = "__inta";
 const int_analytic = "__inta__analytics";
@@ -168,7 +167,7 @@ function checkCookieStatus() {
                 "(doubleclick+)",
                 "(pinterest+)",
                 "(googleadservices+)",
-                "(googletagmanager+)([a-z]+){2,5}\/maps\/(:[0-9]{1,5})?(\\/\\/.*)"
+                "(googletagmanager+)([a-z]+){2,5}(:[0-9]{1,5})?(\\/\\/.*)"
             ]
         },
         {
@@ -188,8 +187,8 @@ function checkCookieStatus() {
         }
     ];
 
-    /*
-    const findScripts = [
+    
+    /* const findScripts = [
         "(?=linkedin|gtag|grecaptcha|hotjar|gtm|twitter|instagram)(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+",
         "(google-analytics+)",
         "(!fontawesome+)",
@@ -249,10 +248,16 @@ function checkCookieStatus() {
     ]; */
 
     /* Helper function to merge arrays */
-    const merge = (first, second) => {
+    const merge = (first, second, third) => {
         for(let i=0; i<second.length; i++) {
           first.push(second[i]);
         }
+        if (third !== undefined) {
+            for (let i = 0; i < third.length; i++) {
+                first.push(third[i])
+            }
+        }
+
         return first;
     }
 
@@ -278,9 +283,8 @@ function checkCookieStatus() {
         m = allScripts[2].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
     } else {
-        m = merge(allScripts[1].scripts, allScripts[0].scripts)
-        let findS = merge(m, allScripts[2].scripts);
-        notRequired = new RegExp(findS.join("|"), "ig");
+        m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts)
+        notRequired = new RegExp(m.join("|"), "ig");
     }
 
     const dc = getCookie(int_cookieName);
@@ -296,15 +300,17 @@ function checkCookieStatus() {
         addedNodes.forEach((frae) => {
             if (!intaCookieType("intMarketing") && script.type == "marketing") {
                 if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
+                    console.log(frae.src);
                     frae.src = "about:blank";
                     let settingsContent = document.createElement("section");
                     settingsContent.style = "text-align: center;  padding: 15px;";
                     settingsContent.innerHTML = `
-                <section class="intCookie_ConsentContainer">
-                    ${message}
-                    <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept ${script.type} cookies</button>
-                </section>
-                `;
+                    <section class="intCookie_ConsentContainer">
+                        ${message}
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept ${script.type} cookies</button>
+                    </section>
+                    `;
+                    
                     if (frae.style.display !== "none") {
                         frae.parentElement.appendChild(settingsContent);
                     }
@@ -316,11 +322,22 @@ function checkCookieStatus() {
                     let settingsContent = document.createElement("section");
                     settingsContent.style = "text-align: center;  padding: 15px;";
                     settingsContent.innerHTML = `
-                <section class="intCookie_ConsentContainer">
-                    ${message}
-                    <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept ${script.type} cookies</button>
-                </section>
-                `;
+                    <section class="intCookie_ConsentContainer">
+                        ${message}
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept ${script.type} cookies</button>
+                    </section>
+                    `;
+                    frae.parentElement.appendChild(settingsContent);
+                    frae.parentElement.removeChild(frae);
+                } else if (frae.id.indexOf("map") > -1 || frae.id.indexOf("google") > -1) {
+                    let settingsContent = document.createElement("section");
+                    settingsContent.style = "text-align: center;  padding: 15px;";
+                    settingsContent.innerHTML = `
+                    <section class="intCookie_ConsentContainer">
+                        ${message}
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept ${script.type} cookies</button>
+                    </section>
+                    `;
                     frae.parentElement.appendChild(settingsContent);
                     frae.parentElement.removeChild(frae);
                 }
@@ -370,6 +387,26 @@ function checkCookieStatus() {
                         }
 
                     });   
+                }
+
+                if (node.nodeType === 1 && node.tagName === "DIV") {
+                    allScripts.map((script) => {
+                        const message = {
+                            danish: `<p>Vi beder om sammentykke til "${script.type}" cookies til at se dette indhold.</p>`,
+                            english: `<p>Please provide consent for "${script.type}" cookies to view this content. By clicking on "accept ${script.type} cookies" you´re accepting direct all ${script.type} cookies.</p>`,
+                            german: `<p>Bitte stimme den "${script.type}" cookies zu um diesen Inhalt sehen zu können.</p>`
+                        }
+
+                        if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+                            loopBlock(addedNodes, message.danish, script);
+                        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+                            loopBlock(addedNodes, message.german, script);
+                        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+                            loopBlock(addedNodes, message.english, script);
+                        } else {
+                            loopBlock(addedNodes, message.danish, script);
+                        }
+                    })
                 }
 
                 if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
