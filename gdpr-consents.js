@@ -90,6 +90,14 @@ const pSBC = (p, c0, c1, l) => {
     if (h) return "rgb" + (f ? "a(" : "(") + r + "," + g + "," + b + (f ? "," + m(a * 1000) / 1000 : "") + ")";
     else return "#" + (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0)).toString(16).slice(1, f ? undefined : -2)
 }
+const contentPolicyMetaTag = document.createElement('meta');
+/* Adding security meta tag */
+contentPolicyMetaTag.httpEquiv = "Content-Security-Policy";
+contentPolicyMetaTag.content = "script-src 'self' 'unsafe-inline'";
+
+if (getCookie(int_cookieName) == essentialsCookieName) {
+    intHead.insertBefore(contentPolicyMetaTag, intHead.firstChild);
+}
 
 function checkCookieStatus() {
     const intaStyleLink = document.createElement('link');
@@ -98,7 +106,7 @@ function checkCookieStatus() {
     intaStyleLink.href = 'https://www.intastellarsolutions.com/components/css/jsCookieBannerinfo.css?v=' + new Date().getTime();
     intaStyleLink.media = 'all';
     intHead.appendChild(intaStyleLink);
-
+    
     const allScripts = [
         {
             /* Analytics Scripts which are beeing blocked */
@@ -121,14 +129,13 @@ function checkCookieStatus() {
                 "(consensu+)",
                 "(ip-only+)",
                 "(ggpht+)",
-                "(quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\/\\/.*)"
+                "(quantserve+)[a-z]{2,5}\gtag\(:[0-9]{1,5})?(\\\\.*)"
             ]
         },
         {
             /* Marketing Scripts which are beeing blocked */
             type: "marketing",
             scripts: [
-                "(?=gtag|gtm)",
                 "(_linkedin_partner_id|_linkedin_data_partner_ids|lntrk|twitter|instagram)",
                 "(googlesyndication+)",
                 "(twitter+)",
@@ -167,7 +174,7 @@ function checkCookieStatus() {
                 "(doubleclick+)",
                 "(pinterest+)",
                 "(googleadservices+)",
-                "(googletagmanager+)([a-z]+){2,5}(:[0-9]{1,5})?(\\/\\/.*)"
+                "(googletagmanager+)([a-z]+){2,5}\gtag(:[0-9]{1,5})?(\\\\.*)"
             ]
         },
         {
@@ -182,7 +189,8 @@ function checkCookieStatus() {
                 "(qbrick+)",
                 "(klarna+)",
                 "(paypal+)",
-                "(disqus+)([a-z]+){2,5}\/maps\/(:[0-9]{1,5})?(\\/\\/.*)"
+                "(usersnap+)",
+                "(disqus+)([a-z]+){2,5}\maps\(:[0-9]{1,5})?(\\\\.*)"
             ] 
         }
     ];
@@ -287,6 +295,8 @@ function checkCookieStatus() {
         notRequired = new RegExp(m.join("|"), "ig");
     }
 
+    console.log(notRequired);
+
     const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
 
@@ -300,7 +310,6 @@ function checkCookieStatus() {
         addedNodes.forEach((frae) => {
             if (!intaCookieType("intMarketing") && script.type == "marketing") {
                 if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
-                    console.log(frae.src);
                     frae.src = "about:blank";
                     let settingsContent = document.createElement("section");
                     settingsContent.style = "text-align: center;  padding: 15px;";
@@ -367,6 +376,7 @@ function checkCookieStatus() {
                 if (!allCookiesAllowed() || !intaCookieType("intFunctional")) {
                     deleteAllCookies();
                 }
+
                 /* Adding  custom button to all blocked embedded content on the site */
                 if (node.nodeType === 1 && node.tagName === "IFRAME") {
                     allScripts.map((script) => {
@@ -376,15 +386,15 @@ function checkCookieStatus() {
                             german: `<p>Bitte stimme den "${script.type}" cookies zu um diesen Inhalt sehen zu können.</p>`
                         }
 
-                        if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+                        loopBlock(addedNodes, message.english, script);
+
+                        /* if (intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
                             loopBlock(addedNodes, message.danish, script);
-                        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+                        } else if (intastellarCookieLanguage != undefined && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
                             loopBlock(addedNodes, message.german, script);
-                        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+                        } else if (intastellarCookieLanguage != undefined && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
                             loopBlock(addedNodes, message.english, script);
-                        } else {
-                            loopBlock(addedNodes, message.danish, script);
-                        }
+                        } */
 
                     });   
                 }
@@ -396,16 +406,14 @@ function checkCookieStatus() {
                             english: `<p>Please provide consent for "${script.type}" cookies to view this content. By clicking on "accept ${script.type} cookies" you´re accepting direct all ${script.type} cookies.</p>`,
                             german: `<p>Bitte stimme den "${script.type}" cookies zu um diesen Inhalt sehen zu können.</p>`
                         }
-
-                        if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+                        loopBlock(addedNodes, message.english, script);
+                        /* if ( intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
                             loopBlock(addedNodes, message.danish, script);
-                        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+                        } else if (intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
                             loopBlock(addedNodes, message.german, script);
-                        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+                        } else if (intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
                             loopBlock(addedNodes, message.english, script);
-                        } else {
-                            loopBlock(addedNodes, message.danish, script);
-                        }
+                        } */
                     })
                 }
 
@@ -417,27 +425,27 @@ function checkCookieStatus() {
                                 english: `<p>Please provide consent for "${script.type}" cookies to view this content. By clicking on "accept ${script.type} cookies" you´re accepting direct all ${script.type} cookies.</p>`,
                                 german: `<p>Bitte stimme den "${script.type}" cookies zu um diesen Inhalt sehen zu können.</p>`
                             }
-                            if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+
+                            blockBlockQuotes(tweet, message.english, script);
+
+                           /*  if (intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
                                 blockBlockQuotes(tweet, message.danish, script);
-                            } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+                            } else if (intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
                                 blockBlockQuotes(tweet, message.german, script);
-                            } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+                            } else if (intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
                                 blockBlockQuotes(tweet, message.english, script);
-                            } else {
-                                blockBlockQuotes(tweet, message.danish, script);
-                            }
+                            } */
 
                         })
                     });   
                 }
                 
-                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
+                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     let src = node.src || "";
-                    node.async = false;
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.src;
-                        
+                        console.log(src);
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -446,18 +454,27 @@ function checkCookieStatus() {
                                 if (
                                     notRequired.test(src)
                                 ) {
-                                    node.type = "text/plain";
-                                    
+                                    node.type = "text/blocked";
+                                    node.defer = true;
+                                    node.async = true;
                                     node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 }
+                            } else if(src.indexOf(window.location.hostname) == -1
+                            && src.indexOf("jquery") == 1) {
+                                node.type = "text/javascript";
+                                node.defer = false;
+                                node.async = false;
+                            } else {
+                                node.type = "text/javascript";
                             }
 
                             if (
                                 notRequired.test(node.innerText)
                             ) {
-
-                                node.type = "text/plain";
+                                node.defer = true;
+                                node.async = true;
+                                node.type = "text/blocked";
                                 node.parentElement.removeChild(node);
                                 deleteAllCookies();
                             }
@@ -469,17 +486,30 @@ function checkCookieStatus() {
                                 if (
                                     notRequired.test(src)
                                 ) {
-                                    node.type = "text/plain";
+                                    node.type = "text/blocked";
+                                    node.defer = true;
+                                    node.async = true;
                                     node.parentElement.removeChild(node);
                                 }
+                            } else if(src.indexOf(window.location.hostname) == -1
+                            && src.indexOf("jquery") == 1) {
+                                node.type = "text/javascript";
+                                node.defer = false;
+                                node.async = false;
+                            } else {
+                                node.type = "text/javascript";
                             }
 
                             if (
                                 notRequired.test(node.innerText)
                                 && node.innerText.toLowerCase().indexOf("elementor") == -1
                             ) {
-                                node.type = "text/plain";
+                                node.type = "text/blocked";
+                                node.defer = true;
+                                node.async = true;
                                 node.parentElement.removeChild(node);
+                            } else {
+                                node.type = "text/javascript";
                             }
                         }
 
@@ -493,19 +523,32 @@ function checkCookieStatus() {
                                     if (
                                         notRequired.test(src)
                                     ) {
-                                        node.type = "text/plain";
+                                        node.defer = true;
+                                        node.async = true;
+                                        node.type = "text/blocked";
                                         node.parentElement.removeChild(node);
                                         deleteAllCookies();
                                     }
+                                } else if(src.indexOf(window.location.hostname) == -1
+                                && src.indexOf("jquery") == 1) {
+                                    node.type = "text/javascript";
+                                    node.defer = false;
+                                    node.async = false;
+                                } else {
+                                    node.type = "text/javascript";
                                 }
 
                                 if (
                                     notRequired.test(node.innerText)
                                     && node.innerText.toLowerCase().indexOf("elementor") == -1
                                 ) {
-                                    node.type = "text/plain";
+                                    node.defer = true;
+                                    node.async = true;
+                                    node.type = "text/blocked";
                                     node.parentElement.removeChild(node);
                                     deleteAllCookies();
+                                } else {
+                                    node.type = "text/javascript";
                                 }
                             } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
                                 if (
@@ -515,17 +558,30 @@ function checkCookieStatus() {
                                     if (
                                         notRequired.test(src)
                                     ) {
-                                        node.type = "text/plain";
+                                        node.defer = true;
+                                        node.async = true;
+                                        node.type = "text/blocked";
                                         node.parentElement.removeChild(node);
                                     }
+                                } else if(src.indexOf(window.location.hostname) == -1
+                                && src.indexOf("jquery") == 1) {
+                                    node.type = "text/javascript";
+                                    node.defer = false;
+                                    node.async = false;
+                                } else {
+                                    node.type = "text/javascript";
                                 }
     
                                 if (
                                     notRequired.test(node.innerText)
                                     && node.innerText.toLowerCase().indexOf("elementor") == -1
                                 ) {
-                                    node.type = "text/plain";
+                                    node.defer = true;
+                                    node.async = true;
+                                    node.type = "text/blocked";
                                     node.parentElement.removeChild(node);
+                                } else {
+                                    node.type = "text/javascript";
                                 }
                             }
 
@@ -535,7 +591,7 @@ function checkCookieStatus() {
                                 intHead.appendChild(s);
                             }
 
-                            if (node.getAttribute("type") === "text/plain")
+                            if (node.getAttribute("type") === "text/blocked")
                                 event.preventDefault();
                             node.removeEventListener(
                                 "beforescriptexecute",
@@ -548,14 +604,16 @@ function checkCookieStatus() {
                             beforeScriptExecuteListener
                         );
                     });
-                } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
+                } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     if (dc == essentialsCookieName || dc == "") {
 
                         if (
                             notRequired.test(node.innerText)
                             && node.innerText.toLowerCase().indexOf("elementor") == -1
                         ) {
-                            node.type = "text/plain";
+                            node.defer = true;
+                            node.async = true;
+                            node.type = "text/blocked";
                             node.parentElement.removeChild(node);
                             deleteAllCookies();
                         }
@@ -565,8 +623,12 @@ function checkCookieStatus() {
                             notRequired.test(node.innerText)
                             && node.innerText.toLowerCase().indexOf("elementor") == -1
                         ) {
-                            node.type = "text/plain";
+                            node.defer = true;
+                            node.async = true;
+                            node.type = "text/blocked";
                             node.parentElement.removeChild(node);
+                        } else {
+                            node.type = "text/javascript";
                         }
                     }
 
@@ -582,10 +644,19 @@ function checkCookieStatus() {
                                     notRequired.test(node.innerText)
                                     && node.innerText.toLowerCase().indexOf("elementor") == -1
                                 ) {
-                                    node.type = "text/plain";
+                                    node.defer = true;
+                                    node.async = true;
+                                    node.type = "text/blocked";
                                     node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 }
+                            } else if(src.indexOf(window.location.hostname) == -1
+                            && src.indexOf("jquery") == 1) {
+                                node.type = "text/javascript";
+                                node.defer = false;
+                                node.async = false;
+                            } else {
+                                node.type = "text/javascript";
                             }
                         } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
                             if (
@@ -595,21 +666,34 @@ function checkCookieStatus() {
                                 if (
                                     notRequired.test(src)
                                 ) {
-                                    node.type = "text/plain";
+                                    node.defer = true;
+                                    node.async = true;
+                                    node.type = "text/blocked";
                                     node.parentElement.removeChild(node);
                                 }
+                            } else if(src.indexOf(window.location.hostname) == -1
+                            && src.indexOf("jquery") == 1) {
+                                node.type = "text/javascript";
+                                node.defer = false;
+                                node.async = false;
+                            } else {
+                                node.type = "text/javascript";
                             }
                             
                             if (
                                 notRequired.test(node.innerText)
                                 && node.innerText.toLowerCase().indexOf("elementor") == -1
                             ) {
-                                node.type = "text/plain";
+                                node.defer = true;
+                                node.async = true;
+                                node.type = "text/blocked";
                                 node.parentElement.removeChild(node);
+                            } else {
+                                node.type = "text/javascript";
                             }
                         }
 
-                        if (node.getAttribute("type") === "text/plain")
+                        if (node.getAttribute("type") === "text/blocked")
                             event.preventDefault();
                         node.removeEventListener(
                             "beforescriptexecute",
@@ -659,6 +743,17 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+/* --- Helper function to get Meta tags --- */
+function getMeta(name) {
+    var mtag = document.getElementsByTagName("meta");
+    for (var i = 0; i < mtag.length; i++) {
+        if (mtag[i].getAttribute('name') === name) {
+            return mtag[i].getAttribute("content")
+        }
+    }
+    return ''
 }
 
 function invertColor(color) {
@@ -854,7 +949,6 @@ function findScriptParameter(value) {
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
-let intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
 /* - - - Helper functions for Validate policy link - - - */
 function isValidCCPALink() {
     if (typeof window.INTA.settings.ccpa === "object" && isCCPAURL(window.INTA.settings.ccpa.url)) {
@@ -1409,7 +1503,7 @@ function createCCPAPolicyLink(link){
 }
 /* - - - Helper functions for Validate policy link - - - */
 function isValidPolicyLink() {
-    if (typeof window.INTA.policy_link === "string" && isURL(window.INTA.policy_link)) {
+    if (typeof window.INTA.policy_link === 'string' && isURL(window.INTA.policy_link)) {
         if (window.INTA.policy_link.length > 0) {
             return true;
         }
@@ -1448,6 +1542,7 @@ function saveINTCookieSettings() {
             "; path=/; " +
             intCookieDomain +
             "";
+        contentPolicyMetaTag.content += "";
     } else {
         localStorage.setItem("intFunctional", false);
     }
@@ -1459,6 +1554,7 @@ function saveINTCookieSettings() {
             "; path=/; " +
             intCookieDomain +
             "";
+        contentPolicyMetaTag.content += "";
     } else {
         localStorage.setItem("intStatics", false);
     }
@@ -1470,6 +1566,7 @@ function saveINTCookieSettings() {
             "; path=/; " +
             intCookieDomain +
             "";
+        contentPolicyMetaTag.content += "";
     } else {
         localStorage.setItem("intMarketing", false);
     }
@@ -1486,7 +1583,10 @@ function saveINTCookieSettings() {
 
 
 window.addEventListener("DOMContentLoaded", function () {
-    window.INTA = window.INT;
+    if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
+    if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
+
+    let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
     if (isValidPolicyLink()) {
         createCookieSettings();
         let settings = document.querySelector(".intastellarCookie-settings__container");
@@ -1609,6 +1709,9 @@ window.addEventListener("DOMContentLoaded", function () {
                     "; path=/; " +
                     intCookieDomain +
                     "";
+                if (getMeta("Content-Security-Policy")) {
+                    intHead.removeChild(contentPolicyMetaTag);
+                }
                 localStorage.setItem("intFunctional", "checked");
                 localStorage.setItem("intStatics", "checked");
                 localStorage.setItem("intMarketing", "checked");
@@ -1674,11 +1777,12 @@ window.addEventListener("DOMContentLoaded", function () {
                 for (var i = 0; i < addedNodes.length; i++) {
                     addedNodes.type = "";
                 }
-
                 localStorage.setItem("intFunctional", "checked");
                 localStorage.setItem("intStatics", "checked");
                 localStorage.setItem("intMarketing", "checked");
-
+                if (getMeta("Content-Security-Policy")) {
+                    intHead.removeChild(contentPolicyMetaTag);
+                }
                 window.location.reload();
             });
         }
@@ -1832,11 +1936,12 @@ window.addEventListener("DOMContentLoaded", function () {
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
                     }
-
                     localStorage.setItem("intFunctional", "checked");
                     localStorage.setItem("intStatics", "checked");
                     localStorage.setItem("intMarketing", "checked");
-
+                    if (getMeta("Content-Security-Policy")) {
+                        intHead.removeChild(contentPolicyMetaTag);
+                    }
                     window.location.reload();
                 })
             });
@@ -1956,11 +2061,12 @@ window.addEventListener("DOMContentLoaded", function () {
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
                     }
-
                     localStorage.setItem("intFunctional", "checked");
                     localStorage.setItem("intStatics", "checked");
                     localStorage.setItem("intMarketing", "checked");
-
+                    if (getMeta("Content-Security-Policy")) {
+                        intHead.removeChild(contentPolicyMetaTag);
+                    }
                     window.location.reload();
                 })
             });
