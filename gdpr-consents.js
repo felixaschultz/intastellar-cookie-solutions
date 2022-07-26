@@ -1063,7 +1063,6 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
         moreFooter.innerHTML = 
             `<article>
-                ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
                 <article class="intReadMore">
                     <section class="required">
                         <h3>Nødvendige</h3>
@@ -1121,6 +1120,7 @@ function createCookieSettings() {
                         </label>
                     </section>
                 </article>
+                ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
             </article>`;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
         settingsMessage = settingsMessages.german;
@@ -1131,7 +1131,6 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
         moreFooter.innerHTML =
         `<article>
-            ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
             <article class="intReadMore">
                 <section class="required">
                     <h3>Erforderliche</h3>
@@ -1189,6 +1188,7 @@ function createCookieSettings() {
                     </label>
                 </section>
             </article>
+            ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
         </article>`;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
         settingsMessage = settingsMessages.english;
@@ -1200,7 +1200,6 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accept', 'Necessary cookies only', 'Settings');
         moreFooter.innerHTML =
         `<article>
-            ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
             <article class="intReadMore">
                 <section class="required">
                     <h3>Strictly required</h3>
@@ -1258,6 +1257,7 @@ function createCookieSettings() {
                     </label>
                 </section>
             </article>
+            ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
         </article>`;
     } else {
         /* Default */
@@ -1271,7 +1271,6 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
         moreFooter.innerHTML =
         `<article>
-            ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
             <article class="intReadMore">
                 <section class="required">
                     <h3>Nødvendige</h3>
@@ -1329,6 +1328,7 @@ function createCookieSettings() {
                     </label>
                 </section>
             </article>
+            ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
         </article>`;
     }
 
