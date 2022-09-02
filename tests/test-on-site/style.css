@@ -89,7 +89,7 @@
 
 .intastellarCookie-settings__intHeader {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -273,6 +273,7 @@
 .intastellarCookieConstents__content-intHeader {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .intastellarCookieConstents__contentC {

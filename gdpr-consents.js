@@ -1063,25 +1063,7 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
         moreFooter.innerHTML = 
             `<article>
-                <article class="intReadMore">
-                    <section class="required">
-                        <h3>Nødvendige</h3>
-                        <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
-                    </section>
-                    <section>
-                        <h3>Funktionel</h3>
-                        <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
-                    </section>
-                    <section>
-                        <h3>Statistik</h3>
-                        <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
-                    </section>
-                    <section>
-                        <h3>Marketing</h3>
-                        <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
-                        <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
-                    </section>
-                </article>
+                ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
                 <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
@@ -1120,7 +1102,25 @@ function createCookieSettings() {
                         </label>
                     </section>
                 </article>
-                ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
+                <article class="intReadMore">
+                    <section class="required">
+                        <h3>Nødvendige</h3>
+                        <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
+                    </section>
+                    <section>
+                        <h3>Funktionel</h3>
+                        <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
+                    </section>
+                    <section>
+                        <h3>Statistik</h3>
+                        <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
+                    </section>
+                    <section>
+                        <h3>Marketing</h3>
+                        <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
+                        <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
+                    </section>
+                </article>
             </article>`;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
         settingsMessage = settingsMessages.german;
@@ -1131,25 +1131,7 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
         moreFooter.innerHTML =
         `<article>
-            <article class="intReadMore">
-                <section class="required">
-                    <h3>Erforderliche</h3>
-                    <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
-                </section>
-                <section>
-                    <h3>Funktionel</h3>
-                    <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
-                </section>
-                <section>
-                    <h3>Statistik</h3>
-                    <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
-                </section>
-                <section>
-                    <h3>Werbung</h3>
-                    <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
-                    <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
-                </section>
-            </article>
+            ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
             <article class="intCookieSetting__form">
                 <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
@@ -1188,7 +1170,25 @@ function createCookieSettings() {
                     </label>
                 </section>
             </article>
-            ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
+            <article class="intReadMore">
+                <section class="required">
+                    <h3>Erforderliche</h3>
+                    <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
+                </section>
+                <section>
+                    <h3>Funktionel</h3>
+                    <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
+                </section>
+                <section>
+                    <h3>Statistik</h3>
+                    <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
+                </section>
+                <section>
+                    <h3>Werbung</h3>
+                    <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
+                    <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
+                </section>
+            </article>
         </article>`;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
         settingsMessage = settingsMessages.english;
@@ -1200,25 +1200,7 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accept', 'Necessary cookies only', 'Settings');
         moreFooter.innerHTML =
         `<article>
-            <article class="intReadMore">
-                <section class="required">
-                    <h3>Strictly required</h3>
-                    <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
-                </section>
-                <section>
-                    <h3>Functional</h3>
-                    <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
-                </section>
-                <section>
-                    <h3>Statics</h3>
-                    <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
-                </section>
-                <section>
-                    <h3>Marketing</h3>
-                    <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
-                    <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
-                </section>
-            </article>
+            ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
             <article class="intCookieSetting__form">
                 <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
@@ -1257,7 +1239,25 @@ function createCookieSettings() {
                     </label>
                 </section>
             </article>
-            ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
+            <article class="intReadMore">
+                <section class="required">
+                    <h3>Strictly required</h3>
+                    <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
+                </section>
+                <section>
+                    <h3>Functional</h3>
+                    <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
+                </section>
+                <section>
+                    <h3>Statics</h3>
+                    <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
+                </section>
+                <section>
+                    <h3>Marketing</h3>
+                    <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
+                    <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
+                </section>
+            </article>
         </article>`;
     } else {
         /* Default */
@@ -1271,25 +1271,7 @@ function createCookieSettings() {
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
         moreFooter.innerHTML =
         `<article>
-            <article class="intReadMore">
-                <section class="required">
-                    <h3>Nødvendige</h3>
-                    <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
-                </section>
-                <section>
-                    <h3>Funktionel</h3>
-                    <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
-                </section>
-                <section>
-                    <h3>Statistik</h3>
-                    <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
-                </section>
-                <section>
-                    <h3>Marketing</h3>
-                    <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
-                    <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
-                </section>
-            </article>
+            ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
             <article class="intCookieSetting__form">
                 <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
@@ -1328,7 +1310,25 @@ function createCookieSettings() {
                     </label>
                 </section>
             </article>
-            ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
+            <article class="intReadMore">
+                <section class="required">
+                    <h3>Nødvendige</h3>
+                    <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
+                </section>
+                <section>
+                    <h3>Funktionel</h3>
+                    <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
+                </section>
+                <section>
+                    <h3>Statistik</h3>
+                    <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
+                </section>
+                <section>
+                    <h3>Marketing</h3>
+                    <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
+                    <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
+                </section>
+            </article>
         </article>`;
     }
 
@@ -1443,16 +1443,17 @@ function createCookieSettings() {
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
     let poweredBy = "";
     if (window.location.host.indexOf("intastellarsolutions") == -1) {
-        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' src='https://assets.intastellar-clients.net/bG9nb3MvaW50YXN0ZWxsYXJfc29sdXRpb25zQDJ4LnBuZw==' alt='Intastellar Solutions, International'></a></span>";
+        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='189px' height='50px' src='https://assets.intastellar-clients.net/bG9nb3MvaW50YXN0ZWxsYXJfc29sdXRpb25zQDJ4LnBuZw==' alt='Intastellar Solutions, International'></a></span>";
     }
     
     let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
+    let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
 
     moreintHeader.innerHTML = `
-        <img class="intSettingsCompanyLogo${intCookieIconSmallClass}" src="${cookieLogo}">
+        <img class="intSettingsCompanyLogo${intCookieIconSmallClass}" width="150px" height="102px" src="${cookieLogo}" alt="${CompanyLogoName}">
         <section class="intSettingsPoweredBy">${poweredBy}</section>`;
     
-    cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + document.domain + ' logo" title="' + document.domain + ' logo" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';"></button></intHeader>' +
+    cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';"></button></intHeader>' +
         message + cookieBtn + "" + poweredBy;
 
     cookieSettings.appendChild(cookieSettingsContent);
@@ -1461,7 +1462,7 @@ function createCookieSettings() {
 
     banner.setAttribute("class", "intastellarCookie-settings");
 
-    bannerContent.innerHTML = '<img class="intCookieIcon-openSettings" style="filter: invert(1);" src="'+intCookieIcon+'"> ' + text;
+    bannerContent.innerHTML = '<img class="intCookieIcon-openSettings" style="filter: invert(1);" src="'+intCookieIcon+'" alt="Cookie Icon"> ' + text;
 
     banner.appendChild(bannerContent);
     moreSettings.appendChild(moreSettingsContent);
