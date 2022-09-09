@@ -93,7 +93,7 @@ const pSBC = (p, c0, c1, l) => {
 const contentPolicyMetaTag = document.createElement('meta');
 /* Adding security meta tag */
 contentPolicyMetaTag.httpEquiv = "Content-Security-Policy";
-contentPolicyMetaTag.content = "script-src 'self' 'unsafe-inline'";
+/* contentPolicyMetaTag.content = "script-src 'self' 'unsafe-inline'"; */
 
 if (getCookie(int_cookieName) == essentialsCookieName) {
     intHead.insertBefore(contentPolicyMetaTag, intHead.firstChild);
@@ -136,7 +136,7 @@ function checkCookieStatus() {
             /* Marketing Scripts which are beeing blocked */
             type: "marketing",
             scripts: [
-                "(_linkedin_partner_id|_linkedin_data_partner_ids|lntrk|twitter|instagram)",
+                "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram)",
                 "(googlesyndication+)",
                 "(twitter+)",
                 "(ads-twitter+)",
