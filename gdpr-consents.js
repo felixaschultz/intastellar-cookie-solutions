@@ -6,12 +6,13 @@
 */
 
 /* - - - Setup - - - */
-const int_cookieName = "__inta_ac_cookie";
-const int_FunctionalCookies = "__int_FunctionalCookies";
-const int_marketingCookies = "__int_MarketingCookies";
-const int_staticsticCookies = "__int_StaticCookies";
-const int_hideCookieBannerName = "__inta";
-const int_analytic = "__inta__analytics";
+const intaCookiePref = "__inta-cookieconsents:";
+const int_hideCookieBannerName = intaCookiePref + "hideBanner";
+const int_cookieName = intaCookiePref + "ac_cookie";
+const int_FunctionalCookies = intaCookiePref + "Functional-cookies";
+const int_marketingCookies = intaCookiePref + "Advertisment-cookies";
+const int_staticsticCookies = intaCookiePref + "Statistics-cookies";
+const int_analytic = intaCookiePref + "analytics";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 
@@ -33,6 +34,18 @@ const INTA = window.INTA = {
         logo: intCookieIcon
     }
 }
+
+const intCookieDomain = (function () {
+    "use strict";
+    var i = 0,
+        d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1") ? "" : "." + document.domain || window.location.host,
+        p = d.split(".")
+    
+        d = p.slice(-1 - ++i).join(".");
+        d = d;
+
+    return  "domain="+d +";";
+})();
 
 const allowAllCookieName = "__all__cookies";
 const essentialsCookieName = "__essential__cookies";
@@ -278,7 +291,17 @@ function checkCookieStatus() {
 
     let notRequired;
     let m;
-
+    if (!getCookie(int_FunctionalCookies) && !getCookie(int_staticsticCookies) && !getCookie(int_marketingCookies)) {
+        document.cookie = int_FunctionalCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
+            intCookieDomain +
+            "";
+        document.cookie = int_staticsticCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
+            intCookieDomain +
+            "";
+        document.cookie = int_marketingCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
+            intCookieDomain +
+            "";
+    }
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
     if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_staticsticCookies) != "checked" && getCookie(int_marketingCookies) != "checked") {
         m = merge(allScripts[1].scripts, allScripts[0].scripts)
@@ -302,8 +325,6 @@ function checkCookieStatus() {
         m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
     }
-
-    console.log(notRequired);
 
     const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
@@ -724,18 +745,6 @@ function checkCookieStatus() {
 
 checkCookieStatus();
 
-const intCookieDomain = (function () {
-    "use strict";
-    var i = 0,
-        d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1") ? "" : "." + document.domain || window.location.host,
-        p = d.split(".")
-    
-        d = p.slice(-1 - ++i).join(".");
-        d = d;
-
-    return  "domain="+d +";";
-})();
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -828,7 +837,7 @@ function clearLocalStorage(ls) {
         let lsA = Object.values(ls);
         if (lsA.length != 0 || lsA != null) {
             for (let i = 0; i < lsA.length; i++) {
-                let item = getCookie(lsA[i]);
+                let item = localStorage.getItem(lsA[i]);
                 let itemName = lsA[i];
 
                 localStorage.clear();
@@ -1365,8 +1374,8 @@ function createCookieSettings() {
     }
 
     .intCookieIcon-openSettings{
-        width: 40px;
-        height: 40px;
+        width: auto;
+        height: auto;
     }
     `;
     let text = "";
