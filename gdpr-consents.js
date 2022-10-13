@@ -7,6 +7,9 @@
 
 /* - - - Setup - - - */
 const int_cookieName = "__inta_ac_cookie";
+const int_FunctionalCookies = "__int_FunctionalCookies";
+const int_marketingCookies = "__int_MarketingCookies";
+const int_staticsticCookies = "__int_StaticCookies";
 const int_hideCookieBannerName = "__inta";
 const int_analytic = "__inta__analytics";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
@@ -41,17 +44,21 @@ const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200
 
 const int__cookiesToKeep = [
     "PHPSESSID",
+    int_FunctionalCookies,
+    int_staticsticCookies,
+    int_marketingCookies,
     int_cookieName,
     int_hideCookieBannerName
 ];
 
+
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
-    if (localStorage.getItem(type) === "checked") return true;
-    return (localStorage.getItem(type) === "true")
+    if (getCookie(type) === "checked") return true;
+    return (getCookie(type) === "true")
 }
 
-if (intaCookieType("intFunctional")) {
+if (intaCookieType(int_FunctionalCookies)) {
     int__cookiesToKeep.push("region");
     int__cookiesToKeep.push("language");
     int__cookiesToKeep.push("lang");
@@ -59,7 +66,7 @@ if (intaCookieType("intFunctional")) {
     int__cookiesToKeep.push("locale");
 }
 
-if (intaCookieType("intMarketing")) {
+if (intaCookieType(int_marketingCookies)) {
     int__cookiesToKeep.push("_fbp");
 }
 
@@ -271,23 +278,24 @@ function checkCookieStatus() {
 
     let notRequired;
     let m;
+
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
-    if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intStatics") != "checked" && localStorage.getItem("intMarketing") != "checked") {
+    if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_staticsticCookies) != "checked" && getCookie(int_marketingCookies) != "checked") {
         m = merge(allScripts[1].scripts, allScripts[0].scripts)
         notRequired = new RegExp(m.join("|"), "ig"); 
-    } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") != "checked" && localStorage.getItem("intFunctional") != "checked") {
+    } else if (getCookie(int_marketingCookies) == "checked" && getCookie(int_staticsticCookies) != "checked" && getCookie(int_FunctionalCookies) != "checked") {
         m = merge(allScripts[2].scripts, allScripts[0].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (localStorage.getItem("intStatics") == "checked" && localStorage.getItem("intFunctional") != "checked" && localStorage.getItem("intMarketing") != "checked") {
+    } else if (getCookie(int_staticsticCookies) == "checked" && getCookie(int_FunctionalCookies) != "checked" && getCookie(int_marketingCookies) != "checked") {
         m = merge(allScripts[1].scripts, allScripts[2].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intStatics") == "checked") {
+    } else if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_staticsticCookies) == "checked") {
         m = allScripts[1].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (localStorage.getItem("intFunctional") == "checked" && localStorage.getItem("intMarketing") == "checked") {
+    } else if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_marketingCookies) == "checked") {
         m = allScripts[0].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (localStorage.getItem("intMarketing") == "checked" && localStorage.getItem("intStatics") == "checked") {
+    } else if (getCookie(int_marketingCookies) == "checked" && getCookie(int_staticsticCookies) == "checked") {
         m = allScripts[2].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
     } else {
@@ -308,7 +316,7 @@ function checkCookieStatus() {
 
     function loopBlock(addedNodes, message, script) {
         addedNodes.forEach((frae) => {
-            if (!intaCookieType("intMarketing") && script.type == "marketing") {
+            if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
                 if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
                     frae.src = "about:blank";
                     let settingsContent = document.createElement("section");
@@ -316,7 +324,7 @@ function checkCookieStatus() {
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer">
                         ${message}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept ${script.type} cookies</button>
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>Accept ${script.type} cookies</button>
                     </section>
                     `;
                     
@@ -325,7 +333,7 @@ function checkCookieStatus() {
                     }
                     frae.parentElement.removeChild(frae);
                 }
-            } else if (!intaCookieType("intFunctional") && script.type == "functional") {
+            } else if (!intaCookieType(int_FunctionalCookies) && script.type == "functional") {
                 if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
                     frae.src = "about:blank";
                     let settingsContent = document.createElement("section");
@@ -333,7 +341,7 @@ function checkCookieStatus() {
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer">
                         ${message}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept ${script.type} cookies</button>
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>Accept ${script.type} cookies</button>
                     </section>
                     `;
                     frae.parentElement.appendChild(settingsContent);
@@ -344,7 +352,7 @@ function checkCookieStatus() {
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer">
                         ${message}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctional'>Accept ${script.type} cookies</button>
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>Accept ${script.type} cookies</button>
                     </section>
                     `;
                     frae.parentElement.appendChild(settingsContent);
@@ -355,13 +363,13 @@ function checkCookieStatus() {
     }
 
     function blockBlockQuotes(tweet, message, script) {
-        if (!intaCookieType("intMarketing") && script.type == "marketing" && notRequired.test(tweet.className)) {
+        if (!intaCookieType(int_marketingCookies) && script.type == "marketing" && notRequired.test(tweet.className)) {
             let settingsContent = document.createElement("section");
             settingsContent.style = "text-align: center;  padding: 15px;";
             settingsContent.innerHTML = `
                 <section class="intCookie_ConsentContainer">
                     ${message}
-                    <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketing'>Accept ${script.type} cookies</button>
+                    <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>Accept ${script.type} cookies</button>
                 </section>
             `;
             tweet.parentElement.appendChild(settingsContent);
@@ -373,7 +381,7 @@ function checkCookieStatus() {
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(({ addedNodes }) => {
             addedNodes.forEach((node) => {
-                if (!allCookiesAllowed() || !intaCookieType("intFunctional")) {
+                if (!allCookiesAllowed() || !intaCookieType(int_FunctionalCookies)) {
                     deleteAllCookies();
                 }
 
@@ -445,7 +453,6 @@ function checkCookieStatus() {
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.src;
-                        console.log(src);
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -478,7 +485,7 @@ function checkCookieStatus() {
                                 node.parentElement.removeChild(node);
                                 deleteAllCookies();
                             }
-                        } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false" || localStorage.getItem("intFunctional") == "null" || localStorage.getItem("intMarketing") == "null" || localStorage.getItem("intStatics") == "null"){
+                        } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" || getCookie(int_marketingCookies) == "null" || getCookie(int_staticsticCookies) == "null"){
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -550,7 +557,7 @@ function checkCookieStatus() {
                                 } else {
                                     node.type = "text/javascript";
                                 }
-                            } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
+                            } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
                                 if (
                                     src.indexOf(window.location.hostname) == -1
                                     && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -617,7 +624,7 @@ function checkCookieStatus() {
                             node.parentElement.removeChild(node);
                             deleteAllCookies();
                         }
-                    } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
+                    } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
                         
                         if (
                             notRequired.test(node.innerText)
@@ -658,7 +665,7 @@ function checkCookieStatus() {
                             } else {
                                 node.type = "text/javascript";
                             }
-                        } else if(localStorage.getItem("intFunctional") == "false" || localStorage.getItem("intMarketing") == "false" || localStorage.getItem("intStatics") == "false"){
+                        } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -810,7 +817,7 @@ function allStorage() {
         i = keys.length;
 
     while (i--) {
-        values.push(localStorage.getItem(keys[i]));
+        values.push(getCookie(keys[i]));
     }
 
     return values;
@@ -821,19 +828,11 @@ function clearLocalStorage(ls) {
         let lsA = Object.values(ls);
         if (lsA.length != 0 || lsA != null) {
             for (let i = 0; i < lsA.length; i++) {
-                let item = localStorage.getItem(lsA[i]);
+                let item = getCookie(lsA[i]);
                 let itemName = lsA[i];
-
-                const intMarketingLocalStorage = localStorage.getItem("intMarketing") === null ? false : localStorage.getItem("intMarketing");
-                const intStaticsLocalStorage = localStorage.getItem("intStatics") === null ? false : localStorage.getItem("intStatics");
-                const intFunctionalLocalStorage = localStorage.getItem("intFunctional") === null ? false : localStorage.getItem("intStatics");
 
                 localStorage.clear();
                 localStorage.setItem(itemName, item);
-
-                localStorage.setItem("intMarketing",intMarketingLocalStorage);
-                localStorage.setItem("intStatics",intStaticsLocalStorage);
-                localStorage.setItem("intFunctional",intFunctionalLocalStorage);
             }
         } else {
             localStorage.clear();
@@ -1078,7 +1077,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Funktionel</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -1087,7 +1086,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Statistiske</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -1096,7 +1095,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Marketing</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -1146,7 +1145,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Funktionel</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1155,7 +1154,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statistik</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1164,7 +1163,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Werbung</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1215,7 +1214,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Functional</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1224,7 +1223,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statics</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1233,7 +1232,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Marketing</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1286,7 +1285,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Funktionel</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${localStorage.getItem("intFunctional")}>
+                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1295,7 +1294,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Statistiske</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${localStorage.getItem("intStatics")}>
+                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1304,7 +1303,7 @@ function createCookieSettings() {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">Marketing</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${localStorage.getItem("intMarketing")}>
+                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1537,31 +1536,51 @@ function saveINTCookieSettings() {
     }
 
     if (FunctionalCheckbox.checked) {
-        localStorage.setItem("intFunctional", "checked");
-        document.cookie =
-            int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-            "; path=/; " +
-            intCookieDomain +
+        /* localStorage.setItem("intFunctionalCookies", "checked"); */
+        document.cookie = int_FunctionalCookies+"=checked; expires=" + cookieLifeTime +
+        "; path=/; " +
+        intCookieDomain +
             "";
+        
+        document.cookie =
+        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
+        "; path=/; " +
+        intCookieDomain +
+            "";
+        
         contentPolicyMetaTag.content += "";
     } else {
-        localStorage.setItem("intFunctional", false);
+        document.cookie = int_FunctionalCookies+"=false; expires=" +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
     }
 
     if (StaticsCheckBox.checked) {
-        localStorage.setItem("intStatics", "checked");
+        /* localStorage.setItem("intStaticsCookies", "checked"); */
+        document.cookie = int_staticsticCookies+"=checked; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
         document.cookie =
             int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
             "; path=/; " +
             intCookieDomain +
             "";
         contentPolicyMetaTag.content += "";
-    } else {
-        localStorage.setItem("intStatics", false);
+    }else {
+        document.cookie = int_staticsticCookies+"=false; expires=" +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
     }
 
     if (MarketingCheckBox.checked) {
-        localStorage.setItem("intMarketing", "checked");
+        /* localStorage.setItem("intMarketingCookies", "checked"); */
+        document.cookie = int_marketingCookies+"=checked; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
         document.cookie =
             int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
             "; path=/; " +
@@ -1569,7 +1588,10 @@ function saveINTCookieSettings() {
             "";
         contentPolicyMetaTag.content += "";
     } else {
-        localStorage.setItem("intMarketing", false);
+        document.cookie = int_marketingCookies+"=false; expires=" +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
     }
 
     document.cookie =
@@ -1713,9 +1735,21 @@ window.addEventListener("DOMContentLoaded", function () {
                 if (getMeta("Content-Security-Policy")) {
                     intHead.removeChild(contentPolicyMetaTag);
                 }
-                localStorage.setItem("intFunctional", "checked");
-                localStorage.setItem("intStatics", "checked");
-                localStorage.setItem("intMarketing", "checked");
+
+                
+
+                document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
+                document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
+                document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
                 window.location.reload();
             });
         }
@@ -1778,9 +1812,21 @@ window.addEventListener("DOMContentLoaded", function () {
                 for (var i = 0; i < addedNodes.length; i++) {
                     addedNodes.type = "";
                 }
-                localStorage.setItem("intFunctional", "checked");
-                localStorage.setItem("intStatics", "checked");
-                localStorage.setItem("intMarketing", "checked");
+
+                
+
+                document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
+                document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
+                document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
                 if (getMeta("Content-Security-Policy")) {
                     intHead.removeChild(contentPolicyMetaTag);
                 }
@@ -1809,9 +1855,17 @@ window.addEventListener("DOMContentLoaded", function () {
                     intCookieDomain +
                     "";
 
-                localStorage.setItem("intFunctional", "false");
-                localStorage.setItem("intStatics", "false");
-                localStorage.setItem("intMarketing", "false");
+                    
+                
+                    document.cookie = int_FunctionalCookies + "=checked; expires= path=/; " +
+                    intCookieDomain +
+                    "";
+                document.cookie = int_marketingCookies + "=checked; expires= path=/; " +
+                    intCookieDomain +
+                    "";
+                document.cookie = int_staticsticCookies + "=checked; expires= path=/; " +
+                    intCookieDomain +
+                    "";
 
                 window.location.reload();
             });
@@ -1829,9 +1883,9 @@ window.addEventListener("DOMContentLoaded", function () {
 
             changePermission.forEach((change) => {
                 change.addEventListener("click", function () {
-                    if (this.getAttribute("data-type") == "intMarketing") {
+                    if (this.getAttribute("data-type") == "intMarketingCookies") {
                         document.querySelector("#marketing").checked = true;
-                    } else if (this.getAttribute("data-type") == "intFunctional") {
+                    } else if (this.getAttribute("data-type") == "intFunctionalCookies") {
                         document.querySelector("#functional").checked = true;
                     }
                     saveINTCookieSettings();
@@ -1885,9 +1939,16 @@ window.addEventListener("DOMContentLoaded", function () {
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
-                    localStorage.setItem("intFunctional", "false");
-                    localStorage.setItem("intStatics", "false");
-                    localStorage.setItem("intMarketing", "false");
+
+                    document.cookie = int_FunctionalCookies + "=false; expires= path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie = int_staticsticCookies + "=false; expires= path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie = int_marketingCookies + "=false; expires= path=/; " +
+                        intCookieDomain +
+                        "";
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
@@ -1937,9 +1998,21 @@ window.addEventListener("DOMContentLoaded", function () {
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
                     }
-                    localStorage.setItem("intFunctional", "checked");
-                    localStorage.setItem("intStatics", "checked");
-                    localStorage.setItem("intMarketing", "checked");
+
+                    
+
+                    document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
                     if (getMeta("Content-Security-Policy")) {
                         intHead.removeChild(contentPolicyMetaTag);
                     }
@@ -1962,9 +2035,9 @@ window.addEventListener("DOMContentLoaded", function () {
 
             changePermission.forEach((change) => {
                 change.addEventListener("click", function () {
-                    if (this.getAttribute("data-type") == "intMarketing") {
+                    if (this.getAttribute("data-type") == "intMarketingCookies") {
                         document.querySelector("#marketing").checked = true;
-                    } else if (this.getAttribute("data-type") == "intFunctional") {
+                    } else if (this.getAttribute("data-type") == "intFunctionalCookies") {
                         document.querySelector("#functional").checked = true;
                     }
                     saveINTCookieSettings();
@@ -2009,9 +2082,16 @@ window.addEventListener("DOMContentLoaded", function () {
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
-                    localStorage.setItem("intFunctional", "false");
-                    localStorage.setItem("intStatics", "false");
-                    localStorage.setItem("intMarketing", "false");
+
+                    document.cookie = int_FunctionalCookies + "=false; expires= path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie = int_staticsticCookies + "=false; expires= path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie = int_marketingCookies + "=false; expires= path=/; " +
+                        intCookieDomain +
+                        "";
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
@@ -2062,9 +2142,20 @@ window.addEventListener("DOMContentLoaded", function () {
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
                     }
-                    localStorage.setItem("intFunctional", "checked");
-                    localStorage.setItem("intStatics", "checked");
-                    localStorage.setItem("intMarketing", "checked");
+
+
+                    document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
                     if (getMeta("Content-Security-Policy")) {
                         intHead.removeChild(contentPolicyMetaTag);
                     }
