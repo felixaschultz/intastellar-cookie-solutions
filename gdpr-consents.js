@@ -126,30 +126,29 @@ function checkCookieStatus() {
     intaStyleLink.href = 'https://www.intastellarsolutions.com/components/css/jsCookieBannerinfo.css?v=' + new Date().getTime();
     intaStyleLink.media = 'all';
     intHead.appendChild(intaStyleLink);
-    
     const allScripts = [
         {
             /* Analytics Scripts which are beeing blocked */
             type: "statics",
             scripts: [
                 "(?=gtag|gtm)",
-                "(google-analytics+)",
-                "(googletagmanager+)",
-                "(googleoptimize+)",
-                "(piwik+)",
-                "(matomo+)",
-                "(bing+)",
-                "(slideshare+)",
-                "(siteimproveanalytics+)",
-                "(hotjar+)",
-                "(qualtrics+)",
-                "(pardot+)",
-                "(poultons+)",
-                "(clarity+)",
-                "(consensu+)",
-                "(ip-only+)",
-                "(ggpht+)",
-                "(quantserve+)[a-z]{2,5}\gtag\(:[0-9]{1,5})?(\\\\.*)"
+                "([\-\.]google-analytics+)",
+                "([\-\.]googletagmanager+)",
+                "([\-\.]googleoptimize+)",
+                "([\-\.]piwik+)",
+                "([\-\.]matomo+)",
+                "([\-\.]bing+)",
+                "([\-\.]slideshare+)",
+                "([\-\.]siteimproveanalytics+)",
+                "([\-\.]hotjar+)",
+                "([\-\.]qualtrics+)",
+                "([\-\.]pardot+)",
+                "([\-\.]poultons+)",
+                "([\-\.]clarity+)",
+                "([\-\.]consensu+)",
+                "([\-\.]ip-only+)",
+                "([\-\.]ggpht+)",
+                "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
             ]
         },
         {
@@ -157,60 +156,60 @@ function checkCookieStatus() {
             type: "marketing",
             scripts: [
                 "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram)",
-                "(googlesyndication+)",
-                "(twitter+)",
-                "(ads-twitter+)",
+                "([\-\.]googlesyndication+)",
+                "([\-\.]twitter+)",
+                "([\-\.]ads-twitter+)",
                 "(chimpstatic+)",
-                "(trustpilot+)",
-                "(mailchimp+)",
-                "(linkedin+)",
-                "(bing+)",
-                "(licdn+)",
-                "(amazon-adsystem+)",
-                "(adfrom+)",
-                "(demdex+)",
-                "(instagram+)",
-                "(stickyadstv+)",
-                "(mookie1+)",
-                "(bidswitch+)",
-                "(jnqsge+)",
-                "(syuh+)",
-                "(youtube+)",
-                "(vimeo+)",
-                "(ninthdecimal+)",
-                "(casalemedia+)",
-                "(adsymptotic+)",
-                "(tremorhub+)",
-                "(agkn+)",
-                "(myvisualiq+)",
-                "(exelator+)",
-                "(openx+)",
-                "(yahoo+)",
-                "(advertising+)",
-                "(adnxs+)",
-                "(scdn+)",
-                "(spotify+)",
-                "(facebook+)",
-                "(doubleclick+)",
-                "(pinterest+)",
-                "(googleadservices+)",
-                "(googletagmanager+)([a-z]+){2,5}\gtag(:[0-9]{1,5})?(\\\\.*)"
+                "([\-\.]trustpilot+)",
+                "([\-\.]mailchimp+)",
+                "([\-\.]linkedin+)",
+                "([\-\.]bing+)",
+                "([\-\.]licdn+)",
+                "([\-\.]amazon-adsystem+)",
+                "([\-\.]adfrom+)",
+                "([\-\.]demdex+)",
+                "([\-\.]instagram+)",
+                "([\-\.]stickyadstv+)",
+                "([\-\.]mookie1+)",
+                "([\-\.]bidswitch+)",
+                "([\-\.]jnqsge+)",
+                "([\-\.]syuh+)",
+                "([\-\.]youtube+)",
+                "([\-\.]vimeo+)",
+                "([\-\.]ninthdecimal+)",
+                "([\-\.]casalemedia+)",
+                "([\-\.]adsymptotic+)",
+                "([\-\.]tremorhub+)",
+                "([\-\.]agkn+)",
+                "([\-\.]myvisualiq+)",
+                "([\-\.]exelator+)",
+                "([\-\.]openx+)",
+                "([\-\.]yahoo+)",
+                "([\-\.]advertising+)",
+                "([\-\.]adnxs+)",
+                "([\-\.]scdn+)",
+                "([\-\.]spotify+)",
+                "([\-\.]facebook+)",
+                "([\-\.]doubleclick+)",
+                "([\-\.]pinterest+)",
+                "([\-\.]googleadservices+)",
+                "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
             ]
         },
         {
             /* Functional Scripts which are beeing blocked */
             type: "functional",
             scripts: [
-                "(googleapis+)",
+                "([\-\.]googleapis+)",
                 "(recaptcha+)",
                 "(grecaptcha+)",
-                "(google+)",
-                "(cludo+)",
-                "(qbrick+)",
-                "(klarna+)",
-                "(paypal+)",
-                "(usersnap+)",
-                "(disqus+)([a-z]+){2,5}\maps\(:[0-9]{1,5})?(\\\\.*)"
+                "([\-\.]google+)",
+                "([\-\.]cludo+)",
+                "([\-\.]qbrick+)",
+                "([\-\.]klarna+)",
+                "([\-\.]paypal+)",
+                "([\-\.]usersnap+)",
+                "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
             ] 
         }
     ];
@@ -277,6 +276,7 @@ function checkCookieStatus() {
 
     /* Helper function to merge arrays */
     const merge = (first, second, third) => {
+        /* first.splice(1, 0, "^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+"); */
         for(let i=0; i<second.length; i++) {
           first.push(second[i]);
         }
@@ -285,7 +285,6 @@ function checkCookieStatus() {
                 first.push(third[i])
             }
         }
-
         return first;
     }
 
@@ -322,7 +321,7 @@ function checkCookieStatus() {
         m = allScripts[2].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
     } else {
-        m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts)
+        m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
         notRequired = new RegExp(m.join("|"), "ig");
     }
 
@@ -338,7 +337,7 @@ function checkCookieStatus() {
     function loopBlock(addedNodes, message, script) {
         addedNodes.forEach((frae) => {
             if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
-                if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
+                if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
                     frae.src = "about:blank";
                     let settingsContent = document.createElement("section");
                     settingsContent.style = "text-align: center;  padding: 15px;";
@@ -348,14 +347,13 @@ function checkCookieStatus() {
                         <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>Accept ${script.type} cookies</button>
                     </section>
                     `;
-                    
                     if (frae.style.display !== "none") {
                         frae.parentElement.appendChild(settingsContent);
                     }
                     frae.parentElement.removeChild(frae);
                 }
             } else if (!intaCookieType(int_FunctionalCookies) && script.type == "functional") {
-                if (new RegExp(script.scripts.join("|"), "i").test(frae.src)) {
+                if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
                     frae.src = "about:blank";
                     let settingsContent = document.createElement("section");
                     settingsContent.style = "text-align: center;  padding: 15px;";
@@ -414,17 +412,7 @@ function checkCookieStatus() {
                             english: `<p>Please provide consent for "${script.type}" cookies to view this content. By clicking on "accept ${script.type} cookies" you´re accepting direct all ${script.type} cookies.</p>`,
                             german: `<p>Bitte stimme den "${script.type}" cookies zu um diesen Inhalt sehen zu können.</p>`
                         }
-
                         loopBlock(addedNodes, message.english, script);
-
-                        /* if (intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                            loopBlock(addedNodes, message.danish, script);
-                        } else if (intastellarCookieLanguage != undefined && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                            loopBlock(addedNodes, message.german, script);
-                        } else if (intastellarCookieLanguage != undefined && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                            loopBlock(addedNodes, message.english, script);
-                        } */
-
                     });   
                 }
 
@@ -551,6 +539,7 @@ function checkCookieStatus() {
                                     if (
                                         notRequired.test(src)
                                     ) {
+                                        console.log(notRequired, src)
                                         node.defer = true;
                                         node.async = true;
                                         node.type = "text/blocked";
@@ -1038,7 +1027,7 @@ function createCookieSettings() {
         <p>Ved at trykke på 'Accepter alle' giver du samtykke til alle disse formål. Du kan også vælge at tilkendegive, hvilke formål du vil give samtykke til ved at benytte checkboksene ud for formålet, og derefter trykke på 'Gem indstillinger'.
         Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
         <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
-        <button class="intLearnMoreBtn" onClick="learnMore()"">Læs mere om cookies</button>`,
+        <button class="intLearnMoreBtn" onClick="learnMore()"">Læs mere om cookies</button> eller ${generatePolicyUrl('Vores privat og cookie politik')}`,
         german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
         <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
         <ol>
@@ -1048,7 +1037,7 @@ function createCookieSettings() {
         </ol>
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
         <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
-        <button class="intLearnMoreBtn" onClick="learnMore()"">Mehr über cookies erfahren</button>`,
+        <button class="intLearnMoreBtn" onClick="learnMore()"">Mehr über cookies erfahren</button> order ${generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')}`,
         english: `<h3 style="    font-size: 25px;">You´re in control</h3>
         <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
         <ol>
@@ -1058,7 +1047,7 @@ function createCookieSettings() {
         </ol>
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom left or right corner of the website.</p>
-        <button class="intLearnMoreBtn" onClick="learnMore()">Learn more</button>`
+        <button class="intLearnMoreBtn" onClick="learnMore()">Learn more</button> or ${generatePolicyUrl('Our Privacy and cookie Policy')}` 
     }
 
     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
@@ -1069,7 +1058,7 @@ function createCookieSettings() {
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
-        moreFooter.innerHTML = 
+        moreFooter.innerHTML =
             `<article>
                 ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
                 <article class="intCookieSetting__form">
@@ -1114,6 +1103,7 @@ function createCookieSettings() {
                     <section class="required">
                         <h3>Nødvendige</h3>
                         <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
+                        <div class="cookiesList"></div>
                     </section>
                     <section>
                         <h3>Funktionel</h3>
@@ -1270,7 +1260,7 @@ function createCookieSettings() {
     } else {
         /* Default */
         settingsMessage = settingsMessages.danish;
-
+        
         message =
             messageWrapStart
             + messages.danish
@@ -1339,7 +1329,7 @@ function createCookieSettings() {
             </article>
         </article>`;
     }
-
+    console.log(settingsMessages.danish);
     moreContentText.innerHTML = settingsMessage;
 
     let ccpa = window.INTA.settings === undefined || window.INTA.settings.ccpa === undefined ? false : window.INTA.settings.ccpa.on;
@@ -1528,7 +1518,7 @@ function isValidPolicyLink() {
 }
 
 /* - - - Helper function to learn more - - - */
-function learnMore () {document.querySelector(".intReadMore").classList.toggle("view");}
+function learnMore() { document.querySelector(".intReadMore").classList.toggle("view"); if (document.querySelector(".intReadMore").classList.contains("view")) { document.querySelector(".intReadMore").scrollIntoView(); } }
 
 /* - - - Helper function for saving settings - - - */
 function saveINTCookieSettings() {
@@ -1620,7 +1610,26 @@ window.addEventListener("DOMContentLoaded", function () {
 
     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
     if (isValidPolicyLink()) {
-        createCookieSettings();
+        createCookieSettings();/* 
+        const intaCookieList = Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')));
+        const intaRequiredCookieList = [];
+
+        for (const [key] of Object.entries(intaCookieList)) {
+            intaRequiredCookieList.push(key);
+        }
+
+        let test = Object.keys(intaRequiredCookieList);
+        localStorage.setItem("test", intaRequiredCookieList);
+
+
+        document.querySelector(".cookiesList").innerHTML =
+            `<ul>
+                ${
+                    localStorage.getItem("test").split(",").map((t) => `<li>${t}</li>`).join("\n")
+                }
+            </ul>
+            `;
+        ; */
         let settings = document.querySelector(".intastellarCookie-settings__container");
         if (document.querySelector(".intastellarCookieBanner") != null) {
             if (getCookie(int_hideCookieBannerName) == "1") {
