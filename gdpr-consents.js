@@ -334,7 +334,7 @@ function checkCookieStatus() {
         intHead.appendChild(s);
     }
 
-    function loopBlock(addedNodes, message, script) {
+    function loopBlock(addedNodes, message, script, buttonText) {
         addedNodes.forEach((frae) => {
             if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
                 if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
@@ -342,25 +342,30 @@ function checkCookieStatus() {
                     a.href = frae.src;
                     let externalDomain = a.hostname;
                     frae.src = "about:blank";
-                    let settingsContent = document.createElement("section");
-                    settingsContent.style = "text-align: center;  padding: 15px;";
                     let textLanguage;
+                    let btnText;
                     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
                         textLanguage = message(externalDomain).danish;
+                        btnText = buttonText().danish;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
                         textLanguage = message(externalDomain).german;
+                        btnText = buttonText().german;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
                         textLanguage = message(externalDomain).english;
+                        btnText = buttonText().english;
                     } else {
                         textLanguage = message(externalDomain).danish;
+                        btnText = buttonText().danish;
                     }
 
+                    let settingsContent = document.createElement("article");
+                    settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = `
-                    <section class="intCookie_ConsentContainer">
+                    <section class="intCookie_ConsentContainer-content">
                         <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
                         ${textLanguage}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>Accept ${script.type} cookies</button>
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
                     </section>
                     `;
                     if (frae.style.display !== "none") {
@@ -374,50 +379,60 @@ function checkCookieStatus() {
                     a.href = frae.src;
                     let externalDomain = a.hostname;
                     frae.src = "about:blank";
-                    let settingsContent = document.createElement("section");
 
                     let textLanguage;
+                    let btnText;
                     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
                         textLanguage = message(externalDomain).danish;
+                        btnText = buttonText().danish;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
                         textLanguage = message(externalDomain).german;
+                        btnText = buttonText().german;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
                         textLanguage = message(externalDomain).english;
+                        btnText = buttonText().english;
                     } else {
                         textLanguage = message(externalDomain).danish;
+                        btnText = buttonText().danish;
                     }
 
-                    settingsContent.style = "text-align: center;  padding: 15px;";
+                    let settingsContent = document.createElement("article");
+                    settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = `
-                    <section class="intCookie_ConsentContainer">
+                    <section class="intCookie_ConsentContainer-content">
                         <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
                         ${textLanguage}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>Accept ${script.type} cookies</button>
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
                     </section>
                     `;
                     frae.parentElement.replaceChild(settingsContent, frae);
                 } else if (frae.id.indexOf("map") > -1 || frae.id.indexOf("google") > -1) {
 
                     let textLanguage;
+                    let btnText;
                     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                        textLanguage = message(externalDomain).danish;
+                        textLanguage = message("www.google.com").danish;
+                        btnText = buttonText().danish;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                        textLanguage = message(externalDomain).german;
+                        textLanguage = message("www.google.com").german;
+                        btnText = buttonText().german;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                        textLanguage = message(externalDomain).english;
+                        textLanguage = message("www.google.com").english;
+                        btnText = buttonText().english;
                     } else {
                         textLanguage = message(externalDomain).danish;
+                        btnText = buttonText().danish;
                     }
 
-                    let settingsContent = document.createElement("section");
-                    settingsContent.style = "text-align: center;  padding: 15px;";
+                    let settingsContent = document.createElement("article");
+                    settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = `
-                    <section class="intCookie_ConsentContainer">
+                    <section class="intCookie_ConsentContainer-content">
                         <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
                         ${textLanguage}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>Accept ${script.type} cookies</button>
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
                     </section>
                     `;
                     frae.parentElement.replaceChild(settingsContent, frae);
@@ -426,16 +441,36 @@ function checkCookieStatus() {
         })
     }
 
-    function blockBlockQuotes(tweet, message, script) {
+    function blockBlockQuotes(tweet, message, script, buttonText) {
         if (!intaCookieType(int_marketingCookies) && script.type == "marketing" && notRequired.test(tweet.className)) {
-            let settingsContent = document.createElement("section");
-            settingsContent.style = "text-align: center;  padding: 15px;";
+            let a      = document.createElement('a');
+            a.href = tweet.querySelector("a").href;
+            let externalDomain = a.hostname;
+
+            let textLanguage;
+            let btnText;
+            let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
+            if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+                textLanguage = message(externalDomain).danish;
+                btnText = buttonText().danish;
+            } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+                textLanguage = message(externalDomain).german;
+                btnText = buttonText().german;
+            } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+                textLanguage = message(externalDomain).english;
+                btnText = buttonText().english;
+            } else {
+                textLanguage = message(externalDomain).danish;
+                btnText = buttonText().danish;
+            }
+            let settingsContent = document.createElement("article");
+            settingsContent.classList.add("intCookie_ConsentContainer");
             settingsContent.innerHTML = `
-                <section class="intCookie_ConsentContainer">
-                    <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
-                    ${message()}
-                    <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>Accept ${script.type} cookies</button>
-                </section>
+            <section class="intCookie_ConsentContainer-content">
+                <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                ${textLanguage}
+                <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
+            </section>
             `;
             tweet.parentElement.replaceChild(settingsContent, tweet);
         }
@@ -459,7 +494,16 @@ function checkCookieStatus() {
                                 german: `<p>Dieser Inhalt wird von einem Drittanbieter (${domain}) gehostet. Indem Sie die externen Inhalte anzeigen, akzeptieren Sie die von ${domain} bereitgestellten Cookies.</p>`
                             }
                         };
-                        loopBlock(addedNodes, message, script);
+
+                        const buttonText = () => {
+                            return {
+                                danish: `Accepter ${script.type} cookies`,
+                                english: `Accept ${script.type} cookies`,
+                                german: `Akzeptiere ${script.type} cookies`
+                            }
+                        }
+
+                        loopBlock(addedNodes, message, script, buttonText);
                     });   
                 }
 
@@ -472,14 +516,16 @@ function checkCookieStatus() {
                                 german: `<p>Dieser Inhalt wird von einem Drittanbieter (${domain}) gehostet. Indem Sie die externen Inhalte anzeigen, akzeptieren Sie die von ${domain} bereitgestellten Cookies.</p>`
                             }
                         };
-                        loopBlock(addedNodes, message, script);
-                        /* if ( intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                            loopBlock(addedNodes, message.danish, script);
-                        } else if (intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                            loopBlock(addedNodes, message.german, script);
-                        } else if (intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                            loopBlock(addedNodes, message.english, script);
-                        } */
+
+                        const buttonText = () => {
+                            return {
+                                danish: `Accepter ${script.type} cookies`,
+                                english: `Accept ${script.type} cookies`,
+                                german: `Akzepterie ${script.type} cookies`
+                            }
+                        }
+
+                        loopBlock(addedNodes, message, script, buttonText);
                     })
                 }
 
@@ -488,21 +534,21 @@ function checkCookieStatus() {
                         addedNodes.forEach((tweet) => {
                             const message = (domain) => {
                                 return {
-                                    danish: `<p>Dette indhold hostes af en tredjepart (${domain}). Ved at vise dig det eksterne indhold accepterer du cookies fra ${domain}.</p>`,
-                                    english: `<p>This content is hosted by a third party (${domain}). By showing you the external content you accept the cookies provided by ${domain}.</p>`,
-                                    german: `<p>Dieser Inhalt wird von einem Drittanbieter (${domain}) gehostet. Indem Sie die externen Inhalte anzeigen, akzeptieren Sie die von ${domain} bereitgestellten Cookies.</p>`
+                                    danish: `<p>Dette indhold leveres af en tredjepart (${domain}). Ved at vise dig det eksterne indhold accepterer du cookies fra ${domain}.</p>`,
+                                    english: `<p>This content is provided by a third party (${domain}). By showing you the external content you accept the cookies provided by ${domain}.</p>`,
+                                    german: `<p>Dieser Inhalt wird von einem Drittanbieter (${domain}) bereitgestellt. Indem Sie die externen Inhalte anzeigen, akzeptieren Sie die von ${domain} bereitgestellten Cookies.</p>`
                                 }
                             };
 
-                            blockBlockQuotes(tweet, message, script);
+                            const buttonText = () => {
+                                return {
+                                    danish: `Accepter ${script.type} cookies`,
+                                    english: `Accept ${script.type} cookies`,
+                                    german: `Akzepterie ${script.type} cookies`
+                                }
+                            }
 
-                           /*  if (intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                                blockBlockQuotes(tweet, message.danish, script);
-                            } else if (intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                                blockBlockQuotes(tweet, message.german, script);
-                            } else if (intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                                blockBlockQuotes(tweet, message.english, script);
-                            } */
+                            blockBlockQuotes(tweet, message, script, buttonText);
 
                         })
                     });   
@@ -1448,7 +1494,7 @@ function createCookieSettings() {
         text = " Cookie notice";
         cookieSize = "25%";
     }
-    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__contentC, .intastellarCookie-settings__btn.--bg, .intastellarCCPAContainer{background: " + cookieColor + " !important;color: #fff !important;} .intastellarCookie-settings__btn.--changePermission{border-image-slice: 1;border-color: "+cookieColor+";border-image:" + cookieColor + " 1 !important; border-width: 3px; border-style: solid; background-color: rgba(184, 184, 184, 0.73) !important;color: currentColor !important; width: max-content; margin-inline: auto !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";}.intastellarCCPA__popupClose{background:"+ cookieColor +"; color: #fff;} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
+    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__contentC, .intastellarCookie-settings__btn.--bg, .intastellarCCPAContainer{background: " + cookieColor + " !important;color: #fff !important;} .intCookie_ConsentContainer-content{border-color: #fff; background: linear-gradient(#fff 0 0) padding-box, "+cookieColor+" border-box;} .intastellarCookie-settings__btn.--changePermission{border-image-slice: 1;border-color: "+cookieColor+";border-image:" + cookieColor + " 1 !important; border-width: 3px; border-style: solid; background-color: transparent !important;color: currentColor !important; transition: background .25s ease-in-out; width: max-content; margin-inline: auto !important;} .intastellarCookie-settings__btn.--changePermission:hover{background-color: "+cookieColor+" !important; background: "+cookieColor+" !important; color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";}.intastellarCCPA__popupClose{background:"+ cookieColor +"; color: #fff;} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
     intHead.appendChild(s);
 
     /* Checking for CCPA "Do not sell my personal data" is enabled if so create an info link on the right side of the screen  */

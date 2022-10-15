@@ -260,25 +260,31 @@ section{
 }
 
 .intCookie_ConsentContainer{
+  margin: 60px auto;
+}
+
+.intCookie_ConsentContainer-content{
   width: 500px;
+  margin-inline: auto;
   padding: 25px 15px;
-  margin: 25px auto;
-  color: currentColor;
-  background-color: transparent;
-  border: 2px dotted;
+  color: rgb(36, 36, 36);
+  background-color: #fff;
+  border: 3px dotted;
   position: relative;
+  text-align: center;
 }
 
 .intCookie_ConsentLogo{
   position: absolute;
-  width: 115px !important;
+  width: 95px !important;
   margin-inline: auto;
   /* left: 50%; */
-  inset: -34% -50%;
+  inset: -25% -50%;
   background: #ffffff;
   height: auto !important;
   border-radius: 50%;
-  padding: 20px;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .intSettingsCompanyLogo {
