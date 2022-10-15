@@ -70,6 +70,7 @@ section{
   border: none;
   text-transform: initial;
   letter-spacing: initial;
+  float: none;
 }
 
 .intastellarCookieBanner__settings {
@@ -260,10 +261,24 @@ section{
 
 .intCookie_ConsentContainer{
   width: 500px;
-  padding: 15px;
-  margin: auto;
+  padding: 25px 15px;
+  margin: 25px auto;
   color: currentColor;
   background-color: transparent;
+  border: 2px dotted;
+  position: relative;
+}
+
+.intCookie_ConsentLogo{
+  position: absolute;
+  width: 115px !important;
+  margin-inline: auto;
+  /* left: 50%; */
+  inset: -34% -50%;
+  background: #ffffff;
+  height: auto !important;
+  border-radius: 50%;
+  padding: 20px;
 }
 
 .intSettingsCompanyLogo {
@@ -347,6 +362,13 @@ section{
 }
 
 /* Settings Title */
+.intCookieSaveSettingsContainer{
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+}
+
 .intSettingsTitle {
   font-size: 15px;
   margin-top: 20px;
@@ -358,17 +380,6 @@ section{
   grid-template-columns: repeat(4, 1fr);
   background: #dddddd;
   border-bottom: 1px solid #a3a3a3;
-
-  position: sticky;
-  top: 107px;
-  left: 0;
-}
-
-.intCookieSetting__fixedTop.fixed{
-  position: sticky;
-  position: -webkit-sticky;
-  width: 100%;
-  z-index: 999999999;
 }
 
 /* Learn more */
