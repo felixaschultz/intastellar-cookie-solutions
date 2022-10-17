@@ -363,9 +363,11 @@ function checkCookieStatus() {
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer-content">
-                        <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                        <section class="intCookie_ConsentLogo-container">
+                            <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                        </section>
                         ${textLanguage}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
+                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>${btnText}</button>
                     </section>
                     `;
                     if (frae.style.display !== "none") {
@@ -401,7 +403,9 @@ function checkCookieStatus() {
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer-content">
-                        <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                        <section class="intCookie_ConsentLogo-container">
+                            <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                        </section>
                         ${textLanguage}
                         <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
                     </section>
@@ -430,7 +434,9 @@ function checkCookieStatus() {
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer-content">
-                        <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                        <section class="intCookie_ConsentLogo-container">
+                            <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                        </section>
                         ${textLanguage}
                         <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
                     </section>
@@ -467,9 +473,11 @@ function checkCookieStatus() {
             settingsContent.classList.add("intCookie_ConsentContainer");
             settingsContent.innerHTML = `
             <section class="intCookie_ConsentContainer-content">
-                <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                <section class="intCookie_ConsentLogo-container">
+                    <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                </section>
                 ${textLanguage}
-                <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
+                <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>${btnText}</button>
             </section>
             `;
             tweet.parentElement.replaceChild(settingsContent, tweet);
@@ -1494,7 +1502,7 @@ function createCookieSettings() {
         text = " Cookie notice";
         cookieSize = "25%";
     }
-    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__contentC, .intastellarCookie-settings__btn.--bg, .intastellarCCPAContainer{background: " + cookieColor + " !important;color: #fff !important;} .intCookie_ConsentContainer-content{border-color: #fff; background: linear-gradient(#fff 0 0) padding-box, "+cookieColor+" border-box;} .intastellarCookie-settings__btn.--changePermission{border-image-slice: 1;border-color: "+cookieColor+";border-image:" + cookieColor + " 1 !important; border-width: 3px; border-style: solid; background-color: transparent !important;color: currentColor !important; transition: background .25s ease-in-out; width: max-content; margin-inline: auto !important;} .intastellarCookie-settings__btn.--changePermission:hover{background-color: "+cookieColor+" !important; background: "+cookieColor+" !important; color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";}.intastellarCCPA__popupClose{background:"+ cookieColor +"; color: #fff;} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
+    s.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__contentC, .intastellarCookie-settings__btn.--bg, .intastellarCCPAContainer{background: " + cookieColor + " !important;color: #fff !important;} .intCookie_ConsentContainer-content{border-color: #fff; background: linear-gradient(#fff 0 0) padding-box, "+cookieColor+" border-box;} .intastellarCookie-settings__btn.--changePermission{border-image-slice: 1;border-color: "+cookieColor+";border-image:" + cookieColor + " 1 !important; border-width: 3px; border-style: solid; background: "+cookieColor+" !important;color: #fff !important; transition: background .25s ease-in-out; width: max-content; margin-inline: auto !important;} .intastellarCookie-settings__btn.--changePermission:hover{background-color: transparent !important; background: transparent !important; color: currentColor !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: "+ checkMarkColor +";}.intastellarCCPA__popupClose{background:"+ cookieColor +"; color: #fff;} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: "+cookieTextColor+";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
     intHead.appendChild(s);
 
     /* Checking for CCPA "Do not sell my personal data" is enabled if so create an info link on the right side of the screen  */

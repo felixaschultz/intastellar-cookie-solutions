@@ -261,6 +261,8 @@ section{
 
 .intCookie_ConsentContainer{
   margin: 60px auto;
+  padding: 50px;
+  box-sizing: border-box;
 }
 
 .intCookie_ConsentContainer-content{
@@ -272,17 +274,28 @@ section{
   border: 3px dotted;
   position: relative;
   text-align: center;
+  border-radius: 5px;
 }
 
-.intCookie_ConsentLogo{
+.intCookie_ConsentLogo-container{
   position: absolute;
   width: 95px !important;
   margin-inline: auto;
   /* left: 50%; */
   inset: -25% -50%;
   background: #ffffff;
-  height: auto !important;
+  height: 95px !important;
   border-radius: 50%;
+  box-shadow: 0px -6px 7px rgb(0 0 0 / 20%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.intCookie_ConsentLogo{
+  width: 95px !important;
+  height: auto !important;
   padding: 10px;
   box-sizing: border-box;
 }
@@ -709,7 +722,7 @@ input:checked + .checkmark:before {
     grid-template-columns: repeat(4, 1fr) !important;
   }
 
-  .intCookie_ConsentContainer{
+  .intCookie_ConsentContainer-content{
     width: 100%;
   }
 
