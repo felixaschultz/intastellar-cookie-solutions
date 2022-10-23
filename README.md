@@ -18,6 +18,8 @@ Available languages:
 You can read more about the cookie banner under: https://www.intastellarsolutions.com/gdpr-cookiebanner (danish).
 This banner is free to use as long as the powered by logo is not removed. We are glad if you want to contribuate to this project so we can develop it further and we can make it secure.
 
+We support your own cookiebanner design. Just use our technology to block thrid party cookies.
+
 ## Technologies
 This project i created with:
 * JavaScript
