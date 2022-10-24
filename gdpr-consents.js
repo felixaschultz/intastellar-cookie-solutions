@@ -123,7 +123,7 @@ function checkCookieStatus() {
     const intaStyleLink = document.createElement('link');
     intaStyleLink.rel = 'stylesheet';
     intaStyleLink.type = 'text/css';
-    intaStyleLink.href = 'https://www.intastellarsolutions.com/components/css/jsCookieBannerinfo.css?v=' + new Date().getTime();
+    intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner.css?v=' + new Date().getTime();
     intaStyleLink.media = 'all';
     intHead.appendChild(intaStyleLink);
     const allScripts = [
@@ -169,7 +169,7 @@ function checkCookieStatus() {
             /* Marketing Scripts which are beeing blocked */
             type: "marketing",
             scripts: [
-                "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram)",
+                "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot)",
                 "([\-\.]googlesyndication+)",
                 "([\-\.]twitter+)",
                 "([\-\.]ads-twitter+)",
@@ -298,8 +298,9 @@ function checkCookieStatus() {
 
     function loopBlock(addedNodes, message, script, buttonText) {
         addedNodes.forEach((frae) => {
+            console.log(script);
             if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
-                if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
+                if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae.className.match(new RegExp(script.scripts.join("|"), "ig"))) {
                     let a      = document.createElement('a');
                     a.href = frae.src;
                     let externalDomain = a.hostname;
@@ -335,7 +336,6 @@ function checkCookieStatus() {
                     if (frae.style.display !== "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
-                    /* frae.parentElement.removeChild(frae); */
                 }
             } else if (!intaCookieType(int_FunctionalCookies) && script.type == "functional") {
                 if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
@@ -478,6 +478,7 @@ function checkCookieStatus() {
                 }
 
                 if (node.nodeType === 1 && node.tagName === "DIV") {
+                    
                     allScripts.map((script) => {
                         const message = (domain) => {
                             return {
@@ -486,7 +487,7 @@ function checkCookieStatus() {
                                 german: `<p>Dieser Inhalt wird von einem Drittanbieter (${domain}) gehostet. Indem Sie die externen Inhalte anzeigen, akzeptieren Sie die von ${domain} bereitgestellten Cookies.</p>`
                             }
                         };
-
+                        
                         const buttonText = () => {
                             return {
                                 danish: `Accepter ${script.type} cookies`,
@@ -494,7 +495,6 @@ function checkCookieStatus() {
                                 german: `Akzepterie ${script.type} cookies`
                             }
                         }
-
                         loopBlock(addedNodes, message, script, buttonText);
                     })
                 }
@@ -524,7 +524,7 @@ function checkCookieStatus() {
                     });   
                 }
                 
-                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
+                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     let src = node.src || "";
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
