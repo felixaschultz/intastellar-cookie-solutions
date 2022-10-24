@@ -1166,48 +1166,10 @@ function createCookieSettings() {
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
         moreFooter.innerHTML =
-            `<article>
+            `
                 <section class="intCookieSaveSettingsContainer">
                     ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
                     <button class="intLearnMoreBtn" onClick="learnMore()"">Læs mere om cookies</button>
-                    <article class="intCookieSetting__form">
-                        <section class="intastellarSettings__control">
-                            <label class="intSettingDisabled checkMarkContainer">
-                                <span class="intSettingsTitle">Nødvendige</span>
-                                <span class="intCheckmarkSliderContainer">
-                                    <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                                    <span class="checkmark round"></span>
-                                </span>
-                            </label>
-                        </section>
-                        <section class="intastellarSettings__control">
-                            <label class="checkMarkContainer">
-                                <span class="intSettingsTitle">Funktionel</span>
-                                <span class="intCheckmarkSliderContainer">
-                                    <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
-                                    <span class="checkmark round"></span>
-                                </span>
-                            </label>
-                        </section>
-                        <section class="intastellarSettings__control">
-                            <label class="checkMarkContainer">
-                                <span class="intSettingsTitle">Statistiske</span>
-                                <span class="intCheckmarkSliderContainer">
-                                    <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
-                                    <span class="checkmark round"></span>
-                                </span>
-                            </label>
-                        </section>
-                        <section class="intastellarSettings__control">
-                            <label class="checkMarkContainer">
-                                <span class="intSettingsTitle">Marketing</span>
-                                <span class="intCheckmarkSliderContainer">
-                                    <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
-                                    <span class="checkmark round"></span>
-                                </span>
-                            </label>
-                        </section>
-                    </article>
                 </section>
                 <article class="intReadMore">
                     <section class="required">
@@ -1229,23 +1191,10 @@ function createCookieSettings() {
                         <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
                     </section>
                 </article>
-                </article>`;
-    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-        settingsMessage = settingsMessages.german;
-        message = messageWrapStart
-            + messages.german
-            + messageWrapEnd
-            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
-        cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
-        moreFooter.innerHTML =
-        `<article>
-            <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
-                <button class="intLearnMoreBtn" onClick="learnMore()"">Mehr Erfahren</button>
                 <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Erforderliche</span>
+                            <span class="intSettingsTitle">Nødvendige</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -1263,7 +1212,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Statistik</span>
+                            <span class="intSettingsTitle">Statistiske</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
                                 <span class="checkmark round"></span>
@@ -1272,7 +1221,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Werbung</span>
+                            <span class="intSettingsTitle">Marketing</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
                                 <span class="checkmark round"></span>
@@ -1280,6 +1229,19 @@ function createCookieSettings() {
                         </label>
                     </section>
                 </article>
+            `;
+    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+        settingsMessage = settingsMessages.german;
+        message = messageWrapStart
+            + messages.german
+            + messageWrapEnd
+            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
+        cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
+        moreFooter.innerHTML =
+        `
+            <section class="intCookieSaveSettingsContainer">
+                ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
+                <button class="intLearnMoreBtn" onClick="learnMore()"">Mehr Erfahren</button>
             </section>
             <article class="intReadMore">
                 <section class="required">
@@ -1300,7 +1262,45 @@ function createCookieSettings() {
                     <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
                 </section>
             </article>
-        </article>`;
+            <article class="intCookieSetting__form">
+                <section class="intastellarSettings__control">
+                    <label class="intSettingDisabled checkMarkContainer">
+                        <span class="intSettingsTitle">Erforderliche</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">Funktionel</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">Statistik</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">Werbung</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+            </article>
+        `;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
         settingsMessage = settingsMessages.english;
         message =
@@ -1310,11 +1310,31 @@ function createCookieSettings() {
             + generatePolicyUrl('Our Privacy and cookie Policy');
         cookieBtn = generateCookieButtons('Accept', 'Decline All', 'Settings');
         moreFooter.innerHTML =
-        `<article>
+        `
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
                 <button class="intLearnMoreBtn" onClick="learnMore()"">Show details</button>
-                <article class="intCookieSetting__form">
+            </section>
+            <article class="intReadMore">
+                <section class="required">
+                    <h3>Strictly necessary</h3>
+                    <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
+                </section>
+                <section>
+                    <h3>Functional</h3>
+                    <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
+                </section>
+                <section>
+                    <h3>Statics</h3>
+                    <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
+                </section>
+                <section>
+                    <h3>Marketing</h3>
+                    <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
+                    <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
+                </section>
+            </article>
+            <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
                             <span class="intSettingsTitle">Strictly necessary</span>
@@ -1352,27 +1372,7 @@ function createCookieSettings() {
                         </label>
                     </section>
                 </article>
-            </section>
-            <article class="intReadMore">
-                <section class="required">
-                    <h3>Strictly necessary</h3>
-                    <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
-                </section>
-                <section>
-                    <h3>Functional</h3>
-                    <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
-                </section>
-                <section>
-                    <h3>Statics</h3>
-                    <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
-                </section>
-                <section>
-                    <h3>Marketing</h3>
-                    <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
-                    <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
-                </section>
-            </article>
-        </article>`;
+        `;
     } else {
         /* Default */
         settingsMessage = settingsMessages.danish;
@@ -1384,7 +1384,7 @@ function createCookieSettings() {
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
         moreFooter.innerHTML =
-        `<article>
+        `
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
                 <button class="intLearnMoreBtn" onClick="learnMore()"">Læs mere om cookies</button>
@@ -1446,9 +1446,8 @@ function createCookieSettings() {
                     <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
                 </section>
             </article>
-        </article>`;
+        `;
     }
-    console.log(settingsMessages.danish);
     moreContentText.innerHTML = settingsMessage;
 
     let ccpa = window.INTA.settings === undefined || window.INTA.settings.ccpa === undefined ? false : window.INTA.settings.ccpa.on;
@@ -1637,7 +1636,11 @@ function isValidPolicyLink() {
 }
 
 /* - - - Helper function to learn more - - - */
-function learnMore() { document.querySelector(".intReadMore").classList.toggle("view"); if (document.querySelector(".intReadMore").classList.contains("view")) { document.querySelector(".intReadMore").scrollIntoView(); } }
+function learnMore() {
+    document.querySelector(".intReadMore").classList.toggle("view"); document.querySelector(".intReadMore").scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+}); }
 
 /* - - - Helper function for saving settings - - - */
 function saveINTCookieSettings() {

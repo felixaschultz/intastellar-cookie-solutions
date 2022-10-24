@@ -398,7 +398,7 @@ section{
   width: 100%;
   grid-template-columns: repeat(4, 1fr);
   background: #dddddd;
-  border-bottom: 1px solid #a3a3a3;
+  border-top: 1px solid #a3a3a3;
 }
 
 /* Learn more */
