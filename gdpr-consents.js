@@ -296,7 +296,7 @@ function checkCookieStatus() {
         intHead.appendChild(s);
     }
 
-    function loopBlock(addedNodes, message, script, buttonText) {
+    function loopBlock(addedNodes, message, script, buttonText, logo) {
         addedNodes.forEach((frae) => {
             console.log(script);
             if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
@@ -327,7 +327,7 @@ function checkCookieStatus() {
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer-content">
                         <section class="intCookie_ConsentLogo-container">
-                            <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                            <img src="${logo}" class="intCookie_ConsentLogo">
                         </section>
                         ${textLanguage}
                         <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>${btnText}</button>
@@ -366,7 +366,7 @@ function checkCookieStatus() {
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer-content">
                         <section class="intCookie_ConsentLogo-container">
-                            <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                            <img src="${logo}" class="intCookie_ConsentLogo">
                         </section>
                         ${textLanguage}
                         <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
@@ -397,7 +397,7 @@ function checkCookieStatus() {
                     settingsContent.innerHTML = `
                     <section class="intCookie_ConsentContainer-content">
                         <section class="intCookie_ConsentLogo-container">
-                            <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                            <img src="${logo}" class="intCookie_ConsentLogo">
                         </section>
                         ${textLanguage}
                         <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
@@ -409,7 +409,7 @@ function checkCookieStatus() {
         })
     }
 
-    function blockBlockQuotes(tweet, message, script, buttonText) {
+    function blockBlockQuotes(tweet, message, script, buttonText, logo) {
         if (!intaCookieType(int_marketingCookies) && script.type == "marketing" && notRequired.test(tweet.className)) {
             let a      = document.createElement('a');
             a.href = tweet.querySelector("a").href;
@@ -436,7 +436,7 @@ function checkCookieStatus() {
             settingsContent.innerHTML = `
             <section class="intCookie_ConsentContainer-content">
                 <section class="intCookie_ConsentLogo-container">
-                    <img src="${window.INTA.settings.logo}" class="intCookie_ConsentLogo">
+                    <img src="${logo}" class="intCookie_ConsentLogo">
                 </section>
                 ${textLanguage}
                 <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>${btnText}</button>
@@ -472,8 +472,9 @@ function checkCookieStatus() {
                                 german: `Akzeptiere ${script.type} cookies`
                             }
                         }
-
-                        loopBlock(addedNodes, message, script, buttonText);
+                        let INTAlogo = (window.INT) ? window.INT.settings.logo : window.INTA.settings.logo;
+                        console.log(INTAlogo);
+                        loopBlock(addedNodes, message, script, buttonText, INTAlogo);
                     });   
                 }
 
@@ -495,7 +496,8 @@ function checkCookieStatus() {
                                 german: `Akzepterie ${script.type} cookies`
                             }
                         }
-                        loopBlock(addedNodes, message, script, buttonText);
+                        let INTAlogo = (window.INT) ? window.INT.settings.logo : window.INTA.settings.logo;
+                        loopBlock(addedNodes, message, script, buttonText, INTAlogo);
                     })
                 }
 
@@ -517,8 +519,8 @@ function checkCookieStatus() {
                                     german: `Akzepterie ${script.type} cookies`
                                 }
                             }
-
-                            blockBlockQuotes(tweet, message, script, buttonText);
+                            let INTAlogo = (window.INT) ? window.INT.settings.logo : window.INTA.settings.logo;
+                            blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
 
                         })
                     });   
