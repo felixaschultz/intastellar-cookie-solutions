@@ -19,9 +19,9 @@ const button__acceptAllNecessary = document.querySelector(".intastellarCookieBan
 const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
 
 const saveSettings = {
-    danish: "Kun nødvendige",
-    german: "Nur notwendige",
-    english: "Neccessary only"
+    danish: "Afvis",
+    german: "Ablehnen",
+    english: "Decline All"
 }
 
 const INTA = window.INTA = {
@@ -1117,7 +1117,7 @@ function createCookieSettings() {
 
     const messages = {
         danish: "Ved at acceptere alle cookies understøtter du " + document.domain + " med at udvikle en bedre løsning til dig.</p><p>Vælg om du vil tillade kun de nødvendige cookies eller om du vil tillade alle cookies.",
-        german: "Wenn Sie auf akzeptieren klicken, unterstützen Sie " + document.domain + " bei der Weiterentwicklung von unserer Webseite.</p><p>Wählen Sie zwischen alle Cookies akzeptieren oder nur notwendige cookies.",
+        german: "Wenn Sie auf akzeptieren klicken, unterstützen Sie " + document.domain + " bei der Weiterentwicklung von unserer Webseite.</p><p>Wählen Sie zwischen alle Cookies akzeptieren oder Ablehnen.",
         english: "By accepting all cookies, you support " + document.domain + " in developing a better solution for you. </p><p> Select whether you want to allow only the necessary cookies or whether you want to allow all cookies."
     };
     const messageWrapStart = "<div class='intastellarCookie-settings__contentConatiner'><p>";
@@ -1143,7 +1143,7 @@ function createCookieSettings() {
             <li>Werbung</li>
         </ol>
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
-        <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten links auf der Webseite klicken.</p>
+        <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten auf der Webseite klicken.</p>
         ${generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')}`,
         english: `<h3 style="    font-size: 25px;">You´re in control</h3>
         <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
@@ -1153,7 +1153,7 @@ function createCookieSettings() {
             <li>Marketing</li>
         </ol>
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
-        <p>You may withdraw your consent at any time by clicking the small icon at the bottom left or right corner of the website.</p>
+        <p>You may withdraw your consent at any time by clicking the small icon at the bottom corner of the website.</p>
         ${generatePolicyUrl('Our Privacy and cookie Policy')}` 
     }
 
@@ -1164,7 +1164,7 @@ function createCookieSettings() {
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
-        cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
+        cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
         moreFooter.innerHTML =
             `<article>
                 <section class="intCookieSaveSettingsContainer">
@@ -1236,7 +1236,7 @@ function createCookieSettings() {
             + messages.german
             + messageWrapEnd
             + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
-        cookieBtn = generateCookieButtons('Akzeptieren', 'Nur notwendige cookies', 'Einstellungen');
+        cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
         moreFooter.innerHTML =
         `<article>
             <section class="intCookieSaveSettingsContainer">
@@ -1308,16 +1308,16 @@ function createCookieSettings() {
             + messages.english
             + messageWrapEnd
             + generatePolicyUrl('Our Privacy and cookie Policy');
-        cookieBtn = generateCookieButtons('Accept', 'Necessary cookies only', 'Settings');
+        cookieBtn = generateCookieButtons('Accept', 'Decline All', 'Settings');
         moreFooter.innerHTML =
         `<article>
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
-                <button class="intLearnMoreBtn" onClick="learnMore()"">Learn more</button>
+                <button class="intLearnMoreBtn" onClick="learnMore()"">Show details</button>
                 <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Strictly required</span>
+                            <span class="intSettingsTitle">Strictly necessary</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -1355,7 +1355,7 @@ function createCookieSettings() {
             </section>
             <article class="intReadMore">
                 <section class="required">
-                    <h3>Strictly required</h3>
+                    <h3>Strictly necessary</h3>
                     <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
                 </section>
                 <section>
@@ -1382,7 +1382,7 @@ function createCookieSettings() {
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
-        cookieBtn = generateCookieButtons('Accepter', 'Kun nødvendige cookies', 'Indstillinger');
+        cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
         moreFooter.innerHTML =
         `<article>
             <section class="intCookieSaveSettingsContainer">
@@ -1792,16 +1792,16 @@ window.addEventListener("DOMContentLoaded", function () {
         const settingsSaveLang = {};
         
         if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-            settingsSaveLang.necessaryCookiesText = "Neccessary only";
+            settingsSaveLang.necessaryCookiesText = "Decline All";
             settingsSaveLang.saveSettingsText = "Save settings";
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-            settingsSaveLang.necessaryCookiesText = "Nur notwendige";
+            settingsSaveLang.necessaryCookiesText = "Ablehnen";
             settingsSaveLang.saveSettingsText = "Speichern";
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-            settingsSaveLang.necessaryCookiesText = "Kun nødvendige";
+            settingsSaveLang.necessaryCookiesText = "Afvis";
             settingsSaveLang.saveSettingsText = "Gem indstillinger";
         } else {
-            settingsSaveLang.necessaryCookiesText = "Kun nødvendige";
+            settingsSaveLang.necessaryCookiesText = "Afvis";
             settingsSaveLang.saveSettingsText = "Gem indstillinger";
         }
 
