@@ -2,6 +2,7 @@
 ![GDPR Cookie banner by Intastellar Solutions, International](/img/github__banner.jpg "GDPR Cookie banner by Intastellar Solutions, International")
 ## Table of contents
 * [General info](#general-info)
+* [Implementation](#implementation)
 * [Technologies](#technologies)
 
 ## General Info
@@ -19,6 +20,9 @@ You can read more about the cookie banner under: https://www.intastellarsolution
 This banner is free to use as long as the powered by logo is not removed. We are glad if you want to contribuate to this project so we can develop it further and we can make it secure.
 
 We support your own cookiebanner design. Just use our technology to block thrid party cookies.
+
+## Implementation
+Read our documentation under: https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs to implement our cookie banner on your website.
 
 ## Technologies
 This project i created with:
