@@ -12,7 +12,7 @@ section{
   color: #fff;
   z-index: 100;
   padding: 5px !important;
-  box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.49);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.29);
   cursor: pointer;
   box-sizing: border-box;
   font-weight: 300;
@@ -380,6 +380,35 @@ section{
   width: 100%;
 }
 
+/* Tooltip */
+.intastellarToolTip{
+  position: absolute;
+  top: 12px;
+  opacity: 0;
+  visibility: hidden;
+  width: max-content;
+  font-size: 14px;
+  background: #fff;
+  color: #000;
+  padding: 14px;
+  border-radius: 3px;
+  transition: all .25s ease-in-out;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.29);
+}
+
+.intastellarToolTip.--right{
+  right: 75px;
+}
+
+.intastellarToolTip.--left{
+  left: 75px;
+}
+
+.intastellarCookie-settingsContainer:hover .intastellarToolTip{
+  opacity: 1;
+  visibility: visible;
+}
+
 /* Settings Title */
 .intCookieSaveSettingsContainer{
   position: sticky;
@@ -451,7 +480,7 @@ section{
   color: #000;
   z-index: 3000;
   text-align: center;
-  box-shadow: 0px 1px 6px 0px rgb(0 0 0 / 49%);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.29);
   transition: all 0.5s ease-in-out;
 }
 
