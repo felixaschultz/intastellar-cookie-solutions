@@ -126,14 +126,15 @@ function checkCookieStatus() {
     intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner.css?v=' + new Date().getTime();
     intaStyleLink.media = 'all';
     intHead.appendChild(intaStyleLink);
+
     const allScripts = [
         {
             /* Analytics Scripts which are beeing blocked */
             type: "statics",
             scripts: [
-                "(?=gtag|gtm)",
+                /* "(?=gtag|gtm)",
                 "([\-\.]google-analytics+)",
-                "([\-\.]googletagmanager+)",
+                "([\-\.]googletagmanager+)", */
                 /* "([\-\.]googleoptimize+)", */
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
@@ -474,8 +475,7 @@ function checkCookieStatus() {
                                 german: `Akzeptiere ${script.type} cookies`
                             }
                         }
-                        let INTAlogo = (window.INT) ? window.INT.settings.logo : window.INTA.settings.logo;
-                        console.log(INTAlogo);
+                        let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
                         loopBlock(addedNodes, message, script, buttonText, INTAlogo);
                     });   
                 }
@@ -498,7 +498,7 @@ function checkCookieStatus() {
                                 german: `Akzepterie ${script.type} cookies`
                             }
                         }
-                        let INTAlogo = (window.INT) ? window.INT.settings.logo : window.INTA.settings.logo;
+                        let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
                         loopBlock(addedNodes, message, script, buttonText, INTAlogo);
                     })
                 }
@@ -521,7 +521,7 @@ function checkCookieStatus() {
                                     german: `Akzepterie ${script.type} cookies`
                                 }
                             }
-                            let INTAlogo = (window.INT) ? window.INT.settings.logo : window.INTA.settings.logo;
+                            let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
                             blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
 
                         })
@@ -1043,6 +1043,13 @@ function createCookieSettings() {
     const moreContentText = document.createElement("section");
     const moreFooter = document.createElement("footer");
 
+    let intastellarCookieLanguageSettings = "Cookie Indstillinger";
+    if (intastellarCookieLanguage == "de") {
+        intastellarCookieLanguageSettings = "Cookie Einstellungen";
+    } else if (intastellarCookieLanguage == "en") {
+        intastellarCookieLanguageSettings = "Cookie Settings";
+    }
+
     moreSettings.setAttribute("class", "intastellarCookieConstents");
     moreSettingsContent.setAttribute("class", "intastellarCookieConstents__content");
     moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
@@ -1066,7 +1073,7 @@ function createCookieSettings() {
     const cookieSettingsContent = document.createElement("section");
 
     bannerContent.setAttribute("class", "intastellarCookie-settingsContainer");
-    bannerContent.setAttribute("title", "Cookie Settings");
+    bannerContent.setAttribute("title", intastellarCookieLanguageSettings);
     cookieSettings.setAttribute("class", "intastellarCookie-settings__container");
     const arrange = window.INTA.settings === undefined || window.INTA.settings.arrange === undefined ? "" : window.INTA.settings.arrange;
 
@@ -1458,12 +1465,6 @@ function createCookieSettings() {
     if (arrange == "ltr") {
         position = "--left";
     }
-    let intastellarCookieLanguageSettings = "Cookie Indstillinger";
-    if (intastellarCookieLanguage == "de") {
-        intastellarCookieLanguageSettings = "Cookie Einstellungen";
-    } else if (intastellarCookieLanguage == "en") {
-        intastellarCookieLanguageSettings = "Cookie Settings";
-    }
 
     let IntastellarToolTip = '<div class="intastellarToolTip '+ position +'">'+ intastellarCookieLanguageSettings +'</div>';
     if (textSettings) {
@@ -1545,7 +1546,7 @@ function createCookieSettings() {
     let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
 
     moreintHeader.innerHTML = `
-        <img class="intSettingsCompanyLogo${intCookieIconSmallClass}" width="150px" height="102px" src="${cookieLogo}" alt="${CompanyLogoName}">
+        <img class="intSettingsCompanyLogo${intCookieIconSmallClass}" width="150px" height="auto" src="${cookieLogo}" alt="${CompanyLogoName}">
         <section class="intSettingsPoweredBy">${poweredBy}</section>`;
     
     cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';"></button></intHeader>' +
@@ -1706,6 +1707,15 @@ function saveINTCookieSettings() {
 
 
 window.addEventListener("DOMContentLoaded", function () {
+    /* Working on implementing Google consent mode */
+    if (window.INTA.settings.CMS) {
+        const gtag = document.createElement("script");
+        gtag.innerHTML = `gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'analytics_storage': 'denied'
+        })`;
+        intHead.appendChild(gtag)
+    }
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
     if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
 
@@ -1740,7 +1750,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 document.querySelector(".intastellarCookieBanner").style.display = "";
             }
         } else if (getCookie(int_hideCookieBannerName) == "1") {
-            if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "") {
+            if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
             } else {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
@@ -2012,7 +2022,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 })
             })
 
-            if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "") {
+            if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                 configBtn.forEach((configs) => {
                     configs.addEventListener("click", function () {
                         let settings = document.querySelector(".intastellarCookie-settings__container");
@@ -2165,7 +2175,7 @@ window.addEventListener("DOMContentLoaded", function () {
             })
             /* Showing default banner when no custom banner is set */
             if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
-                if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "") {
+                if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
                 } else {
                     settings.classList.toggle("intastellarCookie-settings__container--expand");
