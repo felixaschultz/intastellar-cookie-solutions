@@ -13,6 +13,7 @@ const int_FunctionalCookies = intaCookiePref + "Functional-cookies";
 const int_marketingCookies = intaCookiePref + "Advertisment-cookies";
 const int_staticsticCookies = intaCookiePref + "Statistics-cookies";
 const int_analytic = intaCookiePref + "analytics";
+const int_gmc = intaCookiePref + "gmc";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 
@@ -132,10 +133,10 @@ function checkCookieStatus() {
             /* Analytics Scripts which are beeing blocked */
             type: "statics",
             scripts: [
-                /* "(?=gtag|gtm)",
+                "(?=gtag|gtm)",
                 "([\-\.]google-analytics+)",
-                "([\-\.]googletagmanager+)", */
-                /* "([\-\.]googleoptimize+)", */
+                "([\-\.]googletagmanager+)",
+                "([\-\.]googleoptimize+)",
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
                 "([\-\.]bing+)",
@@ -253,6 +254,16 @@ function checkCookieStatus() {
 
     let notRequired;
     let m;
+
+    if (getCookie(int_gmc)) {
+        const gtag = document.createElement("script");
+        gtag.innerHTML = `gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'analytics_storage': 'denied'
+        })`;
+        intHead.appendChild(gtag)
+    }
+
     if (!getCookie(int_FunctionalCookies) && !getCookie(int_staticsticCookies) && !getCookie(int_marketingCookies)) {
         document.cookie = int_FunctionalCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
             intCookieDomain +
@@ -1708,14 +1719,18 @@ function saveINTCookieSettings() {
 
 window.addEventListener("DOMContentLoaded", function () {
     /* Working on implementing Google consent mode */
-    if (window.INTA.settings.CMS) {
-        const gtag = document.createElement("script");
-        gtag.innerHTML = `gtag('consent', 'default', {
-            'ad_storage': 'denied',
-            'analytics_storage': 'denied'
-        })`;
-        intHead.appendChild(gtag)
+    if (window.INTA.settings.gcm) {
+        document.cookie =
+        int_gmc + "=false; expires=" + cookieLifeTime +
+        "; path=/; " +
+        intCookieDomain +
+        "";
+        /* if (!getCookie(int_gmc)) { */
+            console.log("Hej")
+            /* window.location.reload(); */
+        /* } */
     }
+
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
     if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
 
