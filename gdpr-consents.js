@@ -154,6 +154,7 @@ function checkCookieStatus() {
                 "([\-\.]webtrendslive)",
                 "([\-\.]amplitude)",
                 "([\-\.]adobe)",
+                "([\-\.]gstatics+)",
                 "([\-\.]adobedtm)",
                 "([\-\.]adobedc)",
                 "([\-\.]qualtrics+)",
@@ -543,6 +544,8 @@ function checkCookieStatus() {
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.href;
+
+                        
                         if (getCookie(int_FunctionalCookies) == "false") {
                             
                             if (
@@ -550,31 +553,31 @@ function checkCookieStatus() {
                             ){
                                 if (
                                     notRequired.test(src)
-                                ) {
-                                    node.type = "text/blocked";
-                                    
-                                    if(node.parentElement !== null) node.parentElement.removeChild(node);
-
-                                    deleteAllCookies();
-                                }
-                            }
-                        }
-                        const beforeScriptExecuteListener = function (event) {
-                            if (getCookie(int_FunctionalCookies) == "false") {
-                            
-                                if (
-                                    src.indexOf(window.location.hostname) == -1
-                                ){
-                                    if (
-                                        notRequired.test(src)
                                     ) {
                                         node.type = "text/blocked";
-                                        if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                        node.parentElement.removeChild(node);
+                                        
                                         deleteAllCookies();
                                     }
                                 }
                             }
-                        }
+                            const beforeScriptExecuteListener = function (event) {
+                                if (getCookie(int_FunctionalCookies) == "false") {
+                                    
+                                    if (
+                                    src.indexOf(window.location.hostname) == -1
+                                    ){
+                                        if (
+                                        notRequired.test(src)
+                                        ) {
+                                            node.type = "text/blocked";
+                                            node.parentElement.removeChild(node);
+                                            deleteAllCookies();
+                                        }
+                                    }
+                                }
+                            }
+                        console.log(notRequired.test(src), src, node.rel);
     
                         node.addEventListener(
                             "beforescriptexecute",
