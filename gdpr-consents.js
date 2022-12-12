@@ -312,7 +312,6 @@ function checkCookieStatus() {
 
     function loopBlock(addedNodes, message, script, buttonText, logo) {
         addedNodes.forEach((frae) => {
-            console.log(script);
             if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
                 if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae.className.match(new RegExp(script.scripts.join("|"), "ig"))) {
                     let a      = document.createElement('a');
@@ -539,7 +538,50 @@ function checkCookieStatus() {
                     });   
                 }
                 
-                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
+                if(node.nodeType === 1 && node.tagName === "LINK"){
+                    let src = node.href || "";
+                    node.removeAttribute("charset");
+                    addedNodes.forEach((node) => {
+                        src = node.href;
+                        if (getCookie(int_FunctionalCookies) == "false") {
+                            
+                            if (
+                                src.indexOf(window.location.hostname) == -1
+                            ){
+                                if (
+                                    notRequired.test(src)
+                                ) {
+                                    node.type = "text/blocked";
+                                    
+                                    if(node.parentElement !== null) node.parentElement.removeChild(node);
+
+                                    deleteAllCookies();
+                                }
+                            }
+                        }
+                        const beforeScriptExecuteListener = function (event) {
+                            if (getCookie(int_FunctionalCookies) == "false") {
+                            
+                                if (
+                                    src.indexOf(window.location.hostname) == -1
+                                ){
+                                    if (
+                                        notRequired.test(src)
+                                    ) {
+                                        node.type = "text/blocked";
+                                        if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                        deleteAllCookies();
+                                    }
+                                }
+                            }
+                        }
+    
+                        node.addEventListener(
+                            "beforescriptexecute",
+                            beforeScriptExecuteListener
+                        );
+                    })
+                } else if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
                     let src = node.src || "";
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
@@ -1111,7 +1153,7 @@ function createCookieSettings() {
         danish: `<h3 style="    font-size: 25px;">Du bestemmer over dine data</h3>
         <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
         <ol>
-            <li>Funktionel</li>
+            <li>Funktionel / Præference</li>
             <li>Statistiske</li>
             <li>Marketing</li>
         </ol>
@@ -1122,7 +1164,7 @@ function createCookieSettings() {
         german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
         <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
         <ol>
-            <li>Funktionel</li>
+            <li>Funktionel / Präferenz</li>
             <li>Statistik</li>
             <li>Werbung</li>
         </ol>
@@ -1132,7 +1174,7 @@ function createCookieSettings() {
         english: `<h3 style="    font-size: 25px;">You´re in control</h3>
         <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
         <ol>
-            <li>Functional</li>
+            <li>Functional / Preference</li>
             <li>Statistical</li>
             <li>Marketing</li>
         </ol>
@@ -1162,7 +1204,7 @@ function createCookieSettings() {
                         <div class="cookiesList"></div>
                     </section>
                     <section>
-                        <h3>Funktionel</h3>
+                        <h3>Funktionel / Præference</h3>
                         <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
                     </section>
                     <section>
@@ -1187,7 +1229,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Funktionel</span>
+                            <span class="intSettingsTitle">Funktionel / Præference</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
                                 <span class="checkmark round"></span>
@@ -1233,7 +1275,7 @@ function createCookieSettings() {
                     <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
                 </section>
                 <section>
-                    <h3>Funktionel</h3>
+                    <h3>Funktionel / Präferenz</h3>
                     <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
                 </section>
                 <section>
@@ -1258,7 +1300,7 @@ function createCookieSettings() {
                 </section>
                 <section class="intastellarSettings__control">
                     <label class="checkMarkContainer">
-                        <span class="intSettingsTitle">Funktionel</span>
+                        <span class="intSettingsTitle">Funktionel / Präferenz</span>
                         <span class="intCheckmarkSliderContainer">
                             <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
                             <span class="checkmark round"></span>
@@ -1305,7 +1347,7 @@ function createCookieSettings() {
                     <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
                 </section>
                 <section>
-                    <h3>Functional</h3>
+                    <h3>Functional / Preference</h3>
                     <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
                 </section>
                 <section>
@@ -1330,7 +1372,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Functional</span>
+                            <span class="intSettingsTitle">Functional / Preference</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
                                 <span class="checkmark round"></span>
@@ -1384,7 +1426,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Funktionel</span>
+                            <span class="intSettingsTitle">Funktionel / Præference</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
                                 <span class="checkmark round"></span>
@@ -1417,7 +1459,7 @@ function createCookieSettings() {
                     <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
                 </section>
                 <section>
-                    <h3>Funktionel</h3>
+                    <h3>Funktionel / Præference</h3>
                     <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
                 </section>
                 <section>
@@ -1550,7 +1592,7 @@ function createCookieSettings() {
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
     let poweredBy = "";
     if (window.location.host.indexOf("intastellarsolutions") == -1) {
-        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='189px' height='50px' src='https://assets.intastellar-clients.net/bG9nb3MvaW50YXN0ZWxsYXJfc29sdXRpb25zQDJ4LnBuZw==' alt='Intastellar Solutions, International'></a></span>";
+        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='189px' height='50px' src='https://www.intastellarsolutions.com/assets/intastellar_solutions.svg' alt='Intastellar Solutions, International'></a></span>";
     }
     
     let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
