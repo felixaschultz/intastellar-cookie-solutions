@@ -1,7 +1,22 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;600;700;800&display=swap"); */
+
 section{
   padding: 0;
 }
+
+.intastellarErrorMessage{
+  position: fixed;
+  inset: 10px;
+  width: max-content;
+  height: max-content;
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.intastellarErrorMessage-content{
+  color: #000;
+  padding: 15px;
+}
+
 .intastellarCookie-settingsContainer {
   position: fixed;
   bottom: 24px;

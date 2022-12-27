@@ -225,9 +225,10 @@ function checkCookieStatus() {
             /* Functional Scripts which are beeing blocked */
             type: "functional",
             scripts: [
-                "([\-\.]googleapis+)",
                 "(recaptcha+)",
                 "(grecaptcha+)",
+                "([\-\.]googleapis+)",
+                "([\-\.]gstatics+)",
                 "([\-\.]google+)",
                 "([\-\.]cludo+)",
                 "([\-\.]qbrick+)",
@@ -467,6 +468,15 @@ function checkCookieStatus() {
                 if (!allCookiesAllowed() || !intaCookieType(int_FunctionalCookies)) {
                     deleteAllCookies();
                 }
+                
+                if(node.nodeType === 1 && node.tagName === "LINK"){
+                    let src = node.href;
+                    if (
+                        notRequired.test(src)
+                    ) {
+                        node.parentElement.removeChild(node);
+                    }
+                }
 
                 /* Adding  custom button to all blocked embedded content on the site */
                 if (node.nodeType === 1 && node.tagName === "IFRAME") {
@@ -538,53 +548,8 @@ function checkCookieStatus() {
                         })
                     });   
                 }
-                
-                if(node.nodeType === 1 && node.tagName === "LINK"){
-                    let src = node.href || "";
-                    node.removeAttribute("charset");
-                    addedNodes.forEach((node) => {
-                        src = node.href;
 
-                        
-                        if (getCookie(int_FunctionalCookies) == "false") {
-                            
-                            if (
-                                src.indexOf(window.location.hostname) == -1
-                            ){
-                                if (
-                                    notRequired.test(src)
-                                    ) {
-                                        node.type = "text/blocked";
-                                        node.parentElement.removeChild(node);
-                                        
-                                        deleteAllCookies();
-                                    }
-                                }
-                            }
-                            const beforeScriptExecuteListener = function (event) {
-                                if (getCookie(int_FunctionalCookies) == "false") {
-                                    
-                                    if (
-                                    src.indexOf(window.location.hostname) == -1
-                                    ){
-                                        if (
-                                        notRequired.test(src)
-                                        ) {
-                                            node.type = "text/blocked";
-                                            node.parentElement.removeChild(node);
-                                            deleteAllCookies();
-                                        }
-                                    }
-                                }
-                            }
-                        console.log(notRequired.test(src), src, node.rel);
-    
-                        node.addEventListener(
-                            "beforescriptexecute",
-                            beforeScriptExecuteListener
-                        );
-                    })
-                } else if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
+                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
                     let src = node.src || "";
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
@@ -858,6 +823,7 @@ function checkCookieStatus() {
     observer.observe(document.documentElement, {
         childList: !0,
         subtree: !0,
+        attributes:    true,
     });
 };
 
@@ -2355,6 +2321,18 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     } else {
         checkCookieStatus();
-        console.error("Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner: https://www.intastellarsolutions.com/gdpr-cookiebanner")
+        /* Displaying a error message if no valid privacy url is giving */
+        const errorMessage = document.createElement("div");
+        const errorMessageContent = document.createElement("div");
+
+        errorMessage.className = "intastellarErrorMessage";
+        errorMessageContent.className = "intastellarErrorMessage-content";
+
+        errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner: <a href='https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy</a>";
+
+        errorMessage.appendChild(errorMessageContent);
+        document.body.appendChild(errorMessage);
+
+        console.error("Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner: https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy")
     }
 });
