@@ -12,6 +12,15 @@ section{
   border-radius: 10px;
 }
 
+.intastellarCookieBannerPrivacy-BackButton{
+  padding: 15px 50px;
+  margin: 2px 10px;
+  background: transparent;
+  border: 1px solid;
+  color: #fff;
+  font-size: 14px;
+}
+
 .intastellarErrorMessage-content{
   color: #000;
   padding: 15px;
@@ -145,6 +154,8 @@ section{
 
 .intastellarCookie-settings__privacyLink {
   font-family: "Roboto", sans-serif !important;
+  background: transparent;
+  border: none;
   text-decoration: none;
   font-size: 16px;
   text-align: center;

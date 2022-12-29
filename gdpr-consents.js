@@ -1041,6 +1041,28 @@ function findScriptParameter(value) {
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
+/* Adding Privacy Policy of Intastellar Solutions, International */
+const privacyContainer = document.createElement("article");
+privacyContainer.setAttribute("class", "intastellarCookiePrivacyContainer");
+privacyContainer.innerHTML = `
+    <button onClick="hidePrivacy()">Back</button>
+    <iframe src="https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/index.php" width="100%" height="590" frameborder="0"></iframe>
+`;
+function showPrivacy(){
+    const moreContentText = document.querySelector(".intastellarCookieConstents__content-main");
+    moreContentText.style.padding = "0";
+    moreContentText.innerHTML = `
+    <button onClick="hidePrivacy()" class="intastellarCookieBannerPrivacy-BackButton">Back</button>
+    <iframe src="https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/index.php" width="100%" height="590" frameborder="0"></iframe>
+`;
+}
+
+function hidePrivacy(){
+    const moreContentText = document.querySelector(".intastellarCookieConstents__content-main");
+    moreContentText.style.padding = "";
+    moreContentText.innerHTML = settingsMessage;
+}
+
 /* - - - Helper functions for Validate policy link - - - */
 function isValidCCPALink() {
     if (typeof window.INTA.settings.ccpa === "object" && isCCPAURL(window.INTA.settings.ccpa.url)) {
@@ -1077,13 +1099,14 @@ function createCookieSettings() {
     moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
     moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer");
 
-    moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");
+    moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");;
 
     const intastellarCookieConstents__Container = document.createElement("article");
 
     const testSection = document.createElement("section");
     testSection.setAttribute("class", "intastellarCookieConstents__contentC");
     testSection.appendChild(moreintHeader);
+
     testSection.appendChild(moreContentText);
 
     moreSettingsContent.appendChild(intastellarCookieConstents__Container);
@@ -1103,7 +1126,7 @@ function createCookieSettings() {
         bannerContent.classList.add("intastellarCookie-settingsContainer--otherSide");
         cookieSettings.classList.add("intastellarCookie-settings__container--otherSide");
     }
-
+    
     /* cookieSettings.style.opacity = "0"; */
     /* bannerContent.setAttribute("class","intastellarCookie-settingsContainer");
     bannerContent.setAttribute("title", "Cookie Settings"); */
@@ -1129,7 +1152,8 @@ function createCookieSettings() {
         <p>Ved at trykke på 'Accepter alle' giver du samtykke til alle disse formål. Du kan også vælge at tilkendegive, hvilke formål du vil give samtykke til ved at benytte checkboksene ud for formålet, og derefter trykke på 'Gem indstillinger'.
         Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
         <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
-        ${generatePolicyUrl('Vores privat og cookie politik')}`,
+        ${generatePolicyUrl('Vores privat og cookie politik')}
+        <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privat politik</button>`,
         german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
         <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
         <ol>
@@ -1139,7 +1163,8 @@ function createCookieSettings() {
         </ol>
         <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
         <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten auf der Webseite klicken.</p>
-        ${generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')}`,
+        ${generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')}
+        <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International Datenschutz erklährung</button>`,
         english: `<h3 style="    font-size: 25px;">You´re in control</h3>
         <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
         <ol>
@@ -1149,7 +1174,8 @@ function createCookieSettings() {
         </ol>
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom corner of the website.</p>
-        ${generatePolicyUrl('Our Privacy and cookie Policy')}` 
+        ${generatePolicyUrl('Our Privacy and cookie Policy')}
+        <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privacy policy</button>` 
     }
 
     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
@@ -1443,6 +1469,7 @@ function createCookieSettings() {
             </article>
         `;
     }
+
     moreContentText.innerHTML = settingsMessage;
 
     let ccpa = window.INTA.settings === undefined || window.INTA.settings.ccpa === undefined ? false : window.INTA.settings.ccpa.on;
@@ -1737,7 +1764,6 @@ window.addEventListener("DOMContentLoaded", function () {
         intCookieDomain +
         "";
         /* if (!getCookie(int_gmc)) { */
-            console.log("Hej")
             /* window.location.reload(); */
         /* } */
     }
