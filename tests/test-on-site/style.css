@@ -17,6 +17,10 @@ section{
   border-radius: 10px;
 }
 
+.intastellar_privacyPolicy{
+  overflow: hidden;
+}
+
 .intastellarCookieBannerPrivacy-BackButton{
   padding: 10px 50px;
   margin: 2px 0px;
