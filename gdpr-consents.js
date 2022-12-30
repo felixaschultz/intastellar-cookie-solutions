@@ -1063,7 +1063,7 @@ xhr.send();
 
 function showPrivacy(){
     document.querySelector(".intLearnMoreBtn").style.display = "none";
-    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "209px";
+    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "206px";
     const moreContentText = document.querySelector(".intastellar_privacyPolicy");
     moreContentText.style.height = "100%";
     moreContentText.style.background = "#ffff";
@@ -1071,8 +1071,10 @@ function showPrivacy(){
     moreContentText.style.borderBottom = "1px solid #c4c4c4"
     moreContentText.style.textAlign = "left";
     moreContentText.innerHTML = `
-        <button onClick="hidePrivacy()" class="intastellarCookieBannerPrivacy-BackButton">Back</button>
-        <div style="padding: 25px;">${intastellarSolutionsPrivacyPolicy}</div>
+        <div style="padding: 25px;">
+            <button onClick="hidePrivacy()" class="intastellarCookieBannerPrivacy-BackButton">Back</button>
+            ${intastellarSolutionsPrivacyPolicy}
+        </div>
     `;
 
     moreContentText.scrollIntoView({
@@ -1532,6 +1534,7 @@ function createCookieSettings() {
 
     .intaGDPR-content p{
         color: #000 !important;
+        text-align: left !important;
     }
 
     .intaGDPR-content ol {
