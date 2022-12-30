@@ -1215,7 +1215,7 @@ function createCookieSettings() {
             `
                 <section class="intCookieSaveSettingsContainer">
                     ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
-                    <button class="intLearnMoreBtn" onClick="learnMore()"">Læs mere om cookies</button>
+                    <button class="intLearnMoreBtn">Læs mere om cookies</button>
                     <article class="intCookieSetting__form">
                         <section class="intastellarSettings__control">
                             <label class="intSettingDisabled checkMarkContainer">
