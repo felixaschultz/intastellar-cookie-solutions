@@ -1048,18 +1048,37 @@ privacyContainer.innerHTML = `
     <button onClick="hidePrivacy()">Back</button>
     <iframe src="https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/index.php" width="100%" height="590" frameborder="0"></iframe>
 `;
+
+let intastellarSolutionsPrivacyPolicy = "https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/index.php";
+const xhr = new XMLHttpRequest();
+xhr.onload = function(){
+    intastellarSolutionsPrivacyPolicy = "loading...";
+    if(this.status === 200){
+        intastellarSolutionsPrivacyPolicy = this.responseText;
+    }
+}
+
+xhr.open("GET", "https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/index.php");
+xhr.send();
+
 function showPrivacy(){
     const moreContentText = document.querySelector(".intastellarCookieConstents__content-main");
-    moreContentText.style.padding = "0";
+    moreContentText.style.background = "#ffff";
+    moreContentText.style.color = "#000";
+    moreContentText.style.borderBottom = "1px solid #c4c4c4"
+    moreContentText.style.textAlign = "left";
     moreContentText.innerHTML = `
     <button onClick="hidePrivacy()" class="intastellarCookieBannerPrivacy-BackButton">Back</button>
-    <iframe src="https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/index.php" width="100%" height="590" frameborder="0"></iframe>
+    ${intastellarSolutionsPrivacyPolicy}
 `;
 }
 
 function hidePrivacy(){
     const moreContentText = document.querySelector(".intastellarCookieConstents__content-main");
     moreContentText.style.padding = "";
+    moreContentText.style.background = "";
+    moreContentText.style.color = "";
+    moreContentText.style.textAlign = "";
     moreContentText.innerHTML = settingsMessage;
 }
 
@@ -1262,7 +1281,7 @@ function createCookieSettings() {
         `
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
-                <button class="intLearnMoreBtn" onClick="learnMore()"">Mehr Erfahren</button>
+                <button class="intLearnMoreBtn" >Mehr Erfahren</button>
             </section>
             <article class="intReadMore">
                 <section class="required">
@@ -1334,7 +1353,7 @@ function createCookieSettings() {
         `
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
-                <button class="intLearnMoreBtn" onClick="learnMore()"">Show details</button>
+                <button class="intLearnMoreBtn" >Show details</button>
             </section>
             <article class="intReadMore">
                 <section class="required">
@@ -1408,7 +1427,7 @@ function createCookieSettings() {
         `
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
-                <button class="intLearnMoreBtn" onClick="learnMore()"">Læs mere om cookies</button>
+                <button class="intLearnMoreBtn" >Læs mere om cookies</button>
                 <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
@@ -1503,9 +1522,42 @@ function createCookieSettings() {
         border-radius: 50%;
     }
 
+    .intaGDPR-content p{
+        color: #000 !important;
+    }
+
+    .intaGDPR-content ol {
+        list-style: none;
+        counter-reset: item;
+        padding: 0 !important;
+    }
+
+    .intaGDPR-content .paragraph__list:before {
+        content: "§ " counters(item, ".") ". ";
+        counter-increment: item;
+    }
+
+    .intaGDPR-content ol li {
+        color: #000 !important;
+    }
+
+    .intaGDPR-content a{
+        display: inline-block;
+        padding: 5px 0px;
+    }
+
+    .intaGDPR-content h2{
+        text-align: left;
+    }
+
+    .intaGDPR-content h3{
+        font-weight: lighter;
+        font-size: 17px;
+    }
+
     .intCookieIcon-openSettings{
-        width: auto;
-        height: auto;
+        width: 55px;
+        height: 55px;
     }
     `;
     let position = "--right";
@@ -1665,11 +1717,19 @@ function isValidPolicyLink() {
 }
 
 /* - - - Helper function to learn more - - - */
-function learnMore() {
-    document.querySelector(".intReadMore").classList.toggle("view"); document.querySelector(".intReadMore").scrollIntoView({
+function learnMore(e) {
+    document.querySelector(".intReadMore").classList.toggle("view");
+    document.querySelector(".intReadMore").scrollIntoView({
         behavior: "smooth",
         block: "start",
-}); }
+    });
+
+    if(document.querySelector(".intReadMore").classList.contains("view")){
+        e.innerHTML = "Hide details";
+    }else {
+        e.innerHTML = "Show details";
+    }
+}
 
 /* - - - Helper function for saving settings - - - */
 function saveINTCookieSettings() {
@@ -1773,7 +1833,14 @@ window.addEventListener("DOMContentLoaded", function () {
 
     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
     if (isValidPolicyLink()) {
-        createCookieSettings();/* 
+        createCookieSettings();
+        /* - - - Helper function for learn more click - - - */
+        document.querySelectorAll(".intLearnMoreBtn").forEach((btn) => {
+            btn.addEventListener("click", function(e) {
+                learnMore(this);
+            })
+        })
+        /* 
         const intaCookieList = Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')));
         const intaRequiredCookieList = [];
 

@@ -3,6 +3,11 @@ section{
   padding: 0;
 }
 
+/* a[target="_blank"]:not(.coi-external-link):after {
+  margin: 0 3px 0 5px;
+  content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQ…4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==");
+} */
+
 .intastellarErrorMessage{
   position: fixed;
   inset: 10px;
@@ -13,12 +18,13 @@ section{
 }
 
 .intastellarCookieBannerPrivacy-BackButton{
-  padding: 15px 50px;
-  margin: 2px 10px;
+  padding: 10px 50px;
+  margin: 2px 0px;
   background: transparent;
   border: 1px solid;
-  color: #fff;
+  color: rgb(40, 40, 40);
   font-size: 14px;
+  border-radius: 5px;
 }
 
 .intastellarErrorMessage-content{
@@ -366,14 +372,28 @@ section{
   transform: translateY(-50%);
   color: #000 !important;
   border-radius: 10px;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   position: relative;
   font-family: "Roboto", sans-serif !important;
 
-  scroll-padding-top: 211px;
+  scroll-padding-top: 135px;
   scroll-snap-align: start;
   scroll-snap-stop: normal;
 }
+
+/* .intastellarCookieConstents__content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.intastellarCookieConstents__content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.intastellarCookieConstents__content::-webkit-scrollbar-thumb {
+  background-color: #b4b4b4;
+  border-radius: 20px;
+} */
 
 .intastellarCookieConstents__content-header {
   height: 15%;
