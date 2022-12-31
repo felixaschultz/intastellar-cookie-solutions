@@ -36,6 +36,28 @@ const INTA = window.INTA = {
     }
 }
 
+/* window.INTA = {
+    policy_link: {
+      target: "_blank",
+      url: "https://www.intastellarsolutions.com/about/legal/privacy"
+    },
+    settings: {
+      logo: "https://www.intastellarsolutions.com/assets/icons/fav/favicon-96x96.png",
+      color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)",
+      text: false,
+      ccpa: {
+        on: true,
+        url: "https://www.intastellarsolutions.com/about/legal/california-consumer-privacy-act",
+        collection: [
+          "Email",
+          "Name",
+          "Phone number"
+        ]
+      },
+      gcm: true
+    }
+}; */
+
 const intCookieDomain = (function () {
     "use strict";
     var i = 0,
@@ -1900,8 +1922,6 @@ window.addEventListener("DOMContentLoaded", function () {
             return cookieEnabled;
         }
 
-        const cookiesOn = getCookie(int_cookieName);
-
         document.querySelectorAll(".intastellarCookieBanner__settings").forEach((setting) => {
             setting.addEventListener("click", () => {
                 let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
@@ -2017,37 +2037,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 window.location.reload();
             });
         }
-
-        /* if (cookiesOn == "no") {
-            if (!document.__defineGetter__) {
-                Object.defineProperty(document, "cookie", {
-                    get: function () {
-                        return "";
-                    },
-                    set: function () {
-                        return !0;
-                    },
-                });
-            } else {
-                document.__defineGetter__("cookie", function () {
-                    return "";
-                });
-                document.__defineSetter__("cookie", function () { });
-                var cookies = document.cookie.split(";");
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i];
-                    var eqPos = cookie.indexOf("=");
-                    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                }
-            }
-        } else if (cookiesOn == allowAllCookieName) {
-            document.cookie = int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-                "; path=/; " +
-                domain +
-                "";
-        } else if (cookiesOn == "no-set") {
-        } */
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {

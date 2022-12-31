@@ -244,7 +244,7 @@ section{
   left: 0;
   background: rgba(0, 0, 0, 0.49);
 
-  z-index: 53147483647 !important;
+  z-index: 99999999999 !important;
   place-content: center;
 }
 
