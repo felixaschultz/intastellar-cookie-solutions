@@ -148,7 +148,11 @@ function checkCookieStatus() {
     intaStyleLink.type = 'text/css';
     intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner.css?v=' + new Date().getTime();
     intaStyleLink.media = 'all';
-    intHead.appendChild(intaStyleLink);
+    intHead.insertBefore(intaStyleLink, document.scripts[document.scripts.length - 1]);
+    /* To get anonymous cookie banner usage */
+    let s = document.createElement("script");
+    s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
+    intHead.appendChild(s);
 
     const allScripts = [
         {
@@ -325,14 +329,6 @@ function checkCookieStatus() {
 
     const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
-
-    /* To get anonymous cookie banner usage */
-    let s = document.createElement("script");
-    s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
-
-    if (window.location.href != "https://developers.intastellarsolutions.com/gdpr-cookiebanner/tryout/index.php") {
-        intHead.appendChild(s);
-    }
 
     function loopBlock(addedNodes, message, script, buttonText, logo) {
         addedNodes.forEach((frae) => {
@@ -1064,12 +1060,6 @@ const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastel
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
 /* Adding Privacy Policy of Intastellar Solutions, International */
-const privacyContainer = document.createElement("article");
-privacyContainer.setAttribute("class", "intastellarCookiePrivacyContainer");
-privacyContainer.innerHTML = `
-    <button onClick="hidePrivacy()">Back</button>
-    <iframe src="https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/index.php" width="100%" height="590" frameborder="0"></iframe>
-`;
 
 let intastellarSolutionsPrivacyPolicy = "https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/index.php";
 const xhr = new XMLHttpRequest();
