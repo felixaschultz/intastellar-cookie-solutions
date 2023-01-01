@@ -292,7 +292,7 @@ function checkCookieStatus() {
         intHead.appendChild(gtag)
     }
 
-    if (!getCookie(int_FunctionalCookies) && !getCookie(int_staticsticCookies) && !getCookie(int_marketingCookies)) {
+    /* if (!getCookie(int_FunctionalCookies) && !getCookie(int_staticsticCookies) && !getCookie(int_marketingCookies)) {
         document.cookie = int_FunctionalCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
             intCookieDomain +
             "";
@@ -302,7 +302,7 @@ function checkCookieStatus() {
         document.cookie = int_marketingCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
             intCookieDomain +
             "";
-    }
+    } */
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
     if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_staticsticCookies) != "checked" && getCookie(int_marketingCookies) != "checked") {
         m = merge(allScripts[1].scripts, allScripts[0].scripts)
@@ -557,6 +557,8 @@ function checkCookieStatus() {
                     });   
                 }
 
+                console.log(getCookie(int_staticsticCookies) );
+
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
                     let src = node.src || "";
                     node.removeAttribute("charset");
@@ -596,7 +598,9 @@ function checkCookieStatus() {
                                 if(node.parentElement !== null) node.parentElement.removeChild(node);
                                 deleteAllCookies();
                             }
-                        } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" || getCookie(int_marketingCookies) == "null" || getCookie(int_staticsticCookies) == "null"){
+                        } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" || getCookie(int_marketingCookies) == "null" || getCookie(int_staticsticCookies) == "null"
+                            || getCookie(int_FunctionalCookies) == "" || getCookie(int_marketingCookies) == "" || getCookie(int_staticsticCookies) == ""
+                        ){
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -669,7 +673,8 @@ function checkCookieStatus() {
                                 } else {
                                     node.type = "text/javascript";
                                 }
-                            } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
+                            } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" || getCookie(int_marketingCookies) == "null" || getCookie(int_staticsticCookies) == "null"
+                            || getCookie(int_FunctionalCookies) == "" || getCookie(int_marketingCookies) == "" || getCookie(int_staticsticCookies) == ""){
                                 if (
                                     src.indexOf(window.location.hostname) == -1
                                     && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
