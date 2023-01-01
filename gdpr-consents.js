@@ -1542,6 +1542,8 @@ function createCookieSettings() {
     .intaGDPR-content p{
         color: #000 !important;
         text-align: left !important;
+        font-size: 16px;
+        line-height: 17px;
     }
 
     .intaGDPR-content ol {
@@ -1557,11 +1559,14 @@ function createCookieSettings() {
 
     .intaGDPR-content ol li {
         color: #000 !important;
+        font-size: 16px;
+        line-height: 17px;
     }
 
     .intaGDPR-content a{
         display: inline-block;
         padding: 5px 0px;
+        color: #00a0a0;
     }
 
     .intaGDPR-content h2{
@@ -1595,6 +1600,44 @@ function createCookieSettings() {
         .intCookieIcon-openSettings{
             width: 40px;
             height: 40px;
+        }
+        .intaGDPR-content p{
+            color: #000 !important;
+            text-align: left !important;
+            font-size: 16px;
+            line-height: 17px;
+        }
+    
+        .intaGDPR-content ol {
+            list-style: none;
+            counter-reset: item;
+            padding: 0 !important;
+        }
+    
+        .intaGDPR-content .paragraph__list:before {
+            content: "§ " counters(item, ".") ". ";
+            counter-increment: item;
+        }
+    
+        .intaGDPR-content ol li {
+            color: #000 !important;
+            font-size: 16px;
+            line-height: 17px;
+        }
+    
+        .intaGDPR-content a{
+            display: inline-block;
+            padding: 5px 0px;
+            color: #00a0a0;
+        }
+    
+        .intaGDPR-content h2{
+            text-align: left;
+        }
+    
+        .intaGDPR-content h3{
+            font-weight: lighter;
+            font-size: 17px;
         }
         `;
         text = " Cookie notice";
