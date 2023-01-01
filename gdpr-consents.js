@@ -557,8 +557,6 @@ function checkCookieStatus() {
                     });   
                 }
 
-                console.log(getCookie(int_staticsticCookies) );
-
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
                     let src = node.src || "";
                     node.removeAttribute("charset");
@@ -645,7 +643,7 @@ function checkCookieStatus() {
                                     if (
                                         notRequired.test(src)
                                     ) {
-                                        console.log(notRequired, src)
+                                        /* console.log(notRequired, src) */
                                         node.defer = true;
                                         node.async = true;
                                         node.type = "text/blocked";
@@ -1825,7 +1823,7 @@ function saveINTCookieSettings() {
         
         contentPolicyMetaTag.content += "";
     } else {
-        document.cookie = int_FunctionalCookies+"=false; expires=" +
+        document.cookie = int_FunctionalCookies+"=false; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
@@ -1844,7 +1842,7 @@ function saveINTCookieSettings() {
             "";
         contentPolicyMetaTag.content += "";
     }else {
-        document.cookie = int_staticsticCookies+"=false; expires=" +
+        document.cookie = int_staticsticCookies+"=false; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
@@ -1863,8 +1861,7 @@ function saveINTCookieSettings() {
             "";
         contentPolicyMetaTag.content += "";
     } else {
-        document.cookie = int_marketingCookies+"=false; expires=" +
-                    "; path=/; " +
+        document.cookie = int_marketingCookies+"=false; expires=" + cookieLifeTime + "; path=/; " +
                     intCookieDomain +
                     "";
     }
@@ -2138,13 +2135,16 @@ window.addEventListener("DOMContentLoaded", function () {
 
                     
                 
-                    document.cookie = int_FunctionalCookies + "=checked; expires= path=/; " +
+                document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
+                "; path=/; " +
                     intCookieDomain +
                     "";
-                document.cookie = int_marketingCookies + "=checked; expires= path=/; " +
+                document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
+                "; path=/; " +
                     intCookieDomain +
                     "";
-                document.cookie = int_staticsticCookies + "=checked; expires= path=/; " +
+                document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
+                "; path=/; " +
                     intCookieDomain +
                     "";
 
@@ -2221,13 +2221,16 @@ window.addEventListener("DOMContentLoaded", function () {
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
 
-                    document.cookie = int_FunctionalCookies + "=false; expires= path=/; " +
+                    document.cookie = int_FunctionalCookies + "=false; expires=" + cookieLifeTime +
+                    "; path=/; " +
                         intCookieDomain +
                         "";
-                    document.cookie = int_staticsticCookies + "=false; expires= path=/; " +
+                    document.cookie = int_staticsticCookies + "=false; expires=" + cookieLifeTime +
+                    "; path=/; " +
                         intCookieDomain +
                         "";
-                    document.cookie = int_marketingCookies + "=false; expires= path=/; " +
+                    document.cookie = int_marketingCookies + "=false; expires=" + cookieLifeTime +
+                    "; path=/; " +
                         intCookieDomain +
                         "";
                     var cV = 1;
@@ -2364,13 +2367,16 @@ window.addEventListener("DOMContentLoaded", function () {
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
 
-                    document.cookie = int_FunctionalCookies + "=false; expires= path=/; " +
+                    document.cookie = int_FunctionalCookies + "=false; expires=" + cookieLifeTime +
+                    "; path=/; " +
                         intCookieDomain +
                         "";
-                    document.cookie = int_staticsticCookies + "=false; expires= path=/; " +
+                    document.cookie = int_staticsticCookies + "=false; expires=" + cookieLifeTime +
+                    "; path=/; " +
                         intCookieDomain +
                         "";
-                    document.cookie = int_marketingCookies + "=false; expires= path=/; " +
+                    document.cookie = int_marketingCookies + "=false; expires=" + cookieLifeTime +
+                    "; path=/; " +
                         intCookieDomain +
                         "";
                     var cV = 1;
