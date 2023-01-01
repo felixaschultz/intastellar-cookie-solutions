@@ -330,6 +330,24 @@ function checkCookieStatus() {
     const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
 
+    /* Helper function to create Consents Block message for iframes etc.*/
+    function ConsentsBlock(logo, textLanguage, btnText, datatype){
+        let p = "";
+        if(window.location.host.indexOf("intastellarsolutions.com") == -1){
+            p = `<a href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="text-decoration: none;font-size: 11.5px; padding: .5em 0 0; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`;
+        }
+        return `
+        <section class="intCookie_ConsentContainer-content">
+            <section class="intCookie_ConsentLogo-container">
+                <img src="${logo}" class="intCookie_ConsentLogo">
+            </section>
+            ${textLanguage}
+            <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
+            ${p}
+        </section>
+        `
+    }
+
     function loopBlock(addedNodes, message, script, buttonText, logo) {
         addedNodes.forEach((frae) => {
             if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
@@ -337,6 +355,7 @@ function checkCookieStatus() {
                     let a      = document.createElement('a');
                     a.href = frae.src;
                     let externalDomain = a.hostname;
+                    
                     frae.src = "about:blank";
                     let textLanguage;
                     let btnText;
@@ -357,15 +376,7 @@ function checkCookieStatus() {
 
                     let settingsContent = document.createElement("article");
                     settingsContent.classList.add("intCookie_ConsentContainer");
-                    settingsContent.innerHTML = `
-                    <section class="intCookie_ConsentContainer-content">
-                        <section class="intCookie_ConsentLogo-container">
-                            <img src="${logo}" class="intCookie_ConsentLogo">
-                        </section>
-                        ${textLanguage}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>${btnText}</button>
-                    </section>
-                    `;
+                    settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
                     if (frae.style.display !== "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
@@ -396,15 +407,7 @@ function checkCookieStatus() {
 
                     let settingsContent = document.createElement("article");
                     settingsContent.classList.add("intCookie_ConsentContainer");
-                    settingsContent.innerHTML = `
-                    <section class="intCookie_ConsentContainer-content">
-                        <section class="intCookie_ConsentLogo-container">
-                            <img src="${logo}" class="intCookie_ConsentLogo">
-                        </section>
-                        ${textLanguage}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
-                    </section>
-                    `;
+                    settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
                     frae.parentElement.replaceChild(settingsContent, frae);
                 } else if (frae.id.indexOf("map") > -1 || frae.id.indexOf("google") > -1) {
 
@@ -427,15 +430,7 @@ function checkCookieStatus() {
 
                     let settingsContent = document.createElement("article");
                     settingsContent.classList.add("intCookie_ConsentContainer");
-                    settingsContent.innerHTML = `
-                    <section class="intCookie_ConsentContainer-content">
-                        <section class="intCookie_ConsentLogo-container">
-                            <img src="${logo}" class="intCookie_ConsentLogo">
-                        </section>
-                        ${textLanguage}
-                        <button class='intastellarCookie-settings__btn --changePermission' data-type='intFunctionalCookies'>${btnText}</button>
-                    </section>
-                    `;
+                    settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
                     frae.parentElement.replaceChild(settingsContent, frae);
                 }
             }
@@ -466,15 +461,7 @@ function checkCookieStatus() {
             }
             let settingsContent = document.createElement("article");
             settingsContent.classList.add("intCookie_ConsentContainer");
-            settingsContent.innerHTML = `
-            <section class="intCookie_ConsentContainer-content">
-                <section class="intCookie_ConsentLogo-container">
-                    <img src="${logo}" class="intCookie_ConsentLogo">
-                </section>
-                ${textLanguage}
-                <button class='intastellarCookie-settings__btn --changePermission' data-type='intMarketingCookies'>${btnText}</button>
-            </section>
-            `;
+            settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
             tweet.parentElement.replaceChild(settingsContent, tweet);
         }
     }
@@ -520,9 +507,12 @@ function checkCookieStatus() {
                 }
 
                 if (node.nodeType === 1 && node.tagName === "DIV") {
-                    
                     allScripts.map((script) => {
+                        
                         const message = (domain) => {
+                            if(node.classList.contains("trustpilot-widget")){
+                                domain = "trustpilot.com";
+                            }
                             return {
                                 danish: `<p>Dette indhold hostes af en tredjepart (${domain}). Ved at vise dig det eksterne indhold accepterer du cookies fra ${domain}.</p>`,
                                 english: `<p>This content is hosted by a third party (${domain}). By showing you the external content you accept the cookies provided by ${domain}.</p>`,
@@ -1663,7 +1653,7 @@ function createCookieSettings() {
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
     let poweredBy = "";
     if (window.location.host.indexOf("intastellarsolutions") == -1) {
-        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + document.domain + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='189px' height='50px' src='https://www.intastellarsolutions.com/assets/intastellar_solutions.svg' alt='Intastellar Solutions, International'></a></span>";
+        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + encodeURI(window.location.href) + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='189px' height='50px' src='https://www.intastellarsolutions.com/assets/intastellar_solutions.svg' alt='Intastellar Solutions, International'></a></span>";
     }
     
     let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
