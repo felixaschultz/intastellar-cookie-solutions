@@ -10,11 +10,13 @@ section{
 
 .intastellarErrorMessage{
   position: fixed;
-  inset: 10px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: max-content;
   height: max-content;
   background-color: #ccc;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .intastellar_privacyPolicy{
