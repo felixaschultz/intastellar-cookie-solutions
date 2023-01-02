@@ -518,7 +518,7 @@ function checkCookieStatus() {
                             return {
                                 danish: `Accepter ${scriptTypelang.danish} cookies`,
                                 english: `Accept ${scriptTypelang.english} cookies`,
-                                german: `Akzepterie ${scriptTypelang.german} cookies`
+                                german: `Akzeptiere ${scriptTypelang.german} cookies`
                             }
                         }
                         let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
@@ -564,7 +564,7 @@ function checkCookieStatus() {
                             return {
                                 danish: `Accepter ${scriptTypelang.danish} cookies`,
                                 english: `Accept ${scriptTypelang.english} cookies`,
-                                german: `Akzepterie ${scriptTypelang.german} cookies`
+                                german: `Akzeptiere ${scriptTypelang.german} cookies`
                             }
                         }
                         let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
@@ -607,7 +607,7 @@ function checkCookieStatus() {
                                 return {
                                     danish: `Accepter ${scriptTypelang.danish} cookies`,
                                     english: `Accept ${scriptTypelang.english} cookies`,
-                                    german: `Akzepterie ${scriptTypelang.german} cookies`
+                                    german: `Akzeptiere ${scriptTypelang.german} cookies`
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
