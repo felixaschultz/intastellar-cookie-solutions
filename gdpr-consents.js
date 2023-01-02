@@ -482,15 +482,6 @@ function checkCookieStatus() {
                 if (!allCookiesAllowed() || !intaCookieType(int_FunctionalCookies)) {
                     deleteAllCookies();
                 }
-                
-                if(node.nodeType === 1 && node.tagName === "LINK"){
-                    let src = node.href;
-                    if (
-                        notRequired.test(src)
-                    ) {
-                        node.parentElement.removeChild(node);
-                    }
-                }
 
                 /* Adding  custom button to all blocked embedded content on the site */
                 if (node.nodeType === 1 && node.tagName === "IFRAME") {
@@ -826,6 +817,78 @@ function checkCookieStatus() {
 
                         if (node.getAttribute("type") === "text/blocked")
                             event.preventDefault();
+                        node.removeEventListener(
+                            "beforescriptexecute",
+                            beforeScriptExecuteListener
+                        );
+                    };
+                    node.addEventListener(
+                        "beforescriptexecute",
+                        beforeScriptExecuteListener
+                    );
+                    beforeScriptExecuteListener();
+                }else if(node.nodeType === 1 && node.tagName === "LINK"){
+                    let src = node.href;
+                    if (dc == essentialsCookieName || dc == "") {
+
+                        if (
+                            notRequired.test(src)
+                        ) {
+                            node.disabled = true;
+                            if(node.parentElement !== null) node.parentElement.removeChild(node);
+                            deleteAllCookies();
+                        }
+                    } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
+                        
+                        if (
+                            notRequired.test(src)
+                        ) {
+                            node.disabled = true;
+                            if(node.parentElement !== null) node.parentElement.removeChild(node);
+                        } else {
+                            node.type = "text/javascript";
+                        }
+                    }
+
+                    const beforeScriptExecuteListener = function (event) {
+                        let src = node.src || "";
+                        if (dc == essentialsCookieName || dc == "") {
+                            if (
+                                src.indexOf(window.location.hostname) == -1
+                                && src.indexOf("jquery") == -1
+                                && src.indexOf("elementor") == -1
+                            ) {
+                                if (
+                                    notRequired.test(src)
+                                ) {
+                                    node.disabled = true;
+                                    /* if(node.parentElement !== null) node.parentElement.removeChild(node); */
+                                    deleteAllCookies();
+                                }
+                            }
+                        } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
+                            if (
+                                src.indexOf(window.location.hostname) == -1
+                                && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                            ) {
+                                if (
+                                    notRequired.test(src)
+                                ) {
+                                    node.disabled = true;
+                                    /* if(node.parentElement !== null) node.parentElement.removeChild(node); */
+                                }
+                            }
+                            
+                            if (
+                                notRequired.test(src)
+                            ) {
+                                node.disabled = true;
+                                /* if(node.parentElement !== null) node.parentElement.removeChild(node); */
+                            }
+                        }
+
+                        if (node.getAttribute("disabled") === true)
+                            
                         node.removeEventListener(
                             "beforescriptexecute",
                             beforeScriptExecuteListener
