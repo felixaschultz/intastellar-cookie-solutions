@@ -36,6 +36,15 @@ const INTA = window.INTA = {
     }
 }
 
+/* Custom error message */
+
+class IntastellarSolutionsSDK extends Error {
+    constructor(message) {
+      super(message);
+      this.name = 'IntastellarSolutionsSDK';
+    }
+};
+
 /* window.INTA = {
     policy_link: {
       target: "_blank",
@@ -141,14 +150,14 @@ contentPolicyMetaTag.content = "*.usercontent.one";
 if (getCookie(int_cookieName) == essentialsCookieName || getCookie(int_cookieName) == null) {
     intHead.insertBefore(contentPolicyMetaTag, intHead.firstChild);
 } */
+const intaStyleLink = document.createElement('link');
+intaStyleLink.rel = 'stylesheet';
+intaStyleLink.type = 'text/css';
+intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner.css?v=' + new Date().getTime();
+intaStyleLink.media = 'all';
+intHead.insertBefore(intaStyleLink, document.scripts[document.scripts.length - 1]);
 
 function checkCookieStatus() {
-    const intaStyleLink = document.createElement('link');
-    intaStyleLink.rel = 'stylesheet';
-    intaStyleLink.type = 'text/css';
-    intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner.css?v=' + new Date().getTime();
-    intaStyleLink.media = 'all';
-    intHead.insertBefore(intaStyleLink, document.scripts[document.scripts.length - 1]);
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
     s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
@@ -1693,7 +1702,7 @@ function createCookieSettings() {
             document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
         })
     } else if (!isValidCCPALink() && "ccpa" in window.INTA.settings && window.INTA.settings.ccpa.on === "true") {
-        console.error("Intastellar Solutions SDK: Please add your valid 'California Consumer Privacy Act' url to the banner: https://www.intastellarsolutions.com/gdpr-cookiebanner");
+        throw new IntastellarSolutionsSDK("Please add your valid 'California Consumer Privacy Act' url to the banner. Read more at https://www.intastellarsolutions.com/gdpr-cookiebanner");
     }
 
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
@@ -2459,11 +2468,11 @@ window.addEventListener("DOMContentLoaded", function () {
         errorMessage.className = "intastellarErrorMessage";
         errorMessageContent.className = "intastellarErrorMessage-content";
 
-        errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner: <a href='https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy</a>";
+        errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner. Read more at <a href='https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy</a>";
 
         errorMessage.appendChild(errorMessageContent);
         document.body.appendChild(errorMessage);
 
-        console.error("Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner: https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy")
+        throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy")
     }
 });
