@@ -2233,7 +2233,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
-            const changePermission = document.querySelectorAll(".--changePermission");
+            const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
 
             changePermission.forEach((change) => {
                 change.addEventListener("click", function () {
@@ -2388,7 +2388,7 @@ window.addEventListener("DOMContentLoaded", function () {
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
             let settings = document.querySelector(".intastellarCookie-settings__container");
 
-            const changePermission = document.querySelectorAll(".--changePermission");
+            const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
 
             changePermission.forEach((change) => {
                 change.addEventListener("click", function () {
