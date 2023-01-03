@@ -263,7 +263,6 @@ function checkCookieStatus() {
                 "(grecaptcha+)",
                 "([\-\.]googleapis+)",
                 "([\-\.]gstatics+)",
-                /* "([\-\.]google+)", */
                 "([\-\.]cludo+)",
                 "([\-\.]qbrick+)",
                 "([\-\.]klarna+)",
@@ -1239,7 +1238,7 @@ function createCookieSettings() {
             <li>Marketing</li>
         </ol>
         <p>Ved at trykke på 'Accepter alle' giver du samtykke til alle disse formål. Du kan også vælge at tilkendegive, hvilke formål du vil give samtykke til ved at benytte checkboksene ud for formålet, og derefter trykke på 'Gem indstillinger'.
-        Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i venstre hjørne af hjemmesiden.</p>
+        Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i ${(window.INTA.arrange == "ltr") ? "venstre" : "højre"} hjørne af hjemmesiden.</p>
         <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
         ${generatePolicyUrl('Vores privat og cookie politik')}
         <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privat politik</button>`,
@@ -1250,8 +1249,8 @@ function createCookieSettings() {
             <li>Statistik</li>
             <li>Werbung</li>
         </ol>
-        <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Einstellungen speichern“ klicken.</p>
-        <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten auf der Webseite klicken.</p>
+        <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Speichern“ klicken.</p>
+        <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten in der ${(window.INTA.arrange == "ltr") ? "linken" : "rechten"} Ecke klicken.</p>
         ${generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')}
         <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International Datenschutz erklährung</button>`,
         english: `<h3 style="    font-size: 25px;">You´re in control</h3>
@@ -1262,7 +1261,7 @@ function createCookieSettings() {
             <li>Marketing</li>
         </ol>
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
-        <p>You may withdraw your consent at any time by clicking the small icon at the bottom corner of the website.</p>
+        <p>You may withdraw your consent at any time by clicking the small icon at the bottom ${(window.INTA.arrange == "ltr") ? "left" : "right"} corner of the website.</p>
         ${generatePolicyUrl('Our Privacy and cookie Policy')}
         <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privacy policy</button>` 
     }
