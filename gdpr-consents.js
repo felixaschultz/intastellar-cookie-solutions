@@ -168,7 +168,6 @@ function checkCookieStatus() {
             /* Analytics Scripts which are beeing blocked */
             type: "statics",
             scripts: [
-                "(?=gtag|gtm)",
                 "([\-\.]google-analytics+)",
                 "([\-\.]googletagmanager+)",
                 "([\-\.]googleoptimize+)",
@@ -252,7 +251,7 @@ function checkCookieStatus() {
                 "([\-\.]facebook+)",
                 "([\-\.]doubleclick+)",
                 "([\-\.]pinterest+)",
-                "([\-\.]googleadservices+)",
+                /* "([\-\.]googleadservices+)", */
                 "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
             ]
         },
@@ -264,7 +263,7 @@ function checkCookieStatus() {
                 "(grecaptcha+)",
                 "([\-\.]googleapis+)",
                 "([\-\.]gstatics+)",
-                "([\-\.]google+)",
+                /* "([\-\.]google+)", */
                 "([\-\.]cludo+)",
                 "([\-\.]qbrick+)",
                 "([\-\.]klarna+)",
@@ -291,27 +290,7 @@ function checkCookieStatus() {
 
     let notRequired;
     let m;
-
-    if (getCookie(int_gmc)) {
-        const gtag = document.createElement("script");
-        gtag.innerHTML = `gtag('consent', 'default', {
-            'ad_storage': 'denied',
-            'analytics_storage': 'denied'
-        })`;
-        intHead.appendChild(gtag)
-    }
-
-    /* if (!getCookie(int_FunctionalCookies) && !getCookie(int_staticsticCookies) && !getCookie(int_marketingCookies)) {
-        document.cookie = int_FunctionalCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
-            intCookieDomain +
-            "";
-        document.cookie = int_staticsticCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
-            intCookieDomain +
-            "";
-        document.cookie = int_marketingCookies + "=false; expires=" + cookieLifeTime + "; path=/; " +
-            intCookieDomain +
-            "";
-    } */
+    /* autoads-preview.googleusercontent.com */
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
     if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_staticsticCookies) != "checked" && getCookie(int_marketingCookies) != "checked") {
         m = merge(allScripts[1].scripts, allScripts[0].scripts)
@@ -386,7 +365,7 @@ function checkCookieStatus() {
                     let settingsContent = document.createElement("article");
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
-                    if (frae.style.display !== "none") {
+                    if (frae.style.display != "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
@@ -417,7 +396,9 @@ function checkCookieStatus() {
                     let settingsContent = document.createElement("article");
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
+                    if (frae.style.display != "none") {
                     frae.parentElement.replaceChild(settingsContent, frae);
+                    }
                 } else if (frae.id.indexOf("map") > -1 || frae.id.indexOf("google") > -1) {
 
                     let textLanguage;
@@ -440,7 +421,9 @@ function checkCookieStatus() {
                     let settingsContent = document.createElement("article");
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
-                    frae.parentElement.replaceChild(settingsContent, frae);
+                    if (frae.style.display != "none") {
+                        frae.parentElement.replaceChild(settingsContent, frae);
+                    }
                 }
             }
         })
@@ -471,7 +454,9 @@ function checkCookieStatus() {
             let settingsContent = document.createElement("article");
             settingsContent.classList.add("intCookie_ConsentContainer");
             settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
-            tweet.parentElement.replaceChild(settingsContent, tweet);
+            if (tweet.style.display != "none") {
+                tweet.parentElement.replaceChild(settingsContent, tweet);
+            }
         }
     }
 
@@ -622,6 +607,7 @@ function checkCookieStatus() {
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.src;
+
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -1962,6 +1948,17 @@ window.addEventListener("DOMContentLoaded", function () {
             /* window.location.reload(); */
         /* } */
     }
+
+    const gtag = document.createElement("script");
+    gtag.innerHTML = `gtag('consent', 'default', {
+        'ad_storage':  ${(getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"'},
+        'analytics_storage': ${(getCookie(int_staticsticCookies) == "false") ? '"denied"': '"granted"'}
+    })`;
+
+    /* 'ad_storage':  ${(getCookie(int_marketingCookies) == "false") ? 'denied': 'granted'},
+        'analytics_storage': ${(getCookie(int_staticsticCookies) == "false") ? 'denied': 'granted'} */
+
+    intHead.appendChild(gtag)
 
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
     if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
