@@ -251,7 +251,7 @@ function checkCookieStatus() {
                 "([\-\.]facebook+)",
                 "([\-\.]doubleclick+)",
                 "([\-\.]pinterest+)",
-                /* "([\-\.]googleadservices+)", */
+                "([\-\.]googleadservices+)",
                 "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
             ]
         },
@@ -259,6 +259,7 @@ function checkCookieStatus() {
             /* Functional Scripts which are beeing blocked */
             type: "functional",
             scripts: [
+                "(maps.google.com|google.com/maps)",
                 "(recaptcha+)",
                 "(grecaptcha+)",
                 "([\-\.]googleapis+)",
