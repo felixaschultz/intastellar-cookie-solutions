@@ -208,6 +208,7 @@ function checkCookieStatus() {
             scripts: [
                 "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot)",
                 "([\-\.]googlesyndication+)",
+                "([\-\.]googletagservices+)",
                 "([\-\.]twitter+)",
                 "([\-\.]ads-twitter+)",
                 "(chimpstatic+)",
@@ -259,10 +260,12 @@ function checkCookieStatus() {
             /* Functional Scripts which are beeing blocked */
             type: "functional",
             scripts: [
-                "(maps.google.com|google.com/maps)",
+                "(maps.google.com)",
+                "(www.google.com/maps/)",
                 "(recaptcha+)",
                 "(grecaptcha+)",
                 "([\-\.]googleapis+)",
+                /* "([\-\.]google+)", */
                 "([\-\.]gstatics+)",
                 "([\-\.]cludo+)",
                 "([\-\.]qbrick+)",
@@ -874,7 +877,7 @@ function checkCookieStatus() {
                     );
                     beforeScriptExecuteListener();
 
-                    if(getCookie(int_FunctionalCookies) != "false"){
+                    /* if(getCookie(int_FunctionalCookies) != "false"){
                         if(window.INTA.settings.styleSheets){
                             window.INTA.settings.styleSheets.forEach((style) => {
                                 const link = document.createElement("link");
@@ -885,7 +888,7 @@ function checkCookieStatus() {
                                 }
                             })
                         }
-                    }
+                    } */
                 }
             });
         });
@@ -1540,7 +1543,7 @@ function createCookieSettings() {
                     </section>
                 </article>
             </section>
-            ${footerIntastellarPrivacyPolicy}
+            <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
                     <h3>Nødvendige</h3>
@@ -1954,10 +1957,6 @@ window.addEventListener("DOMContentLoaded", function () {
         'ad_storage':  ${(getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"'},
         'analytics_storage': ${(getCookie(int_staticsticCookies) == "false") ? '"denied"': '"granted"'}
     })`;
-
-    /* 'ad_storage':  ${(getCookie(int_marketingCookies) == "false") ? 'denied': 'granted'},
-        'analytics_storage': ${(getCookie(int_staticsticCookies) == "false") ? 'denied': 'granted'} */
-
     intHead.appendChild(gtag)
 
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
