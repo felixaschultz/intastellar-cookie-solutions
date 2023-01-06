@@ -1000,7 +1000,9 @@ function clearLocalStorage(ls) {
                 let itemName = lsA[i];
 
                 localStorage.clear();
-                localStorage.setItem(itemName, item);
+                if(item != undefined || item != null){
+                    localStorage.setItem(itemName, item);
+                }
             }
         } else {
             localStorage.clear();
@@ -1957,6 +1959,7 @@ window.addEventListener("DOMContentLoaded", function () {
     if(typeof gtag !== "undefined"){
         gtag('consent', 'default', {
             'ad_storage': (getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"',
+            'personalization_storage': (getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"',
             'analytics_storage': (getCookie(int_staticsticCookies) == "false") ? '"denied"': '"granted"',
             'functionality_storage': (getCookie(int_FunctionalCookies) == "false") ? '"denied"': '"granted"'
         });
