@@ -16,6 +16,8 @@ const int_analytic = intaCookiePref + "analytics";
 const int_gmc = intaCookiePref + "gmc";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
+let scriptTypelang = {};
+let settingsMessage;
 
 const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
 
@@ -1952,12 +1954,13 @@ window.addEventListener("DOMContentLoaded", function () {
         /* } */
     }
 
-    const gtag = document.createElement("script");
-    gtag.innerHTML = `gtag('consent', 'default', {
-        'ad_storage':  ${(getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"'},
-        'analytics_storage': ${(getCookie(int_staticsticCookies) == "false") ? '"denied"': '"granted"'}
-    })`;
-    intHead.appendChild(gtag)
+    if(typeof gtag !== "undefined"){
+        gtag('consent', 'default', {
+            'ad_storage': (getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"',
+            'analytics_storage': (getCookie(int_staticsticCookies) == "false") ? '"denied"': '"granted"',
+            'functionality_storage': (getCookie(int_FunctionalCookies) == "false") ? '"denied"': '"granted"'
+        });
+    }
 
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
     if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
