@@ -82,6 +82,18 @@ const intCookieDomain = (function () {
     return  "domain="+d +";";
 })();
 
+const intCookieDomainWithWWW = (function () {
+    "use strict";
+    var i = 0,
+        d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1") ? "" : "." + document.domain || window.location.host,
+        p = d.split(".")
+    
+        d = p.slice(-1 - ++i).join(".");
+        d = d;
+
+    return  "domain=www."+d +";";
+})();
+
 const allowAllCookieName = "__all__cookies";
 const essentialsCookieName = "__essential__cookies";
 const blockTrackingCookies = "__hideTrackingCookies";
@@ -118,6 +130,13 @@ if (intaCookieType(int_FunctionalCookies)) {
 }
 
 if(intaCookieType(int_staticsticCookies)){
+    int__cookiesToKeep.push("_clck");
+    int__cookiesToKeep.push("_clsk");
+    int__cookiesToKeep.push("CLID");
+    int__cookiesToKeep.push("ANONCHK");
+    int__cookiesToKeep.push("MR");
+    int__cookiesToKeep.push("MUID");
+    int__cookiesToKeep.push("SM");
     int__cookiesToKeep.push("_ga");
     int__cookiesToKeep.push("__gp");
     int__cookiesToKeep.push("_gid");
@@ -151,7 +170,6 @@ if(intaCookieType(int_staticsticCookies)){
 
 if (intaCookieType(int_marketingCookies)) {
     int__cookiesToKeep.push("_fbp");
-    int__cookiesToKeep.push("_clck");
     int__cookiesToKeep.push("__gsas");
     int__cookiesToKeep.push("__gpi");
     int__cookiesToKeep.push("__gpi_optout");
@@ -168,6 +186,8 @@ if (intaCookieType(int_marketingCookies)) {
     int__cookiesToKeep.push("_gac_");
     int__cookiesToKeep.push("_gcl_aw");
     int__cookiesToKeep.push("_gcl");
+    int__cookiesToKeep.push("GoogleAdServingTest");
+    int__cookiesToKeep.push("_uetvid");
 }
 
 const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.join("|"), "i");
@@ -1075,6 +1095,7 @@ function deleteAllCookies() {
         if (!int__cookiesToKeepReg.test(name)) {
             let localS = window.INTA.settings === undefined || window.INTA.settings.keepInLocalStorage === undefined ? "" : window.INTA.settings.keepInLocalStorage;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; " + intCookieDomain + " path=/";
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; " + intCookieDomainWithWWW + " path=/";
             clearLocalStorage(localS);
         }
     }
