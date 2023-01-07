@@ -14,6 +14,7 @@ const int_marketingCookies = intaCookiePref + "Advertisment-cookies";
 const int_staticsticCookies = intaCookiePref + "Statistics-cookies";
 const int_analytic = intaCookiePref + "analytics";
 const int_gmc = intaCookiePref + "gmc";
+const int_visitorCheck = intaCookiePref + "visitorCheck";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let scriptTypelang = {};
@@ -95,7 +96,8 @@ const int__cookiesToKeep = [
     int_staticsticCookies,
     int_marketingCookies,
     int_cookieName,
-    int_hideCookieBannerName
+    int_hideCookieBannerName,
+    int_visitorCheck
 ];
 
 
@@ -111,10 +113,61 @@ if (intaCookieType(int_FunctionalCookies)) {
     int__cookiesToKeep.push("lang");
     int__cookiesToKeep.push("hl");
     int__cookiesToKeep.push("locale");
+    int__cookiesToKeep.push("FCCDCF");
+    int__cookiesToKeep.push("AMP_TOKEN");
+}
+
+if(intaCookieType(int_staticsticCookies)){
+    int__cookiesToKeep.push("_ga");
+    int__cookiesToKeep.push("__gp");
+    int__cookiesToKeep.push("_gid");
+    int__cookiesToKeep.push("_dc_gtm_");
+    int__cookiesToKeep.push("_gaexp_rc");
+    int__cookiesToKeep.push("_gaexp");
+    int__cookiesToKeep.push("_gat");
+    int__cookiesToKeep.push("_clsk");
+    int__cookiesToKeep.push("_uetvid");
+    int__cookiesToKeep.push("FPAU");
+    int__cookiesToKeep.push("FPGCLDC");
+    int__cookiesToKeep.push("_gcl_dc");
+    int__cookiesToKeep.push("_gcl_au");
+    int__cookiesToKeep.push("FCNEC");
+    int__cookiesToKeep.push("FPLC");
+    int__cookiesToKeep.push("FPGCLAW");
+    int__cookiesToKeep.push("FPGCLGB");
+    int__cookiesToKeep.push("_gcl_gb");
+    int__cookiesToKeep.push("_gac_gb_");
+    int__cookiesToKeep.push("_gcl_aw");
+    int__cookiesToKeep.push("__utma");
+    int__cookiesToKeep.push("__utmb");
+    int__cookiesToKeep.push("__utmc");
+    int__cookiesToKeep.push("__utmt");
+    int__cookiesToKeep.push("__utmz");
+    int__cookiesToKeep.push("__utmv");
+    int__cookiesToKeep.push("FPID");
+    int__cookiesToKeep.push("_opt");
+    int__cookiesToKeep.push("_gcl");
 }
 
 if (intaCookieType(int_marketingCookies)) {
     int__cookiesToKeep.push("_fbp");
+    int__cookiesToKeep.push("_clck");
+    int__cookiesToKeep.push("__gsas");
+    int__cookiesToKeep.push("__gpi");
+    int__cookiesToKeep.push("__gpi_optout");
+    int__cookiesToKeep.push("__gads");
+    int__cookiesToKeep.push("GED_PLAYLIST_ACTIVITY");
+    int__cookiesToKeep.push("FPAU");
+    int__cookiesToKeep.push("FPGCLDC");
+    int__cookiesToKeep.push("_gcl_dc");
+    int__cookiesToKeep.push("_gcl_gb");
+    int__cookiesToKeep.push("_gcl_au");
+    int__cookiesToKeep.push("FPGCLAW");
+    int__cookiesToKeep.push("FPGCLGB");
+    int__cookiesToKeep.push("_gac_gb_");
+    int__cookiesToKeep.push("_gac_");
+    int__cookiesToKeep.push("_gcl_aw");
+    int__cookiesToKeep.push("_gcl");
 }
 
 const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.join("|"), "i");
@@ -1000,12 +1053,14 @@ function clearLocalStorage(ls) {
                 let itemName = lsA[i];
 
                 localStorage.clear();
+                sessionStorage.clear();
                 if(item != undefined || item != null){
                     localStorage.setItem(itemName, item);
                 }
             }
         } else {
             localStorage.clear();
+            sessionStorage.clear();
         }
     }
 }
