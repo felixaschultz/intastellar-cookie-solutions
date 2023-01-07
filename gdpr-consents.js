@@ -488,7 +488,7 @@ function checkCookieStatus() {
                             if(script.type == "marketing"){
                                scriptTypelang = {
                                     danish: "marketing",
-                                    english: "marketing",
+                                    english: "advertisement",
                                     german: "werbe"
                                } 
                             }else if(script.type == "functional"){
@@ -534,7 +534,7 @@ function checkCookieStatus() {
                             if(script.type == "marketing"){
                                scriptTypelang = {
                                     danish: "marketing",
-                                    english: "marketing",
+                                    english: "advertisement",
                                     german: "werbe"
                                } 
                             }else if(script.type == "functional"){
@@ -577,7 +577,7 @@ function checkCookieStatus() {
                                 if(script.type == "marketing"){
                                    scriptTypelang = {
                                         danish: "marketing",
-                                        english: "marketing",
+                                        english: "advertisement",
                                         german: "werbe"
                                    } 
                                 }else if(script.type == "functional"){
@@ -1266,7 +1266,7 @@ function createCookieSettings() {
         <ol>
             <li>Functional / Preference</li>
             <li>Statistical</li>
-            <li>Marketing</li>
+            <li>Advertisement</li>
         </ol>
         <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
         <p>You may withdraw your consent at any time by clicking the small icon at the bottom ${(window.INTA.arrange == "ltr") ? "left" : "right"} corner of the website.</p>
@@ -1463,7 +1463,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Marketing</span>
+                            <span class="intSettingsTitle">Advertisement</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
                                 <span class="checkmark round"></span>
@@ -1487,7 +1487,7 @@ function createCookieSettings() {
                     <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
                 </section>
                 <section>
-                    <h3>Marketing</h3>
+                    <h3>Advertisement</h3>
                     <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
                     <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
                 </section>
@@ -1944,17 +1944,7 @@ function saveINTCookieSettings() {
 
 
 window.addEventListener("DOMContentLoaded", function () {
-    /* Working on implementing Google consent mode */
-    if (window.INTA.settings.gcm) {
-        document.cookie =
-        int_gmc + "=false; expires=" + cookieLifeTime +
-        "; path=/; " +
-        intCookieDomain +
-        "";
-        /* if (!getCookie(int_gmc)) { */
-            /* window.location.reload(); */
-        /* } */
-    }
+    /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
 
     if(typeof gtag !== "undefined"){
         gtag('consent', 'default', {
