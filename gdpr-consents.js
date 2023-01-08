@@ -120,7 +120,7 @@ const inta_requiredCookieList = [
     {
         cookie: int_hideCookieBannerName,
         vendor: "Intastellar Solutions, International",
-        purpose: ""
+        purpose: "It´s function is to hide the popup window onload after user has accept or rejected cookies."
     },
     {
         cookie: int_cookieName,
@@ -187,7 +187,7 @@ inta_statisticCookieList.push({
 inta_statisticCookieList.push({
     cookie: "_ga",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "to store and count pageviews."
 })
 inta_statisticCookieList.push({
     cookie: "__gp",
@@ -436,7 +436,7 @@ inta_marketingCookieList.push(
     {
         cookie: "_fbp",
         vendor: "Facebook Inc",
-        purpose: ""
+        purpose: "to store and track visits across websites."
     }
 );
 inta_marketingCookieList.push({
@@ -539,32 +539,37 @@ inta_marketingCookieList.push({
     vendor: "Microsoft Inc",
     purpose: ""
 });
+inta_marketingCookieList.push({
+    cookie: "personalization_id",
+    vendor: "Twitter Intl Co",
+    purpose: "This cookie tracks activities on and off Twitter for a personalized experience"
+});
 
 /* - - - List of functional cookies - - - */
 const inta_functionalCookieList = [];
 inta_functionalCookieList.push({
     cookie: "region",
-    vendor: "Website",
+    vendor: window.location.host,
     purpose: ""
 })
 inta_functionalCookieList.push({
     cookie: "language",
-    vendor: "Website",
+    vendor: window.location.host,
     purpose: ""
 })
 inta_functionalCookieList.push({
     cookie: "lang",
-    vendor: "Website",
+    vendor: window.location.host,
     purpose: ""
 })
 inta_functionalCookieList.push({
     cookie: "hl",
-    vendor: "Website",
+    vendor: window.location.host,
     purpose: ""
 })
 inta_functionalCookieList.push({
     cookie: "locale",
-    vendor: "Website",
+    vendor: window.location.host,
     purpose: ""
 })
 inta_functionalCookieList.push({
@@ -598,13 +603,6 @@ function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
     return (getCookie(type) === "true")
 }
-/* if (intaCookieType(int_FunctionalCookies) != false || intaCookieType(int_staticsticCookies) != false || intaCookieType(int_marketingCookies) != false) {
-    const allCookies = document.cookie.split(";").reduce((cookies, cookie) => {
-        const [name, val] = cookie.split("=").map(c => {c.trim()})
-
-        int__cookiesToKeep.push(name);
-    })
-} */
 
 /* Cookie name list for functional cookies */
 if (intaCookieType(int_FunctionalCookies)) {
