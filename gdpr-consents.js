@@ -82,105 +82,463 @@ const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200
 
 /* List of cookies that should not be deleted */
 const inta_requiredCookieList = [
-    "PHPSESSID",
-    "SCJP",
-    "SCJD",
-    "SCWCD",
-    "SCBCD",
-    "SCDJWS",
-    int_FunctionalCookies,
-    int_staticsticCookies,
-    int_marketingCookies,
-    int_cookieName,
-    int_hideCookieBannerName,
-    int_visitorCheck
+    {
+        cookie: "PHPSESSID",
+        vendor: window.location.host,
+        purpose: ""
+    },
+    {
+        cookie: "SCJP",
+        vendor: window.location.host,
+        purpose: ""
+    },
+    {
+        cookie: "SCJD",
+        vendor: window.location.host,
+        purpose: ""
+    },
+    {
+        cookie: "SCWCD",
+        vendor: window.location.host,
+        purpose: ""
+    },
+    {
+        cookie: "SCBCD",
+        vendor: window.location.host,
+        purpose: ""
+    },
+    {
+        cookie: "SCDJWS",
+        vendor: window.location.host,
+        purpose: ""
+    },
+    {
+        cookie: int_visitorCheck,
+        vendor: "Intastellar Solutions, International",
+        purpose: ""
+    },
+    {
+        cookie: int_hideCookieBannerName,
+        vendor: "Intastellar Solutions, International",
+        purpose: ""
+    },
+    {
+        cookie: int_cookieName,
+        vendor: "Intastellar Solutions, International",
+        purpose: ""
+    },
+    {
+        cookie: int_marketingCookies,
+        vendor: "Intastellar Solutions, International",
+        purpose: "Its function is to store users cookie choice regarding marketing / advertising cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for advertising purposes or not."
+    },
+    {
+        cookie: int_staticsticCookies,
+        vendor: "Intastellar Solutions, International",
+        purpose: "Its function is to store users cookie choice regarding statistical cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for statistical purposes or not."
+    },
+    {
+        cookie: int_FunctionalCookies,
+        vendor: "Intastellar Solutions, International",
+        purpose: "Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not."
+    }
 ];
-const int__cookiesToKeep = inta_requiredCookieList.slice();
+const int__cookiesToKeep = inta_requiredCookieList.slice().map((cookie) => {
+    return cookie.cookie;
+});
 
 /* - - - List of Analytics / Statistics cookie names - - - */
 const inta_statisticCookieList = [];
-inta_statisticCookieList.push("_clck");
-inta_statisticCookieList.push("_clsk");
-inta_statisticCookieList.push("CLID");
-inta_statisticCookieList.push("ANONCHK");
-inta_statisticCookieList.push("MR");
-inta_statisticCookieList.push("MUID");
-inta_statisticCookieList.push("SM");
-inta_statisticCookieList.push("_ga");
-inta_statisticCookieList.push("__gp");
-inta_statisticCookieList.push("_gid");
-inta_statisticCookieList.push("_dc_gtm_");
-inta_statisticCookieList.push("_gaexp_rc");
-inta_statisticCookieList.push("_gaexp");
-inta_statisticCookieList.push("_gat");
-inta_statisticCookieList.push("_opt_expid");
-inta_statisticCookieList.push("_clsk");
-inta_statisticCookieList.push("_uetvid");
-inta_statisticCookieList.push("FPAU");
-inta_statisticCookieList.push("FPGCLDC");
-inta_statisticCookieList.push("_gcl_dc");
-inta_statisticCookieList.push("_gcl_au");
-inta_statisticCookieList.push("FCNEC");
-inta_statisticCookieList.push("FPLC");
-inta_statisticCookieList.push("FPGCLAW");
-inta_statisticCookieList.push("FPGCLGB");
-inta_statisticCookieList.push("_gcl_gb");
-inta_statisticCookieList.push("_gac_gb_");
-inta_statisticCookieList.push("_gcl_aw");
-inta_statisticCookieList.push("__utma");
-inta_statisticCookieList.push("__utmb");
-inta_statisticCookieList.push("__utmc");
-inta_statisticCookieList.push("__utmt");
-inta_statisticCookieList.push("__utmz");
-inta_statisticCookieList.push("__utmv");
-inta_statisticCookieList.push("FPID");
-inta_statisticCookieList.push("_opt");
-inta_statisticCookieList.push("_gcl");
-inta_statisticCookieList.push("_hjSessionUser_");
-inta_statisticCookieList.push("_hjid");
-inta_statisticCookieList.push("_hjFirstSeen");
-inta_statisticCookieList.push("_hjUserAttributesHash");
-inta_statisticCookieList.push("_hjCachedUserAttributes");
-inta_statisticCookieList.push("_hjViewportId");
-inta_statisticCookieList.push("_hjSession_");
-inta_statisticCookieList.push("_hjSessionTooLarge");
-inta_statisticCookieList.push("_hjSessionRejected");
-inta_statisticCookieList.push("_hjSessionResumed");
-inta_statisticCookieList.push("_hjLocalStorageTest");
-inta_statisticCookieList.push("_hjIncludedInPageviewSample");
-inta_statisticCookieList.push("_hjIncludedInSessionSample");
-inta_statisticCookieList.push("_hjAbsoluteSessionInProgress");
-inta_statisticCookieList.push("_hjTLDTest");
-inta_statisticCookieList.push("_hjRecordingEnabled");
-inta_statisticCookieList.push("_hjRecordingLastActivity");
-inta_statisticCookieList.push("_hjClosedSurveyInvites");
-inta_statisticCookieList.push("_hjDonePolls");
-inta_statisticCookieList.push("_hjMinimizedPolls");
-inta_statisticCookieList.push("_hjShownFeedbackMessage");
+inta_statisticCookieList.push({
+    cookie: "_clck",
+    vendor: "Microsoft Inc",
+    purpose: "Persists the Clarity User ID and preferences, unique to that site, on the browser. This ensures that behavior in subsequent visits to the same site will be attributed to the same user ID.	"
+})
+inta_statisticCookieList.push({
+    cookie: "_clsk",
+    vendor: "Microsoft Inc",
+    purpose: "Connects multiple page views by a user into a single Clarity session recording."
+})
+inta_statisticCookieList.push({
+    cookie: "CLID",
+    vendor: "Microsoft Inc",
+    purpose: "Identifies the first-time Clarity saw this user on any site using Clarity."
+})
+inta_statisticCookieList.push({
+    cookie: "ANONCHK",
+    vendor: "Microsoft Inc",
+    purpose: "Indicates whether MUID is transferred to ANID, a cookie used for advertising. Clarity doesn't use ANID and so this is always set to 0."
+})
+inta_statisticCookieList.push({
+    cookie: "MR",
+    vendor: "Microsoft Inc",
+    purpose: "Indicates whether to refresh MUID."
+})
+inta_statisticCookieList.push({
+    cookie: "MUID",
+    vendor: "Microsoft Inc",
+    purpose: "Identifies unique web browsers visiting Microsoft sites. These cookies are used for advertising, site analytics, and other operational purposes."
+})
+inta_statisticCookieList.push({
+    cookie: "SM",
+    vendor: "Microsoft Inc",
+    purpose: "Used in synchronizing the MUID across Microsoft domains."
+})
+inta_statisticCookieList.push({
+    cookie: "_ga",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "__gp",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gid",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_dc_gtm_",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gaexp_rc",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gaexp",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gat",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_opt_expid",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "FPAU",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "FPGCLDC",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gcl_dc",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gcl_au",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "FCNEC",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "FPLC",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "FPGCLAW",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "FPGCLGB",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gcl_aw",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gac_gb_",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gcl_gb",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "__utma",
+    vendor: "Google Inc",
+    purpose: "to Store the calculation of days and time to purchase."
+})
+inta_statisticCookieList.push({
+    cookie: "__utmb",
+    vendor: "Google Inc",
+    purpose: "to store time of visit."
+})
+inta_statisticCookieList.push({
+    cookie: "__utmc",
+    vendor: "Google Inc",
+    purpose: "to store time of visit."
+})
+inta_statisticCookieList.push({
+    cookie: "__utmt",
+    vendor: "Google Inc",
+    purpose: "to store time of visit."
+})
+inta_statisticCookieList.push({
+    cookie: "__utmz",
+    vendor: "Google Inc",
+    purpose: "to store used keyword and search engine."
+})
+inta_statisticCookieList.push({
+    cookie: "__utmv",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "FPID",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_opt",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "_gcl",
+    vendor: "Google Inc",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjSessionUser_",
+    vendor: "Hotjar Ltd.",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjid",
+    vendor: "Hotjar Ltd.",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjFirstSeen",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjUserAttributesHash",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjCachedUserAttributes",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjViewportId",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjSession_",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjSessionTooLarge",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjSessionRejected",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjSessionResumed",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjLocalStorageTest",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjIncludedInPageviewSample",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjIncludedInSessionSample",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjAbsoluteSessionInProgress",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjTLDTest",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjRecordingEnabled",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjRecordingLastActivity",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjShownFeedbackMessage",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjMinimizedPolls",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjDonePolls",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
+inta_statisticCookieList.push({
+    cookie: "_hjClosedSurveyInvites",
+    vendor: "Hotjar Ltd",
+    purpose: "to provide ad delivery or retargeting."
+})
 
 /* - - - List of Marketing cookies - - - */
 const inta_marketingCookieList = [];
-inta_marketingCookieList.push("_fbp");
-inta_marketingCookieList.push("__gsas");
-inta_marketingCookieList.push("__gpi");
-inta_marketingCookieList.push("li_giant");
-inta_marketingCookieList.push("li_fat_id");
-inta_marketingCookieList.push("__gpi_optout");
-inta_marketingCookieList.push("__gads");
-inta_marketingCookieList.push("GED_PLAYLIST_ACTIVITY");
-inta_marketingCookieList.push("FPAU");
-inta_marketingCookieList.push("FPGCLDC");
-inta_marketingCookieList.push("_gcl_dc");
-inta_marketingCookieList.push("_gcl_gb");
-inta_marketingCookieList.push("_gcl_au");
-inta_marketingCookieList.push("FPGCLAW");
-inta_marketingCookieList.push("FPGCLGB");
-inta_marketingCookieList.push("_gac_gb_");
-inta_marketingCookieList.push("_gac_");
-inta_marketingCookieList.push("_gcl_aw");
-inta_marketingCookieList.push("_gcl");
-inta_marketingCookieList.push("GoogleAdServingTest");
-inta_marketingCookieList.push("_uetvid");
+inta_marketingCookieList.push(
+    {
+        cookie: "_fbp",
+        vendor: "Facebook Inc",
+        purpose: ""
+    }
+);
+inta_marketingCookieList.push({
+    cookie: "__gsas",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "__gpi",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "li_giant",
+    vendor: "LinkedIn Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "li_fat_id",
+    vendor: "LinkedIn Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "__gpi_optout",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "__gads",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "GED_PLAYLIST_ACTIVITY",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "FPAU",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "FPGCLDC",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "_gcl_dc",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "_gcl_gb",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "_gcl_au",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "FPGCLAW",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "FPGCLGB",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "_gac_gb_",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "_gac_",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "_gcl_aw",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "_gcl",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "GoogleAdServingTest",
+    vendor: "Google Inc",
+    purpose: ""
+});
+inta_marketingCookieList.push({
+    cookie: "_uetvid",
+    vendor: "Microsoft Inc",
+    purpose: ""
+});
 
 /* - - - List of functional cookies - - - */
 const inta_functionalCookieList = [];
@@ -223,89 +581,17 @@ if (intaCookieType(int_FunctionalCookies)) {
 }
 /* Cookie name list for statistical cookies */
 if(intaCookieType(int_staticsticCookies)){
-    int__cookiesToKeep.push("_clck");
-    int__cookiesToKeep.push("_clsk");
-    int__cookiesToKeep.push("CLID");
-    int__cookiesToKeep.push("ANONCHK");
-    int__cookiesToKeep.push("MR");
-    int__cookiesToKeep.push("MUID");
-    int__cookiesToKeep.push("SM");
-    int__cookiesToKeep.push("_ga");
-    int__cookiesToKeep.push("__gp");
-    int__cookiesToKeep.push("_gid");
-    int__cookiesToKeep.push("_dc_gtm_");
-    int__cookiesToKeep.push("_gaexp_rc");
-    int__cookiesToKeep.push("_gaexp");
-    int__cookiesToKeep.push("_gat");
-    int__cookiesToKeep.push("_opt_expid");
-    int__cookiesToKeep.push("_clsk");
-    int__cookiesToKeep.push("_uetvid");
-    int__cookiesToKeep.push("FPAU");
-    int__cookiesToKeep.push("FPGCLDC");
-    int__cookiesToKeep.push("_gcl_dc");
-    int__cookiesToKeep.push("_gcl_au");
-    int__cookiesToKeep.push("FCNEC");
-    int__cookiesToKeep.push("FPLC");
-    int__cookiesToKeep.push("FPGCLAW");
-    int__cookiesToKeep.push("FPGCLGB");
-    int__cookiesToKeep.push("_gcl_gb");
-    int__cookiesToKeep.push("_gac_gb_");
-    int__cookiesToKeep.push("_gcl_aw");
-    int__cookiesToKeep.push("__utma");
-    int__cookiesToKeep.push("__utmb");
-    int__cookiesToKeep.push("__utmc");
-    int__cookiesToKeep.push("__utmt");
-    int__cookiesToKeep.push("__utmz");
-    int__cookiesToKeep.push("__utmv");
-    int__cookiesToKeep.push("FPID");
-    int__cookiesToKeep.push("_opt");
-    int__cookiesToKeep.push("_gcl");
-    int__cookiesToKeep.push("_hjSessionUser_");
-    int__cookiesToKeep.push("_hjid");
-    int__cookiesToKeep.push("_hjFirstSeen");
-    int__cookiesToKeep.push("_hjUserAttributesHash");
-    int__cookiesToKeep.push("_hjCachedUserAttributes");
-    int__cookiesToKeep.push("_hjViewportId");
-    int__cookiesToKeep.push("_hjSession_");
-    int__cookiesToKeep.push("_hjSessionTooLarge");
-    int__cookiesToKeep.push("_hjSessionRejected");
-    int__cookiesToKeep.push("_hjSessionResumed");
-    int__cookiesToKeep.push("_hjLocalStorageTest");
-    int__cookiesToKeep.push("_hjIncludedInPageviewSample");
-    int__cookiesToKeep.push("_hjIncludedInSessionSample");
-    int__cookiesToKeep.push("_hjAbsoluteSessionInProgress");
-    int__cookiesToKeep.push("_hjTLDTest");
-    int__cookiesToKeep.push("_hjRecordingEnabled");
-    int__cookiesToKeep.push("_hjRecordingLastActivity");
-    int__cookiesToKeep.push("_hjClosedSurveyInvites");
-    int__cookiesToKeep.push("_hjDonePolls");
-    int__cookiesToKeep.push("_hjMinimizedPolls");
-    int__cookiesToKeep.push("_hjShownFeedbackMessage");
+    let newArray = inta_statisticCookieList.map((cookie) => {
+        return cookie.cookie;
+    });
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 /* Cookie name list for marketing / advertisment cookies */
 if (intaCookieType(int_marketingCookies)) {
-    int__cookiesToKeep.push("_fbp");
-    int__cookiesToKeep.push("__gsas");
-    int__cookiesToKeep.push("__gpi");
-    int__cookiesToKeep.push("li_giant");
-    int__cookiesToKeep.push("li_fat_id");
-    
-    int__cookiesToKeep.push("__gpi_optout");
-    int__cookiesToKeep.push("__gads");
-    int__cookiesToKeep.push("GED_PLAYLIST_ACTIVITY");
-    int__cookiesToKeep.push("FPAU");
-    int__cookiesToKeep.push("FPGCLDC");
-    int__cookiesToKeep.push("_gcl_dc");
-    int__cookiesToKeep.push("_gcl_gb");
-    int__cookiesToKeep.push("_gcl_au");
-    int__cookiesToKeep.push("FPGCLAW");
-    int__cookiesToKeep.push("FPGCLGB");
-    int__cookiesToKeep.push("_gac_gb_");
-    int__cookiesToKeep.push("_gac_");
-    int__cookiesToKeep.push("_gcl_aw");
-    int__cookiesToKeep.push("_gcl");
-    int__cookiesToKeep.push("GoogleAdServingTest");
-    int__cookiesToKeep.push("_uetvid");
+    let newArray = inta_marketingCookieList.map((cookie) => {
+        return cookie.cookie;
+    });
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
 const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.join("|"), "i");
@@ -1530,31 +1816,11 @@ function createCookieSettings() {
                             <table>
                             ${
                                 inta_requiredCookieList.map((cookie) => {
-                                    let purpose = "<br>";
-                                    if(cookie == int_staticsticCookies){
-                                        purpose = `
-                                            Its function is to store users cookie choice regarding statistical cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for statistical purposes or not.
-                                        `
-                                    } else if(cookie == int_marketingCookies){
-                                        purpose = `
-                                        Its function is to store users cookie choice regarding marketing / advertising cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for advertising purposes or not.
-                                        `
-                                    } else if(cookie == int_FunctionalCookies){
-                                        purpose = `
-                                            Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not.
-                                        `
-                                    }else if(cookie == int_hideCookieBannerName){
-
-                                    }else if (cookie == int_cookieName){
-
-                                    }else if(cookie == int_visitorCheck){
-
-                                    }
-
                                     return `
                                         <tr>
-                                            <td>${cookie}</td>
-                                            <td>${purpose}</td>
+                                            <td>${cookie.cookie}</td>
+                                            <td>${cookie.purpose}</td>
+                                            <td>${cookie.vendor}</td>
                                         </tr>
                                         `
                                 }).join(" ")
@@ -1588,9 +1854,11 @@ function createCookieSettings() {
                                 inta_statisticCookieList.map((cookie) => {
                                     return `
                                         <tr>
-                                            <td>${cookie}</td>
-                                            <td></td>
-                                        </tr>`
+                                            <td>${cookie.cookie}</td>
+                                            <td>${cookie.purpose}</td>
+                                            <td>${cookie.vendor}</td>
+                                        </tr>
+                                        `
                                 }).join(" ")
                             }
                             </table>
@@ -1606,9 +1874,11 @@ function createCookieSettings() {
                                 inta_marketingCookieList.map((cookie) => {
                                     return `
                                         <tr>
-                                            <td>${cookie}</td>
-                                            <td></td>
-                                        </tr>`
+                                            <td>${cookie.cookie}</td>
+                                            <td>${cookie.purpose}</td>
+                                            <td>${cookie.vendor}</td>
+                                        </tr>
+                                        `
                                 }).join(" ")
                             }
                             </table>
@@ -1676,31 +1946,11 @@ function createCookieSettings() {
                         <table>
                         ${
                             inta_requiredCookieList.map((cookie) => {
-                                let purpose = "<br>";
-                                if(cookie == int_staticsticCookies){
-                                    purpose = `
-                                        Its function is to store users cookie choice regarding statistical cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for statistical purposes or not.
-                                    `
-                                } else if(cookie == int_marketingCookies){
-                                    purpose = `
-                                    Its function is to store users cookie choice regarding marketing / advertising cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for advertising purposes or not.
-                                    `
-                                } else if(cookie == int_FunctionalCookies){
-                                    purpose = `
-                                        Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not.
-                                    `
-                                }else if(cookie == int_hideCookieBannerName){
-
-                                }else if (cookie == int_cookieName){
-
-                                }else if(cookie == int_visitorCheck){
-
-                                }
-
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td>${purpose}</td>
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
                                     </tr>
                                     `
                             }).join(" ")
@@ -1734,9 +1984,11 @@ function createCookieSettings() {
                             inta_statisticCookieList.map((cookie) => {
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td></td>
-                                    </tr>`
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
+                                    </tr>
+                                    `
                             }).join(" ")
                         }
                         </table>
@@ -1752,9 +2004,11 @@ function createCookieSettings() {
                             inta_marketingCookieList.map((cookie) => {
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td></td>
-                                    </tr>`
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
+                                    </tr>
+                                    `
                             }).join(" ")
                         }
                         </table>
@@ -1823,31 +2077,11 @@ function createCookieSettings() {
                         <table>
                         ${
                             inta_requiredCookieList.map((cookie) => {
-                                let purpose = "<br>";
-                                if(cookie == int_staticsticCookies){
-                                    purpose = `
-                                        Its function is to store users cookie choice regarding statistical cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for statistical purposes or not.
-                                    `
-                                } else if(cookie == int_marketingCookies){
-                                    purpose = `
-                                    Its function is to store users cookie choice regarding marketing / advertising cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for advertising purposes or not.
-                                    `
-                                } else if(cookie == int_FunctionalCookies){
-                                    purpose = `
-                                        Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not.
-                                    `
-                                }else if(cookie == int_hideCookieBannerName){
-
-                                }else if (cookie == int_cookieName){
-
-                                }else if(cookie == int_visitorCheck){
-
-                                }
-
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td>${purpose}</td>
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
                                     </tr>
                                     `
                             }).join(" ")
@@ -1881,9 +2115,11 @@ function createCookieSettings() {
                             inta_statisticCookieList.map((cookie) => {
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td></td>
-                                    </tr>`
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
+                                    </tr>
+                                    `
                             }).join(" ")
                         }
                         </table>
@@ -1899,9 +2135,11 @@ function createCookieSettings() {
                             inta_marketingCookieList.map((cookie) => {
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td></td>
-                                    </tr>`
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
+                                    </tr>
+                                    `
                             }).join(" ")
                         }
                         </table>
@@ -1972,31 +2210,11 @@ function createCookieSettings() {
                         <table>
                         ${
                             inta_requiredCookieList.map((cookie) => {
-                                let purpose = "<br>";
-                                if(cookie == int_staticsticCookies){
-                                    purpose = `
-                                        Its function is to store users cookie choice regarding statistical cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for statistical purposes or not.
-                                    `
-                                } else if(cookie == int_marketingCookies){
-                                    purpose = `
-                                    Its function is to store users cookie choice regarding marketing / advertising cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for advertising purposes or not.
-                                    `
-                                } else if(cookie == int_FunctionalCookies){
-                                    purpose = `
-                                        Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not.
-                                    `
-                                }else if(cookie == int_hideCookieBannerName){
-
-                                }else if (cookie == int_cookieName){
-
-                                }else if(cookie == int_visitorCheck){
-
-                                }
-
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td>${purpose}</td>
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
                                     </tr>
                                     `
                             }).join(" ")
@@ -2028,9 +2246,11 @@ function createCookieSettings() {
                             inta_statisticCookieList.map((cookie) => {
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td></td>
-                                    </tr>`
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
+                                    </tr>
+                                    `
                             }).join(" ")
                         }
                         </table>
@@ -2046,9 +2266,11 @@ function createCookieSettings() {
                             inta_marketingCookieList.map((cookie) => {
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td></td>
-                                    </tr>`
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
+                                    </tr>
+                                    `
                             }).join(" ")
                         }
                         </table>
