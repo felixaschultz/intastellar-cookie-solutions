@@ -126,6 +126,7 @@ if (intaCookieType(int_FunctionalCookies)) {
     int__cookiesToKeep.push("hl");
     int__cookiesToKeep.push("locale");
     int__cookiesToKeep.push("FCCDCF");
+    int__cookiesToKeep.push("NID");
     int__cookiesToKeep.push("AMP_TOKEN");
 }
 
@@ -172,6 +173,9 @@ if (intaCookieType(int_marketingCookies)) {
     int__cookiesToKeep.push("_fbp");
     int__cookiesToKeep.push("__gsas");
     int__cookiesToKeep.push("__gpi");
+    int__cookiesToKeep.push("li_giant");
+    int__cookiesToKeep.push("li_fat_id");
+    
     int__cookiesToKeep.push("__gpi_optout");
     int__cookiesToKeep.push("__gads");
     int__cookiesToKeep.push("GED_PLAYLIST_ACTIVITY");
