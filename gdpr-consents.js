@@ -118,6 +118,13 @@ function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
     return (getCookie(type) === "true")
 }
+/* if (intaCookieType(int_FunctionalCookies) != false || intaCookieType(int_staticsticCookies) != false || intaCookieType(int_marketingCookies) != false) {
+    const allCookies = document.cookie.split(";").reduce((cookies, cookie) => {
+        const [name, val] = cookie.split("=").map(c => {c.trim()})
+
+        int__cookiesToKeep.push(name);
+    })
+} */
 
 if (intaCookieType(int_FunctionalCookies)) {
     int__cookiesToKeep.push("region");
