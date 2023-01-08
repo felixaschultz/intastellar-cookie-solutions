@@ -91,7 +91,7 @@ const intCookieDomainWithWWW = (function () {
         d = p.slice(-1 - ++i).join(".");
         d = d;
 
-    return  "domain=www."+d +";";
+    return  "domain=www"+d +";";
 })();
 
 const allowAllCookieName = "__all__cookies";
