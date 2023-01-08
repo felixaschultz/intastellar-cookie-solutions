@@ -542,16 +542,56 @@ inta_marketingCookieList.push({
 
 /* - - - List of functional cookies - - - */
 const inta_functionalCookieList = [];
-inta_functionalCookieList.push("region");
-inta_functionalCookieList.push("language");
-inta_functionalCookieList.push("lang");
-inta_functionalCookieList.push("hl");
-inta_functionalCookieList.push("locale");
-inta_functionalCookieList.push("FCCDCF");
-inta_functionalCookieList.push("NID");
-inta_functionalCookieList.push("AMP_TOKEN");
-inta_functionalCookieList.push("__stripe_sid");
-inta_functionalCookieList.push("__stripe_mid");
+inta_functionalCookieList.push({
+    cookie: "region",
+    vendor: "Website",
+    purpose: ""
+})
+inta_functionalCookieList.push({
+    cookie: "language",
+    vendor: "Website",
+    purpose: ""
+})
+inta_functionalCookieList.push({
+    cookie: "lang",
+    vendor: "Website",
+    purpose: ""
+})
+inta_functionalCookieList.push({
+    cookie: "hl",
+    vendor: "Website",
+    purpose: ""
+})
+inta_functionalCookieList.push({
+    cookie: "locale",
+    vendor: "Website",
+    purpose: ""
+})
+inta_functionalCookieList.push({
+    cookie: "FCCDCF",
+    vendor: "Goolge Inc",
+    purpose: ""
+})
+inta_functionalCookieList.push({
+    cookie: "NID",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_functionalCookieList.push({
+    cookie: "AMP_TOKEN",
+    vendor: "Google Inc",
+    purpose: ""
+})
+inta_functionalCookieList.push({
+    cookie: "__stripe_sid",
+    vendor: "Stripe",
+    purpose: "Fraud prevention"
+})
+inta_functionalCookieList.push({
+    cookie: "__stripe_mid",
+    vendor: "Stripe",
+    purpose: "Fraud prevention"
+})
 
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
@@ -568,16 +608,10 @@ function intaCookieType(type) {
 
 /* Cookie name list for functional cookies */
 if (intaCookieType(int_FunctionalCookies)) {
-    int__cookiesToKeep.push("region");
-    int__cookiesToKeep.push("language");
-    int__cookiesToKeep.push("lang");
-    int__cookiesToKeep.push("hl");
-    int__cookiesToKeep.push("locale");
-    int__cookiesToKeep.push("FCCDCF");
-    int__cookiesToKeep.push("NID");
-    int__cookiesToKeep.push("AMP_TOKEN");
-    int__cookiesToKeep.push("__stripe_sid");
-    int__cookiesToKeep.push("__stripe_mid");
+    let newArray = inta_functionalCookieList.map((cookie) => {
+        return cookie.cookie;
+    });
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 /* Cookie name list for statistical cookies */
 if(intaCookieType(int_staticsticCookies)){
@@ -1837,9 +1871,11 @@ function createCookieSettings() {
                                 inta_functionalCookieList.map((cookie) => {
                                     return `
                                         <tr>
-                                            <td>${cookie}</td>
-                                            <td></td>
-                                        </tr>`
+                                            <td>${cookie.cookie}</td>
+                                            <td>${cookie.purpose}</td>
+                                            <td>${cookie.vendor}</td>
+                                        </tr>
+                                        `
                                 }).join(" ")
                             }
                             </table>  
@@ -1967,9 +2003,11 @@ function createCookieSettings() {
                             inta_functionalCookieList.map((cookie) => {
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td></td>
-                                    </tr>`
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
+                                    </tr>
+                                    `
                             }).join(" ")
                         }
                         </table>
@@ -2098,9 +2136,11 @@ function createCookieSettings() {
                             inta_functionalCookieList.map((cookie) => {
                                 return `
                                     <tr>
-                                        <td>${cookie}</td>
-                                        <td></td>
-                                    </tr>`
+                                        <td>${cookie.cookie}</td>
+                                        <td>${cookie.purpose}</td>
+                                        <td>${cookie.vendor}</td>
+                                    </tr>
+                                    `
                             }).join(" ")
                         }
                         </table>
@@ -2230,9 +2270,11 @@ function createCookieSettings() {
                         inta_functionalCookieList.map((cookie) => {
                             return `
                                 <tr>
-                                    <td>${cookie}</td>
-                                    <td></td>
-                                </tr>`
+                                    <td>${cookie.cookie}</td>
+                                    <td>${cookie.purpose}</td>
+                                    <td>${cookie.vendor}</td>
+                                </tr>
+                                `
                         }).join(" ")
                     }
                     </table>
