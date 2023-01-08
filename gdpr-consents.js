@@ -81,21 +81,6 @@ const intHead = document.querySelector("head");
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 
 /* List of cookies that should not be deleted */
-const int__cookiesToKeep = [
-    "PHPSESSID",
-    "SCJP",
-    "SCJD",
-    "SCWCD",
-    "SCBCD",
-    "SCDJWS",
-    int_FunctionalCookies,
-    int_staticsticCookies,
-    int_marketingCookies,
-    int_cookieName,
-    int_hideCookieBannerName,
-    int_visitorCheck
-];
-
 const inta_requiredCookieList = [
     "PHPSESSID",
     "SCJP",
@@ -110,6 +95,7 @@ const inta_requiredCookieList = [
     int_hideCookieBannerName,
     int_visitorCheck
 ];
+const int__cookiesToKeep = inta_requiredCookieList.slice();
 
 /* - - - List of Analytics / Statistics cookie names - - - */
 const inta_statisticCookieList = [];
@@ -295,7 +281,6 @@ if(intaCookieType(int_staticsticCookies)){
     int__cookiesToKeep.push("_hjDonePolls");
     int__cookiesToKeep.push("_hjMinimizedPolls");
     int__cookiesToKeep.push("_hjShownFeedbackMessage");
-    
 }
 /* Cookie name list for marketing / advertisment cookies */
 if (intaCookieType(int_marketingCookies)) {
