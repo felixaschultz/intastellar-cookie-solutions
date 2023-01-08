@@ -1846,6 +1846,11 @@ function createCookieSettings() {
                         <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
                         <article class="intaCookieListOverview">
                             <table>
+                                <tr>
+                                    <th>Navn</th>
+                                    <th>Formål</th>
+                                    <th>Udbyder</th>
+                                </tr>
                             ${
                                 inta_requiredCookieList.map((cookie) => {
                                     return `
@@ -1865,6 +1870,11 @@ function createCookieSettings() {
                         <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
                         <article class="intaCookieListOverview">
                             <table>
+                                <tr>
+                                    <th>Navn</th>
+                                    <th>Formål</th>
+                                    <th>Udbyder</th>
+                                </tr>
                             ${
                                 inta_functionalCookieList.map((cookie) => {
                                     return `
@@ -1884,6 +1894,11 @@ function createCookieSettings() {
                         <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p>
                         <article class="intaCookieListOverview">
                             <table>
+                                <tr>
+                                    <th>Navn</th>
+                                    <th>Formål</th>
+                                    <th>Udbyder</th>
+                                </tr>
                             ${
                                 inta_statisticCookieList.map((cookie) => {
                                     return `
@@ -1904,6 +1919,11 @@ function createCookieSettings() {
                         <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
                         <article class="intaCookieListOverview">
                             <table>
+                                <tr>
+                                    <th>Navn</th>
+                                    <th>Formål</th>
+                                    <th>Udbyder</th>
+                                </tr>
                             ${
                                 inta_marketingCookieList.map((cookie) => {
                                     return `
@@ -1978,6 +1998,11 @@ function createCookieSettings() {
                     <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Zweck</th>
+                                <th>Anbieter</th>
+                            </tr>
                         ${
                             inta_requiredCookieList.map((cookie) => {
                                 return `
@@ -1997,6 +2022,11 @@ function createCookieSettings() {
                     <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Zweck</th>
+                                <th>Anbieter</th>
+                            </tr>
                         ${
                             inta_functionalCookieList.map((cookie) => {
                                 return `
@@ -2016,6 +2046,11 @@ function createCookieSettings() {
                     <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Zweck</th>
+                                <th>Anbieter</th>
+                            </tr>
                         ${
                             inta_statisticCookieList.map((cookie) => {
                                 return `
@@ -2036,6 +2071,11 @@ function createCookieSettings() {
                     <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Zweck</th>
+                                <th>Anbieter</th>
+                            </tr>
                         ${
                             inta_marketingCookieList.map((cookie) => {
                                 return `
@@ -2111,6 +2151,11 @@ function createCookieSettings() {
                     <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Purpose</th>
+                                <th>Vendor</th>
+                            </tr>
                         ${
                             inta_requiredCookieList.map((cookie) => {
                                 return `
@@ -2130,6 +2175,11 @@ function createCookieSettings() {
                     <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Purpose</th>
+                                <th>Vendor</th>
+                            </tr>
                         ${
                             inta_functionalCookieList.map((cookie) => {
                                 return `
@@ -2149,6 +2199,11 @@ function createCookieSettings() {
                     <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Purpose</th>
+                                <th>Vendor</th>
+                            </tr>
                         ${
                             inta_statisticCookieList.map((cookie) => {
                                 return `
@@ -2169,6 +2224,11 @@ function createCookieSettings() {
                     <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Purpose</th>
+                                <th>Vendor</th>
+                            </tr>
                         ${
                             inta_marketingCookieList.map((cookie) => {
                                 return `
@@ -2246,6 +2306,11 @@ function createCookieSettings() {
                     <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Navn</th>
+                                <th>Formål</th>
+                                <th>Udbyder</th>
+                            </tr>
                         ${
                             inta_requiredCookieList.map((cookie) => {
                                 return `
@@ -2264,6 +2329,11 @@ function createCookieSettings() {
                     <h3>Funktionel / Præference <i class="intastellar__arrow"></i></h3>
                     <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
                     <table>
+                        <tr>
+                            <th>Navn</th>
+                            <th>Formål</th>
+                            <th>Udbyder</th>
+                        </tr>
                     ${
                         inta_functionalCookieList.map((cookie) => {
                             return `
@@ -2282,6 +2352,11 @@ function createCookieSettings() {
                     <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Navn</th>
+                                <th>Formål</th>
+                                <th>Udbyder</th>
+                            </tr>
                         ${
                             inta_statisticCookieList.map((cookie) => {
                                 return `
@@ -2302,6 +2377,11 @@ function createCookieSettings() {
                     <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
                     <article class="intaCookieListOverview">
                         <table>
+                            <tr>
+                                <th>Navn</th>
+                                <th>Formål</th>
+                                <th>Udbyder</th>
+                            </tr>
                         ${
                             inta_marketingCookieList.map((cookie) => {
                                 return `
