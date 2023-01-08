@@ -167,6 +167,13 @@ if(intaCookieType(int_staticsticCookies)){
     int__cookiesToKeep.push("FPID");
     int__cookiesToKeep.push("_opt");
     int__cookiesToKeep.push("_gcl");
+    int__cookiesToKeep.push("_hjSessionUser_");
+    int_cookiesToKeep.push("_hjid");
+    int__cookiesToKeep.push("_hjFirstSeen");
+    int__cookiesToKeep.push("_hjUserAttributesHash");
+    int__cookiesToKeep.push("_hjCachedUserAttributes");
+    int__cookiesToKeep.push("_hjViewportId");
+    
 }
 
 if (intaCookieType(int_marketingCookies)) {
