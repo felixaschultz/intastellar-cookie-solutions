@@ -480,6 +480,7 @@ function checkCookieStatus() {
                 "([\-\.]klarna+)",
                 "([\-\.]paypal+)",
                 "([\-\.]usersnap+)",
+                "([\-\.]zoom+)",
                 "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
             ] 
         }
