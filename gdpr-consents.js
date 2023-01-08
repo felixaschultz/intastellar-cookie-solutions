@@ -118,6 +118,101 @@ const int__cookiesToKeep = [
     int_visitorCheck
 ];
 
+/* - - - List of Analytics / Statistics cookie names - - - */
+const inta_statisticCookieList = [];
+inta_statisticCookieList.push("_clck");
+inta_statisticCookieList.push("_clsk");
+inta_statisticCookieList.push("CLID");
+inta_statisticCookieList.push("ANONCHK");
+inta_statisticCookieList.push("MR");
+inta_statisticCookieList.push("MUID");
+inta_statisticCookieList.push("SM");
+inta_statisticCookieList.push("_ga");
+inta_statisticCookieList.push("__gp");
+inta_statisticCookieList.push("_gid");
+inta_statisticCookieList.push("_dc_gtm_");
+inta_statisticCookieList.push("_gaexp_rc");
+inta_statisticCookieList.push("_gaexp");
+inta_statisticCookieList.push("_gat");
+inta_statisticCookieList.push("_opt_expid");
+inta_statisticCookieList.push("_clsk");
+inta_statisticCookieList.push("_uetvid");
+inta_statisticCookieList.push("FPAU");
+inta_statisticCookieList.push("FPGCLDC");
+inta_statisticCookieList.push("_gcl_dc");
+inta_statisticCookieList.push("_gcl_au");
+inta_statisticCookieList.push("FCNEC");
+inta_statisticCookieList.push("FPLC");
+inta_statisticCookieList.push("FPGCLAW");
+inta_statisticCookieList.push("FPGCLGB");
+inta_statisticCookieList.push("_gcl_gb");
+inta_statisticCookieList.push("_gac_gb_");
+inta_statisticCookieList.push("_gcl_aw");
+inta_statisticCookieList.push("__utma");
+inta_statisticCookieList.push("__utmb");
+inta_statisticCookieList.push("__utmc");
+inta_statisticCookieList.push("__utmt");
+inta_statisticCookieList.push("__utmz");
+inta_statisticCookieList.push("__utmv");
+inta_statisticCookieList.push("FPID");
+inta_statisticCookieList.push("_opt");
+inta_statisticCookieList.push("_gcl");
+inta_statisticCookieList.push("_hjSessionUser_");
+inta_statisticCookieList.push("_hjid");
+inta_statisticCookieList.push("_hjFirstSeen");
+inta_statisticCookieList.push("_hjUserAttributesHash");
+inta_statisticCookieList.push("_hjCachedUserAttributes");
+inta_statisticCookieList.push("_hjViewportId");
+inta_statisticCookieList.push("_hjSession_");
+inta_statisticCookieList.push("_hjSessionTooLarge");
+inta_statisticCookieList.push("_hjSessionRejected");
+inta_statisticCookieList.push("_hjSessionResumed");
+inta_statisticCookieList.push("_hjLocalStorageTest");
+inta_statisticCookieList.push("_hjIncludedInPageviewSample");
+inta_statisticCookieList.push("_hjIncludedInSessionSample");
+inta_statisticCookieList.push("_hjAbsoluteSessionInProgress");
+inta_statisticCookieList.push("_hjTLDTest");
+inta_statisticCookieList.push("_hjRecordingEnabled");
+inta_statisticCookieList.push("_hjRecordingLastActivity");
+inta_statisticCookieList.push("_hjClosedSurveyInvites");
+inta_statisticCookieList.push("_hjDonePolls");
+inta_statisticCookieList.push("_hjMinimizedPolls");
+inta_statisticCookieList.push("_hjShownFeedbackMessage");
+
+/* - - - List of Marketing cookies - - - */
+const inta_marketingCookieList = [];
+inta_marketingCookieList.push("_fbp");
+inta_marketingCookieList.push("__gsas");
+inta_marketingCookieList.push("__gpi");
+inta_marketingCookieList.push("li_giant");
+inta_marketingCookieList.push("li_fat_id");
+inta_marketingCookieList.push("__gpi_optout");
+inta_marketingCookieList.push("__gads");
+inta_marketingCookieList.push("GED_PLAYLIST_ACTIVITY");
+inta_marketingCookieList.push("FPAU");
+inta_marketingCookieList.push("FPGCLDC");
+inta_marketingCookieList.push("_gcl_dc");
+inta_marketingCookieList.push("_gcl_gb");
+inta_marketingCookieList.push("_gcl_au");
+inta_marketingCookieList.push("FPGCLAW");
+inta_marketingCookieList.push("FPGCLGB");
+inta_marketingCookieList.push("_gac_gb_");
+inta_marketingCookieList.push("_gac_");
+inta_marketingCookieList.push("_gcl_aw");
+inta_marketingCookieList.push("_gcl");
+inta_marketingCookieList.push("GoogleAdServingTest");
+inta_marketingCookieList.push("_uetvid");
+
+/* - - - List of functional cookies - - - */
+const inta_functionalCookieList = [];
+inta_functionalCookieList.push("region");
+inta_functionalCookieList.push("language");
+inta_functionalCookieList.push("lang");
+inta_functionalCookieList.push("hl");
+inta_functionalCookieList.push("locale");
+inta_functionalCookieList.push("FCCDCF");
+inta_functionalCookieList.push("NID");
+inta_functionalCookieList.push("AMP_TOKEN");
 
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
@@ -1452,16 +1547,44 @@ function createCookieSettings() {
                     </section>
                     <section>
                         <h3>Funktionel / Præference</h3>
-                        <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>  
+                        <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
+                        <h4>Potentielle cookies:</h4>
+                        <ul>
+                        ${
+                            inta_functionalCookieList.map((cookie) => {
+                                return `<li>${cookie}</li>`
+                            }).join(" ")
+                        }
+                        </ul>                   
                     </section>
                     <section>
                         <h3>Statistik</h3>
-                        <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
+                        <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p>
+                        <h4>Potentielle cookies:</h4>
+                        <ul>
+                        ${
+                            inta_statisticCookieList.map((cookie) => {
+                                return `
+                                    <li>${cookie}</li>
+                                `
+                            }).join(" ")
+                        }
+                        </ul>
                     </section>
                     <section>
                         <h3>Marketing</h3>
                         <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
                         <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
+                        <h4>Potentielle cookies:</h4>
+                        <ul>
+                        ${
+                            inta_marketingCookieList.map((cookie) => {
+                                return `
+                                    <li>${cookie}</li>
+                                `
+                            }).join(" ")
+                        }
+                        </ul>
                     </section>
                 </article>
             `;
@@ -1525,15 +1648,45 @@ function createCookieSettings() {
                 <section>
                     <h3>Funktionel / Präferenz</h3>
                     <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
+                    <h4>Potentielle cookies:</h4>
+                    <ul>
+                    ${
+                        inta_functionalCookieList.map((cookie) => {
+                            return `
+                                <li>${cookie}</li>
+                            `
+                        }).join(" ")
+                    }
+                    </ul>
                 </section>
                 <section>
                     <h3>Statistik</h3>
                     <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
+                    <h4>Potentielle cookies:</h4>
+                    <ul>
+                    ${
+                        inta_statisticCookieList.map((cookie) => {
+                            return `
+                                <li>${cookie}</li>
+                            `
+                        }).join(" ")
+                    }
+                    </ul>
                 </section>
                 <section>
                     <h3>Werbung</h3>
                     <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
                     <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
+                    <h4>Potentielle cookies:</h4>
+                    <ul>
+                    ${
+                        inta_marketingCookieList.map((cookie) => {
+                            return `
+                                <li>${cookie}</li>
+                            `
+                        }).join(" ")
+                    }
+                    </ul>
                 </section>
             </article>
         `;
@@ -1598,15 +1751,45 @@ function createCookieSettings() {
                 <section>
                     <h3>Functional / Preference</h3>
                     <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
+                    <h4>Potential cookies:</h4>
+                    <ul>
+                    ${
+                        inta_functionalCookieList.map((cookie) => {
+                            return `
+                                <li>${cookie}</li>
+                            `
+                        }).join(" ")
+                    }
+                    </ul>
                 </section>
                 <section>
                     <h3>Statics</h3>
                     <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
+                    <h4>Potential cookies:</h4>
+                    <ul>
+                    ${
+                        inta_statisticCookieList.map((cookie) => {
+                            return `
+                                <li>${cookie}</li>
+                            `
+                        }).join(" ")
+                    }
+                    </ul>
                 </section>
                 <section>
                     <h3>Advertisement</h3>
                     <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
                     <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
+                    <h4>Potential cookies:</h4>
+                    <ul>
+                    ${
+                        inta_marketingCookieList.map((cookie) => {
+                            return `
+                                <li>${cookie}</li>
+                            `
+                        }).join(" ")
+                    }
+                    </ul>
                 </section>
             </article>
         `;
@@ -1677,11 +1860,29 @@ function createCookieSettings() {
                 <section>
                     <h3>Statistik</h3>
                     <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
+                    <ul>
+                    ${
+                        inta_statisticCookieList.map((cookie) => {
+                            return `
+                                <li>${cookie}</li>
+                            `
+                        })
+                    }
+                    </ul>
                 </section>
                 <section>
                     <h3>Marketing</h3>
                     <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
                     <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
+                    <ul>
+                    ${
+                        inta_marketingCookieList.map((cookie) => {
+                            return `
+                                <li>${cookie}</li>
+                            `
+                        })
+                    }
+                    </ul>
                 </section>
             </article>
         `;
