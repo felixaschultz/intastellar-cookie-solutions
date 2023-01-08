@@ -88,6 +88,8 @@ const int__cookiesToKeep = [
     "SCWCD",
     "SCBCD",
     "SCDJWS",
+    "__stripe_sid",
+    "__stripe_mid",
     int_FunctionalCookies,
     int_staticsticCookies,
     int_marketingCookies,
@@ -191,6 +193,8 @@ inta_functionalCookieList.push("locale");
 inta_functionalCookieList.push("FCCDCF");
 inta_functionalCookieList.push("NID");
 inta_functionalCookieList.push("AMP_TOKEN");
+inta_functionalCookieList.push("__stripe_sid");
+inta_functionalCookieList.push("__stripe_mid");
 
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
@@ -215,6 +219,8 @@ if (intaCookieType(int_FunctionalCookies)) {
     int__cookiesToKeep.push("FCCDCF");
     int__cookiesToKeep.push("NID");
     int__cookiesToKeep.push("AMP_TOKEN");
+    int__cookiesToKeep.push("__stripe_sid");
+    int__cookiesToKeep.push("__stripe_mid");
 }
 /* Cookie name list for statistical cookies */
 if(intaCookieType(int_staticsticCookies)){
@@ -1521,7 +1527,11 @@ function createCookieSettings() {
                     <section class="required">
                         <h3>Nødvendige</h3>
                         <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
-                        <div class="cookiesList"></div>
+                        ${
+                            int__cookiesToKeep.map((cookie) => {
+                                return `<li>${cookie}</li>`
+                            }).join(" ")
+                        }
                     </section>
                     <section>
                         <h3>Funktionel / Præference</h3>
@@ -1622,6 +1632,11 @@ function createCookieSettings() {
                 <section class="required">
                     <h3>Erforderliche</h3>
                     <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
+                    ${
+                        int__cookiesToKeep.map((cookie) => {
+                            return `<li>${cookie}</li>`
+                        }).join(" ")
+                    }
                 </section>
                 <section>
                     <h3>Funktionel / Präferenz</h3>
@@ -1725,6 +1740,11 @@ function createCookieSettings() {
                 <section class="required">
                     <h3>Strictly necessary</h3>
                     <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
+                    ${
+                        int__cookiesToKeep.map((cookie) => {
+                            return `<li>${cookie}</li>`
+                        }).join(" ")
+                    }
                 </section>
                 <section>
                     <h3>Functional / Preference</h3>
@@ -1830,6 +1850,11 @@ function createCookieSettings() {
                 <section class="required">
                     <h3>Nødvendige</h3>
                     <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
+                    ${
+                        int__cookiesToKeep.map((cookie) => {
+                            return `<li>${cookie}</li>`
+                        }).join(" ")
+                    }
                 </section>
                 <section>
                     <h3>Funktionel / Præference</h3>
