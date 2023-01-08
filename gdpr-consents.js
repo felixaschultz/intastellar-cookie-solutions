@@ -102,8 +102,14 @@ const intHead = document.querySelector("head");
 
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 
+/* List of cookies that should not be deleted */
 const int__cookiesToKeep = [
     "PHPSESSID",
+    "SCJP",
+    "SCJD",
+    "SCWCD",
+    "SCBCD",
+    "SCDJWS",
     int_FunctionalCookies,
     int_staticsticCookies,
     int_marketingCookies,
@@ -126,6 +132,7 @@ function intaCookieType(type) {
     })
 } */
 
+/* Cookie name list for functional cookies */
 if (intaCookieType(int_FunctionalCookies)) {
     int__cookiesToKeep.push("region");
     int__cookiesToKeep.push("language");
@@ -136,7 +143,7 @@ if (intaCookieType(int_FunctionalCookies)) {
     int__cookiesToKeep.push("NID");
     int__cookiesToKeep.push("AMP_TOKEN");
 }
-
+/* Cookie name list for statistical cookies */
 if(intaCookieType(int_staticsticCookies)){
     int__cookiesToKeep.push("_clck");
     int__cookiesToKeep.push("_clsk");
@@ -152,6 +159,7 @@ if(intaCookieType(int_staticsticCookies)){
     int__cookiesToKeep.push("_gaexp_rc");
     int__cookiesToKeep.push("_gaexp");
     int__cookiesToKeep.push("_gat");
+    int__cookiesToKeep.push("_opt_expid");
     int__cookiesToKeep.push("_clsk");
     int__cookiesToKeep.push("_uetvid");
     int__cookiesToKeep.push("FPAU");
@@ -175,14 +183,29 @@ if(intaCookieType(int_staticsticCookies)){
     int__cookiesToKeep.push("_opt");
     int__cookiesToKeep.push("_gcl");
     int__cookiesToKeep.push("_hjSessionUser_");
-    int_cookiesToKeep.push("_hjid");
+    int__cookiesToKeep.push("_hjid");
     int__cookiesToKeep.push("_hjFirstSeen");
     int__cookiesToKeep.push("_hjUserAttributesHash");
     int__cookiesToKeep.push("_hjCachedUserAttributes");
     int__cookiesToKeep.push("_hjViewportId");
+    int__cookiesToKeep.push("_hjSession_");
+    int__cookiesToKeep.push("_hjSessionTooLarge");
+    int__cookiesToKeep.push("_hjSessionRejected");
+    int__cookiesToKeep.push("_hjSessionResumed");
+    int__cookiesToKeep.push("_hjLocalStorageTest");
+    int__cookiesToKeep.push("_hjIncludedInPageviewSample");
+    int__cookiesToKeep.push("_hjIncludedInSessionSample");
+    int__cookiesToKeep.push("_hjAbsoluteSessionInProgress");
+    int__cookiesToKeep.push("_hjTLDTest");
+    int__cookiesToKeep.push("_hjRecordingEnabled");
+    int__cookiesToKeep.push("_hjRecordingLastActivity");
+    int__cookiesToKeep.push("_hjClosedSurveyInvites");
+    int__cookiesToKeep.push("_hjDonePolls");
+    int__cookiesToKeep.push("_hjMinimizedPolls");
+    int__cookiesToKeep.push("_hjShownFeedbackMessage");
     
 }
-
+/* Cookie name list for marketing / advertisment cookies */
 if (intaCookieType(int_marketingCookies)) {
     int__cookiesToKeep.push("_fbp");
     int__cookiesToKeep.push("__gsas");
