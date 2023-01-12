@@ -699,6 +699,8 @@ function checkCookieStatus() {
                 "([\-\.]webtrendslive)",
                 "([\-\.]amplitude)",
                 "([\-\.]adobe)",
+                "([\-\.]mxpnl)",
+                "([\-\.]mixpanel)",
                 "([\-\.]gstatics+)",
                 "([\-\.]adobedtm)",
                 "([\-\.]adobedc)",
