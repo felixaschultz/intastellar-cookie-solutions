@@ -165,6 +165,26 @@ inta_statisticCookieList.push({
     purpose: "Identifies the first-time Clarity saw this user on any site using Clarity."
 })
 inta_statisticCookieList.push({
+    cookie: "mp_*_mixpanel",
+    vendor: "Mixpanel",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "mixpanel_distinct_id",
+    vendor: "Mixpanel",
+    purpose: "To store a unique user ID, store account details."
+})
+inta_statisticCookieList.push({
+    cookie: "*_mixpanel",
+    vendor: "Mixpanel",
+    purpose: ""
+})
+inta_statisticCookieList.push({
+    cookie: "mixpanel",
+    vendor: "Mixpanel",
+    purpose: ""
+})
+inta_statisticCookieList.push({
     cookie: "ANONCHK",
     vendor: "Microsoft Inc",
     purpose: "Indicates whether MUID is transferred to ANID, a cookie used for advertising. Clarity doesn't use ANID and so this is always set to 0."
