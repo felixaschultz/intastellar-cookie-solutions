@@ -19,6 +19,7 @@ const button__acceptAll = document.querySelector(".intastellarCookieBanner__acce
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let scriptTypelang = {};
 let settingsMessage;
+const foundScripts = window.foundScripts = [];
 
 const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
 
@@ -1145,7 +1146,10 @@ function checkCookieStatus() {
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.src;
-
+                        if (src.indexOf(window.location.hostname) == -1){
+							window.foundScripts.push(src);
+                        }
+                            
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
