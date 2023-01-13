@@ -699,6 +699,7 @@ function checkCookieStatus() {
             /* Analytics Scripts which are beeing blocked */
             type: "statics",
             scripts: [
+                "(mixpanel)",
                 "([\-\.]google-analytics+)",
                 "([\-\.]googletagmanager+)",
                 "([\-\.]googleoptimize+)",
@@ -739,7 +740,7 @@ function checkCookieStatus() {
             /* Marketing Scripts which are beeing blocked */
             type: "marketing",
             scripts: [
-                "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot)",
+                "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
                 "([\-\.]googlesyndication+)",
                 "([\-\.]googletagservices+)",
                 "([\-\.]twitter+)",
