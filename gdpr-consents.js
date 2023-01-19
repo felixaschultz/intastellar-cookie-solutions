@@ -86,7 +86,7 @@ const inta_requiredCookieList = [
     {
         cookie: "PHPSESSID",
         vendor: window.location.host,
-        purpose: ""
+        purpose: "This cookie is native to PHP applications. The cookie is used to store and identify a users' unique session ID for the purpose of managing user session on the website. The cookie is a session cookies and is deleted when all the browser windows are closed."
     },
     {
         cookie: "SCJP",
@@ -175,11 +175,11 @@ inta_statisticCookieList.push({
     vendor: "Mixpanel",
     purpose: "To store a unique user ID, store account details."
 })
-inta_statisticCookieList.push({
+/* inta_statisticCookieList.push({
     cookie: "*_mixpanel",
     vendor: "Mixpanel",
     purpose: ""
-})
+}) */
 inta_statisticCookieList.push({
     cookie: "mixpanel",
     vendor: "Mixpanel",
@@ -639,6 +639,7 @@ if(intaCookieType(int_staticsticCookies)){
     });
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
+
 /* Cookie name list for marketing / advertisment cookies */
 if (intaCookieType(int_marketingCookies)) {
     let newArray = inta_marketingCookieList.map((cookie) => {
@@ -689,6 +690,18 @@ intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner
 intaStyleLink.media = 'all';
 intHead.insertBefore(intaStyleLink, document.scripts[document.scripts.length - 1]);
 
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+    dataLayer.push(arguments);
+}
+gtag('consent', 'default', {
+    'ad_storage': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied',
+    'personalization_storage': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied',
+    'analytics_storage': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied',
+    'functionality_storage': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied',
+    'ads_data_redaction': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied'
+});
+
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
@@ -698,12 +711,16 @@ function checkCookieStatus() {
     const allScripts = [
         {
             /* Analytics Scripts which are beeing blocked */
+            /* 
+                "([\-\.]google-analytics+)",
+                "([\-\.]googletagmanager+)",
+            */
             type: "statics",
             scripts: [
                 "(mixpanel)",
+                "([\-\.]googleoptimize+)",
                 "([\-\.]google-analytics+)",
                 "([\-\.]googletagmanager+)",
-                "([\-\.]googleoptimize+)",
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
                 "([\-\.]bing+)",
@@ -739,11 +756,17 @@ function checkCookieStatus() {
         },
         {
             /* Marketing Scripts which are beeing blocked */
+            /* 
+                "([\-\.]googlesyndication+)",
+                "([\-\.]googletagservices+)",
+                "([\-\.]googleadservices+)",
+            */
             type: "marketing",
             scripts: [
                 "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
                 "([\-\.]googlesyndication+)",
                 "([\-\.]googletagservices+)",
+                "([\-\.]googleadservices+)",
                 "([\-\.]twitter+)",
                 "([\-\.]ads-twitter+)",
                 "(chimpstatic+)",
@@ -787,7 +810,6 @@ function checkCookieStatus() {
                 "([\-\.]facebook+)",
                 "([\-\.]doubleclick+)",
                 "([\-\.]pinterest+)",
-                "([\-\.]googleadservices+)",
                 "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
             ]
         },
@@ -800,7 +822,6 @@ function checkCookieStatus() {
                 "(recaptcha+)",
                 "(grecaptcha+)",
                 "([\-\.]googleapis+)",
-                /* "([\-\.]google+)", */
                 "([\-\.]gstatics+)",
                 "([\-\.]cludo+)",
                 "([\-\.]qbrick+)",
@@ -1150,6 +1171,8 @@ function checkCookieStatus() {
 							window.foundScripts.push(src);
                         }
                             
+                        const scriptTag = document.createElement("script");
+                        scriptTag.src = src;
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -1205,7 +1228,9 @@ function checkCookieStatus() {
                                 node.defer = false;
                                 node.async = false;
                             } else {
-                                node.type = "text/javascript";
+                                /* if(document.querySelector(scriptTag) === null){
+                                    node.parentElement.appendChild(scriptTag);
+                                } */
                             }
 
                             if (
@@ -1217,7 +1242,9 @@ function checkCookieStatus() {
                                 node.async = true;
                                 if(node.parentElement !== null) node.parentElement.removeChild(node);
                             } else {
-                                node.type = "text/javascript";
+                                /* if(document.querySelector(scriptTag) === null){
+                                    node.parentElement.appendChild(scriptTag);
+                                } */
                             }
                         }
 
@@ -1244,7 +1271,9 @@ function checkCookieStatus() {
                                     node.defer = false;
                                     node.async = false;
                                 } else {
-                                    node.type = "text/javascript";
+                                    /* if(document.querySelector(scriptTag) === null){
+                                        node.parentElement.appendChild(scriptTag);
+                                    } */
                                 }
 
                                 if (
@@ -1257,7 +1286,9 @@ function checkCookieStatus() {
                                     if(node.parentElement !== null) node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 } else {
-                                    node.type = "text/javascript";
+                                    /* if(document.querySelector(scriptTag) === null){
+                                        node.parentElement.appendChild(scriptTag);
+                                    } */
                                 }
                             } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" || getCookie(int_marketingCookies) == "null" || getCookie(int_staticsticCookies) == "null"
                             || getCookie(int_FunctionalCookies) == "" || getCookie(int_marketingCookies) == "" || getCookie(int_staticsticCookies) == ""){
@@ -1279,7 +1310,9 @@ function checkCookieStatus() {
                                     node.defer = false;
                                     node.async = false;
                                 } else {
-                                    node.type = "text/javascript";
+                                    /* if(document.querySelector(scriptTag) === null){
+                                        node.parentElement.appendChild(scriptTag);
+                                    } */
                                 }
     
                                 if (
@@ -1291,14 +1324,10 @@ function checkCookieStatus() {
                                     node.type = "text/blocked";
                                     if(node.parentElement !== null) node.parentElement.removeChild(node);
                                 } else {
-                                    node.type = "text/javascript";
+                                    /* if(document.querySelector(scriptTag) === null){
+                                        node.parentElement.appendChild(scriptTag);
+                                    } */
                                 }
-                            }
-
-                            if (analyticsCookies == "yes") {
-                                let s = document.createElement("script");
-                                s.src = "https://www.intastellarsolutions.com/js/analytics.js";
-                                intHead.appendChild(s);
                             }
 
                             if (node.getAttribute("type") === "text/blocked")
@@ -1338,12 +1367,14 @@ function checkCookieStatus() {
                             node.type = "text/blocked";
                             if(node.parentElement !== null) node.parentElement.removeChild(node);
                         } else {
-                            node.type = "text/javascript";
+                            /* node.parentElement.appendChild(node); */
                         }
                     }
 
                     const beforeScriptExecuteListener = function (event) {
                         let src = node.src || "";
+                        const scriptTag = document.createElement("script");
+                        scriptTag.src = src;
                         if (dc == essentialsCookieName || dc == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -1366,7 +1397,9 @@ function checkCookieStatus() {
                                 node.defer = false;
                                 node.async = false;
                             } else {
-                                node.type = "text/javascript";
+                                /* if(document.querySelector(scriptTag) === null){
+                                    node.parentElement.appendChild(scriptTag);
+                                } */
                             }
                         } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
                             if (
@@ -1388,6 +1421,9 @@ function checkCookieStatus() {
                                 node.async = false;
                             } else {
                                 node.type = "text/javascript";
+                                /* if(document.querySelector(scriptTag) === null){
+                                    node.parentElement.appendChild(scriptTag);
+                                } */
                             }
                             
                             if (
@@ -1399,7 +1435,9 @@ function checkCookieStatus() {
                                 node.type = "text/blocked";
                                 if(node.parentElement !== null) node.parentElement.removeChild(node);
                             } else {
-                                node.type = "text/javascript";
+                                /* if(document.querySelector(scriptTag) === null){
+                                    node.parentElement.appendChild(scriptTag);
+                                } */
                             }
                         }
 
@@ -1415,19 +1453,6 @@ function checkCookieStatus() {
                         beforeScriptExecuteListener
                     );
                     beforeScriptExecuteListener();
-
-                    /* if(getCookie(int_FunctionalCookies) != "false"){
-                        if(window.INTA.settings.styleSheets){
-                            window.INTA.settings.styleSheets.forEach((style) => {
-                                const link = document.createElement("link");
-                                link.href = style;
-                                console.log(document.querySelectorAll("[href='"+style+"']"));
-                                if(document.querySelectorAll("[href='"+style+"']").length === 0){
-                                    intHead.appendChild(link);
-                                }
-                            })
-                        }
-                    } */
                 }
             });
         });
@@ -2753,7 +2778,9 @@ function saveINTCookieSettings() {
     }
 
     if (StaticsCheckBox.checked) {
-        /* localStorage.setItem("intStaticsCookies", "checked"); */
+        gtag('consent', 'update', {
+            'analytics_storage': 'granted',
+        })
         document.cookie = int_staticsticCookies+"=checked; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
@@ -2772,7 +2799,6 @@ function saveINTCookieSettings() {
     }
 
     if (MarketingCheckBox.checked) {
-        /* localStorage.setItem("intMarketingCookies", "checked"); */
         document.cookie = int_marketingCookies+"=checked; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
@@ -2795,23 +2821,14 @@ function saveINTCookieSettings() {
     intCookieDomain +
     "";
 
-    window.location.reload();
+    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 }
 /* - - - END - - - */
 
 
 window.addEventListener("DOMContentLoaded", function () {
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
-
-    if(typeof gtag !== "undefined"){
-        gtag('consent', 'default', {
-            'ad_storage': (getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"',
-            'personalization_storage': (getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"',
-            'analytics_storage': (getCookie(int_staticsticCookies) == "false") ? '"denied"': '"granted"',
-            'functionality_storage': (getCookie(int_FunctionalCookies) == "false") ? '"denied"': '"granted"'
-        });
-    }
-
+    /* (getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"' */
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
     if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
 
@@ -2832,26 +2849,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 document.querySelectorAll(".intaCookieListOverview")[i].classList.toggle("view");
             })
         })
-        /* 
-        const intaCookieList = Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')));
-        const intaRequiredCookieList = [];
-
-        for (const [key] of Object.entries(intaCookieList)) {
-            intaRequiredCookieList.push(key);
-        }
-
-        let test = Object.keys(intaRequiredCookieList);
-        localStorage.setItem("test", intaRequiredCookieList);
-
-
-        document.querySelector(".cookiesList").innerHTML =
-            `<ul>
-                ${
-                    localStorage.getItem("test").split(",").map((t) => `<li>${t}</li>`).join("\n")
-                }
-            </ul>
-            `;
-        ; */
 
         let settings = document.querySelector(".intastellarCookie-settings__container");
         if (document.querySelector(".intastellarCookieBanner") != null) {
@@ -2936,6 +2933,39 @@ window.addEventListener("DOMContentLoaded", function () {
             ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
 
         document.querySelector(".--save").addEventListener("click",() => {
+            if (FunctionalCheckbox.checked) {
+                gtag('consent', 'update', {
+                    'functionality_storage': 'granted',
+                })
+            } else {
+                gtag('consent', 'update', {
+                    'functionality_storage': 'denied',
+                })
+            }
+        
+            if (StaticsCheckBox.checked) {
+                gtag('consent', 'update', {
+                    'analytics_storage': 'granted',
+                })
+            }else {
+                gtag('consent', 'update', {
+                    'analytics_storage': 'denied',
+                })
+            }
+        
+            if (MarketingCheckBox.checked) {
+                gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'personalization_storage': 'granted',
+                    'ads_data_redaction':  'granted'
+                })
+            } else {
+                gtag('consent', 'update', {
+                    'ad_storage': 'denied',
+                    'personalization_storage': 'denied',
+                    'ads_data_redaction':  'denied'
+                })
+            }
             saveINTCookieSettings();
         });
 
@@ -2989,7 +3019,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     "; path=/; " +
                     intCookieDomain +
                     "";
-                window.location.reload();
             });
         }
 
@@ -3035,10 +3064,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     "; path=/; " +
                     intCookieDomain +
                     "";
-                if (getMeta("Content-Security-Policy")) {
-                    /* intHead.removeChild(contentPolicyMetaTag); */
-                }
-                window.location.reload();
             });
         }
 
@@ -3078,7 +3103,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     intCookieDomain +
                     "";
 
-                window.location.reload();
             });
         }
 
@@ -3144,7 +3168,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         "; path=/; " +
                         intCookieDomain +
                         "";
-                    window.location.reload();
                 })
             }
 
@@ -3183,7 +3206,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         "";
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
                     
-                    window.location.reload();
                 });
             });
             all.forEach((a) => {
@@ -3230,7 +3252,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     if (getMeta("Content-Security-Policy")) {
                         /* intHead.removeChild(contentPolicyMetaTag); */
                     }
-                    window.location.reload();
                 })
             });
         } else {
@@ -3329,7 +3350,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         "";
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
                     
-                    window.location.reload();
                 });
             });
 
@@ -3376,7 +3396,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     if (getMeta("Content-Security-Policy")) {
                         /* intHead.removeChild(contentPolicyMetaTag); */
                     }
-                    window.location.reload();
                 })
             });
         }
