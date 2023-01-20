@@ -690,18 +690,6 @@ intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner
 intaStyleLink.media = 'all';
 intHead.insertBefore(intaStyleLink, document.scripts[document.scripts.length - 1]);
 
-window.dataLayer = window.dataLayer || [];
-function gtag() {
-    dataLayer.push(arguments);
-}
-gtag('consent', 'default', {
-    'ad_storage': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied',
-    'personalization_storage': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied',
-    'analytics_storage': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied',
-    'functionality_storage': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied',
-    'ads_data_redaction': (getCookie(int_marketingCookies) != "false") ? 'granted': 'denied'
-});
-
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
@@ -2824,7 +2812,17 @@ function saveINTCookieSettings() {
     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 }
 /* - - - END - - - */
-
+window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'personalization_storage': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'denied',
+        'ads_data_redaction': 'denied'
+    });
 
 window.addEventListener("DOMContentLoaded", function () {
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
