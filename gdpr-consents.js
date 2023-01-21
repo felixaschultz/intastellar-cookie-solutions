@@ -565,6 +565,16 @@ inta_marketingCookieList.push({
     vendor: "Twitter Intl Co",
     purpose: "This cookie tracks activities on and off Twitter for a personalized experience"
 });
+inta_marketingCookieList.push({
+    cookie: "CMID",
+    vendor: "Casale Media",
+    purpose: "Casale Media sets thias cookie to collect information on user behavior, for targeted advertising."
+});
+inta_marketingCookieList.push({
+    cookie: "CMPS",
+    vendor: "Casale Media",
+    purpose: "CMPS cookie is set by Casale Media for anonymous tracking based on user´s website visits, for displaying targeted ads."
+})
 
 /* - - - List of functional cookies - - - */
 const inta_functionalCookieList = [];
@@ -757,6 +767,7 @@ function checkCookieStatus() {
                 "([\-\.]googleadservices+)",
                 "([\-\.]twitter+)",
                 "([\-\.]ads-twitter+)",
+                "([\-\.]casalemedia+)",
                 "(chimpstatic+)",
                 "([\-\.]trustpilot+)",
                 "([\-\.]mailchimp+)",
@@ -2813,16 +2824,16 @@ function saveINTCookieSettings() {
 }
 /* - - - END - - - */
 window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-    gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'personalization_storage': 'denied',
-        'analytics_storage': 'denied',
-        'functionality_storage': 'denied',
-        'ads_data_redaction': 'denied'
-    });
+function gtag() {
+    dataLayer.push(arguments);
+}
+gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'personalization_storage': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'denied',
+    'ads_data_redaction': 'denied'
+});
 
 window.addEventListener("DOMContentLoaded", function () {
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
