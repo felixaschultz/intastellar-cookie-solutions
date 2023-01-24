@@ -8,7 +8,6 @@
 /* - - - Setup - - - */
 const intaCookiePref = "__inta-cookieconsents:";
 const int_hideCookieBannerName = intaCookiePref + "hideBanner";
-const int_cookieName = intaCookiePref + "ac_cookie";
 const int_FunctionalCookies = intaCookiePref + "Functional-cookies";
 const int_marketingCookies = intaCookiePref + "Advertisment-cookies";
 const int_staticsticCookies = intaCookiePref + "Statistics-cookies";
@@ -32,6 +31,7 @@ const saveSettings = {
 const INTA = window.INTA = {
     policy_link: undefined,
     settings: {
+        company: "",
         lang: "auto",
         color: "rgba(0, 51, 153, 1)",
         keepInLocalStorage: [],
@@ -85,32 +85,32 @@ const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200
 const inta_requiredCookieList = [
     {
         cookie: "PHPSESSID",
-        vendor: window.location.host,
+        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
         purpose: "This cookie is native to PHP applications. The cookie is used to store and identify a users' unique session ID for the purpose of managing user session on the website. The cookie is a session cookies and is deleted when all the browser windows are closed."
     },
     {
         cookie: "SCJP",
-        vendor: window.location.host,
+        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
         purpose: ""
     },
     {
         cookie: "SCJD",
-        vendor: window.location.host,
+        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
         purpose: ""
     },
     {
         cookie: "SCWCD",
-        vendor: window.location.host,
+        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
         purpose: ""
     },
     {
         cookie: "SCBCD",
-        vendor: window.location.host,
+        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
         purpose: ""
     },
     {
         cookie: "SCDJWS",
-        vendor: window.location.host,
+        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
         purpose: ""
     },
     {
@@ -122,11 +122,6 @@ const inta_requiredCookieList = [
         cookie: int_hideCookieBannerName,
         vendor: "Intastellar Solutions, International",
         purpose: "It´s function is to hide the popup window onload after user has accept or rejected cookies."
-    },
-    {
-        cookie: int_cookieName,
-        vendor: "Intastellar Solutions, International",
-        purpose: ""
     },
     {
         cookie: int_marketingCookies,
@@ -580,28 +575,28 @@ inta_marketingCookieList.push({
 const inta_functionalCookieList = [];
 inta_functionalCookieList.push({
     cookie: "region",
-    vendor: window.location.host,
-    purpose: ""
+    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
+    purpose: "This cookie is used to set users prefrence regarding the selected region."
 })
 inta_functionalCookieList.push({
     cookie: "language",
-    vendor: window.location.host,
-    purpose: ""
+    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
+    purpose: "This cookie is used to set users prefrence regarding the selected language."
 })
 inta_functionalCookieList.push({
     cookie: "lang",
-    vendor: window.location.host,
-    purpose: ""
+    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
+    purpose: "This cookie is used to set users prefrence regarding the selected language."
 })
 inta_functionalCookieList.push({
     cookie: "hl",
-    vendor: window.location.host,
-    purpose: ""
+    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
+    purpose: "This cookie is used to set users prefrence regarding the selected region."
 })
 inta_functionalCookieList.push({
     cookie: "locale",
-    vendor: window.location.host,
-    purpose: ""
+    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
+    purpose: "This cookie is used to set users prefrence regarding the selected region."
 })
 inta_functionalCookieList.push({
     cookie: "FCCDCF",
@@ -685,14 +680,6 @@ const pSBC = (p, c0, c1, l) => {
     if (h) return "rgb" + (f ? "a(" : "(") + r + "," + g + "," + b + (f ? "," + m(a * 1000) / 1000 : "") + ")";
     else return "#" + (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0)).toString(16).slice(1, f ? undefined : -2)
 }
-const contentPolicyMetaTag = document.createElement('meta');
-/* Adding security meta tag */
-/* contentPolicyMetaTag.httpEquiv = "Content-Security-Policy";
-contentPolicyMetaTag.content = "*.usercontent.one";
-
-if (getCookie(int_cookieName) == essentialsCookieName || getCookie(int_cookieName) == null) {
-    intHead.insertBefore(contentPolicyMetaTag, intHead.firstChild);
-} */
 const intaStyleLink = document.createElement('link');
 intaStyleLink.rel = 'stylesheet';
 intaStyleLink.type = 'text/css';
@@ -873,8 +860,6 @@ function checkCookieStatus() {
         m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
         notRequired = new RegExp(m.join("|"), "ig");
     }
-
-    const dc = getCookie(int_cookieName);
     const analyticsCookies = getCookie(int_analytic);
 
     /* Helper function to create Consents Block message for iframes etc.*/
@@ -902,7 +887,6 @@ function checkCookieStatus() {
                     let a      = document.createElement('a');
                     a.href = frae.src;
                     let externalDomain = a.hostname;
-                    
                     frae.src = "about:blank";
                     let textLanguage;
                     let btnText;
@@ -1018,14 +1002,14 @@ function checkCookieStatus() {
             }
         }
     }
-
+    /* - - - Cookie banner settings btn - - - */
+    const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
+    const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
+    const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(({ addedNodes }) => {
             addedNodes.forEach((node) => {
-                if (!allCookiesAllowed() || !intaCookieType(int_FunctionalCookies)) {
-                    deleteAllCookies();
-                }
 
                 /* Adding  custom button to all blocked embedded content on the site */
                 if (node.nodeType === 1 && node.tagName === "IFRAME") {
@@ -1172,7 +1156,8 @@ function checkCookieStatus() {
                             
                         const scriptTag = document.createElement("script");
                         scriptTag.src = src;
-                        if (dc == essentialsCookieName || dc == "") {
+                        if (getCookie(int_FunctionalCookies) == "false" && getCookie(int_marketingCookies) == "false" && getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" && getCookie(int_marketingCookies) == "null" && getCookie(int_staticsticCookies) == "null"
+                            || getCookie(int_FunctionalCookies) == "" && getCookie(int_marketingCookies) == "" && getCookie(int_staticsticCookies) == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -1248,7 +1233,8 @@ function checkCookieStatus() {
                         }
 
                         const beforeScriptExecuteListener = function (event) {
-                            if (dc == essentialsCookieName || dc == "") {
+                            if (getCookie(int_FunctionalCookies) == "false" && getCookie(int_marketingCookies) == "false" && getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" && getCookie(int_marketingCookies) == "null" && getCookie(int_staticsticCookies) == "null"
+                            || getCookie(int_FunctionalCookies) == "" && getCookie(int_marketingCookies) == "" && getCookie(int_staticsticCookies) == "") {
 
                                 if (
                                     src.indexOf(window.location.hostname) == -1
@@ -1270,9 +1256,6 @@ function checkCookieStatus() {
                                     node.defer = false;
                                     node.async = false;
                                 } else {
-                                    /* if(document.querySelector(scriptTag) === null){
-                                        node.parentElement.appendChild(scriptTag);
-                                    } */
                                 }
 
                                 if (
@@ -1285,9 +1268,6 @@ function checkCookieStatus() {
                                     if(node.parentElement !== null) node.parentElement.removeChild(node);
                                     deleteAllCookies();
                                 } else {
-                                    /* if(document.querySelector(scriptTag) === null){
-                                        node.parentElement.appendChild(scriptTag);
-                                    } */
                                 }
                             } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" || getCookie(int_marketingCookies) == "null" || getCookie(int_staticsticCookies) == "null"
                             || getCookie(int_FunctionalCookies) == "" || getCookie(int_marketingCookies) == "" || getCookie(int_staticsticCookies) == ""){
@@ -1343,7 +1323,8 @@ function checkCookieStatus() {
                         );
                     });
                 } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
-                    if (dc == essentialsCookieName || dc == "") {
+                    if (getCookie(int_FunctionalCookies) == "false" && getCookie(int_marketingCookies) == "false" && getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" && getCookie(int_marketingCookies) == "null" && getCookie(int_staticsticCookies) == "null"
+                            || getCookie(int_FunctionalCookies) == "" && getCookie(int_marketingCookies) == "" && getCookie(int_staticsticCookies) == ""){
 
                         if (
                             notRequired.test(node.innerText)
@@ -1374,7 +1355,8 @@ function checkCookieStatus() {
                         let src = node.src || "";
                         const scriptTag = document.createElement("script");
                         scriptTag.src = src;
-                        if (dc == essentialsCookieName || dc == "") {
+                        if (getCookie(int_FunctionalCookies) == "false" && getCookie(int_marketingCookies) == "false" && getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" && getCookie(int_marketingCookies) == "null" && getCookie(int_staticsticCookies) == "null"
+                            || getCookie(int_FunctionalCookies) == "" && getCookie(int_marketingCookies) == "" && getCookie(int_staticsticCookies) == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1
@@ -1456,10 +1438,12 @@ function checkCookieStatus() {
             });
         });
     });
+    
     observer.observe(document.documentElement, {
         childList: !0,
         subtree: !0,
         attributes:    true,
+        characterDataOldValue: true
     });
 };
 
@@ -1652,16 +1636,6 @@ function getCookies() {
         ret += i + ' - ' + cookies[i - 1] + "<br>";
     }
     return ret;
-}
-
-/* Helper function to allow all cookies */
-
-function allCookiesAllowed() {
-    if (getCookie(int_cookieName) == allowAllCookieName) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 /* Find specific parameter on current Script */
@@ -1896,72 +1870,63 @@ function createCookieSettings() {
                         <h3 class="intaExpandCookieList">Nødvendige <i class="intastellar__arrow"></i></h3>
                         <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
                         <article class="intaCookieListOverview">
-                            <table>
-                                <tr>
-                                    <th>Navn</th>
-                                    <th>Formål</th>
-                                    <th>Udbyder</th>
-                                </tr>
                             ${
                                 inta_requiredCookieList.map((cookie) => {
                                     return `
-                                        <tr>
-                                            <td>${cookie.cookie}</td>
-                                            <td>${cookie.purpose}</td>
-                                            <td>${cookie.vendor}</td>
-                                        </tr>
+                                        <section class="intaCookieListOverview-grid">
+                                            <section>
+                                                <p class="intaCookieListOverview-heading">Udbyder</p>
+                                                <p>${cookie.vendor}</p>
+                                                <p class="intaCookieListOverview-heading">Navn</p>
+                                                <p>${cookie.cookie}</p>
+                                            </section>
+                                            <p>${cookie.purpose}</p>
+                                        </section>
                                         `
                                 }).join(" ")
                             }
-                            </table>
                         </article>
                     </section>
                     <section>
                         <h3 class="intaExpandCookieList">Funktionel / Præference <i class="intastellar__arrow"></i></h3>
                         <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
                         <article class="intaCookieListOverview">
-                            <table>
-                                <tr>
-                                    <th>Navn</th>
-                                    <th>Formål</th>
-                                    <th>Udbyder</th>
-                                </tr>
-                            ${
-                                inta_functionalCookieList.map((cookie) => {
-                                    return `
-                                        <tr>
-                                            <td>${cookie.cookie}</td>
-                                            <td>${cookie.purpose}</td>
-                                            <td>${cookie.vendor}</td>
-                                        </tr>
-                                        `
-                                }).join(" ")
-                            }
-                            </table>  
+                        ${
+                            inta_functionalCookieList.map((cookie) => {
+                                return `
+                                    <section class="intaCookieListOverview-grid">
+                                        <section>
+                                            <p class="intaCookieListOverview-heading">Udbyder</p>
+                                            <p>${cookie.vendor}</p>
+                                            <p class="intaCookieListOverview-heading">Navn</p>
+                                            <p>${cookie.cookie}</p>
+                                        </section>
+                                        <p>${cookie.purpose}</p>
+                                    </section>
+                                    `
+                            }).join(" ")
+                        }
                         </article>                 
                     </section>
                     <section>
                         <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
                         <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p>
                         <article class="intaCookieListOverview">
-                            <table>
-                                <tr>
-                                    <th>Navn</th>
-                                    <th>Formål</th>
-                                    <th>Udbyder</th>
-                                </tr>
-                            ${
-                                inta_statisticCookieList.map((cookie) => {
-                                    return `
-                                        <tr>
-                                            <td>${cookie.cookie}</td>
-                                            <td>${cookie.purpose}</td>
-                                            <td>${cookie.vendor}</td>
-                                        </tr>
-                                        `
-                                }).join(" ")
-                            }
-                            </table>
+                        ${
+                            inta_statisticCookieList.map((cookie) => {
+                                return `
+                                    <section class="intaCookieListOverview-grid">
+                                        <section>
+                                            <p class="intaCookieListOverview-heading">Udbyder</p>
+                                            <p>${cookie.vendor}</p>
+                                            <p class="intaCookieListOverview-heading">Navn</p>
+                                            <p>${cookie.cookie}</p>
+                                        </section>
+                                        <p>${cookie.purpose}</p>
+                                    </section>
+                                    `
+                            }).join(" ")
+                        }
                         </article>
                     </section>
                     <section>
@@ -1969,24 +1934,21 @@ function createCookieSettings() {
                         <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
                         <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
                         <article class="intaCookieListOverview">
-                            <table>
-                                <tr>
-                                    <th>Navn</th>
-                                    <th>Formål</th>
-                                    <th>Udbyder</th>
-                                </tr>
-                            ${
-                                inta_marketingCookieList.map((cookie) => {
-                                    return `
-                                        <tr>
-                                            <td>${cookie.cookie}</td>
-                                            <td>${cookie.purpose}</td>
-                                            <td>${cookie.vendor}</td>
-                                        </tr>
-                                        `
-                                }).join(" ")
-                            }
-                            </table>
+                        ${
+                            inta_marketingCookieList.map((cookie) => {
+                                return `
+                                    <section class="intaCookieListOverview-grid">
+                                        <section>
+                                            <p class="intaCookieListOverview-heading">Udbyder</p>
+                                            <p>${cookie.vendor}</p>
+                                            <p class="intaCookieListOverview-heading">Navn</p>
+                                            <p>${cookie.cookie}</p>
+                                        </section>
+                                        <p>${cookie.purpose}</p>
+                                    </section>
+                                    `
+                            }).join(" ")
+                        }
                         </article>
                     </section>
                 </article>
@@ -2048,72 +2010,63 @@ function createCookieSettings() {
                     <h3 class="intaExpandCookieList">Erforderliche <i class="intastellar__arrow"></i></h3>
                     <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Zweck</th>
-                                <th>Anbieter</th>
-                            </tr>
                         ${
                             inta_requiredCookieList.map((cookie) => {
                                 return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
+                                    <section class="intaCookieListOverview-grid">
+                                        <section>
+                                            <p class="intaCookieListOverview-heading">Anbieter</p>
+                                            <p>${cookie.vendor}</p>
+                                            <p class="intaCookieListOverview-heading">Name</p>
+                                            <p>${cookie.cookie}</p>
+                                        </section>
+                                        <p>${cookie.purpose}</p>
+                                    </section>
                                     `
                             }).join(" ")
                         }
-                        </table>
                     </article>
                 </section>
                 <section>
                     <h3 class="intaExpandCookieList">Funktionel / Präferenz <i class="intastellar__arrow"></i></h3>
                     <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Zweck</th>
-                                <th>Anbieter</th>
-                            </tr>
-                        ${
-                            inta_functionalCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_functionalCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Anbieter</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
                 <section>
                     <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
                     <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Zweck</th>
-                                <th>Anbieter</th>
-                            </tr>
-                        ${
-                            inta_statisticCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_statisticCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Anbieter</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
                 <section>
@@ -2121,24 +2074,21 @@ function createCookieSettings() {
                     <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
                     <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Zweck</th>
-                                <th>Anbieter</th>
-                            </tr>
-                        ${
-                            inta_marketingCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_marketingCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Anbieter</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
             </article>
@@ -2201,72 +2151,63 @@ function createCookieSettings() {
                     <h3 class="intaExpandCookieList">Strictly necessary <i class="intastellar__arrow"></i></h3>
                     <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Purpose</th>
-                                <th>Vendor</th>
-                            </tr>
-                        ${
-                            inta_requiredCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_requiredCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Vendor</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
                 <section>
                     <h3 class="intaExpandCookieList">Functional / Preference <i class="intastellar__arrow"></i></h3>
                     <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Purpose</th>
-                                <th>Vendor</th>
-                            </tr>
-                        ${
-                            inta_functionalCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_functionalCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Vendor</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
                 <section>
                     <h3 class="intaExpandCookieList">Statics <i class="intastellar__arrow"></i></h3>
                     <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Purpose</th>
-                                <th>Vendor</th>
-                            </tr>
-                        ${
-                            inta_statisticCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_statisticCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Vendor</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
                 <section>
@@ -2274,24 +2215,21 @@ function createCookieSettings() {
                     <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
                     <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Purpose</th>
-                                <th>Vendor</th>
-                            </tr>
-                        ${
-                            inta_marketingCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_marketingCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Vendor</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
             </article>
@@ -2356,70 +2294,61 @@ function createCookieSettings() {
                     <h3 class="intaExpandCookieList">Nødvendige <i class="intastellar__arrow"></i></h3>
                     <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Navn</th>
-                                <th>Formål</th>
-                                <th>Udbyder</th>
-                            </tr>
-                        ${
-                            inta_requiredCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_requiredCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Udbyder</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Navn</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
                 <section>
                     <h3>Funktionel / Præference <i class="intastellar__arrow"></i></h3>
                     <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
-                    <table>
-                        <tr>
-                            <th>Navn</th>
-                            <th>Formål</th>
-                            <th>Udbyder</th>
-                        </tr>
                     ${
                         inta_functionalCookieList.map((cookie) => {
                             return `
-                                <tr>
-                                    <td>${cookie.cookie}</td>
-                                    <td>${cookie.purpose}</td>
-                                    <td>${cookie.vendor}</td>
-                                </tr>
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Udbyder</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Navn</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
                                 `
                         }).join(" ")
                     }
-                    </table>
                 </section>
                 <section>
                     <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
                     <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Navn</th>
-                                <th>Formål</th>
-                                <th>Udbyder</th>
-                            </tr>
-                        ${
-                            inta_statisticCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_statisticCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Udbyder</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Navn</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
                 <section>
@@ -2427,24 +2356,21 @@ function createCookieSettings() {
                     <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
                     <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
                     <article class="intaCookieListOverview">
-                        <table>
-                            <tr>
-                                <th>Navn</th>
-                                <th>Formål</th>
-                                <th>Udbyder</th>
-                            </tr>
-                        ${
-                            inta_marketingCookieList.map((cookie) => {
-                                return `
-                                    <tr>
-                                        <td>${cookie.cookie}</td>
-                                        <td>${cookie.purpose}</td>
-                                        <td>${cookie.vendor}</td>
-                                    </tr>
-                                    `
-                            }).join(" ")
-                        }
-                        </table>
+                    ${
+                        inta_marketingCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Udbyder</p>
+                                        <p>${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Navn</p>
+                                        <p>${cookie.cookie}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
                     </article>
                 </section>
             </article>
@@ -2748,10 +2674,6 @@ function saveINTCookieSettings() {
     const MarketingCheckBox = document.querySelector("#marketing");
 
     if (MarketingCheckBox.checked === false && StaticsCheckBox.checked === false && FunctionalCheckbox.checked === false) {
-        document.cookie = int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
         document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain + "";
     }
 
@@ -2762,13 +2684,6 @@ function saveINTCookieSettings() {
         intCookieDomain +
             "";
         
-        document.cookie =
-        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-        "; path=/; " +
-        intCookieDomain +
-            "";
-        
-        contentPolicyMetaTag.content += "";
     } else {
         document.cookie = int_FunctionalCookies+"=false; expires=" + cookieLifeTime +
                     "; path=/; " +
@@ -2784,12 +2699,6 @@ function saveINTCookieSettings() {
                     "; path=/; " +
                     intCookieDomain +
                     "";
-        document.cookie =
-            int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-            "; path=/; " +
-            intCookieDomain +
-            "";
-        contentPolicyMetaTag.content += "";
     }else {
         document.cookie = int_staticsticCookies+"=false; expires=" + cookieLifeTime +
                     "; path=/; " +
@@ -2802,12 +2711,6 @@ function saveINTCookieSettings() {
                     "; path=/; " +
                     intCookieDomain +
                     "";
-        document.cookie =
-            int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-            "; path=/; " +
-            intCookieDomain +
-            "";
-        contentPolicyMetaTag.content += "";
     } else {
         document.cookie = int_marketingCookies+"=false; expires=" + cookieLifeTime + "; path=/; " +
                     intCookieDomain +
@@ -2822,6 +2725,7 @@ function saveINTCookieSettings() {
 
     document.querySelector("html").classList.toggle("noScroll");
     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+    window.location.reload();
 }
 /* - - - END - - - */
 window.dataLayer = window.dataLayer || [];
@@ -2998,11 +2902,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     intCookieDomain +
                     "";
                 document.cookie =
-                    int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie =
                     "_vis_opt=" +
                     cV +
                     "; expires=" +
@@ -3012,9 +2911,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     "; path=/; " +
                     intCookieDomain +
                     "";
-                if (getMeta("Content-Security-Policy")) {
-                    /* intHead.removeChild(contentPolicyMetaTag); */
-                }
 
                 
 
@@ -3032,6 +2928,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     "";
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                window.location.reload()
             });
         }
 
@@ -3040,11 +2937,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 var cV = 1;
                 document.cookie =
                     int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie =
-                    int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
@@ -3079,6 +2971,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     "";
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                window.location.reload()
             });
         }
 
@@ -3087,11 +2980,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 var cV = 1;
                 document.cookie =
                     int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie =
-                    int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
@@ -3117,6 +3005,9 @@ window.addEventListener("DOMContentLoaded", function () {
                 "; path=/; " +
                     intCookieDomain +
                     "";
+                document.querySelector("html").classList.toggle("noScroll");
+                document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                window.location.reload()
 
             });
         }
@@ -3174,11 +3065,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         intCookieDomain +
                         "";
                     document.cookie =
-                        int_cookieName + "=analytics; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie =
                         "_vis_opt=" +
                         cV +
                         "; expires=" + cookieLifeTime +
@@ -3210,11 +3096,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         intCookieDomain +
                         "";
                     document.cookie =
-                        int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie =
                         "_vis_opt=" +
                         cV +
                         "; expires=" + cookieLifeTime +
@@ -3222,7 +3103,9 @@ window.addEventListener("DOMContentLoaded", function () {
                         intCookieDomain +
                         "";
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
-                    
+                    document.querySelector("html").classList.toggle("noScroll");
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    window.location.reload()
                 });
             });
             all.forEach((a) => {
@@ -3230,11 +3113,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie =
-                        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
                         "; path=/; " +
                         intCookieDomain +
                         "";
@@ -3266,11 +3144,9 @@ window.addEventListener("DOMContentLoaded", function () {
                         "; path=/; " +
                         intCookieDomain +
                         "";
-                    if (getMeta("Content-Security-Policy")) {
-                        /* intHead.removeChild(contentPolicyMetaTag); */
-                    }
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    window.location.reload()
                 })
             });
         } else {
@@ -3279,13 +3155,12 @@ window.addEventListener("DOMContentLoaded", function () {
 
             const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
             const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
+            const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
             const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
 
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
             let settings = document.querySelector(".intastellarCookie-settings__container");
-
-            const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
 
             changePermission.forEach((change) => {
                 change.addEventListener("click", function () {
@@ -3359,11 +3234,6 @@ window.addEventListener("DOMContentLoaded", function () {
                         intCookieDomain +
                         "";
                     document.cookie =
-                        int_cookieName + "=" + essentialsCookieName + "; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie =
                         "_vis_opt=" +
                         cV +
                         "; expires=" + cookieLifeTime +
@@ -3371,7 +3241,9 @@ window.addEventListener("DOMContentLoaded", function () {
                         intCookieDomain +
                         "";
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
-                    
+                    document.querySelector("html").classList.toggle("noScroll");
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    window.location.reload()
                 });
             });
 
@@ -3380,11 +3252,6 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie =
-                        int_cookieName + "=" + allowAllCookieName + "; expires=" + cookieLifeTime +
                         "; path=/; " +
                         intCookieDomain +
                         "";
@@ -3415,11 +3282,9 @@ window.addEventListener("DOMContentLoaded", function () {
                         "; path=/; " +
                         intCookieDomain +
                         "";
-                    if (getMeta("Content-Security-Policy")) {
-                        /* intHead.removeChild(contentPolicyMetaTag); */
-                    }
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    window.location.reload();
                 })
             });
         }

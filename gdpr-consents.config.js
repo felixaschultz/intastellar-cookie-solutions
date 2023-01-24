@@ -4,6 +4,7 @@ window.INTA = {
         url: "https://www.intastellarsolutions.com/about/legal/privacy"
     },
     settings: {
+        company: "Intastellar Solutions",
         logo: "https://www.intastellarsolutions.com/assets/icons/fav/favicon-96x96.png",
         color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)",
         text: false,
