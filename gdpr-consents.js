@@ -137,6 +137,31 @@ const inta_requiredCookieList = [
         cookie: int_FunctionalCookies,
         vendor: "Intastellar Solutions, International",
         purpose: "Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not."
+    },
+    {
+        cookie: "woocommerce_cart_hash",
+        vendor: "WooCommerce",
+        purpose: "Helps WooCommerce determine when cart contents/data changes"
+    },
+    {
+        cookie: "woocommerce_items_in_cart",
+        vendor: "WooCommerce",
+        purpose: "Helps WooCommerce determine when cart contents/data changes."
+    },
+    {
+        cookie: "wp_woocommerce_session_",
+        vendor: "WooCommerce",
+        purpose: "Contains a unique code for each customer so that it knows where to find the cart data in the database for each customer"
+    },
+    {
+        cookie: "woocommerce_recently_viewed",
+        vendor: "WooCommerce",
+        purpose: "Powers the Recent Viewed Products widget"
+    },
+    {
+        cookie: "store_notice[notice id]",
+        vendor: "WooCommerce",
+        purpose: "Allows customers to dismiss the Store Notice."
     }
 ];
 const int__cookiesToKeep = inta_requiredCookieList.slice().map((cookie) => {
