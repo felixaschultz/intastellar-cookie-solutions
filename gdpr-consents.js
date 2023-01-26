@@ -477,123 +477,233 @@ inta_marketingCookieList.push(
     {
         cookie: "_fbp",
         vendor: "Facebook Inc",
-        purpose: "to store and track visits across websites."
+        purpose: "to store and track visits across websites.",
+        domains: [
+            "facebook.com",
+            "facebook.net",
+            "fbcdn.net"
+        ]
     }
 );
 inta_marketingCookieList.push({
     cookie: "__gsas",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "__gpi",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "li_giant",
     vendor: "LinkedIn Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "linkedin.com",
+        "licdn.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "li_fat_id",
     vendor: "LinkedIn Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "linkedin.com",
+        "licdn.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "__gpi_optout",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "__gads",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "GED_PLAYLIST_ACTIVITY",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "FPAU",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "FPGCLDC",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "_gcl_dc",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "_gcl_gb",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "_gcl_au",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "FPGCLAW",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "FPGCLGB",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "_gac_gb_",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "_gac_",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "_gcl_aw",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "_gcl",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "GoogleAdServingTest",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "_uetvid",
     vendor: "Microsoft Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "stripe.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "personalization_id",
     vendor: "Twitter Intl Co",
-    purpose: "This cookie tracks activities on and off Twitter for a personalized experience"
+    purpose: "This cookie tracks activities on and off Twitter for a personalized experience",
+    domains: [
+        "stripe.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "CMID",
     vendor: "Casale Media",
-    purpose: "Casale Media sets thias cookie to collect information on user behavior, for targeted advertising."
+    purpose: "Casale Media sets thias cookie to collect information on user behavior, for targeted advertising.",
+    domains: [
+        "stripe.com"
+    ]
 });
 inta_marketingCookieList.push({
     cookie: "CMPS",
     vendor: "Casale Media",
-    purpose: "CMPS cookie is set by Casale Media for anonymous tracking based on user´s website visits, for displaying targeted ads."
+    purpose: "CMPS cookie is set by Casale Media for anonymous tracking based on user´s website visits, for displaying targeted ads.",
+    domains: [
+        "stripe.com"
+    ]
 })
 
 /* - - - List of functional cookies - - - */
@@ -626,27 +736,48 @@ inta_functionalCookieList.push({
 inta_functionalCookieList.push({
     cookie: "FCCDCF",
     vendor: "Goolge Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 })
 inta_functionalCookieList.push({
     cookie: "NID",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 })
 inta_functionalCookieList.push({
     cookie: "AMP_TOKEN",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "googletagmanager.com",
+        "googleadservice.com",
+        "google-analytics.com"
+    ]
 })
 inta_functionalCookieList.push({
     cookie: "__stripe_sid",
     vendor: "Stripe",
-    purpose: "Fraud prevention"
+    purpose: "Fraud prevention",
+    domains: [
+        "stripe.com"
+    ]
 })
 inta_functionalCookieList.push({
     cookie: "__stripe_mid",
     vendor: "Stripe",
-    purpose: "Fraud prevention"
+    purpose: "Fraud prevention",
+    domains: [
+        "stripe.com"
+    ]
 })
 
 /* - - - Helper function to get cookie type*/
@@ -730,7 +861,6 @@ function checkCookieStatus() {
                 "(mixpanel)",
                 "([\-\.]googleoptimize+)",
                 "([\-\.]google-analytics+)",
-                "([\-\.]googletagmanager+)",
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
                 "([\-\.]bing+)",
@@ -896,7 +1026,7 @@ function checkCookieStatus() {
         return `
         <section class="intCookie_ConsentContainer-content">
             <section class="intCookie_ConsentLogo-container">
-                <img src="${logo}" class="intCookie_ConsentLogo">
+                <img src="${logo}" class="intCookie_ConsentLogo" alt="Company logo">
             </section>
             ${textLanguage}
             <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
@@ -2607,12 +2737,14 @@ function createCookieSettings() {
         <img class="intSettingsCompanyLogo${intCookieIconSmallClass}" width="150px" height="auto" src="${cookieLogo}" alt="${CompanyLogoName}">
         <section class="intSettingsPoweredBy">${poweredBy}</section>`;
     
-    cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';"></button></intHeader>' +
+    cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';" aria-label="Close cookie banner"></button></intHeader>' +
         message + cookieBtn + "" + poweredBy;
-
+    
     cookieSettings.appendChild(cookieSettingsContent);
 
-    banner.appendChild(cookieSettings);
+    if(window.INTA.settings.advanced){
+        banner.appendChild(cookieSettings);
+    }
 
     banner.setAttribute("class", "intastellarCookie-settings");
 
@@ -2624,6 +2756,11 @@ function createCookieSettings() {
     document.body.appendChild(banner);
     document.body.appendChild(moreSettings);
 }
+/* 
+    const intastellarCreateBanner = document.createElement("script");
+    intastellarCreateBanner.src = "https://downloads.intastellarsolutions.com/cookieconsents/style.js";
+    intHead.insertBefore(intastellarCreateBanner, document.scripts[document.scripts.length - 1]);
+*/
 
 /* - - - Helper functions for Messages */
 function generatePolicyUrl(policy_link_text) {
@@ -2680,13 +2817,13 @@ function learnMore(e) {
     } */
     document.querySelector(".intReadMore").classList.toggle("view");
     document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "225px";
-    document.querySelector(".intReadMore").scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-    });
 
     if(document.querySelector(".intReadMore").classList.contains("view")){
         e.innerHTML = "Hide details";
+        document.querySelector(".intReadMore").scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
     }else {
         e.innerHTML = "Show details";
     }
@@ -2774,6 +2911,9 @@ window.addEventListener("DOMContentLoaded", function () {
     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
     if (isValidPolicyLink()) {
         createCookieSettings();
+        document.querySelectorAll(".intCookie_ConsentLogo").forEach((logo) => {
+            logo.src = window.INTA.settings.logo;
+        });
         /* - - - Helper function for learn more click - - - */
         document.querySelectorAll(".intLearnMoreBtn").forEach((btn) => {
             btn.addEventListener("click", function(e) {
@@ -3075,11 +3215,12 @@ window.addEventListener("DOMContentLoaded", function () {
                     });
                 })
             }
-
-            closeSettings.addEventListener("click", function () {
-                let settings = document.querySelector(".intastellarCookie-settings__container");
-                settings.classList.toggle("intastellarCookie-settings__container--expand");
-            })
+            if (window.INTA.settings.advanced) {
+                closeSettings.addEventListener("click", function () {
+                    let settings = document.querySelector(".intastellarCookie-settings__container");
+                    settings.classList.toggle("intastellarCookie-settings__container--expand");
+                })
+            }
 
             if (analyticsBTN != null || analyticsBTN != undefined) {
                 analyticsBTN.addEventListener("click", function () {
@@ -3231,11 +3372,12 @@ window.addEventListener("DOMContentLoaded", function () {
                     });
                 })
             }
-
-            closeSettings.addEventListener("click", function () {
-                let settings = document.querySelector(".intastellarCookie-settings__container");
-                settings.classList.toggle("intastellarCookie-settings__container--expand");
-            })
+            if (window.INTA.settings.advanced) {
+                closeSettings.addEventListener("click", function () {
+                    let settings = document.querySelector(".intastellarCookie-settings__container");
+                    settings.classList.toggle("intastellarCookie-settings__container--expand");
+                })
+            }
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
