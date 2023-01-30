@@ -859,7 +859,7 @@ function checkCookieStatus() {
             type: "statics",
             scripts: [
                 "(mixpanel)",
-                "([\-\.]googleoptimize+)",
+                /* "([\-\.]googleoptimize+)", */
                 "([\-\.]google-analytics+)",
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
@@ -2894,15 +2894,17 @@ window.dataLayer = window.dataLayer || [];
 function gtag() {
     dataLayer.push(arguments);
 }
-gtag('consent', 'default', {
-    'ad_storage': 'denied',
-    'personalization_storage': 'denied',
-    'analytics_storage': 'denied',
-    'functionality_storage': 'denied',
-    'ads_data_redaction': 'denied'
-});
 
 window.addEventListener("DOMContentLoaded", function () {
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'personalization_storage': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'denied',
+        'ads_data_redaction': 'denied',
+        'url_passthrough': true,
+        'wait_for_update': 500,
+    });
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"' */
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };

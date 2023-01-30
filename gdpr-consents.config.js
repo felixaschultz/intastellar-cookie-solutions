@@ -16,11 +16,11 @@ window.INTA = {
         on: true,
         url: "https://www.intastellarsolutions.com/about/legal/california-consumer-privacy-act",
         collection: [
-            "Email",
-            "Name",
-            "Phone number"
-        ]
+                "Email",
+                "Name",
+                "Phone number"
+            ]
         },
-        gcm: true
+        gcm: true,
     }
 };
