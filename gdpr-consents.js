@@ -228,157 +228,254 @@ inta_statisticCookieList.push({
 inta_statisticCookieList.push({
     cookie: "_ga",
     vendor: "Google Inc",
-    purpose: "to store and count pageviews."
+    purpose: "to store and count pageviews.",
+    domains: [
+        "youtube.com",
+        "youtube-nocookie.com",
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "__gp",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gid",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "youtube.com",
+        "youtube-nocookie.com",
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_dc_gtm_",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gaexp_rc",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gaexp",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gat",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_opt_expid",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "FPAU",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "FPGCLDC",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gcl_dc",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gcl_au",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "FCNEC",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "FPLC",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "FPGCLAW",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "FPGCLGB",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gcl_aw",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gac_gb_",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gcl_gb",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "__utma",
     vendor: "Google Inc",
-    purpose: "to Store the calculation of days and time to purchase."
+    purpose: "to Store the calculation of days and time to purchase.",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "__utmb",
     vendor: "Google Inc",
-    purpose: "to store time of visit."
+    purpose: "to store time of visit.",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "__utmc",
     vendor: "Google Inc",
-    purpose: "to store time of visit."
+    purpose: "to store time of visit.",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "__utmt",
     vendor: "Google Inc",
-    purpose: "to store time of visit."
+    purpose: "to store time of visit.",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "__utmz",
     vendor: "Google Inc",
-    purpose: "to store used keyword and search engine."
+    purpose: "to store used keyword and search engine.",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "__utmv",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "FPID",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_opt",
     vendor: "Google Inc",
-    purpose: ""
+    purpose: "",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_gcl",
     vendor: "Google Inc",
-    purpose: "to provide ad delivery or retargeting."
+    purpose: "to provide ad delivery or retargeting.",
+    domains: [
+        "google.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_hjSessionUser_",
     vendor: "Hotjar Ltd.",
-    purpose: "to provide ad delivery or retargeting."
+    purpose: "to provide ad delivery or retargeting.",
+    domains: [
+        "hotjar.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_hjid",
     vendor: "Hotjar Ltd.",
-    purpose: "to provide ad delivery or retargeting."
+    purpose: "to provide ad delivery or retargeting.",
+    domains: [
+        "hotjar.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_hjFirstSeen",
     vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting."
+    purpose: "to provide ad delivery or retargeting.",
+    domains: [
+        "hotjar.com"
+    ]
 })
 inta_statisticCookieList.push({
     cookie: "_hjUserAttributesHash",
@@ -481,7 +578,8 @@ inta_marketingCookieList.push(
         domains: [
             "facebook.com",
             "facebook.net",
-            "fbcdn.net"
+            "fbcdn.net",
+            "instagram.com"
         ]
     }
 );
@@ -492,7 +590,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -502,7 +601,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -530,7 +630,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -540,7 +641,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -550,7 +652,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -560,7 +663,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -570,7 +674,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -580,7 +685,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -590,7 +696,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -600,7 +707,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -610,7 +718,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -620,7 +729,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -630,7 +740,62 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
+    ]
+});
+inta_marketingCookieList.push({
+    cookie: "CONSENT",
+    vendor: "Google Inc",
+    purpose: "",
+    domains: [
+        "youtube.com",
+        "youtube-nocookie.com",
+        "google.com"
+    ]
+});
+inta_marketingCookieList.push({
+    cookie: "CONSENT",
+    vendor: "Trustpilot Group plc",
+    purpose: "",
+    domains: [
+        "trustpilot.com"
+    ]
+});
+inta_marketingCookieList.push({
+    cookie: "GPS",
+    vendor: "Google Inc",
+    purpose: "",
+    domains: [
+        "youtube.com",
+        "youtube-nocookie.com"
+    ]
+});
+inta_marketingCookieList.push({
+    cookie: "PREF",
+    vendor: "Google Inc",
+    purpose: "",
+    domains: [
+        "youtube.com",
+        "youtube-nocookie.com"
+    ]
+});
+inta_marketingCookieList.push({
+    cookie: "VISITOR_INFO1_LIVE",
+    vendor: "Google Inc",
+    purpose: "",
+    domains: [
+        "youtube.com",
+        "youtube-nocookie.com"
+    ]
+});
+inta_marketingCookieList.push({
+    cookie: "YSC",
+    vendor: "Google Inc",
+    purpose: "",
+    domains: [
+        "youtube.com",
+        "youtube-nocookie.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -640,7 +805,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -650,7 +816,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -660,7 +827,8 @@ inta_marketingCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -668,9 +836,10 @@ inta_marketingCookieList.push({
     vendor: "Google Inc",
     purpose: "",
     domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com"
+        "www.googletagmanager.com",
+        "www.googleadservice.com",
+        "www.google-analytics.com",
+        "google.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -678,7 +847,8 @@ inta_marketingCookieList.push({
     vendor: "Microsoft Inc",
     purpose: "",
     domains: [
-        "stripe.com"
+        "bing.com",
+        "clarity.com"
     ]
 });
 inta_marketingCookieList.push({
@@ -686,7 +856,7 @@ inta_marketingCookieList.push({
     vendor: "Twitter Intl Co",
     purpose: "This cookie tracks activities on and off Twitter for a personalized experience",
     domains: [
-        "stripe.com"
+        "t.co"
     ]
 });
 inta_marketingCookieList.push({
@@ -740,7 +910,8 @@ inta_functionalCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 })
 inta_functionalCookieList.push({
@@ -750,7 +921,8 @@ inta_functionalCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 })
 inta_functionalCookieList.push({
@@ -760,7 +932,8 @@ inta_functionalCookieList.push({
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
-        "google-analytics.com"
+        "google-analytics.com",
+        "google.com"
     ]
 })
 inta_functionalCookieList.push({
@@ -1042,6 +1215,21 @@ function checkCookieStatus() {
                     let a      = document.createElement('a');
                     a.href = frae.src;
                     let externalDomain = a.hostname;
+
+                    
+                    inta_marketingCookieList.forEach((cookie) => {
+                        var i = 0,
+                        d = externalDomain,
+                        p = d.split(".")
+                    
+                        d = p.slice(-1 - ++i).join(".");
+                        externalDomain = d;
+                        
+                        if(cookie?.domains?.includes(externalDomain)){
+                            externalDomain = cookie.vendor;
+                        }    
+                    })                
+
                     frae.src = "about:blank";
                     let textLanguage;
                     let btnText;
@@ -1074,6 +1262,19 @@ function checkCookieStatus() {
                     let externalDomain = a.hostname;
                     frae.src = "about:blank";
 
+                    
+                    inta_functionalCookieList.forEach((cookie) => {
+                        var i = 0,
+                        d = externalDomain,
+                        p = d.split(".")
+                    
+                        d = p.slice(-1 - ++i).join(".");
+                        externalDomain = d;
+                        if(cookie?.domains?.includes(externalDomain)){
+                            externalDomain = cookie.vendor;
+                        }    
+                    }) 
+
                     let textLanguage;
                     let btnText;
                     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
@@ -1098,18 +1299,30 @@ function checkCookieStatus() {
                     frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 } else if (frae.id.indexOf("map") > -1 || frae.id.indexOf("google") > -1) {
+                    let externalDomain = "www.google.com";
+                    inta_functionalCookieList.forEach((cookie) => {
+                        var i = 0,
+                        d = externalDomain,
+                        p = d.split(".")
+                    
+                        d = p.slice(-1 - ++i).join(".");
+                        externalDomain = d;
+                        if(cookie?.domains?.includes(externalDomain)){
+                            externalDomain = cookie.vendor;
+                        }    
+                    }) 
 
                     let textLanguage;
                     let btnText;
                     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                        textLanguage = message("www.google.com").danish;
+                        textLanguage = message(externalDomain).danish;
                         btnText = buttonText().danish;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                        textLanguage = message("www.google.com").german;
+                        textLanguage = message(externalDomain).german;
                         btnText = buttonText().german;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                        textLanguage = message("www.google.com").english;
+                        textLanguage = message(externalDomain).english;
                         btnText = buttonText().english;
                     } else {
                         textLanguage = message(externalDomain).danish;
@@ -1132,6 +1345,19 @@ function checkCookieStatus() {
             let a      = document.createElement('a');
             a.href = tweet.querySelector("a").href;
             let externalDomain = a.hostname;
+
+            inta_marketingCookieList.forEach((cookie) => {
+                var i = 0,
+                d = externalDomain,
+                p = d.split(".")
+            
+                d = p.slice(-1 - ++i).join(".");
+                externalDomain = d;
+
+                if(cookie?.domains?.includes(externalDomain)){
+                    externalDomain = cookie.vendor;
+                }    
+            }) 
 
             let textLanguage;
             let btnText;
@@ -1214,8 +1440,21 @@ function checkCookieStatus() {
                         
                         const message = (domain) => {
                             if(node.classList.contains("trustpilot-widget")){
-                                domain = "trustpilot.com";
+                                domain = "www.trustpilot.com";  
                             }
+
+                            inta_marketingCookieList.forEach((cookie) => {
+                                var i = 0,
+                                d = domain,
+                                p = d.split(".")
+                            
+                                d = p.slice(-1 - ++i).join(".");
+                                domain = d;
+                                
+                                if(cookie?.domains?.includes(domain)){
+                                    domain = cookie.vendor;
+                                }    
+                            })
                             return {
                                 danish: `<p>Dette indhold hostes af en tredjepart (${domain}). Ved at vise dig det eksterne indhold accepterer du cookies fra ${domain}.</p>`,
                                 english: `<p>This content is hosted by a third party (${domain}). By showing you the external content you accept the cookies provided by ${domain}.</p>`,
