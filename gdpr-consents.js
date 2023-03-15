@@ -876,15 +876,6 @@ inta_marketingCookieList.push({
     ]
 })
 
-inta_marketingCookieList.push({
-    cookie: "__cf_bm",
-    vendor: "Vimeo Inc",
-    purpose: "CMPS cookie is set by Casale Media for anonymous tracking based on user´s website visits, for displaying targeted ads.",
-    domains: [
-        "vimeo.com",
-        "player.vimeo.com"
-    ]
-})
 
 /* - - - List of functional cookies - - - */
 const inta_functionalCookieList = [];
@@ -962,7 +953,34 @@ inta_functionalCookieList.push({
         "stripe.com"
     ]
 })
+inta_functionalCookieList.push({
+    cookie: "__cf_bm",
+    vendor: "CloudFlare",
+    purpose: "to read and filter requests from bots.",
+    domains: [
+        "vimeo.com",
+        "player.vimeo.com"
+    ]
+})
+inta_marketingCookieList.push({
+    cookie: "Vuid",
+    vendor: "Vimeo Inc",
+    purpose: "to store the user's usage history.",
+    domains: [
+        "vimeo.com",
+        "player.vimeo.com"
+    ]
+})
 
+inta_marketingCookieList.push({
+    cookie: "__utmt_player",
+    vendor: "Vimeo Inc",
+    purpose: "Google Analytics cookie deployed by Vimeo which is used to throttle the request rate for the service – limiting the collection of data on high traffic sites. As such, this cookie for the Vimeo player assists in the players performance/uptime monitoring and placement on customer sites. “Utmt” Indicates the type of request, which is one of: event, transaction, item, or custom variable. The item in this case being the Vimeo player as indicated by the word “player”.",
+    domains: [
+        "vimeo.com",
+        "player.vimeo.com"
+    ]
+})
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
