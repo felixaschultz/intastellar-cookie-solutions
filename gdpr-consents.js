@@ -685,23 +685,23 @@ inta_marketingCookieList.push({
 });
 inta_marketingCookieList.push({
     cookie: "li_giant",
-    vendor: "LinkedIn Inc (Microsoft Inc)",
+    vendor: "LinkedIn Inc",
     purpose: "",
     domains: [
         "linkedin.com",
         "licdn.com"
     ],
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
+    vendor_privacy: "https://www.linkedin.com/legal/privacy-policy"
 });
 inta_marketingCookieList.push({
     cookie: "li_fat_id",
-    vendor: "LinkedIn Inc (Microsoft Inc)",
+    vendor: "LinkedIn Inc",
     purpose: "",
     domains: [
         "linkedin.com",
         "licdn.com"
     ],
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
+    vendor_privacy: "https://www.linkedin.com/legal/privacy-policy"
 });
 inta_marketingCookieList.push({
     cookie: "__gpi_optout",
