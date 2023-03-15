@@ -876,6 +876,16 @@ inta_marketingCookieList.push({
     ]
 })
 
+inta_marketingCookieList.push({
+    cookie: "__cf_bm",
+    vendor: "Vimeo Inc",
+    purpose: "CMPS cookie is set by Casale Media for anonymous tracking based on user´s website visits, for displaying targeted ads.",
+    domains: [
+        "vimeo.com",
+        "player.vimeo.com"
+    ]
+})
+
 /* - - - List of functional cookies - - - */
 const inta_functionalCookieList = [];
 inta_functionalCookieList.push({
