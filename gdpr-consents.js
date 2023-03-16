@@ -82,197 +82,287 @@ const intHead = document.querySelector("head");
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 
 /* List of cookies that should not be deleted */
-const inta_requiredCookieList = [
+const inta_requiredCookieList = [{
+    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
+    cookies: [
+        {
+            cookie: "PHPSESSID",
+            purpose: "This cookie is native to PHP applications. The cookie is used to store and identify a users' unique session ID for the purpose of managing user session on the website. The cookie is a session cookies and is deleted when all the browser windows are closed.",
+        },
+        {
+            cookie: "SCJP",
+            purpose: "",
+        },
+        {
+            cookie: "SCJD",
+            purpose: "",
+        },
+        {
+            cookie: "SCWCD",
+            purpose: "",
+        },
+        {
+            cookie: "SCBCD",
+            purpose: "",
+        },
+        {
+            cookie: "SCDJWS",
+            purpose: "",
+        }
+    ]},
     {
-        cookie: "PHPSESSID",
-        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-        purpose: "This cookie is native to PHP applications. The cookie is used to store and identify a users' unique session ID for the purpose of managing user session on the website. The cookie is a session cookies and is deleted when all the browser windows are closed.",
-        vendor_privacy: null
-    },
-    {
-        cookie: "SCJP",
-        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-        purpose: "",
-        vendor_privacy: null
-    },
-    {
-        cookie: "SCJD",
-        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-        purpose: "",
-        vendor_privacy: null
-    },
-    {
-        cookie: "SCWCD",
-        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-        purpose: "",
-        vendor_privacy: null
-    },
-    {
-        cookie: "SCBCD",
-        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-        purpose: "",
-        vendor_privacy: null
-    },
-    {
-        cookie: "SCDJWS",
-        vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-        purpose: "",
-        vendor_privacy: null
-    },
-    {
-        cookie: int_visitorCheck,
         vendor: "Intastellar Solutions, International",
-        purpose: "",
+        cookies: [
+            {
+                cookie: int_visitorCheck,
+                purpose: "",
+            },
+            {
+                cookie: int_hideCookieBannerName,
+                purpose: "It´s function is to hide the popup window onload after user has accept or rejected cookies.",
+            },
+            {
+                cookie: int_marketingCookies,
+                purpose: "Its function is to store users cookie choice regarding marketing / advertising cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for advertising purposes or not.",
+            },
+            {
+                cookie: int_staticsticCookies,
+                purpose: "Its function is to store users cookie choice regarding statistical cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for statistical purposes or not.",
+            },
+            {
+                cookie: int_FunctionalCookies,
+                purpose: "Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not.",
+            }
+        ],
         vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy"
     },
     {
-        cookie: int_hideCookieBannerName,
-        vendor: "Intastellar Solutions, International",
-        purpose: "It´s function is to hide the popup window onload after user has accept or rejected cookies.",
-        vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy"
-    },
-    {
-        cookie: int_marketingCookies,
-        vendor: "Intastellar Solutions, International",
-        purpose: "Its function is to store users cookie choice regarding marketing / advertising cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for advertising purposes or not.",
-        vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy"
-    },
-    {
-        cookie: int_staticsticCookies,
-        vendor: "Intastellar Solutions, International",
-        purpose: "Its function is to store users cookie choice regarding statistical cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for statistical purposes or not.",
-        vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy"
-    },
-    {
-        cookie: int_FunctionalCookies,
-        vendor: "Intastellar Solutions, International",
-        purpose: "Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not.",
-        vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy"
-    },
-    {
-        cookie: "woocommerce_cart_hash",
         vendor: "WooCommerce",
-        purpose: "Helps WooCommerce determine when cart contents/data changes",
+        cookies: [
+            {
+                cookie: "woocommerce_cart_hash",
+                purpose: "Helps WooCommerce determine when cart contents/data changes",
+            },
+            {
+                cookie: "woocommerce_items_in_cart",
+                purpose: "Helps WooCommerce determine when cart contents/data changes.",
+            },
+            {
+                cookie: "wp_woocommerce_session_",
+                purpose: "Contains a unique code for each customer so that it knows where to find the cart data in the database for each customer"
+            },
+            {
+                cookie: "woocommerce_recently_viewed",
+                purpose: "Powers the Recent Viewed Products widget",
+            },
+            {
+                cookie: "store_notice[notice id]",
+                purpose: "Allows customers to dismiss the Store Notice."
+            }
+        ],
         vendor_privacy: "https://automattic.com/privacy/"
     },
     {
-        cookie: "woocommerce_items_in_cart",
-        vendor: "WooCommerce",
-        purpose: "Helps WooCommerce determine when cart contents/data changes.",
-        vendor_privacy: "https://automattic.com/privacy/"
-    },
-    {
-        cookie: "wp_woocommerce_session_",
-        vendor: "WooCommerce",
-        purpose: "Contains a unique code for each customer so that it knows where to find the cart data in the database for each customer",
-        vendor_privacy: "https://automattic.com/privacy/"
-    },
-    {
-        cookie: "woocommerce_recently_viewed",
-        vendor: "WooCommerce",
-        purpose: "Powers the Recent Viewed Products widget",
-        vendor_privacy: "https://automattic.com/privacy/"
-    },
-    {
-        cookie: "store_notice[notice id]",
-        vendor: "WooCommerce",
-        purpose: "Allows customers to dismiss the Store Notice.",
-        vendor_privacy: "https://automattic.com/privacy/"
-    },
-    {
-        cookie: "ASP.NET_SessionId",
         vendor: "Microsoft Inc, ASP.NET",
-        purpose: "Supports the integration of third-party platform on the Website",
+        cookies: [
+            {
+                cookie: "ASP.NET_SessionId",
+                purpose: "Supports the integration of third-party platform on the Website",
+            }
+        ],
         vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
     },
     {
-        cookie: "AWSALB",
         vendor: "Amazon Web Services",
-        purpose: "Required for the website to perform properly.",
-        vendor_privacy: "https://aws.amazon.com/privacy/"
-    },
-    {
-        cookie: "AWSALBCORS",
-        vendor: "Amazon Web Services",
-        purpose: "Supports the website's technical functions.",
+        cookies: [
+            {
+                cookie: "AWSALB",
+                purpose: "Required for the website to perform properly.",
+            },
+            {
+                cookie: "AWSALBCORS",
+                purpose: "Supports the website's technical functions.",
+            }
+        ],
         vendor_privacy: "https://aws.amazon.com/privacy/"
     }
 ];
 const int__cookiesToKeep = inta_requiredCookieList.slice().map((cookie) => {
-    return cookie.cookie;
+    cookie.cookies.map((cookie) => {
+        return cookie.cookie
+    })
 });
 
 /* - - - List of Analytics / Statistics cookie names - - - */
 const inta_statisticCookieList = [];
 inta_statisticCookieList.push({
-    cookie: "_clck",
     vendor: "Microsoft Inc",
-    purpose: "Persists the Clarity User ID and preferences, unique to that site, on the browser. This ensures that behavior in subsequent visits to the same site will be attributed to the same user ID.	",
+    cookies: [
+        {
+            cookie: "_clck",
+            purpose: "Persists the Clarity User ID and preferences, unique to that site, on the browser. This ensures that behavior in subsequent visits to the same site will be attributed to the same user ID.",
+        },
+        {
+            cookie: "_clsk",
+            purpose: "Connects multiple page views by a user into a single Clarity session recording.",
+        },
+        {
+            cookie: "CLID",
+            purpose: "Identifies the first-time Clarity saw this user on any site using Clarity."
+        },
+        {
+            cookie: "ANONCHK",
+            purpose: "Indicates whether MUID is transferred to ANID, a cookie used for advertising. Clarity doesn't use ANID and so this is always set to 0."
+        },
+        {
+            cookie: "MR",
+            purpose: "Indicates whether to refresh MUID."
+        },
+        {
+            cookie: "MUID",
+            purpose: "Identifies unique web browsers visiting Microsoft sites. These cookies are used for advertising, site analytics, and other operational purposes."
+        },
+        {
+            cookie: "SM",
+            purpose: "Used in synchronizing the MUID across Microsoft domains."
+        }
+    ],
     vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
-})
+});
 inta_statisticCookieList.push({
-    cookie: "_clsk",
-    vendor: "Microsoft Inc",
-    purpose: "Connects multiple page views by a user into a single Clarity session recording.",
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
-})
-inta_statisticCookieList.push({
-    cookie: "CLID",
-    vendor: "Microsoft Inc",
-    purpose: "Identifies the first-time Clarity saw this user on any site using Clarity.",
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
-})
-inta_statisticCookieList.push({
-    cookie: "mp_*_mixpanel",
     vendor: "Mixpanel",
-    purpose: "",
+    cookies: [
+        {
+            cookie: "mp_*_mixpanel",
+            purpose: "",
+        },
+        {
+            cookie: "mixpanel_distinct_id",
+            purpose: "To store a unique user ID, store account details.",
+        },
+        {
+            cookie: "mixpanel",
+            purpose: ""
+        }
+    ],
     vendor_privacy: "https://mixpanel.com/legal/privacy-policy/"
 })
 inta_statisticCookieList.push({
-    cookie: "mixpanel_distinct_id",
-    vendor: "Mixpanel",
-    purpose: "To store a unique user ID, store account details.",
-    vendor_privacy: "https://mixpanel.com/legal/privacy-policy/"
-})
-/* inta_statisticCookieList.push({
-    cookie: "*_mixpanel",
-    vendor: "Mixpanel",
-    purpose: ""
-}) */
-inta_statisticCookieList.push({
-    cookie: "mixpanel",
-    vendor: "Mixpanel",
-    purpose: "",
-    vendor_privacy: "https://mixpanel.com/legal/privacy-policy/"
-})
-inta_statisticCookieList.push({
-    cookie: "ANONCHK",
-    vendor: "Microsoft Inc",
-    purpose: "Indicates whether MUID is transferred to ANID, a cookie used for advertising. Clarity doesn't use ANID and so this is always set to 0.",
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
-})
-inta_statisticCookieList.push({
-    cookie: "MR",
-    vendor: "Microsoft Inc",
-    purpose: "Indicates whether to refresh MUID.",
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
-})
-inta_statisticCookieList.push({
-    cookie: "MUID",
-    vendor: "Microsoft Inc",
-    purpose: "Identifies unique web browsers visiting Microsoft sites. These cookies are used for advertising, site analytics, and other operational purposes.",
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
-})
-inta_statisticCookieList.push({
-    cookie: "SM",
-    vendor: "Microsoft Inc",
-    purpose: "Used in synchronizing the MUID across Microsoft domains.",
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
-})
-inta_statisticCookieList.push({
-    cookie: "_ga",
     vendor: "Google Inc",
-    purpose: "to store and count pageviews.",
+    cookies: [
+        {
+            cookie: "_ga",
+            purpose: "to store and count pageviews.",
+        },
+        {
+            cookie: "__gp",
+            purpose: "",
+        },
+        {
+            cookie: "_gid",
+            purpose: ""
+        },
+        {
+            cookie: "_dc_gtm_",
+            purpose: ""
+        },
+        {
+            cookie: "_gaexp_rc",
+            purpose: ""
+        },
+        {
+            cookie: "_gaexp",
+            purpose: ""
+        },
+        {
+            cookie: "_gat",
+            purpose: ""
+        },
+        {
+            cookie: "_opt_expid",
+            purpose: ""
+        },
+        {
+            cookie: "FPAU",
+            purpose: ""
+        },
+        {
+            cookie: "FPGCLDC",
+            purpose: ""
+        },
+        {
+            cookie: "_gcl_dc",
+            purpose: ""
+        },
+        {
+            cookie: "_gcl_au",
+            purpose: ""
+        },
+        {
+            cookie: "FCNEC",
+            purpose: ""
+        },
+        {
+            cookie: "FPLC",
+            purpose: ""
+        },
+        {
+            cookie: "FPGCLAW",
+            purpose: ""
+        },
+        {
+            cookie: "FPGCLGB",
+            purpose: ""
+        },
+        {
+            cookie: "_gcl_aw",
+            purpose: ""
+        },
+        {
+            cookie: "_gac_gb_",
+            purpose: ""
+        },
+        {
+            cookie: "_gcl_gb",
+            purpose: ""
+        },
+        {
+            cookie: "__utma",
+            purpose: "to Store the calculation of days and time to purchase."
+        },
+        {
+            cookie: "__utmb",
+            purpose: "to store time of visit."
+        },
+        {
+            cookie: "__utmc",
+            purpose: "to store time of visit."
+        },
+        {
+            cookie: "__utmt",
+            purpose: "to store time of visit."
+        },
+        {
+            cookie: "__utmz",
+            purpose: "to store used keyword and search engine."
+        },
+        {
+            cookie: "__utmv",
+            purpose: ""
+        },
+        {
+            cookie: "FPID",
+            purpose: ""
+        },
+        {
+            cookie: "_opt",
+            purpose: ""
+        },
+        {
+            cookie: "_gcl",
+            purpose: "to provide ad delivery or retargeting."
+        }
+    ],
     domains: [
         "youtube.com",
         "youtube-nocookie.com",
@@ -280,384 +370,98 @@ inta_statisticCookieList.push({
     ],
     vendor_privacy: "https://policies.google.com/privacy"
 })
+
 inta_statisticCookieList.push({
-    cookie: "__gp",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gid",
-    vendor: "YouTube (Google Inc)",
-    purpose: "",
-    domains: [
-        "youtube.com",
-        "youtube-nocookie.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_dc_gtm_",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gaexp_rc",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gaexp",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gat",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_opt_expid",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "FPAU",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "FPGCLDC",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gcl_dc",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gcl_au",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "FCNEC",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "FPLC",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "FPGCLAW",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "FPGCLGB",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gcl_aw",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gac_gb_",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gcl_gb",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "__utma",
-    vendor: "Google Inc",
-    purpose: "to Store the calculation of days and time to purchase.",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "__utmb",
-    vendor: "Google Inc",
-    purpose: "to store time of visit.",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "__utmc",
-    vendor: "Google Inc",
-    purpose: "to store time of visit.",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "__utmt",
-    vendor: "Google Inc",
-    purpose: "to store time of visit.",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "__utmz",
-    vendor: "Google Inc",
-    purpose: "to store used keyword and search engine.",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "__utmv",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "FPID",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_opt",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_gcl",
-    vendor: "Google Inc",
-    purpose: "to provide ad delivery or retargeting.",
-    domains: [
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjSessionUser_",
     vendor: "Hotjar Ltd.",
-    purpose: "to provide ad delivery or retargeting.",
+    cookies: [
+        {
+            cookie: "_hjSessionUser_",
+            purpose: "",
+        },
+        {
+            cookie: "_hjid",
+            purpose: "_hjUserAttributesHash",
+        },
+        {
+            cookie: "_hjFirstSeen",
+            purpose: "",
+        },
+        {
+            cookie: "_hjUserAttributesHash",
+            purpose: "",
+        },
+        {
+            cookie: "_hjCachedUserAttributes",
+            purpose: "",
+        },
+        {
+            cookie: "_hjViewportId",
+            purpose: "",
+        },
+        {
+            cookie: "_hjSession_",
+            purpose: "",
+        },
+        {
+            cookie: "_hjSessionTooLarge",
+            purpose: "",
+        },
+        {
+            cookie: "_hjSessionRejected",
+            purpose: "",
+        },
+        {
+            cookie: "_hjSessionResumed",
+            purpose: "",
+        },
+        {
+            cookie: "_hjLocalStorageTest",
+            purpose: "",
+        },
+        {
+            cookie: "_hjIncludedInPageviewSample",
+            purpose: "",
+        },
+        {
+            cookie: "_hjIncludedInSessionSample",
+            purpose: "",
+        },
+        {
+            cookie: "_hjAbsoluteSessionInProgress",
+            purpose: "",
+        },
+        {
+            cookie: "_hjTLDTest",
+            purpose: "",
+        },
+        {
+            cookie: "_hjRecordingEnabled",
+            purpose: "",
+        },
+        {
+            cookie: "_hjRecordingLastActivity",
+            purpose: "",
+        },
+        {
+            cookie: "_hjShownFeedbackMessage",
+            purpose: "",
+        },
+        {
+            cookie: "_hjMinimizedPolls",
+            purpose: "",
+        },
+        {
+            cookie: "_hjDonePolls",
+            purpose: "",
+        },
+        {
+            cookie: "_hjClosedSurveyInvites",
+            purpose: "",
+        }
+    ],
     domains: [
         "hotjar.com"
     ],
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjid",
-    vendor: "Hotjar Ltd.",
-    purpose: "to provide ad delivery or retargeting.",
-    domains: [
-        "hotjar.com"
-    ],
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjFirstSeen",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    domains: [
-        "hotjar.com"
-    ],
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjUserAttributesHash",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjCachedUserAttributes",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjViewportId",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjSession_",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjSessionTooLarge",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjSessionRejected",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjSessionResumed",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjLocalStorageTest",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjIncludedInPageviewSample",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjIncludedInSessionSample",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjAbsoluteSessionInProgress",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjTLDTest",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjRecordingEnabled",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjRecordingLastActivity",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjShownFeedbackMessage",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjMinimizedPolls",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjDonePolls",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-inta_statisticCookieList.push({
-    cookie: "_hjClosedSurveyInvites",
-    vendor: "Hotjar Ltd",
-    purpose: "to provide ad delivery or retargeting.",
     vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
 })
 
@@ -665,9 +469,13 @@ inta_statisticCookieList.push({
 const inta_marketingCookieList = [];
 inta_marketingCookieList.push(
     {
-        cookie: "_fbp",
         vendor: "Meta Inc",
-        purpose: "to store and track visits across websites.",
+        cookies: [
+            {
+                cookie: "_fbp",
+                purpose: "to store and track visits across websites."
+            }
+        ],
         domains: [
             "facebook.com",
             "facebook.net",
@@ -678,9 +486,73 @@ inta_marketingCookieList.push(
     }
 );
 inta_marketingCookieList.push({
-    cookie: "__gsas",
     vendor: "Google Inc",
-    purpose: "",
+    cookies: [
+        {
+            cookie: "__gsas",
+            purpose: ""
+        },
+        {
+            cookie: "__gpi",
+            purpose: ""
+        },
+        {
+            cookie: "__gpi_optout",
+            purpose: "",
+        },
+        {
+            cookie: "__gads",
+            purpose: ""
+        },
+        {
+            cookie: "GED_PLAYLIST_ACTIVITY",
+            purpose: ""
+        },
+        {
+            cookie: "FPAU",
+            purpose: "", 
+        },
+        {
+            cookie: "FPGCLDC",
+            purpose: "",
+        },
+        {
+            cookie: "_gcl_dc",
+            purpose: "",
+        },
+        {
+            cookie: "_gcl_gb",
+            purpose: "",
+        },
+        {
+            cookie: "_gcl_au",
+            purpose: "",
+        },
+        {
+            cookie: "FPGCLAW",
+            purpose: "",
+        },
+        {
+            cookie: "FPGCLGB",
+            purpose: "", 
+        },
+        {
+            cookie: "_gac_gb_",
+            purpose: "", 
+        },
+        {
+            cookie: "CONSENT",
+            purpose: "", 
+        },
+        {
+            cookie: "_gcl_aw",
+            purpose: "",
+        },
+        {
+            cookie: "GoogleAdServingTest",
+            purpose: ""
+        }
+    ],
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
@@ -689,365 +561,183 @@ inta_marketingCookieList.push({
     ],
     vendor_privacy: "https://policies.google.com/privacy"
 });
+
 inta_marketingCookieList.push({
-    cookie: "__gpi",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "li_giant",
     vendor: "LinkedIn Inc",
-    purpose: "",
+    cookies: [
+        {
+            cookie: "li_giant",
+            purpose: "",
+        },
+        {
+            cookie: "li_fat_id",
+            purpose: ""
+        }
+    ],
     domains: [
         "linkedin.com",
         "licdn.com"
     ],
     vendor_privacy: "https://www.linkedin.com/legal/privacy-policy"
 });
+
 inta_marketingCookieList.push({
-    cookie: "li_fat_id",
-    vendor: "LinkedIn Inc",
-    purpose: "",
-    domains: [
-        "linkedin.com",
-        "licdn.com"
-    ],
-    vendor_privacy: "https://www.linkedin.com/legal/privacy-policy"
-});
-inta_marketingCookieList.push({
-    cookie: "__gpi_optout",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "__gads",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "GED_PLAYLIST_ACTIVITY",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "FPAU",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "FPGCLDC",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "_gcl_dc",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "_gcl_gb",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "_gcl_au",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "FPGCLAW",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "FPGCLGB",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "_gac_gb_",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "CONSENT",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "youtube.com",
-        "youtube-nocookie.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "CONSENT",
     vendor: "Trustpilot A/S",
-    purpose: "",
+    cookies: [
+        {
+            cookie: "CONSENT",
+            purpose: "",
+        }
+    ],
     domains: [
         "trustpilot.com"
     ],
     vendor_privacy: "https://legal.trustpilot.com/for-reviewers/end-user-privacy-terms"
 });
+
 inta_marketingCookieList.push({
-    cookie: "GPS",
-    vendor: "YouTube (Google Inc)",
-    purpose: "",
+    vendor: "YouTube",
+    cookies: [
+        {
+            cookie: "GPS",
+            purpose: "",
+        },
+        {
+            cookie: "PREF",
+            purpose: "",
+        },
+        {
+            cookie: "VISITOR_INFO1_LIVE",
+            purpose: ""
+        },
+        {
+            cookie: "YSC",
+            purpose: "",
+        }
+    ],
     domains: [
         "youtube.com",
         "youtube-nocookie.com"
     ],
     vendor_privacy: "https://policies.google.com/privacy"
 });
+
 inta_marketingCookieList.push({
-    cookie: "PREF",
-    vendor: "YouTube (Google Inc)",
-    purpose: "",
-    domains: [
-        "youtube.com",
-        "youtube-nocookie.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "VISITOR_INFO1_LIVE",
-    vendor: "YouTube (Google Inc)",
-    purpose: "",
-    domains: [
-        "youtube.com",
-        "youtube-nocookie.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "YSC",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "youtube.com",
-        "youtube-nocookie.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "_gac_",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "_gcl_aw",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "_gcl",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "GoogleAdServingTest",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "www.googletagmanager.com",
-        "www.googleadservice.com",
-        "www.google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-});
-inta_marketingCookieList.push({
-    cookie: "_uetvid",
     vendor: "Microsoft Inc",
-    purpose: "",
+    cookies: [
+        {
+            cookie: "_uetvid",
+            purpose: "",
+        },
+    ],
     domains: [
         "bing.com",
         "clarity.com"
     ],
     vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
 });
+
 inta_marketingCookieList.push({
-    cookie: "personalization_id",
     vendor: "Twitter Intl Co",
-    purpose: "This cookie tracks activities on and off Twitter for a personalized experience",
+    cookies: [
+        {
+            cookie: "personalization_id",
+            purpose: "This cookie tracks activities on and off Twitter for a personalized experience",
+        },
+    ],
     domains: [
         "t.co"
     ],
-    vendor_privacy: "https://twitter.com/en/privacy"
+    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
 });
-inta_marketingCookieList.push({
-    cookie: "CMID",
-    vendor: "Casale Media",
-    purpose: "Casale Media sets thias cookie to collect information on user behavior, for targeted advertising.",
-    domains: [
-        "stripe.com"
-    ],
-    vendor_privacy: null
-});
-inta_marketingCookieList.push({
-    cookie: "CMPS",
-    vendor: "Casale Media",
-    purpose: "CMPS cookie is set by Casale Media for anonymous tracking based on user´s website visits, for displaying targeted ads.",
-    domains: [
-        "stripe.com"
-    ],
-    vendor_privacy: null
-})
 
+inta_marketingCookieList.push({
+    vendor: "Casale Media",
+    cookies: [
+        {
+            cookie: "CMID",
+            purpose: "Casale Media sets thias cookie to collect information on user behavior, for targeted advertising.",
+        },
+        {
+            cookie: "CMPS",
+            purpose: "CMPS cookie is set by Casale Media for anonymous tracking based on user´s website visits, for displaying targeted ads.",
+        },
+        {
+
+        }
+    ],
+    domains: [],
+    vendor_privacy: null
+});
+
+inta_marketingCookieList.push({
+    vendor: "Vimeo Inc",
+    cookies: [
+        {
+            cookie: "Vuid",
+            purpose: "to store the user's usage history.",
+        },
+        {
+            cookie: "__utmt_player",
+            purpose: "Google Analytics cookie deployed by Vimeo which is used to throttle the request rate for the service – limiting the collection of data on high traffic sites. As such, this cookie for the Vimeo player assists in the players performance/uptime monitoring and placement on customer sites. “Utmt” Indicates the type of request, which is one of: event, transaction, item, or custom variable. The item in this case being the Vimeo player as indicated by the word “player”."
+        }
+    ],
+    domains: [
+        "vimeo.com",
+        "player.vimeo.com"
+    ],
+    vendor_privacy: "https://vimeo.com/privacy"
+});
 
 /* - - - List of functional cookies - - - */
 const inta_functionalCookieList = [];
 inta_functionalCookieList.push({
-    cookie: "region",
     vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-    purpose: "This cookie is used to set users prefrence regarding the selected region.",
-    vendor_privacy: null
-})
-inta_functionalCookieList.push({
-    cookie: "language",
-    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-    purpose: "This cookie is used to set users prefrence regarding the selected language.",
-    vendor_privacy: null
-})
-inta_functionalCookieList.push({
-    cookie: "lang",
-    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-    purpose: "This cookie is used to set users prefrence regarding the selected language.",
-    vendor_privacy: null
-})
-inta_functionalCookieList.push({
-    cookie: "hl",
-    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-    purpose: "This cookie is used to set users prefrence regarding the selected region.",
-    vendor_privacy: null
-})
-inta_functionalCookieList.push({
-    cookie: "locale",
-    vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
-    purpose: "This cookie is used to set users prefrence regarding the selected region.",
-    vendor_privacy: null
-})
-inta_functionalCookieList.push({
-    cookie: "FCCDCF",
-    vendor: "Goolge Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
+    cookies: [
+        {
+            cookie: "region",
+            purpose: "This cookie is used to set users prefrence regarding the selected region.",
+        },
+        {
+            cookie: "language",
+            purpose: "This cookie is used to set users prefrence regarding the selected language.",
+        },
+        {
+            cookie: "lang",
+            purpose: "This cookie is used to set users prefrence regarding the selected language.",
+        },
+        {
+            cookie: "hl",
+            purpose: "This cookie is used to set users prefrence regarding the selected language.",
+        },
+        {
+            cookie: "locale",
+            purpose: "This cookie is used to set users prefrence regarding the selected region.",
+        }
     ],
-    vendor_privacy: "https://policies.google.com/privacy"
+    vendor_privacy: null
 })
+
 inta_functionalCookieList.push({
-    cookie: "NID",
     vendor: "Google Inc",
-    purpose: "",
+    cookies: [
+        {
+            cookie: "FCCDCF",
+            purpose: "",
+        },
+        {
+            cookie: "NID",
+            purpose: "",
+        },
+        {
+            cookie: "AMP_TOKEN",
+            purpose: "",
+        },
+        {
+            cookie: "_GRECAPTCHA",
+            purpose: "Ensures the website and application security.",
+        }
+    ],
     domains: [
         "googletagmanager.com",
         "googleadservice.com",
@@ -1056,102 +746,67 @@ inta_functionalCookieList.push({
     ],
     vendor_privacy: "https://policies.google.com/privacy"
 })
+
 inta_functionalCookieList.push({
-    cookie: "AMP_TOKEN",
-    vendor: "Google Inc",
-    purpose: "",
-    domains: [
-        "googletagmanager.com",
-        "googleadservice.com",
-        "google-analytics.com",
-        "google.com"
-    ],
-    vendor_privacy: "https://policies.google.com/privacy"
-})
-inta_functionalCookieList.push({
-    cookie: "__stripe_sid",
     vendor: "Stripe",
-    purpose: "Fraud prevention",
+    cookies: [
+        {
+            cookie: "__stripe_sid",
+            purpose: "Fraud prevention",
+        },
+        {
+            cookie: "__stripe_mid",
+            purpose: "Fraud prevention",
+        },
+    ],
     domains: [
         "stripe.com"
     ],
     vendor_privacy: "https://stripe.com/gb/privacy"
 })
+
 inta_functionalCookieList.push({
-    cookie: "__stripe_mid",
-    vendor: "Stripe",
-    purpose: "Fraud prevention",
-    domains: [
-        "stripe.com"
-    ],
-    vendor_privacy: "https://stripe.com/gb/privacy"
-})
-inta_functionalCookieList.push({
-    cookie: "__cf_bm",
     vendor: "CloudFlare",
-    purpose: "to read and filter requests from bots.",
+    cookies: [
+        {
+            cookie: "__cf_bm",
+            purpose: "to read and filter requests from bots.",
+        }
+    ],
     domains: [
         "vimeo.com",
         "player.vimeo.com"
     ],
     vendor_privacy: "https://www.cloudflare.com/en-gb/privacypolicy/"
 })
+
 inta_functionalCookieList.push({
-    cookie: "rxvt",
     vendor: "Dynatrace",
-    purpose: "Dynatrace. Session timeout.",
-    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
-})
-inta_functionalCookieList.push({
-    cookie: "dtLatC",
-    vendor: "Dynatrace",
-    purpose: "Dynatrace. Measures server latency for performance monitoring.",
-    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
-})
-inta_functionalCookieList.push({
-    cookie: "rxVisitor",
-    vendor: "Dynatrace",
-    purpose: "Dynatrace. This cookie is used to store an anonymous ID for the user to correlate across sessions on the world service.",
-    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
-})
-inta_functionalCookieList.push({
-    cookie: "dtCookie",
-    vendor: "Dynatrace",
-    purpose: "Dynatrace. Tracks a visit across multiple requests",
-    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
-})
-inta_functionalCookieList.push({
-    cookie: "_GRECAPTCHA",
-    vendor: "Google Inc",
-    purpose: "Ensures the website and application security.",
-    vendor_privacy: "https://policies.google.com/technologies/partner-sites?hl=en"
-})
-inta_functionalCookieList.push({
-    cookie: "dtPC",
-    vendor: "Dynatrace",
-    purpose: "Required to identify proper endpoints for beacon transmission; includes session ID for correlation.",
-    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
-})
-inta_marketingCookieList.push({
-    cookie: "Vuid",
-    vendor: "Vimeo Inc",
-    purpose: "to store the user's usage history.",
-    domains: [
-        "vimeo.com",
-        "player.vimeo.com"
+    cookies: [
+        {
+            cookie: "rxvt",
+            purpose: "Dynatrace. Session timeout.",
+        },
+        {
+            cookie: "dtLatC",
+            purpose: "Dynatrace. Measures server latency for performance monitoring.",
+        },
+        {
+            cookie: "rxVisitor",
+            purpose: "Dynatrace. This cookie is used to store an anonymous ID for the user to correlate across sessions on the world service.",
+        },
+        {
+            cookie: "dtCookie",
+            purpose: "Dynatrace. Tracks a visit across multiple requests",
+        },
+        {
+            cookie: "dtPC",
+            purpose: "Required to identify proper endpoints for beacon transmission; includes session ID for correlation.",
+        }
     ],
-    vendor_privacy: "https://vimeo.com/privacy"
+    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
 })
-inta_marketingCookieList.push({
-    cookie: "__utmt_player",
-    vendor: "Vimeo Inc",
-    purpose: "Google Analytics cookie deployed by Vimeo which is used to throttle the request rate for the service – limiting the collection of data on high traffic sites. As such, this cookie for the Vimeo player assists in the players performance/uptime monitoring and placement on customer sites. “Utmt” Indicates the type of request, which is one of: event, transaction, item, or custom variable. The item in this case being the Vimeo player as indicated by the word “player”.",
-    domains: [
-        "vimeo.com",
-        "player.vimeo.com"
-    ],
-    vendor_privacy: "https://vimeo.com/privacy"
-})
+
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
@@ -1424,6 +1079,8 @@ function checkCookieStatus() {
                         d = p.slice(-1 - ++i).join(".");
                         externalDomain = d;
                         
+                        console.log(externalDomain, cookie.vendor);
+
                         if(cookie?.domains?.includes(externalDomain)){
                             externalDomain = cookie.vendor;
                         }    
@@ -2166,6 +1823,31 @@ function deleteAllCookies() {
     }
 }
 
+/* Helper function to list all cookies */
+function listAllCookies(cookieList){
+    return cookieList.map((cookie) => {
+        return `
+            <section class="intaCookieListOverview-grid">
+                <section>
+                    <p class="intaCookieListOverview-heading">Udbyder</p>
+                    <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                    <p class="intaCookieListOverview-heading">Privat Politik</p>
+                    ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
+                </section>
+                <section>
+                    <p class="intaCookieListOverview-heading">Cookie</p>
+                    ${cookie.cookies.map((cookie) => {
+                        return `
+                            <p>${cookie.cookie}</p>
+                            <p>${cookie.purpose}</p>
+                        `
+                    }).join(" ")}
+                </section>
+            </section>
+            `
+    }).join(" ")
+}
+
 function isURL(str) {
     const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
         '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -2426,21 +2108,7 @@ function createCookieSettings() {
                         <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
                         <article class="intaCookieListOverview">
                             ${
-                                inta_requiredCookieList.map((cookie) => {
-                                    return `
-                                        <section class="intaCookieListOverview-grid">
-                                            <section>
-                                                <p class="intaCookieListOverview-heading">Udbyder</p>
-                                                <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                                <p class="intaCookieListOverview-heading">Navn</p>
-                                                <p>${cookie.cookie}</p>
-                                                <p class="intaCookieListOverview-heading">Privat Politik</p>
-                                                ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
-                                            </section>
-                                            <p>${cookie.purpose}</p>
-                                        </section>
-                                        `
-                                }).join(" ")
+                                listAllCookies(inta_requiredCookieList)
                             }
                         </article>
                     </section>
@@ -2449,21 +2117,7 @@ function createCookieSettings() {
                         <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
                         <article class="intaCookieListOverview">
                         ${
-                            inta_functionalCookieList.map((cookie) => {
-                                return `
-                                    <section class="intaCookieListOverview-grid">
-                                        <section>
-                                            <p class="intaCookieListOverview-heading">Udbyder</p>
-                                            <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                            <p class="intaCookieListOverview-heading">Navn</p>
-                                            <p>${cookie.cookie}</p>
-                                            <p class="intaCookieListOverview-heading">Privat Politik</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
-                                        </section>
-                                        <p>${cookie.purpose}</p>
-                                    </section>
-                                    `
-                            }).join(" ")
+                            listAllCookies(inta_functionalCookieList)
                         }
                         </article>                 
                     </section>
@@ -2472,21 +2126,7 @@ function createCookieSettings() {
                         <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p>
                         <article class="intaCookieListOverview">
                         ${
-                            inta_statisticCookieList.map((cookie) => {
-                                return `
-                                    <section class="intaCookieListOverview-grid">
-                                        <section>
-                                            <p class="intaCookieListOverview-heading">Udbyder</p>
-                                            <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                            <p class="intaCookieListOverview-heading">Navn</p>
-                                            <p>${cookie.cookie}</p>
-                                            <p class="intaCookieListOverview-heading">Privat Politik</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
-                                        </section>
-                                        <p>${cookie.purpose}</p>
-                                    </section>
-                                    `
-                            }).join(" ")
+                            listAllCookies(inta_statisticCookieList)
                         }
                         </article>
                     </section>
@@ -2496,21 +2136,7 @@ function createCookieSettings() {
                         <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
                         <article class="intaCookieListOverview">
                         ${
-                            inta_marketingCookieList.map((cookie) => {
-                                return `
-                                    <section class="intaCookieListOverview-grid">
-                                        <section>
-                                            <p class="intaCookieListOverview-heading">Udbyder</p>
-                                            <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                            <p class="intaCookieListOverview-heading">Navn</p>
-                                            <p>${cookie.cookie}</p>
-                                            <p class="intaCookieListOverview-heading">Privat Politik</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
-                                        </section>
-                                        <p>${cookie.purpose}</p>
-                                    </section>
-                                    `
-                            }).join(" ")
+                            listAllCookies(inta_marketingCookieList)
                         }
                         </article>
                     </section>
@@ -2574,21 +2200,7 @@ function createCookieSettings() {
                     <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
                     <article class="intaCookieListOverview">
                         ${
-                            inta_requiredCookieList.map((cookie) => {
-                                return `
-                                    <section class="intaCookieListOverview-grid">
-                                        <section>
-                                            <p class="intaCookieListOverview-heading">Anbieter</p>
-                                            <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                            <p class="intaCookieListOverview-heading">Name</p>
-                                            <p>${cookie.cookie}</p>
-                                            <p class="intaCookieListOverview-heading">Datenschutzerklährung:</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
-                                        </section>
-                                        <p>${cookie.purpose}</p>
-                                    </section>
-                                    `
-                            }).join(" ")
+                            listAllCookies(inta_requiredCookieList)
                         }
                     </article>
                 </section>
@@ -2597,21 +2209,7 @@ function createCookieSettings() {
                     <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_functionalCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Anbieter</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Datenschutzerklährung:</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_functionalCookieList)
                     }
                     </article>
                 </section>
@@ -2620,20 +2218,7 @@ function createCookieSettings() {
                     <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_statisticCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Anbieter</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p class="intaCookieListOverview-heading">Datenschutzerklährung:</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_statisticCookieList)
                     }
                     </article>
                 </section>
@@ -2643,21 +2228,7 @@ function createCookieSettings() {
                     <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_marketingCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Anbieter</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Datenschutzerklährung:</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_marketingCookieList)
                     }
                     </article>
                 </section>
@@ -2722,20 +2293,7 @@ function createCookieSettings() {
                     <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_requiredCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Vendor</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Privacy Policy: ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}</p>
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_requiredCookieList)
                     }
                     </article>
                 </section>
@@ -2744,20 +2302,7 @@ function createCookieSettings() {
                     <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_functionalCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Vendor</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Privacy Policy: ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}</p>
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_functionalCookieList)
                     }
                     </article>
                 </section>
@@ -2766,20 +2311,7 @@ function createCookieSettings() {
                     <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_statisticCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Vendor</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Privacy Policy: ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}</p>
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_statisticCookieList)
                     }
                     </article>
                 </section>
@@ -2789,20 +2321,7 @@ function createCookieSettings() {
                     <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_marketingCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Vendor</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Privacy Policy: ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}</p>
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_marketingCookieList)
                     }
                     </article>
                 </section>
@@ -2869,21 +2388,7 @@ function createCookieSettings() {
                     <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_requiredCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Udbyder</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Navn</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Privat Politik</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_requiredCookieList)
                     }
                     </article>
                 </section>
@@ -2891,21 +2396,7 @@ function createCookieSettings() {
                     <h3>Funktionel / Præference <i class="intastellar__arrow"></i></h3>
                     <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
                     ${
-                        inta_functionalCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Udbyder</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Navn</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Privat Politik</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_functionalCookieList)
                     }
                 </section>
                 <section>
@@ -2913,21 +2404,7 @@ function createCookieSettings() {
                     <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
                     <article class="intaCookieListOverview">
                     ${
-                        inta_statisticCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Udbyder</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Navn</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Privat Politik</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_statisticCookieList)
                     }
                     </article>
                 </section>
@@ -2937,21 +2414,7 @@ function createCookieSettings() {
                     <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
                     <article class="intaCookieListOverview">
                     ${
-                        inta_marketingCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Udbyder</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Navn</p>
-                                        <p>${cookie.cookie}</p>
-                                        <p class="intaCookieListOverview-heading">Privat Politik</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
+                        listAllCookies(inta_marketingCookieList)
                     }
                     </article>
                 </section>
