@@ -178,6 +178,24 @@ const inta_requiredCookieList = [
         vendor: "WooCommerce",
         purpose: "Allows customers to dismiss the Store Notice.",
         vendor_privacy: "https://automattic.com/privacy/"
+    },
+    {
+        cookie: "ASP.NET_SessionId",
+        vendor: "Microsoft Inc, ASP.NET",
+        purpose: "Supports the integration of third-party platform on the Website",
+        vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
+    },
+    {
+        cookie: "AWSALB",
+        vendor: "Amazon Web Services",
+        purpose: "Required for the website to perform properly.",
+        vendor_privacy: "https://aws.amazon.com/privacy/"
+    },
+    {
+        cookie: "AWSALBCORS",
+        vendor: "Amazon Web Services",
+        purpose: "Supports the website's technical functions.",
+        vendor_privacy: "https://aws.amazon.com/privacy/"
     }
 ];
 const int__cookiesToKeep = inta_requiredCookieList.slice().map((cookie) => {
@@ -1078,6 +1096,42 @@ inta_functionalCookieList.push({
     ],
     vendor_privacy: "https://www.cloudflare.com/en-gb/privacypolicy/"
 })
+inta_functionalCookieList.push({
+    cookie: "rxvt",
+    vendor: "Dynatrace",
+    purpose: "Dynatrace. Session timeout.",
+    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
+})
+inta_functionalCookieList.push({
+    cookie: "dtLatC",
+    vendor: "Dynatrace",
+    purpose: "Dynatrace. Measures server latency for performance monitoring.",
+    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
+})
+inta_functionalCookieList.push({
+    cookie: "rxVisitor",
+    vendor: "Dynatrace",
+    purpose: "Dynatrace. This cookie is used to store an anonymous ID for the user to correlate across sessions on the world service.",
+    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
+})
+inta_functionalCookieList.push({
+    cookie: "dtCookie",
+    vendor: "Dynatrace",
+    purpose: "Dynatrace. Tracks a visit across multiple requests",
+    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
+})
+inta_functionalCookieList.push({
+    cookie: "_GRECAPTCHA",
+    vendor: "Google Inc",
+    purpose: "Ensures the website and application security.",
+    vendor_privacy: "https://policies.google.com/technologies/partner-sites?hl=en"
+})
+inta_functionalCookieList.push({
+    cookie: "dtPC",
+    vendor: "Dynatrace",
+    purpose: "Required to identify proper endpoints for beacon transmission; includes session ID for correlation.",
+    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
+})
 inta_marketingCookieList.push({
     cookie: "Vuid",
     vendor: "Vimeo Inc",
@@ -1088,7 +1142,6 @@ inta_marketingCookieList.push({
     ],
     vendor_privacy: "https://vimeo.com/privacy"
 })
-
 inta_marketingCookieList.push({
     cookie: "__utmt_player",
     vendor: "Vimeo Inc",
@@ -2212,7 +2265,7 @@ xhr.send();
 
 function showPrivacy(){
     document.querySelector(".intLearnMoreBtn").style.display = "none";
-    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "206px";
+    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "100px";
     const moreContentText = document.querySelector(".intastellar_privacyPolicy");
     moreContentText.style.height = "100%";
     moreContentText.style.background = "#ffff";
@@ -2365,44 +2418,6 @@ function createCookieSettings() {
                 <section class="intCookieSaveSettingsContainer">
                     ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
                     <button class="intLearnMoreBtn">Læs mere om cookies</button>
-                    <article class="intCookieSetting__form">
-                        <section class="intastellarSettings__control">
-                            <label class="intSettingDisabled checkMarkContainer">
-                                <span class="intSettingsTitle">Nødvendige</span>
-                                <span class="intCheckmarkSliderContainer">
-                                    <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                                    <span class="checkmark round"></span>
-                                </span>
-                            </label>
-                        </section>
-                        <section class="intastellarSettings__control">
-                            <label class="checkMarkContainer">
-                                <span class="intSettingsTitle">Funktionel</span>
-                                <span class="intCheckmarkSliderContainer">
-                                    <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
-                                    <span class="checkmark round"></span>
-                                </span>
-                            </label>
-                        </section>
-                        <section class="intastellarSettings__control">
-                            <label class="checkMarkContainer">
-                                <span class="intSettingsTitle">Statistiske</span>
-                                <span class="intCheckmarkSliderContainer">
-                                    <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
-                                    <span class="checkmark round"></span>
-                                </span>
-                            </label>
-                        </section>
-                        <section class="intastellarSettings__control">
-                            <label class="checkMarkContainer">
-                                <span class="intSettingsTitle">Marketing</span>
-                                <span class="intCheckmarkSliderContainer">
-                                    <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
-                                    <span class="checkmark round"></span>
-                                </span>
-                            </label>
-                        </section>
-                    </article>
                 </section>
                 <section class="intastellar_privacyPolicy"></section>
                 <article class="intReadMore">
@@ -2419,7 +2434,8 @@ function createCookieSettings() {
                                                 <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                                                 <p class="intaCookieListOverview-heading">Navn</p>
                                                 <p>${cookie.cookie}</p>
-                                                ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privatlivs politik</a>`}
+                                                <p class="intaCookieListOverview-heading">Privat Politik</p>
+                                                ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                                             </section>
                                             <p>${cookie.purpose}</p>
                                         </section>
@@ -2441,7 +2457,8 @@ function createCookieSettings() {
                                             <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                                             <p class="intaCookieListOverview-heading">Navn</p>
                                             <p>${cookie.cookie}</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privatlivs politik</a>`}
+                                            <p class="intaCookieListOverview-heading">Privat Politik</p>
+                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                                         </section>
                                         <p>${cookie.purpose}</p>
                                     </section>
@@ -2463,7 +2480,8 @@ function createCookieSettings() {
                                             <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                                             <p class="intaCookieListOverview-heading">Navn</p>
                                             <p>${cookie.cookie}</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privatlivs politik</a>`}
+                                            <p class="intaCookieListOverview-heading">Privat Politik</p>
+                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                                         </section>
                                         <p>${cookie.purpose}</p>
                                     </section>
@@ -2486,7 +2504,8 @@ function createCookieSettings() {
                                             <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                                             <p class="intaCookieListOverview-heading">Navn</p>
                                             <p>${cookie.cookie}</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privatlivs politik</a>`}
+                                            <p class="intaCookieListOverview-heading">Privat Politik</p>
+                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                                         </section>
                                         <p>${cookie.purpose}</p>
                                     </section>
@@ -2496,311 +2515,6 @@ function createCookieSettings() {
                         </article>
                     </section>
                 </article>
-            `;
-    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-        settingsMessage = settingsMessages.german;
-        message = messageWrapStart
-            + messages.german
-            + messageWrapEnd
-            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
-        cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
-        moreFooter.innerHTML =
-        `
-            <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
-                <button class="intLearnMoreBtn" >Mehr Erfahren</button>
-                <article class="intCookieSetting__form">
-                    <section class="intastellarSettings__control">
-                        <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Erforderliche</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Funktionel</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Statistik</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Werbung</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                </article>
-            </section>
-            <section class="intastellar_privacyPolicy"></section>
-            <article class="intReadMore">
-                <section class="required">
-                    <h3 class="intaExpandCookieList">Erforderliche <i class="intastellar__arrow"></i></h3>
-                    <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
-                    <article class="intaCookieListOverview">
-                        ${
-                            inta_requiredCookieList.map((cookie) => {
-                                return `
-                                    <section class="intaCookieListOverview-grid">
-                                        <section>
-                                            <p class="intaCookieListOverview-heading">Anbieter</p>
-                                            <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                            <p class="intaCookieListOverview-heading">Name</p>
-                                            <p>${cookie.cookie}</p>
-                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s Datenschutzerklährung") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
-                                        </section>
-                                        <p>${cookie.purpose}</p>
-                                    </section>
-                                    `
-                            }).join(" ")
-                        }
-                    </article>
-                </section>
-                <section>
-                    <h3 class="intaExpandCookieList">Funktionel / Präferenz <i class="intastellar__arrow"></i></h3>
-                    <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
-                    <article class="intaCookieListOverview">
-                    ${
-                        inta_functionalCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Anbieter</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s Datenschutzerklährung") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
-                    }
-                    </article>
-                </section>
-                <section>
-                    <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
-                    <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
-                    <article class="intaCookieListOverview">
-                    ${
-                        inta_statisticCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Anbieter</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s Datenschutzerklährung") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
-                    }
-                    </article>
-                </section>
-                <section>
-                    <h3 class="intaExpandCookieList">Werbung <i class="intastellar__arrow"></i></h3>
-                    <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
-                    <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
-                    <article class="intaCookieListOverview">
-                    ${
-                        inta_marketingCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Anbieter</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s Datenschutzerklährung") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
-                    }
-                    </article>
-                </section>
-            </article>
-        `;
-    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-        settingsMessage = settingsMessages.english;
-        message =
-            messageWrapStart
-            + messages.english
-            + messageWrapEnd
-            + generatePolicyUrl('Our Privacy and cookie Policy');
-        cookieBtn = generateCookieButtons('Accept', 'Decline All', 'Settings');
-        moreFooter.innerHTML =
-        `
-            <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
-                <button class="intLearnMoreBtn" >Show details</button>
-                <article class="intCookieSetting__form">
-                    <section class="intastellarSettings__control">
-                        <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Strictly necessary</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Functional</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Statics</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Advertisement</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                </article>
-            </section>
-            <section class="intastellar_privacyPolicy"></section>
-            <article class="intReadMore">
-                <section class="required">
-                    <h3 class="intaExpandCookieList">Strictly necessary <i class="intastellar__arrow"></i></h3>
-                    <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
-                    <article class="intaCookieListOverview">
-                    ${
-                        inta_requiredCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Vendor</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
-                    }
-                    </article>
-                </section>
-                <section>
-                    <h3 class="intaExpandCookieList">Functional / Preference <i class="intastellar__arrow"></i></h3>
-                    <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
-                    <article class="intaCookieListOverview">
-                    ${
-                        inta_functionalCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Vendor</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
-                    }
-                    </article>
-                </section>
-                <section>
-                    <h3 class="intaExpandCookieList">Statics <i class="intastellar__arrow"></i></h3>
-                    <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
-                    <article class="intaCookieListOverview">
-                    ${
-                        inta_statisticCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Vendor</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
-                    }
-                    </article>
-                </section>
-                <section>
-                    <h3 class="intaExpandCookieList">Advertisement <i class="intastellar__arrow"></i></h3>
-                    <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
-                    <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
-                    <article class="intaCookieListOverview">
-                    ${
-                        inta_marketingCookieList.map((cookie) => {
-                            return `
-                                <section class="intaCookieListOverview-grid">
-                                    <section>
-                                        <p class="intaCookieListOverview-heading">Vendor</p>
-                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
-                                        <p class="intaCookieListOverview-heading">Name</p>
-                                        <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}
-                                    </section>
-                                    <p>${cookie.purpose}</p>
-                                </section>
-                                `
-                        }).join(" ")
-                    }
-                    </article>
-                </section>
-            </article>
-        `;
-    } else {
-        /* Default */
-        settingsMessage = settingsMessages.danish;
-        
-        message =
-            messageWrapStart
-            + messages.danish
-            + messageWrapEnd
-            + generatePolicyUrl('Vores privat og cookie politik');
-        cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
-        moreFooter.innerHTML =
-        `
-            <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
-                <button class="intLearnMoreBtn" >Læs mere om cookies</button>
                 <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
@@ -2839,6 +2553,314 @@ function createCookieSettings() {
                         </label>
                     </section>
                 </article>
+            `;
+    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+        settingsMessage = settingsMessages.german;
+        message = messageWrapStart
+            + messages.german
+            + messageWrapEnd
+            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
+        cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
+        moreFooter.innerHTML =
+        `
+            <section class="intCookieSaveSettingsContainer">
+                ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
+                <button class="intLearnMoreBtn" >Mehr Erfahren</button>
+            </section>
+            <section class="intastellar_privacyPolicy"></section>
+            <article class="intReadMore">
+                <section class="required">
+                    <h3 class="intaExpandCookieList">Erforderliche <i class="intastellar__arrow"></i></h3>
+                    <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
+                    <article class="intaCookieListOverview">
+                        ${
+                            inta_requiredCookieList.map((cookie) => {
+                                return `
+                                    <section class="intaCookieListOverview-grid">
+                                        <section>
+                                            <p class="intaCookieListOverview-heading">Anbieter</p>
+                                            <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                                            <p class="intaCookieListOverview-heading">Name</p>
+                                            <p>${cookie.cookie}</p>
+                                            <p class="intaCookieListOverview-heading">Datenschutzerklährung:</p>
+                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
+                                        </section>
+                                        <p>${cookie.purpose}</p>
+                                    </section>
+                                    `
+                            }).join(" ")
+                        }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">Funktionel / Präferenz <i class="intastellar__arrow"></i></h3>
+                    <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        inta_functionalCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Anbieter</p>
+                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                        <p class="intaCookieListOverview-heading">Datenschutzerklährung:</p>
+                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
+                    <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        inta_statisticCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Anbieter</p>
+                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p class="intaCookieListOverview-heading">Datenschutzerklährung:</p>
+                                            ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">Werbung <i class="intastellar__arrow"></i></h3>
+                    <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
+                    <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        inta_marketingCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Anbieter</p>
+                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                        <p class="intaCookieListOverview-heading">Datenschutzerklährung:</p>
+                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatlivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s Datenschutzerklährung</a>`}
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
+                    </article>
+                </section>
+            </article>
+            <article class="intCookieSetting__form">
+                    <section class="intastellarSettings__control">
+                        <label class="intSettingDisabled checkMarkContainer">
+                            <span class="intSettingsTitle">Erforderliche</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Funktionel</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Statistik</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Werbung</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                </article>
+        `;
+    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+        settingsMessage = settingsMessages.english;
+        message =
+            messageWrapStart
+            + messages.english
+            + messageWrapEnd
+            + generatePolicyUrl('Our Privacy and cookie Policy');
+        cookieBtn = generateCookieButtons('Accept', 'Decline All', 'Settings');
+        moreFooter.innerHTML =
+        `
+            <section class="intCookieSaveSettingsContainer">
+                ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
+                <button class="intLearnMoreBtn" >Show details</button>
+            </section>
+            <section class="intastellar_privacyPolicy"></section>
+            <article class="intReadMore">
+                <section class="required">
+                    <h3 class="intaExpandCookieList">Strictly necessary <i class="intastellar__arrow"></i></h3>
+                    <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        inta_requiredCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Vendor</p>
+                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                        <p class="intaCookieListOverview-heading">Privacy Policy: ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">Functional / Preference <i class="intastellar__arrow"></i></h3>
+                    <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        inta_functionalCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Vendor</p>
+                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                        <p class="intaCookieListOverview-heading">Privacy Policy: ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">Statics <i class="intastellar__arrow"></i></h3>
+                    <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        inta_statisticCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Vendor</p>
+                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                        <p class="intaCookieListOverview-heading">Privacy Policy: ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">Advertisement <i class="intastellar__arrow"></i></h3>
+                    <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
+                    <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        inta_marketingCookieList.map((cookie) => {
+                            return `
+                                <section class="intaCookieListOverview-grid">
+                                    <section>
+                                        <p class="intaCookieListOverview-heading">Vendor</p>
+                                        <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
+                                        <p class="intaCookieListOverview-heading">Name</p>
+                                        <p>${cookie.cookie}</p>
+                                        <p class="intaCookieListOverview-heading">Privacy Policy: ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privacy policy</a>`}</p>
+                                    </section>
+                                    <p>${cookie.purpose}</p>
+                                </section>
+                                `
+                        }).join(" ")
+                    }
+                    </article>
+                </section>
+            </article>
+            <article class="intCookieSetting__form">
+                    <section class="intastellarSettings__control">
+                        <label class="intSettingDisabled checkMarkContainer">
+                            <span class="intSettingsTitle">Strictly necessary</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Functional</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Statics</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Advertisement</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                </article>
+        `;
+    } else {
+        /* Default */
+        settingsMessage = settingsMessages.danish;
+        
+        message =
+            messageWrapStart
+            + messages.danish
+            + messageWrapEnd
+            + generatePolicyUrl('Vores privat og cookie politik');
+        cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
+        moreFooter.innerHTML =
+        `
+            <section class="intCookieSaveSettingsContainer">
+                ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
+                <button class="intLearnMoreBtn" >Læs mere om cookies</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
@@ -2855,7 +2877,8 @@ function createCookieSettings() {
                                         <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                                         <p class="intaCookieListOverview-heading">Navn</p>
                                         <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatslivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privatslivs politik</a>`}
+                                        <p class="intaCookieListOverview-heading">Privat Politik</p>
+                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                                     </section>
                                     <p>${cookie.purpose}</p>
                                 </section>
@@ -2876,7 +2899,8 @@ function createCookieSettings() {
                                         <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                                         <p class="intaCookieListOverview-heading">Navn</p>
                                         <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatslivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privatslivs politik</a>`}
+                                        <p class="intaCookieListOverview-heading">Privat Politik</p>
+                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                                     </section>
                                     <p>${cookie.purpose}</p>
                                 </section>
@@ -2897,7 +2921,8 @@ function createCookieSettings() {
                                         <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                                         <p class="intaCookieListOverview-heading">Navn</p>
                                         <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatslivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privatslivs politik</a>`}
+                                        <p class="intaCookieListOverview-heading">Privat Politik</p>
+                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                                     </section>
                                     <p>${cookie.purpose}</p>
                                 </section>
@@ -2920,7 +2945,8 @@ function createCookieSettings() {
                                         <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                                         <p class="intaCookieListOverview-heading">Navn</p>
                                         <p>${cookie.cookie}</p>
-                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privatslivs politik") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s privatslivs politik</a>`}
+                                        <p class="intaCookieListOverview-heading">Privat Politik</p>
+                                        ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                                     </section>
                                     <p>${cookie.purpose}</p>
                                 </section>
@@ -2930,6 +2956,44 @@ function createCookieSettings() {
                     </article>
                 </section>
             </article>
+            <article class="intCookieSetting__form">
+                    <section class="intastellarSettings__control">
+                        <label class="intSettingDisabled checkMarkContainer">
+                            <span class="intSettingsTitle">Nødvendige</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Funktionel</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Statistiske</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Marketing</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                </article>
         `;
     }
 
@@ -3217,7 +3281,7 @@ function learnMore(e) {
         document.querySelector(".intastellar_privacyPolicy").height = "0";
     } */
     document.querySelector(".intReadMore").classList.toggle("view");
-    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "225px";
+    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "140px";
 
     if(document.querySelector(".intReadMore").classList.contains("view")){
         e.innerHTML = "Hide details";
