@@ -80,7 +80,6 @@ const blockAdvertismentCookies = "__hideAdvertisementCookies";
 const intHead = document.querySelector("head");
 
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
-console.log(INTA.settings);
 /* List of cookies that should not be deleted */
 const inta_requiredCookieList = [{
     vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
@@ -1035,19 +1034,29 @@ function checkCookieStatus() {
     const analyticsCookies = getCookie(int_analytic);
 
     /* Helper function to create Consents Block message for iframes etc.*/
-    function ConsentsBlock(logo, textLanguage, btnText, datatype){
+    function ConsentsBlock(logo, textLanguage, btnText, datatype, img){
+        let bgStyle = "";
+        if(img !== undefined && img != ""){
+            bgStyle=`
+                <div class="intCookie_ConsentContainer-bgIMG" style="background-image: url(${img}); background-size: cover;"></div>
+            `;
+        }
+
         let p = "";
         if(window.location.host.indexOf("intastellarsolutions.com") == -1){
-            p = `<a href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; padding: .5em 0 0; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`;
+            p = `<a href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; padding: .5em 0 0; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`;
         }
         return `
         <section class="intCookie_ConsentContainer-content">
+            ${bgStyle}
             <section class="intCookie_ConsentLogo-container">
                 <img src="${logo}" class="intCookie_ConsentLogo" alt="Company logo">
             </section>
-            ${textLanguage}
-            <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
-            ${p}
+            <section class="intCookie_ConsentContainer-info">
+                ${textLanguage}
+                <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
+                ${p}
+            </section>
         </section>
         `
     }
@@ -1056,6 +1065,15 @@ function checkCookieStatus() {
         addedNodes.forEach((frae) => {
             if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
                 if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae.className.match(new RegExp(script.scripts.join("|"), "ig"))) {
+                    let ytIMG = "";
+                    let video_id = "";
+
+                    if(frae.src != undefined){
+                        video_id = frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
+                        if(video_id){
+                            ytIMG = "https://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg";
+                        }
+                    }
                     let a      = document.createElement('a');
                     a.href = frae.src;
                     let externalDomain = a.hostname;
@@ -1073,7 +1091,7 @@ function checkCookieStatus() {
                             externalDomain = cookie.vendor;
                         }    
                     })                
-
+                    
                     frae.src = "about:blank";
                     let textLanguage;
                     let btnText;
@@ -1094,7 +1112,7 @@ function checkCookieStatus() {
 
                     let settingsContent = document.createElement("article");
                     settingsContent.classList.add("intCookie_ConsentContainer");
-                    settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
+                    settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
                     if (frae.style.display != "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
