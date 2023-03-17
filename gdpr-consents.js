@@ -1075,8 +1075,10 @@ function checkCookieStatus() {
 
                     if(frae.src != undefined){
                         video_id = frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
-                        if(video_id){
+                        if(video_id && frae?.getAttribute("data-inta-yt-placeholder-img") == null || frae?.getAttribute("data-inta-yt-placeholder-img") == undefined){
                             ytIMG = "https://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg";
+                        }else{
+                            ytIMG = frae?.getAttribute("data-inta-yt-placeholder-img");
                         }
                     }
                     let a      = document.createElement('a');
