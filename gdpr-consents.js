@@ -1117,6 +1117,9 @@ function checkCookieStatus() {
 
                     let settingsContent = document.createElement("article");
                     settingsContent.classList.add("intCookie_ConsentContainer");
+                    if(ytIMG !== undefined && ytIMG != ""){
+                        settingsContent.classList.add("yt-frame");
+                    }
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
                     if (frae.style.display != "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
@@ -1251,6 +1254,7 @@ function checkCookieStatus() {
         }
     }
 
+    /* - - - Helper function for message on the content block - - - */
     const message = (domain, node) => {
         if(node?.classList?.contains("trustpilot-widget")){
             domain = "www.trustpilot.com";  
