@@ -187,12 +187,7 @@ const inta_requiredCookieList = [{
         vendor_privacy: "https://aws.amazon.com/privacy/"
     }
 ];
-const int__cookiesToKeep = inta_requiredCookieList.slice().map((cookie) => {
-    cookie.cookies.map((cookie) => {
-        return cookie.cookie
-    })
-});
-
+const int__cookiesToKeep = [...inta_requiredCookieList.map((cookie) => cookie.cookies.map((c) => c.cookie))].flat(1);
 /* - - - List of Analytics / Statistics cookie names - - - */
 const inta_statisticCookieList = [];
 inta_statisticCookieList.push({
@@ -815,28 +810,23 @@ function intaCookieType(type) {
 
 /* Cookie name list for functional cookies */
 if (intaCookieType(int_FunctionalCookies)) {
-    let newArray = inta_functionalCookieList.map((cookie) => {
-        return cookie.cookie;
-    });
-    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
+    let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => c.cookie))].flat(1)
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray.cookie)
 }
 /* Cookie name list for statistical cookies */
 if(intaCookieType(int_staticsticCookies)){
-    let newArray = inta_statisticCookieList.map((cookie) => {
-        return cookie.cookie;
-    });
-    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
+    let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => c.cookie))].flat(1)
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray.cookie)
 }
 
 /* Cookie name list for marketing / advertisment cookies */
 if (intaCookieType(int_marketingCookies)) {
-    let newArray = inta_marketingCookieList.map((cookie) => {
-        return cookie.cookie;
-    });
+    let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => c.cookie))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
 const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.join("|"), "i");
+
 
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
@@ -1078,8 +1068,6 @@ function checkCookieStatus() {
                     
                         d = p.slice(-1 - ++i).join(".");
                         externalDomain = d;
-                        
-                        console.log(externalDomain, cookie.vendor);
 
                         if(cookie?.domains?.includes(externalDomain)){
                             externalDomain = cookie.vendor;
@@ -1828,20 +1816,24 @@ function listAllCookies(cookieList){
     return cookieList.map((cookie) => {
         return `
             <section class="intaCookieListOverview-grid">
-                <section>
-                    <p class="intaCookieListOverview-heading">Udbyder</p>
+                <section class="intaCookieList-left">
+                    <h3 class="intaCookieListOverview-heading">Udbyder</h3>
                     <p class="intaCookieListOverview-vendor">${cookie.vendor}</p>
                     <p class="intaCookieListOverview-heading">Privat Politik</p>
                     ${(cookie.vendor_privacy === null) ? generatePolicyUrl(cookie.vendor + "´s privacy policy") : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">${cookie.vendor}´s - privatslivs politik</a>`}
                 </section>
                 <section>
-                    <p class="intaCookieListOverview-heading">Cookie</p>
-                    ${cookie.cookies.map((cookie) => {
-                        return `
-                            <p>${cookie.cookie}</p>
-                            <p>${cookie.purpose}</p>
-                        `
-                    }).join(" ")}
+                    <h3 class="intaCookieListOverview-heading">Cookies</h3>
+                    <section>
+                        ${cookie.cookies.map((cookie) => {
+                            return `
+                                <article class="intaCookieList-cookie">
+                                    <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
+                                    <p>${cookie.purpose}</p>
+                                </article>
+                            `
+                        }).join(" ")}
+                    </section>
                 </section>
             </section>
             `
