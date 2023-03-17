@@ -1102,16 +1102,16 @@ function checkCookieStatus() {
                     let btnText;
                     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                        textLanguage = message(externalDomain).danish;
+                        textLanguage = message(externalDomain, frae).danish;
                         btnText = buttonText().danish;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                        textLanguage = message(externalDomain).german;
+                        textLanguage = message(externalDomain, frae).german;
                         btnText = buttonText().german;
                     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                        textLanguage = message(externalDomain).english;
+                        textLanguage = message(externalDomain, frae).english;
                         btnText = buttonText().english;
                     } else {
-                        textLanguage = message(externalDomain).danish;
+                        textLanguage = message(externalDomain, frae).danish;
                         btnText = buttonText().danish;
                     }
 
@@ -1224,7 +1224,7 @@ function checkCookieStatus() {
                 if(cookie?.domains?.includes(externalDomain)){
                     externalDomain = cookie.vendor;
                 }    
-            }) 
+            })
 
             let textLanguage;
             let btnText;
@@ -1250,6 +1250,30 @@ function checkCookieStatus() {
             }
         }
     }
+
+    const message = (domain, node) => {
+        if(node?.classList?.contains("trustpilot-widget")){
+            domain = "www.trustpilot.com";  
+        }
+        inta_marketingCookieList.forEach((cookie) => {
+            var i = 0,
+            d = domain,
+            p = d.split(".")
+        
+            d = p.slice(-1 - ++i).join(".");
+            domain = d;
+            
+            if(cookie?.domains?.includes(domain)){
+                domain = cookie.vendor;
+            }    
+        })
+        return {
+            danish: `<p>Dette indhold leveres af ${domain}.</p>`,
+            english: `<p>This content is provided by ${domain}.</p>`,
+            german: `<p>Dieser Inhalt wird von ${domain} bereitgestellt.</p>`
+        }
+    };
+
     /* - - - Cookie banner settings btn - - - */
     const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
     const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
@@ -1262,13 +1286,6 @@ function checkCookieStatus() {
                 /* Adding  custom button to all blocked embedded content on the site */
                 if (node.nodeType === 1 && node.tagName === "IFRAME") {
                     allScripts.map((script) => {
-                        const message = (domain) => {
-                            return {
-                                danish: `<p>Dette indhold leveres af ${domain}.</p>`,
-                                english: `<p>This content is provided by ${domain}.</p>`,
-                                german: `<p>Dieser Inhalt wird von ${domain} bereitgestellt.</p>`
-                            }
-                        };
 
                         const buttonText = () => {
                             if(script.type == "marketing"){
@@ -1305,30 +1322,6 @@ function checkCookieStatus() {
                 if (node.nodeType === 1 && node.tagName === "DIV") {
                     allScripts.map((script) => {
                         
-                        const message = (domain) => {
-                            if(node.classList.contains("trustpilot-widget")){
-                                domain = "www.trustpilot.com";  
-                            }
-
-                            inta_marketingCookieList.forEach((cookie) => {
-                                var i = 0,
-                                d = domain,
-                                p = d.split(".")
-                            
-                                d = p.slice(-1 - ++i).join(".");
-                                domain = d;
-                                
-                                if(cookie?.domains?.includes(domain)){
-                                    domain = cookie.vendor;
-                                }    
-                            })
-                            return {
-                                danish: `<p>Dette indhold hostes af ${domain}.</p>`,
-                                english: `<p>This content is hosted by ${domain}.</p>`,
-                                german: `<p>Dieser Inhalt wird von ${domain} bereitgestellt.</p>`
-                            }
-                        };
-                        
                         const buttonText = () => {
                             if(script.type == "marketing"){
                                scriptTypelang = {
@@ -1364,13 +1357,6 @@ function checkCookieStatus() {
                 if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
                     allScripts.map((script) => {
                         addedNodes.forEach((tweet) => {
-                            const message = (domain) => {
-                                return {
-                                    danish: `<p>Dette indhold hostes af ${domain}.</p>`,
-                                    english: `<p>This content is hosted by ${domain}.</p>`,
-                                    german: `<p>Dieser Inhalt wird von ${domain} bereitgestellt.</p>`
-                                }
-                            };
 
                             const buttonText = () => {
                                 if(script.type == "marketing"){
