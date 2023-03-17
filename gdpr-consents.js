@@ -1117,7 +1117,7 @@ function checkCookieStatus() {
                         btnText = buttonText().danish;
                     }
 
-                    let settingsContent = document.createElement("article");
+                    let settingsContent = document.createElement("inta-consents-iframe");
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     if(ytIMG !== undefined && ytIMG != ""){
                         settingsContent.classList.add("yt-frame");
@@ -1164,7 +1164,7 @@ function checkCookieStatus() {
                         btnText = buttonText().danish;
                     }
 
-                    let settingsContent = document.createElement("article");
+                    let settingsContent = document.createElement("inta-consents");
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
                     if (frae.style.display != "none") {
@@ -1201,7 +1201,7 @@ function checkCookieStatus() {
                         btnText = buttonText().danish;
                     }
 
-                    let settingsContent = document.createElement("article");
+                    let settingsContent = document.createElement("inta-consents");
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
                     if (frae.style.display != "none") {
@@ -1247,7 +1247,7 @@ function checkCookieStatus() {
                 textLanguage = message(externalDomain).danish;
                 btnText = buttonText().danish;
             }
-            let settingsContent = document.createElement("article");
+            let settingsContent = document.createElement("inta-consents");
             settingsContent.classList.add("intCookie_ConsentContainer");
             settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
             if (tweet.style.display != "none") {
@@ -2070,10 +2070,10 @@ function createCookieSettings() {
 
     let message = "";
     let cookieBtn = "";
-    const banner = document.createElement("article");
+    const banner = document.createElement("inta-consents-settings-btn");
     const bannerContent = document.createElement("button");
 
-    const moreSettings = document.createElement("article");
+    const moreSettings = document.createElement("inta-consents-banner");
     const moreSettingsContent = document.createElement("section");
     const moreintHeader = document.createElement("intheader");
     const moreContentText = document.createElement("section");
@@ -2684,7 +2684,7 @@ function createCookieSettings() {
 
     /* Checking for CCPA "Do not sell my personal data" is enabled if so create an info link on the right side of the screen  */
     if (ccpa && isValidCCPALink()) {
-        const intastellarCCPAContainer = document.createElement("article");
+        const intastellarCCPAContainer = document.createElement("inta-consents-ccpa");
         const intastellarCCPAContainer__content = document.createElement("section");
 
         intastellarCCPAContainer.setAttribute("class", "intastellarCCPAContainer");
@@ -2698,7 +2698,7 @@ function createCookieSettings() {
         document.body.appendChild(intastellarCCPAContainer);
 
 
-        const intastellarCCPApopup = document.createElement("article");
+        const intastellarCCPApopup = document.createElement("inta-consents-ccpa-popup");
         intastellarCCPApopup.setAttribute("class", "intastellarCCPApopup");
         
         const instastellarCCPApopupContent = document.createElement("section");
