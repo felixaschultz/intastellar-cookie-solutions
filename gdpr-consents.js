@@ -576,6 +576,69 @@ inta_marketingCookieList.push({
 });
 
 inta_marketingCookieList.push({
+    vendor: "MailChimp",
+    cookies: [
+        {
+            cookie: "MCPopupClosed",
+            purpose: "to store if a message has been dismissed.",
+        },
+        {
+            cookie: "Mailchimp.cart.*",
+            purpose: ""
+        },
+        {
+            cookie: "mctb_bar_hidden",
+            purpose: ""
+        },
+        {
+            cookie: "mailchimp_campaign_id",
+            purpose: "to store and track the email campaign."
+        },
+        {
+            cookie: "mailchimp_email_id",
+            purpose: "to store and track the email campaign."
+        },
+        {
+            cookie: "Mc_landing_site",
+            purpose: "to store which page was visited first."
+        },
+        {
+            cookie: "Mailchimp_landing_site",
+            purpose: "to store which page was visited first."
+        },
+        {
+            cookie: "Mailchimp_cart_previous_email",
+            purpose: "to store information for remarketing purposes."
+        },
+        {
+            cookie: "Mailchimp_cart_current_email",
+            purpose: "to store information for remarketing purposes."
+        },
+        {
+            cookie: "Mailchimp_user_previous_email",
+            purpose: ""
+        },
+        {
+            cookie: "mailchimp_user_email",
+            purpose: ""
+        },
+        {
+            cookie: "mailchimp.cart.previous_email",
+            purpose: "to store information for remarketing purposes."
+        },
+        {
+            cookie: "mailchimp.cart.current_email",
+            purpose: "to store information for remarketing purposes."
+        }
+    ],
+    domains: [
+        "linkedin.com",
+        "licdn.com"
+    ],
+    vendor_privacy: "https://mailchimp.com/en-gb/legal/privacy/"
+});
+
+inta_marketingCookieList.push({
     vendor: "Trustpilot A/S",
     cookies: [
         {
@@ -1035,7 +1098,7 @@ function checkCookieStatus() {
 
     let tmpl = document.createElement('template');
     tmpl.innerHTML = `
-    <style>:host { display:block; width: auto; max-width: 400px; }</style> <!-- look ma, scoped styles -->
+    <style>:host { display:block; width: auto; max-width: 560px; }</style> <!-- look ma, scoped styles -->
     <slot></slot>
     `;
 
@@ -1144,11 +1207,17 @@ function checkCookieStatus() {
                     let video_id = "";
 
                     if(frae.src != undefined){
-                        video_id = frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
-                        if(video_id && !frae?.hasAttribute("inta-yt-placeholder-img")){
-                            ytIMG = "https://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg";
-                        }else if(frae?.hasAttribute("inta-yt-placeholder-img")){
-                            ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
+                        if(frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")){
+                            video_id = frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
+                            if(video_id && !frae?.hasAttribute("inta-yt-placeholder-img")){
+                                ytIMG = "https://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg";
+                            }else if(frae?.hasAttribute("inta-yt-placeholder-img")){
+                                ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
+                            }
+                        }else{
+                            if(frae?.hasAttribute("inta-yt-placeholder-img")){
+                                ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
+                            }
                         }
                     }
                     let a      = document.createElement('a');
@@ -1240,7 +1309,7 @@ function checkCookieStatus() {
                     if (frae.style.display != "none") {
                     frae.parentElement.replaceChild(settingsContent, frae);
                     }
-                } else if (frae.id.indexOf("map") > -1 || frae.id.indexOf("google") > -1) {
+                } else if (frae.id.indexOf("map") > -1 || frae.id.indexOf("google") > -1 && frae.id.indexOf("google_translate_element2") == -1) {
                     let externalDomain = "www.google.com";
                     inta_functionalCookieList.forEach((cookie) => {
                         var i = 0,
@@ -1277,6 +1346,8 @@ function checkCookieStatus() {
                     if (frae.style.display != "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
+                }else if(frae.id.indexOf("google_translate_element2") > -1 ){
+                    frae.parentElement.replaceChild("", frae);
                 }
             }
         })
@@ -2545,11 +2616,13 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3>Funktionel / Præference <i class="intastellar__arrow"></i></h3>
+                    <h3 class="intaExpandCookieList">Funktionel / Præference <i class="intastellar__arrow"></i></h3>
                     <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
-                    ${
-                        listAllCookies(inta_functionalCookieList)
-                    }
+                    <article class="intaCookieListOverview">
+                        ${
+                            listAllCookies(inta_functionalCookieList)
+                        }
+                    </article>  
                 </section>
                 <section>
                     <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
