@@ -1035,17 +1035,33 @@ function checkCookieStatus() {
 
     let tmpl = document.createElement('template');
     tmpl.innerHTML = `
-    <style>:host { display:block; width: auto; }</style> <!-- look ma, scoped styles -->
+    <style>:host { display:block; width: auto; max-width: 400px; }</style> <!-- look ma, scoped styles -->
     <slot></slot>
     `;
 
     customElements.define('inta-consents-content', class extends HTMLElement {
         constructor() {
             super(); // always call super() first in the constructor.
-
+            let templ = document.createElement("template");
+            templ.innerHTML = `
+                <style>
+                    :host{
+                        min-width: 400px;
+                        margin-inline: auto;
+                        padding: 25px 15px;
+                        color: rgb(36, 36, 36);
+                        background-color: #fff;
+                        border: 3px dotted;
+                        position: relative;
+                        text-align: center;
+                        border-radius: 5px;
+                    }
+                </style>
+            `
             // Attach a shadow root to the element.
-            let shadowRoot = this.attachShadow({mode: 'closed'});
+            let shadowRoot = this.attachShadow({mode: 'open'});
             shadowRoot.appendChild(tmpl.content.cloneNode(true));
+            shadowRoot.appendChild(templ.content.cloneNode(true))
         }
         // ...
     });
@@ -1055,8 +1071,21 @@ function checkCookieStatus() {
             super(); // always call super() first in the constructor.
 
             // Attach a shadow root to the element.
-            let shadowRoot = this.attachShadow({mode: 'closed'});
+            let shadowRoot = this.attachShadow({mode: 'open'});
             shadowRoot.appendChild(tmpl.content.cloneNode(true));
+        }
+        // ...
+    });
+
+    customElements.define('inta-consents-logo', class extends HTMLElement {
+        constructor() {
+            super(); // always call super() first in the constructor.
+
+            // Attach a shadow root to the element.
+            let tmplStyle = document.createElement("template");
+            tmplStyle.innerHTML = `<style>:host{display:block; width: auto;}</style><slot></slot>`;
+            let shadowRoot = this.attachShadow({mode: 'open'});
+            shadowRoot.appendChild(tmplStyle.content.cloneNode(true));
         }
         // ...
     });
@@ -1066,9 +1095,8 @@ function checkCookieStatus() {
             super(); // always call super() first in the constructor.
             // Attach a shadow root to the element.
             let tmplStyle = document.createElement("style");
-            tmplStyle.innerHTML = `:host{background-image: url(${this.getAttribute("inta-bg-img")}); background-size: cover;}`;
-            let shadowRoot = this.attachShadow({mode: 'closed'});
-            shadowRoot.appendChild(tmpl.content.cloneNode(true));
+            tmplStyle.innerHTML = `:host{display:block; width: auto;background-image: url(${this.getAttribute("inta-bg-img")}); background-size: cover;}`;
+            let shadowRoot = this.attachShadow({mode: 'open'});
             shadowRoot.appendChild(tmplStyle);
         }
         // ...
@@ -1095,9 +1123,9 @@ function checkCookieStatus() {
         }else{
             return `
                 <inta-consents-content class="intCookie_ConsentContainer-content">
-                    <inta-consents-section class="intCookie_ConsentLogo-container">
+                    <inta-consents-logo class="intCookie_ConsentLogo-container">
                         <img src="${logo}" class="intCookie_ConsentLogo" alt="Company logo">
-                    </inta-consents-section>
+                    </inta-consents-logo>
                     <inta-consents-section class="intCookie_ConsentContainer-info">
                         ${textLanguage}
                         <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
