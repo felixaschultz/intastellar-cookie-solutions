@@ -58,7 +58,7 @@ const intCookieDomain = (function () {
         d = p.slice(-1 - ++i).join(".");
         d = d;
 
-    return  "domain="+d +";";
+    return  "domain=."+d +";";
 })();
 
 const intCookieDomainWithWWW = (function () {
@@ -70,7 +70,7 @@ const intCookieDomainWithWWW = (function () {
         d = p.slice(-1 - ++i).join(".");
         d = d;
 
-    return  "domain=www"+d +";";
+    return  "domain=www."+d +";";
 })();
 
 const allowAllCookieName = "__all__cookies";
@@ -167,6 +167,10 @@ const inta_requiredCookieList = [{
             {
                 cookie: "ASP.NET_SessionId",
                 purpose: "Supports the integration of third-party platform on the Website",
+            },
+            {
+                cookie: ".AspNetCore.Session",
+                purpose: ""
             }
         ],
         vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
@@ -888,7 +892,7 @@ if (intaCookieType(int_marketingCookies)) {
 }
 
 const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.join("|"), "i");
-
+/* console.log(int__cookiesToKeep); */
 
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
@@ -1202,13 +1206,14 @@ function checkCookieStatus() {
     function loopBlock(addedNodes, message, script, buttonText, logo) {
         addedNodes.forEach((frae) => {
             if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
-                if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae.className.match(new RegExp(script.scripts.join("|"), "ig"))) {
+                if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
+                    frae.sandbox = "";
                     let ytIMG = "";
                     let video_id = "";
-
+                    
                     if(frae.src != undefined){
                         if(frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")){
-                            video_id = frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
+                            video_id = frae?.src?.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
                             if(video_id && !frae?.hasAttribute("inta-yt-placeholder-img")){
                                 ytIMG = "https://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg";
                             }else if(frae?.hasAttribute("inta-yt-placeholder-img")){
@@ -1268,6 +1273,7 @@ function checkCookieStatus() {
                 }
             } else if (!intaCookieType(int_FunctionalCookies) && script.type == "functional") {
                 if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
+                    frae.sandbox = "";
                     let a      = document.createElement('a');
                     a.href = frae.src;
                     let externalDomain = a.hostname;
@@ -1433,7 +1439,6 @@ function checkCookieStatus() {
                 /* Adding  custom button to all blocked embedded content on the site */
                 if (node.nodeType === 1 && node.tagName === "IFRAME") {
                     allScripts.map((script) => {
-
                         const buttonText = () => {
                             if(script.type == "marketing"){
                                scriptTypelang = {
@@ -1839,6 +1844,7 @@ function checkCookieStatus() {
         attributes:    true,
         characterDataOldValue: true
     });
+    deleteAllCookies();
 };
 
 checkCookieStatus();
@@ -1958,10 +1964,10 @@ function deleteAllCookies() {
         var cookie = cookies[i];
         var eqPos = cookie.indexOf("=");
         var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        /* console.log(int__cookiesToKeepReg.test(name)); */
         if (!int__cookiesToKeepReg.test(name)) {
             let localS = window.INTA.settings === undefined || window.INTA.settings.keepInLocalStorage === undefined ? "" : window.INTA.settings.keepInLocalStorage;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; " + intCookieDomain + " path=/";
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; " + intCookieDomainWithWWW + " path=/";
             clearLocalStorage(localS);
         }
     }
@@ -2919,7 +2925,7 @@ function createCookieSettings() {
 function generatePolicyUrl(policy_link_text) {
     let url = "";
     if (typeof window.INTA.policy_link === 'undefined') {
-        console.log("Error: Policy URL has not been defined.");
+        throw new IntastellarSolutionsSDK("Policy URL has not been defined.")
         return;
     }
     if (typeof window.INTA.policy_link === "object") {
