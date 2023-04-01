@@ -197,18 +197,6 @@ inta_statisticCookieList.push({
     vendor: "Microsoft Inc",
     cookies: [
         {
-            cookie: "_clck",
-            purpose: "Persists the Clarity User ID and preferences, unique to that site, on the browser. This ensures that behavior in subsequent visits to the same site will be attributed to the same user ID.",
-        },
-        {
-            cookie: "_clsk",
-            purpose: "Connects multiple page views by a user into a single Clarity session recording.",
-        },
-        {
-            cookie: "CLID",
-            purpose: "Identifies the first-time Clarity saw this user on any site using Clarity."
-        },
-        {
             cookie: "ANONCHK",
             purpose: "Indicates whether MUID is transferred to ANID, a cookie used for advertising. Clarity doesn't use ANID and so this is always set to 0."
         },
@@ -227,6 +215,24 @@ inta_statisticCookieList.push({
     ],
     vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
 });
+inta_statisticCookieList.push({
+    vendor: "Clarity / Microsoft Inc",
+    cookies: [
+        {
+            cookie: "_clck",
+            purpose: "Persists the Clarity User ID and preferences, unique to that site, on the browser. This ensures that behavior in subsequent visits to the same site will be attributed to the same user ID.",
+        },
+        {
+            cookie: "_clsk",
+            purpose: "Connects multiple page views by a user into a single Clarity session recording.",
+        },
+        {
+            cookie: "CLID",
+            purpose: "Identifies the first-time Clarity saw this user on any site using Clarity."
+        }
+    ],
+    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
+})
 inta_statisticCookieList.push({
     vendor: "Mixpanel",
     cookies: [
