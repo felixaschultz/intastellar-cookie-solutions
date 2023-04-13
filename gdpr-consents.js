@@ -20,24 +20,81 @@ let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
 
+let tmpl = document.createElement('template');
+tmpl.innerHTML = `
+<style>:host { display:block; width: auto; max-width: 560px; }</style> <!-- look ma, scoped styles -->
+<slot></slot>
+`;
+
+customElements.define('inta-consents-content', class extends HTMLElement {
+    constructor() {
+        super(); // always call super() first in the constructor.
+        let templ = document.createElement("template");
+        templ.innerHTML = `
+            <style>
+                :host{
+                    min-width: 400px;
+                    margin-inline: auto;
+                    padding: 25px 15px;
+                    color: rgb(36, 36, 36);
+                    background-color: #fff;
+                    border: 3px dotted;
+                    position: relative;
+                    text-align: center;
+                    border-radius: 5px;
+                }
+            </style>
+        `
+        // Attach a shadow root to the element.
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(tmpl.content.cloneNode(true));
+        shadowRoot.appendChild(templ.content.cloneNode(true))
+    }
+    // ...
+});
+
+customElements.define('inta-consents-section', class extends HTMLElement {
+    constructor() {
+        super(); // always call super() first in the constructor.
+
+        // Attach a shadow root to the element.
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(tmpl.content.cloneNode(true));
+    }
+    // ...
+});
+
+customElements.define('inta-consents-logo', class extends HTMLElement {
+    constructor() {
+        super(); // always call super() first in the constructor.
+
+        // Attach a shadow root to the element.
+        let tmplStyle = document.createElement("template");
+        tmplStyle.innerHTML = `<style>:host{display:block; width: auto;}</style><slot></slot>`;
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(tmplStyle.content.cloneNode(true));
+    }
+    // ...
+});
+
+customElements.define('inta-consents-bg', class extends HTMLElement {
+    constructor() {
+        super(); // always call super() first in the constructor.
+        // Attach a shadow root to the element.
+        let tmplStyle = document.createElement("style");
+        tmplStyle.innerHTML = `:host{display:block; width: auto;background-image: url(${this.getAttribute("inta-bg-img")}); background-size: cover;}`;
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(tmplStyle);
+    }
+    // ...
+});
+
 const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
 
 const saveSettings = {
     danish: "Afvis",
     german: "Ablehnen",
     english: "Decline All"
-}
-
-const INTA = window.INTA = {
-    policy_link: undefined,
-    settings: {
-        company: undefined,
-        lang: "auto",
-        color: "rgba(0, 51, 153, 1)",
-        keepInLocalStorage: [],
-        arrange: "ltr",
-        logo: intCookieIcon
-    }
 }
 
 /* Custom error message */
@@ -79,6 +136,11 @@ const blockTrackingCookies = "__hideTrackingCookies";
 const blockAdvertismentCookies = "__hideAdvertisementCookies";
 const intHead = document.querySelector("head");
 
+const region = (window.INTA?.settings?.requiredCookies) ? {
+    cookie: "region",
+    purpose: "This cookie is used to set users prefrence regarding the selected region.",
+} : {}
+
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
 const inta_requiredCookieList = [{
@@ -107,7 +169,8 @@ const inta_requiredCookieList = [{
         {
             cookie: "SCDJWS",
             purpose: "",
-        }
+        },
+        region
     ]},
     {
         vendor: "Intastellar Solutions, International",
@@ -190,7 +253,7 @@ const inta_requiredCookieList = [{
         vendor_privacy: "https://aws.amazon.com/privacy/"
     }
 ];
-const int__cookiesToKeep = [...inta_requiredCookieList.map((cookie) => cookie.cookies.map((c) => c.cookie))].flat(1);
+const int__cookiesToKeep = [...inta_requiredCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
 /* - - - List of Analytics / Statistics cookie names - - - */
 const inta_statisticCookieList = [];
 inta_statisticCookieList.push({
@@ -728,9 +791,6 @@ inta_marketingCookieList.push({
         {
             cookie: "CMPS",
             purpose: "CMPS cookie is set by Casale Media for anonymous tracking based on user´s website visits, for displaying targeted ads.",
-        },
-        {
-
         }
     ],
     domains: [],
@@ -762,10 +822,6 @@ inta_functionalCookieList.push({
     vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
     cookies: [
         {
-            cookie: "region",
-            purpose: "This cookie is used to set users prefrence regarding the selected region.",
-        },
-        {
             cookie: "language",
             purpose: "This cookie is used to set users prefrence regarding the selected language.",
         },
@@ -779,6 +835,10 @@ inta_functionalCookieList.push({
         },
         {
             cookie: "locale",
+            purpose: "This cookie is used to set users prefrence regarding the selected region.",
+        },
+        {
+            cookie: "region",
             purpose: "This cookie is used to set users prefrence regarding the selected region.",
         }
     ],
@@ -882,22 +942,22 @@ function intaCookieType(type) {
 
 /* Cookie name list for functional cookies */
 if (intaCookieType(int_FunctionalCookies)) {
-    let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => c.cookie))].flat(1)
-    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray.cookie)
+    let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
 }
 /* Cookie name list for statistical cookies */
 if(intaCookieType(int_staticsticCookies)){
-    let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => c.cookie))].flat(1)
-    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray.cookie)
+    let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
 /* Cookie name list for marketing / advertisment cookies */
 if (intaCookieType(int_marketingCookies)) {
-    let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => c.cookie))].flat(1)
+    let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
-const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.join("|"), "i");
+const int__cookiesToKeepReg = new RegExp(int__cookiesToKeep.filter(function(entry) { return entry.trim() != ''; }).join("|"), "i");
 /* console.log(int__cookiesToKeep); */
 
 const pSBC = (p, c0, c1, l) => {
@@ -1105,76 +1165,6 @@ function checkCookieStatus() {
         notRequired = new RegExp(m.join("|"), "ig");
     }
     const analyticsCookies = getCookie(int_analytic);
-
-    let tmpl = document.createElement('template');
-    tmpl.innerHTML = `
-    <style>:host { display:block; width: auto; max-width: 560px; }</style> <!-- look ma, scoped styles -->
-    <slot></slot>
-    `;
-
-    customElements.define('inta-consents-content', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
-            let templ = document.createElement("template");
-            templ.innerHTML = `
-                <style>
-                    :host{
-                        min-width: 400px;
-                        margin-inline: auto;
-                        padding: 25px 15px;
-                        color: rgb(36, 36, 36);
-                        background-color: #fff;
-                        border: 3px dotted;
-                        position: relative;
-                        text-align: center;
-                        border-radius: 5px;
-                    }
-                </style>
-            `
-            // Attach a shadow root to the element.
-            let shadowRoot = this.attachShadow({mode: 'open'});
-            shadowRoot.appendChild(tmpl.content.cloneNode(true));
-            shadowRoot.appendChild(templ.content.cloneNode(true))
-        }
-        // ...
-    });
-
-    customElements.define('inta-consents-section', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
-
-            // Attach a shadow root to the element.
-            let shadowRoot = this.attachShadow({mode: 'open'});
-            shadowRoot.appendChild(tmpl.content.cloneNode(true));
-        }
-        // ...
-    });
-
-    customElements.define('inta-consents-logo', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
-
-            // Attach a shadow root to the element.
-            let tmplStyle = document.createElement("template");
-            tmplStyle.innerHTML = `<style>:host{display:block; width: auto;}</style><slot></slot>`;
-            let shadowRoot = this.attachShadow({mode: 'open'});
-            shadowRoot.appendChild(tmplStyle.content.cloneNode(true));
-        }
-        // ...
-    });
-
-    customElements.define('inta-consents-bg', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
-            // Attach a shadow root to the element.
-            let tmplStyle = document.createElement("style");
-            tmplStyle.innerHTML = `:host{display:block; width: auto;background-image: url(${this.getAttribute("inta-bg-img")}); background-size: cover;}`;
-            let shadowRoot = this.attachShadow({mode: 'open'});
-            shadowRoot.appendChild(tmplStyle);
-        }
-        // ...
-    });
-
 
     /* Helper function to create Consents Block message for iframes etc.*/
     function ConsentsBlock(logo, textLanguage, btnText, datatype, img){
@@ -1433,6 +1423,10 @@ function checkCookieStatus() {
         }
     };
 
+    document.fonts.addEventListener("loading", (event) => {
+        console.log(event);
+      });
+
     /* - - - Cookie banner settings btn - - - */
     const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
     const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
@@ -1509,6 +1503,19 @@ function checkCookieStatus() {
                         }
                         let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
                         loopBlock(addedNodes, message, script, buttonText, INTAlogo);
+                    })
+                }
+
+                if (node.nodeType === 1 && node.tagName === "LINK") {
+                    allScripts.map((script) => {
+                        addedNodes.forEach((googleFonts) => {
+                            const linkSrc = googleFonts.href;
+                            if(notRequired.test(linkSrc)){
+                                if(getCookie(int_FunctionalCookies) == "false"){
+                                    if(googleFonts.parentElement !== null) googleFonts.parentElement.removeChild(googleFonts);
+                                }
+                            }
+                        })
                     })
                 }
 
@@ -1970,7 +1977,6 @@ function deleteAllCookies() {
         var cookie = cookies[i];
         var eqPos = cookie.indexOf("=");
         var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        /* console.log(int__cookiesToKeepReg.test(name)); */
         if (!int__cookiesToKeepReg.test(name)) {
             let localS = window.INTA.settings === undefined || window.INTA.settings.keepInLocalStorage === undefined ? "" : window.INTA.settings.keepInLocalStorage;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; " + intCookieDomain + " path=/";
@@ -1996,6 +2002,7 @@ function listAllCookies(cookieList){
                         <h3 class="intaCookieListOverview-heading">Cookies</h3>
                         <section>
                             ${cookie.cookies.map((cookie) => {
+                                if(cookie.cookie == undefined) return;
                                 return `
                                     <article class="intaCookieList-cookie">
                                         <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
@@ -2020,6 +2027,7 @@ function listAllCookies(cookieList){
                     <h3 class="intaCookieListOverview-heading">Cookies</h3>
                     <section>
                         ${cookie.cookies.map((cookie) => {
+                            if(cookie.cookie == undefined) return;
                             return `
                                 <article class="intaCookieList-cookie">
                                     <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
@@ -2044,6 +2052,7 @@ function listAllCookies(cookieList){
                     <h3 class="intaCookieListOverview-heading">Cookies</h3>
                     <section>
                         ${cookie.cookies.map((cookie) => {
+                            if(cookie.cookie == undefined) return;
                             return `
                                 <article class="intaCookieList-cookie">
                                     <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
@@ -3061,6 +3070,16 @@ function gtag() {
 }
 
 window.addEventListener("DOMContentLoaded", function () {
+
+    /* if(window.INTA?.settings?.styleSheets){
+        window.INTA?.settings?.styleSheets.forEach((style) => {
+            const intaGDPRFontStyles = document.createElement("link");
+            intaGDPRFontStyles.href = style;
+            intaGDPRFontStyles.rel = "stylesheet";
+            intHead.appendChild(intaGDPRFontStyles)
+        })
+    } */
+
     gtag('consent', 'default', {
         'ad_storage': 'denied',
         'personalization_storage': 'denied',
