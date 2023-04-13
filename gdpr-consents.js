@@ -19,6 +19,21 @@ const button__acceptAllNecessary = document.querySelector(".intastellarCookieBan
 let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
+const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
+
+if(window.INTA === undefined){
+    window.INTA = {
+        policy_link: undefined,
+        settings: {
+            company: undefined,
+            lang: "auto",
+            color: "rgba(0, 51, 153, 1)",
+            keepInLocalStorage: [],
+            arrange: "ltr",
+            logo: intCookieIcon
+        }
+    }
+}
 
 let tmpl = document.createElement('template');
 tmpl.innerHTML = `
@@ -88,8 +103,6 @@ customElements.define('inta-consents-bg', class extends HTMLElement {
     }
     // ...
 });
-
-const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
 
 const saveSettings = {
     danish: "Afvis",
