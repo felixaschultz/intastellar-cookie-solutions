@@ -11,12 +11,21 @@ const int_hideCookieBannerName = intaCookiePref;
 const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
 const int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
 const int_staticsticCookies = intaCookiePref + ":Statistics-cookies";
-const int_analytic = intaCookiePref + "analytics";
+const int_analytic = intaCookiePref + ":analytics";
 const int_gmc = intaCookiePref + "gmc";
 const int_visitorCheck = intaCookiePref + "visitorCheck";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
-
+let intaConsentsObjectVariable = {
+    consents: {
+        staticsticCookies: false,
+        functionalCookies: false,
+        advertisementCookies: false,
+    },
+    time: new Date().toGMTString(),
+    uid: Math.random().toString(16).slice(2),
+    domain: window.location.host,
+}
 let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
@@ -130,13 +139,13 @@ class IntastellarSolutionsSDK extends Error {
 const intCookieDomain = (function () {
     "use strict";
     var i = 0,
-        d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1") ? "" : "." + document.domain || window.location.host,
+        d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1" || window.location.host.indexOf("127.0.0.1") > -1) ? "" : "." + document.domain || window.location.host,
         p = d.split(".")
     
         d = p.slice(-1 - ++i).join(".");
         d = d;
 
-    return  "domain=."+d +";";
+    return  "domain="+d +";";
 })();
 
 const intCookieDomainWithWWW = (function () {
@@ -3041,6 +3050,7 @@ function decodeIntaConsentsObject(number) {
         var code = number?.slice(i, i += 2);
         string += String.fromCharCode(parseInt(code, parseInt(getCookie(int_hideCookieBannerName).split(".")[1])));
     }
+
     return string;
 }
 
@@ -3117,8 +3127,6 @@ function saveINTCookieSettings() {
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
 
-    console.log((StaticsCheckBox.checked))
-
     if (StaticsCheckBox.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
@@ -3129,21 +3137,21 @@ function saveINTCookieSettings() {
         })
     }
 
-    document.cookie = int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: {
-            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
-            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
-            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
-        },
-        time: new Date().toGMTString()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+    intaConsentsObjectVariable.consents = {
+        staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
+        functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
+        advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
+    };
+    intaConsentsObjectVariable.time = new Date().getTime()
+
+    document.cookie = int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
     "; path=/; " +
     intCookieDomain +
     "";
 
     document.querySelector("html").classList.toggle("noScroll");
     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-    /* window.location.reload(); */
+    window.location.reload();
 }
 /* - - - END - - - */
 window.dataLayer = window.dataLayer || [];
@@ -3331,7 +3339,7 @@ window.addEventListener("DOMContentLoaded", function () {
                             advertisementCookies:  "checked",
                         },
         time: new Date().getTime()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+    }),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
@@ -3349,7 +3357,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                /* window.location.reload() */
+                window.location.reload()
             });
         }
 
@@ -3364,7 +3372,7 @@ window.addEventListener("DOMContentLoaded", function () {
                             advertisementCookies: "checked",
                         },
         time: new Date().getTime()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+    }),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
@@ -3384,7 +3392,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                /* window.location.reload() */
+                window.location.reload()
             });
         }
 
@@ -3399,7 +3407,7 @@ window.addEventListener("DOMContentLoaded", function () {
                             advertisementCookies: false,
                         },
                         time: new Date().getTime()
-                    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+                    }),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
@@ -3413,7 +3421,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                /* window.location.reload() */
+                window.location.reload()
 
             });
         }
@@ -3474,7 +3482,7 @@ window.addEventListener("DOMContentLoaded", function () {
             advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
         },
         time: new Date().getTime()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+    }),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
                         "; path=/; " +
                         intCookieDomain +
                         "";
@@ -3490,16 +3498,15 @@ window.addEventListener("DOMContentLoaded", function () {
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
+                    intaConsentsObjectVariable.consents = {
+                        staticsticCookies: false,
+                        functionalCookies:  false,
+                        advertisementCookies: false,
+                    };
+                    intaConsentsObjectVariable.time = new Date().getTime()
                     var cV = 1;
                     document.cookie =
-                        int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: {
-            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
-            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
-            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
-        },
-        time: new Date().getTime()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+                        int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
                         "; path=/; " +
                         intCookieDomain +
                         "";
@@ -3513,21 +3520,21 @@ window.addEventListener("DOMContentLoaded", function () {
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    /* window.location.reload() */
+                    window.location.reload()
                 });
             });
+            
             all.forEach((a) => {
                 a.addEventListener("click", function () {
+                    intaConsentsObjectVariable.consents = {
+                        staticsticCookies: "checked",
+                        functionalCookies:  "checked",
+                        advertisementCookies: "checked",
+                    };
+                    intaConsentsObjectVariable.time = new Date().getTime()
                     var cV = 1;
                     document.cookie =
-                        int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: {
-            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
-            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
-            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
-        },
-        time: new Date().getTime()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+                        int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
                         "; path=/; " +
                         intCookieDomain +
                         "";
@@ -3547,7 +3554,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    /* window.location.reload() */
+                    window.location.reload()
                 })
             });
         } else {
@@ -3625,7 +3632,7 @@ window.addEventListener("DOMContentLoaded", function () {
             advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
         },
         time: new Date().getTime()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+    }),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
                         "; path=/;" +
                         intCookieDomain +
                         "";
@@ -3646,15 +3653,16 @@ window.addEventListener("DOMContentLoaded", function () {
             all.forEach((a) => {
                 a.addEventListener("click", function () {
                     var cV = 1;
+
+                    intaConsentsObjectVariable.consents = {
+                            staticsticCookies: "checked",
+                            functionalCookies:  "checked",
+                            advertisementCookies: "checked",
+                        };
+                    intaConsentsObjectVariable.time = new Date().getTime()
+
                     document.cookie =
-                        int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: {
-            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
-            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
-            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
-        },
-        time: new Date().getTime()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+                        int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObject),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
                         "; path=/; " +
                         intCookieDomain +
                         "";
@@ -3673,7 +3681,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     }
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    /* window.location.reload(); */
+                    window.location.reload();
                 })
             });
         }
