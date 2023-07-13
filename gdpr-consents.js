@@ -16,6 +16,7 @@ const int_gmc = intaCookiePref + "gmc";
 const int_visitorCheck = intaCookiePref + "visitorCheck";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
+
 let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
@@ -985,10 +986,10 @@ function setIntastellarPartnerDomain(){
             const partnerDomainIframe = document.createElement("iframe");
             partnerDomainIframe.id = "intastellarCrossSiteCheck";
             partnerDomainIframe.src = "https://" + partner + "?intastellarPartners=" + btoa(JSON.stringify({
-                int_staticsticCookies: getCookie(int_staticsticCookies),
-                int_FunctionalCookies: getCookie(int_FunctionalCookies),
+                int_staticsticCookies: JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies,
+                int_FunctionalCookies: JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies,
                 int_hideCookieBannerName: getCookie(int_hideCookieBannerName),
-                int_marketingCookies: getCookie(int_marketingCookies)
+                int_marketingCookies: JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies
             }));
 
             const partnerDomainIframeNoScript = document.createElement("noscript");
@@ -1017,18 +1018,18 @@ function intaCookieType(type) {
 }
 
 /* Cookie name list for functional cookies */
-if (intaCookieType(int_FunctionalCookies)) {
+if (getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies) {
     let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
 }
 /* Cookie name list for statistical cookies */
-if(intaCookieType(int_staticsticCookies)){
+if(getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies){
     let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
 /* Cookie name list for marketing / advertisment cookies */
-if (intaCookieType(int_marketingCookies)) {
+if (getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies) {
     let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
@@ -1219,22 +1220,22 @@ function checkCookieStatus() {
     let m;
     /* autoads-preview.googleusercontent.com */
     /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
-    if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_staticsticCookies) != "checked" && getCookie(int_marketingCookies) != "checked") {
+    if (getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies != "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies != "checked") {
         m = merge(allScripts[1].scripts, allScripts[0].scripts)
         notRequired = new RegExp(m.join("|"), "ig"); 
-    } else if (getCookie(int_marketingCookies) == "checked" && getCookie(int_staticsticCookies) != "checked" && getCookie(int_FunctionalCookies) != "checked") {
+    } else if (getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies != "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies != "checked") {
         m = merge(allScripts[2].scripts, allScripts[0].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (getCookie(int_staticsticCookies) == "checked" && getCookie(int_FunctionalCookies) != "checked" && getCookie(int_marketingCookies) != "checked") {
+    } else if (getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies != "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies != "checked") {
         m = merge(allScripts[1].scripts, allScripts[2].scripts)
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_staticsticCookies) == "checked") {
+    } else if (getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "checked") {
         m = allScripts[1].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (getCookie(int_FunctionalCookies) == "checked" && getCookie(int_marketingCookies) == "checked") {
+    } else if (getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "checked") {
         m = allScripts[0].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
-    } else if (getCookie(int_marketingCookies) == "checked" && getCookie(int_staticsticCookies) == "checked") {
+    } else if (getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "checked" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "checked") {
         m = allScripts[2].scripts;
         notRequired = new RegExp(m.join("|"), "ig");
     } else {
@@ -1278,7 +1279,7 @@ function checkCookieStatus() {
 
     function loopBlock(addedNodes, message, script, buttonText, logo) {
         addedNodes.forEach((frae) => {
-            if (!intaCookieType(int_marketingCookies) && script.type == "marketing") {
+            if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName) != "" && !JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies && script.type == "marketing") {
                 if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
                     frae.sandbox = "";
                     let ytIMG = "";
@@ -1346,7 +1347,7 @@ function checkCookieStatus() {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
-            } else if (!intaCookieType(int_FunctionalCookies) && script.type == "functional") {
+            } else if (getCookie(int_hideCookieBannerName) != "" && !JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies && script.type == "functional") {
                 if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
                     frae.sandbox = "";
                     let a      = document.createElement('a');
@@ -1435,7 +1436,7 @@ function checkCookieStatus() {
     }
 
     function blockBlockQuotes(tweet, message, script, buttonText, logo) {
-        if (!intaCookieType(int_marketingCookies) && script.type == "marketing" && notRequired.test(tweet.className)) {
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName) != "" && !JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
             let a      = document.createElement('a');
             a.href = tweet.querySelector("a").href;
             let externalDomain = a.hostname;
@@ -1590,7 +1591,7 @@ function checkCookieStatus() {
                         addedNodes.forEach((googleFonts) => {
                             const linkSrc = googleFonts.href;
                             if(notRequired.test(linkSrc)){
-                                if(getCookie(int_FunctionalCookies) == "false"){
+                                if(getCookie(int_hideCookieBannerName) != "" && !JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false"){
                                     if(googleFonts.parentElement !== null) googleFonts.parentElement.removeChild(googleFonts);
                                 }
                             }
@@ -1647,8 +1648,8 @@ function checkCookieStatus() {
                             
                         const scriptTag = document.createElement("script");
                         scriptTag.src = src;
-                        if (getCookie(int_FunctionalCookies) == "false" && getCookie(int_marketingCookies) == "false" && getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" && getCookie(int_marketingCookies) == "null" && getCookie(int_staticsticCookies) == "null"
-                            || getCookie(int_FunctionalCookies) == "" && getCookie(int_marketingCookies) == "" && getCookie(int_staticsticCookies) == "") {
+                        if (getCookie(int_hideCookieBannerName) == "" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies== "null"
+                            || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -1682,8 +1683,8 @@ function checkCookieStatus() {
                                 if(node.parentElement !== null) node.parentElement.removeChild(node);
                                 deleteAllCookies();
                             }
-                        } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" || getCookie(int_marketingCookies) == "null" || getCookie(int_staticsticCookies) == "null"
-                            || getCookie(int_FunctionalCookies) == "" || getCookie(int_marketingCookies) == "" || getCookie(int_staticsticCookies) == ""
+                        } else if(getCookie(int_hideCookieBannerName) == "" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies== "null"
+                        || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == ""
                         ){
                             if (
                                 src.indexOf(window.location.hostname) == -1
@@ -1724,8 +1725,8 @@ function checkCookieStatus() {
                         }
 
                         const beforeScriptExecuteListener = function (event) {
-                            if (getCookie(int_FunctionalCookies) == "false" && getCookie(int_marketingCookies) == "false" && getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" && getCookie(int_marketingCookies) == "null" && getCookie(int_staticsticCookies) == "null"
-                            || getCookie(int_FunctionalCookies) == "" && getCookie(int_marketingCookies) == "" && getCookie(int_staticsticCookies) == "") {
+                            if (getCookie(int_hideCookieBannerName) == "" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies== "null"
+                            || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "") {
 
                                 if (
                                     src.indexOf(window.location.hostname) == -1
@@ -1760,8 +1761,8 @@ function checkCookieStatus() {
                                     deleteAllCookies();
                                 } else {
                                 }
-                            } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" || getCookie(int_marketingCookies) == "null" || getCookie(int_staticsticCookies) == "null"
-                            || getCookie(int_FunctionalCookies) == "" || getCookie(int_marketingCookies) == "" || getCookie(int_staticsticCookies) == ""){
+                            } else if(getCookie(int_hideCookieBannerName) == "" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies== "null"
+                            || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == ""){
                                 if (
                                     src.indexOf(window.location.hostname) == -1
                                     && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -1814,8 +1815,8 @@ function checkCookieStatus() {
                         );
                     });
                 } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
-                    if (getCookie(int_FunctionalCookies) == "false" && getCookie(int_marketingCookies) == "false" && getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" && getCookie(int_marketingCookies) == "null" && getCookie(int_staticsticCookies) == "null"
-                            || getCookie(int_FunctionalCookies) == "" && getCookie(int_marketingCookies) == "" && getCookie(int_staticsticCookies) == ""){
+                    if (getCookie(int_hideCookieBannerName) == "" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies== "null"
+                    || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == ""){
 
                         if (
                             notRequired.test(node.innerText)
@@ -1827,7 +1828,7 @@ function checkCookieStatus() {
                             if(node.parentElement !== null) node.parentElement.removeChild(node);
                             deleteAllCookies();
                         }
-                    } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
+                    } else if(JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "false"){
                         
                         if (
                             notRequired.test(node.innerText)
@@ -1846,8 +1847,8 @@ function checkCookieStatus() {
                         let src = node.src || "";
                         const scriptTag = document.createElement("script");
                         scriptTag.src = src;
-                        if (getCookie(int_FunctionalCookies) == "false" && getCookie(int_marketingCookies) == "false" && getCookie(int_staticsticCookies) == "false" || getCookie(int_FunctionalCookies) == "null" && getCookie(int_marketingCookies) == "null" && getCookie(int_staticsticCookies) == "null"
-                            || getCookie(int_FunctionalCookies) == "" && getCookie(int_marketingCookies) == "" && getCookie(int_staticsticCookies) == "") {
+                        if (getCookie(int_hideCookieBannerName) == "" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "null" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies== "null"
+                        || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "") {
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1
@@ -1873,7 +1874,7 @@ function checkCookieStatus() {
                                     node.parentElement.appendChild(scriptTag);
                                 } */
                             }
-                        } else if(getCookie(int_FunctionalCookies) == "false" || getCookie(int_marketingCookies) == "false" || getCookie(int_staticsticCookies) == "false"){
+                        } else if(getCookie(int_hideCookieBannerName) != "" && JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies == "false" ||JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false" || JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies == "false"){
                             if (
                                 src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -2483,7 +2484,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Funktionel</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2492,7 +2493,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Statistiske</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2501,7 +2502,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Marketing</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2575,7 +2576,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Funktionel</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2584,7 +2585,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Statistik</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2593,7 +2594,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Werbung</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2668,7 +2669,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Functional</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2677,7 +2678,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Statics</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2686,7 +2687,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Advertisement</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2763,7 +2764,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Funktionel</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${getCookie(int_FunctionalCookies)}>
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2772,7 +2773,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Statistiske</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${getCookie(int_staticsticCookies)}>
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2781,7 +2782,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Marketing</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${getCookie(int_marketingCookies)}>
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -3032,6 +3033,17 @@ function encodeIntaConsentsObject(string, base) {
     return base+"."+number;
 }
 
+function decodeIntaConsentsObject(number) {
+    var string = "";
+    number = number?.slice(1);
+    var length = number?.length;
+    for (var i = 0; i < length;) {
+        var code = number?.slice(i, i += 2);
+        string += String.fromCharCode(parseInt(code, parseInt(getCookie(int_hideCookieBannerName).split(".")[1])));
+    }
+    return string;
+}
+
 /* - - - Helper functions for Messages */
 function generatePolicyUrl(policy_link_text) {
     let url = "";
@@ -3105,58 +3117,25 @@ function saveINTCookieSettings() {
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
 
-    if (MarketingCheckBox.checked === false && StaticsCheckBox.checked === false && FunctionalCheckbox.checked === false) {
-        document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain + "";
-    }
-
-    if (FunctionalCheckbox.checked) {
-        /* localStorage.setItem("intFunctionalCookies", "checked"); */
-        document.cookie = int_FunctionalCookies+"=checked; expires=" + cookieLifeTime +
-        "; path=/; " +
-        intCookieDomain +
-            "";
-        
-    } else {
-        document.cookie = int_FunctionalCookies+"=false; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-    }
+    console.log((StaticsCheckBox.checked))
 
     if (StaticsCheckBox.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
         })
-        document.cookie = int_staticsticCookies+"=checked; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
     }else {
-        document.cookie = int_staticsticCookies+"=false; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
+        gtag('consent', 'update', {
+            'analytics_storage': 'denied',
+        })
     }
 
-    if (MarketingCheckBox.checked) {
-        document.cookie = int_marketingCookies+"=checked; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-    } else {
-        document.cookie = int_marketingCookies+"=false; expires=" + cookieLifeTime + "; path=/; " +
-                    intCookieDomain +
-                    "";
-    }
-
-    document.cookie =
-    int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
+    document.cookie = int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
         consents: {
-            staticsticCookies : getCookie(int_staticsticCookies),
-            advertismentCookies : getCookie(int_marketingCookies),
-            functionalCookies : getCookie(int_FunctionalCookies),
+            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
+            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
+            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
         },
-        time: new Date().getTime()
+        time: new Date().toGMTString()
     }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
     "; path=/; " +
     intCookieDomain +
@@ -3164,7 +3143,7 @@ function saveINTCookieSettings() {
 
     document.querySelector("html").classList.toggle("noScroll");
     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-    window.location.reload();
+    /* window.location.reload(); */
 }
 /* - - - END - - - */
 window.dataLayer = window.dataLayer || [];
@@ -3189,7 +3168,7 @@ window.addEventListener("DOMContentLoaded", function () {
         'wait_for_update': 500,
     });
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
-    /* (getCookie(int_marketingCookies) == "false") ? '"denied"': '"granted"' */
+    /* (JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
     if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
 
@@ -3235,15 +3214,6 @@ window.addEventListener("DOMContentLoaded", function () {
             } else {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
             }
-        }
-
-        function cookieEnabled() {
-            let cookieEnabled = navigator.cookieEnabled;
-            if (!cookieEnabled) {
-                document.cookie = "test";
-                cookieEnabled = document.cookie.indexOf("test") !== -1;
-            }
-            return cookieEnabled;
         }
 
         document.querySelectorAll(".intastellarCookieBanner__settings").forEach((setting) => {
@@ -3355,12 +3325,17 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 document.cookie =
                     int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: window.navigator,
+                        consents: {
+                            staticsticCookies: "checked",
+                            functionalCookies: "checked",
+                            advertisementCookies:  "checked",
+                        },
         time: new Date().getTime()
     }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
+
                 document.cookie =
                     "_vis_opt=" +
                     cV +
@@ -3372,23 +3347,9 @@ window.addEventListener("DOMContentLoaded", function () {
                     intCookieDomain +
                     "";
 
-                
-
-                document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                window.location.reload()
+                /* window.location.reload() */
             });
         }
 
@@ -3397,7 +3358,11 @@ window.addEventListener("DOMContentLoaded", function () {
                 var cV = 1;
                 document.cookie =
                     int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: window.navigator,
+                        consents: {
+                            staticsticCookies: "checked",
+                            functionalCookies: "checked",
+                            advertisementCookies: "checked",
+                        },
         time: new Date().getTime()
     }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
                     "; path=/; " +
@@ -3417,24 +3382,9 @@ window.addEventListener("DOMContentLoaded", function () {
                 for (var i = 0; i < addedNodes.length; i++) {
                     addedNodes.type = "";
                 }
-
-                
-
-                document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                window.location.reload()
+                /* window.location.reload() */
             });
         }
 
@@ -3443,9 +3393,13 @@ window.addEventListener("DOMContentLoaded", function () {
                 var cV = 1;
                 document.cookie =
                     int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: window.navigator,
-        time: new Date().getTime()
-    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
+                        consents: {
+                            staticsticCookies: false,
+                            functionalCookies: false,
+                            advertisementCookies: false,
+                        },
+                        time: new Date().getTime()
+                    }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
@@ -3457,23 +3411,9 @@ window.addEventListener("DOMContentLoaded", function () {
                     intCookieDomain +
                     "";
 
-                    
-                
-                document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
-                "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
-                "; path=/; " +
-                    intCookieDomain +
-                    "";
-                document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
-                "; path=/; " +
-                    intCookieDomain +
-                    "";
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                window.location.reload()
+                /* window.location.reload() */
 
             });
         }
@@ -3528,7 +3468,11 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: window.navigator,
+        consents: {
+            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
+            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
+            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
+        },
         time: new Date().getTime()
     }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
                         "; path=/; " +
@@ -3546,23 +3490,14 @@ window.addEventListener("DOMContentLoaded", function () {
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
-
-                    document.cookie = int_FunctionalCookies + "=false; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie = int_staticsticCookies + "=false; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie = int_marketingCookies + "=false; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                        intCookieDomain +
-                        "";
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: window.navigator,
+        consents: {
+            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
+            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
+            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
+        },
         time: new Date().getTime()
     }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
                         "; path=/; " +
@@ -3578,7 +3513,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     document.cookie = int_analytic + "=no;expires=" + cookieLifeTime + ";path=/;" + intCookieDomain;
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    window.location.reload()
+                    /* window.location.reload() */
                 });
             });
             all.forEach((a) => {
@@ -3586,7 +3521,11 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: window.navigator,
+        consents: {
+            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
+            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
+            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
+        },
         time: new Date().getTime()
     }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
                         "; path=/; " +
@@ -3606,23 +3545,9 @@ window.addEventListener("DOMContentLoaded", function () {
                         addedNodes.type = "";
                     }
 
-                    
-
-                    document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    window.location.reload()
+                    /* window.location.reload() */
                 })
             });
         } else {
@@ -3691,23 +3616,14 @@ window.addEventListener("DOMContentLoaded", function () {
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
-
-                    document.cookie = int_FunctionalCookies + "=false; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie = int_staticsticCookies + "=false; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie = int_marketingCookies + "=false; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                        intCookieDomain +
-                        "";
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: window.navigator,
+        consents: {
+            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
+            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
+            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
+        },
         time: new Date().getTime()
     }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
                         "; path=/;" +
@@ -3732,7 +3648,11 @@ window.addEventListener("DOMContentLoaded", function () {
                     var cV = 1;
                     document.cookie =
                         int_hideCookieBannerName + "=1."+ encodeIntaConsentsObject(JSON.stringify({
-        consents: window.navigator,
+        consents: {
+            staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
+            functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
+            advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
+        },
         time: new Date().getTime()
     }),randomIntFromInterval(10, 36)) +"; expires=" + cookieLifeTime +
                         "; path=/; " +
@@ -3751,23 +3671,9 @@ window.addEventListener("DOMContentLoaded", function () {
                     for (var i = 0; i < addedNodes.length; i++) {
                         addedNodes.type = "";
                     }
-
-
-                    document.cookie = int_FunctionalCookies + "=checked; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie = int_staticsticCookies + "=checked; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie = int_marketingCookies + "=checked; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    window.location.reload();
+                    /* window.location.reload(); */
                 })
             });
         }
