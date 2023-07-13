@@ -2493,7 +2493,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Funktionel</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies}>
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2502,7 +2502,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Statistiske</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies}>
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2511,7 +2511,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Marketing</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies}>
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2585,7 +2585,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Funktionel</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies}>
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2594,7 +2594,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Statistik</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies}>
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -2603,7 +2603,7 @@ function createCookieSettings() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Werbung</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies}>
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "") ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
