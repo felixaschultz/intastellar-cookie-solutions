@@ -3044,7 +3044,7 @@ function encodeIntaConsentsObject(string, base) {
     return base+"."+number;
 }
 
-function decodeIntaConsentsObject(number) {
+const decodeIntaConsentsObject = window.decodeIntaConsentsObject = function(number) {
     var string = "";
     number = number?.slice(1);
     var length = number?.length;
