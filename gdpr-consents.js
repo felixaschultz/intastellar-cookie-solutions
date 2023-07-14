@@ -1085,7 +1085,19 @@ function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
     s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
-    intHead.appendChild(s);
+
+    const temp = location.host.split('.').reverse();
+    const domain = encodeURI(temp[1] + '.' + temp[0]);
+    const trImage = document.createElement("iframe");
+    trImage.width = "1";
+    trImage.height = "1";
+    trImage.style.position = "absolute";
+    trImage.style.top = "-100%";
+    trImage.style.left = "-100%";
+    trImage.alt = "";
+    trImage.src = "https://consents.cdn.intastellarsolutions.com/cookieSharingIframe.html";
+
+    document.body.appendChild(trImage);
 
     const allScripts = [
         {
