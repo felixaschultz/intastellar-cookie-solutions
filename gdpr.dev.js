@@ -7,7 +7,7 @@
 */
 "use strict";
 /* - - - Setup - - - */
-const intaCookiePref = "cookieconsents";
+const intaCookiePref = "IntastellarSolutionsConsent";
 const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
 const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
 const int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
@@ -85,6 +85,32 @@ customElements.define('inta-consents-content', class extends HTMLElement {
     }
     // ...
 });
+
+customElements.define('inta-consents', class extends HTMLElement {
+    constructor() {
+        super(); // always call super() first in the constructor.
+        let templ = document.createElement("template");
+        templ.innerHTML = `
+            <style>
+                :host{
+                    min-width: 400px;
+                    margin-inline: auto;
+                    padding: 25px 15px;
+                    color: rgb(36, 36, 36);
+                    background-color: #fff;
+                    border: 3px dotted;
+                    position: relative;
+                    text-align: center;
+                    border-radius: 5px;
+                }
+            </style>
+        `
+        // Attach a shadow root to the element.
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(tmpl.content.cloneNode(true));
+        shadowRoot.appendChild(templ.content.cloneNode(true))
+    }
+})
 
 customElements.define('inta-consents-section', class extends HTMLElement {
     constructor() {
@@ -2326,6 +2352,10 @@ function isValidCCPALink() {
 
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+if(window.location.host.indexOf("localhost") > -1 || window.location.host.indexOf("127.0.0.1") > -1){
+    intastellarCreateBanner.src = "../../cb.dev.js";
+}
+
 intHead.insertBefore(intastellarCreateBanner, document.scripts[document.scripts.length - 1]);
 
 

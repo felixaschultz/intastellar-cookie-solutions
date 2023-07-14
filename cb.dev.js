@@ -9,6 +9,7 @@ function createCookieSettings() {
     const moreintHeader = document.createElement("intheader");
     const moreContentText = document.createElement("section");
     const moreFooter = document.createElement("footer");
+    const intaconsents = document.createElement("inta-consents");
 
     let intastellarCookieLanguageSettings = "Cookie Indstillinger";
     if (intastellarCookieLanguage == "de") {
@@ -631,7 +632,7 @@ function createCookieSettings() {
         `;
 
         intastellarCCPAContainer.appendChild(intastellarCCPAContainer__content);
-        document.body.appendChild(intastellarCCPAContainer);
+        intaconsents.appendChild(intastellarCCPAContainer);
 
 
         const intastellarCCPApopup = document.createElement("inta-consents-ccpa-popup");
@@ -662,10 +663,12 @@ function createCookieSettings() {
             `;
         }
         intastellarCCPApopup.appendChild(instastellarCCPApopupContent);
-        document.body.appendChild(intastellarCCPApopup);
-        document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
-            document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
-        })
+        intaconsents.appendChild(intastellarCCPApopup);
+        if(intaconsents != null){
+            document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
+                document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
+            })
+        }
     } else if (!isValidCCPALink() && "ccpa" in window.INTA.settings && window.INTA.settings.ccpa.on === "true") {
         throw new IntastellarSolutionsSDK("Please add your valid 'California Consumer Privacy Act' url to the banner. Read more at https://www.intastellarsolutions.com/gdpr-cookiebanner");
     }
@@ -698,7 +701,8 @@ function createCookieSettings() {
 
     banner.appendChild(bannerContent);
     moreSettings.appendChild(moreSettingsContent);
+    intaconsents.appendChild(banner);
+    intaconsents.appendChild(moreSettings);
 
-    document.body.appendChild(banner);
-    document.body.appendChild(moreSettings);
+    document.body.appendChild(intaconsents);
 }
