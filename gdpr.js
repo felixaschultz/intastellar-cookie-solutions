@@ -1,7 +1,7 @@
 /*
  *  GDPR Cookie banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
- *  consents.cdn.intastellarsolutions.com/js/gdpr-cookiebanner.js
+ *  consents.cdn.intastellarsolutions.com/gdpr.js
  *  @copy 2022 Intastellar Solutions, International
  *
 */
