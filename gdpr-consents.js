@@ -1086,19 +1086,6 @@ function checkCookieStatus() {
     let s = document.createElement("script");
     s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
 
-    const temp = location.host.split('.').reverse();
-    const domain = encodeURI(temp[1] + '.' + temp[0]);
-    const trImage = document.createElement("iframe");
-    trImage.width = "1";
-    trImage.height = "1";
-    trImage.style.position = "absolute";
-    trImage.style.top = "-100%";
-    trImage.style.left = "-100%";
-    trImage.alt = "";
-    trImage.src = "https://consents.cdn.intastellarsolutions.com/cookieSharingIframe.html";
-
-    document.body.appendChild(trImage);
-
     const allScripts = [
         {
             /* Analytics Scripts which are beeing blocked */
@@ -1459,7 +1446,7 @@ function checkCookieStatus() {
     }
 
     function blockBlockQuotes(tweet, message, script, buttonText, logo) {
-        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 && !JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || !JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
             let a      = document.createElement('a');
             a.href = tweet.querySelector("a").href;
             let externalDomain = a.hostname;
@@ -1655,7 +1642,6 @@ function checkCookieStatus() {
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
                             blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
-
                         })
                     });   
                 }
@@ -3056,7 +3042,7 @@ function encodeIntaConsentsObject(string, base) {
     return base+"."+number;
 }
 
-const decodeIntaConsentsObject = window.decodeIntaConsentsObject = function(number) {
+function decodeIntaConsentsObject(number) {
     var string = "";
     number = number?.slice(1);
     var length = number?.length;
@@ -3179,6 +3165,19 @@ if(typeof fbq === "undefined" || typeof fbq === "null"){
 
 /* setIntastellarPartnerDomain(); */
 window.addEventListener("DOMContentLoaded", function () {
+    const temp = location.host.split('.').reverse();
+    const domain = encodeURI(temp[1] + '.' + temp[0]);
+    const trImage = document.createElement("iframe");
+    trImage.width = "1";
+    trImage.height = "1";
+    trImage.style.position = "absolute";
+    trImage.style.top = "-100%";
+    trImage.style.left = "-100%";
+    trImage.style.display = "none";
+    trImage.alt = "";
+    trImage.src = "https://consents.cdn.intastellarsolutions.com/cookieSharingIframe.html";
+
+    document.body.appendChild(trImage);
 
     gtag('consent', 'default', {
         'ad_storage': 'denied',
