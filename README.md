@@ -21,8 +21,13 @@ This banner is free to use as long as the powered by logo is not removed. We are
 
 We support your own cookiebanner design. Just use our technology to block thrid party cookies.
 
+## Development
+If you want to develop on the banner you must do that in your own branch and in all *.dev.js files. You create your branch from the "development" branch, and merge your also into
+that. The "cb(.dev).js" file is the function to create the banner via HTML and CSS and styling. The "gdpr(.dev).js" file is all the functionality of the banner
+
 ## Implementation
 Read our documentation under: https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs to implement our cookie banner on your website.
+You can add and load it direct via https://consents.cdn.intastellarsolutions.com/gdpr.js
 
 ## Technologies
 This project i created with:
