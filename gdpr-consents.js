@@ -15,6 +15,7 @@ const int_staticsticCookies = intaCookiePref + ":Statistics-cookies";
 const int_visitorCheck = intaCookiePref + "visitorCheck";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
+let intastellarShowHideDetailsText = "Show details";
 let intaConsentsObjectVariable = {
     consents: {
         staticsticCookies: false,
@@ -2427,6 +2428,7 @@ function createCookieSettings() {
 
     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
         settingsMessage = settingsMessages.danish;
+        intastellarShowHideDetailsText = "Vis detaljer";
         message =
             messageWrapStart
             + messages.danish
@@ -2437,7 +2439,7 @@ function createCookieSettings() {
             `
                 <section class="intCookieSaveSettingsContainer">
                     ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
-                    <button class="intLearnMoreBtn">Læs mere om cookies</button>
+                    <button class="intLearnMoreBtn">${intastellarShowHideDetailsText}</button>
                 </section>
                 <section class="intastellar_privacyPolicy"></section>
                 <article class="intReadMore">
@@ -2520,6 +2522,7 @@ function createCookieSettings() {
             `;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
         settingsMessage = settingsMessages.german;
+        intastellarShowHideDetailsText = "Details einblenden";
         message = messageWrapStart
             + messages.german
             + messageWrapEnd
@@ -2529,7 +2532,7 @@ function createCookieSettings() {
         `
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
-                <button class="intLearnMoreBtn" >Mehr Erfahren</button>
+                <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
@@ -2612,6 +2615,7 @@ function createCookieSettings() {
         `;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
         settingsMessage = settingsMessages.english;
+        intastellarShowHideDetailsText = "Show details";
         message =
             messageWrapStart
             + messages.english
@@ -2622,7 +2626,7 @@ function createCookieSettings() {
         `
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
-                <button class="intLearnMoreBtn" >Show details</button>
+                <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
@@ -2706,7 +2710,7 @@ function createCookieSettings() {
     } else {
         /* Default */
         settingsMessage = settingsMessages.danish;
-        
+        intastellarShowHideDetailsText = "Vis detaljer";
         message =
             messageWrapStart
             + messages.danish
@@ -2717,7 +2721,7 @@ function createCookieSettings() {
         `
             <section class="intCookieSaveSettingsContainer">
                 ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
-                <button class="intLearnMoreBtn" >Læs mere om cookies</button>
+                <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
@@ -3111,13 +3115,32 @@ function learnMore(e) {
     document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "140px";
 
     if(document.querySelector(".intReadMore").classList.contains("view")){
-        e.innerHTML = "Hide details";
+        if(intastellarCookieLanguage == "da-DK" || intastellarCookieLanguage == "da" || intastellarCookieLanguage == "dk"){
+            console.log("Hej")
+            e.innerHTML = "Skjul detaljer";
+        }else if(intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US"){
+            e.innerHTML = "Hide details";
+        }else if(intastellarCookieLanguage != null && intastellarCookieLanguage === "de" || intastellarCookieLanguage === "de-DE"){
+            e.innerHTML = "Details ausblenden";
+        }
+
         document.querySelector(".intReadMore").scrollIntoView({
             behavior: "smooth",
             block: "start",
         });
     }else {
-        e.innerHTML = "Show details";
+        if(intastellarCookieLanguage == "da-DK" || intastellarCookieLanguage == "da" || intastellarCookieLanguage == "dk"){
+            e.innerHTML = "Vis details";
+        }else if(intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US"){
+            e.innerHTML = "Show details";
+        }else if(intastellarCookieLanguage != null && intastellarCookieLanguage === "de" || intastellarCookieLanguage === "de-DE"){
+            e.innerHTML = "Details einblenden";
+        }
+
+        document.querySelector(".intastellarCookieConstents__contentC").scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
     }
 }
 
