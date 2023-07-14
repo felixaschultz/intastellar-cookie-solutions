@@ -3168,13 +3168,9 @@ window.addEventListener("DOMContentLoaded", function () {
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
-    trImage.width = "1";
-    trImage.height = "1";
-    trImage.style.position = "absolute";
-    trImage.style.top = "-100%";
-    trImage.style.left = "-100%";
+    trImage.name = "intastellar-solutions-sharinglibrary-iframe";
     trImage.style.display = "none";
-    trImage.alt = "";
+    trImage.title = "Intastellar Solutions cookie sharing library";
     trImage.src = "https://consents.cdn.intastellarsolutions.com/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
@@ -3192,7 +3188,7 @@ window.addEventListener("DOMContentLoaded", function () {
     /* (JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
     if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
-
+    
     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
     if (isValidPolicyLink()) {
         createCookieSettings();
@@ -3366,6 +3362,12 @@ window.addEventListener("DOMContentLoaded", function () {
                     intCookieDomain +
                     "";
 
+                window.addEventListener("message", function(e){
+                    if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                })
+
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
                 window.location.reload()
@@ -3402,6 +3404,13 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+
+                window.addEventListener("message", function(e){
+                    if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                })
+
                 window.location.reload()
             });
         }
@@ -3430,6 +3439,13 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+
+                window.addEventListener("message", function(e){
+                    if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                })
+
                 window.location.reload()
 
             });
@@ -3528,6 +3544,13 @@ window.addEventListener("DOMContentLoaded", function () {
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+
+                    window.addEventListener("message", function(e){
+                        if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    })
+
                     window.location.reload()
                 });
             });
@@ -3561,6 +3584,13 @@ window.addEventListener("DOMContentLoaded", function () {
 
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+
+                    window.addEventListener("message", function(e){
+                        if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    })
+
                     window.location.reload()
                 })
             });
@@ -3651,6 +3681,13 @@ window.addEventListener("DOMContentLoaded", function () {
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+
+                    window.addEventListener("message", function(e){
+                        if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    })
+
                     window.location.reload()
                 });
             });
@@ -3685,6 +3722,13 @@ window.addEventListener("DOMContentLoaded", function () {
                     }
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+
+                    window.addEventListener("message", function(e){
+                        if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    })
+
                     window.location.reload();
                 })
             });
