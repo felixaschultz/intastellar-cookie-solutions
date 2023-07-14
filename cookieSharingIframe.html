@@ -11,7 +11,7 @@
             console.log(window.parent);
             "use strict";
             window.addEventListener("message", (event) => {
-                console.log(event.data)
+                /* console.log(event.data) */
             });
             window.parent.postMessage("ready", "*");
         })();
