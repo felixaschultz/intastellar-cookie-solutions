@@ -16,6 +16,7 @@ const int_visitorCheck = intaCookiePref + "visitorCheck";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
+const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 let intaConsentsObjectVariable = {
     consents: {
         staticsticCookies: false,
@@ -2324,7 +2325,7 @@ function isValidCCPALink() {
 }
 
 const intastellarCreateBanner = document.createElement("script");
-intastellarCreateBanner.src = "https://downloads.intastellarsolutions.com/cb.js";
+intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 intHead.insertBefore(intastellarCreateBanner, document.scripts[document.scripts.length - 1]);
 
 
@@ -2488,7 +2489,7 @@ window.addEventListener("DOMContentLoaded", function () {
     trImage.name = "intastellar-solutions-sharinglibrary-iframe";
     trImage.style.display = "none";
     trImage.title = "Intastellar Solutions cookie sharing library";
-    trImage.src = "https://consents.cdn.intastellarsolutions.com/cookieSharingIframe.html";
+    trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
 
@@ -2680,7 +2681,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     "";
 
                 window.addEventListener("message", function(e){
-                    if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                    if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
@@ -2723,7 +2724,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                 window.addEventListener("message", function(e){
-                    if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                    if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
@@ -2758,7 +2759,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                 window.addEventListener("message", function(e){
-                    if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                    if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
@@ -2863,7 +2864,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                     window.addEventListener("message", function(e){
-                        if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                         document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
@@ -2903,7 +2904,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                     window.addEventListener("message", function(e){
-                        if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                         document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
@@ -3000,7 +3001,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                     window.addEventListener("message", function(e){
-                        if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                         document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
@@ -3041,7 +3042,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                     window.addEventListener("message", function(e){
-                        if(e.data != "ready" && e.origin != "https://consents.cdn.intastellarsolutions.com") return
+                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                         document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
