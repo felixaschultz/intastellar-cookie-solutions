@@ -7,7 +7,7 @@
 */
 "use strict";
 /* - - - Setup - - - */
-const intaCookiePref = "IntastellarSolutionsConsent";
+const intaCookiePref = "IntastellarConsentSolution";
 const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
 const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
 const int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
@@ -86,7 +86,7 @@ customElements.define('inta-consents-content', class extends HTMLElement {
     // ...
 });
 
-customElements.define('inta-consents', class extends HTMLElement {
+customElements.define('intastellar-consents', class extends HTMLElement {
     constructor() {
         super(); // always call super() first in the constructor.
         let templ = document.createElement("template");

@@ -9,7 +9,7 @@ function createCookieSettings() {
     const moreintHeader = document.createElement("intheader");
     const moreContentText = document.createElement("section");
     const moreFooter = document.createElement("footer");
-    const intaconsents = document.createElement("inta-consents");
+    const intaconsents = document.createElement("intastellar-consents");
 
     let intastellarCookieLanguageSettings = "Cookie Indstillinger";
     if (intastellarCookieLanguage == "de") {
@@ -664,11 +664,6 @@ function createCookieSettings() {
         }
         intastellarCCPApopup.appendChild(instastellarCCPApopupContent);
         intaconsents.appendChild(intastellarCCPApopup);
-        if(intaconsents != null){
-            document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
-                document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
-            })
-        }
     } else if (!isValidCCPALink() && "ccpa" in window.INTA.settings && window.INTA.settings.ccpa.on === "true") {
         throw new IntastellarSolutionsSDK("Please add your valid 'California Consumer Privacy Act' url to the banner. Read more at https://www.intastellarsolutions.com/gdpr-cookiebanner");
     }
@@ -705,4 +700,10 @@ function createCookieSettings() {
     intaconsents.appendChild(moreSettings);
 
     document.body.appendChild(intaconsents);
+
+    if(document.querySelector(".intastellarCCPAContainer") != null){
+        document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
+            document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
+        })
+    }
 }
