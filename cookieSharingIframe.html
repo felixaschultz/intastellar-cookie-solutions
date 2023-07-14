@@ -9,6 +9,11 @@
     <script>
         window.addEventListener("message", function(o){
             console.log(o);
+
+            o.source.postMessage(
+                "hi there yourself!  the secret response " + "is: rheeeeet!",
+                o.origin,
+            );
         })
     </script>
 </body>
