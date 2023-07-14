@@ -8,7 +8,7 @@
 "use strict";
 /* - - - Setup - - - */
 const intaCookiePref = "cookieconsents";
-const int_hideCookieBannerName = intaCookiePref;
+const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
 const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
 const int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
 const int_staticsticCookies = intaCookiePref + ":Statistics-cookies";
