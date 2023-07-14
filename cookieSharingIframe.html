@@ -7,14 +7,14 @@
 </head>
 <body>
     <script>
-        window.addEventListener("message", function(o){
-            console.log(o);
-
-            o.source.postMessage(
-                "hi there yourself!  the secret response " + "is: rheeeeet!",
-                o.origin,
-            );
-        })
+        (function() {
+            console.log(window.parent);
+            "use strict";
+            window.addEventListener("message", (event) => {
+                console.log(event.data)
+            });
+            window.parent.postMessage("ready", "*");
+        })();
     </script>
 </body>
 </html>
