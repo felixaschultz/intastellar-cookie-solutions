@@ -1085,7 +1085,7 @@ function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
     s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
-
+    intHead.appendChild(s);
     const allScripts = [
         {
             /* Analytics Scripts which are beeing blocked */
