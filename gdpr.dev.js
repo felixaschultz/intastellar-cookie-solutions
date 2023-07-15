@@ -93,15 +93,7 @@ customElements.define('intastellar-consents', class extends HTMLElement {
         templ.innerHTML = `
             <style>
                 :host{
-                    min-width: 400px;
-                    margin-inline: auto;
-                    padding: 25px 15px;
-                    color: rgb(36, 36, 36);
-                    background-color: #fff;
-                    border: 3px dotted;
-                    position: relative;
-                    text-align: center;
-                    border-radius: 5px;
+
                 }
             </style>
         `
@@ -1124,8 +1116,9 @@ function checkCookieStatus() {
             type: "statics",
             scripts: [
                 "(mixpanel)",
-                /* "([\-\.]googleoptimize+)", */
+                "([\-\.]googleoptimize+)",
                 "([\-\.]google-analytics+)",
+                "([\-\.]googletagmanager+)",
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
                 "([\-\.]bing+)",
@@ -1391,7 +1384,7 @@ function checkCookieStatus() {
                     let a      = document.createElement('a');
                     a.href = frae.src;
                     let externalDomain = a.hostname;
-                    frae.src = "about:blank";
+                    /* frae.src = "about:blank"; */
 
                     
                     inta_functionalCookieList.forEach((cookie) => {
@@ -2500,6 +2493,7 @@ function saveINTCookieSettings() {
     document.querySelector("html").classList.toggle("noScroll");
     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
     window.location.reload();
+    /* checkCookieStatus(); */
 }
 /* - - - END - - - */
 window.dataLayer = window.dataLayer || [];
