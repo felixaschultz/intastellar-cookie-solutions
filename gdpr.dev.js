@@ -1116,9 +1116,8 @@ function checkCookieStatus() {
             type: "statics",
             scripts: [
                 "(mixpanel)",
-                "([\-\.]googleoptimize+)",
+                /* "([\-\.]googleoptimize+)", */
                 "([\-\.]google-analytics+)",
-                "([\-\.]googletagmanager+)",
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
                 "([\-\.]bing+)",
@@ -1970,7 +1969,7 @@ function checkCookieStatus() {
     deleteAllCookies();
 };
 
-checkCookieStatus();
+/* checkCookieStatus(); */
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -2332,6 +2331,22 @@ function hidePrivacy(){
     moreContentText.style.height = "0";
 }
 
+function checkIfIncluded(file) {
+    var links = document.getElementsByTagName("link");
+    for(var i = 0; i < links.length; i++) {
+        if (links[i].href.substr(-file.length) == file)
+            return true;
+    }
+
+    var scripts = document.getElementsByTagName("script");
+    for(var i = 0; i < scripts.length; i++) {
+        if (scripts[i].src.substr(-file.length) == file)
+            return true;
+    }
+
+    return false;
+}
+
 /* - - - Helper functions for Validate policy link - - - */
 function isValidCCPALink() {
     if (typeof window.INTA.settings.ccpa === "object" && isCCPAURL(window.INTA.settings.ccpa.url)) {
@@ -2348,7 +2363,6 @@ intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if(window.location.host.indexOf("localhost") > -1 || window.location.host.indexOf("127.0.0.1") > -1){
     intastellarCreateBanner.src = "../../cb.dev.js";
 }
-
 intHead.insertBefore(intastellarCreateBanner, document.scripts[document.scripts.length - 1]);
 
 
