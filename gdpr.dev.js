@@ -17,7 +17,7 @@ const button__acceptAll = document.querySelector(".intastellarCookieBanner__acce
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
-const intaCookieConsents = JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents;
+const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 let intaConsentsObjectVariable = {
     consents: {
         staticsticCookies: false,
