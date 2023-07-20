@@ -1967,7 +1967,6 @@ function checkCookieStatus() {
         attributes:    true,
         characterDataOldValue: true
     });
-    deleteAllCookies();
 };
 
 checkCookieStatus();
