@@ -64,7 +64,7 @@ function createCookieSettings() {
     const messageWrapStart = "<div class='intastellarCookie-settings__contentConatiner'><p>";
     const messageWrapEnd = "</p></div>";
 
-    const settingsMessages = {
+    const settingsMessagesLanguages = {
         danish: `<h3 style="    font-size: 25px;">Du bestemmer over dine data</h3>
         <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
         <ol>
@@ -102,7 +102,7 @@ function createCookieSettings() {
     }
 
     if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-        settingsMessage = settingsMessages.danish;
+        settingsMessage = settingsMessagesLanguages.danish;
         intastellarShowHideDetailsText = "Vis detaljer";
         message =
             messageWrapStart
@@ -111,127 +111,34 @@ function createCookieSettings() {
             + generatePolicyUrl('Vores privat og cookie politik');
         cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
         moreFooter.innerHTML =
-            `
-                <section class="intCookieSaveSettingsContainer">
-                    ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
-                    <button class="intLearnMoreBtn">${intastellarShowHideDetailsText}</button>
-                </section>
-                <section class="intastellar_privacyPolicy"></section>
-                <article class="intReadMore">
-                    <section class="required">
-                        <h3 class="intaExpandCookieList">Nødvendige <i class="intastellar__arrow"></i></h3>
-                        <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
-                        <article class="intaCookieListOverview">
-                            ${
-                                listAllCookies(inta_requiredCookieList)
-                            }
-                        </article>
-                    </section>
-                    <section>
-                        <h3 class="intaExpandCookieList">Funktionel / Præference <i class="intastellar__arrow"></i></h3>
-                        <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
-                        <article class="intaCookieListOverview">
-                        ${
-                            listAllCookies(inta_functionalCookieList)
-                        }
-                        </article>                 
-                    </section>
-                    <section>
-                        <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
-                        <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p>
-                        <article class="intaCookieListOverview">
-                        ${
-                            listAllCookies(inta_statisticCookieList)
-                        }
-                        </article>
-                    </section>
-                    <section>
-                        <h3 class="intaExpandCookieList">Marketing <i class="intastellar__arrow"></i></h3>
-                        <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
-                        <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
-                        <article class="intaCookieListOverview">
-                        ${
-                            listAllCookies(inta_marketingCookieList)
-                        }
-                        </article>
-                    </section>
-                </article>
-                <article class="intCookieSetting__form">
-                    <section class="intastellarSettings__control">
-                        <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Nødvendige</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Funktionel</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Statistiske</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                    <section class="intastellarSettings__control">
-                        <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Marketing</span>
-                            <span class="intCheckmarkSliderContainer">
-                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
-                                <span class="checkmark round"></span>
-                            </span>
-                        </label>
-                    </section>
-                </article>
-            `;
-    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-        settingsMessage = settingsMessages.german;
-        intastellarShowHideDetailsText = "Details einblenden";
-        message = messageWrapStart
-            + messages.german
-            + messageWrapEnd
-            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
-        cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
-        moreFooter.innerHTML =
         `
             <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(saveSettings.german, 'Akzeptieren')}
+                ${generateCookieSettingsButton(language.danish.saveSettings, 'Accepter')}
                 <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
-                    <h3 class="intaExpandCookieList">Erforderliche <i class="intastellar__arrow"></i></h3>
-                    <p>Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.</p>
-                    <article class="intaCookieListOverview">
-                        ${
-                            listAllCookies(inta_requiredCookieList)
-                        }
-                    </article>
-                </section>
-                <section>
-                    <h3 class="intaExpandCookieList">Funktionel / Präferenz <i class="intastellar__arrow"></i></h3>
-                    <p>Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln.</p>
+                    <h3 class="intaExpandCookieList">${language.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.danish.necessary.description}</p>
                     <article class="intaCookieListOverview">
                     ${
-                        listAllCookies(inta_functionalCookieList)
+                        listAllCookies(inta_requiredCookieList)
                     }
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
-                    <p>Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern.</p>
+                    <h3 class="intaExpandCookieList">${language.danish.functional.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.danish.functional.description}</p>
+                    <article class="intaCookieListOverview">
+                        ${
+                            listAllCookies(inta_functionalCookieList)
+                        }
+                    </article>  
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">${language.danish.statisic.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.danish.statisic.description}</p> 
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_statisticCookieList)
@@ -239,9 +146,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">Werbung <i class="intastellar__arrow"></i></h3>
-                    <p>Wir verwenden Webtechnologien (auch Cookies) ausgewählter Partner, um Ihnen speziell auf Sie zugeschnittene Inhalte und Werbung auf Webseiten und Social-Media-Seiten anzeigen zu können. Diese Inhalte werden anhand Ihres Nutzungsverhaltens ausgewählt und angezeigt.</p>
-                    <p>Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen.</p>
+                    <h3 class="intaExpandCookieList">${language.danish.marketing.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.danish.marketing.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_marketingCookieList)
@@ -252,7 +158,7 @@ function createCookieSettings() {
             <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Erforderliche</span>
+                            <span class="intSettingsTitle">${language.danish.necessary.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -261,7 +167,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Funktionel</span>
+                            <span class="intSettingsTitle">${language.danish.functional.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
@@ -270,7 +176,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Statistik</span>
+                            <span class="intSettingsTitle">${language.danish.statisic.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
@@ -279,7 +185,99 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Werbung</span>
+                            <span class="intSettingsTitle">${language.danish.marketing.title}</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                </article>
+        `;
+    } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+        settingsMessage = settingsMessagesLanguages.german;
+        intastellarShowHideDetailsText = "Details einblenden";
+        message = messageWrapStart
+            + messages.german
+            + messageWrapEnd
+            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
+        cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
+        moreFooter.innerHTML =
+        `
+            <section class="intCookieSaveSettingsContainer">
+                ${generateCookieSettingsButton(language.german.saveSettings, 'Akzeptieren')}
+                <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+            </section>
+            <section class="intastellar_privacyPolicy"></section>
+            <article class="intReadMore">
+                <section class="required">
+                    <h3 class="intaExpandCookieList">${language.german.necessary.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.german.necessary.description}</p>
+                    <article class="intaCookieListOverview">
+                        ${
+                            listAllCookies(inta_requiredCookieList)
+                        }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">${language.german.functional.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.german.functional.description}</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        listAllCookies(inta_functionalCookieList)
+                    }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">${language.german.statisic.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.german.statisic.description}</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        listAllCookies(inta_statisticCookieList)
+                    }
+                    </article>
+                </section>
+                <section>
+                    <h3 class="intaExpandCookieList">${language.german.marketing.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.german.marketing.description}</p>
+                    <article class="intaCookieListOverview">
+                    ${
+                        listAllCookies(inta_marketingCookieList)
+                    }
+                    </article>
+                </section>
+            </article>
+            <article class="intCookieSetting__form">
+                    <section class="intastellarSettings__control">
+                        <label class="intSettingDisabled checkMarkContainer">
+                            <span class="intSettingsTitle">${language.german.necessary.title}</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">${language.german.functional.title}</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">${language.german.statisic.title}</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    </section>
+                    <section class="intastellarSettings__control">
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">${language.german.marketing.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
@@ -289,7 +287,7 @@ function createCookieSettings() {
                 </article>
         `;
     } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-        settingsMessage = settingsMessages.english;
+        settingsMessage = settingsMessagesLanguages.english;
         intastellarShowHideDetailsText = "Show details";
         message =
             messageWrapStart
@@ -300,14 +298,14 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         `
             <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(saveSettings.english, 'Accept')}
+                ${generateCookieSettingsButton(language.english.saveSettings, 'Accept')}
                 <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
-                    <h3 class="intaExpandCookieList">Strictly necessary <i class="intastellar__arrow"></i></h3>
-                    <p>Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.</p>
+                    <h3 class="intaExpandCookieList">${language.english.necessary.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.english.necessary.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_requiredCookieList)
@@ -315,8 +313,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">Functional / Preference <i class="intastellar__arrow"></i></h3>
-                    <p>Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region.</p>
+                    <h3 class="intaExpandCookieList">${language.english.functional.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.english.functional.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_functionalCookieList)
@@ -324,8 +322,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">Statics <i class="intastellar__arrow"></i></h3>
-                    <p>We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users.</p>
+                    <h3 class="intaExpandCookieList">${language.english.statisic.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.english.statisic.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_statisticCookieList)
@@ -333,9 +331,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">Advertisement <i class="intastellar__arrow"></i></h3>
-                    <p>We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour.</p>
-                    <p>Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.</p>
+                    <h3 class="intaExpandCookieList">${language.english.marketing.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.english.marketing.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_marketingCookieList)
@@ -346,7 +343,7 @@ function createCookieSettings() {
             <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Strictly necessary</span>
+                            <span class="intSettingsTitle">${language.english.necessary.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -355,7 +352,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Functional</span>
+                            <span class="intSettingsTitle">${language.english.functional.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
@@ -364,7 +361,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Statics</span>
+                            <span class="intSettingsTitle">${language.english.statisic.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
@@ -373,7 +370,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Advertisement</span>
+                            <span class="intSettingsTitle">${language.english.marketing.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
@@ -384,7 +381,7 @@ function createCookieSettings() {
         `;
     } else {
         /* Default */
-        settingsMessage = settingsMessages.danish;
+        settingsMessage = settingsMessagesLanguages.danish;
         intastellarShowHideDetailsText = "Vis detaljer";
         message =
             messageWrapStart
@@ -395,14 +392,14 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         `
             <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(saveSettings.danish, 'Accepter')}
+                ${generateCookieSettingsButton(language.danish.saveSettings, 'Accepter')}
                 <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
-                    <h3 class="intaExpandCookieList">Nødvendige <i class="intastellar__arrow"></i></h3>
-                    <p>Påkrævede webteknologier og cookies gør vores hjemmeside teknisk tilgængelig for og brugbar for dig. Dette gælder grundlæggende basisfunktioner såsom navigation på hjemmesiden, korrekt visning i din internetbrowser eller anmodning om dit samtykke. Uden disse webteknologier og cookies fungerer vores hjemmeside ikke.</p>
+                    <h3 class="intaExpandCookieList">${language.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.danish.necessary.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_requiredCookieList)
@@ -410,8 +407,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">Funktionel / Præference <i class="intastellar__arrow"></i></h3>
-                    <p>Funktionelle cookies gør det muligt at gemme information, der ændrer måden hjemmesiden fremstår eller fungerer på. For eksempel dit foretrukne sprog eller område.</p>
+                    <h3 class="intaExpandCookieList">${language.danish.functional.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.danish.functional.description}</p>
                     <article class="intaCookieListOverview">
                         ${
                             listAllCookies(inta_functionalCookieList)
@@ -419,8 +416,8 @@ function createCookieSettings() {
                     </article>  
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">Statistik <i class="intastellar__arrow"></i></h3>
-                    <p>Vi ønsker konstant at forbedre brugervenligheden og ydeevnen på vores hjemmesider. Af denne grund bruger vi analyseteknologier (inklusive cookies), som pseudonymt måler og vurderer, hvilke funktioner og indhold på vores hjemmesider der bruges, hvordan og hvor ofte. På dette grundlag kan vi forbedre vores hjemmesider for brugerne.</p> 
+                    <h3 class="intaExpandCookieList">${language.danish.statisic.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.danish.statisic.description}</p> 
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_statisticCookieList)
@@ -428,9 +425,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">Marketing <i class="intastellar__arrow"></i></h3>
-                    <p>Vi bruger webteknologier (også cookies) fra udvalgte partnere for at kunne vise dig indhold og annoncer, der er specielt skræddersyet til dig på hjemmesider og sociale medier. Dette indhold udvælges og vises på baggrund af din brugsadfærd.</p>
-                    <p>Annonce- eller marketingcookies bruges til at give besøgende relevante annoncer og marketingkampagner. Disse cookies sporer besøgende på tværs af websteder og indsamler oplysninger for at levere tilpassede annoncer.</p>
+                    <h3 class="intaExpandCookieList">${language.danish.marketing.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${language.danish.marketing.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_marketingCookieList)
@@ -441,7 +437,7 @@ function createCookieSettings() {
             <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">Nødvendige</span>
+                            <span class="intSettingsTitle">${language.danish.necessary.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -450,7 +446,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Funktionel</span>
+                            <span class="intSettingsTitle">${language.danish.functional.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
@@ -459,7 +455,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Statistiske</span>
+                            <span class="intSettingsTitle">${language.danish.statisic.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
@@ -468,7 +464,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">Marketing</span>
+                            <span class="intSettingsTitle">${language.danish.marketing.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
