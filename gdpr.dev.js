@@ -34,7 +34,7 @@ const foundScripts = window.foundScripts = [];
 const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
 
 /* Object for supported languages */
-const language = {
+const intastellarSupportedLanguages = {
     english: {
         saveSettings: "Decline All",
         necessary: { // Object for cookie info

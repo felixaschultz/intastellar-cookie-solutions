@@ -113,14 +113,14 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         `
             <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(language.danish.saveSettings, 'Accepter')}
+                ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
                 <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
-                    <h3 class="intaExpandCookieList">${language.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.danish.necessary.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.danish.necessary.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_requiredCookieList)
@@ -128,8 +128,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.danish.functional.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.danish.functional.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.functional.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.danish.functional.description}</p>
                     <article class="intaCookieListOverview">
                         ${
                             listAllCookies(inta_functionalCookieList)
@@ -137,8 +137,8 @@ function createCookieSettings() {
                     </article>  
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.danish.statisic.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.danish.statisic.description}</p> 
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.statisic.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.danish.statisic.description}</p> 
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_statisticCookieList)
@@ -146,8 +146,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.danish.marketing.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.danish.marketing.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.marketing.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.danish.marketing.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_marketingCookieList)
@@ -158,7 +158,7 @@ function createCookieSettings() {
             <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">${language.danish.necessary.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.necessary.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -167,7 +167,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.danish.functional.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.functional.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
@@ -176,7 +176,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.danish.statisic.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.statisic.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
@@ -185,7 +185,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.danish.marketing.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.marketing.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
@@ -205,14 +205,14 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         `
             <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(language.german.saveSettings, 'Akzeptieren')}
+                ${generateCookieSettingsButton(intastellarSupportedLanguages.german.saveSettings, 'Akzeptieren')}
                 <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
-                    <h3 class="intaExpandCookieList">${language.german.necessary.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.german.necessary.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.necessary.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.german.necessary.description}</p>
                     <article class="intaCookieListOverview">
                         ${
                             listAllCookies(inta_requiredCookieList)
@@ -220,8 +220,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.german.functional.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.german.functional.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.functional.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.german.functional.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_functionalCookieList)
@@ -229,8 +229,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.german.statisic.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.german.statisic.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.statisic.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.german.statisic.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_statisticCookieList)
@@ -238,8 +238,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.german.marketing.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.german.marketing.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.marketing.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.german.marketing.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_marketingCookieList)
@@ -250,7 +250,7 @@ function createCookieSettings() {
             <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">${language.german.necessary.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.german.necessary.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -259,7 +259,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.german.functional.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.german.functional.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
@@ -268,7 +268,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.german.statisic.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.german.statisic.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
@@ -277,7 +277,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.german.marketing.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.german.marketing.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
@@ -298,14 +298,14 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         `
             <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(language.english.saveSettings, 'Accept')}
+                ${generateCookieSettingsButton(intastellarSupportedLanguages.english.saveSettings, 'Accept')}
                 <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
-                    <h3 class="intaExpandCookieList">${language.english.necessary.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.english.necessary.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.necessary.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.english.necessary.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_requiredCookieList)
@@ -313,8 +313,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.english.functional.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.english.functional.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.functional.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.english.functional.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_functionalCookieList)
@@ -322,8 +322,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.english.statisic.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.english.statisic.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.statisic.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.english.statisic.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_statisticCookieList)
@@ -331,8 +331,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.english.marketing.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.english.marketing.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.marketing.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.english.marketing.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_marketingCookieList)
@@ -343,7 +343,7 @@ function createCookieSettings() {
             <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">${language.english.necessary.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.english.necessary.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -352,7 +352,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.english.functional.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.english.functional.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
@@ -361,7 +361,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.english.statisic.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.english.statisic.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
@@ -370,7 +370,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.english.marketing.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.english.marketing.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
@@ -392,14 +392,14 @@ function createCookieSettings() {
         moreFooter.innerHTML =
         `
             <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(language.danish.saveSettings, 'Accepter')}
+                ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
                 <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
             </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
-                    <h3 class="intaExpandCookieList">${language.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.danish.necessary.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.danish.necessary.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_requiredCookieList)
@@ -407,8 +407,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.danish.functional.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.danish.functional.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.functional.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.danish.functional.description}</p>
                     <article class="intaCookieListOverview">
                         ${
                             listAllCookies(inta_functionalCookieList)
@@ -416,8 +416,8 @@ function createCookieSettings() {
                     </article>  
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.danish.statisic.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.danish.statisic.description}</p> 
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.statisic.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.danish.statisic.description}</p> 
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_statisticCookieList)
@@ -425,8 +425,8 @@ function createCookieSettings() {
                     </article>
                 </section>
                 <section>
-                    <h3 class="intaExpandCookieList">${language.danish.marketing.title} <i class="intastellar__arrow"></i></h3>
-                    <p>${language.danish.marketing.description}</p>
+                    <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.marketing.title} <i class="intastellar__arrow"></i></h3>
+                    <p>${intastellarSupportedLanguages.danish.marketing.description}</p>
                     <article class="intaCookieListOverview">
                     ${
                         listAllCookies(inta_marketingCookieList)
@@ -437,7 +437,7 @@ function createCookieSettings() {
             <article class="intCookieSetting__form">
                     <section class="intastellarSettings__control">
                         <label class="intSettingDisabled checkMarkContainer">
-                            <span class="intSettingsTitle">${language.danish.necessary.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.necessary.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
                                 <span class="checkmark round"></span>
@@ -446,7 +446,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.danish.functional.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.functional.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                                 <span class="checkmark round"></span>
@@ -455,7 +455,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.danish.statisic.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.statisic.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                                 <span class="checkmark round"></span>
@@ -464,7 +464,7 @@ function createCookieSettings() {
                     </section>
                     <section class="intastellarSettings__control">
                         <label class="checkMarkContainer">
-                            <span class="intSettingsTitle">${language.danish.marketing.title}</span>
+                            <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.marketing.title}</span>
                             <span class="intCheckmarkSliderContainer">
                                 <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                                 <span class="checkmark round"></span>
