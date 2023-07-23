@@ -94,7 +94,7 @@ const intastellarSupportedLanguages = {
     }
 }
 
-if(window.INTA === undefined){
+/* if(window.INTA === undefined){ */
     window.INTA = {
         policy_link: undefined,
         settings: {
@@ -108,12 +108,12 @@ if(window.INTA === undefined){
             StyleSheet: null
         }
     }
-}else{
+/* }else{
     window.INTA.settings.keepInLocalStorage.push(int_FunctionalCookies);
     window.INTA.settings.keepInLocalStorage.push(int_hideCookieBannerName);
     window.INTA.settings.keepInLocalStorage.push(int_marketingCookies);
     window.INTA.settings.keepInLocalStorage.push(int_staticsticCookies);
-}
+} */
 
 let tmpl = document.createElement('template');
 tmpl.innerHTML = `
