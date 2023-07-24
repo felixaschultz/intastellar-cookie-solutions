@@ -2559,7 +2559,7 @@ function saveINTCookieSettings() {
 
     document.querySelector("html").classList.toggle("noScroll");
     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-    window.location.reload();
+    /*window.location.reload();*/
     /* checkCookieStatus(); */
 }
 /* - - - END - - - */
@@ -2779,7 +2779,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                window.location.reload()
+                /*window.location.reload();*/
             });
         }
 
@@ -2820,7 +2820,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
 
-                window.location.reload()
+                /*window.location.reload();*/
             });
         }
 
@@ -2855,7 +2855,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
 
-                window.location.reload()
+                /*window.location.reload();*/
 
             });
         }
@@ -2960,7 +2960,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
 
-                    window.location.reload()
+                    /*window.location.reload();*/
                 });
             });
             
@@ -3000,7 +3000,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
 
-                    window.location.reload()
+                    /*window.location.reload();*/
                 })
             });
         } else {
@@ -3097,7 +3097,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
 
-                    window.location.reload()
+                    /*window.location.reload();*/
                 });
             });
 
@@ -3138,7 +3138,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
 
-                    window.location.reload();
+                    /*window.location.reload();*/
                 })
             });
         }
