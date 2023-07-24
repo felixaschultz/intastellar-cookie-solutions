@@ -1154,179 +1154,177 @@ intaStyleLink.type = 'text/css';
 intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner.css?v=' + new Date().getTime();
 intaStyleLink.media = 'all';
 intHead.insertBefore(intaStyleLink, document.currentScript.previousSibling);
+const allScripts = [
+    {
+        /* Analytics Scripts which are beeing blocked */
+        /* 
+            "([\-\.]google-analytics+)",
+            "([\-\.]googletagmanager+)",
+        */
+        type: "statics",
+        scripts: [
+            "(mixpanel)",
+            /* "([\-\.]googleoptimize+)", */
+            /*"([\-\.]google-analytics+)",*/
+            "([\-\.]piwik+)",
+            "([\-\.]matomo+)",
+            "([\-\.]bing+)",
+            "([\-\.]slideshare+)",
+            "([\-\.]siteimproveanalytics+)",
+            "([\-\.]hotjar+)",
+            "([\-\.]snapchat)",
+            "([\-\.]contentsquare)",
+            "([\-\.]6sc)",
+            "([\-\.]nr-data)",
+            "([\-\.]2o7)",
+            "([\-\.]hackerone)",
+            "([\-\.]gstatic)",
+            "([\-\.]webtrends)",
+            "([\-\.]webtrendslive)",
+            "([\-\.]amplitude)",
+            "([\-\.]adobe)",
+            "([\-\.]mxpnl)",
+            "([\-\.]mixpanel)",
+            "([\-\.]gstatics+)",
+            "([\-\.]adobedtm)",
+            "([\-\.]adobedc)",
+            "([\-\.]qualtrics+)",
+            "([\-\.]pardot+)",
+            "([\-\.]poultons+)",
+            "([\-\.]chartbeat+)",
+            "([\-\.]clarity+)",
+            "([\-\.]consensu+)",
+            "([\-\.]ip-only+)",
+            "([\-\.]ggpht+)",
+            "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ]
+    },
+    {
+        /* Marketing Scripts which are beeing blocked */
+        /* 
+            "([\-\.]googlesyndication+)",
+            "([\-\.]googletagservices+)",
+            "([\-\.]googleadservices+)",
+            "([\-\.]omnisnippet+)",
+        */
+        type: "marketing",
+        scripts: [
+            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
+            "([\-\.]googlesyndication+)",
+            "([\-\.]googletagservices+)",
+            "([\-\.]googleadservices+)",
+            "([\-\.]twitter+)",
+            "([\-\.]ads-twitter+)",
+            "([\-\.]casalemedia+)",
+            "(chimpstatic+)",
+            "([\-\.]trustpilot+)",
+            "([\-\.]mailchimp+)",
+            "([\-\.]linkedin+)",
+            "([\-\.]bing+)",
+            "([\-\.]licdn+)",
+            "([\-\.]amazon-adsystem+)",
+            "([\-\.]adfrom+)",
+            "([\-\.]demdex+)",
+            "([\-\.]instagram+)",
+            "([\-\.]stickyadstv+)",
+            "([\-\.]mookie1+)",
+            "([\-\.]bidswitch+)",
+            "([\-\.]jnqsge+)",
+            "([\-\.]syuh+)",
+            "([\-\.]youtube+)",
+            "([\-\.]vimeo+)",
+            "([\-\.]ninthdecimal+)",
+            "([\-\.]casalemedia+)",
+            "([\-\.]adsymptotic+)",
+            "([\-\.]tremorhub+)",
+            "([\-\.]agkn+)",
+            "([\-\.]myvisualiq+)",
+            "([\-\.]exelator+)",
+            "([\-\.]openx+)",
+            "([\-\.]adsrvr+)",
+            "([\-\.]justpremium+)",
+            "([\-\.]ants+)",
+            "([\-\.]bluekai+)",
+            "([\-\.]revcontent+)",
+            "([\-\.]outbrain+)",
+            "([\-\.]adscale+)",
+            "([\-\.]pdst+)",
+            "([\-\.]yahoo+)",
+            "([\-\.]advertising+)",
+            "([\-\.]adnxs+)",
+            "([\-\.]scdn+)",
+            "([\-\.]spotify+)",
+            "([\-\.]facebook+)",
+            "([\-\.]doubleclick+)",
+            "([\-\.]pinterest+)",
+            "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ]
+    },
+    {
+        /* Functional Scripts which are beeing blocked */
+        type: "functional",
+        scripts: [
+            "(maps.google.com)",
+            "(www.google.com/maps/)",
+            /* "(recaptcha+)",
+            "(grecaptcha+)", */
+            "([\-\.]googleapis+)",
+            "([\-\.]gstatics+)",
+            "([\-\.]cludo+)",
+            "([\-\.]qbrick+)",
+            "([\-\.]klarna+)",
+            "([\-\.]paypal+)",
+            "([\-\.]usersnap+)",
+            "([\-\.]zoom+)",
+            "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ] 
+    }
+];
 
+let notRequired;
+let m;
+/* Helper function to merge arrays */
+const merge = (first, second, third) => {
+    /* first.splice(1, 0, "^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+"); */
+    for(let i=0; i<second.length; i++) {
+      first.push(second[i]);
+    }
+    if (third !== undefined) {
+        for (let i = 0; i < third.length; i++) {
+            first.push(third[i])
+        }
+    }
+    return first;
+}
+/* autoads-preview.googleusercontent.com */
+/* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
+if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.staticsticCookies != "checked" && intaCookieConsents?.advertisementCookies != "checked") {
+    m = merge(allScripts[1].scripts, allScripts[0].scripts)
+    notRequired = new RegExp(m.join("|"), "ig"); 
+} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies == "checked" && intaCookieConsents?.staticsticCookies != "checked" && intaCookieConsents?.functionalCookies != "checked") {
+    m = merge(allScripts[2].scripts, allScripts[0].scripts)
+    notRequired = new RegExp(m.join("|"), "ig");
+} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "checked" && intaCookieConsents?.functionalCookies != "checked" && intaCookieConsents?.advertisementCookies != "checked") {
+    m = merge(allScripts[1].scripts, allScripts[2].scripts)
+    notRequired = new RegExp(m.join("|"), "ig");
+} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.staticsticCookies == "checked") {
+    m = allScripts[1].scripts;
+    notRequired = new RegExp(m.join("|"), "ig");
+} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.advertisementCookies == "checked") {
+    m = allScripts[0].scripts;
+    notRequired = new RegExp(m.join("|"), "ig");
+} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies == "checked" && intaCookieConsents?.staticsticCookies == "checked") {
+    m = allScripts[2].scripts;
+    notRequired = new RegExp(m.join("|"), "ig");
+} else {
+    m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
+    notRequired = new RegExp(m.join("|"), "ig");
+}
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
     s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
     intHead.appendChild(s);
-    const allScripts = [
-        {
-            /* Analytics Scripts which are beeing blocked */
-            /* 
-                "([\-\.]google-analytics+)",
-                "([\-\.]googletagmanager+)",
-            */
-            type: "statics",
-            scripts: [
-                "(mixpanel)",
-                /* "([\-\.]googleoptimize+)", */
-                /*"([\-\.]google-analytics+)",*/
-                "([\-\.]piwik+)",
-                "([\-\.]matomo+)",
-                "([\-\.]bing+)",
-                "([\-\.]slideshare+)",
-                "([\-\.]siteimproveanalytics+)",
-                "([\-\.]hotjar+)",
-                "([\-\.]snapchat)",
-                "([\-\.]contentsquare)",
-                "([\-\.]6sc)",
-                "([\-\.]nr-data)",
-                "([\-\.]2o7)",
-                "([\-\.]hackerone)",
-                "([\-\.]gstatic)",
-                "([\-\.]webtrends)",
-                "([\-\.]webtrendslive)",
-                "([\-\.]amplitude)",
-                "([\-\.]adobe)",
-                "([\-\.]mxpnl)",
-                "([\-\.]mixpanel)",
-                "([\-\.]gstatics+)",
-                "([\-\.]adobedtm)",
-                "([\-\.]adobedc)",
-                "([\-\.]qualtrics+)",
-                "([\-\.]pardot+)",
-                "([\-\.]poultons+)",
-                "([\-\.]chartbeat+)",
-                "([\-\.]clarity+)",
-                "([\-\.]consensu+)",
-                "([\-\.]ip-only+)",
-                "([\-\.]ggpht+)",
-                "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
-            ]
-        },
-        {
-            /* Marketing Scripts which are beeing blocked */
-            /* 
-                "([\-\.]googlesyndication+)",
-                "([\-\.]googletagservices+)",
-                "([\-\.]googleadservices+)",
-                "([\-\.]omnisnippet+)",
-            */
-            type: "marketing",
-            scripts: [
-                "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
-                "([\-\.]googlesyndication+)",
-                "([\-\.]googletagservices+)",
-                "([\-\.]googleadservices+)",
-                "([\-\.]twitter+)",
-                "([\-\.]ads-twitter+)",
-                "([\-\.]casalemedia+)",
-                "(chimpstatic+)",
-                "([\-\.]trustpilot+)",
-                "([\-\.]mailchimp+)",
-                "([\-\.]linkedin+)",
-                "([\-\.]bing+)",
-                "([\-\.]licdn+)",
-                "([\-\.]amazon-adsystem+)",
-                "([\-\.]adfrom+)",
-                "([\-\.]demdex+)",
-                "([\-\.]instagram+)",
-                "([\-\.]stickyadstv+)",
-                "([\-\.]mookie1+)",
-                "([\-\.]bidswitch+)",
-                "([\-\.]jnqsge+)",
-                "([\-\.]syuh+)",
-                "([\-\.]youtube+)",
-                "([\-\.]vimeo+)",
-                "([\-\.]ninthdecimal+)",
-                "([\-\.]casalemedia+)",
-                "([\-\.]adsymptotic+)",
-                "([\-\.]tremorhub+)",
-                "([\-\.]agkn+)",
-                "([\-\.]myvisualiq+)",
-                "([\-\.]exelator+)",
-                "([\-\.]openx+)",
-                "([\-\.]adsrvr+)",
-                "([\-\.]justpremium+)",
-                "([\-\.]ants+)",
-                "([\-\.]bluekai+)",
-                "([\-\.]revcontent+)",
-                "([\-\.]outbrain+)",
-                "([\-\.]adscale+)",
-                "([\-\.]pdst+)",
-                "([\-\.]yahoo+)",
-                "([\-\.]advertising+)",
-                "([\-\.]adnxs+)",
-                "([\-\.]scdn+)",
-                "([\-\.]spotify+)",
-                "([\-\.]facebook+)",
-                "([\-\.]doubleclick+)",
-                "([\-\.]pinterest+)",
-                "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
-            ]
-        },
-        {
-            /* Functional Scripts which are beeing blocked */
-            type: "functional",
-            scripts: [
-                "(maps.google.com)",
-                "(www.google.com/maps/)",
-                /* "(recaptcha+)",
-                "(grecaptcha+)", */
-                "([\-\.]googleapis+)",
-                "([\-\.]gstatics+)",
-                "([\-\.]cludo+)",
-                "([\-\.]qbrick+)",
-                "([\-\.]klarna+)",
-                "([\-\.]paypal+)",
-                "([\-\.]usersnap+)",
-                "([\-\.]zoom+)",
-                "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
-            ] 
-        }
-    ];
-
-    /* Helper function to merge arrays */
-    const merge = (first, second, third) => {
-        /* first.splice(1, 0, "^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+"); */
-        for(let i=0; i<second.length; i++) {
-          first.push(second[i]);
-        }
-        if (third !== undefined) {
-            for (let i = 0; i < third.length; i++) {
-                first.push(third[i])
-            }
-        }
-        return first;
-    }
-
-    let notRequired;
-    let m;
-    /* autoads-preview.googleusercontent.com */
-    /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
-    if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.staticsticCookies != "checked" && intaCookieConsents?.advertisementCookies != "checked") {
-        m = merge(allScripts[1].scripts, allScripts[0].scripts)
-        notRequired = new RegExp(m.join("|"), "ig"); 
-    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies == "checked" && intaCookieConsents?.staticsticCookies != "checked" && intaCookieConsents?.functionalCookies != "checked") {
-        m = merge(allScripts[2].scripts, allScripts[0].scripts)
-        notRequired = new RegExp(m.join("|"), "ig");
-    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "checked" && intaCookieConsents?.functionalCookies != "checked" && intaCookieConsents?.advertisementCookies != "checked") {
-        m = merge(allScripts[1].scripts, allScripts[2].scripts)
-        notRequired = new RegExp(m.join("|"), "ig");
-    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.staticsticCookies == "checked") {
-        m = allScripts[1].scripts;
-        notRequired = new RegExp(m.join("|"), "ig");
-    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.advertisementCookies == "checked") {
-        m = allScripts[0].scripts;
-        notRequired = new RegExp(m.join("|"), "ig");
-    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies == "checked" && intaCookieConsents?.staticsticCookies == "checked") {
-        m = allScripts[2].scripts;
-        notRequired = new RegExp(m.join("|"), "ig");
-    } else {
-        m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
-        notRequired = new RegExp(m.join("|"), "ig");
-    }
 
     /* Helper function to create Consents Block message for iframes etc.*/
     function ConsentsBlock(logo, textLanguage, btnText, datatype, img){
@@ -1744,7 +1742,7 @@ function checkCookieStatus() {
                                     node.defer = true;
                                     node.async = true;
                                     
-                                    if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
 
                                     deleteAllCookies();
                                 }
@@ -1763,7 +1761,7 @@ function checkCookieStatus() {
                                 node.defer = true;
                                 node.async = true;
                                 node.type = "text/blocked";
-                                if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                 deleteAllCookies();
                             }
                         } else if(getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
@@ -1779,7 +1777,7 @@ function checkCookieStatus() {
                                     node.type = "text/blocked";
                                     node.defer = true;
                                     node.async = true;
-                                    if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                 }
                             } else if(src.indexOf(window.location.hostname) == -1
                             && src.indexOf("jquery") == 1) {
@@ -1799,7 +1797,7 @@ function checkCookieStatus() {
                                 node.type = "text/blocked";
                                 node.defer = true;
                                 node.async = true;
-                                if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                             } else {
                                 /* if(document.querySelector(scriptTag) === null){
                                     node.parentElement.appendChild(scriptTag);
@@ -1822,7 +1820,7 @@ function checkCookieStatus() {
                                         node.defer = true;
                                         node.async = true;
                                         node.type = "text/blocked";
-                                        if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                         deleteAllCookies();
                                     }
                                 } else if(src.indexOf(window.location.hostname) == -1
@@ -1840,7 +1838,7 @@ function checkCookieStatus() {
                                     node.defer = true;
                                     node.async = true;
                                     node.type = "text/blocked";
-                                    if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                     deleteAllCookies();
                                 } else {
                                 }
@@ -1856,7 +1854,7 @@ function checkCookieStatus() {
                                         node.defer = true;
                                         node.async = true;
                                         node.type = "text/blocked";
-                                        if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                     }
                                 } else if(src.indexOf(window.location.hostname) == -1
                                 && src.indexOf("jquery") == 1) {
@@ -1876,7 +1874,7 @@ function checkCookieStatus() {
                                     node.defer = true;
                                     node.async = true;
                                     node.type = "text/blocked";
-                                    if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                 } else {
                                     /* if(document.querySelector(scriptTag) === null){
                                         node.parentElement.appendChild(scriptTag);
@@ -1908,7 +1906,7 @@ function checkCookieStatus() {
                             node.defer = true;
                             node.async = true;
                             node.type = "text/blocked";
-                            if(node.parentElement !== null) node.parentElement.removeChild(node);
+                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                             deleteAllCookies();
                         }
                     } else if(intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false"){
@@ -1920,7 +1918,7 @@ function checkCookieStatus() {
                             node.defer = true;
                             node.async = true;
                             node.type = "text/blocked";
-                            if(node.parentElement !== null) node.parentElement.removeChild(node);
+                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                         } else {
                             /* node.parentElement.appendChild(node); */
                         }
@@ -1944,7 +1942,7 @@ function checkCookieStatus() {
                                     node.defer = true;
                                     node.async = true;
                                     node.type = "text/blocked";
-                                    if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                     deleteAllCookies();
                                 }
                             } else if(src.indexOf(window.location.hostname) == -1
@@ -1968,7 +1966,7 @@ function checkCookieStatus() {
                                     node.defer = true;
                                     node.async = true;
                                     node.type = "text/blocked";
-                                    if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                 }
                             } else if(src.indexOf(window.location.hostname) == -1
                             && src.indexOf("jquery") == 1) {
@@ -1989,7 +1987,7 @@ function checkCookieStatus() {
                                 node.defer = true;
                                 node.async = true;
                                 node.type = "text/blocked";
-                                if(node.parentElement !== null) node.parentElement.removeChild(node);
+                                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                             } else {
                                 /* if(document.querySelector(scriptTag) === null){
                                     node.parentElement.appendChild(scriptTag);
@@ -2530,6 +2528,443 @@ function learnMore(e) {
 }
 
 /* - - - Helper function for saving settings - - - */
+
+/* - - - END - - - */
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+    dataLayer.push(arguments);
+}
+gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'personalization_storage': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'denied',
+    'ads_data_redaction': 'denied',
+    'url_passthrough': true,
+    'wait_for_update': 500,
+});
+
+if(typeof fbq === "undefined" || typeof fbq === "null"){
+    function fbq(){}
+}
+
+
+function updateConsents(){
+    const addedNodes = Array.prototype.slice.call(document.querySelectorAll("*"));
+    addedNodes.forEach((node) => {
+        /* Adding  custom button to all blocked embedded content on the site */
+        if (node.nodeType === 1 && node.tagName === "IFRAME") {
+            allScripts.map((script) => {
+                const buttonText = () => {
+                    if(script.type == "marketing"){
+                        scriptTypelang = {
+                            danish: "marketing",
+                            english: "advertisement",
+                            german: "werbe"
+                        } 
+                    }else if(script.type == "functional"){
+                        scriptTypelang = {
+                            danish: "funktionelle",
+                            english: "functional",
+                            german: "funktionelle"
+                        }
+                    }else if(script.type == "statics"){
+                        scriptTypelang = {
+                            danish: "statistiske",
+                            english: "statics",
+                            german: "statistische"
+                        }
+                    }
+
+                    return {
+                        danish: `Accepter ${scriptTypelang.danish} cookies`,
+                        english: `Accept ${scriptTypelang.english} cookies`,
+                        german: `Akzeptiere ${scriptTypelang.german} cookies`
+                    }
+                }
+                let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
+                loopBlock(addedNodes, message, script, buttonText, INTAlogo);
+            });   
+        }
+
+        if (node.nodeType === 1 && node.tagName === "DIV") {
+            allScripts.map((script) => {
+                
+                const buttonText = () => {
+                    if(script.type == "marketing"){
+                        scriptTypelang = {
+                            danish: "marketing",
+                            english: "advertisement",
+                            german: "werbe"
+                        } 
+                    }else if(script.type == "functional"){
+                        scriptTypelang = {
+                            danish: "funktionelle",
+                            english: "functional",
+                            german: "funktionelle"
+                        }
+                    }else if(script.type == "statics"){
+                        scriptTypelang = {
+                            danish: "statistiske",
+                            english: "statics",
+                            german: "statistische"
+                        }
+                    }
+
+                    return {
+                        danish: `Accepter ${scriptTypelang.danish} cookies`,
+                        english: `Accept ${scriptTypelang.english} cookies`,
+                        german: `Akzeptiere ${scriptTypelang.german} cookies`
+                    }
+                }
+                let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
+                loopBlock(addedNodes, message, script, buttonText, INTAlogo);
+            })
+        }
+
+        if (node.nodeType === 1 && node.tagName === "LINK") {
+            allScripts.map((script) => {
+                addedNodes.forEach((googleFonts) => {
+                    const linkSrc = googleFonts.href;
+                    if(notRequired.test(linkSrc)){
+                        if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies == "false"){
+                            if(googleFonts.parentElement !== null) googleFonts.parentElement.removeChild(googleFonts);
+                        }
+                    }
+                })
+            })
+        }
+
+        if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
+            allScripts.map((script) => {
+                addedNodes.forEach((tweet) => {
+
+                    const buttonText = () => {
+                        if(script.type == "marketing"){
+                            scriptTypelang = {
+                                danish: "marketing",
+                                english: "advertisement",
+                                german: "werbe"
+                            } 
+                        }else if(script.type == "functional"){
+                            scriptTypelang = {
+                                danish: "funktionelle",
+                                english: "functional",
+                                german: "funktionelle"
+                            }
+                        }else if(script.type == "statics"){
+                            scriptTypelang = {
+                                danish: "statistiske",
+                                english: "statics",
+                                german: "statistische"
+                            }
+                        }
+
+                        return {
+                            danish: `Accepter ${scriptTypelang.danish} cookies`,
+                            english: `Accept ${scriptTypelang.english} cookies`,
+                            german: `Akzeptiere ${scriptTypelang.german} cookies`
+                        }
+                    }
+                    let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
+                    blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
+                })
+            });   
+        }
+        
+        if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
+            /* console.log(node); */
+            let src = node.src || "";
+            node.removeAttribute("charset");
+            addedNodes.forEach((node) => {
+                src = node.src;
+                if (src.indexOf(window.location.hostname) == -1){
+                    window.foundScripts.push(src);
+                }
+                    
+                const scriptTag = document.createElement("script");
+                scriptTag.src = src;
+                if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
+                    || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
+                    if (
+                        src.indexOf(window.location.hostname) == -1
+                        && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                    ) {
+                        if (
+                            notRequired.test(src)
+                        ) {
+                            node.type = "text/blocked";
+                            node.defer = true;
+                            node.async = true;
+                            
+                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+
+                            deleteAllCookies();
+                        }
+                    } else if(src.indexOf(window.location.hostname) == -1
+                    && src.indexOf("jquery") == 1) {
+                        node.type = "text/javascript";
+                        node.defer = false;
+                        node.async = false;
+                    } else {
+                        node.type = "text/javascript";
+                    }
+
+                    if (
+                        notRequired.test(node.innerText)
+                    ) {
+                        node.defer = true;
+                        node.async = true;
+                        node.type = "text/blocked";
+                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                        deleteAllCookies();
+                    }
+                } else if(getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
+                || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
+                ){
+                    if (
+                        src.indexOf(window.location.hostname) == -1
+                        && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                    ) {
+                        if (
+                            notRequired.test(src)
+                        ) {
+                            node.type = "text/blocked";
+                            node.defer = true;
+                            node.async = true;
+                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                        }
+                    } else if(src.indexOf(window.location.hostname) == -1
+                    && src.indexOf("jquery") == 1) {
+                        node.type = "text/javascript";
+                        node.defer = false;
+                        node.async = false;
+                    } else {
+                        /* if(document.querySelector(scriptTag) === null){
+                            node.parentElement.appendChild(scriptTag);
+                        } */
+                    }
+
+                    if (
+                        notRequired.test(node.innerText)
+                        && node.innerText.toLowerCase().indexOf("elementor") == -1
+                    ) {
+                        node.type = "text/blocked";
+                        node.defer = true;
+                        node.async = true;
+                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                    } else {
+                        /* if(document.querySelector(scriptTag) === null){
+                            node.parentElement.appendChild(scriptTag);
+                        } */
+                    }
+                }
+
+                const beforeScriptExecuteListener = function (event) {
+                    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
+                    || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
+
+                        if (
+                            src.indexOf(window.location.hostname) == -1
+                            && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                        ) {
+                            if (
+                                notRequired.test(src)
+                            ) {
+                                /* console.log(notRequired, src) */
+                                node.defer = true;
+                                node.async = true;
+                                node.type = "text/blocked";
+                                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                                deleteAllCookies();
+                            }
+                        } else if(src.indexOf(window.location.hostname) == -1
+                        && src.indexOf("jquery") == 1) {
+                            node.type = "text/javascript";
+                            node.defer = false;
+                            node.async = false;
+                        } else {
+                        }
+
+                        if (
+                            notRequired.test(node.innerText)
+                            && node.innerText.toLowerCase().indexOf("elementor") == -1
+                        ) {
+                            node.defer = true;
+                            node.async = true;
+                            node.type = "text/blocked";
+                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                            deleteAllCookies();
+                        } else {
+                        }
+                    } else if(getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
+                    || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""){
+                        if (
+                            src.indexOf(window.location.hostname) == -1
+                            && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                        ) {
+                            if (
+                                notRequired.test(src)
+                            ) {
+                                node.defer = true;
+                                node.async = true;
+                                node.type = "text/blocked";
+                                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                            }
+                        } else if(src.indexOf(window.location.hostname) == -1
+                        && src.indexOf("jquery") == 1) {
+                            node.type = "text/javascript";
+                            node.defer = false;
+                            node.async = false;
+                        } else {
+                            /* if(document.querySelector(scriptTag) === null){
+                                node.parentElement.appendChild(scriptTag);
+                            } */
+                        }
+
+                        if (
+                            notRequired.test(node.innerText)
+                            && node.innerText.toLowerCase().indexOf("elementor") == -1
+                        ) {
+                            node.defer = true;
+                            node.async = true;
+                            node.type = "text/blocked";
+                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                        } else {
+                            /* if(document.querySelector(scriptTag) === null){
+                                node.parentElement.appendChild(scriptTag);
+                            } */
+                        }
+                    }
+
+                    if (node.getAttribute("type") === "text/blocked")
+                        event.preventDefault();
+                    node.removeEventListener(
+                        "beforescriptexecute",
+                        beforeScriptExecuteListener
+                    );
+                };
+
+                node.addEventListener(
+                    "beforescriptexecute",
+                    beforeScriptExecuteListener
+                );
+            });
+        } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
+            if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
+            || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""){
+
+                if (
+                    notRequired.test(node.innerText)
+                    && node.innerText.toLowerCase().indexOf("elementor") == -1
+                ) {
+                    node.defer = true;
+                    node.async = true;
+                    node.type = "text/blocked";
+                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                    deleteAllCookies();
+                }
+            } else if(intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false"){
+                
+                if (
+                    notRequired.test(node.innerText)
+                    && node.innerText.toLowerCase().indexOf("elementor") == -1
+                ) {
+                    node.defer = true;
+                    node.async = true;
+                    node.type = "text/blocked";
+                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                } else {
+                    /* node.parentElement.appendChild(node); */
+                }
+            }
+
+            const beforeScriptExecuteListener = function (event) {
+                let src = node.src || "";
+                const scriptTag = document.createElement("script");
+                scriptTag.src = src;
+                if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
+                || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
+                    if (
+                        src.indexOf(window.location.hostname) == -1
+                        && src.indexOf("jquery") == -1
+                        && src.indexOf("elementor") == -1
+                    ) {
+                        if (
+                            notRequired.test(node.innerText)
+                            && node.innerText.toLowerCase().indexOf("elementor") == -1
+                        ) {
+                            node.defer = true;
+                            node.async = true;
+                            node.type = "text/blocked";
+                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                            deleteAllCookies();
+                        }
+                    } else if(src.indexOf(window.location.hostname) == -1
+                    && src.indexOf("jquery") == 1) {
+                        node.type = "text/javascript";
+                        node.defer = false;
+                        node.async = false;
+                    } else {
+                        /* if(document.querySelector(scriptTag) === null){
+                            node.parentElement.appendChild(scriptTag);
+                        } */
+                    }
+                } else if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" ||intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false"){
+                    if (
+                        src.indexOf(window.location.hostname) == -1
+                        && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                    ) {
+                        if (
+                            notRequired.test(src)
+                        ) {
+                            node.defer = true;
+                            node.async = true;
+                            node.type = "text/blocked";
+                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                        }
+                    } else if(src.indexOf(window.location.hostname) == -1
+                    && src.indexOf("jquery") == 1) {
+                        node.type = "text/javascript";
+                        node.defer = false;
+                        node.async = false;
+                    } else {
+                        node.type = "text/javascript";
+                        /* if(document.querySelector(scriptTag) === null){
+                            node.parentElement.appendChild(scriptTag);
+                        } */
+                    }
+                    
+                    if (
+                        notRequired.test(node.innerText)
+                        && node.innerText.toLowerCase().indexOf("elementor") == -1
+                    ) {
+                        node.defer = true;
+                        node.async = true;
+                        node.type = "text/blocked";
+                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                    } else {
+                        /* if(document.querySelector(scriptTag) === null){
+                            node.parentElement.appendChild(scriptTag);
+                        } */
+                    }
+                }
+
+                if (node.getAttribute("type") === "text/blocked")
+                    event.preventDefault();
+                node.removeEventListener(
+                    "beforescriptexecute",
+                    beforeScriptExecuteListener
+                );
+            };
+            node.addEventListener(
+                "beforescriptexecute",
+                beforeScriptExecuteListener
+            );
+            beforeScriptExecuteListener();
+        }
+    });
+}
 function saveINTCookieSettings() {
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
@@ -2560,20 +2995,12 @@ function saveINTCookieSettings() {
     document.querySelector("html").classList.toggle("noScroll");
     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
     /*window.location.reload();*/
-    /* checkCookieStatus(); */
-}
-/* - - - END - - - */
-window.dataLayer = window.dataLayer || [];
-function gtag() {
-    dataLayer.push(arguments);
-}
-
-if(typeof fbq === "undefined" || typeof fbq === "null"){
-    function fbq(){}
+    updateConsents();
 }
 
 /* setIntastellarPartnerDomain(); */
-window.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
+
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
@@ -2583,16 +3010,6 @@ window.addEventListener("DOMContentLoaded", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
-
-    gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'personalization_storage': 'denied',
-        'analytics_storage': 'denied',
-        'functionality_storage': 'denied',
-        'ads_data_redaction': 'denied',
-        'url_passthrough': true,
-        'wait_for_update': 500,
-    });
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
@@ -2776,9 +3193,19 @@ window.addEventListener("DOMContentLoaded", function () {
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
-
+                
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+
+                gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'personalization_storage': 'granted',
+                    'analytics_storage': 'granted',
+                    'functionality_storage': 'granted',
+                    'ads_data_redaction': 'granted',
+                    'url_passthrough': true,
+                });
+                updateConsents();
                 /*window.location.reload();*/
             });
         }
@@ -2820,6 +3247,15 @@ window.addEventListener("DOMContentLoaded", function () {
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
 
+                gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'personalization_storage': 'granted',
+                    'analytics_storage': 'granted',
+                    'functionality_storage': 'granted',
+                    'ads_data_redaction': 'granted',
+                    'url_passthrough': true,
+                });
+                updateConsents();
                 /*window.location.reload();*/
             });
         }
@@ -2854,7 +3290,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
-
+                
                 /*window.location.reload();*/
 
             });
@@ -3000,6 +3436,15 @@ window.addEventListener("DOMContentLoaded", function () {
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
 
+                    gtag('consent', 'update', {
+                        'ad_storage': 'granted',
+                        'personalization_storage': 'granted',
+                        'analytics_storage': 'granted',
+                        'functionality_storage': 'granted',
+                        'ads_data_redaction': 'granted',
+                        'url_passthrough': true,
+                    });
+                    updateConsents();
                     /*window.location.reload();*/
                 })
             });
@@ -3138,6 +3583,15 @@ window.addEventListener("DOMContentLoaded", function () {
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     })
 
+                    gtag('consent', 'update', {
+                        'ad_storage': 'granted',
+                        'personalization_storage': 'granted',
+                        'analytics_storage': 'granted',
+                        'functionality_storage': 'granted',
+                        'ads_data_redaction': 'granted',
+                        'url_passthrough': true,
+                    });
+                    updateConsents();
                     /*window.location.reload();*/
                 })
             });
