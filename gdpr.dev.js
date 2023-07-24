@@ -5,7 +5,6 @@
  *  @copy 2022 Intastellar Solutions, International
  *
 */
-"use strict";
 /* - - - Setup - - - */
 const intaCookiePref = "IntastellarConsentSolution";
 const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
