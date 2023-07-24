@@ -1172,7 +1172,7 @@ function checkCookieStatus() {
             scripts: [
                 "(mixpanel)",
                 /* "([\-\.]googleoptimize+)", */
-                "([\-\.]google-analytics+)",
+                /*"([\-\.]google-analytics+)",*/
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
                 "([\-\.]bing+)",
