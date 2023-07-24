@@ -5,7 +5,6 @@
  *  @copy 2022 Intastellar Solutions, International
  *
 */
-"use strict";
 /* - - - Setup - - - */
 const intaCookiePref = "IntastellarConsentSolution";
 const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
@@ -1172,7 +1171,7 @@ function checkCookieStatus() {
             scripts: [
                 "(mixpanel)",
                 /* "([\-\.]googleoptimize+)", */
-                "([\-\.]google-analytics+)",
+                /*"([\-\.]google-analytics+)",*/
                 "([\-\.]piwik+)",
                 "([\-\.]matomo+)",
                 "([\-\.]bing+)",
