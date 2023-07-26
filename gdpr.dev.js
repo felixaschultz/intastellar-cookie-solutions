@@ -2578,6 +2578,8 @@ function updateConsents(consent, type = null){
 }
 
 function saveINTCookieSettings(consent, type = null) {
+    document.querySelector("html").classList.remove("noScroll");
+    document.querySelector(".intastellarCookieConstents").classList.remove("--active");
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
@@ -2603,9 +2605,6 @@ function saveINTCookieSettings(consent, type = null) {
     "; path=/; " +
     intCookieDomain +
     "";
-
-    document.querySelector("html").classList.remove("noScroll");
-    document.querySelector(".intastellarCookieConstents").classList.remove("--active");
     /*window.location.reload();*/
     updateConsents(consent, type);
 }
