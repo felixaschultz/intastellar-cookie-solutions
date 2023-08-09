@@ -8,6 +8,9 @@ window.INTA = {
         logo: "https://www.intastellarsolutions.com/assets/icons/fav/favicon-96x96.png",
         color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)",
         text: false,
+        requiredCookies: [
+            "c_user"
+        ],
         arrange: "rtl",
         styleSheets: [
             "https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;600;700;800&display=swap",
