@@ -276,8 +276,7 @@ const inta_requiredCookieList = [{
         {
             cookie: "SCDJWS",
             purpose: "",
-        },
-        requiredCookies
+        }
     ]},
     {
         vendor: "Intastellar Solutions, International",
