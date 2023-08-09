@@ -240,17 +240,13 @@ const blockTrackingCookies = "__hideTrackingCookies";
 const blockAdvertismentCookies = "__hideAdvertisementCookies";
 const intHead = document.querySelector("head");
 
-/* const region = (window.INTA?.settings?.requiredCookies) ? {
+const region = (window.INTA?.settings?.requiredCookies) ? {
     cookie: "region",
     purpose: "This cookie is used to set users prefrence regarding the selected region.",
-} : {} */
+} : {}
 
-const requiredCookies = (window.INTA?.settings?.requiredCookies) ? window.INTA?.settings?.requiredCookies.map((requiredCookie) => {
-    return {
-        cookie: requiredCookie,
-        purpose: ""
-    }
-}) : {}
+/* const requiredCookies = (window.INTA?.settings?.requiredCookies) ? window.INTA?.settings?.requiredCookies : {} */
+
 
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
@@ -305,6 +301,10 @@ const inta_requiredCookieList = [{
             {
                 cookie: int_FunctionalCookies,
                 purpose: "Its function is to store users cookie choice regarding functional cookies. Its purpose is to store a users cookie choice whether a user allows storing for functional purposes like chosen region, or not.",
+            },
+            {
+                cookie: "c_user",
+                purpose: "This cookeis stores, it´s the signed in user id",
             }
         ],
         vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy"
