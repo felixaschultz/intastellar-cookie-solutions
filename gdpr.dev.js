@@ -245,9 +245,6 @@ const region = (window.INTA?.settings?.requiredCookies) ? {
     purpose: "This cookie is used to set users prefrence regarding the selected region.",
 } : {}
 
-/* const requiredCookies = (window.INTA?.settings?.requiredCookies) ? window.INTA?.settings?.requiredCookies : {} */
-
-
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
 const inta_requiredCookieList = [{
@@ -276,7 +273,8 @@ const inta_requiredCookieList = [{
         {
             cookie: "SCDJWS",
             purpose: "",
-        }
+        },
+        region
     ]},
     {
         vendor: "Intastellar Solutions, International",
@@ -303,7 +301,7 @@ const inta_requiredCookieList = [{
             },
             {
                 cookie: "c_user",
-                purpose: "This cookeis stores, it´s the signed in user id",
+                purpose: ""
             }
         ],
         vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy"
@@ -1412,7 +1410,7 @@ function checkCookieStatus() {
                     })                
                     
                     if(frae.src !== window.INTA.settings?.partnerDomain){
-                        /* frae.src = "about:blank"; */
+                        frae.src = "about:blank";
                     }
                     let textLanguage;
                     let btnText;
@@ -1441,7 +1439,7 @@ function checkCookieStatus() {
                     }
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
                     if (frae.style.display != "none") {
-                        frae.parentElement.innerHTML += settingsContent;
+                        frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
             } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies && script.type == "functional") {
@@ -2036,7 +2034,6 @@ function checkCookieStatus() {
         attributes:    true,
         characterDataOldValue: true
     });
-    /* observer.disconnect(); */
 };
 
 checkCookieStatus();
@@ -2571,23 +2568,17 @@ if(typeof fbq === "undefined" || typeof fbq === "null"){
 function updateConsents(consent, type = null){
     const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
     
-    console.log(consent, type);
-
-    if(consent == "all"){
+    if(intaCookieConsents.functionalCookies === "checked" && intaCookieConsents.staticsticCookies === "checked" && intaCookieConsents.advertisementCookies === "checked"){
         const intaBlockItemsContainer = document.querySelectorAll("inta-consents-iframe");
         
         intaBlockItemsContainer.forEach((container) => {
             const newIframe = document.createElement("iframe");
             console.log(container.getAttribute("data-src"));
             newIframe.src = container.getAttribute("data-src");
-            console.log(container, intaCookieConsents, newIframe);
-            /* container?.replaceWith(newIframe); */
+            console.log(container, intaCookieConsents);
+            container?.replaceWith(newIframe);
         })
-    }else if(consent == "changePermission"){
-        
-    }/* else if(intaCookieConsents.functionalCookies === "checked" && intaCookieConsents.staticsticCookies === "checked" && intaCookieConsents.advertisementCookies === "checked"){
-
-    } */
+    }
 }
 
 function saveINTCookieSettings(consent, type = null) {
