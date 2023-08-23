@@ -2,7 +2,7 @@
  *  GDPR Cookie banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
  *  consents.cdn.intastellarsolutions.com/gdpr.js
- *  @copy 2022 Intastellar Solutions, International
+ *  @copy 2022-2023 Intastellar Solutions, International
  *
 */
 /* - - - Setup - - - */
@@ -16,6 +16,7 @@ const button__acceptAll = document.querySelector(".intastellarCookieBanner__acce
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
+const intastellarAssetsCDNdomain = "https://www.intastellarsolutions.com/assets";
 const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 let intaConsentsObjectVariable = {
     consents: {
@@ -30,7 +31,7 @@ let intaConsentsObjectVariable = {
 let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
-const intCookieIcon = "https://www.intastellarsolutions.com/assets/icons/cookie_settings.svg";
+const intCookieIcon = intastellarAssetsCDNdomain + "/icons/cookie_settings.svg";
 
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
@@ -219,7 +220,7 @@ const intCookieDomain = (function () {
         d = p.slice(-1 - ++i).join(".");
         d = d;
 
-    return  "domain="+d +";";
+    return  "domain="+d+";";
 })();
 
 const intCookieDomainWithWWW = (function () {
@@ -231,7 +232,7 @@ const intCookieDomainWithWWW = (function () {
         d = p.slice(-1 - ++i).join(".");
         d = d;
 
-    return  "domain=www."+d +";";
+    return  "domain=www."+d+";";
 })();
 
 const allowAllCookieName = "__all__cookies";
