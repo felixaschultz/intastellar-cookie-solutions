@@ -3230,11 +3230,11 @@ window.addEventListener("load", function () {
         errorMessage.className = "intastellarErrorMessage";
         errorMessageContent.className = "intastellarErrorMessage-content";
 
-        errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner. Read more at <a href='https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy</a>";
+        errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner. Read more at <a href='https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy</a>";
 
         errorMessage.appendChild(errorMessageContent);
         document.body.appendChild(errorMessage);
 
-        throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/wordpress-docs#privacy")
+        throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy")
     }
 });
