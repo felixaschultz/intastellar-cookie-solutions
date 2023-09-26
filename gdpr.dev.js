@@ -2579,12 +2579,6 @@ function updateConsents(consent, type = null){
     }
 }
 
-window.addEventListener("message", function(e){
-    if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
-    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-})
-
 function saveINTCookieSettings(consent, type = null) {
     document.querySelector("html").classList.remove("noScroll");
     document.querySelector(".intastellarCookieConstents").classList.remove("--active");
@@ -2615,6 +2609,8 @@ function saveINTCookieSettings(consent, type = null) {
     "";
     /*window.location.reload();*/
     updateConsents(consent, type);
+    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 }
 
 /* setIntastellarPartnerDomain(); */
@@ -2629,6 +2625,7 @@ window.addEventListener("load", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
+
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
@@ -2807,11 +2804,8 @@ window.addEventListener("load", function () {
                     intCookieDomain +
                     "";
 
-                window.addEventListener("message", function(e){
-                    if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
-                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-                })
+                document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
@@ -3009,11 +3003,9 @@ window.addEventListener("load", function () {
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
-                    window.addEventListener("message", function(e){
-                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
-                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-                    })
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+
                     gtag('consent', 'update', {
                         'ad_storage': 'denied',
                         'personalization_storage': 'denied',
@@ -3057,11 +3049,8 @@ window.addEventListener("load", function () {
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
-                    window.addEventListener("message", function(e){
-                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
-                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-                    })
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 
                     gtag('consent', 'update', {
                         'ad_storage': 'granted',
@@ -3096,6 +3085,7 @@ window.addEventListener("load", function () {
                         document.querySelector("#functional").checked = true;
                     }
                     saveINTCookieSettings("changePermission", this.getAttribute("data-type"));
+                    
                 })
             })
             /* Showing default banner when no custom banner is set */
@@ -3163,11 +3153,8 @@ window.addEventListener("load", function () {
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
-                    window.addEventListener("message", function(e){
-                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
-                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-                    })
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 
                     /*window.location.reload();*/
                 });
@@ -3204,11 +3191,8 @@ window.addEventListener("load", function () {
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
-                    window.addEventListener("message", function(e){
-                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
-                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-                    })
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 
                     gtag('consent', 'update', {
                         'ad_storage': 'granted',
