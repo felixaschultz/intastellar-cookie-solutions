@@ -33,13 +33,15 @@
             window.addEventListener("message", (event) => {
                 const origin = event.origin || event.originalEvent.origin;
                 /* localStorage.setItem("cookieSharing", JSON.stringify(event.data)); */
-                var d = new Date();
+                const d = new Date();
+                const daysExpire = 1;
                 d.setTime(d.getTime()+(daysExpire * 24 * 60 * 60 * 1000));
                 var expires = "expires=" + d.toGMTString();
                 document.cookie = "cookieSharing=" + JSON.stringify(event.data) + "; path=/; "+ expires +"; SameSite=none; Secure";
+                
                 if(JSON.parse(getCookie("cookieSharing")).sharingDomains.includes(origin)){
                     window.parent.postMessage({
-                        cookieSharing: JSON.parse(localStorage.getItem("cookieSharing")),
+                        cookieSharing: JSON.parse(getCookie("cookieSharing")),
                     }, "*");
                 }
             });

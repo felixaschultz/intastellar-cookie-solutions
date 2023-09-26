@@ -11,6 +11,9 @@ window.INTA = {
         requiredCookies: [
             "c_user"
         ],
+        partnerDomain: [
+            "intastellarsolutions.com"
+        ],
         arrange: "rtl",
         styleSheets: [
             "https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;600;700;800&display=swap",
