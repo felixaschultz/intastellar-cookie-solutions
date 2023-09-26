@@ -2516,7 +2516,6 @@ function learnMore(e) {
 
     if(document.querySelector(".intReadMore").classList.contains("view")){
         if(intastellarCookieLanguage == "da-DK" || intastellarCookieLanguage == "da" || intastellarCookieLanguage == "dk"){
-            console.log("Hej")
             e.innerHTML = "Skjul detaljer";
         }else if(intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US"){
             e.innerHTML = "Hide details";
@@ -2574,12 +2573,16 @@ function updateConsents(consent, type = null){
         
         intaBlockItemsContainer.forEach((container) => {
             const newIframe = document.createElement("iframe");
-            console.log(container.getAttribute("data-src"));
             newIframe.src = container.getAttribute("data-src");
-            console.log(container, intaCookieConsents);
             container?.replaceWith(newIframe);
         })
     }
+
+    window.addEventListener("message", function(e){
+        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
+        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    })
 }
 
 function saveINTCookieSettings(consent, type = null) {
@@ -2805,6 +2808,7 @@ window.addEventListener("load", function () {
                     "";
 
                 window.addEventListener("message", function(e){
+
                     if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");

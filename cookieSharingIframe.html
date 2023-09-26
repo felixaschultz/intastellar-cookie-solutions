@@ -9,10 +9,10 @@
     <script>
         (function() {
             "use strict";
+            window.parent.postMessage("ready", "*");
             window.addEventListener("message", (event) => {
                 console.log(event.data)
             });
-            window.parent.postMessage("ready", "*");
         })();
     </script>
 </body>
