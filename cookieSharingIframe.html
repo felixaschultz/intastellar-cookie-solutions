@@ -39,7 +39,15 @@
                 var expires = "expires=" + d.toGMTString();
                 document.cookie = "cookieSharing=" + JSON.stringify(event.data) + "; path=/; "+ expires +"; SameSite=none; Secure";
                 
-                if(getCookie("cookieSharing") && getCookie("cookieSharing")?.sharingDomains?.includes(origin)){
+            });
+
+            window.addEventListener("message", (e) => {
+                if(e.data == "you´re open to share with me"){
+                    window.parent.postMessage({
+                        cookieSharing: JSON.parse(getCookie("cookieSharing")),
+                    }, "*");
+                }
+                /* if(getCookie("cookieSharing") && getCookie("cookieSharing")?.sharingDomains?.includes(origin)){
                     window.parent.postMessage({
                         cookieSharing: JSON.parse(getCookie("cookieSharing")),
                     }, "*");
@@ -47,8 +55,9 @@
                     window.parent.postMessage({
                         cookieSharing: event.data,
                     }, "*");
-                }
-            });
+                } */
+            })
+
             window.parent.postMessage("ready", "*");
         /* })(); */
     </script>
