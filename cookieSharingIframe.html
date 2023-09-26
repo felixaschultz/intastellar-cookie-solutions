@@ -39,7 +39,7 @@
                 var expires = "expires=" + d.toGMTString();
                 document.cookie = "cookieSharing=" + JSON.stringify(event.data) + "; path=/; "+ expires +"; SameSite=none; Secure";
                 
-                if(getCookie("cookieSharing") && JSON.parse(getCookie("cookieSharing")).sharingDomains.includes(origin)){
+                if(getCookie("cookieSharing") && getCookie("cookieSharing")?.sharingDomains?.includes(origin)){
                     window.parent.postMessage({
                         cookieSharing: JSON.parse(getCookie("cookieSharing")),
                     }, "*");
