@@ -1439,6 +1439,9 @@ function checkCookieStatus() {
                     if(ytIMG !== undefined && ytIMG != ""){
                         settingsContent.classList.add("yt-frame");
                     }
+                    if(frae.classList.length > 0){
+                        settingsContent.setAttribute("data-class", frae.className);
+                    }
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
                     if (frae.style.display != "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
@@ -2035,16 +2038,12 @@ function checkCookieStatus() {
             });
         });
     });
-    
-    observer.observe(document.documentElement, {
-        childList: !0,
-        subtree: !0,
-        attributes:    true,
-        characterDataOldValue: true
-    });
     window.addEventListener("load", () => {
         observer.disconnect();
     })
+    
+    startObserving(observer, document.documentElement);
+    return observer;
 };
 
 checkCookieStatus();
@@ -2553,6 +2552,15 @@ function learnMore(e) {
     }
 }
 
+function startObserving ( observer ) {
+    observer.observe(document.documentElement, {
+        childList: !0,
+        subtree: !0,
+        attributes:    true,
+        characterDataOldValue: true
+    })
+}
+
 /* - - - Helper function for saving settings - - - */
 
 /* - - - END - - - */
@@ -2610,17 +2618,24 @@ function updateConsents(consent, type = null){
             newIframe.border = "0";
             newIframe.frameBorder = "0";
             newIframe.setAttribute("inta-yt-placeholder-img", container?.querySelector("inta-consents-bg")?.getAttribute("inta-bg-img"));
-            newIframe.width = "560";
-            newIframe.height = "315";
+            
             if(container.getAttribute("data-src").indexOf("youtube") > -1 || container.getAttribute("data-src").indexOf("youtu.be") > -1){
                 newIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
                 newIframe.title = "YouTube video player";
             }
+
+            if(container.getAttribute("data-class")){
+                newIframe.setAttribute("class", container.getAttribute("data-class"))
+            }else{
+                newIframe.width = "560";
+                newIframe.height = "315";
+            }
+
             newIframe.src = container.getAttribute("data-src");
             container.parentElement.replaceChild(newIframe,container);
         })
     }else{
-        checkCookieStatus();
+        console.log("No marketing cookies");
     }
 }
 
