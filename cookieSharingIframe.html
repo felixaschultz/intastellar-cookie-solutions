@@ -10,7 +10,13 @@
         /* (function() {
             "use strict"; */
             window.addEventListener("message", (event) => {
-                console.log(event.data)
+                const origin = event.origin || event.originalEvent.origin;
+                localStorage.setItem("cookieSharing", JSON.stringify(event.data));
+                if(JSON.parse(localStorage.getItem("cookieSharing")).sharingDomains.includes(origin)){
+                    window.parent.postMessage({
+                        cookieSharing: JSON.parse(localStorage.getItem("cookieSharing")),
+                    }, "*");
+                }
             });
             window.parent.postMessage("ready", "*");
         /* })(); */
