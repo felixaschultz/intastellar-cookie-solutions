@@ -2662,7 +2662,7 @@ window.addEventListener("load", function () {
         })
 
         window.INTA.settings.partnerDomain.forEach((domain) => {
-            sharingDomains.push(domain);
+            intaConsentsObjectVariable.sharingDomains.push(domain);
         })
 
         
