@@ -1327,13 +1327,6 @@ if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerN
     notRequired = new RegExp(m.join("|"), "ig");
 }
 
-window.addEventListener("message", (e) => {
-    if(e.data.cookieSharing){
-        const sharedCookies = e.data.cookieSharing;
-        console.log(sharedCookies);
-    }
-})
-
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
@@ -3224,6 +3217,18 @@ window.addEventListener("load", function () {
                 })
             });
         }
+
+        if(window.INTA.settings?.partnerDomain?.includes(window.location.host)){
+            document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+            .postMessage("you´re open to share with me", "*");
+            window.addEventListener("message", (e) => {
+                if(e.data.cookieSharing){
+                    const sharedCookies = e.data.cookieSharing;
+                    console.log(sharedCookies);
+                }
+            })
+        }
+
     } else {
         checkCookieStatus();
         /* Displaying a error message if no valid privacy url is giving */
