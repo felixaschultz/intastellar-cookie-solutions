@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Intastellar Cookie Sharing infos</title>
 </head>
 <body>
     <script>
         (function() {
-            console.log(window.parent);
             "use strict";
             window.addEventListener("message", (event) => {
-                /* console.log(event.data) */
+                console.log(event.data)
             });
             window.parent.postMessage("ready", "*");
         })();
