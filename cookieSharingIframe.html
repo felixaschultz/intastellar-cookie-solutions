@@ -39,9 +39,13 @@
                 var expires = "expires=" + d.toGMTString();
                 document.cookie = "cookieSharing=" + JSON.stringify(event.data) + "; path=/; "+ expires +"; SameSite=none; Secure";
                 
-                if(JSON.parse(getCookie("cookieSharing")).sharingDomains.includes(origin)){
+                if(getCookie("cookieSharing") && JSON.parse(getCookie("cookieSharing")).sharingDomains.includes(origin)){
                     window.parent.postMessage({
                         cookieSharing: JSON.parse(getCookie("cookieSharing")),
+                    }, "*");
+                }else{
+                    window.parent.postMessage({
+                        cookieSharing: event.data,
                     }, "*");
                 }
             });
