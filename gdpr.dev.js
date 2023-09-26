@@ -27,6 +27,7 @@ let intaConsentsObjectVariable = {
     time: new Date().toGMTString(),
     uid: Math.random().toString(16).slice(2),
     domain: window.location.host,
+    sharingDomains: [],
 }
 let scriptTypelang = {};
 let settingsMessage;
@@ -1325,6 +1326,14 @@ if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerN
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
     notRequired = new RegExp(m.join("|"), "ig");
 }
+
+window.addEventListener("message", (e) => {
+    if(e.data.cookieSharing){
+        const sharedCookies = e.data.cookieSharing;
+        console.log(sharedCookies);
+    }
+})
+
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
@@ -2631,6 +2640,7 @@ window.addEventListener("load", function () {
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
     if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
     
+
     let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
     if (isValidPolicyLink()) {
         createCookieSettings();
@@ -2650,6 +2660,12 @@ window.addEventListener("load", function () {
                 learnMore(this);
             })
         })
+
+        window.INTA.settings.partnerDomain.forEach((domain) => {
+            sharingDomains.push(domain);
+        })
+
+        
 
         document.querySelectorAll(".intaExpandCookieList").forEach((btn, i) => {
             
