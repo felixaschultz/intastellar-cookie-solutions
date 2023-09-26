@@ -39,11 +39,11 @@
                 var expires = "expires=" + d.toGMTString();
                 document.cookie = "cookieSharing=" + JSON.stringify(event.data) + "; path=/; "+ expires +"; SameSite=none; Secure";
                 
-                if(event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))){
+                /* if(event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))){
                     window.parent.postMessage({
                         cookieSharing: JSON.parse(getCookie("cookieSharing")),
                     }, "*");
-                }
+                } */
 
             });
 

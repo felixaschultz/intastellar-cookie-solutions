@@ -1738,6 +1738,11 @@ function checkCookieStatus() {
 
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
                     let src = node.src || "";
+
+                    /* if(node.){
+                        node.setAttribute("data-marketing", "")
+                    } */
+
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
                         src = node.src;
@@ -1747,6 +1752,7 @@ function checkCookieStatus() {
                             
                         const scriptTag = document.createElement("script");
                         scriptTag.src = src;
+
                         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
                             || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
                             if (
@@ -2593,7 +2599,12 @@ function updateConsents(consent, type = null){
 
     if(intaCookieConsents.advertisementCookies === "checked"){
         const intaBlockItemsContainer = document.querySelectorAll("inta-consents-iframe[data-src]");
-        
+        const marketingScriptTags = document.querySelectorAll("script[data-marketing]");
+
+        marketingScriptTags.forEach((script) => {
+            script.setAttribute("type", "text/javascript");
+        })
+
         intaBlockItemsContainer.forEach((container) => {
             const newIframe = document.createElement("iframe");
             newIframe.border = "0";
@@ -2608,6 +2619,8 @@ function updateConsents(consent, type = null){
             newIframe.src = container.getAttribute("data-src");
             container.parentElement.replaceChild(newIframe,container);
         })
+    }else{
+        checkCookieStatus();
     }
 }
 
@@ -2966,6 +2979,8 @@ window.addEventListener("load", function () {
                         document.querySelector("#functional").checked = true;
                     }
                     saveINTCookieSettings("changePermission", this.getAttribute("data-type"));
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
             })
 
@@ -3124,6 +3139,8 @@ window.addEventListener("load", function () {
                         document.querySelector("#functional").checked = true;
                     }
                     saveINTCookieSettings("changePermission", this.getAttribute("data-type"));
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                     
                 })
             })
