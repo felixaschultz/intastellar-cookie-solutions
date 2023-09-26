@@ -2661,7 +2661,7 @@ window.addEventListener("load", function () {
             })
         })
 
-        window.INTA.settings.partnerDomain.forEach((domain) => {
+        window.INTA.settings?.partnerDomain?.forEach((domain) => {
             intaConsentsObjectVariable.sharingDomains.push(domain);
         })
 
