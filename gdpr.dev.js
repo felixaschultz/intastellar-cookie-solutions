@@ -96,7 +96,7 @@ const intastellarSupportedLanguages = {
 }
 
 /* if(window.INTA === undefined){ */
-    window.INTA = {
+    /* window.INTA = {
         policy_link: undefined,
         settings: {
             company: undefined,
@@ -108,7 +108,7 @@ const intastellarSupportedLanguages = {
             partnerDomain: null,
             StyleSheet: null
         }
-    }
+    } */
 /* }else{
     window.INTA.settings.keepInLocalStorage.push(int_FunctionalCookies);
     window.INTA.settings.keepInLocalStorage.push(int_hideCookieBannerName);
@@ -3110,6 +3110,9 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
                     updateConsents("denied");
+                    document.querySelector("#marketing").checked = false;
+                    document.querySelector("#statics").checked = false;
+                    document.querySelector("#functional").checked = false;
                     /*window.location.reload();*/
                 });
             });
@@ -3141,6 +3144,8 @@ window.addEventListener("load", function () {
                         addedNodes.type = "";
                     }
 
+
+
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
@@ -3156,6 +3161,9 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
                     updateConsents("all");
+                    document.querySelector("#marketing").checked = true;
+                    document.querySelector("#statics").checked = true;
+                    document.querySelector("#functional").checked = true;
                     /*window.location.reload();*/
                 })
             });
@@ -3252,7 +3260,9 @@ window.addEventListener("load", function () {
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-
+                    document.querySelector("#marketing").checked = false;
+                    document.querySelector("#statics").checked = false;
+                    document.querySelector("#functional").checked = false;
                     /*window.location.reload();*/
                 });
             });
@@ -3301,6 +3311,9 @@ window.addEventListener("load", function () {
                     });
                     
                     updateConsents("all");
+                    document.querySelector("#marketing").checked = true;
+                    document.querySelector("#statics").checked = true;
+                    document.querySelector("#functional").checked = true;
                     /*window.location.reload();*/
                 })
             });

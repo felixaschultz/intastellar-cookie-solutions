@@ -713,4 +713,7 @@ function createCookieSettings() {
         })
     }
 }
-createCookieSettings();
+
+window.addEventListener("DOMContentLoaded", function () {
+    createCookieSettings();
+})
