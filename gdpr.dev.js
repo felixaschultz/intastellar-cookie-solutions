@@ -2440,7 +2440,7 @@ intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if(window.location.host.indexOf("localhost") > -1 || window.location.host.indexOf("127.0.0.1") > -1){
     intastellarCreateBanner.src = "../../cb.dev.js";
 }
-intHead.insertBefore(intastellarCreateBanner, document.scripts[document.scripts.length - 1]);
+intHead.insertBefore(intastellarCreateBanner, intHead.firstChild);
 
 
 function randomIntFromInterval(min, max) { // min and max included 
