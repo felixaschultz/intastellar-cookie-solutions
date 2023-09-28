@@ -115,6 +115,7 @@ const intastellarSupportedLanguages = {
     window.INTA.settings.keepInLocalStorage.push(int_marketingCookies);
     window.INTA.settings.keepInLocalStorage.push(int_staticsticCookies);
 } */
+const INTA = window.INTA;
 
 let tmpl = document.createElement('template');
 tmpl.innerHTML = `
