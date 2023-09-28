@@ -5,7 +5,7 @@
  *  @copy 2022-2023 Intastellar Solutions, International
  *
 */
-function createCookieSettings() {
+(function createCookieSettings() {
     let message = "";
     let cookieBtn = "";
     const banner = document.createElement("inta-consents-settings-btn");
@@ -713,4 +713,4 @@ function createCookieSettings() {
             document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
         })
     }
-}
+})()
