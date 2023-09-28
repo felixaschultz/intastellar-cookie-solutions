@@ -3110,6 +3110,9 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
                     updateConsents("denied");
+                    document.querySelector("#marketing").checked = false;
+                    document.querySelector("#statics").checked = false;
+                    document.querySelector("#functional").checked = false;
                     /*window.location.reload();*/
                 });
             });
@@ -3257,7 +3260,9 @@ window.addEventListener("load", function () {
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-
+                    document.querySelector("#marketing").checked = false;
+                    document.querySelector("#statics").checked = false;
+                    document.querySelector("#functional").checked = false;
                     /*window.location.reload();*/
                 });
             });
