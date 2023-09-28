@@ -2724,11 +2724,14 @@ const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
         document.querySelector("html").classList.add("noScroll");
+    },
+    inizilize: function (template) {
+        document.body.append(template);
     }
 }
 
-document.head.prepend(intastellarCreateBanner);
 /* setIntastellarPartnerDomain(); */
+document.head.prepend(intastellarCreateBanner);
 window.addEventListener("load", function () {
 
     const temp = location.host.split('.').reverse();

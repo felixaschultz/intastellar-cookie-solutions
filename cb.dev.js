@@ -706,11 +706,12 @@
     intaconsents.appendChild(banner);
     intaconsents.appendChild(moreSettings);
 
-    document.body.appendChild(intaconsents);
-
     if(document.querySelector(".intastellarCCPAContainer") != null){
         document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
             document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
         })
     }
+    IntastellarCookieConsent.inizilize(
+        intaconsents
+    )
 })()
