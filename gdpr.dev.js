@@ -2667,7 +2667,7 @@ function updateConsents(consent, type = null){
 
 function saveINTCookieSettings(consent, type = null) {
     document.querySelector("html").classList.remove("noScroll");
-    document.querySelector(".intastellarCookieConstents")?.classList.remove("--active");
+    document.querySelector(".intastellarCookieConstents").classList.remove("--active");
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
@@ -2759,7 +2759,7 @@ window.addEventListener("load", function () {
         } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
             if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                 document.querySelector("html").classList.toggle("noScroll");
-                document.querySelector(".intastellarCookieConstents")?.classList.toggle("--active");
+                document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
             } else {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
             }
@@ -2898,7 +2898,7 @@ window.addEventListener("load", function () {
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 
                 document.querySelector("html").classList.toggle("noScroll");
-                document.querySelector(".intastellarCookieConstents")?.classList.toggle("--active");
+                document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                 gtag('consent', 'update', {
                     'ad_storage': 'granted',
@@ -2942,7 +2942,7 @@ window.addEventListener("load", function () {
                     addedNodes.type = "";
                 }
                 document.querySelector("html").classList.toggle("noScroll");
-                document.querySelector(".intastellarCookieConstents")?.classList.toggle("--active");
+                document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                 window.addEventListener("message", function(e){
                     if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
