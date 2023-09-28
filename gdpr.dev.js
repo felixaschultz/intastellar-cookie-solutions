@@ -95,8 +95,8 @@ const intastellarSupportedLanguages = {
     }
 }
 
-/* if(window.INTA === undefined){ */
-    /* window.INTA = {
+if(window.INTA === undefined){
+    window.INTA = {
         policy_link: undefined,
         settings: {
             company: undefined,
@@ -108,13 +108,8 @@ const intastellarSupportedLanguages = {
             partnerDomain: null,
             StyleSheet: null
         }
-    } */
-/* }else{
-    window.INTA.settings.keepInLocalStorage.push(int_FunctionalCookies);
-    window.INTA.settings.keepInLocalStorage.push(int_hideCookieBannerName);
-    window.INTA.settings.keepInLocalStorage.push(int_marketingCookies);
-    window.INTA.settings.keepInLocalStorage.push(int_staticsticCookies);
-} */
+    }
+}
 const INTA = window.INTA;
 
 let tmpl = document.createElement('template');
