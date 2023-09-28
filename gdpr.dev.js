@@ -2724,7 +2724,7 @@ function saveINTCookieSettings(consent, type = null) {
     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 }
 
-window.addEventListener("message", function (event) {
+window.addEventListener("DOMContentLoaded", function (event) {
     (function createCookieSettings() {
         let message = "";
         let cookieBtn = "";
