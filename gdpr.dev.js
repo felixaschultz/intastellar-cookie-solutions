@@ -559,7 +559,13 @@ inta_statisticCookieList.push({
             cookie: "page-views",
             purpose: null
         }
-    ]
+    ],
+    domains: [
+        "omnisend.com",
+        "omnisnippet1.com",
+        "soundestlink.com"
+    ],
+    vendor_privacy: ""
 })
 
 inta_statisticCookieList.push({
@@ -1167,7 +1173,7 @@ const allScripts = [
         type: "statics",
         scripts: [
             "(mixpanel)",
-            /* "([\-\.]googleoptimize+)", */
+            "([\-\.]googleoptimize+)",
             /*"([\-\.]google-analytics+)",*/
             "([\-\.]piwik+)",
             "([\-\.]matomo+)",
@@ -1247,6 +1253,8 @@ const allScripts = [
             "([\-\.]adsrvr+)",
             "([\-\.]justpremium+)",
             "([\-\.]ants+)",
+            "([\-\.]omnisend+)",
+            "([\-\.]omnisnippet+)",
             "([\-\.]bluekai+)",
             "([\-\.]revcontent+)",
             "([\-\.]outbrain+)",
@@ -1260,6 +1268,11 @@ const allScripts = [
             "([\-\.]facebook+)",
             "([\-\.]doubleclick+)",
             "([\-\.]pinterest+)",
+            "([\-\.]adform+)",
+            "([\-\.]adnxs+)",
+            "([\-\.]advertising+)",
+            "([\-\.]adtech+)",
+            "([\-\.]soundestlink+)",
             "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -1686,19 +1699,6 @@ function checkCookieStatus() {
                     })
                 }
 
-                if (node.nodeType === 1 && node.tagName === "LINK") {
-                    allScripts.map((script) => {
-                        addedNodes.forEach((googleFonts) => {
-                            const linkSrc = googleFonts.href;
-                            if(notRequired.test(linkSrc)){
-                                if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies == "false"){
-                                    if(googleFonts.parentElement !== null) googleFonts.parentElement.removeChild(googleFonts);
-                                }
-                            }
-                        })
-                    })
-                }
-
                 if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
                     allScripts.map((script) => {
                         addedNodes.forEach((tweet) => {
@@ -2039,8 +2039,24 @@ function checkCookieStatus() {
         observer.disconnect();
     })
     
+    document.querySelectorAll('*').forEach((node) => {
+        if (node.nodeType === 1 && node.tagName === "LINK") {
+            const linkSrc = node.href;
+
+            if(notRequired.test(linkSrc)){
+                if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
+                    console.log("Remove cookie");
+                    if(node.parentElement !== null){
+                        node.parentElement.removeChild(node);
+                    } 
+                }
+            }
+        }
+    })
+
     startObserving(observer, document.documentElement);
     return observer;
+
 };
 
 checkCookieStatus();
@@ -2512,6 +2528,14 @@ function isValidPolicyLink() {
     }
 
     return false;
+}
+
+if(typeof window.INTA.policy_link === "undefined"){
+    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.hostname + "/config.js";
+    const configScript = document.createElement("script");
+    configScript.src = intastellarDefaultConfigFile;
+
+    document.head.insertBefore(configScript, document.currentScript);
 }
 
 /* - - - Helper function to learn more - - - */
