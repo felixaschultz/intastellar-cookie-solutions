@@ -705,7 +705,9 @@
     intaconsents.appendChild(banner);
     intaconsents.appendChild(moreSettings);
 
-    document.body.appendChild(intaconsents);
+    window.addEventListener("DOMContentLoaded", function () {
+        document.body.appendChild(intaconsents);
+    })
 
 
     if(document.querySelector(".intastellarCCPAContainer") != null){

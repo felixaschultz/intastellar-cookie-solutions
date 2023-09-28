@@ -2433,12 +2433,13 @@ function isValidCCPALink() {
 }
 
 const intastellarCreateBanner = document.createElement("script");
-intastellarCreateBanner.async = true;
+/* intastellarCreateBanner.async = true; */
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if(window.location.host.indexOf("localhost") > -1 || window.location.host.indexOf("127.0.0.1") > -1){
     intastellarCreateBanner.src = "../../cb.dev.js";
 }
-intHead.insertBefore(intastellarCreateBanner, intHead.firstChild);
+
+document.head.prepend(intastellarCreateBanner);
 
 
 function randomIntFromInterval(min, max) { // min and max included 
