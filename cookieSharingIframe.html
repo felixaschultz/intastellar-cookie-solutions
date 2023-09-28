@@ -41,7 +41,7 @@
                 console.log("cookieSharingIframe.html", event.data);
                 if(event.data == "you´re open to share with me"){
                     window.parent.postMessage({
-                        cookieSharing: JSON.parse(getCookie("cookieSharing")),
+                        cookieSharing: event.data,
                     }, "*");
                 }
                 /* if(event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))){

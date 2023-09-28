@@ -713,3 +713,4 @@ function createCookieSettings() {
         })
     }
 }
+createCookieSettings();
