@@ -96,7 +96,7 @@ const intastellarSupportedLanguages = {
 }
 
 /* if(window.INTA === undefined){ */
-    window.INTA = {
+    /* window.INTA = {
         policy_link: undefined,
         settings: {
             company: undefined,
@@ -108,7 +108,7 @@ const intastellarSupportedLanguages = {
             partnerDomain: null,
             StyleSheet: null
         }
-    }
+    } */
 /* }else{
     window.INTA.settings.keepInLocalStorage.push(int_FunctionalCookies);
     window.INTA.settings.keepInLocalStorage.push(int_hideCookieBannerName);
