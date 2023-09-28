@@ -3141,6 +3141,8 @@ window.addEventListener("load", function () {
                         addedNodes.type = "";
                     }
 
+
+
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
@@ -3156,6 +3158,9 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
                     updateConsents("all");
+                    document.querySelector("#marketing").checked = true;
+                    document.querySelector("#statics").checked = true;
+                    document.querySelector("#functional").checked = true;
                     /*window.location.reload();*/
                 })
             });
@@ -3301,6 +3306,9 @@ window.addEventListener("load", function () {
                     });
                     
                     updateConsents("all");
+                    document.querySelector("#marketing").checked = true;
+                    document.querySelector("#statics").checked = true;
+                    document.querySelector("#functional").checked = true;
                     /*window.location.reload();*/
                 })
             });
