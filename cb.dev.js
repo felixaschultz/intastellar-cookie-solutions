@@ -707,13 +707,10 @@ function createCookieSettings() {
 
     document.body.appendChild(intaconsents);
 
+
     if(document.querySelector(".intastellarCCPAContainer") != null){
         document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
             document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
         })
     }
 }
-
-window.addEventListener("DOMContentLoaded", function () {
-    createCookieSettings();
-})

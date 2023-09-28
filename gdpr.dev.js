@@ -2666,12 +2666,12 @@ function updateConsents(consent, type = null){
 
 function saveINTCookieSettings(consent, type = null) {
     document.querySelector("html").classList.remove("noScroll");
-    document.querySelector(".intastellarCookieConstents").classList.remove("--active");
+    document.querySelector(".intastellarCookieConstents")?.classList.remove("--active");
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
 
-    if (StaticsCheckBox.checked) {
+    if (StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
         })
@@ -2682,9 +2682,9 @@ function saveINTCookieSettings(consent, type = null) {
     }
 
     intaConsentsObjectVariable.consents = {
-        staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
-        functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
-        advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
+        staticsticCookies: (StaticsCheckBox?.checked) ? "checked" : false,
+        functionalCookies: (FunctionalCheckbox?.checked) ? "checked" : false,
+        advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
     };
     intaConsentsObjectVariable.time = new Date().getTime()
 
@@ -2710,6 +2710,7 @@ window.addEventListener("load", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
+    createCookieSettings();
 
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
@@ -2758,7 +2759,7 @@ window.addEventListener("load", function () {
         } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
             if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                 document.querySelector("html").classList.toggle("noScroll");
-                document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                document.querySelector(".intastellarCookieConstents")?.classList.toggle("--active");
             } else {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
             }
@@ -2767,8 +2768,8 @@ window.addEventListener("load", function () {
         document.querySelectorAll(".intastellarCookieBanner__settings").forEach((setting) => {
             setting.addEventListener("click", () => {
                 let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
-                if (!intCookieSettingsMore.classList.contains("--active")) {
-                    intCookieSettingsMore.classList.add("--active");
+                if (!intCookieSettingsMore?.classList.contains("--active")) {
+                    intCookieSettingsMore?.classList.add("--active");
                     document.querySelector(".intastellarCookie-settings__container").classList.remove("intastellarCookie-settings__container--expand")
                 }
             });
@@ -2793,37 +2794,37 @@ window.addEventListener("load", function () {
             settingsSaveLang.saveSettingsText = "Gem indstillinger";
         }
 
-        FunctionalCheckbox.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox.checked === false
-                && StaticsCheckBox.checked === false
-                && MarketingCheckBox.checked === false
+        FunctionalCheckbox?.addEventListener("change", () => {
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
+                && StaticsCheckBox?.checked === false
+                && MarketingCheckBox?.checked === false
                 ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
         })
 
-        StaticsCheckBox.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox.checked === false
-                && StaticsCheckBox.checked === false
-                && MarketingCheckBox.checked === false
+        StaticsCheckBox?.addEventListener("change", () => {
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
+                && StaticsCheckBox?.checked === false
+                && MarketingCheckBox?.checked === false
                 ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
         })
 
-        MarketingCheckBox.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox.checked === false
-                && StaticsCheckBox.checked === false
-                && MarketingCheckBox.checked === false
+        MarketingCheckBox?.addEventListener("change", () => {
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
+                && StaticsCheckBox?.checked === false
+                && MarketingCheckBox?.checked === false
                 ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
         })
 
-        document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox.checked === true
-                && StaticsCheckBox.checked === true
-                && MarketingCheckBox.checked === true
-                || FunctionalCheckbox.checked === true
-                || StaticsCheckBox.checked === true
-                || MarketingCheckBox.checked === true
+        document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === true
+                && StaticsCheckBox?.checked === true
+                && MarketingCheckBox?.checked === true
+                || FunctionalCheckbox?.checked === true
+                || StaticsCheckBox?.checked === true
+                || MarketingCheckBox?.checked === true
             ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
 
         document.querySelector(".--save").addEventListener("click",() => {
-            if (FunctionalCheckbox.checked) {
+            if (FunctionalCheckbox?.checked) {
                 gtag('consent', 'update', {
                     'functionality_storage': 'granted',
                 })
@@ -2833,7 +2834,7 @@ window.addEventListener("load", function () {
                 })
             }
         
-            if (StaticsCheckBox.checked) {
+            if (StaticsCheckBox?.checked) {
                 gtag('consent', 'update', {
                     'analytics_storage': 'granted',
                 })
@@ -2843,7 +2844,7 @@ window.addEventListener("load", function () {
                 })
             }
         
-            if (MarketingCheckBox.checked) {
+            if (MarketingCheckBox?.checked) {
                 gtag('consent', 'update', {
                     'ad_storage': 'granted',
                     'personalization_storage': 'granted',
@@ -2897,7 +2898,7 @@ window.addEventListener("load", function () {
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 
                 document.querySelector("html").classList.toggle("noScroll");
-                document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                document.querySelector(".intastellarCookieConstents")?.classList.toggle("--active");
 
                 gtag('consent', 'update', {
                     'ad_storage': 'granted',
@@ -2941,7 +2942,7 @@ window.addEventListener("load", function () {
                     addedNodes.type = "";
                 }
                 document.querySelector("html").classList.toggle("noScroll");
-                document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                document.querySelector(".intastellarCookieConstents")?.classList.toggle("--active");
 
                 window.addEventListener("message", function(e){
                     if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
@@ -3051,9 +3052,9 @@ window.addEventListener("load", function () {
                     document.cookie =
                         int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify({
                                 consents: {
-                                    staticsticCookies: (StaticsCheckBox.checked) ? "checked" : false,
-                                    functionalCookies: (FunctionalCheckbox.checked) ? "checked" : false,
-                                    advertisementCookies: (MarketingCheckBox.checked) ? "checked" : false,
+                                    staticsticCookies: (StaticsCheckBox?.checked) ? "checked" : false,
+                                    functionalCookies: (FunctionalCheckbox?.checked) ? "checked" : false,
+                                    advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
                                 },
                                 time: new Date().getTime()
                             }),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
