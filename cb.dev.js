@@ -50,6 +50,7 @@
     bannerContent.setAttribute("class", "intastellarCookie-settingsContainer");
     bannerContent.setAttribute("title", intastellarCookieLanguageSettings);
     cookieSettings.setAttribute("class", "intastellarCookie-settings__container");
+    banner.setAttribute("onclick","javascript:IntastellarCookieConsent.renew();");
     const arrange = window.INTA.settings === undefined || window.INTA.settings.arrange === undefined ? "" : window.INTA.settings.arrange;
 
     if (arrange == "ltr") {

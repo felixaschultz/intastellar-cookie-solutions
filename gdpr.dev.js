@@ -2720,6 +2720,12 @@ function saveINTCookieSettings(consent, type = null) {
     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 }
+const IntastellarCookieConsent = {
+    renew: function () {
+        document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        document.querySelector("html").classList.add("noScroll");
+    }
+}
 
 document.head.prepend(intastellarCreateBanner);
 /* setIntastellarPartnerDomain(); */
