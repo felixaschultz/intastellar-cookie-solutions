@@ -1363,9 +1363,12 @@ function checkCookieStatus() {
         }else{
             return `
                 <inta-consents-content class="intCookie_ConsentContainer-content">
+                    ${logo === null ? "" : `
                     <inta-consents-logo class="intCookie_ConsentLogo-container">
                         <img src="${logo}" class="intCookie_ConsentLogo" alt="Company logo">
                     </inta-consents-logo>
+                    `}
+                    
                     <inta-consents-section class="intCookie_ConsentContainer-info">
                         ${textLanguage}
                         <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
