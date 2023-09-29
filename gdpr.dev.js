@@ -2451,7 +2451,7 @@ function isValidCCPALink() {
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.async = true;
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-if(window.location.host.indexOf("localhost") > -1 || window.location.host.indexOf("127.0.0.1") > -1){
+if(window.INTA.settings.dev){
     intastellarCreateBanner.src = "../../cb.dev.js";
 }
 
