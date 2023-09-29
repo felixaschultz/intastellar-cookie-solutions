@@ -1659,7 +1659,7 @@ function checkCookieStatus() {
                                 german: `Akzeptiere ${scriptTypelang.german} cookies`
                             }
                         }
-                        let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
+                        let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
                         loopBlock(addedNodes, message, script, buttonText, INTAlogo);
                     });   
                 }
@@ -1694,7 +1694,7 @@ function checkCookieStatus() {
                                 german: `Akzeptiere ${scriptTypelang.german} cookies`
                             }
                         }
-                        let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
+                        let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
                         loopBlock(addedNodes, message, script, buttonText, INTAlogo);
                     })
                 }
@@ -1730,7 +1730,7 @@ function checkCookieStatus() {
                                     german: `Akzeptiere ${scriptTypelang.german} cookies`
                                 }
                             }
-                            let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : intCookieIcon;
+                            let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
                             blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
                         })
                     });   
