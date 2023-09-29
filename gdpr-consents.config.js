@@ -28,6 +28,7 @@ window.INTA = {
                     "Phone number"
                 ]
         },
+        dev: true,
         gcm: true
     }
 };

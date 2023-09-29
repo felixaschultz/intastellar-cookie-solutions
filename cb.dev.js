@@ -685,10 +685,10 @@
     let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
 
     moreintHeader.innerHTML = `
-        ${typeof logo != "undefined" ? '<img class="intCookie_ConsentLogo-container" src="'+ logo +'" alt="'+ CompanyLogoName +'" title="'+ CompanyLogoName +'">' : ``}
+        ${typeof window.INTA.settings.logo != "undefined" ? '<img class="intSettingsCompanyLogo" src="'+ window.INTA.settings.logo +'" alt="'+ CompanyLogoName +'" title="'+ CompanyLogoName +'">' : ``}
         <section class="intSettingsPoweredBy">${poweredBy}</section>`;
     
-    cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + cookieLogo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';" aria-label="Close cookie banner"></button></intHeader>' +
+    cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + window.INTA.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';" aria-label="Close cookie banner"></button></intHeader>' +
         message + cookieBtn + "" + poweredBy;
     
     cookieSettings.appendChild(cookieSettingsContent);
