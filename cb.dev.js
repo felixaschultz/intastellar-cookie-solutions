@@ -33,21 +33,24 @@
     moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");;
 
     const intastellarCookieConstents__Container = document.createElement("article");
+    const intastellarCookieButtons = document.createElement("section");
 
     const testSection = document.createElement("section");
     testSection.setAttribute("class", "intastellarCookieConstents__contentC");
     testSection.appendChild(moreintHeader);
 
     testSection.appendChild(moreContentText);
-
+    
     moreSettingsContent.appendChild(intastellarCookieConstents__Container);
     intastellarCookieConstents__Container.appendChild(testSection);
+    intastellarCookieConstents__Container.appendChild(intastellarCookieButtons);
     intastellarCookieConstents__Container.appendChild(moreFooter);
 
     const cookieSettings = document.createElement("article");
     const cookieSettingsContent = document.createElement("section");
 
     bannerContent.setAttribute("class", "intastellarCookie-settingsContainer");
+    intastellarCookieButtons.setAttribute("class", "intastellarCookie-settings__buttons");
     bannerContent.setAttribute("title", intastellarCookieLanguageSettings);
     cookieSettings.setAttribute("class", "intastellarCookie-settings__container");
     banner.setAttribute("onclick","javascript:IntastellarCookieConsent.renew();");
@@ -116,14 +119,19 @@
             messageWrapStart
             + messages.danish
             + messageWrapEnd
-            + generatePolicyUrl('Vores privat og cookie politik');
+            + generatePolicyUrl('Vores privat og cookie politik')
+            + `<section class="intCookieSaveSettingsContainer">
+            ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
+            <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        </section>`;
         cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
+        intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+            ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
+            <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        </section>`;
         moreFooter.innerHTML =
         `
-            <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
-                <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
-            </section>
+            
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
@@ -209,14 +217,15 @@
         message = messageWrapStart
             + messages.german
             + messageWrapEnd
-            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik');
+            + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')
+           ;
+           intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+           ${generateCookieSettingsButton(intastellarSupportedLanguages.german.saveSettings, 'Akzeptieren')}
+           <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+       </section>`;
         cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
         moreFooter.innerHTML =
         `
-            <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(intastellarSupportedLanguages.german.saveSettings, 'Akzeptieren')}
-                <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
-            </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
@@ -303,14 +312,16 @@
             messageWrapStart
             + messages.english
             + messageWrapEnd
-            + generatePolicyUrl('Our Privacy and cookie Policy');
+            + generatePolicyUrl('Our Privacy and cookie Policy')
+            ;
+        intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+            ${generateCookieSettingsButton(intastellarSupportedLanguages.english.saveSettings, 'Accept')}
+            <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        </section>`;
         cookieBtn = generateCookieButtons('Accept', 'Decline All', 'Settings');
         moreFooter.innerHTML =
         `
-            <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(intastellarSupportedLanguages.english.saveSettings, 'Accept')}
-                <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
-            </section>
+            
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
@@ -399,13 +410,14 @@
             + messages.danish
             + messageWrapEnd
             + generatePolicyUrl('Vores privat og cookie politik');
+            intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+            ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accept')}
+            <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        </section>`;
+
         cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
         moreFooter.innerHTML =
         `
-            <section class="intCookieSaveSettingsContainer">
-                ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
-                <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
-            </section>
             <section class="intastellar_privacyPolicy"></section>
             <article class="intReadMore">
                 <section class="required">
