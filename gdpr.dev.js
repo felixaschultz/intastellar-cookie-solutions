@@ -439,6 +439,10 @@ inta_statisticCookieList.push({
             purpose: "",
         },
         {
+            cookie: "mp_[^/a-zA-Z/]_mixpanel",
+            purpose: "",
+        },
+        {
             cookie: "mixpanel_distinct_id",
             purpose: "To store a unique user ID, store account details.",
         },
@@ -1202,26 +1206,28 @@ function intaCookieType(type) {
     return (getCookie(type) === "true")
 }
 
-function generateCookieRegex(){
+/* function generateCookieRegex(item){ */
     /* Cookie name list for functional cookies */
-    if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1  && !intaCookieConsents?.functionalCookies) {
-        let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
-        int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
-    }
-    /* Cookie name list for statistical cookies */
-    if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.staticsticCookies){
-        let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
-        int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
-    }
-
-    /* Cookie name list for marketing / advertisment cookies */
-    if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies) {
-        let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
-        int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
-    }
-
-    return new RegExp(int__cookiesToKeep.filter(function(entry) { return entry.trim() != ''; }).join("|"), "i");
+if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1  && !intaCookieConsents?.functionalCookies) {
+    let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
 }
+/* Cookie name list for statistical cookies */
+if(getCookie(int_hideCookieBannerName) != ""
+&& getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 
+&& intaCookieConsents?.staticsticCookies){
+    let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
+}
+
+/* Cookie name list for marketing / advertisment cookies */
+if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies) {
+    let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
+}
+
+const int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function(entry) { return entry.trim() != ''; }).join("|"), "i");
+/* } */
 
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
@@ -2302,7 +2308,8 @@ function deleteAllCookies() {
         var cookie = cookies[i];
         var eqPos = cookie.indexOf("=");
         var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        if (!generateCookieRegex().test(name)) {
+        console.log(int__cookiesToKeepRegx.test(name),name,);
+        if (!int__cookiesToKeepRegx.test(name)) {
             let localS = window.INTA.settings === undefined || window.INTA.settings.keepInLocalStorage === undefined ? "" : window.INTA.settings.keepInLocalStorage;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; " + intCookieDomain + " path=/";
             clearLocalStorage(localS);
@@ -2777,22 +2784,22 @@ function updateConsents(consent, type = null){
     } */
 
     if(intaCookieConsents.staticsticCookies === "checked"){
-        window.location.reload();
-        /* document.querySelectorAll("script").forEach((script) => {
-            if(!notRequired.test(script.getAttribute("src"))){
-                script.setAttribute("type", "text/javascript");
-                generateCookieRegex();
-            }
-        }) */
+        let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+        int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
+        deleteAllCookies();
     }
 
     if(intaCookieConsents.functionalCookies === "checked"){
         const intaBlockItemsContainer = document.querySelectorAll("inta-consents[data-src]");
         const marketingScriptTags = document.querySelectorAll("script[data-functional]");
-        generateCookieRegex();
+        /* generateCookieRegex(); */
         marketingScriptTags.forEach((script) => {
             script.setAttribute("type", "text/javascript");
         })
+
+        let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+        int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
+        deleteAllCookies();
 
         intaBlockItemsContainer.forEach((container) => {
             const newIframe = document.createElement("iframe");
@@ -2816,7 +2823,9 @@ function updateConsents(consent, type = null){
     if(intaCookieConsents.advertisementCookies === "checked"){
         const intaBlockItemsContainer = document.querySelectorAll("inta-consents-iframe[data-src]");
         const marketingScriptTags = document.querySelectorAll("script[data-marketing]");
-        generateCookieRegex();
+        let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+        int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
+        deleteAllCookies();
         marketingScriptTags.forEach((script) => {
             script.setAttribute("type", "text/javascript");
         })
