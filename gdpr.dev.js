@@ -2777,12 +2777,13 @@ function updateConsents(consent, type = null){
     } */
 
     if(intaCookieConsents.staticsticCookies === "checked"){
-        document.querySelectorAll("script").forEach((script) => {
+        window.location.reload();
+        /* document.querySelectorAll("script").forEach((script) => {
             if(!notRequired.test(script.getAttribute("src"))){
                 script.setAttribute("type", "text/javascript");
                 generateCookieRegex();
             }
-        })
+        }) */
     }
 
     if(intaCookieConsents.functionalCookies === "checked"){
