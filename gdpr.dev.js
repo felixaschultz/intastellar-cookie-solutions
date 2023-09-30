@@ -1878,6 +1878,7 @@ function checkCookieStatus() {
 
                         if(intaCookieConsents?.advertisementCookies === "checked" || intaCookieConsents?.functionalCookies === "checked" || intaCookieConsents?.staticsticCookies === "checked"){
                             node.type = "text/javascript";
+                            return;
                         }
 
                         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
@@ -2029,7 +2030,9 @@ function checkCookieStatus() {
                                         node.parentElement.appendChild(scriptTag);
                                     } */
                                 }
-                            } else {
+                            } else if(intaCookieConsents?.functionalCookies === "checked" &&
+                            intaCookieConsents?.advertisementCookies === "checked" &&
+                            intaCookieConsents?.staticsticCookies === "checked") {
                                 node.type = "text/javascript";
                             }
 
@@ -2073,6 +2076,10 @@ function checkCookieStatus() {
                         } else {
                             /* node.parentElement.appendChild(node); */
                         }
+                    }else if(intaCookieConsents?.functionalCookies === "checked" &&
+                    intaCookieConsents?.advertisementCookies === "checked" &&
+                    intaCookieConsents?.staticsticCookies === "checked") {
+                        node.type = "text/javascript";
                     }
 
                     const beforeScriptExecuteListener = function (event) {
@@ -2144,6 +2151,10 @@ function checkCookieStatus() {
                                     node.parentElement.appendChild(scriptTag);
                                 } */
                             }
+                        }else if(intaCookieConsents?.functionalCookies === "checked" &&
+                        intaCookieConsents?.advertisementCookies === "checked" &&
+                        intaCookieConsents?.staticsticCookies === "checked") {
+                            node.type = "text/javascript";
                         }
 
                         if (node.getAttribute("type") === "text/blocked")
@@ -2308,7 +2319,6 @@ function deleteAllCookies() {
         var cookie = cookies[i];
         var eqPos = cookie.indexOf("=");
         var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        console.log(int__cookiesToKeepRegx.test(name),name,);
         if (!int__cookiesToKeepRegx.test(name)) {
             let localS = window.INTA.settings === undefined || window.INTA.settings.keepInLocalStorage === undefined ? "" : window.INTA.settings.keepInLocalStorage;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; " + intCookieDomain + " path=/";
@@ -2763,6 +2773,16 @@ if(typeof fbq === "undefined" || typeof fbq === "null"){
 function updateConsents(consent, type = null){
     const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
     
+    if(consent == "all"){
+        let staticCookies = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+        let marketingCookie = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+        let functionalCookies = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+        int__cookiesToKeep.push.apply(int__cookiesToKeep, staticCookies);
+        int__cookiesToKeep.push.apply(int__cookiesToKeep, marketingCookie);
+        int__cookiesToKeep.push.apply(int__cookiesToKeep, functionalCookies);
+        deleteAllCookies();
+    }
+
     /* if(intaCookieConsents.functionalCookies === "checked" && intaCookieConsents.staticsticCookies === "checked" && intaCookieConsents.advertisementCookies === "checked"){
         const intaBlockItemsContainer = document.querySelectorAll("inta-consents-iframe[data-src]");
         
