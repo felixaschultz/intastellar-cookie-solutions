@@ -273,7 +273,11 @@ const inta_requiredCookieList = [{
             purpose: "",
         },
         region
-    ]},
+    ],
+    domains: [
+        window.location.host
+    ]
+    },
     {
         vendor: "Intastellar Solutions, International",
         cookies: [
@@ -302,7 +306,12 @@ const inta_requiredCookieList = [{
                 purpose: ""
             }
         ],
-        vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy"
+        vendor_privacy: "https://www.intastellarsolutions.com/about/legal/privacy",
+        domains: [
+            "intastellarsolutions.com",
+            "consents.cdn.intastellarsolutions.com",
+            window.location.host
+        ]
     },
     {
         vendor: "WooCommerce",
@@ -328,7 +337,10 @@ const inta_requiredCookieList = [{
                 purpose: "Allows customers to dismiss the Store Notice."
             }
         ],
-        vendor_privacy: "https://automattic.com/privacy/"
+        vendor_privacy: "https://automattic.com/privacy/",
+        domains: [
+            window.location.host
+        ]
     },
     {
         vendor: "Microsoft Inc, ASP.NET",
@@ -342,7 +354,10 @@ const inta_requiredCookieList = [{
                 purpose: ""
             }
         ],
-        vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
+        vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement",
+        domains: [
+            window.location.host
+        ]
     },
     {
         vendor: "Amazon Web Services",
@@ -356,7 +371,10 @@ const inta_requiredCookieList = [{
                 purpose: "Supports the website's technical functions.",
             }
         ],
-        vendor_privacy: "https://aws.amazon.com/privacy/"
+        vendor_privacy: "https://aws.amazon.com/privacy/",
+        domains: [
+            window.location.host
+        ]
     }
 ];
 const int__cookiesToKeep = [...inta_requiredCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
@@ -382,7 +400,12 @@ inta_statisticCookieList.push({
             purpose: "Used in synchronizing the MUID across Microsoft domains."
         }
     ],
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
+    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement",
+    domains: [
+        window.location.host,
+        "microsoft.com",
+        "bing.com",
+    ]
 });
 inta_statisticCookieList.push({
     vendor: "Clarity / Microsoft Inc",
@@ -400,7 +423,13 @@ inta_statisticCookieList.push({
             purpose: "Identifies the first-time Clarity saw this user on any site using Clarity."
         }
     ],
-    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
+    vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement",
+    domains: [
+        window.location.host,
+        "microsoft.com",
+        "bing.com",
+        "clarity.ms"
+    ]
 })
 inta_statisticCookieList.push({
     vendor: "Mixpanel",
@@ -418,7 +447,11 @@ inta_statisticCookieList.push({
             purpose: ""
         }
     ],
-    vendor_privacy: "https://mixpanel.com/legal/privacy-policy/"
+    vendor_privacy: "https://mixpanel.com/legal/privacy-policy/",
+    domains: [
+        window.location.host,
+        "mixpanel.com",
+    ]
 })
 inta_statisticCookieList.push({
     vendor: "Google Inc",
@@ -843,8 +876,10 @@ inta_marketingCookieList.push({
         }
     ],
     domains: [
-        "linkedin.com",
-        "licdn.com"
+        "mailchimp.com",
+        "mailchimp.com",
+        "mailchimpapp.com",
+        "tumblr.com"
     ],
     vendor_privacy: "https://mailchimp.com/en-gb/legal/privacy/"
 });
@@ -858,7 +893,8 @@ inta_marketingCookieList.push({
         }
     ],
     domains: [
-        "trustpilot.com"
+        "trustpilot.com",
+        "trustpilot.dk",
     ],
     vendor_privacy: "https://legal.trustpilot.com/for-reviewers/end-user-privacy-terms"
 });
@@ -914,7 +950,9 @@ inta_marketingCookieList.push({
         },
     ],
     domains: [
-        "t.co"
+        "t.co",
+        "x.com",
+        "twitter.com"
     ],
     vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement"
 });
@@ -980,7 +1018,10 @@ inta_functionalCookieList.push({
             purpose: "This cookie is used to set users prefrence regarding the selected region.",
         }
     ],
-    vendor_privacy: null
+    vendor_privacy: null,
+    domains: [
+        window.location.host
+    ]
 })
 
 inta_functionalCookieList.push({
@@ -1030,7 +1071,9 @@ inta_functionalCookieList.push({
         }
     ],
     domains: [
-        "fonts.google.com"
+        "fonts.google.com",
+        "google.com",
+        window.location.host
     ],
     vendor_privacy: "https://policies.google.com/privacy"
 })
@@ -1115,7 +1158,8 @@ inta_functionalCookieList.push({
             purpose: "Required to identify proper endpoints for beacon transmission; includes session ID for correlation.",
         }
     ],
-    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy"
+    vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy",
+    domains: []
 })
 
 /* - - - Function for Partner Url - - - */
@@ -2271,7 +2315,15 @@ function listAllCookies(cookieList){
                         <h3 class="intaCookieListOverview-heading">Udbyder</h3>
                         <p class="intaCookieListOverview-vendor">${vendor}</p>
                         <p class="intaCookieListOverview-heading">Privat Politik</p>
-                        ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`Privatslivs politik`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">Privatslivs politik</a>`}
+                        <p>${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`Privatslivs politik`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">Privatslivs politik</a>`}</p>
+                        <h4 class="intaCookieList-CookieName">Domæne</h4>
+                        ${cookie.domains.map((cookie) => {
+                            if(cookie == undefined) return;
+                            return `
+                                
+                                <p>${cookie}</p>
+                            `
+                        }).join(" ")}
                     </section>
                     <section>
                         <h3 class="intaCookieListOverview-heading">Cookies</h3>
@@ -2297,6 +2349,13 @@ function listAllCookies(cookieList){
                     <p class="intaCookieListOverview-vendor">${vendor}</p>
                     <p class="intaCookieListOverview-heading">Datenschutzerklährung</p>
                     ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`Datenschutzerklährung`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">Datenschutzerklährung</a>`}
+                    <h4 class="intaCookieList-CookieName">Domain</h4>
+                    ${cookie.domains.map((cookie) => {
+                        if(cookie == undefined) return;
+                        return `
+                            <p>${cookie}</p>
+                        `
+                    }).join(" ")}
                 </section>
                 <section>
                     <h3 class="intaCookieListOverview-heading">Cookies</h3>
@@ -2322,6 +2381,13 @@ function listAllCookies(cookieList){
                     <p class="intaCookieListOverview-vendor">${vendor}</p>
                     <p class="intaCookieListOverview-heading">Privacy policy</p>
                     ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`Privacy policy`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">Privacy policy</a>`}
+                    <h4 class="intaCookieList-CookieName">Domains</h4>
+                    ${cookie.domains.map((cookie) => {
+                        if(cookie == undefined) return;
+                        return `
+                            <p>${cookie}</p>
+                        `
+                    }).join(" ")}
                 </section>
                 <section>
                     <h3 class="intaCookieListOverview-heading">Cookies</h3>
@@ -2347,6 +2413,13 @@ function listAllCookies(cookieList){
                     <p class="intaCookieListOverview-vendor">${vendor}</p>
                     <p class="intaCookieListOverview-heading">Privat Politik</p>
                     ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`Privatslivs politik`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">Privatslivs politik</a>`}
+                    <h4 class="intaCookieList-CookieName">Domæne</h4>
+                    ${cookie.domains.map((cookie) => {
+                        if(cookie == undefined) return;
+                        return `
+                            <p>${cookie}</p>
+                        `
+                    }).join(" ")}
                 </section>
                 <section>
                     <h3 class="intaCookieListOverview-heading">Cookies</h3>
