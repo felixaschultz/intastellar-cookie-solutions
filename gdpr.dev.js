@@ -1221,8 +1221,17 @@ if(getCookie(int_hideCookieBannerName) != ""
 }
 
 /* Cookie name list for marketing / advertisment cookies */
-if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies) {
+if(getCookie(int_hideCookieBannerName) != ""
+&& getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 
+&& intaCookieConsents?.advertisementCookies){
     let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
+    int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
+}
+
+if(getCookie(int_hideCookieBannerName) != ""
+&& getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 
+&& intaCookieConsents?.functionalCookies){
+    let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
