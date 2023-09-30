@@ -1800,8 +1800,6 @@ function checkCookieStatus() {
                         if (node.nodeType === 1 && node.tagName === "LINK") {
                         addedNodes.forEach((link) => {
                             const linkSrc = link.href;
-                            
-                            console.log(linkSrc);
                             if(notRequired.test(linkSrc)){
                                 link.disabled = true;
                             }
