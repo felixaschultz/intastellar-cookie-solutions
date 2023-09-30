@@ -2760,7 +2760,6 @@ if(typeof fbq === "undefined" || typeof fbq === "null"){
     function fbq(){}
 }
 
-
 function updateConsents(consent, type = null){
     const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
     
@@ -2865,6 +2864,7 @@ function saveINTCookieSettings(consent, type = null) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
         })
+
     }else {
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
@@ -2911,6 +2911,9 @@ window.addEventListener("load", function () {
 
     document.body.appendChild(trImage);
 
+    gtag('set', {
+        'user_id': (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid
+    });
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
     if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
