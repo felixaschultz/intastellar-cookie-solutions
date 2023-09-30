@@ -1680,6 +1680,12 @@ function checkCookieStatus() {
         mutations.forEach(({ addedNodes }) => {
             addedNodes.forEach((node) => {
 
+                /* if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
+                    window.INTA.settings.settings.styleSheets.map((sheet) => {
+
+                    })
+                } */
+
                 /* Adding  custom button to all blocked embedded content on the site */
                 if (node.nodeType === 1 && node.tagName === "IFRAME") {
                     allScripts.map((script) => {
@@ -1787,18 +1793,20 @@ function checkCookieStatus() {
                     });   
                 }
 
-                if (node.nodeType === 1 && node.tagName === "LINK") {
-                    const linkSrc = node.href;
-        
-                    if(notRequired.test(linkSrc)){
-                        if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
-                            console.log("Remove cookie");
-                            node.parentElement.removeChild(node);
-                            /* if(node.parentElement !== null){
-                                node.parentElement.removeChild(node);
-                            }  */
-                        }
-                    }
+                
+
+                if(getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
+                    || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""){
+                        if (node.nodeType === 1 && node.tagName === "LINK") {
+                        addedNodes.forEach((link) => {
+                            const linkSrc = link.href;
+                            
+                            console.log(linkSrc);
+                            if(notRequired.test(linkSrc)){
+                                link.disabled = true;
+                            }
+                        })
+                    }          
                 }
 
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
