@@ -1890,8 +1890,6 @@ function checkCookieStatus() {
                                 node.type = "text/javascript";
                                 node.defer = false;
                                 node.async = false;
-                            } else {
-                                node.type = "text/javascript";
                             }
 
                             if (
@@ -1942,6 +1940,8 @@ function checkCookieStatus() {
                                     node.parentElement.appendChild(scriptTag);
                                 } */
                             }
+                        }else{
+                            node.type = "text/javascript";
                         }
 
                         const beforeScriptExecuteListener = function (event) {
@@ -2019,6 +2019,8 @@ function checkCookieStatus() {
                                         node.parentElement.appendChild(scriptTag);
                                     } */
                                 }
+                            } else {
+                                node.type = "text/javascript";
                             }
 
                             if (node.getAttribute("type") === "text/blocked")
@@ -2061,6 +2063,8 @@ function checkCookieStatus() {
                         } else {
                             /* node.parentElement.appendChild(node); */
                         }
+                    } else {
+                        node.type = "text/javascript";
                     }
 
                     const beforeScriptExecuteListener = function (event) {
@@ -2132,6 +2136,8 @@ function checkCookieStatus() {
                                     node.parentElement.appendChild(scriptTag);
                                 } */
                             }
+                        } else {
+                            node.type = "text/javascript";
                         }
 
                         if (node.getAttribute("type") === "text/blocked")
