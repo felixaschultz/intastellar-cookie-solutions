@@ -1,5 +1,6 @@
 {
     "githubPullRequests.ignoredPullRequestBranches": [
         "development"
-    ]
+    ],
+    "liveServer.settings.port": 5501
 }
