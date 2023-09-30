@@ -1007,9 +1007,55 @@ inta_functionalCookieList.push({
         "googletagmanager.com",
         "googleadservice.com",
         "google-analytics.com",
-        "google.com"
+        "google.com",
+        "fonts.google.com"
     ],
     vendor_privacy: "https://policies.google.com/privacy"
+})
+
+inta_functionalCookieList.push({
+    vendor: "Google Fonts",
+    cookies: [
+        {
+            cookie: "FCCDCF",
+            purpose: "",
+        },
+        {
+            cookie: "NID",
+            purpose: "",
+        },
+        {
+            cookie: "AMP_TOKEN",
+            purpose: "",
+        }
+    ],
+    domains: [
+        "fonts.google.com"
+    ],
+    vendor_privacy: "https://policies.google.com/privacy"
+})
+
+inta_functionalCookieList.push({
+    vendor: "jsdelivr.com",
+    cookies: [
+        {
+            cookie: "__cfduid",
+            purpose: "Used by the content network, Cloudflare, to identify trusted web traffic.",
+        }
+    ],
+    domains: [
+        "jsdelivr.net",
+        "cdnjs.com",
+        "cdn.jsdelivr.net",
+        "jsdelivr.com",
+        "cdnjs.cloudflare.com",
+        "cloudflare.com",
+        "cloudflare.net",
+        "cloudflareinsights.com",
+        "cloudflarestream.com",
+        "cloudflarewatch.com",
+    ],
+    vendor_privacy: "https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net"
 })
 
 inta_functionalCookieList.push({
@@ -1280,10 +1326,10 @@ const allScripts = [
         /* Functional Scripts which are beeing blocked */
         type: "functional",
         scripts: [
-            "(maps.google.com)",
-            "(www.google.com/maps/)",
-            /* "(recaptcha+)",
-            "(grecaptcha+)", */
+            "(maps.google.com+)",
+            "(www.google.com/maps/+)",
+            "(recaptcha+)",
+            "(grecaptcha+)",
             "([\-\.]googleapis+)",
             "([\-\.]gstatics+)",
             "([\-\.]cludo+)",
@@ -1292,6 +1338,8 @@ const allScripts = [
             "([\-\.]paypal+)",
             "([\-\.]usersnap+)",
             "([\-\.]zoom+)",
+            "([\-\.]cdnjs+)",
+            "([\-\.]jsdelivr+)",
             "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
         ] 
     }
@@ -1737,6 +1785,20 @@ function checkCookieStatus() {
                             blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
                         })
                     });   
+                }
+
+                if (node.nodeType === 1 && node.tagName === "LINK") {
+                    const linkSrc = node.href;
+        
+                    if(notRequired.test(linkSrc)){
+                        if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
+                            console.log("Remove cookie");
+                            node.parentElement.removeChild(node);
+                            /* if(node.parentElement !== null){
+                                node.parentElement.removeChild(node);
+                            }  */
+                        }
+                    }
                 }
 
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
