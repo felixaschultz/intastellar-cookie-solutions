@@ -899,6 +899,11 @@ inta_marketingCookieList.push({
     domains: [
         "trustpilot.com",
         "trustpilot.dk",
+        "trustpilot.co.uk",
+        "cdn.segment.com",
+        "trustpilot-assets.com",
+        "trustpilot-api.com",
+        "segment.com",
     ],
     vendor_privacy: "https://legal.trustpilot.com/for-reviewers/end-user-privacy-terms"
 });
@@ -2769,11 +2774,11 @@ function gtag() {
 }
 
 gtag('consent', 'default', {
-    'ad_storage': (!intaCookieConsents.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'personalization_storage': (!intaCookieConsents.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'analytics_storage': (!intaCookieConsents.staticsticCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'functionality_storage': (!intaCookieConsents.functionalCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'ads_data_redaction': (!intaCookieConsents.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'ad_storage': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'personalization_storage': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'analytics_storage': (!intaCookieConsents?.staticsticCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'functionality_storage': (!intaCookieConsents?.functionalCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'ads_data_redaction': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
     'security_storage': 'granted',
     'url_passthrough': true,
     'wait_for_update': 500,
@@ -2823,7 +2828,7 @@ function updateConsents(consent, type = null){
         })
     }
 
-    /* if(intaCookieConsents.functionalCookies === "checked" && intaCookieConsents.staticsticCookies === "checked" && intaCookieConsents.advertisementCookies === "checked"){
+    /* if(intaCookieConsents?.functionalCookies === "checked" && intaCookieConsents?.staticsticCookies === "checked" && intaCookieConsents?.advertisementCookies === "checked"){
         const intaBlockItemsContainer = document.querySelectorAll("inta-consents-iframe[data-src]");
         
         intaBlockItemsContainer.forEach((container) => {
@@ -2842,13 +2847,13 @@ function updateConsents(consent, type = null){
         })
     } */
 
-    if(intaCookieConsents.staticsticCookies === "checked"){
+    if(intaCookieConsents?.staticsticCookies === "checked"){
         let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
         int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
         deleteAllCookies();
     }
 
-    if(intaCookieConsents.functionalCookies === "checked"){
+    if(intaCookieConsents?.functionalCookies === "checked"){
         const intaBlockItemsContainer = document.querySelectorAll("inta-consents[data-src]");
         const marketingScriptTags = document.querySelectorAll("script[data-functional]");
         /* generateCookieRegex(); */
@@ -2879,7 +2884,7 @@ function updateConsents(consent, type = null){
         })
     }
 
-    if(intaCookieConsents.advertisementCookies === "checked"){
+    if(intaCookieConsents?.advertisementCookies === "checked"){
         const intaBlockItemsContainer = document.querySelectorAll("inta-consents-iframe[data-src]");
         const marketingScriptTags = document.querySelectorAll("script[data-marketing]");
         let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
