@@ -1365,8 +1365,6 @@ const allScripts = [
             "([\-\.]adsrvr+)",
             "([\-\.]justpremium+)",
             "([\-\.]ants+)",
-            "([\-\.]omnisend+)",
-            "([\-\.]omnisnippet+)",
             "([\-\.]bluekai+)",
             "([\-\.]revcontent+)",
             "([\-\.]outbrain+)",
