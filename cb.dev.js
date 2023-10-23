@@ -690,7 +690,7 @@
     cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
     let poweredBy = "";
     if (window.location.host.indexOf("intastellarsolutions") == -1) {
-        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Solutions, International'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + encodeURI(window.location.href) + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg' alt='Intastellar Solutions, International'></a></span>";
+        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Consents Solutions'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + encodeURI(window.location.href) + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg' alt='Intastellar Solutions, International'></a></span>";
     }
     
     let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
