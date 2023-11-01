@@ -2213,6 +2213,9 @@ function checkCookieStatus() {
 };
 
 checkCookieStatus();
+if (document.currentScript.async) {
+    checkCookieStatus();
+}
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -2631,18 +2634,9 @@ function isValidCCPALink() {
 }
 
 const intastellarCreateBanner = document.createElement("script");
-
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if(window.INTA.settings.dev){
     intastellarCreateBanner.src = "../../cb.dev.js";
-}
-
-if (document.currentScript.async) {
-    intastellarCreateBanner.async = true;
-    /* console.log("Executing asynchronously"); */
-} else {
-    intastellarCreateBanner.async = false;
-/* console.log("Executing synchronously"); */
 }
 
 function randomIntFromInterval(min, max) { // min and max included 
@@ -2722,7 +2716,13 @@ if(typeof window.INTA.policy_link === "undefined"){
     const configScript = document.createElement("script");
     configScript.src = intastellarDefaultConfigFile;
 
-    configScript.async = true;
+    if (document.currentScript.async) {
+        configScript.async = false;
+        console.log("Executing asynchronously");
+    } else {
+        configScript.async = true;
+        console.log("Executing synchronously");
+    }
 
     document.head.insertBefore(configScript, document.currentScript);
 }
