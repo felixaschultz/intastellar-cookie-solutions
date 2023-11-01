@@ -1452,6 +1452,7 @@ if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerN
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
+    src.async = true;
     s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
     intHead.appendChild(s);
 
@@ -2981,6 +2982,7 @@ const IntastellarCookieConsent = {
 /* setIntastellarPartnerDomain(); */
 
 window.addEventListener("load", function () {
+    console.log(intastellarCreateBanner)
     document.head.appendChild(intastellarCreateBanner);
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
