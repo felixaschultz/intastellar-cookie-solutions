@@ -2631,10 +2631,18 @@ function isValidCCPALink() {
 }
 
 const intastellarCreateBanner = document.createElement("script");
-intastellarCreateBanner.async = false;
+
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if(window.INTA.settings.dev){
     intastellarCreateBanner.src = "../../cb.dev.js";
+}
+
+if (document.currentScript.async) {
+    intastellarCreateBanner.async = true;
+    /* console.log("Executing asynchronously"); */
+} else {
+    intastellarCreateBanner.async = false;
+/* console.log("Executing synchronously"); */
 }
 
 function randomIntFromInterval(min, max) { // min and max included 
