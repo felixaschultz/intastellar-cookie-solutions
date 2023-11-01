@@ -1452,7 +1452,7 @@ if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerN
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     let s = document.createElement("script");
-    src.async = true;
+    s.async = true;
     s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
     intHead.appendChild(s);
 
