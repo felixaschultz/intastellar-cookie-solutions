@@ -1448,13 +1448,13 @@ if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerN
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
     notRequired = new RegExp(m.join("|"), "ig");
 }
+let s = document.createElement("script");
+s.async = true;
+s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
+intHead.appendChild(s);
 
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
-    let s = document.createElement("script");
-    s.async = true;
-    s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
-    intHead.appendChild(s);
 
     /* Helper function to create Consents Block message for iframes etc.*/
     function ConsentsBlock(logo, textLanguage, btnText, datatype, img){
@@ -2981,9 +2981,8 @@ const IntastellarCookieConsent = {
 
 /* setIntastellarPartnerDomain(); */
 
+document.head.appendChild(intastellarCreateBanner);
 window.addEventListener("load", function () {
-    console.log(intastellarCreateBanner)
-    document.head.appendChild(intastellarCreateBanner);
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
