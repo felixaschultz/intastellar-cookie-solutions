@@ -2059,10 +2059,12 @@ function checkCookieStatus() {
                             );
                         };
 
-                        node.addEventListener(
-                            "beforescriptexecute",
-                            beforeScriptExecuteListener
-                        );
+                        if(node.getAttribute("type") === "text/blocked"){
+                            node.addEventListener(
+                                "beforescriptexecute",
+                                beforeScriptExecuteListener
+                            );
+                        }
                     });
                 } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
                     if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies== "null"
@@ -2179,10 +2181,12 @@ function checkCookieStatus() {
                             beforeScriptExecuteListener
                         );
                     };
-                    node.addEventListener(
-                        "beforescriptexecute",
-                        beforeScriptExecuteListener
-                    );
+                    if(node.getAttribute("type") === "text/blocked"){
+                        node.addEventListener(
+                            "beforescriptexecute",
+                            beforeScriptExecuteListener
+                        );
+                    }
                     beforeScriptExecuteListener();
                 }
             });
@@ -2635,6 +2639,7 @@ function isValidCCPALink() {
 
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+intastellarCreateBanner.async = true;
 if(window.INTA.settings.dev){
     intastellarCreateBanner.src = "../../cb.dev.js";
 }
@@ -2711,7 +2716,7 @@ function isValidPolicyLink() {
     return false;
 }
 
-if(typeof window.INTA.policy_link === "undefined"){
+if(typeof window.INTA.policy_link === "undefined" && document.querySelector('script[src*="../../gdpr-consents.config.js"]') === null){
     const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.host + "/config.js";
     const configScript = document.createElement("script");
     configScript.src = intastellarDefaultConfigFile;
