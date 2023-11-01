@@ -2710,9 +2710,11 @@ function isValidPolicyLink() {
 }
 
 if(typeof window.INTA.policy_link === "undefined"){
-    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.hostname + "/config.js";
+    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.host + "/config.js";
     const configScript = document.createElement("script");
     configScript.src = intastellarDefaultConfigFile;
+
+    configScript.async = true;
 
     document.head.insertBefore(configScript, document.currentScript);
 }
