@@ -2631,7 +2631,7 @@ function isValidCCPALink() {
 }
 
 const intastellarCreateBanner = document.createElement("script");
-intastellarCreateBanner.async = true;
+intastellarCreateBanner.async = false;
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if(window.INTA.settings.dev){
     intastellarCreateBanner.src = "../../cb.dev.js";
