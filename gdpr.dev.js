@@ -2979,9 +2979,11 @@ const IntastellarCookieConsent = {
 }
 
 /* setIntastellarPartnerDomain(); */
-document.head.prepend(intastellarCreateBanner);
-window.addEventListener("load", function () {
 
+window.addEventListener("load", function () {
+    if(document.querySelector("script[src*='https://downloads.intastellarsolutions.com/cookieconsents/"+window.location.host+"/config.js']") != null || document.querySelector("script[src*='gdpr-consents.config.js']") != null){
+        document.head.appendChild(intastellarCreateBanner);
+    }
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
