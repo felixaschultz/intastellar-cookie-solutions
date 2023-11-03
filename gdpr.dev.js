@@ -1288,7 +1288,6 @@ const allScripts = [
         scripts: [
             "(mixpanel)",
             "([\-\.]googleoptimize+)",
-            /*"([\-\.]google-analytics+)",*/
             "([\-\.]piwik+)",
             "([\-\.]matomo+)",
             "([\-\.]bing+)",
@@ -1410,6 +1409,33 @@ const allScripts = [
         ] 
     }
 ];
+
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag('consent', 'default', {
+    'ad_storage': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'personalization_storage': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'analytics_storage': (!intaCookieConsents?.staticsticCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'functionality_storage': (!intaCookieConsents?.functionalCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'ads_data_redaction': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'security_storage': 'granted',
+    'url_passthrough': true,
+    'wait_for_update': 500,
+});
+
+if(window.INTA.settings.gtagId){
+    gtag('config', window.INTA.settings.gtagId, {
+        'user_id': ''+ intaCookieConsentsUserId+''
+    });
+}
+
+if(typeof fbq === "undefined" || typeof fbq === "null"){
+    function fbq(){}
+}
+fbq('consent', 'revoke');
 
 let notRequired;
 let m;
@@ -2784,33 +2810,6 @@ function startObserving ( observer ) {
 /* - - - Helper function for saving settings - - - */
 
 /* - - - END - - - */
-window.dataLayer = window.dataLayer || [];
-function gtag() {
-    dataLayer.push(arguments);
-}
-
-gtag('consent', 'default', {
-    'ad_storage': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'personalization_storage': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'analytics_storage': (!intaCookieConsents?.staticsticCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'functionality_storage': (!intaCookieConsents?.functionalCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'ads_data_redaction': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'security_storage': 'granted',
-    'url_passthrough': true,
-    'wait_for_update': 500,
-});
-
-if(window.INTA.settings.gtagId){
-    gtag('config', window.INTA.settings.gtagId, {
-        'user_id': ''+ intaCookieConsentsUserId+''
-    });
-}
-
-if(typeof fbq === "undefined" || typeof fbq === "null"){
-    function fbq(){}
-}
-fbq('consent', 'revoke');
-
 function updateConsents(consent, type = null){
     if(consent == "all"){
         let staticCookies = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
