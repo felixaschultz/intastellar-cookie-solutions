@@ -14,6 +14,7 @@ window.INTA = {
         partnerDomain: [
             "intastellarsolutions.com"
         ],
+        gtagId: "G-XDDJRGFS76",
         arrange: "rtl",
         styleSheets: [
             "https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;600;700;800&display=swap",
