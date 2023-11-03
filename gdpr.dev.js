@@ -18,6 +18,8 @@ let intastellarShowHideDetailsText = "Show details";
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellarsolutions.com/assets";
 const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
+const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
+
 let intaConsentsObjectVariable = {
     consents: {
         staticsticCookies: false,
@@ -2797,6 +2799,12 @@ gtag('consent', 'default', {
     'url_passthrough': true,
     'wait_for_update': 500,
 });
+
+if(window.INTA.settings.gtagId){
+    gtag('config', window.INTA.settings.gtagId, {
+        'user_id': ''+ intaCookieConsentsUserId+''
+    });
+}
 
 if(typeof fbq === "undefined" || typeof fbq === "null"){
     function fbq(){}
