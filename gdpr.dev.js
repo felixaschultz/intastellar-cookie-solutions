@@ -2757,8 +2757,8 @@ function isValidPolicyLink() {
     return false;
 }
 
-if(typeof window.INTA.policy_link === "undefined" && document.querySelector('script[src*="../../gdpr-consents.config.js"]') === null){
-    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.host + "/config.js";
+if(typeof window.INTA.policy_link === "undefined" && document.querySelector('script[src*="config.js"]') === null){
+    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.host.replace("www.", "") + "/config.js";
     const configScript = document.createElement("script");
     configScript.src = intastellarDefaultConfigFile;
 
