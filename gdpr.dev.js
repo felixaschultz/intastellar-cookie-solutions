@@ -2668,10 +2668,22 @@ function isValidCCPALink() {
 
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-intastellarCreateBanner.async = true;
+intastellarCreateBanner.async = false;
 if(window.INTA.settings.dev){
     intastellarCreateBanner.src = "../../cb.dev.js";
 }
+const IntastellarCookieConsent = {
+    renew: function () {
+        document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        document.querySelector("html").classList.add("noScroll");
+    },
+    inizilize: function (template) {
+        window.addEventListener("DOMContentLoaded", () => {
+            document.body.append(template);
+        })
+    }
+}
+document.head.appendChild(intastellarCreateBanner);
 
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
@@ -2976,20 +2988,12 @@ function saveINTCookieSettings(consent, type = null) {
     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 }
-const IntastellarCookieConsent = {
-    renew: function () {
-        document.querySelector(".intastellarCookieConstents").classList.add("--active");
-        document.querySelector("html").classList.add("noScroll");
-    },
-    inizilize: function (template) {
-        document.body.append(template);
-    }
-}
+
 
 /* setIntastellarPartnerDomain(); */
 
-document.head.appendChild(intastellarCreateBanner);
 window.addEventListener("load", function () {
+    
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
