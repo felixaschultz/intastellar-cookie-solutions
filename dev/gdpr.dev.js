@@ -2986,7 +2986,7 @@ function saveINTCookieSettings(consent, type = null) {
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
-
+    dataLayer.push({'event': 'cookie_consent_update'})
     if (StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
@@ -3148,7 +3148,6 @@ window.addEventListener("load", function () {
             ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
 
         document.querySelector(".--save").addEventListener("click",() => {
-            dataLayer.push({'event': 'cookie_consent_update'})
             const accepted = [];
             if (FunctionalCheckbox?.checked) {
                 gtag('consent', 'update', {
