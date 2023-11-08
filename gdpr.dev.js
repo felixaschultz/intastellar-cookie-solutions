@@ -1332,9 +1332,9 @@ const allScripts = [
         type: "marketing",
         scripts: [
             "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
-            "([\-\.]googlesyndication+)",
+            /* "([\-\.]googlesyndication+)",
             "([\-\.]googletagservices+)",
-            "([\-\.]googleadservices+)",
+            "([\-\.]googleadservices+)", */
             "([\-\.]twitter+)",
             "([\-\.]ads-twitter+)",
             "([\-\.]casalemedia+)",
