@@ -3650,8 +3650,8 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
                     
-                    updateConsents("all");
                     dataLayer.push({'event': 'cookie_consent_update'})
+                    updateConsents("all");
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
                     document.querySelector("#functional").checked = true;
