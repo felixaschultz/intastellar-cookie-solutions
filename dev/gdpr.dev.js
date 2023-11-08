@@ -1424,7 +1424,7 @@ gtag('consent', 'default', {
     'region': ['EU', 'US-CA'],
     'security_storage': 'granted',
     'url_passthrough': true,
-    'wait_for_update': 500,
+    'wait_for_update': 2000,
 });
 
 if(window.INTA.settings.gtagId){
