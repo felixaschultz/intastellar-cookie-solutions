@@ -2986,7 +2986,6 @@ function saveINTCookieSettings(consent, type = null) {
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
-    dataLayer.push({'event': 'cookie_consent_update'})
     if (StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
@@ -2998,6 +2997,7 @@ function saveINTCookieSettings(consent, type = null) {
             'analytics_storage': 'denied',
         })
     }
+    dataLayer.push({'event': 'cookie_consent_update'})
 
     intaConsentsObjectVariable.consents = {
         staticsticCookies: (StaticsCheckBox?.checked) ? "checked" : false,
@@ -3211,7 +3211,7 @@ window.addEventListener("load", function () {
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
-                dataLayer.push({'event': 'cookie_consent_update'})
+                
                 var cV = 0;
                 intaConsentsObjectVariable.consents = {
                     staticsticCookies: "checked",
@@ -3250,6 +3250,7 @@ window.addEventListener("load", function () {
                     'ads_data_redaction': 'granted',
                     'url_passthrough': true,
                 });
+                dataLayer.push({'event': 'cookie_consent_update'})
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -3257,7 +3258,7 @@ window.addEventListener("load", function () {
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
-                dataLayer.push({'event': 'cookie_consent_update'})
+                
                 var cV = 1;
                 intaConsentsObjectVariable.consents = {
                     staticsticCookies: "checked",
@@ -3301,6 +3302,7 @@ window.addEventListener("load", function () {
                     'ads_data_redaction': 'granted',
                     'url_passthrough': true,
                 });
+                dataLayer.push({'event': 'cookie_consent_update'})
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -3308,7 +3310,6 @@ window.addEventListener("load", function () {
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAllNecessary.addEventListener("click", function () {
-                dataLayer.push({'event': 'cookie_consent_update'})
                 intaConsentsObjectVariable.consents = {
                     staticsticCookies: false,
                     functionalCookies:  false,
@@ -3337,7 +3338,15 @@ window.addEventListener("load", function () {
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
                 })
-                
+                gtag('consent', 'update', {
+                    'ad_storage': 'denied',
+                    'personalization_storage': 'denied',
+                    'analytics_storage': 'denied',
+                    'functionality_storage': 'denied',
+                    'ads_data_redaction': 'denied',
+                    'url_passthrough': true,
+                });
+                dataLayer.push({'event': 'cookie_consent_update'})
                 /*window.location.reload();*/
 
             });
@@ -3392,7 +3401,7 @@ window.addEventListener("load", function () {
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
-                    dataLayer.push({'event': 'cookie_consent_update'})
+                    
                     intaConsentsObjectVariable.consents = {
                         staticsticCookies: false,
                         functionalCookies:  false,
@@ -3426,6 +3435,7 @@ window.addEventListener("load", function () {
                         'ads_data_redaction': 'denied',
                         'url_passthrough': true,
                     });
+                    dataLayer.push({'event': 'cookie_consent_update'})
                     updateConsents("denied");
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
@@ -3436,7 +3446,6 @@ window.addEventListener("load", function () {
             
             all.forEach((a) => {
                 a.addEventListener("click", function () {
-                    dataLayer.push({'event': 'cookie_consent_update'})
                     intaConsentsObjectVariable.consents = {
                         staticsticCookies: "checked",
                         functionalCookies:  "checked",
@@ -3478,6 +3487,7 @@ window.addEventListener("load", function () {
                         'ads_data_redaction': 'granted',
                         'url_passthrough': true,
                     });
+                    dataLayer.push({'event': 'cookie_consent_update'})
                     updateConsents("all");
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
@@ -3554,7 +3564,6 @@ window.addEventListener("load", function () {
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
-                    dataLayer.push({'event': 'cookie_consent_update'})
                     intaConsentsObjectVariable.consents = {
                         staticsticCookies: false,
                         functionalCookies:  false,
@@ -3582,13 +3591,24 @@ window.addEventListener("load", function () {
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
                     document.querySelector("#functional").checked = false;
+
+                    gtag('consent', 'update', {
+                        'ad_storage': 'denied',
+                        'personalization_storage': 'denied',
+                        'analytics_storage': 'denied',
+                        'functionality_storage': 'denied',
+                        'ads_data_redaction': 'denied',
+                        'url_passthrough': true,
+                    });
+
+                    dataLayer.push({'event': 'cookie_consent_update'})
                     /*window.location.reload();*/
                 });
             });
 
             all.forEach((a) => {
                 a.addEventListener("click", function () {
-                    dataLayer.push({'event': 'cookie_consent_update'})
+                    
                     var cV = 1;
 
                     intaConsentsObjectVariable.consents = {
@@ -3631,6 +3651,7 @@ window.addEventListener("load", function () {
                     });
                     
                     updateConsents("all");
+                    dataLayer.push({'event': 'cookie_consent_update'})
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
                     document.querySelector("#functional").checked = true;
