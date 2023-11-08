@@ -1421,7 +1421,6 @@ gtag('consent', 'default', {
     'analytics_storage': 'denied',
     'functionality_storage': 'denied',
     'ads_data_redaction': 'denied',
-    'region': ['EU', 'US-CA'],
     'security_storage': 'granted',
     'url_passthrough': true,
     'wait_for_update': 500,
