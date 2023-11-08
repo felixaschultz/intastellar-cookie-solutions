@@ -1426,6 +1426,8 @@ gtag('consent', 'default', {
     'wait_for_update': 500,
 });
 
+gtag("event", "cookie_consent_update");
+
 if(intaCookieConsents?.advertisementCookies){
     gtag('consent', 'update', {
         'ad_storage': 'granted',
