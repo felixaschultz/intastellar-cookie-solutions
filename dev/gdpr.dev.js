@@ -2668,9 +2668,9 @@ function isValidCCPALink() {
 
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-intastellarCreateBanner.async = false;
+intastellarCreateBanner.async = true;
 if(window.INTA.settings.dev){
-    intastellarCreateBanner.src = "../../cb.dev.js";
+    intastellarCreateBanner.src = "../../dev/cb.dev.js";
 }
 const IntastellarCookieConsent = {
     renew: function () {
@@ -2678,9 +2678,7 @@ const IntastellarCookieConsent = {
         document.querySelector("html").classList.add("noScroll");
     },
     inizilize: function (template) {
-        window.addEventListener("DOMContentLoaded", () => {
-            document.body.append(template);
-        })
+        document.body.append(template);
     }
 }
 document.head.appendChild(intastellarCreateBanner);
