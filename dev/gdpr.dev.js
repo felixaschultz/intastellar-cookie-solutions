@@ -1416,16 +1416,43 @@ function gtag() {
 }
 
 gtag('consent', 'default', {
-    'ad_storage': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'personalization_storage': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'analytics_storage': (!intaCookieConsents?.staticsticCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'functionality_storage': (!intaCookieConsents?.functionalCookies || intaCookieConsents == null) ? 'denied' : 'granted',
-    'ads_data_redaction': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'ad_storage': 'denied',
+    'personalization_storage': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'denied',
+    'ads_data_redaction': 'denied',
     'region': ['EU', 'US-CA'],
     'security_storage': 'granted',
     'url_passthrough': true,
     'wait_for_update': 2000,
 });
+
+if(intaCookieConsents?.advertisementCookies){
+    gtag('consent', 'update', {
+        'ad_storage': 'granted',
+    })
+}
+
+if(intaCookieConsents?.staticsticCookies){
+    gtag('consent', 'update', {
+        'analytics_storage': 'granted',
+    })
+}
+
+if(intaCookieConsents?.functionalCookies){
+    gtag('consent', 'update', {
+        'functionality_storage': 'granted',
+    })
+
+}
+
+if(intaCookieConsents?.advertisementCookies){
+    gtag('consent', 'update', {
+        'personalization_storage': 'granted',
+        'ads_data_redaction': 'granted',
+        'ad_storage': 'granted',
+    })
+}
 
 if(window.INTA.settings.gtagId){
     gtag('config', window.INTA.settings.gtagId, {
