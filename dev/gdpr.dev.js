@@ -1421,6 +1421,7 @@ gtag('consent', 'default', {
     'analytics_storage': (!intaCookieConsents?.staticsticCookies || intaCookieConsents == null) ? 'denied' : 'granted',
     'functionality_storage': (!intaCookieConsents?.functionalCookies || intaCookieConsents == null) ? 'denied' : 'granted',
     'ads_data_redaction': (!intaCookieConsents?.advertisementCookies || intaCookieConsents == null) ? 'denied' : 'granted',
+    'region': ['EU', 'US-CA'],
     'security_storage': 'granted',
     'url_passthrough': true,
     'wait_for_update': 500,
