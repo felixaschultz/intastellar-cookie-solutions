@@ -1426,8 +1426,6 @@ gtag('consent', 'default', {
     'wait_for_update': 500,
 });
 
-gtag("event", "cookie_consent_update");
-
 if(intaCookieConsents?.advertisementCookies){
     gtag('consent', 'update', {
         'ad_storage': 'granted',
@@ -3148,6 +3146,7 @@ window.addEventListener("load", function () {
             ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
 
         document.querySelector(".--save").addEventListener("click",() => {
+            dataLayer.push({'event': 'cookie_consent_update'})
             const accepted = [];
             if (FunctionalCheckbox?.checked) {
                 gtag('consent', 'update', {
@@ -3210,6 +3209,7 @@ window.addEventListener("load", function () {
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
+                dataLayer.push({'event': 'cookie_consent_update'})
                 var cV = 0;
                 intaConsentsObjectVariable.consents = {
                     staticsticCookies: "checked",
@@ -3255,6 +3255,7 @@ window.addEventListener("load", function () {
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
+                dataLayer.push({'event': 'cookie_consent_update'})
                 var cV = 1;
                 intaConsentsObjectVariable.consents = {
                     staticsticCookies: "checked",
@@ -3305,6 +3306,7 @@ window.addEventListener("load", function () {
 
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAllNecessary.addEventListener("click", function () {
+                dataLayer.push({'event': 'cookie_consent_update'})
                 intaConsentsObjectVariable.consents = {
                     staticsticCookies: false,
                     functionalCookies:  false,
@@ -3386,33 +3388,9 @@ window.addEventListener("load", function () {
                 })
             }
 
-            if (analyticsBTN != null || analyticsBTN != undefined) {
-                analyticsBTN.addEventListener("click", function () {
-                    var cV = 1;
-                    document.cookie =
-                        int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify({
-                                consents: {
-                                    staticsticCookies: (StaticsCheckBox?.checked) ? "checked" : false,
-                                    functionalCookies: (FunctionalCheckbox?.checked) ? "checked" : false,
-                                    advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
-                                },
-                                time: new Date().getTime()
-                            }),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                    document.cookie =
-                        "_vis_opt=" +
-                        cV +
-                        "; expires=" + cookieLifeTime +
-                        "; path=/; " +
-                        intCookieDomain +
-                        "";
-                })
-            }
-
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
+                    dataLayer.push({'event': 'cookie_consent_update'})
                     intaConsentsObjectVariable.consents = {
                         staticsticCookies: false,
                         functionalCookies:  false,
@@ -3456,6 +3434,7 @@ window.addEventListener("load", function () {
             
             all.forEach((a) => {
                 a.addEventListener("click", function () {
+                    dataLayer.push({'event': 'cookie_consent_update'})
                     intaConsentsObjectVariable.consents = {
                         staticsticCookies: "checked",
                         functionalCookies:  "checked",
@@ -3573,6 +3552,7 @@ window.addEventListener("load", function () {
 
             ness.forEach((n) => {
                 n.addEventListener("click", function () {
+                    dataLayer.push({'event': 'cookie_consent_update'})
                     intaConsentsObjectVariable.consents = {
                         staticsticCookies: false,
                         functionalCookies:  false,
@@ -3606,6 +3586,7 @@ window.addEventListener("load", function () {
 
             all.forEach((a) => {
                 a.addEventListener("click", function () {
+                    dataLayer.push({'event': 'cookie_consent_update'})
                     var cV = 1;
 
                     intaConsentsObjectVariable.consents = {
