@@ -1435,6 +1435,7 @@ if(intaCookieConsents?.advertisementCookies){
 if(intaCookieConsents?.staticsticCookies){
     gtag('consent', 'update', {
         'analytics_storage': 'granted',
+        'ad_storage': 'granted',
     })
 }
 
@@ -2989,6 +2990,7 @@ function saveINTCookieSettings(consent, type = null) {
     if (StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
+            'ad_storage': 'granted',
         })
 
     }else {
@@ -3166,6 +3168,7 @@ window.addEventListener("load", function () {
             if (StaticsCheckBox?.checked) {
                 gtag('consent', 'update', {
                     'analytics_storage': 'granted',
+                    'ad_storage': 'granted',
                 })
                 accepted.push("staticsticCookies");
             }else {
