@@ -9,7 +9,7 @@
 const intaCookiePref = "IntastellarConsentSolution";
 const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
 const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
-const int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
+const intaMarketingCookie = intaCookiePref + ":Advertisment-cookies";
 const int_staticsticCookies = intaCookiePref + ":Statistics-cookies";
 const int_visitorCheck = intaCookiePref + "visitorCheck";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
@@ -104,7 +104,7 @@ if(window.INTA === undefined){
             company: undefined,
             lang: "auto",
             color: "rgba(0, 51, 153, 1)",
-            keepInLocalStorage: ["firstLoad", int_FunctionalCookies, int_hideCookieBannerName, int_marketingCookies, int_staticsticCookies],
+            keepInLocalStorage: ["firstLoad", int_FunctionalCookies, int_hideCookieBannerName, intaMarketingCookie, int_staticsticCookies],
             arrange: "ltr",
             logo: intCookieIcon,
             partnerDomain: null,
@@ -292,7 +292,7 @@ const inta_requiredCookieList = [{
                 purpose: "It´s function is to hide the popup window onload after user has accept or rejected cookies.",
             },
             {
-                cookie: int_marketingCookies,
+                cookie: intaMarketingCookie,
                 purpose: "Its function is to store users cookie choice regarding marketing / advertising cookies. Its purpose is to store a users cookie choice whether a user allows tracking & cookies for advertising purposes or not.",
             },
             {
