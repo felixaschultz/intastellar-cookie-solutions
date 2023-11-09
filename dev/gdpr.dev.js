@@ -2318,7 +2318,7 @@ const IntastellarCookieConsent = {
         document.body.append(template);
     }
 }
-checkCookieStatus();
-if (document.currentScript.async) {
+/* checkCookieStatus(); */
+if (!document.currentScript.async) {
     checkCookieStatus();
 }
