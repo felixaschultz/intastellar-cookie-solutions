@@ -1814,10 +1814,10 @@ function isValidCCPALink() {
 /* - - - Helper functions for Messages */
 function generatePolicyUrl(policy_link_text) {
     let url = "";
-    if (typeof window.INTA.policy_link === 'undefined') {
+    /* if (typeof window.INTA.policy_link === 'undefined') {
         throw new IntastellarSolutionsSDK("Policy URL has not been defined.")
         return;
-    }
+    } */
     if (typeof window.INTA.policy_link === "object") {
         url = "<a href='" + window.INTA.policy_link.url + "' target='" + window.INTA.policy_link.target + "' class='intastellarCookie-settings__privacyLink'>" + policy_link_text + "</a>"
     } else if (typeof window.INTA.policy_link === "string") {
