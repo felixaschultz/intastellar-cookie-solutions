@@ -84,7 +84,7 @@ function decodeIntaConsentsObject(number) {
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 intastellarCreateBanner.async = true;
-if(window.INTA.settings.dev){
+if(window?.INTA?.settings?.dev){
     intastellarCreateBanner.src = "../../dev/cb.dev.js";
 }
 document.head.appendChild(intastellarCreateBanner);
