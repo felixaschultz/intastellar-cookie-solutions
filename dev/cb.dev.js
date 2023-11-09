@@ -1449,7 +1449,7 @@ window.addEventListener("load", function () {
         errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner. Read more at <a href='https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy</a>";
 
         errorMessage.appendChild(errorMessageContent);
-        document.body.appendChild(errorMessage);
+        /* document.body.appendChild(errorMessage); */
 
         throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy")
     }
