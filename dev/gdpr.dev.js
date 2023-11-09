@@ -1226,6 +1226,23 @@ inta_functionalCookieList.push({
     domains: []
 })
 
+/* Checking if config file needs to be loaded */
+if(typeof window.INTA.policy_link === "undefined" && document.querySelector('script[src*="config.js"]') === null){
+    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.host.replace("www.", "") + "/config.js";
+    const configScript = document.createElement("script");
+    configScript.src = intastellarDefaultConfigFile;
+
+    if (document.currentScript.async) {
+        configScript.async = false;
+        console.log("Executing asynchronously");
+    } else {
+        configScript.async = true;
+        console.log("Executing synchronously");
+    }
+
+    document.head.insertBefore(configScript, document.currentScript);
+}
+
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
