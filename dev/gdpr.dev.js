@@ -1404,8 +1404,6 @@ const allScripts = [
         scripts: [
             "(maps.google.com+)",
             "(www.google.com/maps/+)",
-            "(recaptcha+)",
-            "(grecaptcha+)",
             "([\-\.]googleapis+)",
             "([\-\.]gstatics+)",
             "([\-\.]cludo+)",
