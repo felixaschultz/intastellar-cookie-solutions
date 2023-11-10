@@ -39,7 +39,7 @@
                 var expires = "expires=" + d.toGMTString();
                 document.cookie = "cookieSharing=" + JSON.stringify(event.data) + "; path=/; "+ expires +"; SameSite=none; Secure";
                 console.log("cookieSharingIframe.html", event.data);
-                if(event.data == "you´re open to share with me" && inArray(origin.replace("https://", "").replace("http://", "").replace("www.", ""), JSON.parse(("cookieSharing")).parterDomains)){
+                if(event.data == "you´re open to share with me" && JSON.parse(("cookieSharing")).parterDomains.indexOf(origin.replace("https://", "").replace("http://", "").replace("www.", "")) > -1){
                     window.parent.postMessage({
                         cookieSharing: event.data,
                     }, "*");
