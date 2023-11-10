@@ -119,15 +119,17 @@ function setIntastellarPartnerDomain(){
 }
 
 setIntastellarPartnerDomain();
-const instatellariframe = document.getElementById("intastellarCrossSiteCheck");
-const iframeDoc = instatellariframe.contentDocument || instatellariframe.contentWindow.document;
-if (  iframeDoc.readyState  == 'complete' ) {
-    //iframe.contentWindow.alert("Hello");
-    instatellariframe.contentWindow.addEventListener("load", function(){
-        console.log("iframe loaded");
-    
-    })
-} 
+if(document.getElementById("intastellarCrossSiteCheck") != null){
+    const instatellariframe = document.getElementById("intastellarCrossSiteCheck");
+    const iframeDoc = instatellariframe.contentDocument || instatellariframe.contentWindow.document;
+    if (  iframeDoc.readyState  == 'complete' ) {
+        //iframe.contentWindow.alert("Hello");
+        instatellariframe.contentWindow.addEventListener("load", function(){
+            console.log("iframe loaded");
+        
+        })
+    } 
+}
 
 /* - - - Set the intastellarCookieLanguageuage dependent messages */
 
