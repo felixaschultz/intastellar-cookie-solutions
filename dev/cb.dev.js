@@ -1436,8 +1436,8 @@ window.addEventListener("load", function () {
             document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
             .postMessage("you´re open to share with me", "*");
             window.addEventListener("message", (e) => {
-                if(e.data.cookieSharing){
-                    const sharedCookies = e.data.cookieSharing;
+                if(e.data){
+                    const sharedCookies = e.data;
                     console.log(sharedCookies);
                     
                 }
