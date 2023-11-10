@@ -1053,11 +1053,14 @@ window.addEventListener("load", function () {
                 }
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-
+                const intastellarShared = {
+                    intaConsentsObjectVariable: intaConsentsObjectVariable,
+                    partnerDomain: window.INTA.settings.partnerDomain,
+                }
                 window.addEventListener("message", function(e){
                     if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    .postMessage(JSON.stringify(intastellarShared), "*");
                 })
 
                 gtag('consent', 'update', {
@@ -1098,11 +1101,14 @@ window.addEventListener("load", function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-
+                const intastellarShared = {
+                    intaConsentsObjectVariable: intaConsentsObjectVariable,
+                    partnerDomain: window.INTA.settings.partnerDomain,
+                }
                 window.addEventListener("message", function(e){
                     if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    .postMessage(JSON.stringify(intastellarShared), "*");
                 })
                 gtag('consent', 'update', {
                     'ad_storage': 'denied',
@@ -1433,6 +1439,7 @@ window.addEventListener("load", function () {
                 if(e.data.cookieSharing){
                     const sharedCookies = e.data.cookieSharing;
                     console.log(sharedCookies);
+                    
                 }
             })
         }

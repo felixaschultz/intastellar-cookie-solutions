@@ -1291,10 +1291,6 @@ const intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA
 const allScripts = [
     {
         /* Analytics Scripts which are beeing blocked */
-        /* 
-            "([\-\.]google-analytics+)",
-            "([\-\.]googletagmanager+)",
-        */
         type: "statics",
         scripts: [
             "(mixpanel)",
@@ -1343,9 +1339,6 @@ const allScripts = [
         type: "marketing",
         scripts: [
             "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
-            /* "([\-\.]googlesyndication+)",
-            "([\-\.]googletagservices+)",
-            "([\-\.]googleadservices+)", */
             "([\-\.]twitter+)",
             "([\-\.]ads-twitter+)",
             "([\-\.]casalemedia+)",
