@@ -100,7 +100,8 @@ function setIntastellarPartnerDomain(){
                 int_staticsticCookies: intaCookieConsents?.staticsticCookies,
                 int_FunctionalCookies: intaCookieConsents?.functionalCookies,
                 int_hideCookieBannerName: getCookie(int_hideCookieBannerName),
-                int_marketingCookies: intaCookieConsents?.advertisementCookies
+                int_marketingCookies: intaCookieConsents?.advertisementCookies,
+                uid: intaConsentsObjectVariable.uid
             }));
 
             const partnerDomainIframeNoScript = document.createElement("noscript");
@@ -112,14 +113,35 @@ function setIntastellarPartnerDomain(){
             partnerDomainIframeNoScript.appendChild(partnerDomainIframe);
             if (!window.location.host.includes(partner)) {
                 window.addEventListener("DOMContentLoaded", function(){
-                    intHead.appendChild(partnerDomainIframeNoScript);
-                   /*  document.body.appendChild(partnerDomainIframe); */
+                    /* intHead.appendChild(partnerDomainIframeNoScript); */
+                    document.body.appendChild(partnerDomainIframe);
                 })
             }else if(window.location.host.includes(partner)){   
                 intHead.appendChild(getIntastellarPartnerScript);
             }
         })
     }
+}
+
+setIntastellarPartnerDomain();
+if(new URL(window.location.href).searchParams.has("intastellarPartners")){
+    const partnerUrl = new URL(window.location.href).searchParams.get("intastellarPartners");
+    const partnerObject = JSON.parse(atob(partnerUrl));
+    if(partnerObject.int_hideCookieBannerName != null){
+        intaConsentsObjectVariable = {
+            uid: partnerObject.int_hideCookieBannerName.split(".")[1],
+            consents: {
+                functionalCookies: partnerObject.int_FunctionalCookies,
+                staticsticCookies: partnerObject.int_staticsticCookies,
+                advertisementCookies: partnerObject.int_marketingCookies
+            }
+        }
+        document.cookie = int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
+            "; path=/; " +
+            intCookieDomain +
+            "";
+    }
+
 }
 
 /* - - - Set the intastellarCookieLanguageuage dependent messages */
