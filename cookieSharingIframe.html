@@ -37,9 +37,10 @@
                 const daysExpire = 1;
                 d.setTime(d.getTime()+(daysExpire * 24 * 60 * 60 * 1000));
                 var expires = "expires=" + d.toGMTString();
-                document.cookie = "cookieSharing=" + JSON.stringify(event.data) + "; path=/; "+ expires +"; SameSite=none; Secure";
+                
+                localStorage.setItem("cookieSharing", JSON.stringify(event.data));
                 console.log("cookieSharingIframe.html", event.data);
-                if(event.data == "you´re open to share with me" && JSON.parse(("cookieSharing")).parterDomains.indexOf(origin.replace("https://", "").replace("http://", "").replace("www.", "")) > -1){
+                if(event.data == "you´re open to share with me"){
                     window.parent.postMessage({
                         cookieSharing: event.data,
                     }, "*");
