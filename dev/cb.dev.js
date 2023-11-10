@@ -112,37 +112,13 @@ function setIntastellarPartnerDomain(){
             partnerDomainIframe.style.display = "none";
             partnerDomainIframeNoScript.appendChild(partnerDomainIframe);
             if (!window.location.host.includes(partner)) {
-                window.addEventListener("DOMContentLoaded", function(){
-                    /* intHead.appendChild(partnerDomainIframeNoScript); */
-                    document.body.appendChild(partnerDomainIframe);
-                })
-            }else if(window.location.host.includes(partner)){   
-                intHead.appendChild(getIntastellarPartnerScript);
+                document.body.appendChild(partnerDomainIframe);
             }
         })
     }
 }
 
 setIntastellarPartnerDomain();
-if(new URL(window.location.href).searchParams.has("intastellarPartners")){
-    const partnerUrl = new URL(window.location.href).searchParams.get("intastellarPartners");
-    const partnerObject = JSON.parse(atob(partnerUrl));
-    if(partnerObject.int_hideCookieBannerName != null){
-        intaConsentsObjectVariable = {
-            uid: partnerObject.int_hideCookieBannerName.split(".")[1],
-            consents: {
-                functionalCookies: partnerObject.int_FunctionalCookies,
-                staticsticCookies: partnerObject.int_staticsticCookies,
-                advertisementCookies: partnerObject.int_marketingCookies
-            }
-        }
-        document.cookie = int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
-            "; path=/; " +
-            intCookieDomain +
-            "";
-    }
-
-}
 
 /* - - - Set the intastellarCookieLanguageuage dependent messages */
 
@@ -809,6 +785,15 @@ IntastellarCookieConsent.inizilize(
 
 window.addEventListener("load", function () {
     
+    const newSearch = new URLSearchParams(window.location.search);
+    if(newSearch.has("intastellarPartners")){
+        document.cookie =
+        int_hideCookieBannerName + "=__inta1."+ newSearch.get("intastellarPartners") +"; expires=" + cookieLifeTime +
+        "; path=/; " +
+        intCookieDomain +
+        "";
+    }
+
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
