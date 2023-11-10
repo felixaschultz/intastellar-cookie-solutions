@@ -1432,17 +1432,15 @@ window.addEventListener("load", function () {
             });
         }
 
-        if(window.INTA.settings?.partnerDomain?.includes(window.location.host)){
-            document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-            .postMessage("you´re open to share with me", "*");
-            window.addEventListener("message", (e) => {
-                if(e.data){
-                    const sharedCookies = e.data;
-                    console.log(sharedCookies);
-                    
-                }
-            })
-        }
+        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+        .postMessage("you´re open to share with me", "*");
+        window.addEventListener("message", (e) => {
+            if(e.data){
+                const sharedCookies = e.data;
+                console.log(sharedCookies);
+                
+            }
+        })
 
     } else {
         checkCookieStatus();
