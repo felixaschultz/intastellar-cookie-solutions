@@ -92,8 +92,8 @@ if (arrange == "ltr") {
 function setIntastellarPartnerDomain(){
     if(window.INTA.settings.partnerDomain === null) return
 
-    if (window.INTA.settings.partnerDomain.length > 0) {
-        window.INTA.settings.partnerDomain.forEach(function(partner) {
+    if (window.INTA.settings?.partnerDomain?.length > 0) {
+        window.INTA.settings?.partnerDomain?.forEach(function(partner) {
             const partnerDomainIframe = document.createElement("iframe");
             partnerDomainIframe.id = "intastellarCrossSiteCheck";
             partnerDomainIframe.src = "https://" + partner + "?intastellarPartners=" + btoa(JSON.stringify({
