@@ -1227,7 +1227,7 @@ inta_functionalCookieList.push({
 })
 
 /* Checking if config file needs to be loaded */
-if(typeof window.INTA.policy_link === "undefined" && document.querySelector('script[src*="config.js"]') === null){
+if(typeof window.INTA.policy_link === "undefined" && document.querySelector('script[src*="config.js"]') === null && window.INTA.settings.partnerDomain.indexOf(window.location.host) === -1){
     const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.host.replace("www.", "") + "/config.js";
     const configScript = document.createElement("script");
     configScript.src = intastellarDefaultConfigFile;
