@@ -943,6 +943,7 @@ window.addEventListener("load", function () {
                 gtag('consent', 'update', {
                     'analytics_storage': 'granted',
                     'ad_storage': 'granted',
+                    'ad_user_data': 'granted',
                 })
                 accepted.push("staticsticCookies");
             }else {
@@ -959,14 +960,18 @@ window.addEventListener("load", function () {
                 gtag('consent', 'update', {
                     'ad_storage': 'granted',
                     'personalization_storage': 'granted',
-                    'ads_data_redaction':  'granted'
+                    'ads_data_redaction':  'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted',
                 })
                 accepted.push("advertisementCookies");
             } else {
                 gtag('consent', 'update', {
                     'ad_storage': 'denied',
                     'personalization_storage': 'denied',
-                    'ads_data_redaction':  'denied'
+                    'ads_data_redaction':  'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
                 })
                 const index = accepted.indexOf("advertisementCookies");
                 if (index > -1) { // only splice array when item is found
@@ -1023,6 +1028,8 @@ window.addEventListener("load", function () {
                     'analytics_storage': 'granted',
                     'functionality_storage': 'granted',
                     'ads_data_redaction': 'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted',
                     'url_passthrough': true,
                 });
                 dataLayer.push({'event': 'cookie_consent_update'})
@@ -1078,6 +1085,8 @@ window.addEventListener("load", function () {
                     'analytics_storage': 'granted',
                     'functionality_storage': 'granted',
                     'ads_data_redaction': 'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted',
                     'url_passthrough': true,
                 });
                 dataLayer.push({'event': 'cookie_consent_update'})
@@ -1125,6 +1134,8 @@ window.addEventListener("load", function () {
                     'analytics_storage': 'denied',
                     'functionality_storage': 'denied',
                     'ads_data_redaction': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
                     'url_passthrough': true,
                 });
                 dataLayer.push({'event': 'cookie_consent_update'})
@@ -1214,6 +1225,8 @@ window.addEventListener("load", function () {
                         'analytics_storage': 'denied',
                         'functionality_storage': 'denied',
                         'ads_data_redaction': 'denied',
+                        'ad_user_data': 'denied',
+                        'ad_personalization': 'denied',
                         'url_passthrough': true,
                     });
                     dataLayer.push({'event': 'cookie_consent_update'})
@@ -1266,6 +1279,8 @@ window.addEventListener("load", function () {
                         'analytics_storage': 'granted',
                         'functionality_storage': 'granted',
                         'ads_data_redaction': 'granted',
+                        'ad_user_data': 'granted',
+                        'ad_personalization': 'granted',
                         'url_passthrough': true,
                     });
                     dataLayer.push({'event': 'cookie_consent_update'})
@@ -1379,6 +1394,8 @@ window.addEventListener("load", function () {
                         'analytics_storage': 'denied',
                         'functionality_storage': 'denied',
                         'ads_data_redaction': 'denied',
+                        'ad_user_data': 'denied',
+                        'ad_personalization': 'denied',
                         'url_passthrough': true,
                     });
 
@@ -1428,6 +1445,8 @@ window.addEventListener("load", function () {
                         'analytics_storage': 'granted',
                         'functionality_storage': 'granted',
                         'ads_data_redaction': 'granted',
+                        'ad_user_data': 'granted',
+                        'ad_personalization': 'granted',
                         'url_passthrough': true,
                     });
                     
@@ -2057,11 +2076,17 @@ function saveINTCookieSettings(consent, type = null) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
             'ad_storage': 'granted',
+            'ad_user_data': 'granted',
+            'ad_personalization': 'granted',
+            'url_passthrough': true,
         })
 
     }else {
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'url_passthrough': true,
         })
     }
     dataLayer.push({'event': 'cookie_consent_update'})
