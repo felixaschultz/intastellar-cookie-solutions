@@ -1423,6 +1423,8 @@ gtag('consent', 'default', {
     'analytics_storage': 'denied',
     'functionality_storage': 'denied',
     'ads_data_redaction': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
     'security_storage': 'granted',
     'url_passthrough': true,
     'wait_for_update': 500,
@@ -1431,6 +1433,9 @@ gtag('consent', 'default', {
 if(intaCookieConsents?.advertisementCookies){
     gtag('consent', 'update', {
         'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'url_passthrough': true,
     })
 }
 
@@ -1438,6 +1443,9 @@ if(intaCookieConsents?.staticsticCookies){
     gtag('consent', 'update', {
         'analytics_storage': 'granted',
         'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'url_passthrough': true,
     })
 }
 
@@ -1453,6 +1461,9 @@ if(intaCookieConsents?.advertisementCookies){
         'personalization_storage': 'granted',
         'ads_data_redaction': 'granted',
         'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'url_passthrough': true,
     })
 }
 
