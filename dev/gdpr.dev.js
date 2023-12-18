@@ -300,6 +300,7 @@ const region = (window.INTA?.settings?.requiredCookies) ? {
 
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
+
 const inta_requiredCookieList = [{
     vendor: (INTA.settings.company) ? INTA.settings.company : window.location.host,
     cookies: [
@@ -432,6 +433,16 @@ const inta_requiredCookieList = [{
         ]
     }
 ];
+
+window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
+    inta_requiredCookieList.forEach((vendor) => {
+        vendor.cookies.push({
+            cookie: cookie,
+            purpose: cookie?.purpose
+        });
+    });
+});
+
 const int__cookiesToKeep = [...inta_requiredCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
 /* - - - List of Analytics / Statistics cookie names - - - */
 const inta_statisticCookieList = [];
