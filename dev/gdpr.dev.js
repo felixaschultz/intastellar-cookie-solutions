@@ -16,7 +16,7 @@ const button__acceptAll = document.querySelector(".intastellarCookieBanner__acce
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
-const intastellarAssetsCDNdomain = "https://www.intastellarsolutions.com/assets";
+const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 let poweredBy = "";
@@ -34,7 +34,7 @@ let intaConsentsObjectVariable = {
 let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
-const intCookieIcon = intastellarAssetsCDNdomain + "/icons/cookie_settings.svg";
+const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
 
 function getCookie(cname) {
     var name = cname + "=";
