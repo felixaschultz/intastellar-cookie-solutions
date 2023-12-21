@@ -1399,6 +1399,10 @@ const allScripts = [
             "([\-\.]advertising+)",
             "([\-\.]adtech+)",
             "([\-\.]soundestlink+)",
+            "([\-\.]soundest+)",
+            "([\-\.]soundestvid+)",
+            "([\-\.]soundestform+)",
+            "([\-\.]tiktok+)",
             "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
