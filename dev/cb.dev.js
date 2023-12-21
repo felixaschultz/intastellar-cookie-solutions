@@ -118,7 +118,7 @@ function setIntastellarPartnerDomain(){
     }
 }
 
-setIntastellarPartnerDomain();
+/* setIntastellarPartnerDomain(); */
 if(document.getElementById("intastellarCrossSiteCheck") != null){
     const instatellariframe = document.getElementById("intastellarCrossSiteCheck");
     const iframeDoc = instatellariframe.contentDocument || instatellariframe.contentWindow.document;
