@@ -125,8 +125,7 @@ if(document.getElementById("intastellarCrossSiteCheck") != null){
     if (  iframeDoc.readyState  == 'complete' ) {
         //iframe.contentWindow.alert("Hello");
         instatellariframe.contentWindow.addEventListener("load", function(){
-            console.log("iframe loaded");
-        
+            
         })
     } 
 }
@@ -1468,7 +1467,7 @@ window.addEventListener("load", function () {
             }
             if(e.data){
                 const sharedCookies = e.data;
-                console.log(sharedCookies);
+                /* console.log(sharedCookies); */
             }
         })
 
