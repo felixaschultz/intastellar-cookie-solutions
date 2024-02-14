@@ -293,11 +293,6 @@ const blockTrackingCookies = "__hideTrackingCookies";
 const blockAdvertismentCookies = "__hideAdvertisementCookies";
 const intHead = document.querySelector("head");
 
-const region = (window.INTA?.settings?.requiredCookies) ? {
-    cookie: "region",
-    purpose: "This cookie is used to set users prefrence regarding the selected region.",
-} : {}
-
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
 
@@ -327,8 +322,7 @@ const inta_requiredCookieList = [{
         {
             cookie: "SCDJWS",
             purpose: "",
-        },
-        region
+        }
     ],
     domains: [
         window.location.host
@@ -436,11 +430,13 @@ const inta_requiredCookieList = [{
 
 window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
     inta_requiredCookieList.forEach((vendor) => {
-        vendor.cookies.push({
-            cookie: cookie.cookie,
-            purpose: cookie?.purpose,
-            domain: cookie?.domain
-        });
+        if(vendor.vendor === window.INTA.settings.company){
+            vendor.cookies.push({
+                cookie: cookie.cookie,
+                purpose: cookie?.purpose,
+                domain: cookie?.domain
+            });
+        }
     });
 });
 
@@ -1087,10 +1083,6 @@ inta_functionalCookieList.push({
         },
         {
             cookie: "locale",
-            purpose: "This cookie is used to set users prefrence regarding the selected region.",
-        },
-        {
-            cookie: "region",
             purpose: "This cookie is used to set users prefrence regarding the selected region.",
         }
     ],
