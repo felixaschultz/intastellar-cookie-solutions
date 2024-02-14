@@ -437,8 +437,9 @@ const inta_requiredCookieList = [{
 window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
     inta_requiredCookieList.forEach((vendor) => {
         vendor.cookies.push({
-            cookie: cookie,
-            purpose: cookie?.purpose
+            cookie: cookie.cookie,
+            purpose: cookie?.purpose,
+            domain: cookie?.domain
         });
     });
 });
