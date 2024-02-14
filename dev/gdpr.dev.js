@@ -437,8 +437,9 @@ const inta_requiredCookieList = [{
 window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
     inta_requiredCookieList.forEach((vendor) => {
         vendor.cookies.push({
-            cookie: cookie,
-            purpose: cookie?.purpose
+            cookie: cookie.cookie,
+            purpose: cookie?.purpose,
+            domain: cookie?.domain
         });
     });
 });
@@ -2287,7 +2288,6 @@ function checkCookieStatus() {
 
             if(notRequired.test(linkSrc)){
                 if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
-                    console.log("Remove cookie");
                     if(node.parentElement !== null){
                         node.parentElement.removeChild(node);
                     } 

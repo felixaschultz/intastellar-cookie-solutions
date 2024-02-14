@@ -9,7 +9,16 @@ window.INTA = {
         color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)",
         text: false,
         requiredCookies: [
-            "c_user"
+            {
+              cookie: "region",
+              domain: "cykelfaergen.info",
+              purpose: "Used to store the user's region",
+            },
+            {
+              cookie: "modal",
+              domain: "cykelfaergen.info",
+              purpose: "Used to store users choice of modal",
+            }
         ],
         partnerDomain: [
             "intastellarsolutions.com"
