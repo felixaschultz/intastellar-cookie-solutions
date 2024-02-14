@@ -12,6 +12,7 @@ window.INTA = {
             {
               cookie: "region",
               domain: "cykelfaergen.info",
+              type: "functional",
               purpose: "Used to store the user's region",
             },
             {

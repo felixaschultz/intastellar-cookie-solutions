@@ -427,20 +427,6 @@ const inta_requiredCookieList = [{
         ]
     }
 ];
-
-window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
-    inta_requiredCookieList.forEach((vendor) => {
-        if(vendor.vendor === window.INTA.settings.company){
-            vendor.cookies.push({
-                cookie: cookie.cookie,
-                purpose: cookie?.purpose,
-                domain: cookie?.domain
-            });
-        }
-    });
-});
-
-const int__cookiesToKeep = [...inta_requiredCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
 /* - - - List of Analytics / Statistics cookie names - - - */
 const inta_statisticCookieList = [];
 inta_statisticCookieList.push({
@@ -1229,7 +1215,55 @@ inta_functionalCookieList.push({
     vendor_privacy: "https://www.dynatrace.com/company/trust-center/privacy",
     domains: []
 })
-
+let requiredToKeep = inta_requiredCookieList;
+window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
+    if(cookie.type === "functional"){
+        inta_functionalCookieList.forEach((vendor) => {
+            if(vendor.vendor === window.INTA.settings.company){
+                vendor.cookies.push({
+                    cookie: cookie.cookie,
+                    purpose: cookie?.purpose,
+                    domain: cookie?.domain
+                });
+                requiredToKeep.push(vendor);
+            }
+        });
+    }else if(cookie.type === "statistic"){
+        inta_statisticCookieList.forEach((vendor) => {
+            if(vendor.vendor === window.INTA.settings.company){
+                vendor.cookies.push({
+                    cookie: cookie.cookie,
+                    purpose: cookie?.purpose,
+                    domain: cookie?.domain
+                });
+                requiredToKeep.push(vendor);
+            }
+        });
+    }else if(cookie.type === "marketing"){
+        inta_marketingCookieList.forEach((vendor) => {
+            if(vendor.vendor === window.INTA.settings.company){
+                vendor.cookies.push({
+                    cookie: cookie.cookie,
+                    purpose: cookie?.purpose,
+                    domain: cookie?.domain
+                });
+                requiredToKeep.push(vendor);
+            }
+        });
+        
+    }else{
+        inta_requiredCookieList.forEach((vendor) => {
+            if(vendor.vendor === window.INTA.settings.company){
+                vendor.cookies.push({
+                    cookie: cookie.cookie,
+                    purpose: cookie?.purpose,
+                    domain: cookie?.domain
+                });
+            }
+        });
+    }
+});
+const int__cookiesToKeep = [...requiredToKeep.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
 /* Checking if config file needs to be loaded */
 if(typeof window.INTA.policy_link === "undefined" && document.querySelector('script[src*="config.js"]') === null && window.INTA.settings.partnerDomain.indexOf(window.location.host) === -1){
     const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + window.location.host.replace("www.", "") + "/config.js";
