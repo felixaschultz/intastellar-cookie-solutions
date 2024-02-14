@@ -2288,7 +2288,6 @@ function checkCookieStatus() {
 
             if(notRequired.test(linkSrc)){
                 if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
-                    console.log("Remove cookie");
                     if(node.parentElement !== null){
                         node.parentElement.removeChild(node);
                     } 
