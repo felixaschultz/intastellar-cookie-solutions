@@ -1455,6 +1455,7 @@ const allScripts = [
 ];
 
 window.dataLayer = window.dataLayer || [];
+let adsbygoogle;
 (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;
 function gtag() {
     dataLayer.push(arguments);
