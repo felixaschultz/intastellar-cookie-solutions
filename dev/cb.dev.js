@@ -962,7 +962,7 @@ window.addEventListener("load", function () {
                     'ads_data_redaction':  'granted',
                     'ad_user_data': 'granted',
                     'ad_personalization': 'granted',
-                })
+                });
                 (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
                 (adsbygoogle=window.adsbygoogle||[]).push({enable_page_level_ads:true});
                 accepted.push("advertisementCookies");
