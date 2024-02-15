@@ -15,6 +15,7 @@ const int_visitorCheck = intaCookiePref + "visitorCheck";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
+let adsbygoogle;
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
@@ -1454,9 +1455,8 @@ const allScripts = [
     }
 ];
 
-window.dataLayer = window.dataLayer || [];
-let adsbygoogle;
 (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;
+window.dataLayer = window.dataLayer || [];
 function gtag() {
     dataLayer.push(arguments);
 }
