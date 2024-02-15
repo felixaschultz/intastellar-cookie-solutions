@@ -963,6 +963,8 @@ window.addEventListener("load", function () {
                     'ad_user_data': 'granted',
                     'ad_personalization': 'granted',
                 })
+                (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
+                (adsbygoogle=window.adsbygoogle||[]).push({enable_page_level_ads:true});
                 accepted.push("advertisementCookies");
             } else {
                 gtag('consent', 'update', {
@@ -1032,6 +1034,8 @@ window.addEventListener("load", function () {
                     'url_passthrough': true,
                 });
                 dataLayer.push({'event': 'cookie_consent_update'})
+                (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
+                (adsbygoogle=window.adsbygoogle||[]).push({enable_page_level_ads:true});
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -1089,6 +1093,8 @@ window.addEventListener("load", function () {
                     'url_passthrough': true,
                 });
                 dataLayer.push({'event': 'cookie_consent_update'})
+                (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
+                (adsbygoogle=window.adsbygoogle||[]).push({enable_page_level_ads:true});
                 updateConsents("all");
                 /*window.location.reload();*/
             });
