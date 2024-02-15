@@ -36,6 +36,15 @@ let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
 const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
+const IntastellarCookieConsent = {
+    renew: function () {
+        document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        document.querySelector("html").classList.add("noScroll");
+    },
+    inizilize: function (template) {
+        document.body.append(template);
+    }
+}
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -2363,15 +2372,6 @@ function clearLocalStorage(ls) {
             /* localStorage.clear();
             sessionStorage.clear(); */
         }
-    }
-}
-const IntastellarCookieConsent = {
-    renew: function () {
-        document.querySelector(".intastellarCookieConstents").classList.add("--active");
-        document.querySelector("html").classList.add("noScroll");
-    },
-    inizilize: function (template) {
-        document.body.append(template);
     }
 }
 /* checkCookieStatus(); */
