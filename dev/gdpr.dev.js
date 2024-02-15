@@ -1487,7 +1487,9 @@ gtag('consent', 'default', {
 
 if(intaCookieConsents?.advertisementCookies){
     (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
-    (adsbygoogle=window.adsbygoogle||[]).push({enable_page_level_ads:true});
+    let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']").src;
+    googleAdsScript = googleAdsScript.split("client=")[1].split("&")[0];
+    (adsbygoogle=window.adsbygoogle||[]).push({google_ad_client: googleAdsScript,enable_page_level_ads:true});
     gtag('consent', 'update', {
         'personalization_storage': 'granted',
         'ads_data_redaction': 'granted',
