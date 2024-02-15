@@ -16,7 +16,6 @@ const button__acceptAll = document.querySelector(".intastellarCookieBanner__acce
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
 let adsbygoogle;
-(adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
@@ -1465,6 +1464,7 @@ const allScripts = [
     }
 ];
 window.dataLayer = window.dataLayer || [];
+(adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;
 function gtag() {
     dataLayer.push(arguments);
 }
@@ -1648,7 +1648,7 @@ function checkCookieStatus() {
                         }    
                     })                
                     
-                    if(frae.src !== window.INTA.settings?.partnerDomain){
+                    if(frae.src !== window.INTA.settings?.partnerDomain || frae.src.indexOf("doubleclick.net") === -1){
                         frae.src = "about:blank";
                     }
                     let textLanguage;
