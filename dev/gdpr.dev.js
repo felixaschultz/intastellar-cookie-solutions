@@ -15,7 +15,7 @@ const int_visitorCheck = intaCookiePref + "visitorCheck";
 const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
-let adsbygoogle;
+let adsbygoogle = window.adsbygoogle || [];
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
@@ -1487,7 +1487,6 @@ gtag('consent', 'default', {
 
 if(intaCookieConsents?.advertisementCookies){
     (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
-    (adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1;
     (adsbygoogle=window.adsbygoogle||[]).push({enable_page_level_ads:true});
     gtag('consent', 'update', {
         'personalization_storage': 'granted',
