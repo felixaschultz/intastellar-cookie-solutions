@@ -1402,6 +1402,7 @@ const allScripts = [
             "([\-\.]instagram+)",
             "([\-\.]stickyadstv+)",
             "([\-\.]mookie1+)",
+            "([\-\.]doubleclick+)",
             "([\-\.]bidswitch+)",
             "([\-\.]jnqsge+)",
             "([\-\.]syuh+)",
