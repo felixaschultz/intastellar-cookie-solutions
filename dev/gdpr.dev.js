@@ -1463,7 +1463,9 @@ const allScripts = [
     }
 ];
 window.dataLayer = window.dataLayer || [];
-(adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;
+(adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1
+(adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1;
+(adsbygoogle=window.adsbygoogle||[]).push({ params: {google_privacy_treatments: 'disablePersonalization'}})
 function gtag() {
     dataLayer.push(arguments);
 }
@@ -1493,6 +1495,8 @@ if(intaCookieConsents?.advertisementCookies){
         'ad_personalization': 'granted',
         'url_passthrough': true,
     });
+    (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
+    (adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=0;
 }
 
 if(intaCookieConsents?.staticsticCookies){
