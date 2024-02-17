@@ -1429,7 +1429,6 @@ const allScripts = [
             "([\-\.]scdn+)",
             "([\-\.]spotify+)",
             "([\-\.]facebook+)",
-            "([\-\.]doubleclick+)",
             "([\-\.]pinterest+)",
             "([\-\.]adform+)",
             "([\-\.]adnxs+)",
@@ -1644,8 +1643,7 @@ function checkCookieStatus() {
                             externalDomain = cookie.vendor;
                         }    
                     })                
-                    
-                    if(frae.src !== window.INTA.settings?.partnerDomain || frae.src.indexOf("doubleclick.net") === -1){
+                    if(frae.src !== window.INTA.settings?.partnerDomain){
                         frae.src = "about:blank";
                     }
                     let textLanguage;
