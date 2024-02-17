@@ -794,7 +794,7 @@ IntastellarCookieConsent.inizilize(
 )
 
 window.addEventListener("load", function () {
-    
+    (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
@@ -804,7 +804,7 @@ window.addEventListener("load", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
-
+    
     gtag('set', {
         'user_id': (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid
     });
@@ -954,7 +954,7 @@ window.addEventListener("load", function () {
                     accepted.splice(index, 1); // 2nd parameter means remove one item only
                 }
             }
-        
+
             if (MarketingCheckBox?.checked) {
                 gtag('consent', 'update', {
                     'ad_storage': 'granted',
@@ -971,7 +971,7 @@ window.addEventListener("load", function () {
                     'ads_data_redaction':  'denied',
                     'ad_user_data': 'denied',
                     'ad_personalization': 'denied',
-                })
+                });
                 const index = accepted.indexOf("advertisementCookies");
                 if (index > -1) { // only splice array when item is found
                     accepted.splice(index, 1); // 2nd parameter means remove one item only
@@ -1934,6 +1934,8 @@ function learnMore(e) {
 
 /* - - - END - - - */
 function updateConsents(consent, type = null){
+    let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']").src;
+    googleAdsScript = googleAdsScript.split("client=")[1].split("&")[0];
     if(consent == "all"){
         let staticCookies = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
         let marketingCookie = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
@@ -1944,16 +1946,20 @@ function updateConsents(consent, type = null){
         deleteAllCookies();
     }
 
-    if(consent == "all"){
-        let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']").src;
-        googleAdsScript = googleAdsScript.split("client=")[1].split("&")[0];
+    if(consent == "all" || type.length > 0 && type.includes("advertisementCookies")){
         (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
-        (adsbygoogle=window.adsbygoogle||[]).push({google_ad_client: googleAdsScript, enable_page_level_ads:true});
+        if(!adsbygoogle.loaded){
+            (adsbygoogle=window.adsbygoogle||[]).push({google_ad_client: googleAdsScript});
+        }else{
+            adsbygoogle.push({google_ad_client: googleAdsScript});
+        }
+    }else{
+        (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;
     }
 
     if(type.length > 0){
         type.forEach((t) => {
-            
+
             if(t == "staticsticCookies"){
                 let staticCookies = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
                 const index = int__cookiesToKeep.indexOf(staticCookies);
@@ -1967,10 +1973,6 @@ function updateConsents(consent, type = null){
                 if (index == -1) { // only splice array when item is found
                     int__cookiesToKeep.push.apply(int__cookiesToKeep, marketingCookie);
                 }
-                let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']").src;
-                googleAdsScript = googleAdsScript.split("client=")[1].split("&")[0];
-                (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
-                (adsbygoogle=window.adsbygoogle||[]).push({google_ad_client: googleAdsScript, enable_page_level_ads:true});
                 deleteAllCookies();
             } else if(t == "functionalCookies"){
                 let functionalCookies = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
@@ -2082,6 +2084,7 @@ function saveINTCookieSettings(consent, type = null) {
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
+
     if (StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
