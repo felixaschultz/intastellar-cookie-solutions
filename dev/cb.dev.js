@@ -1947,14 +1947,17 @@ function updateConsents(consent, type = null){
     }
 
     if(consent == "all" || type.length > 0 && type.includes("advertisementCookies")){
-        (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;
+        (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
+        (adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=0;
         if(!adsbygoogle.loaded){
             (adsbygoogle=window.adsbygoogle||[]).push({google_ad_client: googleAdsScript});
         }else{
             adsbygoogle.push({google_ad_client: googleAdsScript});
         }
     }else{
-        (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
+        (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;
+        (adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1;
+        (adsbygoogle=window.adsbygoogle||[]).push({ params: {google_privacy_treatments: 'disablePersonalization'}})
     }
 
     if(type.length > 0){
