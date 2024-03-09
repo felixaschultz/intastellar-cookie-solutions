@@ -1950,7 +1950,7 @@ function updateConsents(consent, type = null){
         deleteAllCookies();
     }
 
-    if(consent == "all" || type.length > 0 && type.includes("advertisementCookies")){
+    if(consent == "all" || type?.length > 0 && type?.includes("advertisementCookies")){
         (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
         (adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=0;
         (adsbygoogle = window.adsbygoogle || []).push({});
