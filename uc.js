@@ -1775,45 +1775,47 @@ function checkCookieStatus() {
 
     function blockBlockQuotes(tweet, message, script, buttonText, logo) {
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired?.test(tweet.className)) {
-            let a      = document.createElement('a');
-            a.href = tweet?.querySelector("a").href;
-            let externalDomain = a.hostname;
+            if(tweet != undefined){
+                let a      = document.createElement('a');
+                a.href = tweet?.querySelector("a").href;
+                let externalDomain = a.hostname;
 
-            inta_marketingCookieList.forEach((cookie) => {
-                var i = 0,
-                d = externalDomain,
-                p = d.split(".")
-            
-                d = p.slice(-1 - ++i).join(".");
-                externalDomain = d;
+                inta_marketingCookieList.forEach((cookie) => {
+                    var i = 0,
+                    d = externalDomain,
+                    p = d.split(".")
+                
+                    d = p.slice(-1 - ++i).join(".");
+                    externalDomain = d;
 
-                if(cookie?.domains?.includes(externalDomain)){
-                    externalDomain = cookie.vendor;
-                }    
-            })
+                    if(cookie?.domains?.includes(externalDomain)){
+                        externalDomain = cookie.vendor;
+                    }    
+                })
 
-            let textLanguage;
-            let btnText;
-            let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
-            if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                textLanguage = message(externalDomain).danish;
-                btnText = buttonText().danish;
-            } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                textLanguage = message(externalDomain).german;
-                btnText = buttonText().german;
-            } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                textLanguage = message(externalDomain).english;
-                btnText = buttonText().english;
-            } else {
-                textLanguage = message(externalDomain).danish;
-                btnText = buttonText().danish;
-            }
-            let settingsContent = document.createElement("inta-consents");
-            settingsContent.classList.add("intCookie_ConsentContainer");
-            settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
-            settingsContent.setAttribute("data-src", a.href);
-            if (tweet.style.display != "none") {
-                tweet.parentElement.replaceChild(settingsContent, tweet);
+                let textLanguage;
+                let btnText;
+                let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
+                if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+                    textLanguage = message(externalDomain).danish;
+                    btnText = buttonText().danish;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+                    textLanguage = message(externalDomain).german;
+                    btnText = buttonText().german;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+                    textLanguage = message(externalDomain).english;
+                    btnText = buttonText().english;
+                } else {
+                    textLanguage = message(externalDomain).danish;
+                    btnText = buttonText().danish;
+                }
+                let settingsContent = document.createElement("inta-consents");
+                settingsContent.classList.add("intCookie_ConsentContainer");
+                settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
+                settingsContent.setAttribute("data-src", a.href);
+                if (tweet.style.display != "none") {
+                    tweet.parentElement.replaceChild(settingsContent, tweet);
+                }
             }
         }
     }
