@@ -856,7 +856,7 @@ window.addEventListener("load", function () {
             /* if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) { */
                 document.querySelector("html").classList.toggle("noScroll");
                 if(document.querySelector(".intastellarCookieConstents") != null){
-                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active"); 
+                    document.querySelector(".intastellarCookieConstents").classList.remove("--active"); 
                 }
             /* } else {
                 if(document.querySelector(".intastellarCookieConstents") != null){
@@ -1215,7 +1215,7 @@ window.addEventListener("load", function () {
                         intCookieDomain +
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
-                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    document.querySelector(".intastellarCookieConstents").classList.remove("--active");
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -1320,12 +1320,8 @@ window.addEventListener("load", function () {
             })
             /* Showing default banner when no custom banner is set */
             if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
-                /* if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) { */
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                /* } else {
-                    settings.classList.toggle("intastellarCookie-settings__container--expand");
-                } */
             }
 
             if (window.INTA.settings.advanced) {
@@ -1381,7 +1377,7 @@ window.addEventListener("load", function () {
                         intCookieDomain +
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
-                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    document.querySelector(".intastellarCookieConstents").classList.remove("--active");
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
