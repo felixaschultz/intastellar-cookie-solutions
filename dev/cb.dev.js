@@ -1934,8 +1934,10 @@ function learnMore(e) {
 
 /* - - - END - - - */
 function updateConsents(consent, type = null){
-    let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']").src;
-    googleAdsScript = googleAdsScript.split("client=")[1].split("&")[0];
+    let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']");
+    if(googleAdsScript != null && googleAdsScript != undefined){
+        googleAdsScript = googleAdsScript.src.split("client=")[1].split("&")[0];
+    }
     if(consent == "all"){
         let staticCookies = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
         let marketingCookie = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
