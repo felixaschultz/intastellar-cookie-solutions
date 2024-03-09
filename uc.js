@@ -1774,9 +1774,9 @@ function checkCookieStatus() {
     }
 
     function blockBlockQuotes(tweet, message, script, buttonText, logo) {
-        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired?.test(tweet.className)) {
             let a      = document.createElement('a');
-            a.href = tweet.querySelector("a").href;
+            a.href = tweet?.querySelector("a").href;
             let externalDomain = a.hostname;
 
             inta_marketingCookieList.forEach((cookie) => {
