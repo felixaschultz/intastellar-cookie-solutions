@@ -853,16 +853,14 @@ window.addEventListener("load", function () {
                 document.querySelector(".intastellarCookieBanner").style.display = "";
             }
         } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
-            /* if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) { */
+            if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                 document.querySelector("html").classList.toggle("noScroll");
-                if(document.querySelector(".intastellarCookieConstents") != null){
-                    document.querySelector(".intastellarCookieConstents").classList.remove("--active"); 
-                }
-            /* } else {
                 if(document.querySelector(".intastellarCookieConstents") != null){
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active"); 
                 }
-            } */
+            } else {
+                settings.classList.toggle("intastellarCookie-settings__container--expand");
+            }
         }
 
         document.querySelectorAll(".intastellarCookieBanner__settings").forEach((setting) => {
@@ -1168,7 +1166,7 @@ window.addEventListener("load", function () {
                 })
             })
 
-            /* if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
+            if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                 configBtn.forEach((configs) => {
                     configs.addEventListener("click", function () {
                         let settings = document.querySelector(".intastellarCookie-settings__container");
@@ -1176,7 +1174,7 @@ window.addEventListener("load", function () {
                         settings.classList.toggle("intastellarCookie-settings__container--expand");
                     });
                 })
-            } else { */
+            } else {
                 configBtn.forEach((configs) => {
                     configs.addEventListener("click", function () {
                         let settings = document.querySelector(".intastellarCookieConstents");
@@ -1184,7 +1182,7 @@ window.addEventListener("load", function () {
                         settings.classList.toggle("--active");
                     });
                 })
-            /* } */
+            }
             if (window.INTA.settings.advanced) {
                 closeSettings.addEventListener("click", function () {
                     let settings = document.querySelector(".intastellarCookie-settings__container");
@@ -1215,7 +1213,7 @@ window.addEventListener("load", function () {
                         intCookieDomain +
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
-                    document.querySelector(".intastellarCookieConstents").classList.remove("--active");
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -1320,8 +1318,12 @@ window.addEventListener("load", function () {
             })
             /* Showing default banner when no custom banner is set */
             if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
+                if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                } else {
+                    settings.classList.toggle("intastellarCookie-settings__container--expand");
+                }
             }
 
             if (window.INTA.settings.advanced) {
@@ -1377,7 +1379,7 @@ window.addEventListener("load", function () {
                         intCookieDomain +
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
-                    document.querySelector(".intastellarCookieConstents").classList.remove("--active");
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                     .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -1932,10 +1934,8 @@ function learnMore(e) {
 
 /* - - - END - - - */
 function updateConsents(consent, type = null){
-    let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']");
-    if(googleAdsScript != null && googleAdsScript != undefined){
-        googleAdsScript = googleAdsScript.src.split("client=")[1].split("&")[0];
-    }
+    let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']").src;
+    googleAdsScript = googleAdsScript.split("client=")[1].split("&")[0];
     if(consent == "all"){
         let staticCookies = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
         let marketingCookie = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
