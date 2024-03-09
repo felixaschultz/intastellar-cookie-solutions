@@ -859,7 +859,9 @@ window.addEventListener("load", function () {
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active"); 
                 }
             } else {
-                settings.classList.toggle("intastellarCookie-settings__container--expand");
+                if(document.querySelector(".intastellarCookieConstents") != null){
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active"); 
+                }
             }
         }
 
