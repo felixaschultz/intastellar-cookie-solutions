@@ -1965,7 +1965,9 @@ function checkCookieStatus() {
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
-                            blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
+                            if(tweet != undefined){
+                                blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
+                            }
                         })
                     });   
                 }
