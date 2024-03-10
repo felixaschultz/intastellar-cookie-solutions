@@ -854,9 +854,9 @@ window.addEventListener("load", function () {
             }
         } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
             if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
-                document.querySelector("html").classList.toggle("noScroll");
+                document.querySelector("html").classList.remove("noScroll");
                 if(document.querySelector(".intastellarCookieConstents") != null){
-                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active"); 
+                    document.querySelector(".intastellarCookieConstents").classList.remove("--active"); 
                 }
             } else {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
