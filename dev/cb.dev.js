@@ -853,14 +853,14 @@ window.addEventListener("load", function () {
                 document.querySelector(".intastellarCookieBanner").style.display = "";
             }
         } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
-            if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
+            /* if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) { */
                 document.querySelector("html").classList.remove("noScroll");
                 if(document.querySelector(".intastellarCookieConstents") != null){
                     document.querySelector(".intastellarCookieConstents").classList.remove("--active"); 
                 }
-            } else {
+            /* } else {
                 settings.classList.toggle("intastellarCookie-settings__container--expand");
-            }
+            } */
         }
 
         document.querySelectorAll(".intastellarCookieBanner__settings").forEach((setting) => {
@@ -1317,14 +1317,15 @@ window.addEventListener("load", function () {
                 })
             })
             /* Showing default banner when no custom banner is set */
-            if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
+           /*  if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
                 if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
+                    debugger;
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
                 } else {
                     settings.classList.toggle("intastellarCookie-settings__container--expand");
                 }
-            }
+            } */
 
             if (window.INTA.settings.advanced) {
                 configBtn.forEach((configs) => {
