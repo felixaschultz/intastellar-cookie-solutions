@@ -945,6 +945,7 @@ window.addEventListener("load", function () {
                     'analytics_storage': 'granted',
                     'ad_storage': 'granted',
                     'ad_user_data': 'granted',
+                    'ad_personalization': 'granted',
                 })
                 accepted.push("staticsticCookies");
             }else {
@@ -2095,11 +2096,22 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
 
-    }else {
+    }
+
+    if (FunctionalCheckbox?.checked) {
         gtag('consent', 'update', {
-            'analytics_storage': 'denied',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied',
+            'functionality_storage': 'granted',
+            'url_passthrough': true,
+        })
+    }
+
+    if (MarketingCheckBox?.checked) {
+        gtag('consent', 'update', {
+            'personalization_storage': 'granted',
+            'ads_data_redaction': 'granted',
+            'ad_personalization': 'granted',
+            'ad_storage': 'granted',
+            'ad_user_data': 'granted',
             'url_passthrough': true,
         })
     }
