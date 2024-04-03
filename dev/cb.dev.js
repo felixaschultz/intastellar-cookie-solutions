@@ -6,6 +6,8 @@
  *
 */
 
+const { get } = require("http");
+
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
     if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) return null;
@@ -835,7 +837,9 @@ window.addEventListener("load", function () {
             intaConsentsObjectVariable.sharingDomains.push(domain);
         })
 
-        
+        if(getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName).indexOf("__inta") == -1){
+            document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        }
 
         document.querySelectorAll(".intaExpandCookieList").forEach((btn, i) => {
             
