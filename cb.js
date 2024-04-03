@@ -946,6 +946,8 @@ window.addEventListener("load", function () {
                     'ad_storage': 'granted',
                     'ad_user_data': 'granted',
                     'ad_personalization': 'granted',
+                    'personalization_storage': 'granted',
+                    'url_passthrough': true,
                 })
                 accepted.push("staticsticCookies");
             }else {
@@ -965,6 +967,7 @@ window.addEventListener("load", function () {
                     'ads_data_redaction':  'granted',
                     'ad_user_data': 'granted',
                     'ad_personalization': 'granted',
+                    'url_passthrough': true,
                 });
                 accepted.push("advertisementCookies");
             } else {
@@ -974,6 +977,7 @@ window.addEventListener("load", function () {
                     'ads_data_redaction':  'denied',
                     'ad_user_data': 'denied',
                     'ad_personalization': 'denied',
+                    'url_passthrough': true,
                 });
                 const index = accepted.indexOf("advertisementCookies");
                 if (index > -1) { // only splice array when item is found
