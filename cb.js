@@ -793,7 +793,7 @@ IntastellarCookieConsent.inizilize(
     intaconsents
 )
 /* Check if script was loaded async */
-if(currentScript.getAttribute("async") == false){
+if(document.currentScript.getAttribute("async") == false){
     window.addEventListener("load", function () {
         (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
         const temp = location.host.split('.').reverse();
