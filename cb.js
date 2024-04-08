@@ -894,8 +894,8 @@ window.addEventListener("load", function () {
             settingsSaveLang.saveSettingsText = "Gem indstillinger";
         }
 
+        console.log("FunctionalCheckbox", FunctionalCheckbox?.checked);
         FunctionalCheckbox?.addEventListener("change", () => {
-            console.log("FunctionalCheckbox", FunctionalCheckbox?.checked);
             document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
                 && StaticsCheckBox?.checked === false
                 && MarketingCheckBox?.checked === false
