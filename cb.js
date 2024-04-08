@@ -793,7 +793,7 @@ IntastellarCookieConsent.inizilize(
     intaconsents
 )
 
-window.addEventListener("load", function () {
+/* window.addEventListener("load", function () { */
     (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
@@ -803,7 +803,7 @@ window.addEventListener("load", function () {
     trImage.title = "Intastellar Solutions cookie sharing library";
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
-    /* document.body.appendChild(trImage); */
+    document.body.appendChild(trImage);
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
@@ -1496,7 +1496,7 @@ window.addEventListener("load", function () {
 
         throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy")
     }
-});
+/* }); */
 
 /* --- Helper function to get Meta tags --- */
 function getMeta(name) {
