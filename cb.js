@@ -804,6 +804,9 @@ window.addEventListener("load", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
+    const FunctionalCheckbox = document.querySelector("#functional");
+    const StaticsCheckBox = document.querySelector("#statics");
+    const MarketingCheckBox = document.querySelector("#marketing");
     
     gtag('set', {
         'user_id': (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid
@@ -875,9 +878,6 @@ window.addEventListener("load", function () {
             });
         });
 
-        const FunctionalCheckbox = document.querySelector("#functional");
-        const StaticsCheckBox = document.querySelector("#statics");
-        const MarketingCheckBox = document.querySelector("#marketing");
         const settingsSaveLang = {};
         
         if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
@@ -895,6 +895,7 @@ window.addEventListener("load", function () {
         }
 
         FunctionalCheckbox?.addEventListener("change", () => {
+            console.log("FunctionalCheckbox", FunctionalCheckbox?.checked);
             document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
                 && StaticsCheckBox?.checked === false
                 && MarketingCheckBox?.checked === false
