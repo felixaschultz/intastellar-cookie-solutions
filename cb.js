@@ -792,8 +792,713 @@ if(document.querySelector(".intastellarCCPAContainer") != null){
 IntastellarCookieConsent.inizilize(
     intaconsents
 )
-
-/* window.addEventListener("load", function () { */
+/* Check if script was loaded async */
+if(currentScript.getAttribute("async") == false){
+    window.addEventListener("load", function () {
+        (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
+        const temp = location.host.split('.').reverse();
+        const domain = encodeURI(temp[1] + '.' + temp[0]);
+        const trImage = document.createElement("iframe");
+        trImage.name = "intastellar-solutions-sharinglibrary-iframe";
+        trImage.style.display = "none";
+        trImage.title = "Intastellar Solutions cookie sharing library";
+        trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
+    
+        document.body.appendChild(trImage);
+        const FunctionalCheckbox = document.querySelector("#functional");
+        const StaticsCheckBox = document.querySelector("#statics");
+        const MarketingCheckBox = document.querySelector("#marketing");
+        console.log(FunctionalCheckbox);
+        gtag('set', {
+            'user_id': (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid
+        });
+        /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
+        /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
+        if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
+        if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
+        
+        if (isValidPolicyLink()) {
+            document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
+                if(window.INTA.settings.company != "" && window.INTA.settings.company != undefined && vendor.innerText == window.location.host){
+                    vendor.innerText = window.INTA.settings.company;
+                    /* let msg = document.querySelectorAll(".intastellarCookie-settings__privacyLink")[i].innerText.replace(window.location.host, ""); */
+                    /* document.querySelectorAll(".intastellarCookie-settings__privacyLink")[i].innerText = window.INTA.settings.company; */
+                }
+            });
+            document.querySelectorAll(".intCookie_ConsentLogo").forEach((logo) => {
+                logo.src = window.INTA.settings.logo;
+            });
+            /* - - - Helper function for learn more click - - - */
+            document.querySelectorAll(".intLearnMoreBtn").forEach((btn) => {
+                btn.addEventListener("click", function(e) {
+                    learnMore(this);
+                })
+            })
+    
+            window.INTA.settings?.partnerDomain?.forEach((domain) => {
+                intaConsentsObjectVariable.sharingDomains.push(domain);
+            })
+    
+            if(getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName).indexOf("__inta") == -1){
+                document.querySelector(".intastellarCookieConstents").classList.add("--active");
+            }
+    
+            document.querySelectorAll(".intaExpandCookieList").forEach((btn, i) => {
+                
+                btn.addEventListener("click", () => {
+                    document.querySelectorAll(".intastellar__arrow")[i].classList.toggle("open");
+                    document.querySelectorAll(".intaCookieListOverview")[i].classList.toggle("view");
+                })
+            })
+    
+            let settings = document.querySelector(".intastellarCookie-settings__container");
+            if (document.querySelector(".intastellarCookieBanner") != null) {
+                if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
+                    document.querySelector(".intastellarCookieBanner").style.display = "none";
+                } else {
+                    document.querySelector(".intastellarCookieBanner").style.display = "";
+                }
+            } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
+                /* if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) { */
+                    document.querySelector("html").classList.remove("noScroll");
+                    if(document.querySelector(".intastellarCookieConstents") != null){
+                        document.querySelector(".intastellarCookieConstents").classList.remove("--active"); 
+                    }
+                /* } else {
+                    settings.classList.toggle("intastellarCookie-settings__container--expand");
+                } */
+            }
+    
+            document.querySelectorAll(".intastellarCookieBanner__settings").forEach((setting) => {
+                setting.addEventListener("click", () => {
+                    let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
+                    if (!intCookieSettingsMore?.classList.contains("--active")) {
+                        intCookieSettingsMore?.classList.add("--active");
+                        document.querySelector(".intastellarCookie-settings__container").classList.remove("intastellarCookie-settings__container--expand")
+                    }
+                });
+            });
+    
+            const settingsSaveLang = {};
+            
+            if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+                settingsSaveLang.necessaryCookiesText = "Decline All";
+                settingsSaveLang.saveSettingsText = "Save settings";
+            } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+                settingsSaveLang.necessaryCookiesText = "Ablehnen";
+                settingsSaveLang.saveSettingsText = "Speichern";
+            } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+                settingsSaveLang.necessaryCookiesText = "Afvis";
+                settingsSaveLang.saveSettingsText = "Gem indstillinger";
+            } else {
+                settingsSaveLang.necessaryCookiesText = "Afvis";
+                settingsSaveLang.saveSettingsText = "Gem indstillinger";
+            }
+    
+            console.log("FunctionalCheckbox", FunctionalCheckbox?.checked);
+            FunctionalCheckbox?.addEventListener("change", () => {
+                document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
+                    && StaticsCheckBox?.checked === false
+                    && MarketingCheckBox?.checked === false
+                    ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+            })
+    
+            StaticsCheckBox?.addEventListener("change", () => {
+                document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
+                    && StaticsCheckBox?.checked === false
+                    && MarketingCheckBox?.checked === false
+                    ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+            })
+    
+            MarketingCheckBox?.addEventListener("change", () => {
+                document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
+                    && StaticsCheckBox?.checked === false
+                    && MarketingCheckBox?.checked === false
+                    ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+            })
+    
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === true
+                    && StaticsCheckBox?.checked === true
+                    && MarketingCheckBox?.checked === true
+                    || FunctionalCheckbox?.checked === true
+                    || StaticsCheckBox?.checked === true
+                    || MarketingCheckBox?.checked === true
+                ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
+    
+            document.querySelector(".--save").addEventListener("click",() => {
+                const accepted = [];
+                if (FunctionalCheckbox?.checked) {
+                    gtag('consent', 'update', {
+                        'functionality_storage': 'granted',
+                    })
+                    accepted.push("functionalCookies");
+                } else {
+                    gtag('consent', 'update', {
+                        'functionality_storage': 'denied',
+                    })
+                    const index = accepted.indexOf("functionalCookies");
+                    if (index > -1) { // only splice array when item is found
+                        accepted.splice(index, 1); // 2nd parameter means remove one item only
+                    }
+                }
+            
+                if (StaticsCheckBox?.checked) {
+                    gtag('consent', 'update', {
+                        'analytics_storage': 'granted',
+                        'ad_storage': 'granted',
+                        'ad_user_data': 'granted',
+                        'ad_personalization': 'granted',
+                        'personalization_storage': 'granted',
+                        'url_passthrough': true,
+                    })
+                    accepted.push("staticsticCookies");
+                }else {
+                    gtag('consent', 'update', {
+                        'analytics_storage': 'denied',
+                    })
+                    const index = accepted.indexOf("staticsticCookies");
+                    if (index > -1) { // only splice array when item is found
+                        accepted.splice(index, 1); // 2nd parameter means remove one item only
+                    }
+                }
+    
+                if (MarketingCheckBox?.checked) {
+                    gtag('consent', 'update', {
+                        'ad_storage': 'granted',
+                        'personalization_storage': 'granted',
+                        'ads_data_redaction':  'granted',
+                        'ad_user_data': 'granted',
+                        'ad_personalization': 'granted',
+                        'url_passthrough': true,
+                    });
+                    accepted.push("advertisementCookies");
+                } else {
+                    gtag('consent', 'update', {
+                        'ad_storage': 'denied',
+                        'personalization_storage': 'denied',
+                        'ads_data_redaction':  'denied',
+                        'ad_user_data': 'denied',
+                        'ad_personalization': 'denied',
+                        'url_passthrough': true,
+                    });
+                    const index = accepted.indexOf("advertisementCookies");
+                    if (index > -1) { // only splice array when item is found
+                        accepted.splice(index, 1); // 2nd parameter means remove one item only
+                    }
+                }
+                saveINTCookieSettings("changePermission", accepted);
+            });
+    
+            if (window.INTA.settings.ccpa !== undefined && window.INTA.settings.ccpa.on) {
+                const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
+    
+                closeCCPAButton.addEventListener("click", () => {
+                    document.querySelector(".intastellarCCPApopup").classList.remove("--active");
+                });
+            }
+    
+            if (button__acceptAll != null || button__acceptAll != undefined) {
+                button__acceptAll.addEventListener("click", function () {
+                    
+                    var cV = 0;
+                    intaConsentsObjectVariable.consents = {
+                        staticsticCookies: "checked",
+                        functionalCookies:  "checked",
+                        advertisementCookies: "checked",
+                    };
+                    intaConsentsObjectVariable.time = new Date().getTime()
+                    document.cookie =
+                        int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+    
+                    document.cookie =
+                        "_vis_opt=" +
+                        cV +
+                        "; expires=" +
+                        new Date(
+                            new Date().getTime() + 60 * 60 * 1000 * 24 * 100
+                        ).toGMTString() +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+    
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    
+                    document.querySelector("html").classList.toggle("noScroll");
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+    
+                    gtag('consent', 'update', {
+                        'ad_storage': 'granted',
+                        'personalization_storage': 'granted',
+                        'analytics_storage': 'granted',
+                        'functionality_storage': 'granted',
+                        'ads_data_redaction': 'granted',
+                        'ad_user_data': 'granted',
+                        'ad_personalization': 'granted',
+                        'url_passthrough': true,
+                    });
+                    dataLayer.push({'event': 'cookie_consent_update'})
+                    updateConsents("all");
+                    /*window.location.reload();*/
+                });
+            }
+    
+            if (button__acceptAll != null || button__acceptAll != undefined) {
+                button__acceptAll.addEventListener("click", function () {
+                    
+                    var cV = 1;
+                    intaConsentsObjectVariable.consents = {
+                        staticsticCookies: "checked",
+                        functionalCookies:  "checked",
+                        advertisementCookies: "checked",
+                    };
+                    intaConsentsObjectVariable.time = new Date().getTime()
+                    document.cookie =
+                        int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie =
+                        "_vis_opt=" +
+                        cV +
+                        "; expires=" +
+                        new Date(
+                            new Date().getTime() + 60 * 60 * 1000 * 24 * 100
+                        ).toGMTString() +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+                    var addedNodes = document.getElementsByTagName("script");
+                    for (var i = 0; i < addedNodes.length; i++) {
+                        addedNodes.type = "";
+                    }
+                    document.querySelector("html").classList.toggle("noScroll");
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    const intastellarShared = {
+                        intaConsentsObjectVariable: intaConsentsObjectVariable,
+                        partnerDomain: window.INTA.settings.partnerDomain,
+                    }
+                    window.addEventListener("message", function(e){
+                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intastellarShared), "*");
+                    })
+    
+                    gtag('consent', 'update', {
+                        'ad_storage': 'granted',
+                        'personalization_storage': 'granted',
+                        'analytics_storage': 'granted',
+                        'functionality_storage': 'granted',
+                        'ads_data_redaction': 'granted',
+                        'ad_user_data': 'granted',
+                        'ad_personalization': 'granted',
+                        'url_passthrough': true,
+                    });
+                    dataLayer.push({'event': 'cookie_consent_update'})
+                    updateConsents("all");
+                    /*window.location.reload();*/
+                });
+            }
+    
+            if (button__acceptAll != null || button__acceptAll != undefined) {
+                button__acceptAllNecessary.addEventListener("click", function () {
+                    intaConsentsObjectVariable.consents = {
+                        staticsticCookies: false,
+                        functionalCookies:  false,
+                        advertisementCookies: false,
+                    };
+                    intaConsentsObjectVariable.time = new Date().getTime()
+                    var cV = 1;
+                    document.cookie =
+                        int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+                    document.cookie =
+                        "_vis_opt=" +
+                        cV +
+                        "; expires=" + cookieLifeTime +
+                        "; path=/; " +
+                        intCookieDomain +
+                        "";
+    
+                    document.querySelector("html").classList.toggle("noScroll");
+                    document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    const intastellarShared = {
+                        intaConsentsObjectVariable: intaConsentsObjectVariable,
+                        partnerDomain: window.INTA.settings.partnerDomain,
+                    }
+                    window.addEventListener("message", function(e){
+                        if(e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intastellarShared), "*");
+                    })
+                    gtag('consent', 'update', {
+                        'ad_storage': 'denied',
+                        'personalization_storage': 'denied',
+                        'analytics_storage': 'denied',
+                        'functionality_storage': 'denied',
+                        'ads_data_redaction': 'denied',
+                        'ad_user_data': 'denied',
+                        'ad_personalization': 'denied',
+                        'url_passthrough': true,
+                    });
+                    dataLayer.push({'event': 'cookie_consent_update'})
+                    /*window.location.reload();*/
+    
+                });
+            }
+    
+            if (button__acceptAll != null || button__acceptAll != undefined) {
+                const configBtn = document.querySelectorAll(".intastellarCookie-settingsContainer");
+    
+                const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
+                const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
+    
+                const analyticsBTN = document.querySelector(".analytics");
+                const closeSettings = document.querySelector(".intastellarCookie-settings__close");
+                const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
+    
+                changePermission.forEach((change) => {
+                    change.addEventListener("click", function () {
+                        if (this.getAttribute("data-type") == "intMarketingCookies") {
+                            document.querySelector("#marketing").checked = true;
+                        } else if (this.getAttribute("data-type") == "intFunctionalCookies") {
+                            document.querySelector("#functional").checked = true;
+                        }
+                        saveINTCookieSettings("changePermission", this.getAttribute("data-type"));
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    })
+                })
+    
+                if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
+                    configBtn.forEach((configs) => {
+                        configs.addEventListener("click", function () {
+                            let settings = document.querySelector(".intastellarCookie-settings__container");
+                            document.querySelector("html").classList.toggle("noScroll");
+                            settings.classList.toggle("intastellarCookie-settings__container--expand");
+                        });
+                    })
+                } else {
+                    configBtn.forEach((configs) => {
+                        configs.addEventListener("click", function () {
+                            let settings = document.querySelector(".intastellarCookieConstents");
+                            /* document.querySelector("html").classList.toggle("noScroll"); */
+                            settings.classList.toggle("--active");
+                        });
+                    })
+                }
+                if (window.INTA.settings.advanced) {
+                    closeSettings.addEventListener("click", function () {
+                        let settings = document.querySelector(".intastellarCookie-settings__container");
+                        settings.classList.toggle("intastellarCookie-settings__container--expand");
+                    })
+                }
+    
+                ness.forEach((n) => {
+                    n.addEventListener("click", function () {
+                        
+                        intaConsentsObjectVariable.consents = {
+                            staticsticCookies: false,
+                            functionalCookies:  false,
+                            advertisementCookies: false,
+                        };
+                        intaConsentsObjectVariable.time = new Date().getTime()
+                        var cV = 1;
+                        document.cookie =
+                            int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
+                            "; path=/; " +
+                            intCookieDomain +
+                            "";
+                        document.cookie =
+                            "_vis_opt=" +
+                            cV +
+                            "; expires=" + cookieLifeTime +
+                            "; path=/; " +
+                            intCookieDomain +
+                            "";
+                        document.querySelector("html").classList.toggle("noScroll");
+                        document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+    
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    
+                        gtag('consent', 'update', {
+                            'ad_storage': 'denied',
+                            'personalization_storage': 'denied',
+                            'analytics_storage': 'denied',
+                            'functionality_storage': 'denied',
+                            'ads_data_redaction': 'denied',
+                            'ad_user_data': 'denied',
+                            'ad_personalization': 'denied',
+                            'url_passthrough': true,
+                        });
+                        dataLayer.push({'event': 'cookie_consent_update'})
+                        updateConsents("denied");
+                        document.querySelector("#marketing").checked = false;
+                        document.querySelector("#statics").checked = false;
+                        document.querySelector("#functional").checked = false;
+                        /*window.location.reload();*/
+                    });
+                });
+                
+                all.forEach((a) => {
+                    a.addEventListener("click", function () {
+                        intaConsentsObjectVariable.consents = {
+                            staticsticCookies: "checked",
+                            functionalCookies:  "checked",
+                            advertisementCookies: "checked",
+                        };
+                        intaConsentsObjectVariable.time = new Date().getTime()
+                        var cV = 1;
+                        document.cookie =
+                            int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
+                            "; path=/; " +
+                            intCookieDomain +
+                            "";
+                        document.cookie =
+                            "_vis_opt=" +
+                            cV +
+                            "; expires=" + cookieLifeTime +
+                            "; path=/; " +
+                            intCookieDomain +
+                            "";
+                        
+                        var addedNodes = document.getElementsByTagName("script");
+                        for (var i = 0; i < addedNodes.length; i++) {
+                            addedNodes.type = "";
+                        }
+    
+    
+    
+                        document.querySelector("html").classList.toggle("noScroll");
+                        document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+    
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    
+                        gtag('consent', 'update', {
+                            'ad_storage': 'granted',
+                            'personalization_storage': 'granted',
+                            'analytics_storage': 'granted',
+                            'functionality_storage': 'granted',
+                            'ads_data_redaction': 'granted',
+                            'ad_user_data': 'granted',
+                            'ad_personalization': 'granted',
+                            'url_passthrough': true,
+                        });
+                        dataLayer.push({'event': 'cookie_consent_update'})
+                        updateConsents("all");
+                        document.querySelector("#marketing").checked = true;
+                        document.querySelector("#statics").checked = true;
+                        document.querySelector("#functional").checked = true;
+                        /*window.location.reload();*/
+                    })
+                });
+            } else {
+                const configBtn = document.querySelectorAll(".intastellarCookie-settingsContainer");
+                const config = document.querySelectorAll(".config");
+    
+                const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
+                const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
+                const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
+                const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
+    
+                const analyticsBTN = document.querySelector(".analytics");
+                const closeSettings = document.querySelector(".intastellarCookie-settings__close");
+                let settings = document.querySelector(".intastellarCookie-settings__container");
+    
+                changePermission.forEach((change) => {
+                    change.addEventListener("click", function () {
+                        if (this.getAttribute("data-type") == "intMarketingCookies") {
+                            document.querySelector("#marketing").checked = true;
+                        } else if (this.getAttribute("data-type") == "intFunctionalCookies") {
+                            document.querySelector("#functional").checked = true;
+                        }
+                        saveINTCookieSettings("changePermission", this.getAttribute("data-type"));
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                        
+                    })
+                })
+                /* Showing default banner when no custom banner is set */
+               /*  if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
+                    if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
+                        debugger;
+                        document.querySelector("html").classList.toggle("noScroll");
+                        document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    } else {
+                        settings.classList.toggle("intastellarCookie-settings__container--expand");
+                    }
+                } */
+    
+                if (window.INTA.settings.advanced) {
+                    configBtn.forEach((configs) => {
+                        configs.addEventListener("click", function () {
+                            let settings = document.querySelector(".intastellarCookie-settings__container");
+                            document.querySelector("html").classList.toggle("noScroll");
+                            settings.classList.toggle("intastellarCookie-settings__container--expand");
+                        });
+                    })
+    
+                    config.forEach((configs) => {
+                        configs.addEventListener("click", function () {
+                            let settings = document.querySelector(".intastellarCookie-settings__container");
+                            settings.classList.toggle("intastellarCookie-settings__container--expand");
+                        });
+                    })
+                } else {
+                    configBtn.forEach((configs) => {
+                        configs.addEventListener("click", function () {
+                            let settings = document.querySelector(".intastellarCookieConstents");
+                            document.querySelector("html").classList.toggle("noScroll");
+                            settings.classList.add("--active");
+                        });
+                    })
+                }
+                if (window.INTA.settings.advanced) {
+                    closeSettings.addEventListener("click", function () {
+                        let settings = document.querySelector(".intastellarCookie-settings__container");
+                        settings.classList.toggle("intastellarCookie-settings__container--expand");
+                    })
+                }
+    
+                ness.forEach((n) => {
+                    n.addEventListener("click", function () {
+                        intaConsentsObjectVariable.consents = {
+                            staticsticCookies: false,
+                            functionalCookies:  false,
+                            advertisementCookies: false,
+                        };
+                        intaConsentsObjectVariable.time = new Date().getTime()
+                        var cV = 1;
+                        document.cookie =
+                            int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
+                            "; path=/;" +
+                            intCookieDomain +
+                            "";
+                        document.cookie =
+                            "_vis_opt=" +
+                            cV +
+                            "; expires=" + cookieLifeTime +
+                            "; path=/; " +
+                            intCookieDomain +
+                            "";
+                        document.querySelector("html").classList.toggle("noScroll");
+                        document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+    
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                        document.querySelector("#marketing").checked = false;
+                        document.querySelector("#statics").checked = false;
+                        document.querySelector("#functional").checked = false;
+    
+                        gtag('consent', 'update', {
+                            'ad_storage': 'denied',
+                            'personalization_storage': 'denied',
+                            'analytics_storage': 'denied',
+                            'functionality_storage': 'denied',
+                            'ads_data_redaction': 'denied',
+                            'ad_user_data': 'denied',
+                            'ad_personalization': 'denied',
+                            'url_passthrough': true,
+                        });
+    
+                        dataLayer.push({'event': 'cookie_consent_update'})
+                        /*window.location.reload();*/
+                    });
+                });
+    
+                all.forEach((a) => {
+                    a.addEventListener("click", function () {
+                        
+                        var cV = 1;
+    
+                        intaConsentsObjectVariable.consents = {
+                                staticsticCookies: "checked",
+                                functionalCookies:  "checked",
+                                advertisementCookies: "checked",
+                            };
+                        intaConsentsObjectVariable.time = new Date().getTime()
+    
+                        document.cookie =
+                            int_hideCookieBannerName + "=__inta1."+ encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable),randomIntFromInterval(20, 34)) +"; expires=" + cookieLifeTime +
+                            "; path=/; " +
+                            intCookieDomain +
+                            "";
+                        document.cookie =
+                            "_vis_opt=" +
+                            cV +
+                            "; expires=" + cookieLifeTime +
+                            "; path=/; " +
+                            intCookieDomain +
+                            "";
+                        
+                        var addedNodes = document.getElementsByTagName("script");
+                        for (var i = 0; i < addedNodes.length; i++) {
+                            addedNodes.type = "";
+                        }
+                        document.querySelector("html").classList.toggle("noScroll");
+                        document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+    
+                        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    
+                        gtag('consent', 'update', {
+                            'ad_storage': 'granted',
+                            'personalization_storage': 'granted',
+                            'analytics_storage': 'granted',
+                            'functionality_storage': 'granted',
+                            'ads_data_redaction': 'granted',
+                            'ad_user_data': 'granted',
+                            'ad_personalization': 'granted',
+                            'url_passthrough': true,
+                        });
+                        
+                        dataLayer.push({'event': 'cookie_consent_update'})
+                        updateConsents("all");
+                        document.querySelector("#marketing").checked = true;
+                        document.querySelector("#statics").checked = true;
+                        document.querySelector("#functional").checked = true;
+                        /*window.location.reload();*/
+                    })
+                });
+            }
+    
+            
+            window.addEventListener("message", (e) => {
+                if(e.data == "ready"){
+                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+                        .postMessage("you´re open to share with me", "*");
+                }
+                if(e.data){
+                    const sharedCookies = e.data;
+                    /* console.log(sharedCookies); */
+                }
+            })
+    
+        } else {
+            checkCookieStatus();
+            /* Displaying a error message if no valid privacy url is giving */
+            const errorMessage = document.createElement("div");
+            const errorMessageContent = document.createElement("div");
+    
+            errorMessage.className = "intastellarErrorMessage";
+            errorMessageContent.className = "intastellarErrorMessage-content";
+    
+            errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner. Read more at <a href='https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy</a>";
+    
+            errorMessage.appendChild(errorMessageContent);
+            /* document.body.appendChild(errorMessage); */
+    
+            throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy")
+        }
+    });
+}else{
     (adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
@@ -1325,7 +2030,7 @@ IntastellarCookieConsent.inizilize(
                 })
             })
             /* Showing default banner when no custom banner is set */
-           /*  if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
+            /*  if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
                 if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
                     debugger;
                     document.querySelector("html").classList.toggle("noScroll");
@@ -1496,7 +2201,7 @@ IntastellarCookieConsent.inizilize(
 
         throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy")
     }
-/* }); */
+}
 
 /* --- Helper function to get Meta tags --- */
 function getMeta(name) {
