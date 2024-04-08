@@ -803,7 +803,7 @@ window.addEventListener("load", function () {
     trImage.title = "Intastellar Solutions cookie sharing library";
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
-    document.body.appendChild(trImage);
+    /* document.body.appendChild(trImage); */
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
