@@ -1669,7 +1669,7 @@ function checkCookieStatus() {
 
                     let settingsContent = document.createElement("inta-consents-iframe");
                     if(!frae.classList.contains("trustpilot-widget")){
-                        settingsContent.setAttribute("data-src", a.href);
+                        settingsContent.setAttribute("data-src", a?.href);
                     }
                     settingsContent.classList.add("intCookie_ConsentContainer");
                     if(ytIMG !== undefined && ytIMG != ""){
@@ -1680,7 +1680,7 @@ function checkCookieStatus() {
                     }
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
                     if (frae.style.display != "none") {
-                        frae.parentElement.replaceChild(settingsContent, frae);
+                        frae?.parentElement?.replaceChild(settingsContent, frae);
                     }
                 }
             } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies && script.type == "functional") {
@@ -1726,7 +1726,7 @@ function checkCookieStatus() {
                     settingsContent.setAttribute("data-src", a.href);
                     settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
                     if (frae.style.display != "none") {
-                    frae.parentElement.replaceChild(settingsContent, frae);
+                    frae?.parentElement?.replaceChild(settingsContent, frae);
                     }
                 } else if (frae?.id?.indexOf("map") > -1 || frae?.id?.indexOf("google") > -1 && frae?.id?.indexOf("google_translate_element2") == -1) {
                     let externalDomain = "www.google.com";
@@ -1774,7 +1774,7 @@ function checkCookieStatus() {
     }
 
     function blockBlockQuotes(tweet, message, script, buttonText, logo) {
-        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
+        if (tweet != " " && getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
             let a      = document.createElement('a');
             a.href = tweet.querySelector("a").href;
             let externalDomain = a.hostname;
