@@ -1563,9 +1563,8 @@ let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
 
-window.addEventListener("load", function () {
-    intHead.appendChild(s);
-})
+
+intHead.appendChild(s);
 
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
@@ -1845,14 +1844,10 @@ function checkCookieStatus() {
         }
     };
 
-    document.fonts.addEventListener("loading", (event) => {
-        /* console.log(event); */
-    });
-
     /* - - - Cookie banner settings btn - - - */
-    const ness = document.querySelectorAll(".intastellarCookieBanner__accpetNecssery");
-    const all = document.querySelectorAll(".intastellarCookieSettings--acceptAll");
-    const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
+    const ness = document.getElementsByClassName(".intastellarCookieBanner__accpetNecssery");
+    const all = document.getElementsByClassName(".intastellarCookieSettings--acceptAll");
+    const changePermission = document.getElementsByClassName(".intastellarCookie-settings__btn.--changePermission");
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(({ addedNodes }) => {
@@ -2310,7 +2305,7 @@ function checkCookieStatus() {
         observer.disconnect();
     })
     
-    document.querySelectorAll('*').forEach((node) => {
+    document.getElementsByTagName('LINK').forEach((node) => {
         if (node.nodeType === 1 && node.tagName === "LINK") {
             const linkSrc = node.href;
 
