@@ -1562,7 +1562,10 @@ if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerN
 let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
-intHead.appendChild(s);
+
+window.addEventListener("load", function () {
+    intHead.appendChild(s);
+})
 
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
