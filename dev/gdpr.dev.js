@@ -2305,19 +2305,21 @@ function checkCookieStatus() {
         observer.disconnect();
     })
     
-    /* document.getElementsByTagName('link').forEach((node) => {
-        if (node.nodeType === 1 && node.tagName === "LINK") {
-            const linkSrc = node.href;
+    const allLinks = document.getElementsByTagName('link');
+
+    for ( const link of allLinks ) {
+        if (link.nodeType === 1 && link.tagName === "LINK") {
+            const linkSrc = link.href;
 
             if(notRequired.test(linkSrc)){
                 if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
-                    if(node.parentElement !== null){
-                        node.parentElement.removeChild(node);
+                    if(link.parentElement !== null){
+                        link.parentElement.removeChild(link);
                     } 
                 }
             }
         }
-    }) */
+    }
 
     startObserving(observer, document.documentElement);
     return observer;
