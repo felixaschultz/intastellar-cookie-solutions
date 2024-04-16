@@ -2330,7 +2330,8 @@ function startObserving ( observer ) {
         childList: !0,
         subtree: !0,
         attributes:    true,
-        characterDataOldValue: true
+        characterDataOldValue: true,
+        attributeFilter: ["src", "href", "type"]
     })
 }
 function deleteAllCookies() {
