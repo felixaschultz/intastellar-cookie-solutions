@@ -2305,7 +2305,7 @@ function checkCookieStatus() {
         observer.disconnect();
     })
     
-    Array.prototype.slice.call(document.getElementsByTagName('LINK')).forEach((node) => {
+    /* document.getElementsByTagName('link').forEach((node) => {
         if (node.nodeType === 1 && node.tagName === "LINK") {
             const linkSrc = node.href;
 
@@ -2317,7 +2317,7 @@ function checkCookieStatus() {
                 }
             }
         }
-    })
+    }) */
 
     startObserving(observer, document.documentElement);
     return observer;
