@@ -2303,19 +2303,20 @@ function checkCookieStatus() {
     });
     window.addEventListener("load", () => {
         observer.disconnect();
-        document.getElementsByTagName('LINK').forEach((node) => {
-            if (node.nodeType === 1 && node.tagName === "LINK") {
-                const linkSrc = node.href;
+    })
     
-                if(notRequired.test(linkSrc)){
-                    if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
-                        if(node.parentElement !== null){
-                            node.parentElement.removeChild(node);
-                        } 
-                    }
+    Array.prototype.slice.call(document.getElementsByTagName('LINK')).forEach((node) => {
+        if (node.nodeType === 1 && node.tagName === "LINK") {
+            const linkSrc = node.href;
+
+            if(notRequired.test(linkSrc)){
+                if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
+                    if(node.parentElement !== null){
+                        node.parentElement.removeChild(node);
+                    } 
                 }
             }
-        })
+        }
     })
 
     startObserving(observer, document.documentElement);
