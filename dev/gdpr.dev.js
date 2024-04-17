@@ -183,85 +183,87 @@ tmpl.innerHTML = `
 <slot></slot>
 `;
 
-customElements.define('inta-consents-content', class extends HTMLElement {
-    constructor() {
-        super(); // always call super() first in the constructor.
-        let templ = document.createElement("template");
-        templ.innerHTML = `
-            <style>
-                :host{
-                    min-width: 400px;
-                    margin-inline: auto;
-                    padding: 25px 15px;
-                    color: rgb(36, 36, 36);
-                    background-color: #fff;
-                    border: 3px dotted;
-                    position: relative;
-                    text-align: center;
-                    border-radius: 5px;
-                }
-            </style>
-        `
-        // Attach a shadow root to the element.
-        let shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(tmpl.content.cloneNode(true));
-        shadowRoot.appendChild(templ.content.cloneNode(true))
-    }
-    // ...
-});
-
-customElements.define('intastellar-consents', class extends HTMLElement {
-    constructor() {
-        super(); // always call super() first in the constructor.
-        let templ = document.createElement("template");
-        templ.innerHTML = `
-            <style>
-                :host{
-
-                }
-            </style>
-        `
-        // Attach a shadow root to the element.
-        let shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(tmpl.content.cloneNode(true));
-        shadowRoot.appendChild(templ.content.cloneNode(true))
-    }
-})
-
-customElements.define('inta-consents-section', class extends HTMLElement {
-    constructor() {
-        super(); // always call super() first in the constructor.
-
-        // Attach a shadow root to the element.
-        let shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(tmpl.content.cloneNode(true));
-    }
-    // ...
-});
-
-customElements.define('inta-consents-logo', class extends HTMLElement {
-    constructor() {
-        super(); // always call super() first in the constructor.
-
-        // Attach a shadow root to the element.
-        let tmplStyle = document.createElement("template");
-        tmplStyle.innerHTML = `<style>:host{display:block; width: auto;}</style><slot></slot>`;
-        let shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(tmplStyle.content.cloneNode(true));
-    }
-    // ...
-});
-
-customElements.define('inta-consents-bg', class extends HTMLElement {
-    constructor() {
-        super(); // always call super() first in the constructor.
-        // Attach a shadow root to the element.
-        let tmplStyle = document.createElement("style");
-        tmplStyle.innerHTML = `:host{display:block; width: auto;background-image: url(${this.getAttribute("inta-bg-img")}); background-size: cover;}`;
-        let shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(tmplStyle);
-    }
-    // ...
+window.addEventListener("DOMContentLoaded", (event) => {
+    customElements.define('inta-consents-content', class extends HTMLElement {
+        constructor() {
+            super(); // always call super() first in the constructor.
+            let templ = document.createElement("template");
+            templ.innerHTML = `
+                <style>
+                    :host{
+                        min-width: 400px;
+                        margin-inline: auto;
+                        padding: 25px 15px;
+                        color: rgb(36, 36, 36);
+                        background-color: #fff;
+                        border: 3px dotted;
+                        position: relative;
+                        text-align: center;
+                        border-radius: 5px;
+                    }
+                </style>
+            `
+            // Attach a shadow root to the element.
+            let shadowRoot = this.attachShadow({ mode: 'open' });
+            shadowRoot.appendChild(tmpl.content.cloneNode(true));
+            shadowRoot.appendChild(templ.content.cloneNode(true))
+        }
+        // ...
+    });
+    
+    customElements.define('intastellar-consents', class extends HTMLElement {
+        constructor() {
+            super(); // always call super() first in the constructor.
+            let templ = document.createElement("template");
+            templ.innerHTML = `
+                <style>
+                    :host{
+    
+                    }
+                </style>
+            `
+            // Attach a shadow root to the element.
+            let shadowRoot = this.attachShadow({ mode: 'open' });
+            shadowRoot.appendChild(tmpl.content.cloneNode(true));
+            shadowRoot.appendChild(templ.content.cloneNode(true))
+        }
+    })
+    
+    customElements.define('inta-consents-section', class extends HTMLElement {
+        constructor() {
+            super(); // always call super() first in the constructor.
+    
+            // Attach a shadow root to the element.
+            let shadowRoot = this.attachShadow({ mode: 'open' });
+            shadowRoot.appendChild(tmpl.content.cloneNode(true));
+        }
+        // ...
+    });
+    
+    customElements.define('inta-consents-logo', class extends HTMLElement {
+        constructor() {
+            super(); // always call super() first in the constructor.
+    
+            // Attach a shadow root to the element.
+            let tmplStyle = document.createElement("template");
+            tmplStyle.innerHTML = `<style>:host{display:block; width: auto;}</style><slot></slot>`;
+            let shadowRoot = this.attachShadow({ mode: 'open' });
+            shadowRoot.appendChild(tmplStyle.content.cloneNode(true));
+        }
+        // ...
+    });
+    
+    customElements.define('inta-consents-bg', class extends HTMLElement {
+        constructor() {
+            super(); // always call super() first in the constructor.
+            // Attach a shadow root to the element.
+            let tmplStyle = document.createElement("style");
+            tmplStyle.innerHTML = `:host{display:block; width: auto;background-image: url(${this.getAttribute("inta-bg-img")}); background-size: cover;}`;
+            let shadowRoot = this.attachShadow({ mode: 'open' });
+            shadowRoot.appendChild(tmplStyle);
+        }
+        // ...
+    });
 });
 
 /* Custom error message */
