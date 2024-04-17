@@ -1797,16 +1797,16 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
         let btnText;
         let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
         if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-            textLanguage = bannercontentmessage(externalDomain).danish;
+            textLanguage = message(externalDomain).danish;
             btnText = buttonText().danish;
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-            textLanguage = bannercontentmessage(externalDomain).german;
+            textLanguage = message(externalDomain).german;
             btnText = buttonText().german;
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-            textLanguage = bannercontentmessage(externalDomain).english;
+            textLanguage = message(externalDomain).english;
             btnText = buttonText().english;
         } else {
-            textLanguage = bannercontentmessage(externalDomain).danish;
+            textLanguage = message(externalDomain).danish;
             btnText = buttonText().danish;
         }
         let settingsContent = document.createElement("inta-consents");
