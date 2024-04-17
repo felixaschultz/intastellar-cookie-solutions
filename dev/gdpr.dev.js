@@ -1892,7 +1892,7 @@ function checkCookieStatus() {
                             }
                         }
                         let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
-                        loopBlock(addedNodes, message, script, buttonText, INTAlogo);
+                        loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
                     });
                 }
 
