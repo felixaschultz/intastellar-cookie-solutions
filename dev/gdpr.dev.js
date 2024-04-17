@@ -1655,16 +1655,16 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 let btnText;
 
                 if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                    textLanguage = bannerContentMessage(externalDomain, frae).danish;
+                    textLanguage = message(externalDomain, frae).danish;
                     btnText = buttonText().danish;
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                    textLanguage = bannerContentMessage(externalDomain, frae).german;
+                    textLanguage = message(externalDomain, frae).german;
                     btnText = buttonText().german;
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                    textLanguage = bannerContentMessage(externalDomain, frae).english;
+                    textLanguage = message(externalDomain, frae).english;
                     btnText = buttonText().english;
                 } else {
-                    textLanguage = bannerContentMessage(externalDomain, frae).danish;
+                    textLanguage = message(externalDomain, frae).danish;
                     btnText = buttonText().danish;
                 }
 
@@ -1927,7 +1927,7 @@ function checkCookieStatus() {
                             }
                         }
                         let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
-                        loopBlock(addedNodes, message, script, buttonText, INTAlogo);
+                        loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
                     })
                 }
 
@@ -1963,7 +1963,7 @@ function checkCookieStatus() {
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
-                            blockBlockQuotes(tweet, message, script, buttonText, INTAlogo);
+                            blockBlockQuotes(tweet, bannerContentMessage, script, buttonText, INTAlogo);
                         })
                     });
                 }
