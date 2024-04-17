@@ -1655,16 +1655,16 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 let btnText;
 
                 if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                    textLanguage = message(externalDomain, frae).danish;
+                    textLanguage = bannerContentMessage(externalDomain, frae).danish;
                     btnText = buttonText().danish;
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                    textLanguage = message(externalDomain, frae).german;
+                    textLanguage = bannerContentMessage(externalDomain, frae).german;
                     btnText = buttonText().german;
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                    textLanguage = message(externalDomain, frae).english;
+                    textLanguage = bannerContentMessage(externalDomain, frae).english;
                     btnText = buttonText().english;
                 } else {
-                    textLanguage = message(externalDomain, frae).danish;
+                    textLanguage = bannerContentMessage(externalDomain, frae).danish;
                     btnText = buttonText().danish;
                 }
 
@@ -1709,16 +1709,16 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 let btnText;
                 let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                 if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                    textLanguage = message(externalDomain).danish;
+                    textLanguage = bannerContentMessage(externalDomain).danish;
                     btnText = buttonText().danish;
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                    textLanguage = message(externalDomain).german;
+                    textLanguage = bannerContentMessage(externalDomain).german;
                     btnText = buttonText().german;
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                    textLanguage = message(externalDomain).english;
+                    textLanguage = bannerContentMessage(externalDomain).english;
                     btnText = buttonText().english;
                 } else {
-                    textLanguage = message(externalDomain).danish;
+                    textLanguage = bannerContentMessage(externalDomain).danish;
                     btnText = buttonText().danish;
                 }
 
@@ -1747,16 +1747,16 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 let btnText;
                 let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                 if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                    textLanguage = message(externalDomain).danish;
+                    textLanguage = bannerContentMessage(externalDomain).danish;
                     btnText = buttonText().danish;
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                    textLanguage = message(externalDomain).german;
+                    textLanguage = bannerContentMessage(externalDomain).german;
                     btnText = buttonText().german;
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                    textLanguage = message(externalDomain).english;
+                    textLanguage = bannerContentMessage(externalDomain).english;
                     btnText = buttonText().english;
                 } else {
-                    textLanguage = message(externalDomain).danish;
+                    textLanguage = bannerContentMessage(externalDomain).danish;
                     btnText = buttonText().danish;
                 }
 
@@ -1797,16 +1797,16 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
         let btnText;
         let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
         if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-            textLanguage = message(externalDomain).danish;
+            textLanguage = bannercontentmessage(externalDomain).danish;
             btnText = buttonText().danish;
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-            textLanguage = message(externalDomain).german;
+            textLanguage = bannercontentmessage(externalDomain).german;
             btnText = buttonText().german;
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-            textLanguage = message(externalDomain).english;
+            textLanguage = bannercontentmessage(externalDomain).english;
             btnText = buttonText().english;
         } else {
-            textLanguage = message(externalDomain).danish;
+            textLanguage = bannercontentmessage(externalDomain).danish;
             btnText = buttonText().danish;
         }
         let settingsContent = document.createElement("inta-consents");
@@ -1820,7 +1820,7 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
 }
 
 /* - - - Helper function for message on the content block - - - */
-const message = (domain, node) => {
+const bannerContentMessage = (domain, node) => {
     if (node?.classList?.contains("trustpilot-widget")) {
         domain = "www.trustpilot.com";
     }
