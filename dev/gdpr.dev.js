@@ -1843,6 +1843,87 @@ const bannerContentMessage = (domain, node) => {
     }
 };
 
+const beforeScriptExecuteListener = function (event, node) {
+    let src = node.src || "";
+    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+        || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
+        if (
+            src.indexOf(window.location.hostname) == -1
+            && src.indexOf("jquery") == -1
+            && src.indexOf("elementor") == -1
+        ) {
+            if (
+                notRequired.test(node.innerText)
+                && node.innerText.toLowerCase().indexOf("elementor") == -1
+            ) {
+                node.defer = true;
+                node.async = true;
+                node.type = "text/blocked";
+                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                deleteAllCookies();
+            }
+        } else if (src.indexOf(window.location.hostname) == -1
+            && src.indexOf("jquery") == 1) {
+            node.type = "text/javascript";
+            node.defer = false;
+            node.async = false;
+        } else {
+            /* if(document.querySelector(scriptTag) === null){
+                node.parentElement.appendChild(scriptTag);
+            } */
+        }
+    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false") {
+        if (
+            src.indexOf(window.location.hostname) == -1
+            && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+        ) {
+            if (
+                notRequired.test(src)
+            ) {
+                node.defer = true;
+                node.async = true;
+                node.type = "text/blocked";
+                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+            }
+        } else if (src.indexOf(window.location.hostname) == -1
+            && src.indexOf("jquery") == 1) {
+            node.type = "text/javascript";
+            node.defer = false;
+            node.async = false;
+        } else {
+            node.type = "text/javascript";
+            /* if(document.querySelector(scriptTag) === null){
+                node.parentElement.appendChild(scriptTag);
+            } */
+        }
+
+        if (
+            notRequired.test(node.innerText)
+            && node.innerText.toLowerCase().indexOf("elementor") == -1
+        ) {
+            node.defer = true;
+            node.async = true;
+            node.type = "text/blocked";
+            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+        } else {
+            /* if(document.querySelector(scriptTag) === null){
+                node.parentElement.appendChild(scriptTag);
+            } */
+        }
+    } else if (intaCookieConsents?.functionalCookies === "checked" &&
+        intaCookieConsents?.advertisementCookies === "checked" &&
+        intaCookieConsents?.staticsticCookies === "checked") {
+        node.type = "text/javascript";
+    }
+
+    if (node.getAttribute("type") === "text/blocked")
+        event.preventDefault();
+    node.removeEventListener(
+        "beforescriptexecute",
+        (e, node) => beforeScriptExecuteListener(e, node)
+    );
+};
+
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
 
@@ -1855,48 +1936,7 @@ function checkCookieStatus() {
         mutations.forEach(({ addedNodes }) => {
             addedNodes.forEach((node) => {
 
-                /* if(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies){
-                    window.INTA.settings.settings.styleSheets.map((sheet) => {
-
-                    })
-                } */
-
-                /* Adding  custom button to all blocked embedded content on the site */
-                if (node.nodeType === 1 && node.tagName === "IFRAME") {
-                    allScripts.map((script) => {
-                        const buttonText = () => {
-                            if (script.type == "marketing") {
-                                scriptTypelang = {
-                                    danish: "marketing",
-                                    english: "advertisement",
-                                    german: "werbe"
-                                }
-                            } else if (script.type == "functional") {
-                                scriptTypelang = {
-                                    danish: "funktionelle",
-                                    english: "functional",
-                                    german: "funktionelle"
-                                }
-                            } else if (script.type == "statics") {
-                                scriptTypelang = {
-                                    danish: "statistiske",
-                                    english: "statics",
-                                    german: "statistische"
-                                }
-                            }
-
-                            return {
-                                danish: `Accepter ${scriptTypelang.danish} cookies`,
-                                english: `Accept ${scriptTypelang.english} cookies`,
-                                german: `Akzeptiere ${scriptTypelang.german} cookies`
-                            }
-                        }
-                        let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
-                        loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
-                    });
-                }
-
-                if (node.nodeType === 1 && node.tagName === "DIV") {
+                if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
                     allScripts.map((script) => {
 
                         const buttonText = () => {
@@ -1985,9 +2025,6 @@ function checkCookieStatus() {
                 if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
                     let src = node.src || "";
 
-                    /* if(node.){
-                        node.setAttribute("data-marketing", "")
-                    } */
 
                     node.removeAttribute("charset");
                     addedNodes.forEach((node) => {
@@ -1996,9 +2033,6 @@ function checkCookieStatus() {
                         if (src.indexOf(window.location.hostname) == -1) {
                             window.foundScripts.push(src);
                         }
-
-                        const scriptTag = document.createElement("script");
-                        scriptTag.src = src;
 
                         if (intaCookieConsents?.advertisementCookies === "checked" || intaCookieConsents?.functionalCookies === "checked" || intaCookieConsents?.staticsticCookies === "checked") {
                             node.type = "text/javascript";
@@ -2060,12 +2094,7 @@ function checkCookieStatus() {
                                 node.type = "text/javascript";
                                 node.defer = false;
                                 node.async = false;
-                            } else {
-                                /* if(document.querySelector(scriptTag) === null){
-                                    node.parentElement.appendChild(scriptTag);
-                                } */
                             }
-
                             if (
                                 notRequired.test(node.innerText)
                                 && node.innerText.toLowerCase().indexOf("elementor") == -1
@@ -2074,106 +2103,13 @@ function checkCookieStatus() {
                                 node.defer = true;
                                 node.async = true;
                                 /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                            } else {
-                                /* if(document.querySelector(scriptTag) === null){
-                                    node.parentElement.appendChild(scriptTag);
-                                } */
                             }
                         }
-
-                        const beforeScriptExecuteListener = function (event) {
-                            if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-                                || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
-
-                                if (
-                                    src.indexOf(window.location.hostname) == -1
-                                    && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
-                                ) {
-                                    if (
-                                        notRequired.test(src)
-                                    ) {
-                                        /* console.log(notRequired, src) */
-                                        node.defer = true;
-                                        node.async = true;
-                                        node.type = "text/blocked";
-                                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                        deleteAllCookies();
-                                    }
-                                } else if (src.indexOf(window.location.hostname) == -1
-                                    && src.indexOf("jquery") == 1) {
-                                    node.type = "text/javascript";
-                                    node.defer = false;
-                                    node.async = false;
-                                } else {
-                                }
-
-                                if (
-                                    notRequired.test(node.innerText)
-                                    && node.innerText.toLowerCase().indexOf("elementor") == -1
-                                ) {
-                                    node.defer = true;
-                                    node.async = true;
-                                    node.type = "text/blocked";
-                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                    deleteAllCookies();
-                                } else {
-                                }
-                            } else if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-                                || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
-                                if (
-                                    src.indexOf(window.location.hostname) == -1
-                                    && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
-                                ) {
-                                    if (
-                                        notRequired.test(src)
-                                    ) {
-                                        node.defer = true;
-                                        node.async = true;
-                                        node.type = "text/blocked";
-                                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                    }
-                                } else if (src.indexOf(window.location.hostname) == -1
-                                    && src.indexOf("jquery") == 1) {
-                                    node.type = "text/javascript";
-                                    node.defer = false;
-                                    node.async = false;
-                                } else {
-                                    /* if(document.querySelector(scriptTag) === null){
-                                        node.parentElement.appendChild(scriptTag);
-                                    } */
-                                }
-
-                                if (
-                                    notRequired.test(node.innerText)
-                                    && node.innerText.toLowerCase().indexOf("elementor") == -1
-                                ) {
-                                    node.defer = true;
-                                    node.async = true;
-                                    node.type = "text/blocked";
-                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                } else {
-                                    /* if(document.querySelector(scriptTag) === null){
-                                        node.parentElement.appendChild(scriptTag);
-                                    } */
-                                }
-                            } else if (intaCookieConsents?.functionalCookies === "checked" &&
-                                intaCookieConsents?.advertisementCookies === "checked" &&
-                                intaCookieConsents?.staticsticCookies === "checked") {
-                                node.type = "text/javascript";
-                            }
-
-                            if (node.getAttribute("type") === "text/blocked")
-                                event.preventDefault();
-                            node.removeEventListener(
-                                "beforescriptexecute",
-                                beforeScriptExecuteListener
-                            );
-                        };
 
                         if (node.getAttribute("type") === "text/blocked") {
                             node.addEventListener(
                                 "beforescriptexecute",
-                                beforeScriptExecuteListener
+                                (e) => beforeScriptExecuteListener(e,node)
                             );
                         }
                     });
@@ -2210,95 +2146,14 @@ function checkCookieStatus() {
                         node.type = "text/javascript";
                     }
 
-                    const beforeScriptExecuteListener = function (event) {
-                        let src = node.src || "";
-                        const scriptTag = document.createElement("script");
-                        scriptTag.src = src;
-                        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-                            || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
-                            if (
-                                src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == -1
-                                && src.indexOf("elementor") == -1
-                            ) {
-                                if (
-                                    notRequired.test(node.innerText)
-                                    && node.innerText.toLowerCase().indexOf("elementor") == -1
-                                ) {
-                                    node.defer = true;
-                                    node.async = true;
-                                    node.type = "text/blocked";
-                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                    deleteAllCookies();
-                                }
-                            } else if (src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == 1) {
-                                node.type = "text/javascript";
-                                node.defer = false;
-                                node.async = false;
-                            } else {
-                                /* if(document.querySelector(scriptTag) === null){
-                                    node.parentElement.appendChild(scriptTag);
-                                } */
-                            }
-                        } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false") {
-                            if (
-                                src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
-                            ) {
-                                if (
-                                    notRequired.test(src)
-                                ) {
-                                    node.defer = true;
-                                    node.async = true;
-                                    node.type = "text/blocked";
-                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                }
-                            } else if (src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == 1) {
-                                node.type = "text/javascript";
-                                node.defer = false;
-                                node.async = false;
-                            } else {
-                                node.type = "text/javascript";
-                                /* if(document.querySelector(scriptTag) === null){
-                                    node.parentElement.appendChild(scriptTag);
-                                } */
-                            }
-
-                            if (
-                                notRequired.test(node.innerText)
-                                && node.innerText.toLowerCase().indexOf("elementor") == -1
-                            ) {
-                                node.defer = true;
-                                node.async = true;
-                                node.type = "text/blocked";
-                                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                            } else {
-                                /* if(document.querySelector(scriptTag) === null){
-                                    node.parentElement.appendChild(scriptTag);
-                                } */
-                            }
-                        } else if (intaCookieConsents?.functionalCookies === "checked" &&
-                            intaCookieConsents?.advertisementCookies === "checked" &&
-                            intaCookieConsents?.staticsticCookies === "checked") {
-                            node.type = "text/javascript";
-                        }
-
-                        if (node.getAttribute("type") === "text/blocked")
-                            event.preventDefault();
-                        node.removeEventListener(
-                            "beforescriptexecute",
-                            beforeScriptExecuteListener
-                        );
-                    };
+                    
                     if (node.getAttribute("type") === "text/blocked") {
                         node.addEventListener(
                             "beforescriptexecute",
-                            beforeScriptExecuteListener
+                            (e) => beforeScriptExecuteListener(e,node)
                         );
                     }
-                    beforeScriptExecuteListener();
+                    beforeScriptExecuteListener(null, node);
                 }
             });
         });

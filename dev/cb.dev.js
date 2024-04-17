@@ -2,11 +2,9 @@
  *  GDPR Cookie banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
  *  consents.cdn.intastellarsolutions.com/gdpr.js
- *  @copy 2022-2023 Intastellar Solutions, International
+ *  @copy 2022-2024 Intastellar Solutions, International
  *
 */
-
-const { get } = require("http");
 
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
