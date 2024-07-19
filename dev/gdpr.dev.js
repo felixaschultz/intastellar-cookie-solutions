@@ -1298,6 +1298,9 @@ if (typeof window.INTA.policy_link === "undefined" && document.querySelector('sc
 function intaSetCookieSettings() {
     const urlParams = new URLSearchParams(window.location.search);
     const cookieSettings = urlParams.get('intaCookieSettings');
+
+    console.log("Cookie Settings: ", cookieSettings);
+
     if (cookieSettings) {
         document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime + "; " + intCookieDomain + " ; path=/; SameSite=none; Secure";
     }
