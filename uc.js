@@ -183,8 +183,8 @@ tmpl.innerHTML = `
 <slot></slot>
 `;
 
+intaSetCookieSettings();
 window.addEventListener("DOMContentLoaded", (event) => {
-    intaSetCookieSettings();
     customElements.define('inta-consents-content', class extends HTMLElement {
         constructor() {
             super(); // always call super() first in the constructor.
