@@ -1299,7 +1299,7 @@ function intaSetCookieSettings() {
     const urlParams = new URLSearchParams(window.location.search);
     const cookieSettings = urlParams.get('intaCookieSettings');
     if (cookieSettings) {
-        document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime + "; " + intCookieDomain + " ; path=/";
+        document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime + "; " + intCookieDomain + " ; path=/; SameSite=none; Secure";
     }
 };
 
