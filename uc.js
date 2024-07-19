@@ -1301,7 +1301,7 @@ function intaSetCookieSettings() {
 
     console.log("Cookie Settings from URL", cookieSettings);
     if (cookieSettings) {
-        console.log("Setting the new cookie", cookieLifeTime);
+        console.log("Setting the new cookie");
         document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime +
             "; path=/; " +
             intCookieDomain +
