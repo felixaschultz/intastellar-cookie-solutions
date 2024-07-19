@@ -1299,13 +1299,13 @@ function intaSetCookieSettings() {
     const urlParams = new URLSearchParams(window.location.search);
     const cookieSettings = urlParams.get('intaCookieSettings');
 
-    console.log("Cookie Settings from URL", cookieSettings);
+    console.log("Cookie Settings from URL", window.location.host);
     if (cookieSettings) {
-        console.log("Setting the new cookie", cookieLifeTime);
+        console.log("Setting the new cookie");
         document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime +
             "; path=/; " +
             intCookieDomain +
-            " SameSite=None; Secure";
+            "";
     }
 };
 
