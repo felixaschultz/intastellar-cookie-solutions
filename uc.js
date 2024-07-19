@@ -198,10 +198,6 @@ function intaSetCookieSettings() {
     }
 };
 
-window.addEventListener("load", (event) => {
-    intaSetCookieSettings();
-});
-
 window.addEventListener("DOMContentLoaded", (event) => {
     customElements.define('inta-consents-content', class extends HTMLElement {
         constructor() {
@@ -2228,4 +2224,9 @@ function clearLocalStorage(ls) {
 /* checkCookieStatus(); */
 if (!document.currentScript.async) {
     checkCookieStatus();
+}
+
+if (document.currentScript.async) {
+    checkCookieStatus();
+    intaSetCookieSettings();
 }
