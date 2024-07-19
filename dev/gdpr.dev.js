@@ -192,14 +192,14 @@ function intaSetCookieSettings() {
     console.log("Cookie Settings from URL", window.location.host);
     if (cookieSettings) {
         console.log("Setting the new cookie" + cookieSettings);
+
         document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime +
             "; path=/; " +
             intCookieDomain +
             "SameSite=Lax";
-        if (!reload) {
-            window.location.reload();
-            urlParams.append("reload", "true");
-        }
+        urlParams.delete('intaCookieSettings');
+        window.location.search = urlParams.toString();
+        window.location.reload();
     }
 };
 
