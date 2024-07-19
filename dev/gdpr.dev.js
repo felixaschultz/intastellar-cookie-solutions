@@ -187,6 +187,7 @@ tmpl.innerHTML = `
 function intaSetCookieSettings() {
     const urlParams = new URLSearchParams(window.location.search);
     const cookieSettings = urlParams.get('intaCookieSettings');
+    const reload = urlParams.get('reload');
 
     console.log("Cookie Settings from URL", window.location.host);
     if (cookieSettings) {
@@ -195,7 +196,10 @@ function intaSetCookieSettings() {
             "; path=/; " +
             intCookieDomain +
             "SameSite=Lax";
-        window.location.reload();
+        if (!reload) {
+            window.location.reload();
+            urlParams.append("reload", "true");
+        }
     }
 };
 
