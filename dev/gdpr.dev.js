@@ -190,11 +190,12 @@ function intaSetCookieSettings() {
 
     console.log("Cookie Settings from URL", window.location.host);
     if (cookieSettings) {
-        console.log("Setting the new cookie");
+        console.log("Setting the new cookie" + cookieSettings);
         document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime +
             "; path=/; " +
             intCookieDomain +
             "SameSite=Lax";
+        window.location.reload();
     }
 };
 
