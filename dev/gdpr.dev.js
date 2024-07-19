@@ -183,8 +183,22 @@ tmpl.innerHTML = `
 <slot></slot>
 `;
 
+/* - - - Function to get Cookie Settings from url and set the cookie - - - */
+function intaSetCookieSettings() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cookieSettings = urlParams.get('intaCookieSettings');
+
+    console.log("Cookie Settings from URL", window.location.host);
+    if (cookieSettings) {
+        console.log("Setting the new cookie");
+        document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime +
+            "; path=/; " +
+            intCookieDomain +
+            "SameSite=Lax";
+    }
+};
+
 window.addEventListener("DOMContentLoaded", (event) => {
-    intaSetCookieSettings();
     customElements.define('inta-consents-content', class extends HTMLElement {
         constructor() {
             super(); // always call super() first in the constructor.
@@ -1293,22 +1307,6 @@ if (typeof window.INTA.policy_link === "undefined" && document.querySelector('sc
 
     document.head.insertBefore(configScript, document.currentScript);
 }
-
-/* - - - Function to get Cookie Settings from url and set the cookie - - - */
-function intaSetCookieSettings() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const cookieSettings = urlParams.get('intaCookieSettings');
-
-    console.log("Cookie Settings from URL", window.location.host);
-    if (cookieSettings) {
-        console.log("Setting the new cookie");
-        document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime +
-            "; path=/; " +
-            intCookieDomain +
-            "";
-    }
-};
-
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
@@ -2226,4 +2224,9 @@ function clearLocalStorage(ls) {
 /* checkCookieStatus(); */
 if (!document.currentScript.async) {
     checkCookieStatus();
+}
+
+if (document.currentScript.async) {
+    checkCookieStatus();
+    intaSetCookieSettings();
 }
