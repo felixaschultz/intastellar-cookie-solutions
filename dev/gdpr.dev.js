@@ -184,6 +184,7 @@ tmpl.innerHTML = `
 `;
 
 window.addEventListener("DOMContentLoaded", (event) => {
+    intaSetCookieSettings();
     customElements.define('inta-consents-content', class extends HTMLElement {
         constructor() {
             super(); // always call super() first in the constructor.
@@ -210,7 +211,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         }
         // ...
     });
-    
+
     customElements.define('intastellar-consents', class extends HTMLElement {
         constructor() {
             super(); // always call super() first in the constructor.
@@ -228,22 +229,22 @@ window.addEventListener("DOMContentLoaded", (event) => {
             shadowRoot.appendChild(templ.content.cloneNode(true))
         }
     })
-    
+
     customElements.define('inta-consents-section', class extends HTMLElement {
         constructor() {
             super(); // always call super() first in the constructor.
-    
+
             // Attach a shadow root to the element.
             let shadowRoot = this.attachShadow({ mode: 'open' });
             shadowRoot.appendChild(tmpl.content.cloneNode(true));
         }
         // ...
     });
-    
+
     customElements.define('inta-consents-logo', class extends HTMLElement {
         constructor() {
             super(); // always call super() first in the constructor.
-    
+
             // Attach a shadow root to the element.
             let tmplStyle = document.createElement("template");
             tmplStyle.innerHTML = `<style>:host{display:block; width: auto;}</style><slot></slot>`;
@@ -252,7 +253,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         }
         // ...
     });
-    
+
     customElements.define('inta-consents-bg', class extends HTMLElement {
         constructor() {
             super(); // always call super() first in the constructor.
@@ -278,7 +279,7 @@ class IntastellarSolutionsSDK extends Error {
 const intCookieDomain = (function () {
     "use strict";
     var i = 0,
-        d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1" || window.location.host.indexOf("127.0.0.1") > -1) ? "" : document.domain || window.location.host,
+        d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "" || window.location.host === "127.0.0.1" || window.location.host.indexOf("127.0.0.1") > -1) ? "127.0.0.1" : document.domain || window.location.host,
         p = d.split(".")
 
     d = p.slice(-1 - ++i).join(".");
@@ -1293,6 +1294,15 @@ if (typeof window.INTA.policy_link === "undefined" && document.querySelector('sc
     document.head.insertBefore(configScript, document.currentScript);
 }
 
+/* - - - Function to get Cookie Settings from url and set the cookie - - - */
+function intaSetCookieSettings() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cookieSettings = urlParams.get('intaCookieSettings');
+    if (cookieSettings) {
+        document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime + "; " + intCookieDomain + " ; path=/";
+    }
+};
+
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
@@ -2109,7 +2119,7 @@ function checkCookieStatus() {
                         if (node.getAttribute("type") === "text/blocked") {
                             node.addEventListener(
                                 "beforescriptexecute",
-                                (e) => beforeScriptExecuteListener(e,node)
+                                (e) => beforeScriptExecuteListener(e, node)
                             );
                         }
                     });
@@ -2146,11 +2156,11 @@ function checkCookieStatus() {
                         node.type = "text/javascript";
                     }
 
-                    
+
                     if (node.getAttribute("type") === "text/blocked") {
                         node.addEventListener(
                             "beforescriptexecute",
-                            (e) => beforeScriptExecuteListener(e,node)
+                            (e) => beforeScriptExecuteListener(e, node)
                         );
                     }
                     beforeScriptExecuteListener(null, node);
