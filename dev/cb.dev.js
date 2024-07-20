@@ -2134,7 +2134,13 @@ function saveINTCookieSettings(consent, type = null) {
     const MarketingCheckBox = document.querySelector("#marketing");
 
     if (MarketingCheckBox?.checked) {
-        window.allScripts.map((script) => {
+        gtag('consent', 'update', {
+            'ad_storage': 'granted',
+            'ad_user_data': 'granted',
+            'ad_personalization': 'granted',
+            'url_passthrough': true,
+        });
+        /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
                     document.querySelectorAll("script").forEach((script) => {
@@ -2146,9 +2152,15 @@ function saveINTCookieSettings(consent, type = null) {
                     })
                 })
             }
-        })
+        }) */
     } else {
-        window.allScripts.map((script) => {
+        gtag('consent', 'update', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'url_passthrough': true
+        });
+        /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
                     document.querySelectorAll("script").forEach((script) => {
@@ -2160,11 +2172,15 @@ function saveINTCookieSettings(consent, type = null) {
                     })
                 })
             }
-        })
+        }) */
     }
 
     if (FunctionalCheckbox?.checked) {
-        window.allScripts.map((script) => {
+        gtag('consent', 'update', {
+            'functionality_storage': 'granted',
+            'url_passthrough': true,
+        })
+        /* window.allScripts.map((script) => {
             if (script.type == "functional") {
                 script.scripts.forEach((src) => {
                     document.querySelectorAll("script").forEach((script) => {
@@ -2176,9 +2192,12 @@ function saveINTCookieSettings(consent, type = null) {
                     })
                 })
             }
-        })
+        }) */
     } else {
-        window.allScripts.map((script) => {
+        gtag('consent', 'update', {
+            'functionality_storage': 'denied',
+        })
+        /* window.allScripts.map((script) => {
             if (script.type == "functional") {
                 script.scripts.forEach((src) => {
                     document.querySelectorAll("script").forEach((script) => {
@@ -2190,7 +2209,7 @@ function saveINTCookieSettings(consent, type = null) {
                     })
                 })
             }
-        })
+        }) */
     }
 
     if (StaticsCheckBox?.checked) {
@@ -2202,7 +2221,7 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
 
-        window.allScripts.map((script) => {
+        /* window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
                     document.querySelectorAll("script").forEach((script) => {
@@ -2214,7 +2233,7 @@ function saveINTCookieSettings(consent, type = null) {
                     })
                 })
             }
-        })
+        }) */
     } else {
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
@@ -2223,7 +2242,7 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
 
-        window.allScripts.map((script) => {
+        /* window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
                     document.querySelectorAll("script").forEach((script) => {
@@ -2233,7 +2252,7 @@ function saveINTCookieSettings(consent, type = null) {
                     })
                 })
             }
-        })
+        }) */
     }
     dataLayer.push({ 'event': 'cookie_consent_update' })
 

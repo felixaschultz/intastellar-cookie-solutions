@@ -1955,6 +1955,7 @@ function checkCookieStatus() {
     const changePermission = document.getElementsByClassName(".intastellarCookie-settings__btn.--changePermission");
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
+
         mutations.forEach(({ addedNodes }) => {
             addedNodes.forEach((node) => {
 
