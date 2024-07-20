@@ -1520,36 +1520,12 @@ if (intaCookieConsents?.advertisementCookies) {
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 0;
 
-    allScripts.map((script) => {
-        if (script.type == "marketing") {
-            allScripts.scripts.forEach((src) => {
-                document.querySelectorAll("script").forEach((script) => {
-                    if (script.src == src.src || script.innerText.indexOf(src.src) > -1) {
-                        script.type = "text/javascript";
-                    }
-                })
-            })
-        }
-    })
-
 }
 
 if (intaCookieConsents?.staticsticCookies) {
     gtag('consent', 'update', {
         'analytics_storage': 'granted',
         'url_passthrough': true,
-    })
-
-    allScripts.map((script) => {
-        if (script.type == "statics") {
-            allScripts.scripts.forEach((src) => {
-                document.querySelectorAll("script").forEach((script) => {
-                    if (script.src == src.src || script.innerText.indexOf(src.src) > -1) {
-                        script.type = "text/javascript";
-                    }
-                })
-            })
-        }
     })
 }
 
