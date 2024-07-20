@@ -1356,7 +1356,7 @@ intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner
 intaStyleLink.media = 'all';
 intHead.insertBefore(intaStyleLink, document.currentScript.previousSibling);
 const intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" || window.INTA.settings.lang === undefined ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
-const allScripts = [
+const allScripts = window.allScripts = [
     {
         /* Analytics Scripts which are beeing blocked */
         type: "statics",
@@ -1524,7 +1524,7 @@ if (intaCookieConsents?.advertisementCookies) {
         if (script.type == "marketing") {
             allScripts.scripts.forEach((src) => {
                 document.querySelectorAll("script").forEach((script) => {
-                    if (script.src == src.src) {
+                    if (script.src == src.src || script.innerText.indexOf(src.src) > -1) {
                         script.type = "text/javascript";
                     }
                 })
@@ -1544,7 +1544,7 @@ if (intaCookieConsents?.staticsticCookies) {
         if (script.type == "statics") {
             allScripts.scripts.forEach((src) => {
                 document.querySelectorAll("script").forEach((script) => {
-                    if (script.src == src.src) {
+                    if (script.src == src.src || script.innerText.indexOf(src.src) > -1) {
                         script.type = "text/javascript";
                     }
                 })
@@ -1556,18 +1556,6 @@ if (intaCookieConsents?.staticsticCookies) {
 if (intaCookieConsents?.functionalCookies) {
     gtag('consent', 'update', {
         'functionality_storage': 'granted',
-    })
-
-    allScripts.map((script) => {
-        if (script.type == "functional") {
-            allScripts.scripts.forEach((src) => {
-                document.querySelectorAll("script").forEach((script) => {
-                    if (script.src == src.src) {
-                        script.type = "text/javascript";
-                    }
-                })
-            })
-        }
     })
 
 }
@@ -1618,6 +1606,7 @@ if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerN
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
     notRequired = new RegExp(m.join("|"), "ig");
 }
+window.notRequired = notRequired;
 let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
