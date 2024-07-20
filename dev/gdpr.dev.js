@@ -1522,8 +1522,12 @@ if (intaCookieConsents?.advertisementCookies) {
 
     allScripts.map((script) => {
         if (script.type == "marketing") {
-            allScripts.scripts.forEach((script) => {
-                script.type = "text/javascript";
+            allScripts.scripts.forEach((src) => {
+                document.querySelectorAll("script").forEach((script) => {
+                    if (script.src == src.src) {
+                        script.type = "text/javascript";
+                    }
+                })
             })
         }
     })
@@ -1538,8 +1542,12 @@ if (intaCookieConsents?.staticsticCookies) {
 
     allScripts.map((script) => {
         if (script.type == "statics") {
-            allScripts.scripts.forEach((script) => {
-                script.type = "text/javascript";
+            allScripts.scripts.forEach((src) => {
+                document.querySelectorAll("script").forEach((script) => {
+                    if (script.src == src.src) {
+                        script.type = "text/javascript";
+                    }
+                })
             })
         }
     })
@@ -1552,8 +1560,12 @@ if (intaCookieConsents?.functionalCookies) {
 
     allScripts.map((script) => {
         if (script.type == "functional") {
-            allScripts.scripts.forEach((script) => {
-                script.type = "text/javascript";
+            allScripts.scripts.forEach((src) => {
+                document.querySelectorAll("script").forEach((script) => {
+                    if (script.src == src.src) {
+                        script.type = "text/javascript";
+                    }
+                })
             })
         }
     })
