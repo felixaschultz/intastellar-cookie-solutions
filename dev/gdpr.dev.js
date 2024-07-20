@@ -1515,8 +1515,19 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_personalization': 'granted',
         'url_passthrough': true,
     });
+
+    // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 0;
+
+    allScripts.map((script) => {
+        if (script.type == "marketing") {
+            allScripts.scripts.forEach((script) => {
+                script.type = "text/javascript";
+            })
+        }
+    })
+
 }
 
 if (intaCookieConsents?.staticsticCookies) {
@@ -1524,11 +1535,27 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted',
         'url_passthrough': true,
     })
+
+    allScripts.map((script) => {
+        if (script.type == "statics") {
+            allScripts.scripts.forEach((script) => {
+                script.type = "text/javascript";
+            })
+        }
+    })
 }
 
 if (intaCookieConsents?.functionalCookies) {
     gtag('consent', 'update', {
         'functionality_storage': 'granted',
+    })
+
+    allScripts.map((script) => {
+        if (script.type == "functional") {
+            allScripts.scripts.forEach((script) => {
+                script.type = "text/javascript";
+            })
+        }
     })
 
 }
