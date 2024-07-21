@@ -928,12 +928,13 @@ window.addEventListener("load", function () {
                 }
                 document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaCookieSettings), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
 
-                const parent = e.target.parentElement.parentElement.parentElement.parentNode;
-                parent.insertBefore(newIframe, e.target.parentElement.parentElement.parentElement);
+                setTimeout(() => {
+                    const parent = e.target.parentElement.parentElement.parentElement.parentNode;
+                    parent.insertBefore(newIframe, e.target.parentElement.parentElement.parentElement);
 
-                // Step 3: Remove the existing element
-                parent.removeChild(e.target.parentElement.parentElement.parentElement);
-
+                    // Step 3: Remove the existing element
+                    parent.removeChild(e.target.parentElement.parentElement.parentElement);
+                }, 1000);
 
                 // Replace the old cookie with the new one
                 /* window.location.reload(); */
