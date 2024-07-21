@@ -914,17 +914,29 @@ window.addEventListener("load", function () {
         changePermission.forEach((btn) => {
             btn.addEventListener("click", (e) => {
                 const intaCookieSettings = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : intaConsentsObjectVariable.consents;
-
+                const newIframe = document.createElement("iframe");
                 let type = e.target.getAttribute("data-type");
                 if (type === "intFunctionalCookies") {
                     intaCookieSettings.functionalCookies = "checked";
+                    newIframe.src = e.target.parentElement.parentElement.parentElement.getAttribute("data-src");
                 } else if (type === "intMarketingCookies") {
                     intaCookieSettings.advertisementCookies = "checked";
+                    newIframe.src = e.target.parentElement.parentElement.parentElement.getAttribute("data-src");
                 } else if (type === "intStaticsticCookies") {
                     intaCookieSettings.staticsticCookies = "checked";
+                    newIframe.src = e.target.parentElement.parentElement.parentElement.getAttribute("data-src");
                 }
                 document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaCookieSettings), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
-                window.location.reload();
+
+                const parent = e.target.parentElement.parentElement.parentElement.parentNode;
+                parent.insertBefore(newIframe, e.target.parentElement.parentElement.parentElement);
+
+                // Step 3: Remove the existing element
+                parent.removeChild(e.target.parentElement.parentElement.parentElement);
+
+
+                // Replace the old cookie with the new one
+                /* window.location.reload(); */
             });
         });
 
