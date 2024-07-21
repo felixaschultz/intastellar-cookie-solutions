@@ -787,8 +787,6 @@ window.addEventListener("load", function () {
     trImage.title = "Intastellar Solutions cookie sharing library";
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
-    document.body.appendChild(trImage);
-
     gtag('set', {
         'user_id': (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid
     });
