@@ -927,7 +927,7 @@ window.addEventListener("load", function () {
                     newIframe.src = e.target.parentElement.parentElement.parentElement.getAttribute("data-src");
                 }
                 document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaCookieSettings), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
-
+                console.log("Cookie updated");
                 setTimeout(() => {
                     const parent = e.target.parentElement.parentElement.parentElement.parentNode;
                     parent.insertBefore(newIframe, e.target.parentElement.parentElement.parentElement);
