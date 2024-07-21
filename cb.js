@@ -934,7 +934,7 @@ window.addEventListener("load", function () {
 
                     // Step 3: Remove the existing element
                     parent.removeChild(e.target.parentElement.parentElement.parentElement);
-                    console.log(parent);
+                    console.log(JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents);
                 }, 1000);
 
                 // Replace the old cookie with the new one
