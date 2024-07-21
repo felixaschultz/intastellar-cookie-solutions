@@ -1952,48 +1952,12 @@ function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
+        requestAnimationFrame(() => {
+            mutations.forEach(({ addedNodes }) => {
+                addedNodes.forEach((node) => {
 
-        mutations.forEach(({ addedNodes }) => {
-            addedNodes.forEach((node) => {
-
-                if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
-                    allScripts.map((script) => {
-
-                        const buttonText = () => {
-                            if (script.type == "marketing") {
-                                scriptTypelang = {
-                                    danish: "marketing",
-                                    english: "advertisement",
-                                    german: "werbe"
-                                }
-                            } else if (script.type == "functional") {
-                                scriptTypelang = {
-                                    danish: "funktionelle",
-                                    english: "functional",
-                                    german: "funktionelle"
-                                }
-                            } else if (script.type == "statics") {
-                                scriptTypelang = {
-                                    danish: "statistiske",
-                                    english: "statics",
-                                    german: "statistische"
-                                }
-                            }
-
-                            return {
-                                danish: `Accepter ${scriptTypelang.danish} cookies`,
-                                english: `Accept ${scriptTypelang.english} cookies`,
-                                german: `Akzeptiere ${scriptTypelang.german} cookies`
-                            }
-                        }
-                        let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
-                        loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
-                    })
-                }
-
-                if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
-                    allScripts.map((script) => {
-                        addedNodes.forEach((tweet) => {
+                    if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
+                        allScripts.map((script) => {
 
                             const buttonText = () => {
                                 if (script.type == "marketing") {
@@ -2023,70 +1987,159 @@ function checkCookieStatus() {
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
-                            blockBlockQuotes(tweet, bannerContentMessage, script, buttonText, INTAlogo);
-                        })
-                    });
-                }
-
-
-
-                if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-                    || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
-                    if (node.nodeType === 1 && node.tagName === "LINK") {
-                        addedNodes.forEach((link) => {
-                            const linkSrc = link.href;
-                            if (notRequired.test(linkSrc)) {
-                                link.disabled = true;
-                            }
+                            loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
                         })
                     }
-                }
 
-                if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
-                    let src = node.src || "";
+                    if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
+                        allScripts.map((script) => {
+                            addedNodes.forEach((tweet) => {
+
+                                const buttonText = () => {
+                                    if (script.type == "marketing") {
+                                        scriptTypelang = {
+                                            danish: "marketing",
+                                            english: "advertisement",
+                                            german: "werbe"
+                                        }
+                                    } else if (script.type == "functional") {
+                                        scriptTypelang = {
+                                            danish: "funktionelle",
+                                            english: "functional",
+                                            german: "funktionelle"
+                                        }
+                                    } else if (script.type == "statics") {
+                                        scriptTypelang = {
+                                            danish: "statistiske",
+                                            english: "statics",
+                                            german: "statistische"
+                                        }
+                                    }
+
+                                    return {
+                                        danish: `Accepter ${scriptTypelang.danish} cookies`,
+                                        english: `Accept ${scriptTypelang.english} cookies`,
+                                        german: `Akzeptiere ${scriptTypelang.german} cookies`
+                                    }
+                                }
+                                let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA.settings.logo) ? window.INTA.settings.logo : null;
+                                blockBlockQuotes(tweet, bannerContentMessage, script, buttonText, INTAlogo);
+                            })
+                        });
+                    }
 
 
-                    node.removeAttribute("charset");
-                    addedNodes.forEach((node) => {
 
-                        src = node.src;
-                        if (src.indexOf(window.location.hostname) == -1) {
-                            window.foundScripts.push(src);
+                    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+                        || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
+                        if (node.nodeType === 1 && node.tagName === "LINK") {
+                            addedNodes.forEach((link) => {
+                                const linkSrc = link.href;
+                                if (notRequired.test(linkSrc)) {
+                                    link.disabled = true;
+                                }
+                            })
                         }
+                    }
 
-                        if (intaCookieConsents?.advertisementCookies === "checked" || intaCookieConsents?.functionalCookies === "checked" || intaCookieConsents?.staticsticCookies === "checked") {
-                            node.type = "text/javascript";
-                            return;
-                        }
-
+                    if (node.nodeType === 1 && node.tagName === "SCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.indexOf("window.INTA") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1 && node.innerText.toLowerCase().indexOf("chic_lite_data") == -1 && node.innerText.toLowerCase().indexOf("mailchimp_public_data") == -1 && node.innerText.toLowerCase().indexOf("monsterinsights_frontend") == -1) {
+                        let src = node.src || "";
 
 
-                        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-                            || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
-                            if (
-                                src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                        node.removeAttribute("charset");
+                        addedNodes.forEach((node) => {
+
+                            src = node.src;
+                            if (src.indexOf(window.location.hostname) == -1) {
+                                window.foundScripts.push(src);
+                            }
+
+                            if (intaCookieConsents?.advertisementCookies === "checked" || intaCookieConsents?.functionalCookies === "checked" || intaCookieConsents?.staticsticCookies === "checked") {
+                                node.type = "text/javascript";
+                                return;
+                            }
+
+
+
+                            if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+                                || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
+                                if (
+                                    src.indexOf(window.location.hostname) == -1
+                                    && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                                ) {
+                                    if (
+                                        notRequired.test(src)
+                                    ) {
+                                        node.type = "text/blocked";
+                                        node.defer = true;
+                                        node.async = true;
+
+                                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+
+                                        deleteAllCookies();
+                                    }
+                                } else if (src.indexOf(window.location.hostname) == -1
+                                    && src.indexOf("jquery") == 1) {
+                                    node.type = "text/javascript";
+                                    node.defer = false;
+                                    node.async = false;
+                                }
+
+                                if (
+                                    notRequired.test(node.innerText)
+                                ) {
+                                    node.defer = true;
+                                    node.async = true;
+                                    node.type = "text/blocked";
+                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                                    deleteAllCookies();
+                                }
+                            } else if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+                                || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
                             ) {
                                 if (
-                                    notRequired.test(src)
+                                    src.indexOf(window.location.hostname) == -1
+                                    && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+                                ) {
+                                    if (
+                                        notRequired.test(src)
+                                    ) {
+                                        node.type = "text/blocked";
+                                        node.defer = true;
+                                        node.async = true;
+                                        /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                                    }
+                                } else if (src.indexOf(window.location.hostname) == -1
+                                    && src.indexOf("jquery") == 1) {
+                                    node.type = "text/javascript";
+                                    node.defer = false;
+                                    node.async = false;
+                                }
+                                if (
+                                    notRequired.test(node.innerText)
+                                    && node.innerText.toLowerCase().indexOf("elementor") == -1
                                 ) {
                                     node.type = "text/blocked";
                                     node.defer = true;
                                     node.async = true;
-
                                     /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-
-                                    deleteAllCookies();
                                 }
-                            } else if (src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == 1) {
-                                node.type = "text/javascript";
-                                node.defer = false;
-                                node.async = false;
                             }
+
+                            if (node.getAttribute("type") === "text/blocked") {
+                                node.addEventListener(
+                                    "beforescriptexecute",
+                                    (e) => beforeScriptExecuteListener(e, node)
+                                );
+                            }
+                        });
+                    } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
+                        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+                            || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
 
                             if (
                                 notRequired.test(node.innerText)
+                                && node.innerText.toLowerCase().indexOf("elementor") == -1
                             ) {
                                 node.defer = true;
                                 node.async = true;
@@ -2094,37 +2147,25 @@ function checkCookieStatus() {
                                 /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                 deleteAllCookies();
                             }
-                        } else if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-                            || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
-                        ) {
-                            if (
-                                src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
-                            ) {
-                                if (
-                                    notRequired.test(src)
-                                ) {
-                                    node.type = "text/blocked";
-                                    node.defer = true;
-                                    node.async = true;
-                                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                }
-                            } else if (src.indexOf(window.location.hostname) == -1
-                                && src.indexOf("jquery") == 1) {
-                                node.type = "text/javascript";
-                                node.defer = false;
-                                node.async = false;
-                            }
+                        } else if (intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false") {
+
                             if (
                                 notRequired.test(node.innerText)
                                 && node.innerText.toLowerCase().indexOf("elementor") == -1
                             ) {
-                                node.type = "text/blocked";
                                 node.defer = true;
                                 node.async = true;
+                                node.type = "text/blocked";
                                 /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                            } else {
+                                /* node.parentElement.appendChild(node); */
                             }
+                        } else if (intaCookieConsents?.functionalCookies === "checked" &&
+                            intaCookieConsents?.advertisementCookies === "checked" &&
+                            intaCookieConsents?.staticsticCookies === "checked") {
+                            node.type = "text/javascript";
                         }
+
 
                         if (node.getAttribute("type") === "text/blocked") {
                             node.addEventListener(
@@ -2132,54 +2173,17 @@ function checkCookieStatus() {
                                 (e) => beforeScriptExecuteListener(e, node)
                             );
                         }
-                    });
-                } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
-                    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-                        || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
-
-                        if (
-                            notRequired.test(node.innerText)
-                            && node.innerText.toLowerCase().indexOf("elementor") == -1
-                        ) {
-                            node.defer = true;
-                            node.async = true;
-                            node.type = "text/blocked";
-                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                            deleteAllCookies();
-                        }
-                    } else if (intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false") {
-
-                        if (
-                            notRequired.test(node.innerText)
-                            && node.innerText.toLowerCase().indexOf("elementor") == -1
-                        ) {
-                            node.defer = true;
-                            node.async = true;
-                            node.type = "text/blocked";
-                            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                        } else {
-                            /* node.parentElement.appendChild(node); */
-                        }
-                    } else if (intaCookieConsents?.functionalCookies === "checked" &&
-                        intaCookieConsents?.advertisementCookies === "checked" &&
-                        intaCookieConsents?.staticsticCookies === "checked") {
-                        node.type = "text/javascript";
+                        beforeScriptExecuteListener(null, node);
                     }
-
-
-                    if (node.getAttribute("type") === "text/blocked") {
-                        node.addEventListener(
-                            "beforescriptexecute",
-                            (e) => beforeScriptExecuteListener(e, node)
-                        );
-                    }
-                    beforeScriptExecuteListener(null, node);
-                }
+                });
             });
         });
     });
 
     startObserving(observer, document.documentElement);
+    window.addEventListener("load", () => {
+        observer.disconnect();
+    });
     return observer;
 
 };
@@ -2188,7 +2192,6 @@ function startObserving(observer) {
         childList: !0,
         subtree: !0,
         attributes: true,
-        characterDataOldValue: true,
         attributeFilter: ["src", "href", "type"]
     })
 }
