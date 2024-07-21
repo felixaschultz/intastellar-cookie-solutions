@@ -927,13 +927,11 @@ window.addEventListener("load", function () {
                     newIframe.src = e.target.parentElement.parentElement.parentElement.getAttribute("data-src");
                 }
                 document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaCookieSettings), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
-                console.log("Cookie updated");
-                setTimeout(() => {
-                    const parent = e.target.parentElement.parentElement.parentElement.parentNode;
-                    parent.insertBefore(newIframe, e.target.parentElement.parentElement.parentElement);
 
+                const parent = e.target.parentElement.parentElement.parentElement.parentNode;
+                setTimeout(() => {
+                    parent.insertBefore(newIframe, e.target.parentElement.parentElement.parentElement);
                     // Step 3: Remove the existing element
-                    parent.removeChild(e.target.parentElement.parentElement.parentElement);
                     console.log(JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents);
                 }, 1000);
 
@@ -1971,7 +1969,7 @@ function updateConsents(consent, type = null) {
     })
 
     let googleAdsScript = document.querySelector("script[src*='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']")?.src;
-    googleAdsScript = googleAdsScript.split("client=")[1].split("&")[0];
+    googleAdsScript = googleAdsScript?.split("client=")[1]?.split("&")[0];
     if (consent == "all") {
         let staticCookies = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
         let marketingCookie = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
