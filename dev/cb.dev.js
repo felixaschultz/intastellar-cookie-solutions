@@ -913,15 +913,17 @@ window.addEventListener("load", function () {
 
         changePermission.forEach((btn) => {
             btn.addEventListener("click", (e) => {
+                const intaCookieSettings = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : intaConsentsObjectVariable.consents;
+
                 let type = e.target.getAttribute("data-type");
                 if (type === "intFunctionalCookies") {
-                    intaConsentsObjectVariable.functionalCookies = "checked";
+                    intaCookieSettings.functionalCookies = "checked";
                 } else if (type === "intMarketingCookies") {
-                    intaConsentsObjectVariable.advertisementCookies = "checked";
+                    intaCookieSettings.advertisementCookies = "checked";
                 } else if (type === "intStaticsticCookies") {
-                    intaConsentsObjectVariable.staticsticCookies = "checked";
+                    intaCookieSettings.staticsticCookies = "checked";
                 }
-                document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(window.intaCookieConsents), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
+                document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaCookieSettings), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
                 window.location.reload();
             });
         });
