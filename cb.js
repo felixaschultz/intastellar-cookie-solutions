@@ -934,6 +934,7 @@ window.addEventListener("load", function () {
 
                     // Step 3: Remove the existing element
                     parent.removeChild(e.target.parentElement.parentElement.parentElement);
+                    console.log(parent);
                 }, 1000);
 
                 // Replace the old cookie with the new one
