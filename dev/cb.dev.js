@@ -907,6 +907,25 @@ window.addEventListener("load", function () {
             || MarketingCheckBox?.checked === true
             ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
 
+        const ness = document.getElementsByClassName("intastellarCookieBanner__accpetNecssery");
+        const all = document.getElementsByClassName("intastellarCookieSettings--acceptAll");
+        const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
+
+        changePermission.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                let type = e.target.getAttribute("data-type");
+                if (type === "intFunctionalCookies") {
+                    intaConsentsObjectVariable.functionalCookies = "checked";
+                } else if (type === "intMarketingCookies") {
+                    intaConsentsObjectVariable.advertisementCookies = "checked";
+                } else if (type === "intStaticsticCookies") {
+                    intaConsentsObjectVariable.staticsticCookies = "checked";
+                }
+                document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(window.intaCookieConsents), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
+                window.location.reload();
+            });
+        });
+
         document.querySelector(".--save").addEventListener("click", () => {
             const accepted = [];
             if (FunctionalCheckbox?.checked) {

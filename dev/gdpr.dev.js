@@ -18,7 +18,7 @@ let intastellarShowHideDetailsText = "Show details";
 let adsbygoogle = window.adsbygoogle || [];
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
-const intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
+const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 let poweredBy = "";
 let intaConsentsObjectVariable = {
@@ -1946,13 +1946,10 @@ const beforeScriptExecuteListener = function (event, node) {
     );
 };
 
+/* - - - Cookie banner settings btn - - - */
+
 function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
-
-    /* - - - Cookie banner settings btn - - - */
-    const ness = document.getElementsByClassName(".intastellarCookieBanner__accpetNecssery");
-    const all = document.getElementsByClassName(".intastellarCookieSettings--acceptAll");
-    const changePermission = document.getElementsByClassName(".intastellarCookie-settings__btn.--changePermission");
     /* - - - Observer - - - */
     const observer = new MutationObserver((mutations) => {
 
