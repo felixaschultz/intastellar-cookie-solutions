@@ -101,8 +101,6 @@ function setIntastellarPartnerDomain() {
         intastellarSharingIframe.style.position = "absolute";
         intastellarSharingIframe.style.top = "-100%";
         intastellarSharingIframe.style.left = "-100%";
-
-        console.log("Partner domain: ", window.INTA.settings.partnerDomain);
         //document.body.appendChild(intastellarSharingIframe);
 
     }
@@ -767,7 +765,7 @@ window.addEventListener("load", function () {
         const intastellariframe = document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]");
         window.addEventListener("message", function (event) {
             if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
-            if (event.data === "ready" && intaConsentsObjectVariable.sharingDomains.length > 0 && intaConsentsObjectVariable.sharingDomains.includes(domain)) {
+            if (event.data === "ready" && intaConsentsObjectVariable.sharingDomains.length > 0 && intaConsentsObjectVariable.sharingDomains.includes(window.location.host)) {
                 intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
             }
 
