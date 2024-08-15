@@ -1475,7 +1475,7 @@ window.addEventListener("load", function () {
         window.addEventListener("message", (e) => {
             if (e.data == "ready") {
                 document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                    .postMessage(JSON.stringify(IntastellarCookieConsent), "*");
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
             }
             if (e.data) {
                 const sharedCookies = e.data;
