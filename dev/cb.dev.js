@@ -42,7 +42,7 @@ const moreSettingsContent = document.createElement("section");
 const moreintHeader = document.createElement("intheader");
 const moreContentText = document.createElement("section");
 const moreFooter = document.createElement("footer");
-const intaconsents = document.createElement("intastellar-consents");
+const intaconsents = document.createElement("intastellarconsents");
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
@@ -93,43 +93,30 @@ function setIntastellarPartnerDomain() {
     if (window.INTA.settings.partnerDomain === null) return
 
     if (window.INTA.settings?.partnerDomain?.length > 0) {
-        window.INTA.settings?.partnerDomain?.forEach(function (partner) {
-            const partnerDomainIframe = document.createElement("iframe");
-            partnerDomainIframe.id = "intastellarCrossSiteCheck";
-            partnerDomainIframe.src = "https://" + partner + "?intastellarPartners=" + btoa(JSON.stringify({
-                int_staticsticCookies: intaCookieConsents?.staticsticCookies,
-                int_FunctionalCookies: intaCookieConsents?.functionalCookies,
-                int_hideCookieBannerName: getCookie(int_hideCookieBannerName),
-                int_marketingCookies: intaCookieConsents?.advertisementCookies,
-                uid: intaConsentsObjectVariable.uid
-            }));
+        const intastellarSharingIframe = document.createElement("iframe");
+        // intastellarSharingIframe.src = "https://consents.cdn.intastellarsolutions.com/cookieSharingIframe.html";
+        intastellarSharingIframe.src = "/cookieSharingIframe.html";
+        intastellarSharingIframe.id = "intastellarCrossSiteCheck";
+        intastellarSharingIframe.style.display = "none";
+        intastellarSharingIframe.style.position = "absolute";
+        intastellarSharingIframe.style.top = "-100%";
+        intastellarSharingIframe.style.left = "-100%";
 
-            const partnerDomainIframeNoScript = document.createElement("noscript");
-
-            const getIntastellarPartnerScript = document.createElement("script");
-            getIntastellarPartnerScript.async = true;
-            getIntastellarPartnerScript.src = "https://consent.intastellarsolutions.com/getPartner.js?v=1." + new Date().getTime();
-            partnerDomainIframe.style.display = "none";
-            partnerDomainIframeNoScript.appendChild(partnerDomainIframe);
-            if (!window.location.host.includes(partner)) {
-                document.body.appendChild(partnerDomainIframe);
-            }
-        })
+        console.log("Partner domain: ", window.INTA.settings.partnerDomain);
+        document.body.appendChild(intastellarSharingIframe);
+        if (document.getElementById("intastellarCrossSiteCheck") != null) {
+            const intastellariframe = document.getElementById("intastellarCrossSiteCheck");
+            window.addEventListener("message", function (event) {
+                if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
+                if (event.data === "ready") {
+                    intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
+                }
+            });
+        }
     }
 }
-
-/* setIntastellarPartnerDomain(); */
-if (document.getElementById("intastellarCrossSiteCheck") != null) {
-    const instatellariframe = document.getElementById("intastellarCrossSiteCheck");
-    const iframeDoc = instatellariframe.contentDocument || instatellariframe.contentWindow.document;
-    if (iframeDoc.readyState == 'complete') {
-        //iframe.contentWindow.alert("Hello");
-        instatellariframe.contentWindow.addEventListener("load", function () {
-
-        })
-    }
-}
-
+setIntastellarPartnerDomain();
+IntastellarCookieConsent.inizilize(intaconsents)
 /* - - - Set the intastellarCookieLanguageuage dependent messages */
 
 const messages = {
@@ -774,10 +761,7 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
 }
 
 window.addEventListener("load", function () {
-    IntastellarCookieConsent.inizilize(
-        intaconsents
-    )
-        (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
+    (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
@@ -785,6 +769,9 @@ window.addEventListener("load", function () {
     trImage.style.display = "none";
     trImage.title = "Intastellar Solutions cookie sharing library";
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
+
+    document.body.appendChild(trImage);
+    console.log(trImage);
 
     gtag('set', {
         'user_id': (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid
@@ -815,6 +802,14 @@ window.addEventListener("load", function () {
         window.INTA.settings?.partnerDomain?.forEach((domain) => {
             intaConsentsObjectVariable.sharingDomains.push(domain);
         })
+
+        if (window.INTA.settings?.partnerDomain) {
+            dataLayer.push({
+                "linker": {
+                    "domains": window.INTA.settings?.partnerDomain
+                }
+            });
+        }
 
         if (getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName).indexOf("__inta") == -1) {
             document.querySelector(".intastellarCookieConstents").classList.add("--active");

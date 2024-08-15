@@ -1,60 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intastellar Cookie Sharing infos</title>
 </head>
+
 <body>
     <script>
         /* (function() {
             "use strict"; */
-            function getCookie(cname) {
-                var name = cname + "=";
-                var decodedCookie = decodeURIComponent(document.cookie);
-                var ca = decodedCookie.split(";");
-                for (var i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) === " ") {
-                        c = c.substring(1);
-                    }
-
-                    /* console.log(localStorage.getItem(cname), cname); */
-
-                    if (c.indexOf(name) === 0 && localStorage.getItem(cname) === null) {
-                        return c.substring(name.length, c.length);
-                    }else if(localStorage.getItem(cname) !== null){
-                        return localStorage.getItem(cname);
-                    }
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(";");
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === " ") {
+                    c = c.substring(1);
                 }
-                return "";
+
+                /* console.log(localStorage.getItem(cname), cname); */
+
+                if (c.indexOf(name) === 0 && localStorage.getItem(cname) === null) {
+                    return c.substring(name.length, c.length);
+                } else if (localStorage.getItem(cname) !== null) {
+                    return localStorage.getItem(cname);
+                }
             }
+            return "";
+        }
 
-            window.addEventListener("message", (event) => {
-                const origin = event.origin || event.originalEvent.origin;
-                /* localStorage.setItem("cookieSharing", JSON.stringify(event.data)); */
-                const d = new Date();
-                const daysExpire = 1;
-                d.setTime(d.getTime()+(daysExpire * 24 * 60 * 60 * 1000));
-                var expires = "expires=" + d.toGMTString();
+        window.addEventListener("message", (event) => {
+            const origin = event.origin || event.originalEvent.origin;
+            console.log(event.data, origin);
+
+            localStorage.setItem("cookieSharing", event.data);
+
+            if (event.data == "you´re open to share with me") {
+                window.parent.postMessage({
+                    cookieSharing: event.data,
+                }, "*");
+            }
+            /* if(event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))){
                 
-                if(event.data.cookieSharing !== undefined){
-                    document.cookie = "cookieSharing=" + event.data.cookieSharing + ";" + expires + ";path=/; SameSite=None; Secure";
-                }
-                
-                if(event.data == "you´re open to share with me"){
-                    window.parent.postMessage({
-                        cookieSharing: event.data,
-                    }, "*");
-                }
-                /* if(event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))){
-                    
-                } */
+            } */
 
-            });
+        });
 
-            window.parent.postMessage("ready", "*");
+        window.parent.postMessage("ready", "*");
         /* })(); */
     </script>
 </body>
+
 </html>
