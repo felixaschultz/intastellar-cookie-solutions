@@ -772,7 +772,7 @@ window.addEventListener("load", function () {
             if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
                 const intastellarUserGivingConsents = event.data.cookieSharing;
                 document.cookie =
-                    int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intastellarUserGivingConsents), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
+                    int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(intastellarUserGivingConsents, randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
                     "; path=/; " +
                     intCookieDomain +
                     "";
