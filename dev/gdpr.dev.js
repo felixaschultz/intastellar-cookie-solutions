@@ -2218,24 +2218,21 @@ function clearLocalStorage(ls) {
             for (let i = 0; i < lsA.length; i++) {
                 let item = localStorage.getItem(lsA[i]);
                 let itemName = lsA[i];
-                /* localStorage.clear();
-                sessionStorage.clear(); */
+                localStorage.clear();
+                sessionStorage.clear();
                 if (item != undefined || item != null) {
                     localStorage.setItem(itemName, item);
                 }
             }
         } else {
-            /* localStorage.clear();
-            sessionStorage.clear(); */
+            localStorage.clear();
+            sessionStorage.clear();
         }
     }
 }
-/* checkCookieStatus(); */
-if (!document.currentScript.async) {
-    checkCookieStatus();
-}
 
-if (document.currentScript.async) {
+
+document.currentScript.addEventListener("load", () => {
     checkCookieStatus();
-    intaSetCookieSettings();
-}
+    deleteAllCookies();
+});
