@@ -102,20 +102,21 @@ function setIntastellarPartnerDomain() {
         intastellarSharingIframe.style.top = "-100%";
         intastellarSharingIframe.style.left = "-100%";
 
+        console.log("Partner domain: ", window.INTA.settings.partnerDomain);
         document.body.appendChild(intastellarSharingIframe);
+        if (document.getElementById("intastellarCrossSiteCheck") != null) {
+            const intastellariframe = document.getElementById("intastellarCrossSiteCheck");
+            window.addEventListener("message", function (event) {
+                if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
+                if (event.data === "ready") {
+                    intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
+                }
+            });
+        }
     }
 }
 setIntastellarPartnerDomain();
-if (document.getElementById("intastellarCrossSiteCheck") != null) {
-    const intastellariframe = document.getElementById("intastellarCrossSiteCheck");
-    window.addEventListener("message", function (event) {
-        if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
-        if (event.data === "ready") {
-            intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
-        }
-    });
-}
-
+IntastellarCookieConsent.inizilize(intaconsents)
 /* - - - Set the intastellarCookieLanguageuage dependent messages */
 
 const messages = {
