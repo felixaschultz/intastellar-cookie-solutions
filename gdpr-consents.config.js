@@ -10,15 +10,15 @@ window.INTA = {
         text: false,
         requiredCookies: [
             {
-              cookie: "region",
-              domain: "cykelfaergen.info",
-              type: "functional",
-              purpose: "Used to store the user's region",
+                cookie: "region",
+                domain: "cykelfaergen.info",
+                type: "functional",
+                purpose: "Used to store the user's region",
             },
             {
-              cookie: "modal",
-              domain: "cykelfaergen.info",
-              purpose: "Used to store users choice of modal",
+                cookie: "modal",
+                domain: "cykelfaergen.info",
+                purpose: "Used to store users choice of modal",
             }
         ],
         partnerDomain: [
@@ -34,10 +34,10 @@ window.INTA = {
             on: true,
             url: "https://www.intastellarsolutions.com/about/legal/california-consumer-privacy-act",
             collection: [
-                    "Email",
-                    "Name",
-                    "Phone number"
-                ]
+                "Email",
+                "Name",
+                "Phone number"
+            ]
         },
         dev: true,
         gcm: true
