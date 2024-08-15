@@ -770,6 +770,16 @@ window.addEventListener("load", function () {
             if (event.data === "ready") {
                 intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
             }
+
+            if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
+                const intastellarUserGivingConsents = event.data.cookieSharing;
+
+                document.cookie =
+                    int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intastellarUserGivingConsents), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
+                    "; path=/; " +
+                    intCookieDomain +
+                    "";
+            }
         });
     }
 
@@ -1087,6 +1097,7 @@ window.addEventListener("load", function () {
                     if (e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intastellarShared), "*");
+
                 })
 
                 gtag('consent', 'update', {

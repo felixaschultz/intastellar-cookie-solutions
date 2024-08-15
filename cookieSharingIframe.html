@@ -34,9 +34,17 @@
 
         window.addEventListener("message", (event) => {
             const origin = event.origin || event.originalEvent.origin;
-            console.log(event.data, origin);
+            const localStorageData = localStorage.getItem("cookieSharing");
 
-            localStorage.setItem("cookieSharing", event.data);
+            if (event.data === localStorageData) {
+                if (event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))) {
+                    window.parent.postMessage({
+                        cookieSharing: localStorageData,
+                    }, "*");
+                }
+            } else {
+                localStorage.setItem("cookieSharing", event.data);
+            }
 
             if (event.data == "you´re open to share with me") {
                 window.parent.postMessage({
