@@ -773,12 +773,11 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
     })
 }
 
-IntastellarCookieConsent.inizilize(
-    intaconsents
-)
-
 window.addEventListener("load", function () {
-    (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
+    IntastellarCookieConsent.inizilize(
+        intaconsents
+    )
+        (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
     const trImage = document.createElement("iframe");
@@ -1730,6 +1729,7 @@ function isURL(str) {
             pattern.test(str) && str.indexOf("cookie") != -1 ||
             pattern.test(str) && str.indexOf("privat") != -1 ||
             pattern.test(str) && str.indexOf("privacy") != -1 ||
+            pattern.test(str) && str.indexOf("conditions") != -1 ||
             pattern.test(str) && str.indexOf("datenschutz") != -1 ||
             pattern.test(str) && str.indexOf("handelsbetingelser") != -1) {
             return true;
