@@ -103,16 +103,8 @@ function setIntastellarPartnerDomain() {
         intastellarSharingIframe.style.left = "-100%";
 
         console.log("Partner domain: ", window.INTA.settings.partnerDomain);
-        document.body.appendChild(intastellarSharingIframe);
-        if (document.getElementById("intastellarCrossSiteCheck") != null) {
-            const intastellariframe = document.getElementById("intastellarCrossSiteCheck");
-            window.addEventListener("message", function (event) {
-                if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
-                if (event.data === "ready") {
-                    intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
-                }
-            });
-        }
+        //document.body.appendChild(intastellarSharingIframe);
+
     }
 }
 setIntastellarPartnerDomain();
@@ -771,7 +763,15 @@ window.addEventListener("load", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
-    console.log(trImage);
+    if (document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]") != null) {
+        const intastellariframe = document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]");
+        window.addEventListener("message", function (event) {
+            if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
+            if (event.data === "ready") {
+                intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
+            }
+        });
+    }
 
     gtag('set', {
         'user_id': (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid
