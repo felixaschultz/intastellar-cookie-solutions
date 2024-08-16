@@ -106,12 +106,6 @@ function setIntastellarPartnerDomain() {
     }
 }
 
-window.addEventListener("load", function () {
-    console.log("Intastellar Cookie Consent loaded");
-    setIntastellarPartnerDomain();
-    IntastellarCookieConsent.inizilize(intaconsents);
-});
-
 /* - - - Set the intastellarCookieLanguageuage dependent messages */
 
 const messages = {
@@ -766,6 +760,8 @@ window.addEventListener("load", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
+    setIntastellarPartnerDomain();
+    IntastellarCookieConsent.inizilize(intaconsents);
     if (document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]") != null) {
         const intastellariframe = document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]");
         window.addEventListener("message", function (event) {
@@ -1053,7 +1049,7 @@ window.addEventListener("load", function () {
                     'ad_personalization': 'granted',
                     'url_passthrough': true,
                 });
-                dataLayer.push({ 'event': 'cookie_consent_update' })
+                dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -1111,7 +1107,7 @@ window.addEventListener("load", function () {
                     'ad_personalization': 'granted',
                     'url_passthrough': true,
                 });
-                dataLayer.push({ 'event': 'cookie_consent_update' })
+                dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -1160,7 +1156,7 @@ window.addEventListener("load", function () {
                     'ad_personalization': 'denied',
                     'url_passthrough': true,
                 });
-                dataLayer.push({ 'event': 'cookie_consent_update' })
+                dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 /*window.location.reload();*/
 
             });
@@ -1251,7 +1247,7 @@ window.addEventListener("load", function () {
                         'ad_personalization': 'denied',
                         'url_passthrough': true,
                     });
-                    dataLayer.push({ 'event': 'cookie_consent_update' })
+                    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("denied");
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
@@ -1305,7 +1301,7 @@ window.addEventListener("load", function () {
                         'ad_personalization': 'granted',
                         'url_passthrough': true,
                     });
-                    dataLayer.push({ 'event': 'cookie_consent_update' })
+                    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
@@ -1422,7 +1418,7 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
 
-                    dataLayer.push({ 'event': 'cookie_consent_update' })
+                    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     /*window.location.reload();*/
                 });
             });
@@ -1473,7 +1469,7 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
 
-                    dataLayer.push({ 'event': 'cookie_consent_update' })
+                    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
@@ -2292,13 +2288,13 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     }
-    dataLayer.push({ 'event': 'cookie_consent_update' })
 
     intaConsentsObjectVariable.consents = {
         staticsticCookies: (StaticsCheckBox?.checked) ? "checked" : false,
         functionalCookies: (FunctionalCheckbox?.checked) ? "checked" : false,
         advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
     };
+    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
     intaConsentsObjectVariable.time = new Date().getTime()
 
     document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +

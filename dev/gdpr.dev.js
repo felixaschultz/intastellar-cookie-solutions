@@ -2242,6 +2242,6 @@ function clearLocalStorage(ls) {
 
 
 document.currentScript.addEventListener("load", () => {
-    checkCookieStatus();
     deleteAllCookies();
+    checkCookieStatus();
 });
