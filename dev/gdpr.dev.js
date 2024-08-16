@@ -42,7 +42,16 @@ const IntastellarCookieConsent = {
         document.querySelector("html").classList.add("noScroll");
     },
     inizilize: function (template) {
-        document.body.append(template);
+        // The cookie banner template is only sometimes added to the DOM event
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                document.body.append(template);
+            });
+        } else {
+            document.body.append(template);
+        }
+
     }
 }
 
