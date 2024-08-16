@@ -749,6 +749,9 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
     })
 }
 
+setIntastellarPartnerDomain();
+IntastellarCookieConsent.inizilize(intaconsents);
+
 window.addEventListener("load", function () {
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
@@ -760,8 +763,6 @@ window.addEventListener("load", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
-    setIntastellarPartnerDomain();
-    IntastellarCookieConsent.inizilize(intaconsents);
     if (document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]") != null) {
         const intastellariframe = document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]");
         window.addEventListener("message", function (event) {
