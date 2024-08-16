@@ -149,7 +149,7 @@ if (
     }
     document.head.insertBefore(configScript, document.currentScript);
 }
-document.head.appendChild(intastellarCreateBanner);
+document.head.insertBefore(intastellarCreateBanner, document.currentScript)
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
