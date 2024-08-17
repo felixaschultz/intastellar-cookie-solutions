@@ -125,7 +125,9 @@ if (
     document.head.insertBefore(configScript, document.currentScript);
 }
 // Adding the script to the head
-document.head.insertBefore(intastellarCreateBanner, document.currentScript)
+setTimeout(() => {
+    document.head.insertBefore(intastellarCreateBanner, document.currentScript)
+}, 500);
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
