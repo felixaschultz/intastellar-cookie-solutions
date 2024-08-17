@@ -41,11 +41,13 @@ const IntastellarCookieConsent = {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
         document.querySelector("html").classList.add("noScroll");
     },
-    inizilize: function (template) {
+    initialize: function (template) {
         // The cookie banner template is only sometimes added to the DOM event
-
+        console.log(template, document.readyState);
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
+            console.log("Document is loading");
+            document.addEventListener('load', () => {
+                console.log("Document is loaded");
                 document.body.append(template);
             });
         } else {
@@ -124,10 +126,12 @@ const intastellarDevMode = (function () {
 
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-intastellarCreateBanner.async = true;
 if (intastellarDevMode) {
     intastellarCreateBanner.src = "../../dev/cb.dev.js";
 }
+// Adding the script to the head
+document.head.insertBefore(intastellarCreateBanner, document.currentScript)
+
 /* Checking if config file needs to be loaded */
 if (
     document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
@@ -140,16 +144,8 @@ if (
     const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
     const configScript = document.createElement("script");
     configScript.src = intastellarDefaultConfigFile;
-
-    if (document.currentScript.async) {
-        configScript.async = false;
-        /* console.log("Executing asynchronously"); */
-    } else {
-        /* console.log("Executing synchronously"); */
-    }
     document.head.insertBefore(configScript, document.currentScript);
 }
-document.head.insertBefore(intastellarCreateBanner, document.currentScript)
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
@@ -2248,9 +2244,5 @@ function clearLocalStorage(ls) {
         }
     }
 }
-
-
-document.currentScript.addEventListener("load", () => {
-    deleteAllCookies();
-    checkCookieStatus();
-});
+deleteAllCookies();
+checkCookieStatus();

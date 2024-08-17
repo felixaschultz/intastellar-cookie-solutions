@@ -749,9 +749,6 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
     })
 }
 
-setIntastellarPartnerDomain();
-IntastellarCookieConsent.inizilize(intaconsents);
-
 window.addEventListener("load", function () {
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
@@ -1811,6 +1808,9 @@ xhr.onload = function () {
 
 xhr.open("GET", "https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/privacy-policy?lang=" + (window?.INTA?.settings === undefined || window?.INTA?.settings.lang === "auto" || window?.INTA?.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window?.INTA?.settings.language == "german" ? "de" : window?.INTA?.settings.language == "danish" ? "da" : window?.INTA?.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang")) + "&v=" + new Date().getTime());
 xhr.send();
+setIntastellarPartnerDomain();
+console.log(intaconsents)
+IntastellarCookieConsent.initialize(intaconsents);
 
 function showPrivacy() {
     document.querySelector(".intLearnMoreBtn").style.display = "none";
