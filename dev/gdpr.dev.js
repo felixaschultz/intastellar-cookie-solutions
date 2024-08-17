@@ -109,8 +109,6 @@ intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if (intastellarDevMode) {
     intastellarCreateBanner.src = "../../dev/cb.dev.js";
 }
-// Adding the script to the head
-document.head.insertBefore(intastellarCreateBanner, document.currentScript)
 
 /* Checking if config file needs to be loaded */
 if (
@@ -126,6 +124,8 @@ if (
     configScript.src = intastellarDefaultConfigFile;
     document.head.insertBefore(configScript, document.currentScript);
 }
+// Adding the script to the head
+document.head.insertBefore(intastellarCreateBanner, document.currentScript)
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
