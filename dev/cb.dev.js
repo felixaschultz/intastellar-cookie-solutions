@@ -1742,6 +1742,24 @@ function isURL(str) {
     }
 }
 
+const IntastellarCookieConsent = {
+    renew: function () {
+        document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        document.querySelector("html").classList.add("noScroll");
+    },
+    initialize: function (template) {
+        // The cookie banner template is only sometimes added to the DOM event
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                document.body.append(template);
+            });
+        } else {
+            document.body.append(template);
+        }
+
+    }
+}
+
 function isCCPAURL(str) {
     const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
         '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -1809,7 +1827,6 @@ xhr.onload = function () {
 xhr.open("GET", "https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/privacy-policy?lang=" + (window?.INTA?.settings === undefined || window?.INTA?.settings.lang === "auto" || window?.INTA?.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window?.INTA?.settings.language == "german" ? "de" : window?.INTA?.settings.language == "danish" ? "da" : window?.INTA?.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang")) + "&v=" + new Date().getTime());
 xhr.send();
 setIntastellarPartnerDomain();
-console.log(intaconsents)
 IntastellarCookieConsent.initialize(intaconsents);
 
 function showPrivacy() {

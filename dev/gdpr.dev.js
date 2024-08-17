@@ -36,26 +36,6 @@ let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
 const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
-const IntastellarCookieConsent = {
-    renew: function () {
-        document.querySelector(".intastellarCookieConstents").classList.add("--active");
-        document.querySelector("html").classList.add("noScroll");
-    },
-    initialize: function (template) {
-        // The cookie banner template is only sometimes added to the DOM event
-        console.log(template, document.readyState);
-        if (document.readyState === 'loading') {
-            console.log("Document is loading");
-            document.addEventListener('DOMContentLoaded', () => {
-                console.log("Document is loaded");
-                document.body.append(template);
-            });
-        } else {
-            document.body.append(template);
-        }
-
-    }
-}
 
 if (window.INTA === undefined) {
     window.INTA = {
