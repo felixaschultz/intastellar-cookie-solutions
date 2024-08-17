@@ -46,7 +46,7 @@ const IntastellarCookieConsent = {
         console.log(template, document.readyState);
         if (document.readyState === 'loading') {
             console.log("Document is loading");
-            document.addEventListener('load', () => {
+            document.addEventListener('DOMContentLoaded', () => {
                 console.log("Document is loaded");
                 document.body.append(template);
             });
