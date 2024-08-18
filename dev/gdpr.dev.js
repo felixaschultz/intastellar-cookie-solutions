@@ -1096,7 +1096,7 @@ inta_marketingCookieList.push({
 /* - - - List of functional cookies - - - */
 const inta_functionalCookieList = [];
 inta_functionalCookieList.push({
-    vendor: (Window.INTA?.settings?.company) ? Window.INTA?.settings?.company : window.location.host,
+    vendor: (window.INTA?.settings?.company) ? window.INTA?.settings?.company : window.location.host,
     cookies: [
         {
             cookie: "language",
@@ -1307,6 +1307,7 @@ window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
     }
 });
 const int__cookiesToKeep = [...requiredToKeep.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
+console.log(int__cookiesToKeep);
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
