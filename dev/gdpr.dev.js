@@ -1268,7 +1268,6 @@ window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
                     purpose: cookie?.purpose,
                     domain: cookie?.domain
                 });
-                requiredToKeep.push(vendor);
             }
         });
     } else if (cookie.type === "statistic") {
