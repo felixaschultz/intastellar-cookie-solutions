@@ -133,7 +133,7 @@ const intastellarSupportedLanguages = {
     english: {
         saveSettings: "Decline All",
         necessary: { // Object for cookie info
-            title: "Strictly necessary", //"Necessary Cookies:",
+            title: "Necessary", //"Necessary Cookies:",
             description: "Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.",
         },
         functional: {
