@@ -1732,6 +1732,7 @@ function isURL(str) {
             pattern.test(str) && str.indexOf("privacy") != -1 ||
             pattern.test(str) && str.indexOf("conditions") != -1 ||
             pattern.test(str) && str.indexOf("datenschutz") != -1 ||
+            pattern.test(str) && str.indexOf("politica") != -1 ||
             pattern.test(str) && str.indexOf("handelsbetingelser") != -1) {
             return true;
         } else {
