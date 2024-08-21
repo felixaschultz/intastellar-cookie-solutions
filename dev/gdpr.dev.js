@@ -113,6 +113,7 @@ if (intastellarDevMode) {
 /* Checking if config file needs to be loaded */
 if (
     document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
+    || window.INTA === undefined
 ) {
     // Get the host and remove "www." prefix
     let host = window.location.host.replace("www.", "");
