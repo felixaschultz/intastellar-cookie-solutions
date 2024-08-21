@@ -115,9 +115,9 @@ if (
     document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
     || window.INTA === undefined
 ) {
-    // Get the host and remove "www." prefix
-    let host = window.location.host.replace("www.", "");
-
+    // Get the host and remove all subdomains
+    let host = window.location.host;
+    host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
     // Remove the port if it exists
     host = host.replace(/:\d+$/, "");
     const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
