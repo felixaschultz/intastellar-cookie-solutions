@@ -731,7 +731,7 @@ cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings_
 cookieSettings.appendChild(cookieSettingsContent);
 
 if (window?.INTA?.settings.advanced) {
-    banner.appendChild(cookieSettings);
+    //banner.appendChild(cookieSettings);
 }
 
 banner.setAttribute("class", "intastellarCookie-settings");
