@@ -1752,7 +1752,9 @@ const IntastellarCookieConsent = {
         // The cookie banner template is only sometimes added to the DOM event
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
-                document.body.append(template);
+                setTimeout(() => {
+                    document.body.append(template);
+                }, 500);
             });
         } else {
             document.body.append(template);
