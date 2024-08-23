@@ -1352,7 +1352,19 @@ intaStyleLink.type = 'text/css';
 intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner.css?v=' + new Date().getTime();
 intaStyleLink.media = 'all';
 intHead.insertBefore(intaStyleLink, document.currentScript.previousSibling);
-const intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA?.settings === undefined || window.INTA?.settings?.lang === "auto" || window.INTA?.settings?.lang === "" || window.INTA?.settings?.lang === undefined ? document.querySelector("html").getAttribute("lang") : window.INTA?.settings?.language == "german" ? "de" : window.INTA?.settings?.language == "danish" ? "da" : window.INTA?.settings?.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
+window.INTA.settings.lang = window.INTA?.settings?.language;
+const intastellarCookieLanguage
+    = window.intastellarCookieLanguage
+    = window.INTA?.settings === undefined
+        || window.INTA?.settings?.lang === "auto"
+        || window.INTA?.settings?.lang === ""
+        || window.INTA?.settings?.lang === undefined
+        ? document.querySelector("html").getAttribute("lang")
+        : window.INTA?.settings?.language == "german" ? "de"
+            : window.INTA?.settings?.language == "danish" ? "da"
+                : window.INTA?.settings?.language == "english" ? "en"
+                    : document.querySelector("html").getAttribute("lang");
+
 const allScripts = window.allScripts = [
     {
         /* Analytics Scripts which are beeing blocked */
