@@ -1752,9 +1752,22 @@ const IntastellarCookieConsent = {
         // The cookie banner template is only sometimes added to the DOM event
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => {
-                    document.body.append(template);
-                }, 50);
+                /* Checking if config file needs to be loaded */
+                if (
+                    document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
+                    || window.INTA === undefined
+                ) {
+                    // Get the host and remove all subdomains
+                    let host = window.location.host;
+                    host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
+                    // Remove the port if it exists
+                    host = host.replace(/:\d+$/, "");
+                    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
+                    const configScript = document.createElement("script");
+                    configScript.src = intastellarDefaultConfigFile;
+                    document.head.insertBefore(configScript, document.currentScript);
+                }
+                document.body.append(template);
             });
         } else {
             document.body.append(template);

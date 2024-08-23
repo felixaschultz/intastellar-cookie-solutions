@@ -109,22 +109,6 @@ intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if (intastellarDevMode) {
     intastellarCreateBanner.src = "../../dev/cb.dev.js";
 }
-
-/* Checking if config file needs to be loaded */
-if (
-    document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
-    || window.INTA === undefined
-) {
-    // Get the host and remove all subdomains
-    let host = window.location.host;
-    host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
-    // Remove the port if it exists
-    host = host.replace(/:\d+$/, "");
-    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
-    const configScript = document.createElement("script");
-    configScript.src = intastellarDefaultConfigFile;
-    document.head.insertBefore(configScript, document.currentScript);
-}
 // Adding the script to the head
 setTimeout(() => {
     document.head.insertBefore(intastellarCreateBanner, document.currentScript)
