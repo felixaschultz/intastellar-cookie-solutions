@@ -1765,7 +1765,14 @@ const IntastellarCookieConsent = {
                     const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
                     const configScript = document.createElement("script");
                     configScript.src = intastellarDefaultConfigFile;
-                    document.head.insertBefore(configScript, document.currentScript);
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("GET", intastellarDefaultConfigFile);
+                    xhr.send();
+
+                    if (xhr.status === 200) {
+                        document.head.insertBefore(configScript, document.currentScript);
+                    }
                 }
                 document.body.append(template);
             });
