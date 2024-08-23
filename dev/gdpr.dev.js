@@ -186,9 +186,9 @@ function intaSetCookieSettings() {
     const cookieSettings = urlParams.get('intaCookieSettings');
     const reload = urlParams.get('reload');
 
-    console.log("Cookie Settings from URL", window.location.host);
+    /*  console.log("Cookie Settings from URL", window.location.host); */
     if (cookieSettings && !reload) {
-        console.log("Setting the new cookie" + cookieSettings);
+        /* console.log("Setting the new cookie" + cookieSettings); */
 
         document.cookie = int_hideCookieBannerName + "=" + cookieSettings + "; expires=" + cookieLifeTime +
             "; path=/; " +
@@ -1291,7 +1291,6 @@ window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
     }
 });
 const int__cookiesToKeep = [...requiredToKeep.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
-console.log(int__cookiesToKeep);
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
