@@ -1754,7 +1754,7 @@ const IntastellarCookieConsent = {
             document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     document.body.append(template);
-                }, 500);
+                }, 50);
             });
         } else {
             document.body.append(template);
