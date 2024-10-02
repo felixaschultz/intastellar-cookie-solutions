@@ -37,7 +37,6 @@
             const localStorageData = localStorage.getItem("cookieSharing");
             const partnerDomains = JSON.parse(localStorage.getItem("cookieSharing"));
             if (partnerDomains.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))) {
-                console.log("origin", origin, event.data);
                 if (event.data === "getConsents") {
                     const cookie = localStorageData;
                     window.parent.postMessage(cookie, "*");
