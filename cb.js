@@ -775,6 +775,7 @@ window.addEventListener("load", function () {
                 if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
                 if (event.data === "ready" && intaConsentsObjectVariable.sharingDomains.length > 0 && intaConsentsObjectVariable.sharingDomains.includes(window.location.host)) {
                     intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
+                    intastellariframe.contentWindow.postMessage("getConsents", "https://consents.cdn.intastellarsolutions.com");
                 }
             }
 
