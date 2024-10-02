@@ -783,7 +783,7 @@ window.addEventListener("load", function () {
                     if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
 
 
-                    console.log(event.data);
+                    console.log(event);
                     /*                 if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
                                     const intastellarUserGivingConsents = event.data.cookieSharing;
                                     console.log(intastellarUserGivingConsents);
