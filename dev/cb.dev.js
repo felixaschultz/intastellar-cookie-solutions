@@ -1,4 +1,11 @@
 /*
+ *  Cookie Consents Banner by Intastellar Solutions, International
+ *  intastellarsolutions.com/gdpr-cookiebanner
+ *  consents.cdn.intastellarsolutions.com/uc.js
+ *  @copy 2022-2024 Intastellar Solutions, International
+ *
+*/
+/*
  *  GDPR Cookie banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
  *  consents.cdn.intastellarsolutions.com/gdpr.js
@@ -764,29 +771,14 @@ window.addEventListener("load", function () {
     if (document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]") != null) {
         const intastellariframe = document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]");
         if (window?.INTA?.settings?.partnerDomain) {
-            window.addEventListener("message", function (event) {
+            function sendCookieInformation(event) {
                 if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
                 if (event.data === "ready" && intaConsentsObjectVariable.sharingDomains.length > 0 && intaConsentsObjectVariable.sharingDomains.includes(window.location.host)) {
                     intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
                 }
-            });
+            }
 
-            window.addEventListener("message", function (event) {
-                if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
-
-                setTimeout(() => {
-                    console.log(event.data);
-                    /*                 if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
-                                    const intastellarUserGivingConsents = event.data.cookieSharing;
-                                    console.log(intastellarUserGivingConsents);
-                                    document.cookie =
-                                        int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(intastellarUserGivingConsents, randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
-                                        "; path=/; " +
-                                        intCookieDomain +
-                                        "";
-                                } */
-                }, 1000);
-            });
+            window.addEventListener("message", sendCookieInformation);
         }
     }
 
@@ -1757,6 +1749,9 @@ const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
         document.querySelector("html").classList.add("noScroll");
+    },
+    remove: function (template) {
+        template.classList.remove("--active");
     },
     initialize: function (template) {
         // The cookie banner template is only sometimes added to the DOM event
