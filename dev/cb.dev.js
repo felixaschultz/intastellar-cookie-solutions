@@ -763,22 +763,26 @@ window.addEventListener("load", function () {
 
     if (document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]") != null) {
         const intastellariframe = document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]");
-        window.addEventListener("message", function (event) {
-            if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
-            if (event.data === "ready" && intaConsentsObjectVariable.sharingDomains.length > 0 && intaConsentsObjectVariable.sharingDomains.includes(window.location.host)) {
-                intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
-            }
+        if (window?.INTA?.settings?.partnerDomain) {
+            window.addEventListener("message", function (event) {
+                if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
+                if (event.data === "ready" && intaConsentsObjectVariable.sharingDomains.length > 0 && intaConsentsObjectVariable.sharingDomains.includes(window.location.host)) {
+                    intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
+                }
 
-            if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
-                const intastellarUserGivingConsents = event.data.cookieSharing;
-                console.log(intastellarUserGivingConsents);
-                document.cookie =
-                    int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(intastellarUserGivingConsents, randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
-                    "; path=/; " +
-                    intCookieDomain +
-                    "";
-            }
-        });
+                setTimeout(() => {
+                    if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
+                        const intastellarUserGivingConsents = event.data.cookieSharing;
+                        console.log(intastellarUserGivingConsents);
+                        document.cookie =
+                            int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(intastellarUserGivingConsents, randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
+                            "; path=/; " +
+                            intCookieDomain +
+                            "";
+                    }
+                }, 1000);
+            });
+        }
     }
 
     gtag('set', {
