@@ -778,6 +778,7 @@ window.addEventListener("load", function () {
                 }
             }
 
+            window.addEventListener("message", sendCookieInformation);
             setTimeout(() => {
                 intastellariframe.contentWindow.postMessage("getConsents", "https://consents.cdn.intastellarsolutions.com");
                 function saveCookieInformation(event) {
@@ -796,8 +797,7 @@ window.addEventListener("load", function () {
 
                 window.addEventListener("message", saveCookieInformation, false);
 
-            }, 1000);
-            window.addEventListener("message", sendCookieInformation);
+            }, 1500);
         }
     }
 
