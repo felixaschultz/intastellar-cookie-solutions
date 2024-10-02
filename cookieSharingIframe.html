@@ -36,20 +36,9 @@
             const origin = event.origin || event.originalEvent.origin;
             const localStorageData = localStorage.getItem("cookieSharing");
 
-            if (event.data === localStorageData) {
-                if (event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))) {
-                    window.parent.postMessage({
-                        cookieSharing: localStorageData,
-                    }, "*");
-                }
-            } else {
-                localStorage.setItem("cookieSharing", event.data);
-            }
-
-            if (event.data == "you´re open to share with me") {
-                window.parent.postMessage({
-                    cookieSharing: event.data,
-                }, "*");
+            if (event.data === "getConsents") {
+                const cookie = localStorageData;
+                window.parent.postMessage(cookie, "*");
             }
             /* if(event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))){
                 
