@@ -1751,7 +1751,7 @@ const IntastellarCookieConsent = {
         document.querySelector("html").classList.add("noScroll");
     },
     remove: function (template) {
-        document.body.removeChild(template);
+        template.classList.remove("--active");
     },
     initialize: function (template) {
         // The cookie banner template is only sometimes added to the DOM event
