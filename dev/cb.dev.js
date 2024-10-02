@@ -773,9 +773,10 @@ window.addEventListener("load", function () {
 
             window.addEventListener("message", function (event) {
                 if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
-                console.log(event.data);
 
-                /*                 if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
+                setTimeout(() => {
+                    console.log(event.data);
+                    /*                 if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
                                     const intastellarUserGivingConsents = event.data.cookieSharing;
                                     console.log(intastellarUserGivingConsents);
                                     document.cookie =
@@ -784,6 +785,7 @@ window.addEventListener("load", function () {
                                         intCookieDomain +
                                         "";
                                 } */
+                }, 1000);
             });
         }
     }
