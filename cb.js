@@ -776,10 +776,11 @@ window.addEventListener("load", function () {
                 if (event.data === "ready" && intaConsentsObjectVariable.sharingDomains.length > 0 && intaConsentsObjectVariable.sharingDomains.includes(window.location.host)) {
                     intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
 
-                    window.removeEventListener("message", sendCookieInformation);
+
                 }
             }
             window.addEventListener("message", sendCookieInformation);
+            window.removeEventListener("message", sendCookieInformation);
 
             function saveCookieInformation(event) {
                 if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
