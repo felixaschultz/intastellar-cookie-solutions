@@ -790,10 +790,12 @@ window.addEventListener("load", function () {
                             "; path=/; " +
                             intCookieDomain +
                             "";
+                        IntastellarCookieConsent.remove(intaconsents);
                     }
                 }
 
                 window.addEventListener("message", saveCookieInformation, false);
+
             }, 1000);
             window.addEventListener("message", sendCookieInformation);
         }
@@ -1766,6 +1768,9 @@ const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
         document.querySelector("html").classList.add("noScroll");
+    },
+    remove: function (template) {
+        document.body.removeChild(template);
     },
     initialize: function (template) {
         // The cookie banner template is only sometimes added to the DOM event
