@@ -777,11 +777,12 @@ window.addEventListener("load", function () {
                     intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
                 }
             });
+            setTimeout(() => {
 
-            window.addEventListener("message", function (event) {
-                if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
+                window.addEventListener("message", function (event) {
+                    if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
 
-                setTimeout(() => {
+
                     console.log(event.data);
                     /*                 if (event.data.cookieSharing !== undefined || event.data.cookieSharing !== null) {
                                     const intastellarUserGivingConsents = event.data.cookieSharing;
@@ -792,8 +793,8 @@ window.addEventListener("load", function () {
                                         intCookieDomain +
                                         "";
                                 } */
-                }, 1000);
-            });
+                });
+            }, 1000);
         }
     }
 
