@@ -777,10 +777,11 @@ window.addEventListener("load", function () {
                     intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
 
 
+                    intastellariframe.contentWindow.postMessage("getConsents", "https://consents.cdn.intastellarsolutions.com");
+
                 }
             }
             window.addEventListener("message", sendCookieInformation);
-            window.removeEventListener("message", sendCookieInformation);
         }
     }
 
