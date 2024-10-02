@@ -35,14 +35,13 @@
         window.addEventListener("message", (event) => {
             const origin = event.origin || event.originalEvent.origin;
             const localStorageData = localStorage.getItem("cookieSharing");
-
-            if (event.data === "getConsents") {
-                const cookie = localStorageData;
-                window.parent.postMessage(cookie, "*");
+            const partnerDomains = JSON.parse(localStorage.getItem("cookieSharing"));
+            if (partnerDomains.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))) {
+                if (event.data === "getConsents") {
+                    const cookie = localStorageData;
+                    window.parent.postMessage(cookie, "*");
+                }
             }
-            /* if(event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))){
-                
-            } */
 
         });
 
