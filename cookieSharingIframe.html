@@ -42,7 +42,7 @@
                 }
             }
 
-            if (partnerDomains.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))) {
+            if (partnerDomains?.sharingDomains.length > 0 && partnerDomains?.sharingDomains?.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))) {
                 if (event.data === "getConsents") {
                     const cookie = localStorageData;
                     window.parent.postMessage(cookie, "*");
