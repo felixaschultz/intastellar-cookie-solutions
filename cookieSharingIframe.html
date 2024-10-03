@@ -37,13 +37,13 @@
             const localStorageData = localStorage.getItem("cookieSharing");
             const partnerDomains = JSON.parse(localStorage.getItem("cookieSharing"));
 
+            console.log(event.data, JSON.parse(event.data).domain);
             if (JSON.parse(event.data)) {
                 if (JSON.parse(event.data).domain) {
                     localStorage.setItem("cookieSharing#" + JSON.parse(event.data).domain, event.data);
                 }
             }
 
-            console.log(event.data);
             if (partnerDomains.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))) {
                 console.log(event.data);
                 if (event.data === "getConsents") {
