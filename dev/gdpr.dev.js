@@ -48,7 +48,8 @@ if (window.INTA === undefined) {
             arrange: "ltr",
             logo: intCookieIcon,
             partnerDomain: null,
-            StyleSheet: null
+            StyleSheet: null,
+            design: "overlay",
         }
     }
 }
@@ -1328,11 +1329,15 @@ if (getCookie(int_hideCookieBannerName) != ""
 
 const int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function (entry) { return entry.trim() != ''; }).join("|"), "i");
 
+const cookieBannerStyles = {
+    banner: "banner.css",
+    overlay: "overlay.css"
+};
 
 const intaStyleLink = document.createElement('link');
 intaStyleLink.rel = 'stylesheet';
 intaStyleLink.type = 'text/css';
-intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/banner.css?v=' + new Date().getTime();
+intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/' + cookieBannerStyles[window.INTA.settings.design || "overlay"] + '?v=' + new Date().getTime();
 intaStyleLink.media = 'all';
 intHead.insertBefore(intaStyleLink, document.currentScript.previousSibling);
 window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
