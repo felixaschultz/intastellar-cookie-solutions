@@ -134,7 +134,7 @@ const settingsMessagesLanguages = {
         <li>Statistik</li>
         <li>Marketing</li>
     </ol>
-    <p>Ved at trykke på 'Accepter' giver du samtykke til alle disse formål. Du kan også vælge hvilke formål du ønsker at give samtykke til ved at benytte checkboksene herunder, og derefter trykke på ”Gem indstillinger”.
+    <p>Ved at trykke på 'Accepter' giver du samtykke til alle disse formål. Du kan også vælge hvilke formål du ønsker at give samtykke til ved at benytte checkboksene herunder, og derefter trykke på ”Gem”.
     Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i ${(window?.INTA?.settings.arrange == "ltr") ? "venstre" : "højre"} hjørne af hjemmesiden.</p>
     <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på nedenstående links.</p>
     ${generatePolicyUrl('Vores privat og cookie politik')}
@@ -883,10 +883,10 @@ window.addEventListener("load", function () {
             settingsSaveLang.saveSettingsText = "Speichern";
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
             settingsSaveLang.necessaryCookiesText = "Afvis";
-            settingsSaveLang.saveSettingsText = "Gem indstillinger";
+            settingsSaveLang.saveSettingsText = "Gem";
         } else {
             settingsSaveLang.necessaryCookiesText = "Afvis";
-            settingsSaveLang.saveSettingsText = "Gem indstillinger";
+            settingsSaveLang.saveSettingsText = "Gem";
         }
 
         FunctionalCheckbox?.addEventListener("change", () => {
