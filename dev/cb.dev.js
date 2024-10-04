@@ -174,10 +174,6 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
         + `<section class="intCookieSaveSettingsContainer">
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.design == "banner") ?
-            intastellarCookieButtons.innerHTML += `<section class="intSettingsPoweredBy" > ${poweredBy}</section>`
-            : ""
-        }
     </section>`;
     cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
     intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
