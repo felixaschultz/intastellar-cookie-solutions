@@ -1,5 +1,5 @@
-# GDPR Cookie banner by Intastellar Solutions, International
-![GDPR Cookie banner by Intastellar Solutions, International](/img/github__banner.jpg "GDPR Cookie banner by Intastellar Solutions, International")
+# Intastellar Consents Solutions
+![Intastellar Consents Banner](/img/github__banner.jpg "Intastellar Consents Banner")
 ## Table of contents
 * [General info](#general-info)
 * [Implementation](#implementation)
@@ -16,7 +16,7 @@ Available languages:
 * Danish
 * English
 
-You can read more about the cookie banner under: https://www.intastellarsolutions.com/gdpr-cookiebanner (danish).
+You can read more about the cookie banner under: https://www.intastellarsolutions.com/solutions/cookie-consents (danish).
 This banner is free to use as long as the powered by logo is not removed. We are glad if you want to contribuate to this project so we can develop it further and we can make it secure.
 
 We support your own cookiebanner design. Just use our technology to block thrid party cookies.
@@ -26,8 +26,8 @@ If you want to develop on the banner you must do that in your own branch and in 
 that. The "cb(.dev).js" file is the function to create the banner via HTML and CSS and styling. The "gdpr(.dev).js" file is all the functionality of the banner
 
 ## Implementation
-Read our documentation under: https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs to implement our cookie banner on your website.
-You can add and load it direct via https://consents.cdn.intastellarsolutions.com/gdpr.js
+Read our documentation under: https://developers.intastellarsolutions.com/cookie-solutions/docs to implement our cookie banner on your website.
+You can add and load it direct via https://consents.cdn.intastellarsolutions.com/uc.js
 
 ## Technologies
 This project i created with:
