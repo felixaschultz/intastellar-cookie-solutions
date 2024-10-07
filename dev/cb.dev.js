@@ -284,9 +284,7 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
         + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')
         + (window.INTA.settings.design == "banner" ? generatePoweredBy() : "");
     intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
-        ${(window.INTA.settings.design == "banner") + `
-        ${window.INTA.settings.logo ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
-    `}
+        ${(window.INTA.settings.design == "banner" && window.INTA.settings.logo) ? '<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">' : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.german.saveSettings, 'Akzeptieren')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
     </section>`;
