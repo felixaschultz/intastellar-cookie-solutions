@@ -34,18 +34,20 @@
 
         window.addEventListener("message", (event) => {
             const origin = event.origin || event.originalEvent.origin;
-            console.log(event.data, origin);
-
-            localStorage.setItem("cookieSharing", event.data);
-
-            if (event.data == "you´re open to share with me") {
-                window.parent.postMessage({
-                    cookieSharing: event.data,
-                }, "*");
+            const localStorageData = localStorage.getItem("cookieSharing#" + origin.replace("https://", "").replace("http://", "").replace("www.", ""));
+            const partnerDomains = JSON.parse(localStorage.getItem("cookieSharing#" + origin.replace("https://", "").replace("http://", "").replace("www.", "")));
+            if (JSON.parse(event.data)) {
+                if (JSON.parse(event.data).domain) {
+                    localStorage.setItem("cookieSharing#" + JSON.parse(event.data).domain.replace("https://", "").replace("http://", "").replace("www.", ""), event.data);
+                }
             }
-            /* if(event.data.sharingDomains.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))){
-                
-            } */
+
+            if (partnerDomains?.sharingDomains.length > 0 && partnerDomains?.sharingDomains?.includes(origin.replace("https://", "").replace("http://", "").replace("www.", ""))) {
+                if (event.data === "getConsents") {
+                    const cookie = localStorageData;
+                    window.parent.postMessage(cookie, "*");
+                }
+            }
 
         });
 

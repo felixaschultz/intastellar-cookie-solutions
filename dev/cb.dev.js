@@ -1,4 +1,11 @@
 /*
+ *  Cookie Consents Banner by Intastellar Solutions, International
+ *  intastellarsolutions.com/gdpr-cookiebanner
+ *  consents.cdn.intastellarsolutions.com/uc.js
+ *  @copy 2022-2024 Intastellar Solutions, International
+ *
+*/
+/*
  *  GDPR Cookie banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
  *  consents.cdn.intastellarsolutions.com/gdpr.js
@@ -34,14 +41,15 @@ const pSBC = (p, c0, c1, l) => {
 
 let message = "";
 let cookieBtn = "";
+/* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
 const banner = document.createElement("inta-consents-settings-btn");
 const bannerContent = document.createElement("button");
-
+const intastellarLogo = "https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new-white.svg";
 const moreSettings = document.createElement("inta-consents-banner");
 const moreSettingsContent = document.createElement("section");
 const moreintHeader = document.createElement("intheader");
 const moreContentText = document.createElement("section");
-const moreFooter = document.createElement("footer");
+const moreFooter = document.createElement("div");
 const intaconsents = document.createElement("intastellarconsents");
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
@@ -82,17 +90,19 @@ intastellarCookieButtons.setAttribute("class", "intastellarCookie-settings__butt
 bannerContent.setAttribute("title", intastellarCookieLanguageSettings);
 cookieSettings.setAttribute("class", "intastellarCookie-settings__container");
 banner.setAttribute("onclick", "javascript:IntastellarCookieConsent.renew();");
-const arrange = window.INTA.settings === undefined || window.INTA.settings.arrange === undefined ? "" : window.INTA.settings.arrange;
-
+const arrange = window?.INTA?.settings === undefined || window?.INTA?.settings.arrange === undefined ? "" : window?.INTA?.settings.arrange;
+if (window.location.host.indexOf("intastellarsolutions") == -1) {
+    poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Consents Solutions'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com?utm_source=" + encodeURI(window.location.href) + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='" + intastellarLogo + "' alt='Intastellar Solutions, International'></a></span>";
+}
 if (arrange == "ltr") {
     bannerContent.classList.add("intastellarCookie-settingsContainer--otherSide");
     cookieSettings.classList.add("intastellarCookie-settings__container--otherSide");
 }
 
 function setIntastellarPartnerDomain() {
-    if (window.INTA.settings.partnerDomain === null) return
+    if (window?.INTA?.settings.partnerDomain === null) return
 
-    if (window.INTA.settings?.partnerDomain?.length > 0) {
+    if (window?.INTA?.settings?.partnerDomain?.length > 0) {
         const intastellarSharingIframe = document.createElement("iframe");
         // intastellarSharingIframe.src = "https://consents.cdn.intastellarsolutions.com/cookieSharingIframe.html";
         intastellarSharingIframe.src = "/cookieSharingIframe.html";
@@ -101,14 +111,18 @@ function setIntastellarPartnerDomain() {
         intastellarSharingIframe.style.position = "absolute";
         intastellarSharingIframe.style.top = "-100%";
         intastellarSharingIframe.style.left = "-100%";
-
-        console.log("Partner domain: ", window.INTA.settings.partnerDomain);
         //document.body.appendChild(intastellarSharingIframe);
 
     }
 }
-setIntastellarPartnerDomain();
-IntastellarCookieConsent.inizilize(intaconsents)
+
+function generatePoweredBy() {
+    if (window.location.host.indexOf("intastellarsolutions") == -1) {
+        poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Consents Solutions'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com?utm_source=" + encodeURI(window.location.href) + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='" + intastellarLogo + "' alt='Intastellar Solutions, International'></a></span>";
+    }
+    return `<section class="intSettingsPoweredBy" > ${poweredBy}</section>`;
+}
+
 /* - - - Set the intastellarCookieLanguageuage dependent messages */
 
 const messages = {
@@ -120,29 +134,33 @@ const messageWrapStart = "<div class='intastellarCookie-settings__contentConatin
 const messageWrapEnd = "</p></div>";
 
 const settingsMessagesLanguages = {
-    danish: `<h3 style="    font-size: 25px;">Du bestemmer over dine data</h3>
+    danish: `<h3 style="    font-size: 25px;">Du bestemmer selv over dine data!</h3>
     <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
     <ol>
-        <li>Funktionel</li>
-        <li>Statistiske</li>
+        <li>Funktion</li>
+        <li>Statistik</li>
         <li>Marketing</li>
     </ol>
-    <p>Ved at trykke på 'Accepter' giver du samtykke til alle disse formål. Du kan også vælge at tilkendegive, hvilke formål du vil give samtykke til ved at benytte checkboksene ud for formålet, og derefter trykke på 'Gem indstillinger'.
-    Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i ${(window.INTA.settings.arrange == "ltr") ? "venstre" : "højre"} hjørne af hjemmesiden.</p>
-    <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på linket.</p>
+    <p>Ved at trykke på 'Accepter' giver du samtykke til alle disse formål. Du kan også vælge hvilke formål du ønsker at give samtykke til ved at benytte checkboksene herunder, og derefter trykke på ”Gem”.
+    Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i ${(window?.INTA?.settings.arrange == "ltr") ? "venstre" : "højre"} hjørne af hjemmesiden.</p>
+    <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på nedenstående links.</p>
     ${generatePolicyUrl('Vores privat og cookie politik')}
-    <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privat politik</button>`,
+    <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privat politik</button>
+    ${(window.INTA.settings.design == "banner" ? generatePoweredBy() : "")
+        }`,
     german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
     <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
     <ol>
-        <li>Funktionelle</li>
-        <li>Statistike</li>
+        <li>Funktion</li>
+        <li>Statistik</li>
         <li>Werbung</li>
     </ol>
     <p>Wenn Sie auf „Akzeptieren“ klicken, erteilen Sie Ihre Einwilligung für alle diese Zwecke. Sie können auch entscheiden, welchen Zwecken Sie zustimmen, indem Sie das Kästchen neben dem Zweck anklicken und auf „Speichern“ klicken.</p>
-    <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten in der ${(window.INTA.settings.arrange == "ltr") ? "linken" : "rechten"} Ecke klicken.</p>
+    <p>Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf das kleine Symbol unten in der ${(window?.INTA?.settings.arrange == "ltr") ? "linken" : "rechten"} Ecke klicken.</p>
     ${generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')}
-    <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International Datenschutz erklährung</button>`,
+    <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International Datenschutz erklährung</button>
+    ${(window.INTA.settings.design == "banner" ? generatePoweredBy() : "")
+        }`,
     english: `<h3 style="    font-size: 25px;">You´re in control</h3>
     <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
     <ol>
@@ -151,9 +169,11 @@ const settingsMessagesLanguages = {
         <li>Advertisement</li>
     </ol>
     <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
-    <p>You may withdraw your consent at any time by clicking the small icon at the bottom ${(window.INTA.settings.arrange == "ltr") ? "left" : "right"} corner of the website.</p>
+    <p>You may withdraw your consent at any time by clicking the small icon at the bottom ${(window?.INTA?.settings.arrange == "ltr") ? "left" : "right"} corner of the website.</p>
     ${generatePolicyUrl('Our Privacy and cookie Policy')}
-    <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privacy policy</button>`
+    <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privacy policy</button>
+    ${(window.INTA.settings.design == "banner" ? generatePoweredBy() : "")
+        }`
 }
 
 if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
@@ -164,55 +184,20 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
         + messages.danish
         + messageWrapEnd
         + generatePolicyUrl('Vores privat og cookie politik')
-        + `<section class="intCookieSaveSettingsContainer">
+        + (window.INTA.settings.design == "banner" ? generatePoweredBy() : "");
+    + `<section class="intCookieSaveSettingsContainer">
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
     </section>`;
     cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
     intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+        ${(window.INTA.settings.design == "banner" && window.INTA.settings.logo) ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
     </section>`;
     moreFooter.innerHTML =
         `
-        
-        <section class="intastellar_privacyPolicy"></section>
-        <article class="intReadMore">
-            <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.danish.necessary.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_requiredCookieList)
-        }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.functional.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.danish.functional.description}</p>
-                <article class="intaCookieListOverview">
-                    ${listAllCookies(inta_functionalCookieList)
-        }
-                </article>  
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.statisic.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.danish.statisic.description}</p> 
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_statisticCookieList)
-        }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.marketing.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.danish.marketing.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_marketingCookieList)
-        }
-                </article>
-            </section>
-        </article>
-        <article class="intCookieSetting__form">
+         <article class="intCookieSetting__form">
                 <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.necessary.title}</span>
@@ -250,6 +235,43 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
                     </label>
                 </section>
             </article>
+        <section class="intastellar_privacyPolicy"></section>
+        <article class="intReadMore">
+            <section class="required">
+                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.danish.necessary.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_requiredCookieList)
+        }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.functional.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.danish.functional.description}</p>
+                <article class="intaCookieListOverview">
+                    ${listAllCookies(inta_functionalCookieList)
+        }
+                </article>  
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.statisic.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.danish.statisic.description}</p> 
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_statisticCookieList)
+        }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.marketing.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.danish.marketing.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_marketingCookieList)
+        }
+                </article>
+            </section>
+        </article>
+       
     `;
 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
     settingsMessage = settingsMessagesLanguages.german;
@@ -258,50 +280,17 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
         + messages.german
         + messageWrapEnd
         + generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')
-        ;
+        + (window.INTA.settings.design == "banner" ? generatePoweredBy() : "");
     intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+        ${(window.INTA.settings.design == "banner" && window.INTA.settings.logo) ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.german.saveSettings, 'Akzeptieren')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
     </section>`;
-    cookieBtn = generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
+    cookieBtn = (window.INTA.settings.design == "banner") + `
+        ${window.INTA.settings.logo ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
+    ` + generateCookieButtons('Akzeptieren', 'Ablehnen', 'Einstellungen');
     moreFooter.innerHTML =
         `
-        <section class="intastellar_privacyPolicy"></section>
-        <article class="intReadMore">
-            <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.necessary.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.german.necessary.description}</p>
-                <article class="intaCookieListOverview">
-                    ${listAllCookies(inta_requiredCookieList)
-        }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.functional.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.german.functional.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_functionalCookieList)
-        }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.statisic.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.german.statisic.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_statisticCookieList)
-        }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.marketing.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.german.marketing.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_marketingCookieList)
-        }
-                </article>
-            </section>
-        </article>
         <article class="intCookieSetting__form">
                 <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
@@ -340,6 +329,42 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
                     </label>
                 </section>
             </article>
+        <section class="intastellar_privacyPolicy"></section>
+        <article class="intReadMore">
+            <section class="required">
+                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.necessary.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.german.necessary.description}</p>
+                <article class="intaCookieListOverview">
+                    ${listAllCookies(inta_requiredCookieList)
+        }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.functional.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.german.functional.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_functionalCookieList)
+        }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.statisic.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.german.statisic.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_statisticCookieList)
+        }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.marketing.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.german.marketing.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_marketingCookieList)
+        }
+                </article>
+            </section>
+        </article>
     `;
 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
     settingsMessage = settingsMessagesLanguages.english;
@@ -349,51 +374,21 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
         + messages.english
         + messageWrapEnd
         + generatePolicyUrl('Our Privacy and cookie Policy')
-        ;
+        + (window.INTA.settings.design == "banner" ? generatePoweredBy() : "");
+    ;
     intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+        
+    ${(window.INTA.settings.design == "banner" && window.INTA.settings.logo) ? `
+       <img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">`
+            : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.english.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
     </section>`;
-    cookieBtn = generateCookieButtons('Accept', 'Decline All', 'Settings');
+    cookieBtn = (window.INTA.settings.design == "banner") + `
+        ${window.INTA.settings.logo ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
+    ` + generateCookieButtons('Accept', 'Decline All', 'Settings');
     moreFooter.innerHTML =
         `
-        
-        <section class="intastellar_privacyPolicy"></section>
-        <article class="intReadMore">
-            <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.necessary.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.english.necessary.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_requiredCookieList)
-        }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.functional.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.english.functional.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_functionalCookieList)
-        }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.statisic.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.english.statisic.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_statisticCookieList)
-        }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.marketing.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.english.marketing.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_marketingCookieList)
-        }
-                </article>
-            </section>
-        </article>
         <article class="intCookieSetting__form">
                 <section class="intastellarSettings__control">
                     <label class="intSettingDisabled checkMarkContainer">
@@ -432,6 +427,42 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
                     </label>
                 </section>
             </article>
+        <section class="intastellar_privacyPolicy"></section>
+        <article class="intReadMore">
+            <section class="required">
+                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.necessary.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.english.necessary.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_requiredCookieList)
+        }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.functional.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.english.functional.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_functionalCookieList)
+        }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.statisic.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.english.statisic.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_statisticCookieList)
+        }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.marketing.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.english.marketing.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_marketingCookieList)
+        }
+                </article>
+            </section>
+        </article>
     `;
 } else {
     /* Default */
@@ -443,11 +474,16 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
         + messageWrapEnd
         + generatePolicyUrl('Vores privat og cookie politik');
     intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+    ${(window.INTA.settings.design == "banner" && window.INTA.settings.logo) ? `
+       <img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">`
+            : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
     </section>`;
 
-    cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
+    cookieBtn = (window.INTA.settings.design == "banner") + `
+        ${window.INTA.settings.logo ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
+    ` + generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
     moreFooter.innerHTML =
         `
         <section class="intastellar_privacyPolicy"></section>
@@ -528,11 +564,11 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
 
 moreContentText.innerHTML = settingsMessage;
 
-let ccpa = window.INTA.settings === undefined || window.INTA.settings.ccpa === undefined ? false : window.INTA.settings.ccpa.on;
-let ccpaUrl = window.INTA.settings === undefined || window.INTA.settings.ccpa === undefined ? false : window.INTA.settings.ccpa.url;
-let cookieColor = window.INTA.settings === undefined || window.INTA.settings.color === undefined || window.INTA.settings.color === false || window.INTA.settings.color.indexOf("[") > -1 || window.INTA.settings.color === "" ? "rgba(0, 51, 153, 1)" : window.INTA.settings.color;
-let cookieLogo = window.INTA.settings === undefined || window.INTA.settings.logo === undefined || window.INTA.settings.logo === "" || window.INTA.settings.logo.indexOf("[") > -1 ? null : window.INTA.settings.logo;
-let backgroundColor = window.INTA.settings === undefined || window.INTA.settings.background_color === undefined ? "#fff" : window.INTA.settings.background_color;
+let ccpa = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.on;
+let ccpaUrl = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.url;
+let cookieColor = window?.INTA?.settings === undefined || window?.INTA?.settings.color === undefined || window?.INTA?.settings.color === false || window?.INTA?.settings.color.indexOf("[") > -1 || window?.INTA?.settings.color === "" ? "rgba(0, 51, 153, 1)" : window?.INTA?.settings.color;
+let cookieLogo = window?.INTA?.settings === undefined || window?.INTA?.settings.logo === undefined || window?.INTA?.settings.logo === "" || window?.INTA?.settings.logo.indexOf("[") > -1 ? null : window?.INTA?.settings.logo;
+let backgroundColor = window?.INTA?.settings === undefined || window?.INTA?.settings.background_color === undefined ? "#fff" : window?.INTA?.settings.background_color;
 let cookieTextColor = invertColor(backgroundColor);
 const checkMarkColor = cookieColor;
 let brightColor = "";
@@ -553,7 +589,7 @@ if (cookieColor.indexOf("var") != -1) {
 
 const intaCookieBannerStyle = document.createElement("style");
 
-let textSettings = window.INTA.settings === undefined || window.INTA.settings.text === undefined ? false : window.INTA.settings.text;
+let textSettings = window?.INTA?.settings === undefined || window?.INTA?.settings.text === undefined ? false : window?.INTA?.settings.text;
 let withText = `
 .intastellarCookie-settingsContainer{
     border-radius: 50%;
@@ -688,7 +724,7 @@ if (ccpa && isValidCCPALink()) {
     const instastellarCCPApopupContent = document.createElement("section");
     instastellarCCPApopupContent.setAttribute("class", "intastellarCCPApopup__content");
 
-    if (window.INTA.settings.ccpa.collection != undefined) {
+    if (window?.INTA?.settings.ccpa.collection != undefined) {
         instastellarCCPApopupContent.innerHTML = `
         <h2><svg class="intastellarCCPA__icon" width="18px" height="19px" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#000"/></svg> Do not sell my personal data!</h2><button class="intastellarCCPA__popupClose">X</button>
         <p>This section is about our California Consumer Privacy Act.</p>
@@ -696,7 +732,7 @@ if (ccpa && isValidCCPALink()) {
         <h3>Personal data we collect:</h3>
         <ul>
             <li>IP-Address</li>
-            ${window.INTA.settings.ccpa.collection.map(name => '<li>' + name.charAt(0).toUpperCase() + '' + name.slice(1) + '</li>').join('')}
+            ${window?.INTA?.settings.ccpa.collection.map(name => '<li>' + name.charAt(0).toUpperCase() + '' + name.slice(1) + '</li>').join('')}
         </ul>
         `;
     } else {
@@ -711,30 +747,27 @@ if (ccpa && isValidCCPALink()) {
     }
     intastellarCCPApopup.appendChild(instastellarCCPApopupContent);
     intaconsents.appendChild(intastellarCCPApopup);
-} else if (!isValidCCPALink() && "ccpa" in window.INTA.settings && window.INTA.settings.ccpa.on === "true") {
-    throw new IntastellarSolutionsSDK("Please add your valid 'California Consumer Privacy Act' url to the banner. Read more at https://www.intastellarsolutions.com/gdpr-cookiebanner");
+} else if (!isValidCCPALink() && "ccpa" in window?.INTA?.settings && window?.INTA?.settings.ccpa.on === "true") {
+    throw new IntastellarSolutionsSDK("Please add your valid 'California Consumer Privacy Act' url to the banner. Read more at https://www.intastellarsolutions.com/solutions/cookie-consents");
 }
 
 cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
-
-if (window.location.host.indexOf("intastellarsolutions") == -1) {
-    poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Consents Solutions'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com/gdpr-cookiebanner?utm_source=" + encodeURI(window.location.href) + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg' alt='Intastellar Solutions, International'></a></span>";
-}
 
 let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
 let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
 
 moreintHeader.innerHTML = `
-    ${typeof window.INTA.settings.logo != "undefined" ? '<img class="intSettingsCompanyLogo" src="' + window.INTA.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '">' : ``}
-    <section class="intSettingsPoweredBy">${poweredBy}</section>`;
+    ${typeof window?.INTA?.settings.logo != "undefined" ? '<img class="intSettingsCompanyLogo" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '">' : ``}
+    ${(window.INTA.settings.design == "overlay" || window.INTA.settings.design == undefined) ? `<section class="intSettingsPoweredBy">${poweredBy}</section>` : ""}
+    `;
 
-cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + window.INTA.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';" aria-label="Close cookie banner"></button></intHeader>' +
-    message + cookieBtn + "" + poweredBy;
+cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';" aria-label="Close cookie banner"></button></intHeader>' +
+    message + cookieBtn + "" + (window.INTA.settings.design !== "overlay" || window.INTA.settings.design != undefined) ? poweredBy : null;
 
 cookieSettings.appendChild(cookieSettingsContent);
 
-if (window.INTA.settings.advanced) {
-    banner.appendChild(cookieSettings);
+if (window?.INTA?.settings.advanced) {
+    //banner.appendChild(cookieSettings);
 }
 
 banner.setAttribute("class", "intastellarCookie-settings");
@@ -763,14 +796,19 @@ window.addEventListener("load", function () {
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
 
     document.body.appendChild(trImage);
+
     if (document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]") != null) {
         const intastellariframe = document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]");
-        window.addEventListener("message", function (event) {
-            if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
-            if (event.data === "ready") {
-                intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
+        if (window?.INTA?.settings?.partnerDomain) {
+            function sendCookieInformation(event) {
+                if (event.origin !== "https://consents.cdn.intastellarsolutions.com") return;
+                if (event.data === "ready" && intaConsentsObjectVariable.sharingDomains.length > 0 && intaConsentsObjectVariable.sharingDomains.includes(window.location.host)) {
+                    intastellariframe.contentWindow.postMessage(intaConsentsObjectVariable, "https://consents.cdn.intastellarsolutions.com");
+                }
             }
-        });
+
+            window.addEventListener("message", sendCookieInformation);
+        }
     }
 
     gtag('set', {
@@ -778,19 +816,17 @@ window.addEventListener("load", function () {
     });
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
-    if (window.INT != undefined && window.INT.policy_link != undefined) { window.INTA.policy_link = window.INT.policy_link };
-    if (window.INT != undefined && window.INT.settings != undefined) { window.INTA.settings = window.INT.settings };
 
     if (isValidPolicyLink()) {
         document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
-            if (window.INTA.settings.company != "" && window.INTA.settings.company != undefined && vendor.innerText == window.location.host) {
-                vendor.innerText = window.INTA.settings.company;
+            if (window?.INTA?.settings.company != "" && window?.INTA?.settings.company != undefined && vendor.innerText == window.location.host) {
+                vendor.innerText = window?.INTA?.settings.company;
                 /* let msg = document.querySelectorAll(".intastellarCookie-settings__privacyLink")[i].innerText.replace(window.location.host, ""); */
-                /* document.querySelectorAll(".intastellarCookie-settings__privacyLink")[i].innerText = window.INTA.settings.company; */
+                /* document.querySelectorAll(".intastellarCookie-settings__privacyLink")[i].innerText = window?.INTA?.settings.company; */
             }
         });
         document.querySelectorAll(".intCookie_ConsentLogo").forEach((logo) => {
-            logo.src = window.INTA.settings.logo;
+            logo.src = window?.INTA?.settings.logo;
         });
         /* - - - Helper function for learn more click - - - */
         document.querySelectorAll(".intLearnMoreBtn").forEach((btn) => {
@@ -799,14 +835,14 @@ window.addEventListener("load", function () {
             })
         })
 
-        window.INTA.settings?.partnerDomain?.forEach((domain) => {
+        window?.INTA?.settings?.partnerDomain?.forEach((domain) => {
             intaConsentsObjectVariable.sharingDomains.push(domain);
         })
 
-        if (window.INTA.settings?.partnerDomain) {
+        if (window?.INTA?.settings?.partnerDomain) {
             dataLayer.push({
                 "linker": {
-                    "domains": window.INTA.settings?.partnerDomain
+                    "domains": window?.INTA?.settings?.partnerDomain
                 }
             });
         }
@@ -831,7 +867,7 @@ window.addEventListener("load", function () {
                 document.querySelector(".intastellarCookieBanner").style.display = "";
             }
         } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
-            /* if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) { */
+            /* if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) { */
             document.querySelector("html").classList.remove("noScroll");
             if (document.querySelector(".intastellarCookieConstents") != null) {
                 document.querySelector(".intastellarCookieConstents").classList.remove("--active");
@@ -864,10 +900,10 @@ window.addEventListener("load", function () {
             settingsSaveLang.saveSettingsText = "Speichern";
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
             settingsSaveLang.necessaryCookiesText = "Afvis";
-            settingsSaveLang.saveSettingsText = "Gem indstillinger";
+            settingsSaveLang.saveSettingsText = "Gem";
         } else {
             settingsSaveLang.necessaryCookiesText = "Afvis";
-            settingsSaveLang.saveSettingsText = "Gem indstillinger";
+            settingsSaveLang.saveSettingsText = "Gem";
         }
 
         FunctionalCheckbox?.addEventListener("change", () => {
@@ -991,7 +1027,7 @@ window.addEventListener("load", function () {
             saveINTCookieSettings("changePermission", accepted);
         });
 
-        if (window.INTA.settings.ccpa !== undefined && window.INTA.settings.ccpa.on) {
+        if (window?.INTA?.settings.ccpa !== undefined && window?.INTA?.settings.ccpa.on) {
             const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
 
             closeCCPAButton.addEventListener("click", () => {
@@ -1042,7 +1078,7 @@ window.addEventListener("load", function () {
                     'ad_personalization': 'granted',
                     'url_passthrough': true,
                 });
-                dataLayer.push({ 'event': 'cookie_consent_update' })
+                dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -1081,12 +1117,13 @@ window.addEventListener("load", function () {
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
                 const intastellarShared = {
                     intaConsentsObjectVariable: intaConsentsObjectVariable,
-                    partnerDomain: window.INTA.settings.partnerDomain,
+                    partnerDomain: window?.INTA?.settings.partnerDomain,
                 }
                 window.addEventListener("message", function (e) {
                     if (e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intastellarShared), "*");
+
                 })
 
                 gtag('consent', 'update', {
@@ -1099,7 +1136,7 @@ window.addEventListener("load", function () {
                     'ad_personalization': 'granted',
                     'url_passthrough': true,
                 });
-                dataLayer.push({ 'event': 'cookie_consent_update' })
+                dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -1131,7 +1168,7 @@ window.addEventListener("load", function () {
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
                 const intastellarShared = {
                     intaConsentsObjectVariable: intaConsentsObjectVariable,
-                    partnerDomain: window.INTA.settings.partnerDomain,
+                    partnerDomain: window?.INTA?.settings.partnerDomain,
                 }
                 window.addEventListener("message", function (e) {
                     if (e.data != "ready" && e.origin != intastellarCookieBannerRootDomain) return
@@ -1148,7 +1185,7 @@ window.addEventListener("load", function () {
                     'ad_personalization': 'denied',
                     'url_passthrough': true,
                 });
-                dataLayer.push({ 'event': 'cookie_consent_update' })
+                dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 /*window.location.reload();*/
 
             });
@@ -1177,7 +1214,7 @@ window.addEventListener("load", function () {
                 })
             })
 
-            if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
+            if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) {
                 configBtn.forEach((configs) => {
                     configs.addEventListener("click", function () {
                         let settings = document.querySelector(".intastellarCookie-settings__container");
@@ -1194,7 +1231,7 @@ window.addEventListener("load", function () {
                     });
                 })
             }
-            if (window.INTA.settings.advanced) {
+            if (window?.INTA?.settings.advanced) {
                 closeSettings.addEventListener("click", function () {
                     let settings = document.querySelector(".intastellarCookie-settings__container");
                     settings.classList.toggle("intastellarCookie-settings__container--expand");
@@ -1239,7 +1276,7 @@ window.addEventListener("load", function () {
                         'ad_personalization': 'denied',
                         'url_passthrough': true,
                     });
-                    dataLayer.push({ 'event': 'cookie_consent_update' })
+                    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("denied");
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
@@ -1293,7 +1330,7 @@ window.addEventListener("load", function () {
                         'ad_personalization': 'granted',
                         'url_passthrough': true,
                     });
-                    dataLayer.push({ 'event': 'cookie_consent_update' })
+                    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
@@ -1329,7 +1366,7 @@ window.addEventListener("load", function () {
             })
             /* Showing default banner when no custom banner is set */
             /*  if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
-                 if (window.INTA.settings.advanced === false || window.INTA.settings.advanced === "" || window.INTA.settings.advanced === undefined) {
+                 if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) {
                      debugger;
                      document.querySelector("html").classList.toggle("noScroll");
                      document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
@@ -1338,7 +1375,7 @@ window.addEventListener("load", function () {
                  }
              } */
 
-            if (window.INTA.settings.advanced) {
+            if (window?.INTA?.settings.advanced) {
                 configBtn.forEach((configs) => {
                     configs.addEventListener("click", function () {
                         let settings = document.querySelector(".intastellarCookie-settings__container");
@@ -1362,7 +1399,7 @@ window.addEventListener("load", function () {
                     });
                 })
             }
-            if (window.INTA.settings.advanced) {
+            if (window?.INTA?.settings.advanced) {
                 closeSettings.addEventListener("click", function () {
                     let settings = document.querySelector(".intastellarCookie-settings__container");
                     settings.classList.toggle("intastellarCookie-settings__container--expand");
@@ -1410,7 +1447,7 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
 
-                    dataLayer.push({ 'event': 'cookie_consent_update' })
+                    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     /*window.location.reload();*/
                 });
             });
@@ -1461,7 +1498,7 @@ window.addEventListener("load", function () {
                         'url_passthrough': true,
                     });
 
-                    dataLayer.push({ 'event': 'cookie_consent_update' })
+                    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
@@ -1475,7 +1512,7 @@ window.addEventListener("load", function () {
         window.addEventListener("message", (e) => {
             if (e.data == "ready") {
                 document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                    .postMessage("you´re open to share with me", "*");
+                    .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
             }
             if (e.data) {
                 const sharedCookies = e.data;
@@ -1492,12 +1529,12 @@ window.addEventListener("load", function () {
         errorMessage.className = "intastellarErrorMessage";
         errorMessageContent.className = "intastellarErrorMessage-content";
 
-        errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner. Read more at <a href='https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy</a>";
+        errorMessageContent.innerHTML = "Intastellar Solutions SDK: Please add a valid privacy & cookie policy to the banner. Read more at <a href='https://developers.intastellarsolutions.com/cookie-solutions/docs/add-privacy-policy' target='_blank' rel='noopener'>https://developers.intastellarsolutions.com/cookie-solutions/docs/add-privacy-policy</a>";
 
         errorMessage.appendChild(errorMessageContent);
         /* document.body.appendChild(errorMessage); */
 
-        throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/gdpr-cookiebanner/docs/add-privacy-policy")
+        throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/cookie-solutions/docs/add-privacy-policy")
     }
 });
 
@@ -1726,6 +1763,7 @@ function isURL(str) {
             pattern.test(str) && str.indexOf("privacy") != -1 ||
             pattern.test(str) && str.indexOf("conditions") != -1 ||
             pattern.test(str) && str.indexOf("datenschutz") != -1 ||
+            pattern.test(str) && str.indexOf("politica") != -1 ||
             pattern.test(str) && str.indexOf("handelsbetingelser") != -1) {
             return true;
         } else {
@@ -1733,6 +1771,49 @@ function isURL(str) {
         }
     } else {
         return false;
+    }
+}
+
+const IntastellarCookieConsent = {
+    renew: function () {
+        document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        document.querySelector("html").classList.add("noScroll");
+    },
+    remove: function (template) {
+        template.classList.remove("--active");
+    },
+    initialize: function (template) {
+        // The cookie banner template is only sometimes added to the DOM event
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                /* Checking if config file needs to be loaded */
+                if (
+                    document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
+                    || window.INTA === undefined
+                ) {
+                    // Get the host and remove all subdomains
+                    let host = window.location.host;
+                    host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
+                    // Remove the port if it exists
+                    host = host.replace(/:\d+$/, "");
+                    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
+                    const configScript = document.createElement("script");
+                    configScript.src = intastellarDefaultConfigFile;
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("GET", intastellarDefaultConfigFile);
+                    xhr.send();
+
+                    if (xhr.status === 200) {
+                        document.head.insertBefore(configScript, document.currentScript);
+                    }
+                }
+                document.body.append(template);
+            });
+        } else {
+            document.body.append(template);
+        }
+
     }
 }
 
@@ -1800,8 +1881,10 @@ xhr.onload = function () {
     }
 }
 
-xhr.open("GET", "https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/privacy-policy?lang=" + (window.INTA.settings === undefined || window.INTA.settings.lang === "auto" || window.INTA.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA.settings.language == "german" ? "de" : window.INTA.settings.language == "danish" ? "da" : window.INTA.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang")) + "&v=" + new Date().getTime());
+xhr.open("GET", "https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/privacy-policy?lang=" + (window?.INTA?.settings === undefined || window?.INTA?.settings.lang === "auto" || window?.INTA?.settings.lang === "" ? document.querySelector("html").getAttribute("lang") : window?.INTA?.settings.language == "german" ? "de" : window?.INTA?.settings.language == "danish" ? "da" : window?.INTA?.settings.language == "english" ? "en" : document.querySelector("html").getAttribute("lang")) + "&v=" + new Date().getTime());
 xhr.send();
+setIntastellarPartnerDomain();
+IntastellarCookieConsent.initialize(intaconsents);
 
 function showPrivacy() {
     document.querySelector(".intLearnMoreBtn").style.display = "none";
@@ -1849,8 +1932,8 @@ function checkIfIncluded(file) {
 
 /* - - - Helper functions for Validate policy link - - - */
 function isValidCCPALink() {
-    if (typeof window.INTA.settings.ccpa === "object" && isCCPAURL(window.INTA.settings.ccpa.url)) {
-        if (window.INTA.settings.ccpa.url.length > 0 && typeof window.INTA.settings.ccpa.url != "undefined") {
+    if (typeof window?.INTA?.settings.ccpa === "object" && isCCPAURL(window?.INTA?.settings.ccpa.url)) {
+        if (window?.INTA?.settings.ccpa.url.length > 0 && typeof window?.INTA?.settings.ccpa.url != "undefined") {
             return true;
         }
     }
@@ -1929,7 +2012,7 @@ function learnMore(e) {
         });
     } else {
         if (intastellarCookieLanguage == "da-DK" || intastellarCookieLanguage == "da" || intastellarCookieLanguage == "dk") {
-            e.innerHTML = "Vis details";
+            e.innerHTML = "Vis detaljer";
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
             e.innerHTML = "Show details";
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de" || intastellarCookieLanguage === "de-DE") {
@@ -2280,13 +2363,13 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     }
-    dataLayer.push({ 'event': 'cookie_consent_update' })
 
     intaConsentsObjectVariable.consents = {
         staticsticCookies: (StaticsCheckBox?.checked) ? "checked" : false,
         functionalCookies: (FunctionalCheckbox?.checked) ? "checked" : false,
         advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
     };
+    dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
     intaConsentsObjectVariable.time = new Date().getTime()
 
     document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
