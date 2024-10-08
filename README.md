@@ -1,5 +1,5 @@
-# Intastellar Consents Solutions
 ![Intastellar Consents Banner](/img/github__banner.jpg "Intastellar Consents Banner")
+# Intastellar Consents Solutions
 ## Table of contents
 * [General info](#general-info)
 * [Implementation](#implementation)
