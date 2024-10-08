@@ -1887,8 +1887,14 @@ setIntastellarPartnerDomain();
 IntastellarCookieConsent.initialize(intaconsents);
 
 function showPrivacy() {
+
+    let paddingTop = "100px";
+    if (window.INTA.settings.design === "banner") {
+        paddingTop = "56px";
+    }
+
     document.querySelector(".intLearnMoreBtn").style.display = "none";
-    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "100px";
+    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = paddingTop;
     const moreContentText = document.querySelector(".intastellar_privacyPolicy");
     moreContentText.style.height = "100%";
     moreContentText.style.background = "#ffff";
@@ -1994,8 +2000,15 @@ function learnMore(e) {
     /* if(document.querySelector(".intastellar_privacyPolicy").style.height === "100%") {
         document.querySelector(".intastellar_privacyPolicy").height = "0";
     } */
+
+    let paddingTop = "140px";
+    if (window.INTA.settings.design === "banner") {
+        paddingTop = "56px";
+    }
+
+
     document.querySelector(".intReadMore").classList.toggle("view");
-    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = "140px";
+    document.querySelector(".intastellarCookieConstents__content").style.scrollPaddingTop = paddingTop;
 
     if (document.querySelector(".intReadMore").classList.contains("view")) {
         if (intastellarCookieLanguage == "da-DK" || intastellarCookieLanguage == "da" || intastellarCookieLanguage == "dk") {
