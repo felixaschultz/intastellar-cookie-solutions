@@ -69,8 +69,6 @@ function darkLightCheck(color) {
         0.114 * (b * b)
     );
 
-    console.log(hsp);
-
     // Using the HSP value, determine whether the color is light or dark
     if (hsp > 124.5) {
 
