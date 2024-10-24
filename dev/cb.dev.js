@@ -70,7 +70,7 @@ function darkLightCheck(color) {
     );
 
     // Using the HSP value, determine whether the color is light or dark
-    if (hsp > 124.5) {
+    if (hsp > 163.5) {
 
         return 'light';
     }
