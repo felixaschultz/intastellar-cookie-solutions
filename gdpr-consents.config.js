@@ -5,8 +5,9 @@ window.INTA = {
     },
     settings: {
         company: "Test Company",
-        logo: "https://www.intastellarsolutions.com/assets/icons/fav/favicon-96x96.png",
-        color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)",
+        logo: "https://laesoe-booking.dk/media/2377/logo-combi.png",
+        /* color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)", */
+        color: "#c33333",
         text: false,
         language: "english",
         design: "banner",

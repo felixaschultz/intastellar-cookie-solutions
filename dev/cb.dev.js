@@ -39,12 +39,54 @@ const pSBC = (p, c0, c1, l) => {
     else return "#" + (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0)).toString(16).slice(1, f ? undefined : -2)
 }
 
+function darkLightCheck(color) {
+    let r, g, b, hsp;
+
+    // Check the format of the color, HEX or RGB?
+    if (color.match(/^rgb/)) {
+
+        // If RGB --> store the red, green, blue values in separate variables
+        color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/);
+
+        r = color[1];
+        g = color[2];
+        b = color[3];
+    }
+    else {
+        // If hex --> Convert it to RGB: http://gist.github.com/983661
+        color = +("0x" + color.slice(1).replace(
+            color.length < 5 && /./g, '$&$&'));
+
+        r = color >> 16;
+        g = color >> 8 & 255;
+        b = color & 255;
+    }
+
+    // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+    hsp = Math.sqrt(
+        0.299 * (r * r) +
+        0.587 * (g * g) +
+        0.114 * (b * b)
+    );
+
+    // Using the HSP value, determine whether the color is light or dark
+    if (hsp > 120.5) {
+
+        return 'light';
+    }
+    else {
+
+        return 'dark';
+    }
+}
+
 let message = "";
 let cookieBtn = "";
 /* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
 const banner = document.createElement("inta-consents-settings-btn");
 const bannerContent = document.createElement("button");
-const intastellarLogo = "https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new-white.svg";
+const intastellarLogoLight = "https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new-white.svg";
+const intastellarLogoDark = "https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg";
 const moreSettings = document.createElement("inta-consents-banner");
 const moreSettingsContent = document.createElement("section");
 const moreintHeader = document.createElement("intheader");
@@ -91,6 +133,7 @@ bannerContent.setAttribute("title", intastellarCookieLanguageSettings);
 cookieSettings.setAttribute("class", "intastellarCookie-settings__container");
 banner.setAttribute("onclick", "javascript:IntastellarCookieConsent.renew();");
 const arrange = window?.INTA?.settings === undefined || window?.INTA?.settings.arrange === undefined ? "" : window?.INTA?.settings.arrange;
+const intastellarLogo = darkLightCheck(window.INTA.settings.color) === "light" ? intastellarLogoDark : intastellarLogoLight;
 if (window.location.host.indexOf("intastellarsolutions") == -1) {
     poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Consents Solutions'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com?utm_source=" + encodeURI(window.location.href) + "&utm_content=powered_by&utm_medium=referral&utm_campaign=" + pluginSource + "&utm_term=gdpr_banner_logo' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='" + intastellarLogo + "' alt='Intastellar Solutions, International'></a></span>";
 }
@@ -772,7 +815,7 @@ if (window?.INTA?.settings.advanced) {
 
 banner.setAttribute("class", "intastellarCookie-settings");
 
-bannerContent.innerHTML = '<img class="intCookieIcon-openSettings" style="filter: invert(1);" src="' + intCookieIcon + '" alt="Cookie Icon">' + IntastellarToolTip + ' ' + text;
+bannerContent.innerHTML = '<img class="intCookieIcon-openSettings" style="filter: brightness(' + (darkLightCheck(window.INTA.settings.color) === "light" ? "0" : "100") + ') !important" src="' + intCookieIcon + '" alt="Cookie Icon">' + IntastellarToolTip + ' ' + text;
 
 banner.appendChild(bannerContent);
 moreSettings.appendChild(moreSettingsContent);
