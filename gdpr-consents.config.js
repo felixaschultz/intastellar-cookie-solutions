@@ -8,6 +8,7 @@ window.INTA = {
         logo: "https://laesoe-booking.dk/media/2377/logo-combi.png",
         /* color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)", */
         color: "#c33333",
+        /* color: "#e2000f", */
         text: false,
         language: "english",
         design: "banner",

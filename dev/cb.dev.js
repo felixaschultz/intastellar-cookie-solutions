@@ -69,8 +69,10 @@ function darkLightCheck(color) {
         0.114 * (b * b)
     );
 
+    console.log(hsp);
+
     // Using the HSP value, determine whether the color is light or dark
-    if (hsp > 120.5) {
+    if (hsp > 124.5) {
 
         return 'light';
     }
@@ -636,6 +638,13 @@ let textSettings = window?.INTA?.settings === undefined || window?.INTA?.setting
 let withText = `
 .intastellarCookie-settingsContainer{
     border-radius: 50%;
+}
+
+.intastellarCookieConstents__content-main p,
+.intastellarCookieConstents__content-main h3,
+.intastellarCookieConstents__content-main ol li,
+.intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{
+    color: ${(darkLightCheck(window.INTA.settings.color) === "light") ? "#000" : "#fff"} !important;
 }
 
 .intaGDPR-content p{
