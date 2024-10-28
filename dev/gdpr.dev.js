@@ -222,7 +222,7 @@ function intaSetCookieSettings() {
 window.addEventListener("DOMContentLoaded", (event) => {
     if (document.getElementById("intastellar-gdpr-settings-js-after") !== null) {
         console.warn(`IntastellarSolutionsSDK: You´re using an old version of our cookie solutions, to make sure to get the latest updates and features, please download the latest version from our Website:
-        https://www.intastellarsolutions.com/gdpr-cookiebanner/downloads`);
+        https://www.intastellarsolutions.com/cookie-solutions/downloads`);
     }
     customElements.define('inta-consents-content', class extends HTMLElement {
         constructor() {
