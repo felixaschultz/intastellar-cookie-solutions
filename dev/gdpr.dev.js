@@ -1363,19 +1363,19 @@ intaStyleLink.type = 'text/css';
 intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/' + cookieBannerStyles[window.INTA.settings.design || "overlay"] + '?v=' + new Date().getTime();
 intaStyleLink.media = 'all';
 intHead.insertBefore(intaStyleLink, document.currentScript.previousSibling);
-window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
-    window.INTA?.settings?.lang : window.INTA?.settings?.language;
+window.INTA.settings.language = typeof window.INTA?.settings?.languageuage === "undefined" ?
+    window.INTA?.settings?.language : window.INTA?.settings?.languageuage;
 
 const intastellarCookieLanguage
     = window.intastellarCookieLanguage
     = window.INTA?.settings === undefined
-        || window.INTA?.settings?.language === "auto"
-        || window.INTA?.settings?.language === ""
-        || window.INTA?.settings?.language === undefined
+        || window.INTA?.settings?.languageuage === "auto"
+        || window.INTA?.settings?.languageuage === ""
+        || window.INTA?.settings?.languageuage === undefined
         ? document.querySelector("html").getAttribute("lang")
-        : window.INTA?.settings?.language == "german" ? "de"
-            : window.INTA?.settings?.language == "danish" ? "da"
-                : window.INTA?.settings?.language == "english" ? "en"
+        : window.INTA?.settings?.languageuage == "german" ? "de"
+            : window.INTA?.settings?.languageuage == "danish" ? "da"
+                : window.INTA?.settings?.languageuage == "english" ? "en"
                     : document.querySelector("html").getAttribute("lang");
 
 const allScripts = window.allScripts = [
@@ -1754,7 +1754,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
 
                 let textLanguage;
                 let btnText;
-                let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA?.settings === undefined || window.INTA?.settings?.lang === "auto" || window.INTA?.settings?.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA?.settings?.language == "german" ? "de" : window.INTA?.settings?.language == "danish" ? "da" : window.INTA?.settings?.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
+                let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA?.settings === undefined || window.INTA?.settings?.language === "auto" || window.INTA?.settings?.language === "" ? document.querySelector("html").getAttribute("lang") : window.INTA?.settings?.languageuage == "german" ? "de" : window.INTA?.settings?.languageuage == "danish" ? "da" : window.INTA?.settings?.languageuage == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                 if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
                     textLanguage = bannerContentMessage(externalDomain).danish;
                     btnText = buttonText().danish;
@@ -1795,7 +1795,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
 
                 let textLanguage;
                 let btnText;
-                let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA?.settings === undefined || window.INTA?.settings?.lang === "auto" || window.INTA?.settings?.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA?.settings?.language == "german" ? "de" : window.INTA?.settings?.language == "danish" ? "da" : window.INTA?.settings?.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
+                let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA?.settings === undefined || window.INTA?.settings?.language === "auto" || window.INTA?.settings?.language === "" ? document.querySelector("html").getAttribute("lang") : window.INTA?.settings?.languageuage == "german" ? "de" : window.INTA?.settings?.languageuage == "danish" ? "da" : window.INTA?.settings?.languageuage == "english" ? "en" : document.querySelector("html").getAttribute("lang");
                 if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
                     textLanguage = bannerContentMessage(externalDomain).danish;
                     btnText = buttonText().danish;
@@ -1848,7 +1848,7 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
 
         let textLanguage;
         let btnText;
-        let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA?.settings === undefined || window.INTA?.settings?.lang === "auto" || window.INTA?.settings?.lang === "" ? document.querySelector("html").getAttribute("lang") : window.INTA?.settings?.language == "german" ? "de" : window.INTA?.settings?.language == "danish" ? "da" : window.INTA?.settings?.language == "english" ? "en" : document.querySelector("html").getAttribute("lang");
+        let intastellarCookieLanguage = window.intastellarCookieLanguage = window.INTA?.settings === undefined || window.INTA?.settings?.language === "auto" || window.INTA?.settings?.language === "" ? document.querySelector("html").getAttribute("lang") : window.INTA?.settings?.languageuage == "german" ? "de" : window.INTA?.settings?.languageuage == "danish" ? "da" : window.INTA?.settings?.languageuage == "english" ? "en" : document.querySelector("html").getAttribute("lang");
         if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
             textLanguage = message(externalDomain).danish;
             btnText = buttonText().danish;
