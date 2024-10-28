@@ -5,13 +5,13 @@ window.INTA = {
     },
     settings: {
         company: "Test Company",
-        logo: "https://laesoe-booking.dk/media/2377/logo-combi.png",
+        logo: "https://www.intastellarsolutions.com/assets/logos/intastellar-new-planet.svg",
         /* color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)", */
         color: "#c33333",
         /* color: "#e2000f", */
         text: false,
         language: "spanish",
-        design: "banner",
+        design: "overlay",
         requiredCookies: [
             {
                 cookie: "region",

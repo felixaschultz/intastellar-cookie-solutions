@@ -1878,30 +1878,23 @@ function listAllCookies(cookieList) {
             return `
             <section class="intaCookieListOverview-grid">
                 <section class="intaCookieList-left">
-                    <h3 class="intaCookieListOverview-heading">
-                        Proveedor
-                    </h3>
+                    <h3 class="intaCookieListOverview-heading">Proveedor</h3>
                     <p class="intaCookieListOverview-vendor">${vendor}</p>
-                    <p class="intaCookieListOverview-heading">
-                        Política de privacidad
-                    </p>
+                    <p class="intaCookieListOverview-heading">Política de privacidad</p>
                     ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`Política de privacidad`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">Política de privacidad</a>`}
-                    <h4 class="intaCookieList-CookieName">
-                        Dominios
-                    </h4>
+                    <h4 class="intaCookieList-CookieName">Dominios</h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
                 return `
-                                    <p>${cookie}</p>
-                                `
+                            <p>${cookie}</p>
+                        `
             }).join(" ")}
-            </section>
-            <section>
-                <h3 class="intaCookieListOverview-heading">
-                    Cookies
-                </h3>
+                </section>
                 <section>
+                    <h3 class="intaCookieListOverview-heading">Cookies</h3>
+                    <section>
                         ${cookie.cookies.map((cookie) => {
+                if (cookie.cookie == undefined) return;
                 return `
                                 <article class="intaCookieList-cookie">
                                     <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
@@ -1910,6 +1903,7 @@ function listAllCookies(cookieList) {
                             `
             }).join(" ")}
                     </section>
+                </section>
             </section>
             `
         } else {
