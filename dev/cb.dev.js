@@ -101,6 +101,8 @@ if (intastellarCookieLanguage == "de") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
 } else if (intastellarCookieLanguage == "en") {
     intastellarCookieLanguageSettings = "Cookie Settings";
+} else if (intastellarCookieLanguage == "es") {
+    intastellarCookieLanguageSettings = "Configuración de cookies";
 }
 
 moreSettings.setAttribute("class", "intastellarCookieConstents");
@@ -544,7 +546,7 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || i
         `
         <article class="intCookieSetting__form">
                 <section class="intastellarSettings__control">
-                    <label class="intSetting" disabled checkMarkContainer>
+                    <label class="intSetting checkMarkContainer" disabled>
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.spanish.necessary.title}</span>
                         <span class="intCheckmarkSliderContainer">
                             <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
