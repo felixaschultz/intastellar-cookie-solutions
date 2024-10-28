@@ -1616,7 +1616,7 @@ intHead.appendChild(s);
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
     let p = "";
     if (window.location.host.indexOf("intastellarsolutions.com") == -1) {
-        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`;
+        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="90px" height="40px" style="width: 90px !important; height: 40px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg" alt="Intastellar Solutions, International"></a>`;
     }
     if (img !== undefined && img != "") {
         return `
@@ -1707,6 +1707,9 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
                     textLanguage = message(externalDomain, frae).english;
                     btnText = buttonText().english;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
+                    textLanguage = message(externalDomain, frae).spanish;
+                    btnText = buttonText().spanish;
                 } else {
                     textLanguage = message(externalDomain, frae).danish;
                     btnText = buttonText().danish;
@@ -1996,19 +1999,22 @@ function checkCookieStatus() {
                                     scriptTypelang = {
                                         danish: "marketing",
                                         english: "advertisement",
-                                        german: "werbe"
+                                        german: "werbe",
+                                        spanish: "publicidad"
                                     }
                                 } else if (script.type == "functional") {
                                     scriptTypelang = {
                                         danish: "funktionelle",
                                         english: "functional",
-                                        german: "funktionelle"
+                                        german: "funktionelle",
+                                        spanish: "funcional"
                                     }
                                 } else if (script.type == "statics") {
                                     scriptTypelang = {
                                         danish: "statistiske",
                                         english: "statics",
-                                        german: "statistische"
+                                        german: "statistische",
+                                        spanish: "estadísticas"
                                     }
                                 }
 
