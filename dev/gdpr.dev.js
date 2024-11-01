@@ -191,7 +191,122 @@ const intastellarSupportedLanguages = {
             title: "Marketing",
             description: "Utilizamos tecnologías web (también cookies) de socios seleccionados para poder mostrarle contenido y publicidad especialmente adaptados a usted en sitios web y redes sociales. Este contenido se selecciona y muestra en función de su comportamiento de uso. Las cookies publicitarias o de marketing se utilizan para proporcionar a los visitantes anuncios y campañas de marketing relevantes. Estas cookies rastrean a los visitantes a través de sitios web y recopilan información para proporcionar anuncios personalizados."
         }
-    }
+    },
+    french: {
+        saveSettings: "Refuser",
+        necessary: {
+            title: "Nécessaire", //"Necessary Cookies:",
+            description: "Les technologies web et les cookies nécessaires rendent notre site web techniquement accessible et utilisable pour vous. Cela s'applique aux fonctionnalités de base fondamentales telles que la navigation sur le site web, l'affichage correct dans votre navigateur Internet ou la demande de votre consentement. Sans ces technologies web et cookies, notre site web ne fonctionne pas.",
+        },
+        functional: {
+            title: "Fonctionnel",
+            description: "Les cookies fonctionnels permettent de stocker des informations qui modifient l'apparence ou le comportement du site web. Par exemple, votre langue ou région préférée."
+        },
+        statisic: {
+            title: "Statistiques",
+            description: "Nous voulons constamment améliorer la convivialité et les performances de nos sites web. Pour cette raison, nous utilisons des technologies d'analyse (y compris des cookies) qui mesurent et évaluent de manière pseudonyme quelles fonctions et quels contenus de nos sites web sont utilisés, comment et à quelle fréquence. Sur cette base, nous pouvons améliorer nos sites web pour les utilisateurs."
+        },
+        marketing: {
+            title: "Marketing",
+            description: "Nous utilisons des technologies web (également des cookies) de partenaires sélectionnés pour pouvoir vous montrer du contenu et de la publicité spécialement adaptés à vous sur des sites web et des réseaux sociaux. Ce contenu est sélectionné et affiché sur la base de votre comportement d'utilisation. Les cookies publicitaires ou de marketing sont utilisés pour fournir aux visiteurs des annonces et des campagnes marketing pertinentes. Ces cookies suivent les visiteurs à travers les sites web et collectent des informations pour fournir des annonces personnalisées."
+        }
+    },
+    italian: {
+        saveSettings: "Rifiuta",
+        necessary: {
+            title: "Necessario",
+            description: "Le tecnologie web e i cookie necessari rendono il nostro sito web tecnicamente accessibile e utilizzabile per te. Questo si applica a funzionalità di base fondamentali come la navigazione sul sito web, la visualizzazione corretta nel tuo browser Internet o la richiesta del tuo consenso. Senza queste tecnologie web e cookie, il nostro sito web non funziona.",
+        },
+        functional: {
+            title: "Funzionale",
+            description: "I cookie funzionali consentono di salvare informazioni che modificano l'aspetto o il comportamento del sito web. Ad esempio, la tua lingua o regione preferita."
+        },
+        statisic: {
+            title: "Statistiche",
+            description: "Vogliamo migliorare costantemente l'usabilità e le prestazioni dei nostri siti web. Per questo motivo utilizziamo tecnologie di analisi (compresi i cookie) che misurano e valutano in modo pseudonimo quali funzioni e contenuti dei nostri siti web vengono utilizzati, come e con quale frequenza. Su questa base possiamo migliorare i nostri siti web per gli utenti."
+        },
+        marketing: {
+            title: "Marketing",
+            description: "Utilizziamo tecnologie web (anche cookie) da partner selezionati per poterti mostrare contenuti e pubblicità appositamente studiati per te su siti web e social media. Questi contenuti vengono selezionati e visualizzati in base al tuo comportamento d'uso. I cookie pubblicitari o di marketing vengono utilizzati per fornire ai visitatori annunci e campagne di marketing pertinenti. Questi cookie tracciano i visitatori tra i siti web e raccolgono informazioni per fornire annunci personalizzati."
+        }
+    },
+    dutch: {
+        saveSettings: "Weigeren",
+        necessary: {
+            title: "Noodzakelijk",
+            description: "Noodzakelijke webtechnologieën en cookies maken onze website technisch toegankelijk en bruikbaar voor u. Dit geldt voor fundamentele basisfunctionaliteiten zoals navigatie op de website, correcte weergave in uw internetbrowser of het vragen van uw toestemming. Zonder deze webtechnologieën en cookies werkt onze website niet.",
+        },
+        functional: {
+            title: "Functioneel",
+            description: "Functionele cookies maken het mogelijk informatie op te slaan die de manier waarop de website verschijnt of werkt, verandert. Bijvoorbeeld uw voorkeurstaal of regio."
+        },
+        statisic: {
+            title: "Statistieken",
+            description: "We willen de gebruiksvriendelijkheid en prestaties van onze websites voortdurend verbeteren. Daarom gebruiken we analyse technologieën (inclusief cookies) die pseudoniem meten en evalueren welke functies en inhoud van onze websites worden gebruikt, hoe en hoe vaak. Op basis hiervan kunnen we onze websites verbeteren voor gebruikers."
+        },
+        marketing: {
+            title: "Marketing",
+            description: "We gebruiken webtechnologieën (ook cookies) van geselecteerde partners om u inhoud en advertenties te tonen die speciaal op u zijn afgestemd op websites en sociale media. Deze inhoud wordt geselecteerd en weergegeven op basis van uw gebruiksgedrag. Advertentie- of marketingcookies worden gebruikt om bezoekers relevante advertenties en marketingcampagnes te bieden. Deze cookies volgen bezoekers over websites heen en verzamelen informatie om aangepaste advertenties te leveren."
+        }
+    },
+    portuguese: {
+        saveSettings: "Recusar",
+        necessary: {
+            title: "Necessário",
+            description: "As tecnologias web e os cookies necessários tornam o nosso site tecnicamente acessível e utilizável para si. Isto aplica-se a funcionalidades básicas fundamentais como a navegação no site, a visualização correta no seu navegador de Internet ou o pedido do seu consentimento. Sem estas tecnologias web e cookies, o nosso site não funciona.",
+        },
+        functional: {
+            title: "Funcional",
+            description: "Os cookies funcionais permitem guardar informações que alteram a forma como o site aparece ou se comporta. Por exemplo, o seu idioma ou região preferidos."
+        },
+        statisic: {
+            title: "Estatísticas",
+            description: "Queremos melhorar constantemente a usabilidade e o desempenho dos nossos sites. Para isso, utilizamos tecnologias de análise (incluindo cookies) que medem e avaliam de forma pseudónima quais as funções e conteúdos dos nossos sites que são utilizados, como e com que frequência. Com base nisso, podemos melhorar os nossos sites para os utilizadores."
+        },
+        marketing: {
+            title: "Marketing",
+            description: "Utilizamos tecnologias web (também cookies) de parceiros selecionados para lhe mostrar conteúdo e publicidade especialmente adaptados a si em sites web e redes sociais. Este conteúdo é selecionado e exibido com base no seu comportamento de utilização. Os cookies publicitários ou de marketing são utilizados para fornecer aos visitantes anúncios e campanhas de marketing relevantes. Estes cookies rastreiam visitantes em sites web e recolhem informações para fornecer anúncios personalizados."
+        }
+
+    },
+    russian: {
+        saveSettings: "Отклонить",
+        necessary: {
+            title: "Необходимые", //"Necessary Cookies:",
+            description: "Необходимые веб-технологии и файлы cookie делают наш сайт технически доступным и используемым для вас. Это относится к основным базовым функциям, таким как навигация по сайту, правильное отображение в вашем интернет-браузере или запрос вашего согласия. Без этих веб-технологий и файлов cookie наш сайт не работает.",
+        },
+        functional: {
+            title: "Функциональные",
+            description: "Функциональные файлы cookie позволяют сохранять информацию, которая изменяет внешний вид или действие сайта. Например, ваш предпочитаемый язык или регион."
+        },
+        statisic: {
+            title: "Статистика",
+            description: "Мы постоянно стремимся улучшить удобство использования и производительность наших сайтов. Для этого мы используем технологии анализа (включая файлы cookie), которые псевдонимно измеряют и оценивают, какие функции и содержимое наших сайтов используются, как и как часто. На этой основе мы можем улучшить наши сайты для пользователей."
+        },
+        marketing: {
+            title: "Маркетинг",
+            description: "Мы используем веб-технологии (также файлы cookie) от выбранных партнеров, чтобы показывать вам контент и рекламу, специально подобранную для вас на сайтах и социальных сетях. Этот контент выбирается и отображается на основе вашего поведения. Файлы cookie для рекламы или маркетинга используются для предоставления посетителям релевантных объявлений и маркетинговых кампаний. Эти файлы cookie отслеживают посетителей по различным сайтам и собирают информацию для предоставления настраиваемых объявлений."
+        }
+    },
+    swedish: {
+        saveSettings: "Avvisa",
+        necessary: {
+            title: "Nödvändiga", //"Necessary Cookies:",
+            description: "Nödvändiga webbteknologier och cookies gör vår webbplats tekniskt tillgänglig och användbar för dig. Detta gäller grundläggande basfunktioner som navigering på webbplatsen, korrekt visning i din webbläsare eller begäran om ditt samtycke. Utan dessa webbteknologier och cookies fungerar inte vår webbplats.",
+        },
+        functional: {
+            title: "Funktionell",
+            description: "Funktionella cookies gör det möjligt att spara information som ändrar hur webbplatsen visas eller fungerar. Till exempel ditt föredragna språk eller region."
+        },
+        statisic: {
+            title: "Statistik",
+            description: "Vi vill ständigt förbättra användarvänligheten och prestandan på våra webbplatser. Därför använder vi analys tekniker (inklusive cookies) som pseudonymt mäter och utvärderar vilka funktioner och innehåll på våra webbplatser som används, hur och hur ofta. På denna grund kan vi förbättra våra webbplatser för användarna."
+        },
+        marketing: {
+            title: "Marknadsföring",
+            description: "Vi använder webbteknologier (även cookies) från utvalda partners för att kunna visa dig innehåll och annonser som är speciellt anpassade för dig på webbplatser och sociala medier. Detta innehåll väljs och visas baserat på ditt användarbeteende. Annons- eller marknadsföringscookies används för att ge besökare relevanta annonser och marknadsföringskampanjer. Dessa cookies spårar besökare över webbplatser och samlar in information för att tillhandahålla anpassade annonser."
+        }
+    },
 }
 
 let tmpl = document.createElement('template');
@@ -1717,6 +1832,24 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
                     textLanguage = message(externalDomain, frae).spanish;
                     btnText = buttonText().spanish;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fr" || intastellarCookieLanguage === "fr-FR") {
+                    textLanguage = message(externalDomain, frae).french;
+                    btnText = buttonText().french;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "it" || intastellarCookieLanguage === "it-IT") {
+                    textLanguage = message(externalDomain, frae).italian;
+                    btnText = buttonText().italian;
+
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ru" || intastellarCookieLanguage === "ru-RU") {
+                    textLanguage = message(externalDomain, frae).russian;
+                    btnText = buttonText().russian;
+
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "sv" || intastellarCookieLanguage === "sv-SE") {
+                    textLanguage = message(externalDomain, frae).swedish;
+                    btnText = buttonText().swedish;
+
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "" || intastellarCookieLanguage === "sv-SE") {
+                    textLanguage = message(externalDomain, frae).swedish;
+                    btnText = buttonText().swedish;
                 } else {
                     textLanguage = message(externalDomain, frae).danish;
                     btnText = buttonText().danish;
@@ -1866,6 +1999,25 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
             textLanguage = bannerContentMessage(externalDomain).spanish;
             btnText = buttonText().spanish;
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "sv" || intastellarCookieLanguage === "sv-SE") {
+            // Swedish
+            textLanguage = message(externalDomain).swedish;
+            btnText = buttonText().swedish;
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fr" || intastellarCookieLanguage === "fr-FR") {
+            // French
+            textLanguage = message(externalDomain).french;
+            btnText = buttonText().french;
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pr" || intastellarCookieLanguage === "pr-PT") {
+            // Portuguese
+            textLanguage = message(externalDomain).portuguese;
+            btnText = buttonText().portuguese;
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "it" || intastellarCookieLanguage === "it-IT") {
+            // Italian
+            textLanguage = message(externalDomain).italian;
+            btnText = buttonText().italian;
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ru" || intastellarCookieLanguage === "ru-RU") {
+            textLanguage = message(externalDomain, frae).russian;
+            btnText = buttonText().russian;
         } else {
             textLanguage = message(externalDomain).danish;
             btnText = buttonText().danish;
@@ -1902,6 +2054,11 @@ const bannerContentMessage = (domain, node) => {
         english: `<p>This content is provided by ${domain}.</p>`,
         german: `<p>Dieser Inhalt wird von ${domain} bereitgestellt.</p>`,
         spanish: `<p>Este contenido es proporcionado por ${domain}.</p>`,
+        swedish: `<p>Denna innehåll tillhandahålls av ${domain}.</p>`,
+        french: `<p>Ce contenu est fourni par ${domain}.</p>`,
+        portuguese: `<p>Este conteúdo é fornecido por ${domain}.</p>`,
+        italian: `<p>Questo contenuto è fornito da ${domain}.</p>`,
+        russian: `<p>Этот контент предоставлен ${domain}.</p>`
     }
 };
 
@@ -2005,21 +2162,36 @@ function checkCookieStatus() {
                                         danish: "marketing",
                                         english: "advertisement",
                                         german: "werbe",
-                                        spanish: "publicidad"
+                                        spanish: "publicidad",
+                                        swedish: "marknadsföring",
+                                        french: "publicité",
+                                        portuguese: "publicidade",
+                                        italian: "pubblicità",
+                                        russian: "реклама"
                                     }
                                 } else if (script.type == "functional") {
                                     scriptTypelang = {
                                         danish: "funktionelle",
                                         english: "functional",
                                         german: "funktionelle",
-                                        spanish: "funcional"
+                                        spanish: "funcional",
+                                        swedish: "funktionell",
+                                        french: "fonctionnel",
+                                        portuguese: "funcional",
+                                        italian: "funzionale",
+                                        russian: "функциональный"
                                     }
                                 } else if (script.type == "statics") {
                                     scriptTypelang = {
                                         danish: "statistiske",
                                         english: "statics",
                                         german: "statistische",
-                                        spanish: "estadísticas"
+                                        spanish: "estadísticas",
+                                        swedish: "statistik",
+                                        french: "statistiques",
+                                        portuguese: "estatísticas",
+                                        italian: "statistico",
+                                        russian: "статистика"
                                     }
                                 }
 
@@ -2027,7 +2199,13 @@ function checkCookieStatus() {
                                     danish: `Accepter ${scriptTypelang.danish} cookies`,
                                     english: `Accept ${scriptTypelang.english} cookies`,
                                     german: `Akzeptiere ${scriptTypelang.german} cookies`,
-                                    spanish: `Aceptar cookies ${scriptTypelang.spanish}`
+                                    spanish: `Aceptar cookies ${scriptTypelang.spanish}`,
+                                    swedish: `Acceptera ${scriptTypelang.swedish} cookies`,
+                                    french: `Accepter les cookies ${scriptTypelang.french}`,
+                                    portuguese: `Aceitar cookies ${scriptTypelang.portuguese}`,
+                                    italian: `Accetta i cookie ${scriptTypelang.italian}`,
+                                    russian: `Принять файлы cookie ${scriptTypelang.russian}`
+
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
@@ -2044,19 +2222,37 @@ function checkCookieStatus() {
                                         scriptTypelang = {
                                             danish: "marketing",
                                             english: "advertisement",
-                                            german: "werbe"
+                                            german: "werbe",
+                                            spanish: "publicidad",
+                                            swedish: "marknadsföring",
+                                            french: "publicité",
+                                            portuguese: "publicidade",
+                                            italian: "pubblicità",
+                                            russian: "реклама"
                                         }
                                     } else if (script.type == "functional") {
                                         scriptTypelang = {
                                             danish: "funktionelle",
                                             english: "functional",
-                                            german: "funktionelle"
+                                            german: "funktionelle",
+                                            spanish: "funcional",
+                                            swedish: "funktionell",
+                                            french: "fonctionnel",
+                                            portuguese: "funcional",
+                                            italian: "funzionale",
+                                            russian: "функциональный"
                                         }
                                     } else if (script.type == "statics") {
                                         scriptTypelang = {
                                             danish: "statistiske",
                                             english: "statics",
-                                            german: "statistische"
+                                            german: "statistische",
+                                            spanish: "estadísticas",
+                                            swedish: "statistik",
+                                            french: "statistiques",
+                                            portuguese: "estatísticas",
+                                            italian: "statistico",
+                                            russian: "статистика"
                                         }
                                     }
 
@@ -2064,7 +2260,12 @@ function checkCookieStatus() {
                                         danish: `Accepter ${scriptTypelang.danish} cookies`,
                                         english: `Accept ${scriptTypelang.english} cookies`,
                                         german: `Akzeptiere ${scriptTypelang.german} cookies`,
-                                        spanish: `Aceptar cookies ${scriptTypelang.spanish}`
+                                        spanish: `Aceptar cookies ${scriptTypelang.spanish}`,
+                                        swedish: `Acceptera ${scriptTypelang.swedish} cookies`,
+                                        french: `Accepter les cookies ${scriptTypelang.french}`,
+                                        portuguese: `Aceitar cookies ${scriptTypelang.portuguese}`,
+                                        italian: `Accetta i cookie ${scriptTypelang.italian}`,
+                                        russian: `Принять файлы cookie ${scriptTypelang.russian}`
                                     }
                                 }
                                 let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
