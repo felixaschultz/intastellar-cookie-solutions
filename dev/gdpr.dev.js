@@ -2018,6 +2018,15 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ru" || intastellarCookieLanguage === "ru-RU") {
             textLanguage = message(externalDomain, frae).russian;
             btnText = buttonText().russian;
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no") {
+            textLanguage = message(externalDomain, frae).norwegian;
+            btnText = buttonText().norwegian;
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
+            textLanguage = message(externalDomain, frae).finish;
+            btnText = buttonText().finish;
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
+            textLanguage = message(externalDomain, frae).dutch;
+            btnText = buttonText().dutch;
         } else {
             textLanguage = message(externalDomain).danish;
             btnText = buttonText().danish;
@@ -2058,7 +2067,10 @@ const bannerContentMessage = (domain, node) => {
         french: `<p>Ce contenu est fourni par ${domain}.</p>`,
         portuguese: `<p>Este conteúdo é fornecido por ${domain}.</p>`,
         italian: `<p>Questo contenuto è fornito da ${domain}.</p>`,
-        russian: `<p>Этот контент предоставлен ${domain}.</p>`
+        russian: `<p>Этот контент предоставлен ${domain}.</p>`,
+        norwegian: `<p>Dette innholdet leveres av ${domain}.</p>`,
+        finish: `<p>Tämä sisältö toimitetaan ${domain}.</p>`,
+        dutch: `<p>Deze inhoud wordt geleverd door ${domain}.</p>`,
     }
 };
 
@@ -2167,7 +2179,10 @@ function checkCookieStatus() {
                                         french: "publicité",
                                         portuguese: "publicidade",
                                         italian: "pubblicità",
-                                        russian: "реклама"
+                                        russian: "реклама",
+                                        norwegian: "markedsføring",
+                                        finish: "mainonta",
+                                        dutch: "reclame"
                                     }
                                 } else if (script.type == "functional") {
                                     scriptTypelang = {
@@ -2179,7 +2194,10 @@ function checkCookieStatus() {
                                         french: "fonctionnel",
                                         portuguese: "funcional",
                                         italian: "funzionale",
-                                        russian: "функциональный"
+                                        russian: "функциональный",
+                                        norwegian: "funksjonelle",
+                                        finish: "toiminnallinen",
+                                        dutch: "functioneel"
                                     }
                                 } else if (script.type == "statics") {
                                     scriptTypelang = {
@@ -2191,7 +2209,10 @@ function checkCookieStatus() {
                                         french: "statistiques",
                                         portuguese: "estatísticas",
                                         italian: "statistico",
-                                        russian: "статистика"
+                                        russian: "статистика",
+                                        norwegian: "statistiske",
+                                        finish: "tilastollinen",
+                                        dutch: "statistieken"
                                     }
                                 }
 
@@ -2204,8 +2225,10 @@ function checkCookieStatus() {
                                     french: `Accepter les cookies ${scriptTypelang.french}`,
                                     portuguese: `Aceitar cookies ${scriptTypelang.portuguese}`,
                                     italian: `Accetta i cookie ${scriptTypelang.italian}`,
-                                    russian: `Принять файлы cookie ${scriptTypelang.russian}`
-
+                                    russian: `Принять файлы cookie ${scriptTypelang.russian}`,
+                                    norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
+                                    finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
+                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
@@ -2228,7 +2251,10 @@ function checkCookieStatus() {
                                             french: "publicité",
                                             portuguese: "publicidade",
                                             italian: "pubblicità",
-                                            russian: "реклама"
+                                            russian: "реклама",
+                                            norwegian: "markedsføring",
+                                            finish: "mainonta",
+                                            dutch: "reclame"
                                         }
                                     } else if (script.type == "functional") {
                                         scriptTypelang = {
@@ -2240,7 +2266,10 @@ function checkCookieStatus() {
                                             french: "fonctionnel",
                                             portuguese: "funcional",
                                             italian: "funzionale",
-                                            russian: "функциональный"
+                                            russian: "функциональный",
+                                            norwegian: "funksjonelle",
+                                            finish: "toiminnallinen",
+                                            dutch: "functioneel"
                                         }
                                     } else if (script.type == "statics") {
                                         scriptTypelang = {
@@ -2252,7 +2281,10 @@ function checkCookieStatus() {
                                             french: "statistiques",
                                             portuguese: "estatísticas",
                                             italian: "statistico",
-                                            russian: "статистика"
+                                            russian: "статистика",
+                                            norwegian: "statistiske",
+                                            finish: "tilastollinen",
+                                            dutch: "statistieken"
                                         }
                                     }
 
@@ -2265,7 +2297,10 @@ function checkCookieStatus() {
                                         french: `Accepter les cookies ${scriptTypelang.french}`,
                                         portuguese: `Aceitar cookies ${scriptTypelang.portuguese}`,
                                         italian: `Accetta i cookie ${scriptTypelang.italian}`,
-                                        russian: `Принять файлы cookie ${scriptTypelang.russian}`
+                                        russian: `Принять файлы cookie ${scriptTypelang.russian}`,
+                                        norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
+                                        finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
+                                        dutch: `Accepteer ${scriptTypelang.danish} cookies`
                                     }
                                 }
                                 let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
