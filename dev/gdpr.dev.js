@@ -1676,6 +1676,11 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
 }
 
+window.uetq = window.uetq || [];
+window.uetq.push('consent', 'default', {
+    'ad_storage': 'denied'
+});
+
 gtag('consent', 'default', {
     'ad_storage': 'denied',
     'personalization_storage': 'denied',

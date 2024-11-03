@@ -2005,8 +2005,14 @@ window.addEventListener("load", function () {
                     'ad_user_data': 'granted',
                     'ad_personalization': 'granted',
                 });
+                window.uetq.push('consent', 'update', {
+                    'ad_storage': 'granted'
+                });
                 accepted.push("advertisementCookies");
             } else {
+                window.uetq.push('consent', 'update', {
+                    'ad_storage': 'denied'
+                });
                 gtag('consent', 'update', {
                     'ad_storage': 'denied',
                     'personalization_storage': 'denied',
@@ -2073,6 +2079,9 @@ window.addEventListener("load", function () {
                     'ad_personalization': 'granted',
                     'url_passthrough': true,
                 });
+                window.uetq.push('consent', 'update', {
+                    'ad_storage': 'granted'
+                });
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 updateConsents("all");
                 /*window.location.reload();*/
@@ -2131,6 +2140,9 @@ window.addEventListener("load", function () {
                     'ad_personalization': 'granted',
                     'url_passthrough': true,
                 });
+                window.uetq.push('consent', 'update', {
+                    'ad_storage': 'granted'
+                });
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 updateConsents("all");
                 /*window.location.reload();*/
@@ -2179,6 +2191,9 @@ window.addEventListener("load", function () {
                     'ad_user_data': 'denied',
                     'ad_personalization': 'denied',
                     'url_passthrough': true,
+                });
+                window.uetq.push('consent', 'update', {
+                    'ad_storage': 'denied'
                 });
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 /*window.location.reload();*/
@@ -2271,6 +2286,9 @@ window.addEventListener("load", function () {
                         'ad_personalization': 'denied',
                         'url_passthrough': true,
                     });
+                    window.uetq.push('consent', 'update', {
+                        'ad_storage': 'denied'
+                    });
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("denied");
                     document.querySelector("#marketing").checked = false;
@@ -2324,6 +2342,9 @@ window.addEventListener("load", function () {
                         'ad_user_data': 'granted',
                         'ad_personalization': 'granted',
                         'url_passthrough': true,
+                    });
+                    window.uetq.push('consent', 'update', {
+                        'ad_storage': 'granted'
                     });
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
@@ -2441,6 +2462,9 @@ window.addEventListener("load", function () {
                         'ad_personalization': 'denied',
                         'url_passthrough': true,
                     });
+                    window.uetq.push('consent', 'update', {
+                        'ad_storage': 'denied'
+                    });
 
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     /*window.location.reload();*/
@@ -2491,6 +2515,9 @@ window.addEventListener("load", function () {
                         'ad_user_data': 'granted',
                         'ad_personalization': 'granted',
                         'url_passthrough': true,
+                    });
+                    window.uetq.push('consent', 'update', {
+                        'ad_storage': 'granted'
                     });
 
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
@@ -3635,6 +3662,9 @@ function saveINTCookieSettings(consent, type = null) {
             'ad_personalization': 'granted',
             'url_passthrough': true,
         });
+        window.uetq.push('consent', 'update', {
+            'ad_storage': 'granted'
+        });
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -3654,6 +3684,9 @@ function saveINTCookieSettings(consent, type = null) {
             'ad_user_data': 'denied',
             'ad_personalization': 'denied',
             'url_passthrough': true
+        });
+        window.uetq.push('consent', 'update', {
+            'ad_storage': 'denied'
         });
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
@@ -3736,6 +3769,10 @@ function saveINTCookieSettings(consent, type = null) {
             'ad_personalization': 'denied',
             'url_passthrough': true,
         })
+
+        window.uetq.push('consent', 'update', {
+            'ad_storage': 'denied'
+        });
 
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
