@@ -307,6 +307,44 @@ const intastellarSupportedLanguages = {
             description: "Vi använder webbteknologier (även cookies) från utvalda partners för att kunna visa dig innehåll och annonser som är speciellt anpassade för dig på webbplatser och sociala medier. Detta innehåll väljs och visas baserat på ditt användarbeteende. Annons- eller marknadsföringscookies används för att ge besökare relevanta annonser och marknadsföringskampanjer. Dessa cookies spårar besökare över webbplatser och samlar in information för att tillhandahålla anpassade annonser."
         }
     },
+    norwegian: {
+        saveSettings: "Avslå",
+        necessary: {
+            title: "Nødvendige", //"Necessary Cookies:",
+            description: "Nødvendige webteknologier og informasjonskapsler gjør nettstedet vårt teknisk tilgjengelig og brukbart for deg. Dette gjelder grunnleggende funksjoner som navigasjon på nettstedet, riktig visning i nettleseren din eller forespørsel om samtykke. Uten disse webteknologiene og informasjonskapslene fungerer ikke nettstedet vårt.",
+        },
+        functional: {
+            title: "Funksjonell",
+            description: "Funksjonelle informasjonskapsler gjør det mulig å lagre informasjon som endrer måten nettstedet vises eller fungerer på. For eksempel ditt foretrukne språk eller region."
+        },
+        statisic: {
+            title: "Statistikk",
+            description: "Vi ønsker å forbedre brukervennligheten og ytelsen til nettstedene våre kontinuerlig. Derfor bruker vi analyse teknologier (inkludert informasjonskapsler) som måler og evaluerer pseudonymt hvilke funksjoner og innhold på nettstedene våre som brukes, hvordan og hvor ofte. På denne bakgrunn kan vi forbedre nettstedene våre for brukerne."
+        },
+        marketing: {
+            title: "Markedsføring",
+            description: "Vi bruker webteknologier (også informasjonskapsler) fra utvalgte partnere for å kunne vise deg innhold og annonser som er spesielt tilpasset deg på nettsteder og sosiale medier. Dette innholdet velges og vises basert på bruksatferden din. Annonse- eller markedsføringskapsler brukes til å gi besøkende relevante annonser og markedsføringskampanjer. Disse informasjonskapslene sporer besøkende på tvers av nettsteder og samler inn informasjon for å levere tilpassede annonser."
+        }
+    },
+    finnish: {
+        saveSettings: "Hylätä",
+        necessary: {
+            title: "Välttämätön", //"Necessary Cookies:",
+            description: "Välttämättömät verkkoteknologiat ja evästeet tekevät verkkosivustostamme teknisesti saavutettavan ja käyttökelpoisen sinulle. Tämä koskee perustavanlaatuisia perustoimintoja, kuten sivuston navigointia, oikeaa näyttöä Internet-selaimessasi tai suostumuksesi pyytämistä. Ilman näitä verkkoteknologioita ja evästeitä verkkosivustomme ei toimi.",
+        },
+        functional: {
+            title: "Toiminnallinen",
+            description: "Toiminnalliset evästeet mahdollistavat tietojen tallentamisen, jotka muuttavat sivuston ulkonäköä tai toimintaa. Esimerkiksi suosikkikieli tai alue."
+        },
+        statisic: {
+            title: "Tilastot",
+            description: "Haluamme jatkuvasti parantaa verkkosivustojemme käytettävyyttä ja suorituskykyä. Tätä varten käytämme analyysitekniikoita (mukaan lukien evästeet), jotka mittaavat ja arvioivat pseudonyymisti, mitä sivustojemme toimintoja ja sisältöjä käytetään, miten ja kuinka usein. Tällä perusteella voimme parantaa sivustoja käyttäjille."
+        },
+        marketing: {
+            title: "Markkinointi",
+            description: "Käytämme valittujen kumppaneiden web-tekniikoita (myös evästeitä) voidaksemme näyttää sinulle sisältöä ja mainoksia, jotka on räätälöity sinulle erityisesti verkkosivustoilla ja sosiaalisissa medioissa. Tämä sisältö valitaan ja näytetään käyttäytymisesi perusteella. Mainos- tai markkinointievästeitä käytetään tarjoamaan vierailijoille relevantteja mainoksia ja markkinointikampanjoita. Nämä evästeet seuraavat vierailijoita sivustoilla ja keräävät tietoja räätälöityjen mainosten tarjoamiseksi."
+        }
+    }
 }
 
 let tmpl = document.createElement('template');
@@ -1498,7 +1536,8 @@ const intastellarCookieLanguage
                                     : window.INTA?.settings?.language == "portuguese" ? "pt"
                                         : window.INTA?.settings?.language == "russian" ? "ru"
                                             : window.INTA?.settings?.language == "swedish" ? "sv"
-                                                : document.querySelector("html").getAttribute("lang");
+                                                : window.INTA?.settings?.language == "norwegian" ? "no"
+                                                    : document.querySelector("html").getAttribute("lang");
 
 const allScripts = window.allScripts = [
     {
@@ -1847,9 +1886,15 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                     textLanguage = message(externalDomain, frae).swedish;
                     btnText = buttonText().swedish;
 
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "" || intastellarCookieLanguage === "sv-SE") {
-                    textLanguage = message(externalDomain, frae).swedish;
-                    btnText = buttonText().swedish;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no" || intastellarCookieLanguage === "no-NO") {
+                    textLanguage = message(externalDomain, frae).norwegian;
+                    btnText = buttonText().norwegian;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
+                    textLanguage = message(externalDomain, frae).dutch;
+                    btnText = buttonText().dutch;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
+                    textLanguage = message(externalDomain, frae).finish;
+                    btnText = buttonText().finish;
                 } else {
                     textLanguage = message(externalDomain, frae).danish;
                     btnText = buttonText().danish;
@@ -1907,6 +1952,15 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
                     textLanguage = bannerContentMessage(externalDomain).spanish;
                     btnText = buttonText().spanish;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no" || intastellarCookieLanguage === "no-NO") {
+                    textLanguage = bannerContentMessage(externalDomain).norwegian;
+                    btnText = buttonText().norwegian;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
+                    textLanguage = bannerContentMessage(externalDomain).dutch;
+                    btnText = buttonText().dutch;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
+                    textLanguage = bannerContentMessage(externalDomain).finish;
+                    btnText = buttonText().finish;
                 } else {
                     textLanguage = bannerContentMessage(externalDomain).danish;
                     btnText = buttonText().danish;
@@ -1947,6 +2001,15 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
                     textLanguage = bannerContentMessage(externalDomain).spanish;
                     btnText = buttonText().spanish;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
+                    textLanguage = bannerContentMessage(externalDomain).dutch;
+                    btnText = buttonText().dutch;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fr" || intastellarCookieLanguage === "fr-FR") {
+                    textLanguage = bannerContentMessage(externalDomain).french;
+                    btnText = buttonText().french;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
+                    textLanguage = bannerContentMessage(externalDomain).finish;
+                    btnText = buttonText().finish;
                 } else {
                     textLanguage = bannerContentMessage(externalDomain).danish;
                     btnText = buttonText().danish;
