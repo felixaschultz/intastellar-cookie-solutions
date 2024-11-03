@@ -109,8 +109,14 @@ if (intastellarCookieLanguage == "de") {
     intastellarCookieLanguageSettings = "Kakinställningar";
 } else if (intastellarCookieLanguage == "no") {
     intastellarCookieLanguageSettings = "Informasjonskapselinnstillinger";
+} else if (intastellarCookieLanguage == "nl") {
+    intastellarCookieLanguageSettings = "Cookie-instellingen";
+} else if (intastellarCookieLanguage == "it") {
+    intastellarCookieLanguageSettings = "Impostazioni dei cookie";
 } else if (intastellarCookieLanguage == "fi") {
     intastellarCookieLanguageSettings = "Evästeasetukset";
+} else if (intastellarCookieLanguage == "ru") {
+    intastellarCookieLanguageSettings = "Настройки файлов cookie";
 }
 
 moreSettings.setAttribute("class", "intastellarCookieConstents");
