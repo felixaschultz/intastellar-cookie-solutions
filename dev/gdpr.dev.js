@@ -1820,8 +1820,12 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
             && intaCookieConsents?.functionalCookies === "checked" && intaCookieConsents?.staticsticCookies === "checked") {
             return;
         }
+        let settingsContent = document.createElement("inta-consents-iframe");
 
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
+            if (frae.classList.contains("fb-like")) {
+                frae?.parentElement?.replaceChild(settingsContent, frae);
+            }
             if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
                 frae.sandbox = "";
                 let ytIMG = "";
@@ -1904,8 +1908,6 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                     textLanguage = message(externalDomain, frae).danish;
                     btnText = buttonText().danish;
                 }
-
-                let settingsContent = document.createElement("inta-consents-iframe");
                 if (!frae.classList.contains("trustpilot-widget")) {
                     settingsContent.setAttribute("data-src", a?.href);
                 }
