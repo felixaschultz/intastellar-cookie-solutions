@@ -1680,6 +1680,7 @@ window.uetq = window.uetq || [];
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
+fbq('consent', 'revoke');
 
 gtag('consent', 'default', {
     'ad_storage': 'denied',
@@ -1703,6 +1704,11 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_personalization': 'granted',
         'url_passthrough': true,
     });
+
+    window.uetq.push('consent', 'default', {
+        'ad_storage': 'granted'
+    });
+    fbq('consent', 'grant');
 
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
@@ -1729,7 +1735,6 @@ if (window.INTA?.settings?.gtagId) {
         'user_id': '' + intaCookieConsentsUserId + ''
     });
 }
-fbq('consent', 'revoke');
 
 let notRequired;
 let m;
