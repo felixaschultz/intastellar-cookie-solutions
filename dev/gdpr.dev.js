@@ -1814,6 +1814,11 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
     }
 }
 
+/* Helper function to check class names */
+function containsClass(element, searchString) {
+    return element.classList.contains(searchString) || element.className.split(' ').some(cls => cls.includes(searchString));
+}
+
 function loopBlock(addedNodes, message, script, buttonText, logo) {
     addedNodes.forEach((frae) => {
         if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies === "checked"
@@ -1823,7 +1828,8 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
         let settingsContent = document.createElement("inta-consents-iframe");
 
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
-            if (frae.classList.contains("fb-like")) {
+            // Check if an element is from Facebook, check by looking at the class name if it contains "fb"
+            if (containsClass(frae, "fb")) {
                 frae?.parentElement?.replaceChild(settingsContent, frae);
             }
             if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
