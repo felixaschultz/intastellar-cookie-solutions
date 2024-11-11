@@ -14,6 +14,14 @@ Available languages:
 * German
 * Danish
 * English
+* Spanish
+* French
+* Swedish
+* Norwegian
+* Finnish
+* Italian
+* Russian
+* Dutch
 
 You can read more about the cookie banner under: https://www.intastellarsolutions.com/solutions/cookie-consents.
 This banner is free to use as long as the powered by logo is not removed. We are glad if you want to contribuate to this project so we can develop it further and we can make it secure.
