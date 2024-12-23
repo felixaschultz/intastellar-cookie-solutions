@@ -1677,10 +1677,12 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
 }
 
 window.uetq = window.uetq || [];
+window.clarity = window.clarity || function () { };
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
 fbq('consent', 'revoke');
+window.clarity('consent', false);
 
 gtag('consent', 'default', {
     'ad_storage': 'denied',
@@ -1721,6 +1723,7 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted',
         'url_passthrough': true,
     })
+    window.clarity('consent');
 }
 
 if (intaCookieConsents?.functionalCookies) {
