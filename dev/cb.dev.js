@@ -1816,6 +1816,7 @@ window.addEventListener("load", function () {
 
         if (getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName).indexOf("__inta") == -1) {
             document.querySelector(".intastellarCookieConstents").classList.add("--active");
+            dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
         }
 
         document.querySelectorAll(".intaExpandCookieList").forEach((btn, i) => {
@@ -1849,6 +1850,7 @@ window.addEventListener("load", function () {
                 let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
                 if (!intCookieSettingsMore?.classList.contains("--active")) {
                     intCookieSettingsMore?.classList.add("--active");
+                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
                     document.querySelector(".intastellarCookie-settings__container").classList.remove("intastellarCookie-settings__container--expand")
                 }
             });
@@ -2068,6 +2070,7 @@ window.addEventListener("load", function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
 
                 gtag('consent', 'update', {
                     'ad_storage': 'granted',
@@ -2119,6 +2122,7 @@ window.addEventListener("load", function () {
                 }
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
                 const intastellarShared = {
                     intaConsentsObjectVariable: intaConsentsObjectVariable,
                     partnerDomain: window?.INTA?.settings.partnerDomain,
@@ -2173,6 +2177,7 @@ window.addEventListener("load", function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
                 const intastellarShared = {
                     intaConsentsObjectVariable: intaConsentsObjectVariable,
                     partnerDomain: window?.INTA?.settings.partnerDomain,
@@ -2238,6 +2243,7 @@ window.addEventListener("load", function () {
                         let settings = document.querySelector(".intastellarCookieConstents");
                         /* document.querySelector("html").classList.toggle("noScroll"); */
                         settings.classList.toggle("--active");
+                        dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
                     });
                 })
             }
@@ -2272,6 +2278,7 @@ window.addEventListener("load", function () {
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -2329,6 +2336,7 @@ window.addEventListener("load", function () {
 
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -2412,6 +2420,7 @@ window.addEventListener("load", function () {
                         let settings = document.querySelector(".intastellarCookieConstents");
                         document.querySelector("html").classList.toggle("noScroll");
                         settings.classList.add("--active");
+                        dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
                     });
                 })
             }
@@ -2445,6 +2454,7 @@ window.addEventListener("load", function () {
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -2502,6 +2512,7 @@ window.addEventListener("load", function () {
                     }
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
+                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -3146,6 +3157,7 @@ const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
         document.querySelector("html").classList.add("noScroll");
+        dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
     },
     remove: function (template) {
         template.classList.remove("--active");
