@@ -3146,6 +3146,7 @@ const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
         document.querySelector("html").classList.add("noScroll");
+        dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
     },
     remove: function (template) {
         template.classList.remove("--active");
@@ -3177,6 +3178,7 @@ const IntastellarCookieConsent = {
                     }
                 }
                 document.body.append(template);
+                dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
             });
         } else {
             document.body.append(template);
