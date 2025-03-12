@@ -1510,12 +1510,6 @@ const cookieBannerStyles = {
     overlay: "overlay.css"
 };
 
-const intaStyleLink = document.createElement('link');
-intaStyleLink.rel = 'stylesheet';
-intaStyleLink.type = 'text/css';
-intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/' + cookieBannerStyles[window.INTA.settings.design || "overlay"] + '?v=' + new Date().getTime();
-intaStyleLink.media = 'all';
-intHead.insertBefore(intaStyleLink, document.currentScript.previousSibling);
 window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
     window.INTA?.settings?.language : window.INTA?.settings?.language;
 
