@@ -530,6 +530,10 @@ const inta_requiredCookieList = [{
         {
             cookie: "SCDJWS",
             purpose: "",
+        },
+        {
+            cookie: "__hs_cookie_cat_pref",
+            purpose: "Hubspot uses this cookie to remember the user's cookie consent preferences. It is necessary for HubSpot's Cookie Consent functionality.",
         }
     ],
     domains: [
@@ -1516,7 +1520,7 @@ const cookieBannerStyles = {
 window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
     window.INTA?.settings?.language : window.INTA?.settings?.language;
 
-const intastellarCookieLanguage
+let intastellarCookieLanguage
     = window.intastellarCookieLanguage
     = window.INTA?.settings === undefined
         || window.INTA?.settings?.language === "auto"
@@ -1535,6 +1539,10 @@ const intastellarCookieLanguage
                                             : window.INTA?.settings?.language == "swedish" ? "sv"
                                                 : window.INTA?.settings?.language == "norwegian" ? "no"
                                                     : document.querySelector("html").getAttribute("lang");
+
+if(document.querySelector("html").getAttribute("lang") == null){
+    intastellarCookieLanguage = "en";
+}
 
 const allScripts = window.allScripts = [
     {
