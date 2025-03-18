@@ -1520,7 +1520,7 @@ const cookieBannerStyles = {
 window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
     window.INTA?.settings?.language : window.INTA?.settings?.language;
 
-const intastellarCookieLanguage
+let intastellarCookieLanguage
     = window.intastellarCookieLanguage
     = window.INTA?.settings === undefined
         || window.INTA?.settings?.language === "auto"
@@ -1539,6 +1539,10 @@ const intastellarCookieLanguage
                                             : window.INTA?.settings?.language == "swedish" ? "sv"
                                                 : window.INTA?.settings?.language == "norwegian" ? "no"
                                                     : document.querySelector("html").getAttribute("lang");
+
+if(document.querySelector("html").getAttribute("lang") == null){
+    intastellarCookieLanguage = "en";
+}
 
 const allScripts = window.allScripts = [
     {
