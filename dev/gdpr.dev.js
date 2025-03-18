@@ -2425,8 +2425,6 @@ function checkCookieStatus() {
                                 window.foundScripts.push(src);
                             }
 
-                            console.log(intaCookieConsents);
-
                             if (intaCookieConsents?.advertisementCookies === "checked" || intaCookieConsents?.functionalCookies === "checked" || intaCookieConsents?.staticsticCookies === "checked"
                                 || FunctionalCheckbox?.checked || StaticsCheckBox?.checked || MarketingCheckBox?.checked
                             ) {
