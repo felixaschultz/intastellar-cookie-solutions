@@ -97,25 +97,25 @@ const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastel
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
-if (intastellarCookieLanguage == "de") {
+if (intastellarCookieLanguage || window.INTA.settings.language == "de") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
-} else if (intastellarCookieLanguage == "en") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "en") {
     intastellarCookieLanguageSettings = "Cookie Settings";
-} else if (intastellarCookieLanguage == "es") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "es") {
     intastellarCookieLanguageSettings = "Configuración de cookies";
-} else if (intastellarCookieLanguage == "fr") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "fr") {
     intastellarCookieLanguageSettings = "Paramètres des cookies";
-} else if (intastellarCookieLanguage == "sv") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "sv") {
     intastellarCookieLanguageSettings = "Kakinställningar";
-} else if (intastellarCookieLanguage == "no") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "no") {
     intastellarCookieLanguageSettings = "Informasjonskapselinnstillinger";
-} else if (intastellarCookieLanguage == "nl") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "nl") {
     intastellarCookieLanguageSettings = "Cookie-instellingen";
-} else if (intastellarCookieLanguage == "it") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "it") {
     intastellarCookieLanguageSettings = "Impostazioni dei cookie";
-} else if (intastellarCookieLanguage == "fi") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "fi") {
     intastellarCookieLanguageSettings = "Evästeasetukset";
-} else if (intastellarCookieLanguage == "ru") {
+} else if (intastellarCookieLanguage || window.INTA.settings.language == "ru") {
     intastellarCookieLanguageSettings = "Настройки файлов cookie";
 }
 
