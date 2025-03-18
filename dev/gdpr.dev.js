@@ -1678,7 +1678,8 @@ window.clarity = window.clarity || function () { };
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
-gtag('consentsBannerLoaded', true);
+
+gtag('consentsBannerLoaded');
 fbq('consent', 'revoke');
 window.clarity('consent', false);
 
