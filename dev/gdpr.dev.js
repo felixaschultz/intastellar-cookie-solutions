@@ -530,6 +530,10 @@ const inta_requiredCookieList = [{
         {
             cookie: "SCDJWS",
             purpose: "",
+        },
+        {
+            cookie: "__hs_cookie_cat_pref",
+            purpose: "Hubspot uses this cookie to remember the user's cookie consent preferences. It is necessary for HubSpot's Cookie Consent functionality.",
         }
     ],
     domains: [
