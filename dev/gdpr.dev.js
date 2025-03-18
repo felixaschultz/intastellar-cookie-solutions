@@ -373,9 +373,6 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    dataLayer.push({
-        ""
-    })
     if (document.getElementById("intastellar-gdpr-settings-js-after") !== null) {
         console.warn(`IntastellarSolutionsSDK: You´re using an old version of our cookie solutions for WordPress. To make sure to get the latest updates and features, please download the latest version from our Website:
         https://www.intastellarsolutions.com/cookie-solutions/downloads`);
@@ -2519,7 +2516,7 @@ function checkCookieStatus() {
                                 /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                 deleteAllCookies();
                             }
-                        } else if (intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false") {
+                        } else if (intaCookieConsents?.functionalCookies == "false" && intaCookieConsents?.advertisementCookies == "false" && intaCookieConsents?.staticsticCookies == "false") {
 
                             if (
                                 notRequired.test(node.innerText)
