@@ -97,25 +97,25 @@ const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastel
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
-if (intastellarCookieLanguage || window.INTA.settings.language == "de") {
+if (intastellarCookieLanguage == "de" || window.INTA.settings.language == "de") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "en") {
+} else if (intastellarCookieLanguage == "en" || window.INTA.settings.language == "en") {
     intastellarCookieLanguageSettings = "Cookie Settings";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "es") {
+} else if (intastellarCookieLanguage == "es" || window.INTA.settings.language == "es") {
     intastellarCookieLanguageSettings = "Configuración de cookies";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "fr") {
+} else if (intastellarCookieLanguage == "fr" || window.INTA.settings.language == "fr") {
     intastellarCookieLanguageSettings = "Paramètres des cookies";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "sv") {
+} else if (intastellarCookieLanguage == "sv" || window.INTA.settings.language == "sv") {
     intastellarCookieLanguageSettings = "Kakinställningar";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "no") {
+} else if (intastellarCookieLanguage == "no" || window.INTA.settings.language == "no") {
     intastellarCookieLanguageSettings = "Informasjonskapselinnstillinger";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "nl") {
+} else if (intastellarCookieLanguage  == "nl"|| window.INTA.settings.language == "nl") {
     intastellarCookieLanguageSettings = "Cookie-instellingen";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "it") {
+} else if (intastellarCookieLanguage == "it" || window.INTA.settings.language == "it") {
     intastellarCookieLanguageSettings = "Impostazioni dei cookie";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "fi") {
+} else if (intastellarCookieLanguage == "fi" || window.INTA.settings.language == "fi") {
     intastellarCookieLanguageSettings = "Evästeasetukset";
-} else if (intastellarCookieLanguage || window.INTA.settings.language == "ru") {
+} else if (intastellarCookieLanguage == "ru"|| window.INTA.settings.language == "ru") {
     intastellarCookieLanguageSettings = "Настройки файлов cookie";
 }
 
