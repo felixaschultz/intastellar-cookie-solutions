@@ -373,9 +373,6 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    dataLayer.push({
-        ""
-    })
     if (document.getElementById("intastellar-gdpr-settings-js-after") !== null) {
         console.warn(`IntastellarSolutionsSDK: You´re using an old version of our cookie solutions for WordPress. To make sure to get the latest updates and features, please download the latest version from our Website:
         https://www.intastellarsolutions.com/cookie-solutions/downloads`);
@@ -1678,7 +1675,7 @@ window.clarity = window.clarity || function () { };
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
-gtag('consentsBannerLoaded', true);
+gtag('consentsBannerLoaded');
 fbq('consent', 'revoke');
 window.clarity('consent', false);
 
