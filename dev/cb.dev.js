@@ -3823,7 +3823,7 @@ function saveINTCookieSettings(consent, type = null) {
     updateConsents(consent, type);
     setTimeout(() => {
         restartObserver();
-    }, 500);
+    }, 1000);
     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 }
