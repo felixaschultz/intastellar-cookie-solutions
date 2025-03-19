@@ -2167,7 +2167,9 @@ const bannerContentMessage = (domain, node) => {
 const beforeScriptExecuteListener = function (event, node) {
     let src = node.src || "";
     if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-        || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
+        || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
+        || !FunctionalCheckbox?.checked || !StaticsCheckBox?.checked || !MarketingCheckBox?.checked
+    ) {
         if (
             src.indexOf(window.location.hostname) == -1
             && src.indexOf("jquery") == -1
@@ -2193,7 +2195,9 @@ const beforeScriptExecuteListener = function (event, node) {
                 node.parentElement.appendChild(scriptTag);
             } */
         }
-    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false") {
+    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false"
+    || !FunctionalCheckbox?.checked || !StaticsCheckBox?.checked || !MarketingCheckBox?.checked
+) {
         if (
             src.indexOf(window.location.hostname) == -1
             && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
@@ -2233,7 +2237,8 @@ const beforeScriptExecuteListener = function (event, node) {
         }
     } else if (intaCookieConsents?.functionalCookies === "checked" &&
         intaCookieConsents?.advertisementCookies === "checked" &&
-        intaCookieConsents?.staticsticCookies === "checked") {
+        intaCookieConsents?.staticsticCookies === "checked"
+        || FunctionalCheckbox?.checked && StaticsCheckBox?.checked && MarketingCheckBox?.checked) {
         node.type = "text/javascript";
     }
 
