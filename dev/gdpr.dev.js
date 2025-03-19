@@ -2721,6 +2721,9 @@ function checkCookieStatus() {
                 });
             });
         });
+    });
+
+    if(findScriptParameter("ref") != "gtm"){
         startObserving(observer, document.documentElement);
         window.addEventListener("load", () => {
             observer.disconnect();
