@@ -20,6 +20,7 @@ const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolut
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
+const isGtmMode = findScriptParameter("ref") === "gtm";
 let poweredBy = "";
 let intaConsentsObjectVariable = {
     consents: {
@@ -2295,7 +2296,6 @@ function restartObserver() {
     console.log('Observer restarted with updated consent settings');
 }
 
-if(findScriptParameter("ref") != "gtm"){
     const beforeScriptExecuteListener = function (event, node) {
     let src = node.src || "";
 
@@ -2361,8 +2361,11 @@ if(findScriptParameter("ref") != "gtm"){
             window.currentObserver.disconnect();
         }
         
+        if(!isGtmMode){
+            window.currentObserver = checkCookieStatus();
+        }
         // Create a new observer with updated consent settings
-        window.currentObserver = checkCookieStatus();
+        
         
         // Process any existing blocked content that should now be allowed
         processExistingScripts();
@@ -2371,64 +2374,68 @@ if(findScriptParameter("ref") != "gtm"){
     }
 
     function checkCookieStatus() {
+        if(isGtmMode) {
+            console.log("Observer disabled in GTM mode");
+            return null; // Return null instead of creating an observer
+        }
     /* To get anonymous cookie banner usage */
     /* - - - Observer - - - */
-        if(findScriptParameter("ref") != "gtm"){
-            const observer = new MutationObserver((mutations) => {
-                requestAnimationFrame(() => {
-                    mutations.forEach(({ addedNodes }) => {
-                        addedNodes.forEach((node) => {
+        
+        const observer = new MutationObserver((mutations) => {
+            requestAnimationFrame(() => {
+                mutations.forEach(({ addedNodes }) => {
+                    addedNodes.forEach((node) => {
 
-                            if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
-                                allScripts.map((script) => {
+                        if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
+                            allScripts.map((script) => {
 
-                                    const buttonText = () => {
-                                        if (script.type == "marketing") {
-                                            scriptTypelang = {
-                                                danish: "marketing",
-                                                english: "advertisement",
-                                                german: "werbe",
-                                                spanish: "publicidad",
-                                                swedish: "marknadsföring",
-                                                french: "publicité",
-                                                portuguese: "publicidade",
-                                                italian: "pubblicità",
-                                                russian: "реклама",
-                                                norwegian: "markedsføring",
-                                                finish: "mainonta",
-                                                dutch: "reclame"
-                                            }
-                                        } else if (script.type == "functional") {
-                                            scriptTypelang = {
-                                                danish: "funktionelle",
-                                                english: "functional",
-                                                german: "funktionelle",
-                                                spanish: "funcional",
-                                                swedish: "funktionell",
-                                                french: "fonctionnel",
-                                                portuguese: "funcional",
-                                                italian: "funzionale",
-                                                russian: "функциональный",
-                                                norwegian: "funksjonelle",
-                                                finish: "toiminnallinen",
-                                                dutch: "functioneel"
-                                            }
-                                        } else if (script.type == "statics") {
-                                            scriptTypelang = {
-                                                danish: "statistiske",
-                                                english: "statics",
-                                                german: "statistische",
-                                                spanish: "estadísticas",
-                                                swedish: "statistik",
-                                                french: "statistiques",
-                                                portuguese: "estatísticas",
-                                                italian: "statistico",
-                                                russian: "статистика",
-                                                norwegian: "statistiske",
-                                                finish: "tilastollinen",
-                                                dutch: "statistieken"
-                                            }
+                                const buttonText = () => {
+                                    if (script.type == "marketing") {
+                                        scriptTypelang = {
+                                            danish: "marketing",
+                                            english: "advertisement",
+                                            german: "werbe",
+                                            spanish: "publicidad",
+                                            swedish: "marknadsföring",
+                                            french: "publicité",
+                                            portuguese: "publicidade",
+                                            italian: "pubblicità",
+                                            russian: "реклама",
+                                            norwegian: "markedsføring",
+                                            finish: "mainonta",
+                                            dutch: "reclame"
                                         }
+                                    } else if (script.type == "functional") {
+                                        scriptTypelang = {
+                                            danish: "funktionelle",
+                                            english: "functional",
+                                            german: "funktionelle",
+                                            spanish: "funcional",
+                                            swedish: "funktionell",
+                                            french: "fonctionnel",
+                                            portuguese: "funcional",
+                                            italian: "funzionale",
+                                            russian: "функциональный",
+                                            norwegian: "funksjonelle",
+                                            finish: "toiminnallinen",
+                                            dutch: "functioneel"
+                                        }
+                                    } else if (script.type == "statics") {
+                                        scriptTypelang = {
+                                            danish: "statistiske",
+                                            english: "statics",
+                                            german: "statistische",
+                                            spanish: "estadísticas",
+                                            swedish: "statistik",
+                                            french: "statistiques",
+                                            portuguese: "estatísticas",
+                                            italian: "statistico",
+                                            russian: "статистика",
+                                            norwegian: "statistiske",
+                                            finish: "tilastollinen",
+                                            dutch: "statistieken"
+                                        }
+                                    }
 
                                         return {
                                             danish: `Accepter ${scriptTypelang.danish} cookies`,
@@ -2776,24 +2783,23 @@ if(findScriptParameter("ref") != "gtm"){
                         });
                     });
                 });
-                startObserving(observer, document.documentElement);
-                window.addEventListener("load", () => {
-                    observer.disconnect();
-                });
-                return observer;
+        });
+        startObserving(observer, document.documentElement);
+        window.addEventListener("load", () => {
+            observer.disconnect();
+        });
+        return observer;
                 
-        };
-
-        function startObserving(observer) {
-            observer.observe(document.documentElement, {
-                childList: !0,
-                subtree: !0,
-                attributes: true,
-                attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
-            })
-        }
     }
-}
+
+    function startObserving(observer) {
+        observer.observe(document.documentElement, {
+            childList: !0,
+            subtree: !0,
+            attributes: true,
+            attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
+        })
+    }
 
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
@@ -2831,6 +2837,6 @@ function clearLocalStorage(ls) {
     }
 }
 deleteAllCookies();
-if(findScriptParameter("ref") != "gtm"){
+if(!isGtmMode){
     checkCookieStatus();
 }
