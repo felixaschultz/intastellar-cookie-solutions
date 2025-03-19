@@ -1684,7 +1684,9 @@ window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
 
-gtag('consentsBannerLoaded');
+dataLayer.push({
+    'event': 'intastellarConsentsBannerLoaded',
+});
 fbq('consent', 'revoke');
 window.clarity('consent', false);
 
