@@ -2279,6 +2279,7 @@ function processExistingScripts() {
     });
 }
 
+
 function restartObserver() {
     // Disconnect any existing observer
     if (window.currentObserver) {
@@ -2354,15 +2355,100 @@ if(findScriptParameter("ref") != "gtm"){
         );
     };
 
+    function restartObserver() {
+        // Disconnect any existing observer
+        if (window.currentObserver) {
+            window.currentObserver.disconnect();
+        }
+        
+        // Create a new observer with updated consent settings
+        window.currentObserver = checkCookieStatus();
+        
+        // Process any existing blocked content that should now be allowed
+        processExistingScripts();
+        
+        console.log('Observer restarted with updated consent settings');
+    }
+
     function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     /* - - - Observer - - - */
-        if(findScriptParameter("ref") != "gtm"){
-            const observer = new MutationObserver((mutations) => {
-                requestAnimationFrame(() => {
-                    mutations.forEach(({ addedNodes }) => {
-                        addedNodes.forEach((node) => {
+    if(findScriptParameter("ref") != "gtm"){
+        const observer = new MutationObserver((mutations) => {
+            requestAnimationFrame(() => {
+                mutations.forEach(({ addedNodes }) => {
+                    addedNodes.forEach((node) => {
 
+                        if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
+                            allScripts.map((script) => {
+
+                                const buttonText = () => {
+                                    if (script.type == "marketing") {
+                                        scriptTypelang = {
+                                            danish: "marketing",
+                                            english: "advertisement",
+                                            german: "werbe",
+                                            spanish: "publicidad",
+                                            swedish: "marknadsföring",
+                                            french: "publicité",
+                                            portuguese: "publicidade",
+                                            italian: "pubblicità",
+                                            russian: "реклама",
+                                            norwegian: "markedsføring",
+                                            finish: "mainonta",
+                                            dutch: "reclame"
+                                        }
+                                    } else if (script.type == "functional") {
+                                        scriptTypelang = {
+                                            danish: "funktionelle",
+                                            english: "functional",
+                                            german: "funktionelle",
+                                            spanish: "funcional",
+                                            swedish: "funktionell",
+                                            french: "fonctionnel",
+                                            portuguese: "funcional",
+                                            italian: "funzionale",
+                                            russian: "функциональный",
+                                            norwegian: "funksjonelle",
+                                            finish: "toiminnallinen",
+                                            dutch: "functioneel"
+                                        }
+                                    } else if (script.type == "statics") {
+                                        scriptTypelang = {
+                                            danish: "statistiske",
+                                            english: "statics",
+                                            german: "statistische",
+                                            spanish: "estadísticas",
+                                            swedish: "statistik",
+                                            french: "statistiques",
+                                            portuguese: "estatísticas",
+                                            italian: "statistico",
+                                            russian: "статистика",
+                                            norwegian: "statistiske",
+                                            finish: "tilastollinen",
+                                            dutch: "statistieken"
+                                        }
+                                    }
+
+                                    return {
+                                        danish: `Accepter ${scriptTypelang.danish} cookies`,
+                                        english: `Accept ${scriptTypelang.english} cookies`,
+                                        german: `Akzeptiere ${scriptTypelang.german} cookies`,
+                                        spanish: `Aceptar cookies ${scriptTypelang.spanish}`,
+                                        swedish: `Acceptera ${scriptTypelang.swedish} cookies`,
+                                        french: `Accepter les cookies ${scriptTypelang.french}`,
+                                        portuguese: `Aceitar cookies ${scriptTypelang.portuguese}`,
+                                        italian: `Accetta i cookie ${scriptTypelang.italian}`,
+                                        russian: `Принять файлы cookie ${scriptTypelang.russian}`,
+                                        norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
+                                        finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
+                                        dutch: `Accepteer ${scriptTypelang.danish} cookies`
+                                    }
+                                }
+                                let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
+                                loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
+                            })
+                        }
                             if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
                                 allScripts.map((script) => {
 
