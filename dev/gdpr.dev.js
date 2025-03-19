@@ -2279,7 +2279,7 @@ function processExistingScripts() {
     });
 }
 
-
+if(findScriptParameter("ref") != "gtm"){
 const beforeScriptExecuteListener = function (event, node) {
     let src = node.src || "";
 
@@ -2287,11 +2287,30 @@ const beforeScriptExecuteListener = function (event, node) {
         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
         || !FunctionalCheckbox?.checked || !StaticsCheckBox?.checked || !MarketingCheckBox?.checked
     ) {
-        if (
-            src.indexOf(window.location.hostname) == -1
-            && src.indexOf("jquery") == -1
-            && src.indexOf("elementor") == -1
-        ) {
+            if (
+                src.indexOf(window.location.hostname) == -1
+                && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+            ) {
+                if (
+                    notRequired.test(src)
+                ) {
+                    node.defer = true;
+                    node.async = true;
+                    node.type = "text/blocked";
+                    /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+                }
+            } else if (src.indexOf(window.location.hostname) == -1
+                && src.indexOf("jquery") == 1) {
+                node.type = "text/javascript";
+                node.defer = false;
+                node.async = false;
+            } else {
+                node.type = "text/javascript";
+                /* if(document.querySelector(scriptTag) === null){
+                    node.parentElement.appendChild(scriptTag);
+                } */
+            }
+
             if (
                 notRequired.test(node.innerText)
                 && node.innerText.toLowerCase().indexOf("elementor") == -1
@@ -2300,94 +2319,44 @@ const beforeScriptExecuteListener = function (event, node) {
                 node.async = true;
                 node.type = "text/blocked";
                 /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                deleteAllCookies();
+            } else {
+                /* if(document.querySelector(scriptTag) === null){
+                    node.parentElement.appendChild(scriptTag);
+                } */
             }
-        } else if (src.indexOf(window.location.hostname) == -1
-            && src.indexOf("jquery") == 1) {
+        } else if (intaCookieConsents?.functionalCookies === "checked" &&
+            intaCookieConsents?.advertisementCookies === "checked" &&
+            intaCookieConsents?.staticsticCookies === "checked"
+            || FunctionalCheckbox?.checked && StaticsCheckBox?.checked && MarketingCheckBox?.checked) {
             node.type = "text/javascript";
-            node.defer = false;
-            node.async = false;
-        } else {
-            /* if(document.querySelector(scriptTag) === null){
-                node.parentElement.appendChild(scriptTag);
-            } */
-        }
-    } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" || intaCookieConsents?.advertisementCookies == "false" || intaCookieConsents?.staticsticCookies == "false"
-    || !FunctionalCheckbox?.checked || !StaticsCheckBox?.checked || !MarketingCheckBox?.checked
-) {
-        if (
-            src.indexOf(window.location.hostname) == -1
-            && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
-        ) {
-            if (
-                notRequired.test(src)
-            ) {
-                node.defer = true;
-                node.async = true;
-                node.type = "text/blocked";
-                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-            }
-        } else if (src.indexOf(window.location.hostname) == -1
-            && src.indexOf("jquery") == 1) {
-            node.type = "text/javascript";
-            node.defer = false;
-            node.async = false;
-        } else {
-            node.type = "text/javascript";
-            /* if(document.querySelector(scriptTag) === null){
-                node.parentElement.appendChild(scriptTag);
-            } */
         }
 
-        if (
-            notRequired.test(node.innerText)
-            && node.innerText.toLowerCase().indexOf("elementor") == -1
-        ) {
-            node.defer = true;
-            node.async = true;
-            node.type = "text/blocked";
-            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-        } else {
-            /* if(document.querySelector(scriptTag) === null){
-                node.parentElement.appendChild(scriptTag);
-            } */
+        if (node.getAttribute("type") === "text/blocked")
+            event.preventDefault();
+        node.removeEventListener(
+            "beforescriptexecute",
+            (e, node) => beforeScriptExecuteListener(e, node)
+        );
+    };
+
+    function restartObserver() {
+        // Disconnect any existing observer
+        if (window.currentObserver) {
+            window.currentObserver.disconnect();
         }
-    } else if (intaCookieConsents?.functionalCookies === "checked" &&
-        intaCookieConsents?.advertisementCookies === "checked" &&
-        intaCookieConsents?.staticsticCookies === "checked"
-        || FunctionalCheckbox?.checked && StaticsCheckBox?.checked && MarketingCheckBox?.checked) {
-        node.type = "text/javascript";
+        
+        // Create a new observer with updated consent settings
+        window.currentObserver = checkCookieStatus();
+        
+        // Process any existing blocked content that should now be allowed
+        processExistingScripts();
+        
+        console.log('Observer restarted with updated consent settings');
     }
 
-    if (node.getAttribute("type") === "text/blocked")
-        event.preventDefault();
-    node.removeEventListener(
-        "beforescriptexecute",
-        (e, node) => beforeScriptExecuteListener(e, node)
-    );
-};
-
-function restartObserver() {
-    // Disconnect any existing observer
-    if (window.currentObserver) {
-        window.currentObserver.disconnect();
-    }
-    
-    // Create a new observer with updated consent settings
-    window.currentObserver = checkCookieStatus();
-    
-    // Process any existing blocked content that should now be allowed
-    processExistingScripts();
-    
-    console.log('Observer restarted with updated consent settings');
-}
-
-/* - - - Cookie banner settings btn - - - */
-
-function checkCookieStatus() {
+    function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     /* - - - Observer - - - */
-    console.log(findScriptParameter("ref"));
     if(findScriptParameter("ref") != "gtm"){
         const observer = new MutationObserver((mutations) => {
             requestAnimationFrame(() => {
@@ -2722,23 +2691,21 @@ function checkCookieStatus() {
             });
         });
     });
+    startObserving(observer, document.documentElement);
+    window.addEventListener("load", () => {
+        observer.disconnect();
+    });
+    return observer;
 
-    if(findScriptParameter("ref") != "gtm"){
-        startObserving(observer, document.documentElement);
-        window.addEventListener("load", () => {
-            observer.disconnect();
-        });
-        return observer;
+    };
+    function startObserving(observer) {
+        observer.observe(document.documentElement, {
+            childList: !0,
+            subtree: !0,
+            attributes: true,
+            attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
+        })
     }
-
-};
-function startObserving(observer) {
-    observer.observe(document.documentElement, {
-        childList: !0,
-        subtree: !0,
-        attributes: true,
-        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
-    })
 }
 
 function deleteAllCookies() {
