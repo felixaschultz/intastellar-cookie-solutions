@@ -3821,7 +3821,6 @@ function saveINTCookieSettings(consent, type = null) {
         "";
     /*window.location.reload();*/
     updateConsents(consent, type);
-    window.location.reload();
     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
 }
