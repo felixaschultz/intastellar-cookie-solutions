@@ -75,6 +75,19 @@ function getCookie(cname) {
     return "";
 }
 
+function findScriptParameter(value) {
+    const currentURL = document.currentScript.src;
+
+    if (currentURL.indexOf(value) > -1) {
+        let url = new URL(currentURL);
+        let param = url.searchParams;
+        return param.get(value);
+    }
+
+    return undefined;
+
+}
+
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -2708,11 +2721,13 @@ function checkCookieStatus() {
         });
     });
 
-    startObserving(observer, document.documentElement);
-    window.addEventListener("load", () => {
-        observer.disconnect();
-    });
-    return observer;
+    if(findScriptParameter("ref") != "gtm"){
+        startObserving(observer, document.documentElement);
+        window.addEventListener("load", () => {
+            observer.disconnect();
+        });
+        return observer;
+    }
 
 };
 function startObserving(observer) {
@@ -2760,4 +2775,6 @@ function clearLocalStorage(ls) {
     }
 }
 deleteAllCookies();
-checkCookieStatus();
+if(findScriptParameter("ref") != "gtm"){
+    checkCookieStatus();
+}
