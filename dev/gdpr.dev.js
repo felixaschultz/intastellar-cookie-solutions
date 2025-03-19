@@ -2164,8 +2164,113 @@ const bannerContentMessage = (domain, node) => {
     }
 };
 
+function handleInputChange(event) {
+    const target = event.target;
+    if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') {
+        console.log('Input changed:', target.name || target.id, target.checked);
+
+        // Update consent tracker object for checkbox inputs
+        if (target.type === 'checkbox') {
+            if (target.name === "statics" || target.id === "statics") {
+                window.pendingConsents = window.pendingConsents || {};
+                window.pendingConsents.staticsticCookies = target.checked ? "checked" : "false";
+            } else if (target.name === "functional" || target.id === "functional") {
+                window.pendingConsents = window.pendingConsents || {};
+                window.pendingConsents.functionalCookies = target.checked ? "checked" : "false";
+            } else if (target.name === "advertisement" || target.id === "marketing") {
+                window.pendingConsents = window.pendingConsents || {};
+                window.pendingConsents.advertisementCookies = target.checked ? "checked" : "false";
+            }
+        }
+    }
+}
+
+document.addEventListener('change', handleInputChange);
+
+function updateNotRequiredRegexp() {
+    // Create the correct RegExp based on current consent settings
+    let m;
+    if (intaCookieConsents?.functionalCookies === "checked" && 
+        intaCookieConsents?.staticsticCookies !== "checked" && 
+        intaCookieConsents?.advertisementCookies !== "checked") {
+        m = merge(allScripts[1].scripts, allScripts[0].scripts);
+    } else if (intaCookieConsents?.advertisementCookies === "checked" && 
+               intaCookieConsents?.staticsticCookies !== "checked" && 
+               intaCookieConsents?.functionalCookies !== "checked") {
+        m = merge(allScripts[2].scripts, allScripts[0].scripts);
+    } else if (intaCookieConsents?.staticsticCookies === "checked" && 
+               intaCookieConsents?.functionalCookies !== "checked" && 
+               intaCookieConsents?.advertisementCookies !== "checked") {
+        m = merge(allScripts[1].scripts, allScripts[2].scripts);
+    } else if (intaCookieConsents?.functionalCookies === "checked" && 
+               intaCookieConsents?.staticsticCookies === "checked") {
+        m = allScripts[1].scripts;
+    } else if (intaCookieConsents?.functionalCookies === "checked" && 
+               intaCookieConsents?.advertisementCookies === "checked") {
+        m = allScripts[0].scripts;
+    } else if (intaCookieConsents?.advertisementCookies === "checked" && 
+               intaCookieConsents?.staticsticCookies === "checked") {
+        m = allScripts[2].scripts;
+    } else if (intaCookieConsents?.functionalCookies === "checked" && 
+               intaCookieConsents?.advertisementCookies === "checked" && 
+               intaCookieConsents?.staticsticCookies === "checked") {
+        m = [];
+    } else {
+        m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
+    }
+    
+    // Update the notRequired RegExp
+    notRequired = new RegExp(m.length ? m.join("|") : "^$", "ig");
+    window.notRequired = notRequired;
+    console.log("Updated consent blocking patterns");
+    
+    // Process existing scripts that may need to be updated
+    processExistingScripts();
+}
+
+function processExistingScripts() {
+    // Process blocked scripts that should now be allowed
+    document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
+        const src = script.src || '';
+        if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
+            // This script should now be allowed - replace it
+            const newScript = document.createElement('script');
+            newScript.type = 'text/javascript';
+            if (script.src) newScript.src = script.src;
+            if (script.innerText) newScript.text = script.innerText;
+            script.parentNode?.replaceChild(newScript, script);
+        }
+    });
+    
+    // Process blocked iframes that should now be allowed
+    document.querySelectorAll('inta-consents-iframe[data-src], inta-consents[data-src]').forEach(blocked => {
+        const type = blocked.querySelector('.--changePermission')?.dataset?.type;
+        if ((type === 'intMarketingCookies' && intaCookieConsents?.advertisementCookies === "checked") ||
+            (type === 'intFunctionalCookies' && intaCookieConsents?.functionalCookies === "checked") ||
+            (type === 'intStaticsCookies' && intaCookieConsents?.staticsticCookies === "checked")) {
+                
+            const iframe = document.createElement('iframe');
+            iframe.src = blocked.getAttribute('data-src');
+            iframe.border = '0';
+            iframe.frameBorder = '0';
+            
+            if (blocked.getAttribute('data-class')) {
+                iframe.setAttribute('class', blocked.getAttribute('data-class'));
+            } else {
+                iframe.width = '560';
+                iframe.height = '315';
+            }
+            
+            blocked.parentElement?.replaceChild(iframe, blocked);
+        }
+    });
+}
+
+
 const beforeScriptExecuteListener = function (event, node) {
     let src = node.src || "";
+
+
     if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
         || !FunctionalCheckbox?.checked || !StaticsCheckBox?.checked || !MarketingCheckBox?.checked
@@ -2249,6 +2354,21 @@ const beforeScriptExecuteListener = function (event, node) {
         (e, node) => beforeScriptExecuteListener(e, node)
     );
 };
+
+function restartObserver() {
+    // Disconnect any existing observer
+    if (window.currentObserver) {
+        window.currentObserver.disconnect();
+    }
+    
+    // Create a new observer with updated consent settings
+    window.currentObserver = checkCookieStatus();
+    
+    // Process any existing blocked content that should now be allowed
+    processExistingScripts();
+    
+    console.log('Observer restarted with updated consent settings');
+}
 
 /* - - - Cookie banner settings btn - - - */
 
@@ -2427,6 +2547,8 @@ function checkCookieStatus() {
                         node.removeAttribute("charset");
                         addedNodes.forEach((node) => {
 
+                            console.log(StaticsCheckBox?.checked);
+
                             src = node.src;
                             if (src.indexOf(window.location.hostname) == -1) {
                                 window.foundScripts.push(src);
@@ -2476,9 +2598,23 @@ function checkCookieStatus() {
                                     /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                     deleteAllCookies();
                                 }
-                            } else if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
-                                || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
-                                || !FunctionalCheckbox?.checked && !StaticsCheckBox?.checked && !MarketingCheckBox?.checked
+                            } else if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 
+                            || intaCookieConsents?.advertisementCookies == "false" && 
+                            getCookie(int_hideCookieBannerName) != "" && 
+                            getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && 
+                            intaCookieConsents?.functionalCookies == "false" && 
+                            getCookie(int_hideCookieBannerName) != "" && 
+                            getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && 
+                            intaCookieConsents?.staticsticCookies == "false" || 
+                            intaCookieConsents?.advertisementCookies == "null" && 
+                            intaCookieConsents?.functionalCookies == "null" && 
+                            intaCookieConsents?.staticsticCookies == "null"
+                                || intaCookieConsents?.advertisementCookies == "" && 
+                                intaCookieConsents?.functionalCookies == "" && 
+                                intaCookieConsents?.staticsticCookies == ""
+                                || !FunctionalCheckbox?.checked && 
+                                !StaticsCheckBox?.checked && 
+                                !MarketingCheckBox?.checked
                             ) {
                                 if (
                                     src.indexOf(window.location.hostname) == -1
@@ -2584,9 +2720,10 @@ function startObserving(observer) {
         childList: !0,
         subtree: !0,
         attributes: true,
-        attributeFilter: ["src", "href", "type"]
+        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
     })
 }
+
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
 
