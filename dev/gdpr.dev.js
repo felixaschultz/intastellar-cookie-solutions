@@ -2058,6 +2058,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                     settingsContent.setAttribute("data-class", frae.className);
                 }
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
+                console.log(frae.src.indexOf("hs-sites.com"))
                 if (frae.src.indexOf("hs-sites.com") > -1) {
                     frae?.parentElement?.replaceChild(null, frae);
                 } else {
