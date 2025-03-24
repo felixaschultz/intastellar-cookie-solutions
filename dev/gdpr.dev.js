@@ -2059,7 +2059,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 }
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
                 if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae.parentElement.replaceChild("", frae);
+                    frae?.parentElement?.replaceChild(null, frae);
                 } else {
                     if (frae.style.display != "none") {
                         frae?.parentElement?.replaceChild(settingsContent, frae);
@@ -2123,7 +2123,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
                 if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae.parentElement.replaceChild("", frae);
+                    frae?.parentElement?.replaceChild(null, frae);
                 } else {
                     if (frae.style.display != "none") {
 
@@ -2180,17 +2180,14 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
 
                 settingsContent.setAttribute("data-src", frae.src);
                 if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae.parentElement.replaceChild("", frae);
+                    frae?.parentElement?.replaceChild(null, frae);
                 } else {
                     if (frae.style.display != "none") {
-                        if (frae.src.indexOf("hs-sites.com") > -1) {
-                            frae.parentElement.replaceChild("", frae);
-                        }
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
             } else if (frae?.id?.indexOf("google_translate_element2") > -1) {
-                frae.parentElement.replaceChild("", frae);
+                frae?.parentElement?.replaceChild(null, frae);
             }
         }
     })
