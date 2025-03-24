@@ -1718,6 +1718,7 @@ const allScripts = window.allScripts = [
             "([\-\.]tiktok+)",
             "([\-\.]taboola+)",
             "([\-\.]hubspot+)",
+            "([\-\.]hs-sites+)",
             "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -2842,7 +2843,6 @@ function restartObserver() {
                         });
                     });
                 });
-        });
         startObserving(observer, document.documentElement);
         window.addEventListener("load", () => {
             observer.disconnect();
