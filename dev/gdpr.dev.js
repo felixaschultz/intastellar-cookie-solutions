@@ -2066,12 +2066,8 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 }
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
 
-                if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae?.parentElement?.replaceChild(null, frae);
-                } else {
-                    if (frae.style.display != "none") {
-                        frae?.parentElement?.replaceChild(settingsContent, frae);
-                    }
+                if (frae.style.display != "none") {
+                    frae?.parentElement?.replaceChild(settingsContent, frae);
                 }
 
             }
@@ -2197,6 +2193,10 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
             } else if (frae?.id?.indexOf("google_translate_element2") > -1) {
                 frae?.parentElement?.replaceChild(null, frae);
             }
+        }
+
+        if (frae.src.indexOf("hs-sites.com") > -1) {
+            frae?.parentElement?.replaceChild(null, frae);
         }
     })
 }
