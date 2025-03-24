@@ -2171,6 +2171,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
 
                 let settingsContent = document.createElement("inta-consents");
                 settingsContent.classList.add("intCookie_ConsentContainer");
+
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
                 settingsContent.setAttribute("data-src", frae.src);
