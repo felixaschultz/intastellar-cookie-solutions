@@ -1973,7 +1973,11 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
             return;
         }
         let settingsContent = document.createElement("inta-consents-iframe");
-
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
+            if (frae.src.indexOf("hs-sites.com") > -1) {
+                frae?.parentElement?.replaceChild(null, frae);
+            }
+        }
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
             // Check if an element is from Facebook, check by looking at the class name if it contains "fb"
             if (containsClass(frae, "fb")) {
@@ -2200,10 +2204,6 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
             } else if (frae?.id?.indexOf("google_translate_element2") > -1) {
                 frae?.parentElement?.replaceChild(null, frae);
             }
-        }
-
-        if (frae.src.indexOf("hs-sites.com") > -1) {
-            frae?.parentElement?.replaceChild(null, frae);
         }
     })
 }
