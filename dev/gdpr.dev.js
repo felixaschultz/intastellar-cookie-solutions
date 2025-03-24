@@ -2841,6 +2841,7 @@ function restartObserver() {
                             });
                         });
                     });
+                });
         });
         startObserving(observer, document.documentElement);
         window.addEventListener("load", () => {
