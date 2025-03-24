@@ -2057,7 +2057,9 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 if (frae.classList.length > 0) {
                     settingsContent.setAttribute("data-class", frae.className);
                 }
-                settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
+                if (frae.src != "hs-sites.com") {
+                    settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
+                }
                 if (frae.style.display != "none") {
                     frae?.parentElement?.replaceChild(settingsContent, frae);
                 }
@@ -2115,7 +2117,9 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 let settingsContent = document.createElement("inta-consents");
                 settingsContent.classList.add("intCookie_ConsentContainer");
                 settingsContent.setAttribute("data-src", a.href);
-                settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
+                if (frae.src != "hs-sites.com") {
+                    settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
+                }
                 if (frae.style.display != "none") {
                     frae?.parentElement?.replaceChild(settingsContent, frae);
                 }
@@ -2163,7 +2167,9 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
 
                 let settingsContent = document.createElement("inta-consents");
                 settingsContent.classList.add("intCookie_ConsentContainer");
-                settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
+                if (frae.src != "hs-sites.com") {
+                    settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
+                }
                 settingsContent.setAttribute("data-src", frae.src);
                 if (frae.style.display != "none") {
                     frae.parentElement.replaceChild(settingsContent, frae);
@@ -2242,7 +2248,9 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
         }
         let settingsContent = document.createElement("inta-consents");
         settingsContent.classList.add("intCookie_ConsentContainer");
-        settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
+        if (frae.src != "hs-sites.com") {
+            settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
+        }
         settingsContent.setAttribute("data-src", a.href);
         if (tweet.style.display != "none") {
             tweet.parentElement.replaceChild(settingsContent, tweet);
