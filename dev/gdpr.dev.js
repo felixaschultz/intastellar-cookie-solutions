@@ -2129,6 +2129,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
 
                         frae?.parentElement?.replaceChild(settingsContent, frae);
                     }
+
                 }
             } else if (frae?.id?.indexOf("map") > -1 || frae?.id?.indexOf("google") > -1 && frae?.id?.indexOf("google_translate_element2") == -1) {
                 let externalDomain = "www.google.com";
