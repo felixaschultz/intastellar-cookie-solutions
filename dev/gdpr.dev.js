@@ -1073,6 +1073,63 @@ inta_marketingCookieList.push({
 });
 
 inta_marketingCookieList.push({
+    vendor: "HubSpot Inc",
+    cookies: [
+        {
+            cookie: "hubspotutk",
+            purpose: "This cookie is used for to keep track of a visitor's identity. This cookie is passed to HubSpot on form submission and used when de-duplicating contacts."
+        },
+        {
+            cookie: "messagesUtk",
+            purpose: "This cookie is used to recognize visitors who chat with you via the messages tool. If the visitor leaves your site before they're added as a contact, they will have this cookie associated with their browser."
+        },
+        {
+            cookie: "__hstc",
+            purpose: "The main cookie for tracking visitors. It contains the domain, utk, initial timestamp (first visit), last timestamp (last visit), current timestamp (this visit), and session number (increments for each subsequent session)."
+        },
+        {
+            cookie: "__hssc",
+            purpose: "This cookie keeps track of sessions. This is used to determine if HubSpot should increment the session number and timestamps in the __hstc cookie. It contains the domain, viewCount (increments each pageView in a session), and session start timestamp."
+        },
+        {
+            cookie: "__hssrc",
+            purpose: "Whenever HubSpot changes the session cookie, this cookie is also set to determine if the visitor has restarted their browser. If this cookie does not exist when HubSpot manages cookies, it is considered a new session."
+        },
+        {
+            cookie: "__hs_opt_out",
+            purpose: "This cookie is used by the opt-in privacy policy to remember not to ask the visitor to accept cookies again."
+        },
+        {
+            cookie: "__hs_do_not_track",
+            purpose: "This cookie can be set to prevent the tracking code from sending any information to HubSpot. Setting this cookie is different from opting out of cookies, as it still allows anonymized information to be sent to HubSpot."
+        },
+        {
+            cookie: "__cf_bm",
+            purpose: "This cookie is used to distinguish between humans and bots. This is beneficial for the website, in order to make valid reports on the use of their website."
+        },
+        {
+            cookie: "_cfuvid",
+            purpose: "This cookie is used to distinguish between humans and bots. This is beneficial for the website, in order to make valid reports on the use of their website."  
+        }
+    ],
+    domains: [
+        "hubspot.com",
+        "hs-scripts.com",
+        "hs-analytics.net",
+        "hsforms.com",
+        "hsadspixel.net",
+        "hs-banner.com",
+        "hscollectedforms.net",
+        "hscta.net",
+        "hsleadflows.net",
+        "hs-scripts.net",
+        "hsstatic.net",
+        "hubspot.net"
+    ],
+    vendor_privacy: "https://legal.hubspot.com/privacy-policy"
+});
+
+inta_marketingCookieList.push({
     vendor: "LinkedIn Inc",
     cookies: [
         {
@@ -1659,6 +1716,8 @@ const allScripts = window.allScripts = [
             "([\-\.]soundestvid+)",
             "([\-\.]soundestform+)",
             "([\-\.]tiktok+)",
+            "([\-\.]taboola+)",
+            "([\-\.]hubspot+)",
             "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
