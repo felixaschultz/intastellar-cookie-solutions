@@ -2,6 +2,13 @@
  *  Cookie Consents Banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
  *  consents.cdn.intastellarsolutions.com/uc.js
+ *  @copy 2022-2025 Intastellar Solutions, International
+ *
+*/
+/*
+ *  Cookie Consents Banner by Intastellar Solutions, International
+ *  intastellarsolutions.com/gdpr-cookiebanner
+ *  consents.cdn.intastellarsolutions.com/uc.js
  *  @copy 2022-2024 Intastellar Solutions, International
  *
 */
@@ -1763,7 +1770,7 @@ const allScripts = window.allScripts = [
             "([\-\.]tiktok+)",
             "([\-\.]taboola+)",
             "([\-\.]hubspot+)",
-            "([\-\.]hs-sites+)",
+            /* "([\-\.]hs-sites+)", */
             "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -2058,7 +2065,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                     settingsContent.setAttribute("data-class", frae.className);
                 }
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
-                console.log(frae.src.indexOf("hs-sites.com"))
+
                 if (frae.src.indexOf("hs-sites.com") > -1) {
                     frae?.parentElement?.replaceChild(null, frae);
                 } else {
