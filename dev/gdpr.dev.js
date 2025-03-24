@@ -9,6 +9,13 @@
  *  Cookie Consents Banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
  *  consents.cdn.intastellarsolutions.com/uc.js
+ *  @copy 2022-2025 Intastellar Solutions, International
+ *
+*/
+/*
+ *  Cookie Consents Banner by Intastellar Solutions, International
+ *  intastellarsolutions.com/gdpr-cookiebanner
+ *  consents.cdn.intastellarsolutions.com/uc.js
  *  @copy 2022-2024 Intastellar Solutions, International
  *
 */
@@ -1966,7 +1973,11 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
             return;
         }
         let settingsContent = document.createElement("inta-consents-iframe");
-
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
+            if (frae.src.indexOf("hs-sites.com") > -1) {
+                frae?.parentElement?.replaceChild(null, frae);
+            }
+        }
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
             // Check if an element is from Facebook, check by looking at the class name if it contains "fb"
             if (containsClass(frae, "fb")) {
@@ -2194,10 +2205,6 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 frae?.parentElement?.replaceChild(null, frae);
             }
         }
-
-        if (frae.src.indexOf("hs-sites.com") > -1) {
-            frae?.parentElement?.replaceChild(null, frae);
-        }
     })
 }
 
@@ -2318,7 +2325,6 @@ const bannerContentMessage = (domain, node) => {
 function handleInputChange(event) {
     const target = event.target;
     if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') {
-        console.log('Input changed:', target.name || target.id, target.checked);
 
         // Update consent tracker object for checkbox inputs
         if (target.type === 'checkbox') {
@@ -2430,7 +2436,6 @@ function restartObserver() {
     // Process any existing blocked content that should now be allowed
     processExistingScripts();
 
-    console.log('Observer restarted with updated consent settings');
 }
 
 const beforeScriptExecuteListener = function (event, node) {
@@ -2507,12 +2512,11 @@ function restartObserver() {
     // Process any existing blocked content that should now be allowed
     processExistingScripts();
 
-    console.log('Observer restarted with updated consent settings');
 }
 
 function checkCookieStatus() {
     if (isGtmMode) {
-        console.log("Observer disabled in GTM mode");
+        /* console.log("Observer disabled in GTM mode"); */
         return null; // Return null instead of creating an observer
     }
     /* To get anonymous cookie banner usage */
@@ -2759,8 +2763,6 @@ function checkCookieStatus() {
 
                         node.removeAttribute("charset");
                         addedNodes.forEach((node) => {
-
-                            console.log(StaticsCheckBox?.checked);
 
                             src = node.src;
                             if (src.indexOf(window.location.hostname) == -1) {
