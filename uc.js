@@ -42,6 +42,7 @@ const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 const isGtmMode = findScriptParameter("ref") === "gtm";
+const isWordPress = document.currentScript.id === "intastellar-gdpr-settings-js";
 let poweredBy = "";
 let intaConsentsObjectVariable = {
     consents: {
@@ -62,10 +63,12 @@ window.dataLayer = window.dataLayer || [];
 (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
 (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
 
-if (!isGtmMode) {
-    dataLayer.push({
-        'event': 'intastellarConsentsBannerLoaded',
-    });
+if (isGtmMode && isWordPress) {
+    // Remove the current script that is loaded via Google Tag Manager
+    if (isGtmMode) {
+        document.currentScript.remove();
+    }
+
 }
 
 /* - - - Setup - - - */
@@ -157,7 +160,7 @@ if (intastellarDevMode) {
 }
 // Adding the script to the head
 setTimeout(() => {
-    document.head.insertBefore(intastellarCreateBanner, document.currentScript)
+    document.head.insertBefore(intastellarCreateBanner, document.currentScript);
 }, 200);
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
