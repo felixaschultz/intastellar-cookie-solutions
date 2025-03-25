@@ -1821,7 +1821,6 @@ gtag('consent', 'default', {
     'ad_user_data': 'denied',
     'ad_personalization': 'denied',
     'security_storage': 'granted',
-    'region': ["EU", "UK", "CA-US"],
     'url_passthrough': true,
     'wait_for_update': 500,
 });
