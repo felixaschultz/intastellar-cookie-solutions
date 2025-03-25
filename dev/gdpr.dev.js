@@ -5,20 +5,6 @@
  *  @copy 2022-2025 Intastellar Solutions, International
  *
 */
-/*
- *  Cookie Consents Banner by Intastellar Solutions, International
- *  intastellarsolutions.com/gdpr-cookiebanner
- *  consents.cdn.intastellarsolutions.com/uc.js
- *  @copy 2022-2025 Intastellar Solutions, International
- *
-*/
-/*
- *  Cookie Consents Banner by Intastellar Solutions, International
- *  intastellarsolutions.com/gdpr-cookiebanner
- *  consents.cdn.intastellarsolutions.com/uc.js
- *  @copy 2022-2024 Intastellar Solutions, International
- *
-*/
 /* - - - Setup - - - */
 const intaCookiePref = "IntastellarConsentSolution";
 const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
@@ -35,6 +21,7 @@ const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 const isGtmMode = findScriptParameter("ref") === "gtm";
+const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
 let poweredBy = "";
 let intaConsentsObjectVariable = {
     consents: {
@@ -54,20 +41,8 @@ const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_setting
 window.dataLayer = window.dataLayer || [];
 (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
 (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
-dataLayer.push({
-    'event': 'intastellarConsentsBannerLoaded',
-});
 
-window.addEventListener("message", (event) => {
-    // Check origin if needed:
-    // if (event.origin !== "https://tagmanager.google.com") return;
-    console.log("Message received from parent:", event.data);
-    if (event.data && event.data.event === "gtm.init_consent") {
-        console.log("Consent init event received:", event.data);
-        // Place your custom logic here.
-    }
-});
-
+/* - - - Setup - - - */
 if (window.INTA === undefined) {
     window.INTA = {
         policy_link: undefined,
@@ -156,7 +131,7 @@ if (intastellarDevMode) {
 }
 // Adding the script to the head
 setTimeout(() => {
-    document.head.insertBefore(intastellarCreateBanner, document.currentScript)
+    document.head.insertBefore(intastellarCreateBanner, document.currentScript);
 }, 200);
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
@@ -1985,8 +1960,8 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
         }
         let settingsContent = document.createElement("inta-consents-iframe");
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
-            if (frae.src.indexOf("hs-sites.com") > -1) {
-                frae?.parentElement?.replaceChild(null, frae);
+            if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                frae?.parentElement?.replaceChild("", frae);
             }
         }
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
@@ -2148,8 +2123,8 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 settingsContent.setAttribute("data-src", a.href);
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
-                if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae?.parentElement?.replaceChild(null, frae);
+                if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                    frae?.parentElement?.replaceChild("", frae);
                 } else {
                     if (frae.style.display != "none") {
 
@@ -2205,15 +2180,15 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
                 settingsContent.setAttribute("data-src", frae.src);
-                if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae?.parentElement?.replaceChild(null, frae);
+                if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                    frae?.parentElement?.replaceChild("", frae);
                 } else {
                     if (frae.style.display != "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
             } else if (frae?.id?.indexOf("google_translate_element2") > -1) {
-                frae?.parentElement?.replaceChild(null, frae);
+                frae?.parentElement?.replaceChild("", frae);
             }
         }
     })
