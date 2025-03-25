@@ -42,7 +42,7 @@ const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 const isGtmMode = findScriptParameter("ref") === "gtm";
-const isWordPress = document.currentScript.id === "intastellar-gdpr-settings-js";
+const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
 let poweredBy = "";
 let intaConsentsObjectVariable = {
     consents: {
@@ -63,13 +63,15 @@ window.dataLayer = window.dataLayer || [];
 (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
 (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
 
-if (isGtmMode && isWordPress) {
-    // Remove the current script that is loaded via Google Tag Manager
-    if (isGtmMode) {
-        document.currentScript.remove();
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    if (isGtmMode && isWordPress) {
+        // Remove the current script that is loaded via Google Tag Manager
+        if (isGtmMode) {
+            document.currentScript.remove();
+        }
 
-}
+    }
+});
 
 /* - - - Setup - - - */
 if (window.INTA === undefined) {
