@@ -22,6 +22,9 @@ const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookie
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 const isGtmMode = findScriptParameter("ref") === "gtm";
 const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
+const FunctionalCheckbox = document.querySelector("#functional");
+const StaticsCheckBox = document.querySelector("#statics");
+const MarketingCheckBox = document.querySelector("#marketing");
 let poweredBy = "";
 let intaConsentsObjectVariable = {
     consents: {
@@ -2726,10 +2729,6 @@ function checkCookieStatus() {
                             })
                         });
                     }
-
-                    const FunctionalCheckbox = document.querySelector("#functional");
-                    const StaticsCheckBox = document.querySelector("#statics");
-                    const MarketingCheckBox = document.querySelector("#marketing");
 
                     if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
                         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
