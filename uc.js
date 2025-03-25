@@ -1992,7 +1992,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
         }
         let settingsContent = document.createElement("inta-consents-iframe");
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
-            if (frae.src.indexOf("hs-sites.com") > -1) {
+            if (frae?.src?.indexOf("hs-sites.com") > -1) {
                 frae?.parentElement?.replaceChild(null, frae);
             }
         }
@@ -2155,7 +2155,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 settingsContent.setAttribute("data-src", a.href);
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
-                if (frae.src.indexOf("hs-sites.com") > -1) {
+                if (frae?.src?.indexOf("hs-sites.com") > -1) {
                     frae?.parentElement?.replaceChild(null, frae);
                 } else {
                     if (frae.style.display != "none") {
@@ -2212,7 +2212,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
                 settingsContent.setAttribute("data-src", frae.src);
-                if (frae.src.indexOf("hs-sites.com") > -1) {
+                if (frae?.src?.indexOf("hs-sites.com") > -1) {
                     frae?.parentElement?.replaceChild(null, frae);
                 } else {
                     if (frae.style.display != "none") {
