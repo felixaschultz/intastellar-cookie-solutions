@@ -1969,7 +1969,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
         }
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
             // Check if an element is from Facebook, check by looking at the class name if it contains "fb"
-            if (containsClass(frae, "fb-")) {
+            if (containsClass(frae, "fb-") && frae.getAttribute("data-href").indexOf("facebook.com") > -1) {
                 frae?.parentElement?.replaceChild(settingsContent, frae);
             }
             if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
