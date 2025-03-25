@@ -109,13 +109,13 @@ if (intastellarCookieLanguage == "de" || window.INTA.settings.language == "de") 
     intastellarCookieLanguageSettings = "Kakinställningar";
 } else if (intastellarCookieLanguage == "no" || window.INTA.settings.language == "no") {
     intastellarCookieLanguageSettings = "Informasjonskapselinnstillinger";
-} else if (intastellarCookieLanguage  == "nl"|| window.INTA.settings.language == "nl") {
+} else if (intastellarCookieLanguage == "nl" || window.INTA.settings.language == "nl") {
     intastellarCookieLanguageSettings = "Cookie-instellingen";
 } else if (intastellarCookieLanguage == "it" || window.INTA.settings.language == "it") {
     intastellarCookieLanguageSettings = "Impostazioni dei cookie";
 } else if (intastellarCookieLanguage == "fi" || window.INTA.settings.language == "fi") {
     intastellarCookieLanguageSettings = "Evästeasetukset";
-} else if (intastellarCookieLanguage == "ru"|| window.INTA.settings.language == "ru") {
+} else if (intastellarCookieLanguage == "ru" || window.INTA.settings.language == "ru") {
     intastellarCookieLanguageSettings = "Настройки файлов cookie";
 }
 
@@ -1980,7 +1980,7 @@ window.addEventListener("load", function () {
                     'functionality_storage': 'granted',
                 })
                 accepted.push("functionalCookies");
-            } else {
+            } else if (!FunctionalCheckbox?.checked) {
                 gtag('consent', 'update', {
                     'functionality_storage': 'denied',
                 })
@@ -1997,7 +1997,7 @@ window.addEventListener("load", function () {
                     'ad_user_data': 'granted',
                 })
                 accepted.push("staticsticCookies");
-            } else {
+            } else if (!StaticsCheckBox?.checked) {
                 gtag('consent', 'update', {
                     'analytics_storage': 'denied',
                 })
@@ -2019,7 +2019,7 @@ window.addEventListener("load", function () {
                     'ad_storage': 'granted'
                 });
                 accepted.push("advertisementCookies");
-            } else {
+            } else if (!MarketingCheckBox?.checked) {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'denied'
                 });
