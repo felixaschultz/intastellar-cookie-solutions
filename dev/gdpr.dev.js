@@ -1898,17 +1898,17 @@ if (intaCookieConsents?.functionalCookies === "checked" &&
     m = merge(allScripts[1].scripts, allScripts[2].scripts);
 } else if (intaCookieConsents?.functionalCookies === "checked" &&
     intaCookieConsents?.staticsticCookies === "checked") {
-    m = allScripts[1].scripts.filter(script => !script.includes("clarity"));
+    m = allScripts[1].scripts;
 } else if (intaCookieConsents?.functionalCookies === "checked" &&
     intaCookieConsents?.advertisementCookies === "checked") {
-    m = allScripts[0].scripts.filter(script => !script.includes("clarity"));
+    m = allScripts[0].scripts;
 } else if (intaCookieConsents?.advertisementCookies === "checked" &&
     intaCookieConsents?.staticsticCookies === "checked") {
-    m = allScripts[2].scripts.filter(script => !script.includes("clarity"));
+    m = allScripts[2].scripts;
 } else {
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
 }
-window.notRequired = new RegExp(m.join("|"), "ig");
+notRequired = window.notRequired = new RegExp(m.join("|"), "ig");
 let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
