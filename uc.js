@@ -68,7 +68,7 @@ dataLayer.push({
 window.addEventListener("message", (event) => {
     // Check origin if needed:
     // if (event.origin !== "https://tagmanager.google.com") return;
-    console.log("Message received from parent:", event.data);
+    console.log("Message received from parent:", event.origin, event.data);
     if (event.data && event.data.event === "gtm.init_consent") {
         console.log("Consent init event received:", event.data);
         // Place your custom logic here.
