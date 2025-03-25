@@ -97,6 +97,7 @@ const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastel
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
+console.log(window.INTA.settings.language, intastellarCookieLanguage);
 if (intastellarCookieLanguage == "de" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
 } else if (intastellarCookieLanguage == "en" || window.INTA.settings.language == "en" || window.INTA.settings.language == "english") {
