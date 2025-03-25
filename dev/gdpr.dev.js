@@ -51,6 +51,12 @@ let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
 const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
+window.dataLayer = window.dataLayer || [];
+(adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
+(adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
+dataLayer.push({
+    'event': 'intastellarConsentsBannerLoaded',
+});
 
 if (window.INTA === undefined) {
     window.INTA = {
@@ -1801,9 +1807,6 @@ const allScripts = window.allScripts = [
         ]
     }
 ];
-window.dataLayer = window.dataLayer || [];
-(adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
-(adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
 function gtag() {
     dataLayer.push(arguments);
 }
@@ -1817,9 +1820,7 @@ window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
 
-dataLayer.push({
-    'event': 'intastellarConsentsBannerLoaded',
-});
+
 fbq('consent', 'revoke');
 window.clarity('consent', false);
 
