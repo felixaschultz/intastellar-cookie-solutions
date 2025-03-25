@@ -1821,6 +1821,7 @@ gtag('consent', 'default', {
     'ad_user_data': 'denied',
     'ad_personalization': 'denied',
     'security_storage': 'granted',
+    'region': ["EU", "EEA", "UK", "CA-US"],
     'url_passthrough': true,
     'wait_for_update': 500,
 });
@@ -1835,7 +1836,7 @@ if (intaCookieConsents?.advertisementCookies) {
         'url_passthrough': true,
     });
 
-    window.uetq.push('consent', 'default', {
+    window.uetq.push('consent', 'update', {
         'ad_storage': 'granted'
     });
     fbq('consent', 'grant');
