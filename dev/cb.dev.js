@@ -97,25 +97,25 @@ const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastel
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
-if (intastellarCookieLanguage == "de" || window.INTA.settings.language == "de") {
+if (intastellarCookieLanguage == "de" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
-} else if (intastellarCookieLanguage == "en" || window.INTA.settings.language == "en") {
+} else if (intastellarCookieLanguage == "en" || window.INTA.settings.language == "en" || window.INTA.settings.language == "english") {
     intastellarCookieLanguageSettings = "Cookie Settings";
-} else if (intastellarCookieLanguage == "es" || window.INTA.settings.language == "es") {
+} else if (intastellarCookieLanguage == "es" || window.INTA.settings.language == "es" || window.INTA.settings.language == "english") {
     intastellarCookieLanguageSettings = "Configuración de cookies";
-} else if (intastellarCookieLanguage == "fr" || window.INTA.settings.language == "fr") {
+} else if (intastellarCookieLanguage == "fr" || window.INTA.settings.language == "fr" || window.INTA.settings.language == "french") {
     intastellarCookieLanguageSettings = "Paramètres des cookies";
-} else if (intastellarCookieLanguage == "sv" || window.INTA.settings.language == "sv") {
+} else if (intastellarCookieLanguage == "sv" || window.INTA.settings.language == "sv" || window.INTA.settings.language == "swedish") {
     intastellarCookieLanguageSettings = "Kakinställningar";
-} else if (intastellarCookieLanguage == "no" || window.INTA.settings.language == "no") {
+} else if (intastellarCookieLanguage == "no" || window.INTA.settings.language == "no" || window.INTA.settings.language == "norwegian") {
     intastellarCookieLanguageSettings = "Informasjonskapselinnstillinger";
-} else if (intastellarCookieLanguage == "nl" || window.INTA.settings.language == "nl") {
+} else if (intastellarCookieLanguage == "nl" || window.INTA.settings.language == "nl" || window.INTA.settings.language == "dutch") {
     intastellarCookieLanguageSettings = "Cookie-instellingen";
-} else if (intastellarCookieLanguage == "it" || window.INTA.settings.language == "it") {
+} else if (intastellarCookieLanguage == "it" || window.INTA.settings.language == "it" || window.INTA.settings.language == "italian") {
     intastellarCookieLanguageSettings = "Impostazioni dei cookie";
-} else if (intastellarCookieLanguage == "fi" || window.INTA.settings.language == "fi") {
+} else if (intastellarCookieLanguage == "fi" || window.INTA.settings.language == "fi" || window.INTA.settings.language == "finnish") {
     intastellarCookieLanguageSettings = "Evästeasetukset";
-} else if (intastellarCookieLanguage == "ru" || window.INTA.settings.language == "ru") {
+} else if (intastellarCookieLanguage == "ru" || window.INTA.settings.language == "ru" || window.INTA.settings.language == "russian") {
     intastellarCookieLanguageSettings = "Настройки файлов cookie";
 }
 
