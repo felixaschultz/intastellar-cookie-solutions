@@ -1698,7 +1698,7 @@ const allScripts = window.allScripts = [
             "([\-\.]pardot+)",
             "([\-\.]poultons+)",
             "([\-\.]chartbeat+)",
-            "([\-\.]clarity+)",
+            /* "([\-\.]clarity+)", */
             "([\-\.]consensu+)",
             "([\-\.]ip-only+)",
             "([\-\.]ggpht+)",
