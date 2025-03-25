@@ -64,17 +64,7 @@ window.dataLayer = window.dataLayer || [];
 dataLayer.push({
     'event': 'intastellarConsentsBannerLoaded',
 });
-
-window.addEventListener("message", (event) => {
-    // Check origin if needed:
-    // if (event.origin !== "https://tagmanager.google.com") return;
-    console.log("Message received from parent:", event.origin, event.data);
-    if (event.data && event.data.event === "gtm.init_consent") {
-        console.log("Consent init event received:", event.data);
-        // Place your custom logic here.
-    }
-});
-
+/* - - - Setup - - - */
 if (window.INTA === undefined) {
     window.INTA = {
         policy_link: undefined,
@@ -1993,7 +1983,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
         let settingsContent = document.createElement("inta-consents-iframe");
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
             if (frae?.src?.indexOf("hs-sites.com") > -1) {
-                frae?.parentElement?.replaceChild(null, frae);
+                frae?.parentElement?.replaceChild("", frae);
             }
         }
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
@@ -2156,7 +2146,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
                 if (frae?.src?.indexOf("hs-sites.com") > -1) {
-                    frae?.parentElement?.replaceChild(null, frae);
+                    frae?.parentElement?.replaceChild("", frae);
                 } else {
                     if (frae.style.display != "none") {
 
@@ -2213,14 +2203,14 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
 
                 settingsContent.setAttribute("data-src", frae.src);
                 if (frae?.src?.indexOf("hs-sites.com") > -1) {
-                    frae?.parentElement?.replaceChild(null, frae);
+                    frae?.parentElement?.replaceChild("", frae);
                 } else {
                     if (frae.style.display != "none") {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
             } else if (frae?.id?.indexOf("google_translate_element2") > -1) {
-                frae?.parentElement?.replaceChild(null, frae);
+                frae?.parentElement?.replaceChild("", frae);
             }
         }
     })
