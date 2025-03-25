@@ -5,13 +5,6 @@
  *  @copy 2022-2024 Intastellar Solutions, International
  *
 */
-/*
- *  GDPR Cookie banner by Intastellar Solutions, International
- *  intastellarsolutions.com/gdpr-cookiebanner
- *  consents.cdn.intastellarsolutions.com/gdpr.js
- *  @copy 2022-2024 Intastellar Solutions, International
- *
-*/
 
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
@@ -97,12 +90,11 @@ const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastel
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
-console.log(window.INTA.settings.language, intastellarCookieLanguage);
-if (intastellarCookieLanguage == "de" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
+if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
-} else if (intastellarCookieLanguage == "en" || window.INTA.settings.language == "en" || window.INTA.settings.language == "english") {
+} else if (intastellarCookieLanguage == "en" || intastellarCookieLanguage == "en-US" || window.INTA.settings.language == "en" || window.INTA.settings.language == "english") {
     intastellarCookieLanguageSettings = "Cookie Settings";
-} else if (intastellarCookieLanguage == "es" || window.INTA.settings.language == "es" || window.INTA.settings.language == "english") {
+} else if (intastellarCookieLanguage == "es" || intastellarCookieLanguage == "es-ES" || window.INTA.settings.language == "es" || window.INTA.settings.language == "english") {
     intastellarCookieLanguageSettings = "Configuración de cookies";
 } else if (intastellarCookieLanguage == "fr" || window.INTA.settings.language == "fr" || window.INTA.settings.language == "french") {
     intastellarCookieLanguageSettings = "Paramètres des cookies";
