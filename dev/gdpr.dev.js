@@ -1668,6 +1668,7 @@ if (document.querySelector("html").getAttribute("lang") == null) {
 const allScripts = window.allScripts = [
     {
         /* Analytics Scripts which are beeing blocked */
+        /* "([\-\.]clarity+)", */
         type: "statics",
         scripts: [
             "(mixpanel)",
@@ -1698,7 +1699,6 @@ const allScripts = window.allScripts = [
             "([\-\.]pardot+)",
             "([\-\.]poultons+)",
             "([\-\.]chartbeat+)",
-            /* "([\-\.]clarity+)", */
             "([\-\.]consensu+)",
             "([\-\.]ip-only+)",
             "([\-\.]ggpht+)",
@@ -1821,7 +1821,7 @@ gtag('consent', 'default', {
     'ad_user_data': 'denied',
     'ad_personalization': 'denied',
     'security_storage': 'granted',
-    'region': ["EU", "EEA", "UK", "CA-US"],
+    'region': ["EU", "UK", "CA-US"],
     'url_passthrough': true,
     'wait_for_update': 500,
 });
@@ -1885,29 +1885,31 @@ const merge = (first, second, third) => {
 }
 /* autoads-preview.googleusercontent.com */
 /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
-if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.staticsticCookies != "checked" && intaCookieConsents?.advertisementCookies != "checked") {
-    m = merge(allScripts[1].scripts, allScripts[0].scripts)
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies == "checked" && intaCookieConsents?.staticsticCookies != "checked" && intaCookieConsents?.functionalCookies != "checked") {
-    m = merge(allScripts[2].scripts, allScripts[0].scripts)
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "checked" && intaCookieConsents?.functionalCookies != "checked" && intaCookieConsents?.advertisementCookies != "checked") {
-    m = merge(allScripts[1].scripts, allScripts[2].scripts)
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.staticsticCookies == "checked") {
-    m = allScripts[1].scripts;
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.advertisementCookies == "checked") {
-    m = allScripts[0].scripts;
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies == "checked" && intaCookieConsents?.staticsticCookies == "checked") {
-    m = allScripts[2].scripts;
-    notRequired = new RegExp(m.join("|"), "ig");
+if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies !== "checked" &&
+    intaCookieConsents?.advertisementCookies !== "checked") {
+    m = merge(allScripts[1].scripts, allScripts[0].scripts);
+} else if (intaCookieConsents?.advertisementCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies !== "checked" &&
+    intaCookieConsents?.functionalCookies !== "checked") {
+    m = merge(allScripts[2].scripts, allScripts[0].scripts);
+} else if (intaCookieConsents?.staticsticCookies === "checked" &&
+    intaCookieConsents?.functionalCookies !== "checked" &&
+    intaCookieConsents?.advertisementCookies !== "checked") {
+    m = merge(allScripts[1].scripts, allScripts[2].scripts);
+} else if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies === "checked") {
+    m = allScripts[1].scripts.filter(script => !script.includes("clarity"));
+} else if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.advertisementCookies === "checked") {
+    m = allScripts[0].scripts.filter(script => !script.includes("clarity"));
+} else if (intaCookieConsents?.advertisementCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies === "checked") {
+    m = allScripts[2].scripts.filter(script => !script.includes("clarity"));
 } else {
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
-    notRequired = new RegExp(m.join("|"), "ig");
 }
-window.notRequired = notRequired;
+window.notRequired = new RegExp(m.join("|"), "ig");
 let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
