@@ -61,9 +61,13 @@ const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_setting
 window.dataLayer = window.dataLayer || [];
 (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
 (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
-dataLayer.push({
-    'event': 'intastellarConsentsBannerLoaded',
-});
+
+if (!isGtmMode) {
+    dataLayer.push({
+        'event': 'intastellarConsentsBannerLoaded',
+    });
+}
+
 /* - - - Setup - - - */
 if (window.INTA === undefined) {
     window.INTA = {
