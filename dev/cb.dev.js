@@ -5,7 +5,6 @@
  *  @copy 2022-2024 Intastellar Solutions, International
  *
 */
-
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
     if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) return null;
@@ -231,14 +230,14 @@ const settingsMessagesLanguages = {
     ${(window.INTA.settings.design == "banner" ? generatePoweredBy() : "")
         }`,
     english: `<h3 style="    font-size: 25px;">You´re in control</h3>
-    <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
+    <p>We and our trusted partners use technologies, such as cookies, to collect information for various purposes, including:</p>
     <ol>
-        <li>Functional</li>
-        <li>Statistical</li>
-        <li>Advertisement</li>
+        <li>Functionality</li>
+        <li>Analytics</li>
+        <li>Advertising</li>
     </ol>
-    <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
-    <p>You may withdraw your consent at any time by clicking the small icon at the bottom ${(window?.INTA?.settings.arrange == "ltr") ? "left" : "right"} corner of the website.</p>
+    <p>By clicking 'Accept', you consent to all of these purposes. Alternatively, you can select the specific purposes you agree to by ticking the checkboxes and clicking 'Save Settings'.</p>
+    <p>You can withdraw your consent at any time by clicking the small icon in the bottom ${(window?.INTA?.settings.arrange == "ltr") ? "left" : "right"} corner of the website.</p>
     ${generatePolicyUrl('Our Privacy and cookie Policy')}
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privacy policy</button>
     ${(window.INTA.settings.design == "banner" ? generatePoweredBy() : "")
