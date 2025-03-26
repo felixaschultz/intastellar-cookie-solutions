@@ -3,6 +3,7 @@ const intastellarLogoLight = "https://www.intastellar-consents.com/assets/icons/
 const intastellarLogoDark = "https://www.intastellar-consents.com/assets/icons/intastellar-logo-black.svg";
 let intastellarSettingsButton = document.createElement("inta-consents-settings-btn");
 let intastellarSettingsButtonContent = document.createElement("button");
+const intastellarConsentsBanner = document.createElement("inta-consents-banner");
 const intastellarConsentsBannerContent = document.createElement("section");
 const moreintHeader = document.createElement("intheader");
 const moreContentText = document.createElement("section");
@@ -15,8 +16,8 @@ const testSection = document.createElement("section");
 const cookieSettings = document.createElement("article");
 const cookieSettingsContent = document.createElement("section");
 
-moreSettings.setAttribute("class", "intastellarCookieConstents");
-moreSettingsContent.setAttribute("class", "intastellarCookieConstents__content");
+intastellarConsentsBanner.setAttribute("class", "intastellarCookieConstents");
+intastellarConsentsBannerContent.setAttribute("class", "intastellarCookieConstents__content");
 moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
 moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer");
 
@@ -48,10 +49,9 @@ if (arrange == "ltr") {
 }
 
 intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
-
-intaconsentsContainer.appendChild(intastellarSettingsButton);
-intaconsentsContainer.appendChild(cookieSettings);
-
 cookieSettings.appendChild(cookieSettingsContent);
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
+
 intaconsentsContainer.appendChild(intastellarConsentsBanner);
+intaconsentsContainer.appendChild(intastellarSettingsButton);
+intaconsentsContainer.appendChild(cookieSettings);

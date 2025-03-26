@@ -49,13 +49,9 @@ if (arrange == "ltr") {
 }
 
 intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
+cookieSettings.appendChild(cookieSettingsContent);
+intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
 
+intaconsentsContainer.appendChild(intastellarConsentsBanner);
 intaconsentsContainer.appendChild(intastellarSettingsButton);
 intaconsentsContainer.appendChild(cookieSettings);
-
-cookieSettings.appendChild(cookieSettingsContent);
-intastellarConsentsBannerContent.appendChild(intaconsentsContainer);
-intastellarConsentsBannerContent.appendChild(cookieSettings);
-
-intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
-intaconsentsContainer.appendChild(intastellarConsentsBanner);
