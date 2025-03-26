@@ -2068,7 +2068,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 }
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
 
-                if (frae.style.display != "none") {
+                if (frae.style.display != "none" && frae.src != undefined) {
                     frae?.parentElement?.replaceChild(settingsContent, frae);
                 }
 
@@ -2131,7 +2131,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 if (frae?.src?.indexOf("hs-sites.com") > -1) {
                     frae?.parentElement?.replaceChild("", frae);
                 } else {
-                    if (frae.style.display != "none") {
+                    if (frae.style.display != "none" && frae.src != undefined) {
 
                         frae?.parentElement?.replaceChild(settingsContent, frae);
                     }
@@ -2188,7 +2188,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 if (frae?.src?.indexOf("hs-sites.com") > -1) {
                     frae?.parentElement?.replaceChild("", frae);
                 } else {
-                    if (frae.style.display != "none") {
+                    if (frae.style.display != "none" && frae.src != undefined) {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
@@ -2270,9 +2270,9 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
 
         settingsContent.setAttribute("data-src", a.href);
         if (tweet.src.indexOf("hs-sites.com") > -1) {
-            tweet.parentElement.replaceChild("", frae);
+            tweet.parentElement.replaceChild("", tweet);
         } else {
-            if (tweet.style.display != "none") {
+            if (tweet.style.display != "none" && tweet.src != undefined) {
                 tweet.parentElement.replaceChild(settingsContent, tweet);
 
             }
@@ -2525,7 +2525,7 @@ function checkCookieStatus() {
                                 if (script.type == "marketing") {
                                     scriptTypelang = {
                                         danish: "marketing",
-                                        english: "advertisement",
+                                        english: "marketing",
                                         german: "werbe",
                                         spanish: "publicidad",
                                         swedish: "marknadsföring",
@@ -2595,7 +2595,7 @@ function checkCookieStatus() {
                                 if (script.type == "marketing") {
                                     scriptTypelang = {
                                         danish: "marketing",
-                                        english: "advertisement",
+                                        english: "marketing",
                                         german: "werbe",
                                         spanish: "publicidad",
                                         swedish: "marknadsföring",
@@ -2667,7 +2667,7 @@ function checkCookieStatus() {
                                     if (script.type == "marketing") {
                                         scriptTypelang = {
                                             danish: "marketing",
-                                            english: "advertisement",
+                                            english: "marketing",
                                             german: "werbe",
                                             spanish: "publicidad",
                                             swedish: "marknadsföring",
