@@ -55,7 +55,6 @@ intaconsentsContainer.appendChild(cookieSettings);
 
 cookieSettings.appendChild(cookieSettingsContent);
 intastellarConsentsBannerContent.appendChild(intaconsentsContainer);
-intastellarConsentsBannerContent.appendChild(poweredBy);
 intastellarConsentsBannerContent.appendChild(cookieSettings);
 
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
