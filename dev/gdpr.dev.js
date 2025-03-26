@@ -2,7 +2,7 @@
  *  Cookie Consents Banner by Intastellar Solutions, International
  *  intastellarsolutions.com/gdpr-cookiebanner
  *  consents.cdn.intastellarsolutions.com/uc.js
- *  @copy 2022-2024 Intastellar Solutions, International
+ *  @copy 2022-2025 Intastellar Solutions, International
  *
 */
 /* - - - Setup - - - */
@@ -21,6 +21,10 @@ const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 const isGtmMode = findScriptParameter("ref") === "gtm";
+const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
+const FunctionalCheckbox = document.querySelector("#functional");
+const StaticsCheckBox = document.querySelector("#statics");
+const MarketingCheckBox = document.querySelector("#marketing");
 let poweredBy = "";
 let intaConsentsObjectVariable = {
     consents: {
@@ -37,7 +41,11 @@ let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
 const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
+window.dataLayer = window.dataLayer || [];
+(adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
+(adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
 
+/* - - - Setup - - - */
 if (window.INTA === undefined) {
     window.INTA = {
         policy_link: undefined,
@@ -126,7 +134,7 @@ if (intastellarDevMode) {
 }
 // Adding the script to the head
 setTimeout(() => {
-    document.head.insertBefore(intastellarCreateBanner, document.currentScript)
+    document.head.insertBefore(intastellarCreateBanner, document.currentScript);
 }, 200);
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
@@ -134,38 +142,38 @@ const intastellarSupportedLanguages = {
         saveSettings: "Decline All",
         necessary: { // Object for cookie info
             title: "Necessary", //"Necessary Cookies:",
-            description: "Required web technologies and cookies make our website technically accessible to and usable for you. This applies to fundamental base functionalities such as navigation on the website, correct display in your internet browser or requesting your consent. Without these web technologies and cookies our website does not work.",
+            description: "Required web technologies and cookies are essential for making our website accessible and functional for you. They enable key features, such as navigation, proper display in your browser, and managing your consent preferences. Without these technologies and cookies, our website cannot function properly.",
         },
         functional: {
             title: "Functional",
-            description: "Functional cookies make it possible to save information that changes the way the website appears or acts. For instance your preferred language or region."
+            description: "Functional cookies allow us to store information that alters how the website appears or behaves, such as your preferred language or region."
         },
         statisic: {
             title: "Statics",
-            description: "We want to constantly improve the user-friendliness and performance of our websites. For this reason we use analysis technologies (including cookies) which pseudonymously measure and evaluate which functions and content of our websites are used, how and how often. On this basis we can improve our websites for users."
+            description: "We strive to continuously enhance the user experience and performance of our website. To achieve this, we use analytical technologies (including cookies) that pseudonymously track and assess how, when, and which features and content of our website are used. This data helps us improve our site for users."
         },
         marketing: {
             title: "Marketing",
-            description: "We use web technologies (also cookies) from selected partners in order to be able to show you content and advertising specially tailored to you on websites and social media sites. This content is selected and displayed on the basis of your usage behaviour. Advertisement or Marketing cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads."
+            description: "We use web technologies (including cookies) from trusted partners to deliver content and advertisements tailored specifically to you on websites and social media platforms. This content is selected and displayed based on your browsing behavior. Advertising and marketing cookies are used to show relevant ads and campaigns, tracking visitors across sites and gathering information to present personalized advertisements."
         },
     },
     german: {
         saveSettings: "Ablehnen",
         necessary: {
             title: "Erforderliche", //"Necessary Cookies:",
-            description: "Erforderliche Webtechnologien und Cookies machen unsere Website für Sie technisch zugänglich und nutzbar. Dies betrifft grundlegende Basisfunktionalitäten wie die Navigation auf der Website, die korrekte Anzeige in Ihrem Internetbrowser oder das Einholen Ihrer Einwilligung. Ohne diese Webtechnologien und Cookies funktioniert unsere Website nicht.",
+            description: "Erforderliche Webtechnologien und Cookies sind notwendig, um unsere Website für Sie zugänglich und funktionsfähig zu machen. Sie gewährleisten grundlegende Funktionen wie die Navigation auf der Seite, die korrekte Anzeige im Browser und das Einholen Ihrer Einwilligung. Ohne diese Technologien und Cookies ist die Nutzung unserer Website nicht möglich.",
         },
         functional: {
             title: "Funktionel",
-            description: "Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder die Handlungen auf der Website ändern können. Dabei könnte es sich um Ihre bevorzugte Sprache oder Region handeln"
+            description: "Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder Verhalten der Website anpassen, wie zum Beispiel Ihre bevorzugte Sprache oder Region."
         },
         statisic: {
             title: "Statistik",
-            description: "Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites stetig verbessern. Aus diesem Grund verwenden wir Analysetechnologien (einschließlich Cookies), die pseudonym messen und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Grundlage können wir unsere Websites für die Nutzer verbessern."
+            description: "Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites kontinuierlich verbessern. Daher setzen wir Analysetechnologien (einschließlich Cookies) ein, die pseudonym ermitteln und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Basis können wir unsere Websites für die Nutzer optimieren."
         },
         marketing: {
             title: "Werbung",
-            description: "Werbe- oder Marketing-Cookies werden verwendet, um Besuchern relevante Anzeigen und Marketingkampagnen bereitzustellen. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um angepasste Anzeigen bereitzustellen."
+            description: "Werbe- oder Marketing-Cookies werden eingesetzt, um Besuchern relevante Anzeigen und Marketingkampagnen anzuzeigen. Diese Cookies verfolgen Besucher über verschiedene Websites und sammeln Informationen, um personalisierte Werbung bereitzustellen."
         },
     },
     danish: {
@@ -1660,6 +1668,7 @@ if (document.querySelector("html").getAttribute("lang") == null) {
 const allScripts = window.allScripts = [
     {
         /* Analytics Scripts which are beeing blocked */
+        /* "([\-\.]clarity+)", */
         type: "statics",
         scripts: [
             "(mixpanel)",
@@ -1690,7 +1699,6 @@ const allScripts = window.allScripts = [
             "([\-\.]pardot+)",
             "([\-\.]poultons+)",
             "([\-\.]chartbeat+)",
-            "([\-\.]clarity+)",
             "([\-\.]consensu+)",
             "([\-\.]ip-only+)",
             "([\-\.]ggpht+)",
@@ -1763,7 +1771,7 @@ const allScripts = window.allScripts = [
             "([\-\.]tiktok+)",
             "([\-\.]taboola+)",
             "([\-\.]hubspot+)",
-            "([\-\.]hs-sites+)",
+            /* "([\-\.]hs-sites+)", */
             "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -1787,9 +1795,6 @@ const allScripts = window.allScripts = [
         ]
     }
 ];
-window.dataLayer = window.dataLayer || [];
-(adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
-(adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
 function gtag() {
     dataLayer.push(arguments);
 }
@@ -1803,9 +1808,7 @@ window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
 
-dataLayer.push({
-    'event': 'intastellarConsentsBannerLoaded',
-});
+
 fbq('consent', 'revoke');
 window.clarity('consent', false);
 
@@ -1832,7 +1835,7 @@ if (intaCookieConsents?.advertisementCookies) {
         'url_passthrough': true,
     });
 
-    window.uetq.push('consent', 'default', {
+    window.uetq.push('consent', 'update', {
         'ad_storage': 'granted'
     });
     fbq('consent', 'grant');
@@ -1881,29 +1884,31 @@ const merge = (first, second, third) => {
 }
 /* autoads-preview.googleusercontent.com */
 /* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
-if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.staticsticCookies != "checked" && intaCookieConsents?.advertisementCookies != "checked") {
-    m = merge(allScripts[1].scripts, allScripts[0].scripts)
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies == "checked" && intaCookieConsents?.staticsticCookies != "checked" && intaCookieConsents?.functionalCookies != "checked") {
-    m = merge(allScripts[2].scripts, allScripts[0].scripts)
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "checked" && intaCookieConsents?.functionalCookies != "checked" && intaCookieConsents?.advertisementCookies != "checked") {
-    m = merge(allScripts[1].scripts, allScripts[2].scripts)
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.staticsticCookies == "checked") {
+if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies !== "checked" &&
+    intaCookieConsents?.advertisementCookies !== "checked") {
+    m = merge(allScripts[1].scripts, allScripts[0].scripts);
+} else if (intaCookieConsents?.advertisementCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies !== "checked" &&
+    intaCookieConsents?.functionalCookies !== "checked") {
+    m = merge(allScripts[2].scripts, allScripts[0].scripts);
+} else if (intaCookieConsents?.staticsticCookies === "checked" &&
+    intaCookieConsents?.functionalCookies !== "checked" &&
+    intaCookieConsents?.advertisementCookies !== "checked") {
+    m = merge(allScripts[1].scripts, allScripts[2].scripts);
+} else if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies === "checked") {
     m = allScripts[1].scripts;
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "checked" && intaCookieConsents?.advertisementCookies == "checked") {
+} else if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.advertisementCookies === "checked") {
     m = allScripts[0].scripts;
-    notRequired = new RegExp(m.join("|"), "ig");
-} else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies == "checked" && intaCookieConsents?.staticsticCookies == "checked") {
+} else if (intaCookieConsents?.advertisementCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies === "checked") {
     m = allScripts[2].scripts;
-    notRequired = new RegExp(m.join("|"), "ig");
 } else {
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
-    notRequired = new RegExp(m.join("|"), "ig");
 }
-window.notRequired = notRequired;
+notRequired = window.notRequired = new RegExp(m.join("|"), "ig");
 let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
@@ -1959,10 +1964,14 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
             return;
         }
         let settingsContent = document.createElement("inta-consents-iframe");
-
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
+            if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                frae?.parentElement?.replaceChild("", frae);
+            }
+        }
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
             // Check if an element is from Facebook, check by looking at the class name if it contains "fb"
-            if (containsClass(frae, "fb")) {
+            if (containsClass(frae, "fb-") && frae.getAttribute("data-href").indexOf("facebook.com") > -1) {
                 frae?.parentElement?.replaceChild(settingsContent, frae);
             }
             if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
@@ -2058,12 +2067,9 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                     settingsContent.setAttribute("data-class", frae.className);
                 }
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
-                if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae?.parentElement?.replaceChild(null, frae);
-                } else {
-                    if (frae.style.display != "none") {
-                        frae?.parentElement?.replaceChild(settingsContent, frae);
-                    }
+
+                if (frae.style.display != "none" && frae.src != undefined) {
+                    frae?.parentElement?.replaceChild(settingsContent, frae);
                 }
 
             }
@@ -2122,10 +2128,10 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 settingsContent.setAttribute("data-src", a.href);
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
-                if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae?.parentElement?.replaceChild(null, frae);
+                if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                    frae?.parentElement?.replaceChild("", frae);
                 } else {
-                    if (frae.style.display != "none") {
+                    if (frae.style.display != "none" && frae.src != undefined) {
 
                         frae?.parentElement?.replaceChild(settingsContent, frae);
                     }
@@ -2179,15 +2185,15 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
                 settingsContent.setAttribute("data-src", frae.src);
-                if (frae.src.indexOf("hs-sites.com") > -1) {
-                    frae?.parentElement?.replaceChild(null, frae);
+                if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                    frae?.parentElement?.replaceChild("", frae);
                 } else {
-                    if (frae.style.display != "none") {
+                    if (frae.style.display != "none" && frae.src != undefined) {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
             } else if (frae?.id?.indexOf("google_translate_element2") > -1) {
-                frae?.parentElement?.replaceChild(null, frae);
+                frae?.parentElement?.replaceChild("", frae);
             }
         }
     })
@@ -2264,9 +2270,9 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
 
         settingsContent.setAttribute("data-src", a.href);
         if (tweet.src.indexOf("hs-sites.com") > -1) {
-            tweet.parentElement.replaceChild("", frae);
+            tweet.parentElement.replaceChild("", tweet);
         } else {
-            if (tweet.style.display != "none") {
+            if (tweet.style.display != "none" && tweet.src != undefined) {
                 tweet.parentElement.replaceChild(settingsContent, tweet);
 
             }
@@ -2310,7 +2316,6 @@ const bannerContentMessage = (domain, node) => {
 function handleInputChange(event) {
     const target = event.target;
     if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') {
-        console.log('Input changed:', target.name || target.id, target.checked);
 
         // Update consent tracker object for checkbox inputs
         if (target.type === 'checkbox') {
@@ -2422,7 +2427,6 @@ function restartObserver() {
     // Process any existing blocked content that should now be allowed
     processExistingScripts();
 
-    console.log('Observer restarted with updated consent settings');
 }
 
 const beforeScriptExecuteListener = function (event, node) {
@@ -2499,12 +2503,11 @@ function restartObserver() {
     // Process any existing blocked content that should now be allowed
     processExistingScripts();
 
-    console.log('Observer restarted with updated consent settings');
 }
 
 function checkCookieStatus() {
     if (isGtmMode) {
-        console.log("Observer disabled in GTM mode");
+        /* console.log("Observer disabled in GTM mode"); */
         return null; // Return null instead of creating an observer
     }
     /* To get anonymous cookie banner usage */
@@ -2522,7 +2525,7 @@ function checkCookieStatus() {
                                 if (script.type == "marketing") {
                                     scriptTypelang = {
                                         danish: "marketing",
-                                        english: "advertisement",
+                                        english: "marketing",
                                         german: "werbe",
                                         spanish: "publicidad",
                                         swedish: "marknadsföring",
@@ -2592,7 +2595,7 @@ function checkCookieStatus() {
                                 if (script.type == "marketing") {
                                     scriptTypelang = {
                                         danish: "marketing",
-                                        english: "advertisement",
+                                        english: "marketing",
                                         german: "werbe",
                                         spanish: "publicidad",
                                         swedish: "marknadsföring",
@@ -2664,7 +2667,7 @@ function checkCookieStatus() {
                                     if (script.type == "marketing") {
                                         scriptTypelang = {
                                             danish: "marketing",
-                                            english: "advertisement",
+                                            english: "marketing",
                                             german: "werbe",
                                             spanish: "publicidad",
                                             swedish: "marknadsföring",
@@ -2729,10 +2732,6 @@ function checkCookieStatus() {
                         });
                     }
 
-                    const FunctionalCheckbox = document.querySelector("#functional");
-                    const StaticsCheckBox = document.querySelector("#statics");
-                    const MarketingCheckBox = document.querySelector("#marketing");
-
                     if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
                         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
                         if (node.nodeType === 1 && node.tagName === "LINK") {
@@ -2751,8 +2750,6 @@ function checkCookieStatus() {
 
                         node.removeAttribute("charset");
                         addedNodes.forEach((node) => {
-
-                            console.log(StaticsCheckBox?.checked);
 
                             src = node.src;
                             if (src.indexOf(window.location.hostname) == -1) {

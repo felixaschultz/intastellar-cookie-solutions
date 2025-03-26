@@ -5,14 +5,6 @@
  *  @copy 2022-2024 Intastellar Solutions, International
  *
 */
-/*
- *  GDPR Cookie banner by Intastellar Solutions, International
- *  intastellarsolutions.com/gdpr-cookiebanner
- *  consents.cdn.intastellarsolutions.com/gdpr.js
- *  @copy 2022-2024 Intastellar Solutions, International
- *
-*/
-
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
     if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) return null;
@@ -97,25 +89,25 @@ const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastel
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
-if (intastellarCookieLanguage == "de" || window.INTA.settings.language == "de") {
+if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
-} else if (intastellarCookieLanguage == "en" || window.INTA.settings.language == "en") {
+} else if (intastellarCookieLanguage == "en" || intastellarCookieLanguage == "en-US" || window.INTA.settings.language == "en" || window.INTA.settings.language == "english") {
     intastellarCookieLanguageSettings = "Cookie Settings";
-} else if (intastellarCookieLanguage == "es" || window.INTA.settings.language == "es") {
+} else if (intastellarCookieLanguage == "es" || intastellarCookieLanguage == "es-ES" || window.INTA.settings.language == "es" || window.INTA.settings.language == "english") {
     intastellarCookieLanguageSettings = "Configuración de cookies";
-} else if (intastellarCookieLanguage == "fr" || window.INTA.settings.language == "fr") {
+} else if (intastellarCookieLanguage == "fr" || window.INTA.settings.language == "fr" || window.INTA.settings.language == "french") {
     intastellarCookieLanguageSettings = "Paramètres des cookies";
-} else if (intastellarCookieLanguage == "sv" || window.INTA.settings.language == "sv") {
+} else if (intastellarCookieLanguage == "sv" || window.INTA.settings.language == "sv" || window.INTA.settings.language == "swedish") {
     intastellarCookieLanguageSettings = "Kakinställningar";
-} else if (intastellarCookieLanguage == "no" || window.INTA.settings.language == "no") {
+} else if (intastellarCookieLanguage == "no" || window.INTA.settings.language == "no" || window.INTA.settings.language == "norwegian") {
     intastellarCookieLanguageSettings = "Informasjonskapselinnstillinger";
-} else if (intastellarCookieLanguage  == "nl"|| window.INTA.settings.language == "nl") {
+} else if (intastellarCookieLanguage == "nl" || window.INTA.settings.language == "nl" || window.INTA.settings.language == "dutch") {
     intastellarCookieLanguageSettings = "Cookie-instellingen";
-} else if (intastellarCookieLanguage == "it" || window.INTA.settings.language == "it") {
+} else if (intastellarCookieLanguage == "it" || window.INTA.settings.language == "it" || window.INTA.settings.language == "italian") {
     intastellarCookieLanguageSettings = "Impostazioni dei cookie";
-} else if (intastellarCookieLanguage == "fi" || window.INTA.settings.language == "fi") {
+} else if (intastellarCookieLanguage == "fi" || window.INTA.settings.language == "fi" || window.INTA.settings.language == "finnish") {
     intastellarCookieLanguageSettings = "Evästeasetukset";
-} else if (intastellarCookieLanguage == "ru"|| window.INTA.settings.language == "ru") {
+} else if (intastellarCookieLanguage == "ru" || window.INTA.settings.language == "ru" || window.INTA.settings.language == "russian") {
     intastellarCookieLanguageSettings = "Настройки файлов cookie";
 }
 
@@ -238,14 +230,14 @@ const settingsMessagesLanguages = {
     ${(window.INTA.settings.design == "banner" ? generatePoweredBy() : "")
         }`,
     english: `<h3 style="    font-size: 25px;">You´re in control</h3>
-    <p>We and our business partners uses technologies, including cookies, to collect information about you for various purposes, including:</p>
+    <p>We and our trusted partners use technologies, such as cookies, to collect information for various purposes, including:</p>
     <ol>
-        <li>Functional</li>
-        <li>Statistical</li>
-        <li>Advertisement</li>
+        <li>Functionality</li>
+        <li>Analytics</li>
+        <li>Advertising</li>
     </ol>
-    <p>By clicking 'Accept', you give your consent for all these purposes. You can also choose to specify the purposes you consent to by ticking the checkbox next to the purpose and clicking 'Save settings'.</p>
-    <p>You may withdraw your consent at any time by clicking the small icon at the bottom ${(window?.INTA?.settings.arrange == "ltr") ? "left" : "right"} corner of the website.</p>
+    <p>By clicking 'Accept', you consent to all of these purposes. Alternatively, you can select the specific purposes you agree to by ticking the checkboxes and clicking 'Save Settings'.</p>
+    <p>You can withdraw your consent at any time by clicking the small icon in the bottom ${(window?.INTA?.settings.arrange == "ltr") ? "left" : "right"} corner of the website.</p>
     ${generatePolicyUrl('Our Privacy and cookie Policy')}
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privacy policy</button>
     ${(window.INTA.settings.design == "banner" ? generatePoweredBy() : "")
@@ -1980,7 +1972,7 @@ window.addEventListener("load", function () {
                     'functionality_storage': 'granted',
                 })
                 accepted.push("functionalCookies");
-            } else {
+            } else if (!FunctionalCheckbox?.checked) {
                 gtag('consent', 'update', {
                     'functionality_storage': 'denied',
                 })
@@ -1997,7 +1989,7 @@ window.addEventListener("load", function () {
                     'ad_user_data': 'granted',
                 })
                 accepted.push("staticsticCookies");
-            } else {
+            } else if (!StaticsCheckBox?.checked) {
                 gtag('consent', 'update', {
                     'analytics_storage': 'denied',
                 })
@@ -2019,7 +2011,7 @@ window.addEventListener("load", function () {
                     'ad_storage': 'granted'
                 });
                 accepted.push("advertisementCookies");
-            } else {
+            } else if (!MarketingCheckBox?.checked) {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'denied'
                 });
