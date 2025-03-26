@@ -5,18 +5,24 @@ const intastellarLogoDark = "https://www.intastellarsolutions.com/assets/logos/i
 let intastellarSettingsButton = document.createElement("inta-consents-settings-btn");
 let intastellarSettingsButtonContent = document.createElement("button");
 const intastellarConsentsBanner = document.createElement("inta-consents-banner");
+const intastellarConsentsBannerContent = document.createElement("section");
+const moreintHeader = document.createElement("intheader");
+const moreContentText = document.createElement("section");
+const moreFooter = document.createElement("div");
+
+const intastellarCookieConstents__Container = document.createElement("article");
+const intastellarCookieButtons = document.createElement("section");
+const testSection = document.createElement("section");
+
+const cookieSettings = document.createElement("article");
+const cookieSettingsContent = document.createElement("section");
+
 intastellarConsentsBanner.setAttribute("class", "intastellarCookieConstents");
 intastellarConsentsBannerContent.setAttribute("class", "intastellarCookieConstents__content");
 moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
 moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer");
-
-
 moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");;
 
-const intastellarCookieConstents__Container = document.createElement("article");
-const intastellarCookieButtons = document.createElement("section");
-
-const testSection = document.createElement("section");
 testSection.setAttribute("class", "intastellarCookieConstents__contentC");
 testSection.appendChild(moreintHeader);
 
@@ -26,9 +32,6 @@ intastellarConsentsBannerContent.appendChild(intastellarCookieConstents__Contain
 intastellarCookieConstents__Container.appendChild(testSection);
 intastellarCookieConstents__Container.appendChild(intastellarCookieButtons);
 intastellarCookieConstents__Container.appendChild(moreFooter);
-
-const cookieSettings = document.createElement("article");
-const cookieSettingsContent = document.createElement("section");
 
 intastellarSettingsButtonContent.setAttribute("class", "intastellarCookie-settingsContainer");
 intastellarCookieButtons.setAttribute("class", "intastellarCookie-settings__buttons");
