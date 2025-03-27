@@ -52,6 +52,14 @@ if (arrange == "ltr") {
     cookieSettings.classList.add("intastellarCookie-settings__container--otherSide");
 }
 
+let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
+let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
+
+moreintHeader.innerHTML = `
+    ${typeof window?.INTA?.settings.logo != "undefined" ? '<img class="intSettingsCompanyLogo" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '">' : ``}
+    <section class="intSettingsPoweredBy">${poweredBy}</section>
+    `;
+
 intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
 cookieSettings.appendChild(cookieSettingsContent);
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);

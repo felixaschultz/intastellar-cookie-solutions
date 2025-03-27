@@ -3,5 +3,10 @@
         "development"
     ],
     "liveServer.settings.port": 5501,
-    "svn.ignoreMissingSvnWarning": true
+    "svn.ignoreMissingSvnWarning": true,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#0F1D85",
+        "titleBar.activeBackground": "#1629BA",
+        "titleBar.activeForeground": "#F9FAFE"
+    }
 }
