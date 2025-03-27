@@ -42,7 +42,13 @@ that. The "cb(.dev).js" file is the function to create the banner via HTML and C
 
 ## Beta testing
 
-If you want to beta test the banner you can do that by loading the beta version of the banner. Just load the beta version of the banner via https://beta.intastellar-consents.com/uc.js
+If you want to beta test the banner you can do that by loading the beta version of the banner. Just load the beta version of the banner via https://beta.intastellar-consents.com/uc.js.
+
+```html
+<script src="https://beta.intastellar-consents.com/uc.js"></script>
+```
+
+Remember that the beta version is not stable and can have bugs. If you find a bug please report it to us.
 
 ## Implementation
 
