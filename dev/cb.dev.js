@@ -88,7 +88,7 @@ const intaconsents = document.createElement("intastellarconsents");
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
-const fetchStyleing = new XMLHttpRequest();
+/* const fetchStyleing = new XMLHttpRequest();
 fetchStyleing.open("GET", "/dev/styles/" + window.INTA.settings.design + ".js" || "overlay.js", true);
 fetchStyleing.responseType = "javascript";
 fetchStyleing.send();
@@ -101,7 +101,7 @@ fetchStyleing.onreadystatechange = function () {
             console.error("Error in fetching the style file", e);
         }
     }
-};
+}; */
 
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
@@ -1801,6 +1801,7 @@ window.addEventListener("load", function () {
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
 
     if (isValidPolicyLink()) {
+        IntastellarCookieConsent.initialize(intaconsents);
         document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
             if (window?.INTA?.settings.company != "" && window?.INTA?.settings.company != undefined && vendor.innerText == window.location.host) {
                 vendor.innerText = window?.INTA?.settings.company;
