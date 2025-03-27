@@ -54,3 +54,7 @@ Remember that the beta version is not stable and can have bugs. If you find a bu
 
 Read our documentation under: https://developers.intastellarsolutions.com/cookie-solutions/docs to implement our cookie banner on your website.
 You can add and load it direct via loading https://consents.cdn.intastellarsolutions.com/uc.js into your website.
+
+```html
+<script src="https://consents.cdn.intastellarsolutions.com/uc.js"></script>
+```
