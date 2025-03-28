@@ -88,21 +88,6 @@ const intaconsents = document.createElement("intastellarconsents");
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
-/* const fetchStyleing = new XMLHttpRequest();
-fetchStyleing.open("GET", "/dev/styles/" + window.INTA.settings.design + ".js" || "overlay.js", true);
-fetchStyleing.responseType = "javascript";
-fetchStyleing.send();
-fetchStyleing.onreadystatechange = function () {
-    if (fetchStyleing.readyState === 4 && fetchStyleing.status === 200) {
-        try {
-            eval(fetchStyleing.responseText);
-            IntastellarCookieConsent.initialize(window.intaconsentsContainer || intaconsentsContainer);
-        } catch (e) {
-            console.error("Error in fetching the style file", e);
-        }
-    }
-}; */
-
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
 if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {

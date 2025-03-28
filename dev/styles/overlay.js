@@ -17,6 +17,7 @@ const cookieSettingsContent = document.createElement("section");
 
 intastellarConsentsBannerContent.setAttribute("class", "intastellarCookieConstents");
 intastellarConsentsBannerContentContent.setAttribute("class", "intastellarCookieConstents__content");
+
 moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
 moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer");
 
@@ -27,7 +28,9 @@ testSection.appendChild(moreintHeader);
 
 testSection.appendChild(moreContentText);
 
+
 intastellarConsentsBannerContentContent.appendChild(intastellarCookieConstents__Container);
+
 intastellarCookieConstents__Container.appendChild(testSection);
 intastellarCookieConstents__Container.appendChild(intastellarCookieButtons);
 intastellarCookieConstents__Container.appendChild(moreFooter);
@@ -57,3 +60,5 @@ cookieSettings.appendChild(cookieSettingsContent);
 intastellarConsentsBannerContent.appendChild(cookieSettings);
 
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
+
+cookieSettingsContent.appendChild(poweredBy);
