@@ -59,10 +59,14 @@ moreintHeader.innerHTML = `
     ${typeof window?.INTA?.settings.logo != "undefined" ? '<img class="intSettingsCompanyLogo" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '">' : ``}
     `;
 
+moreContentText.innerHTML = settingsMessage;
+intastellarCookieButtons.appendChild(moreSettingsContent);
+
 intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
+intaconsentsContainer.appendChild(intastellarSettingsButton);
 cookieSettings.appendChild(cookieSettingsContent);
+intastellarConsentsBannerContent.appendChild(moreintHeader);
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
 
+intastellarConsentsBanner.appendChild(cookieSettings);
 intaconsentsContainer.appendChild(intastellarConsentsBanner);
-intaconsentsContainer.appendChild(intastellarSettingsButton);
-intaconsentsContainer.appendChild(cookieSettings);
