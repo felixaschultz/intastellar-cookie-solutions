@@ -3165,7 +3165,8 @@ const IntastellarCookieConsent = {
         template.classList.remove("--active");
     },
     initialize: function (template) {
-        if (document.readyState === 'loaded') {
+        console.log(document.readyState);
+        if (document.readyState === 'complete') {
             if (
                 document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
                 || window.INTA === undefined
