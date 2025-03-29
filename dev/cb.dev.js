@@ -1726,11 +1726,11 @@ let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.
 
 moreintHeader.innerHTML = `
     ${typeof window?.INTA?.settings.logo != "undefined" ? '<img onerror="this.onerror=null; this.style.display:none;" class="intSettingsCompanyLogo" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '">' : ``}
-    ${(window.INTA.settings.design == "overlay" || window.INTA.settings.design == undefined) ? `<section class="intSettingsPoweredBy">${poweredBy}</section>` : ""}
+    ${(window.INTA.settings.design == "overlay" || window.INTA.settings.design == undefined) ? `<section class="intSettingsPoweredBy">${poweredBy}</section>` : (window.innerWidth < 768) ? `<section class="intSettingsPoweredBy">${poweredBy}</section>` : ""}
     `;
 
 cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img onerror="this.onerror=null; this.style.display:none;" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';" aria-label="Close cookie banner"></button></intHeader>' +
-    message + cookieBtn + "" + (window.INTA.settings.design !== "overlay" || window.INTA.settings.design != undefined) ? poweredBy : null;
+    message + cookieBtn + "" + (window.INTA.settings.design !== "overlay" || window.INTA.settings.design != undefined) ? poweredBy : (window.innerWidth < 768) ? null : poweredBy + "";
 
 cookieSettings.appendChild(cookieSettingsContent);
 
