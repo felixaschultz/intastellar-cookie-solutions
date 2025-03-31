@@ -1837,9 +1837,9 @@ var _hsp = (window._hsp = window._hsp || []);
 _hsp.push([
     'setHubSpotCookieConsent',
     {
-        'analytics': intaCookieType('statisticCookies'),
-        'advertisement': intaCookieType('advertisementCookies'),
-        'functional': intaCookieType('functionalCookies'),
+        'analytics': false,
+        'advertisement': false,
+        'functional': false,
     }
 ]);
 _hsp.push(['doNotTrack']);
