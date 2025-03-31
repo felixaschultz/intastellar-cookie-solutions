@@ -3723,7 +3723,6 @@ function saveINTCookieSettings(consent, type = null) {
         });
         _hsp.push(['doNotTrack', { track: true }]);
         _hsp.push(['setConsent', { consent: true }]);
-
         _hsp.push(['setHubSpotConsent', {
             analytics: false,
             advertisement: true,
@@ -3750,7 +3749,6 @@ function saveINTCookieSettings(consent, type = null) {
             advertisement: false,
             functionality: false,
         }]);
-
         gtag('consent', 'update', {
             'ad_storage': 'denied',
             'ad_user_data': 'denied',
