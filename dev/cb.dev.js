@@ -2088,6 +2088,8 @@ window.addEventListener("load", function () {
                     'ad_storage': 'granted'
                 });
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
+                _hsp.push(['doNotTrack', { track: true }]);
+                _hsp.push(['setConsent', { consent: true }]);
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -2149,6 +2151,8 @@ window.addEventListener("load", function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'granted'
                 });
+                _hsp.push(['doNotTrack', { track: true }]);
+                _hsp.push(['setConsent', { consent: true }]);
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 updateConsents("all");
                 /*window.location.reload();*/
@@ -2202,6 +2206,8 @@ window.addEventListener("load", function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'denied'
                 });
+                _hsp.push(['doNotTrack', { track: false }]);
+                _hsp.push(['setConsent', { consent: false }]);
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 /*window.location.reload();*/
 
@@ -2300,6 +2306,9 @@ window.addEventListener("load", function () {
                     });
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("denied");
+
+                    _hsp.push(['doNotTrack', { track: false }]);
+                    _hsp.push(['revokeCookieConsent']);
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
                     document.querySelector("#functional").checked = false;
@@ -2358,6 +2367,10 @@ window.addEventListener("load", function () {
                     });
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
+
+                    _hsp.push(['doNotTrack', { track: false }]);
+                    _hsp.push(['setConsent', { consent: true }]);
+
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
                     document.querySelector("#functional").checked = true;
@@ -2478,6 +2491,9 @@ window.addEventListener("load", function () {
                         'ad_storage': 'denied'
                     });
 
+                    _hsp.push(['doNotTrack', { track: false }]);
+                    _hsp.push(['revokeCookieConsent']);
+
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     /*window.location.reload();*/
                 });
@@ -2532,6 +2548,9 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
                     });
+
+                    _hsp.push(['doNotTrack', { track: true }]);
+                    _hsp.push(['setConsent', { consent: true }]);
 
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
@@ -3672,6 +3691,15 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
+        _hsp.push(['doNotTrack', { track: true }]);
+        _hsp.push(['setConsent', { consent: true }]);
+
+        _hsp.push([
+            'addPrivacyConsentListener',
+            function (consent) {
+                console.log(consent.categories.advertisement);
+            },
+        ]);
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -3686,6 +3714,15 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
+        _hsp.push(['doNotTrack', { track: true }]);
+        _hsp.push(['setConsent', { consent: false }]);
+
+        _hsp.push([
+            'addPrivacyConsentListener',
+            function (consent) {
+                console.log(consent.categories.advertisement);
+            },
+        ]);
         gtag('consent', 'update', {
             'ad_storage': 'denied',
             'ad_user_data': 'denied',
@@ -3715,6 +3752,15 @@ function saveINTCookieSettings(consent, type = null) {
             'functionality_storage': 'granted',
             'url_passthrough': true,
         })
+        _hsp.push(['doNotTrack', { track: false }]);
+        _hsp.push(['setConsent', { consent: true }]);
+
+        _hsp.push([
+            'addPrivacyConsentListener',
+            function (consent) {
+                console.log(consent.categories.functionality);
+            },
+        ]);
         /* window.allScripts.map((script) => {
             if (script.type == "functional") {
                 script.scripts.forEach((src) => {
@@ -3729,6 +3775,15 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
+        _hsp.push(['doNotTrack', { track: true }]);
+        _hsp.push(['setConsent', { consent: false }]);
+
+        _hsp.push([
+            'addPrivacyConsentListener',
+            function (consent) {
+                console.log(consent.categories.functionality);
+            },
+        ]);
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
         })
@@ -3756,6 +3811,16 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
 
+        _hsp.push(['doNotTrack', { track: false }]);
+        _hsp.push(['setConsent', { consent: true }]);
+
+        _hsp.push([
+            'addPrivacyConsentListener',
+            function (consent) {
+                console.log(consent.categories.analytics);
+            },
+        ]);
+
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
@@ -3780,6 +3845,16 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
         });
+
+        _hsp.push(['doNotTrack', { track: true }]);
+        _hsp.push(['setConsent', { consent: false }]);
+
+        _hsp.push([
+            'addPrivacyConsentListener',
+            function (consent) {
+                console.log(consent.categories.analytics);
+            },
+        ]);
 
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {

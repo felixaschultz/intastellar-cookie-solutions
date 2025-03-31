@@ -1807,7 +1807,20 @@ window.clarity = window.clarity || function () { };
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
-
+var _hsp = (window._hsp = window._hsp || []);
+_hsq.push(['doNotTrack']);
+_hsp.push(['revokeCookieConsent']);
+/* window._hsp.push(['_setDomainName', window.location.host]);
+if (window.INTA?.settings?.hubspotId) {
+    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
+    window._hsp.push(['_trackPageview']);
+    window._hsp.push(['_trackPageLoadTime']);
+    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
+    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
+    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
+    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
+    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
+} */
 
 fbq('consent', 'revoke');
 window.clarity('consent', false);
