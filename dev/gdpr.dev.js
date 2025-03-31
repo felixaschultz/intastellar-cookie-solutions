@@ -1922,8 +1922,8 @@ if (intaCookieConsents?.functionalCookies) {
     });
     _hsp.push(['setHubSpotConsent', {
         analytics: false,
-        advertisement: true,
-        functionality: false,
+        advertisement: false,
+        functionality: true,
     }]);
 
 }
