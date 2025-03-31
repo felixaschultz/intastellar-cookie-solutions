@@ -656,6 +656,31 @@ const inta_requiredCookieList = [{
     domains: [
         window.location.host
     ]
+},
+{
+    vendor: "HubSpot",
+    cookies: [
+        {
+            cookie: "__hs_opt_out",
+            purpose: "This cookie is used by the opt-in privacy policy to remember not to ask the visitor to accept cookies again.",
+        },
+        {
+            cookie: "__hs_do_not_track",
+            purpose: "This cookie can be set to prevent the HubSpot tracking cookie from being set.",
+        },
+        {
+            cookie: "__hs_initial_opt_in",
+            purpose: "This cookie is used to prevent the banner from always displaying when visitors are browsing in strict mode.",
+        },
+        {
+            cookie: "__hs_cookie_cat_prefs",
+            purpose: "This cookie is used to store the HubSpot cookie category preferences of a visitor.",
+        }
+    ],
+    vendor_privacy: "https://legal.hubspot.com/privacy-policy",
+    domains: [
+        window.location.host
+    ]
 }
 ];
 /* - - - List of Analytics / Statistics cookie names - - - */
@@ -1807,7 +1832,16 @@ window.clarity = window.clarity || function () { };
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
+window.disableHubSpotCookieBanner = true;
 var _hsp = (window._hsp = window._hsp || []);
+_hsp.push([
+    'setHubSpotCookieConsent',
+    {
+        'analytics': intaCookieType('statisticCookies'),
+        'advertisement': intaCookieType('advertisementCookies'),
+        'functional': intaCookieType('functionalCookies'),
+    }
+]);
 _hsp.push(['doNotTrack']);
 _hsp.push(['revokeCookieConsent']);
 /* window._hsp.push(['_setDomainName', window.location.host]);
