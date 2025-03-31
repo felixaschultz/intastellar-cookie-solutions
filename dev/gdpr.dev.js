@@ -1920,8 +1920,8 @@ if (intaCookieConsents?.functionalCookies) {
     });
     _hsp.push(['setHubSpotConsent', {
         analytics: false,
-        advertisement: false,
-        functionality: true,
+        advertisement: true,
+        functionality: false,
     }]);
 
 }
