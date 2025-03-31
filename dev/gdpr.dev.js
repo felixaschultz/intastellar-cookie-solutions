@@ -1842,8 +1842,6 @@ _hsp.push([
         'functional': false,
     }
 ]);
-_hsp.push(['doNotTrack']);
-_hsp.push(['revokeCookieConsent']);
 /* window._hsp.push(['_setDomainName', window.location.host]);
 if (window.INTA?.settings?.hubspotId) {
     window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);

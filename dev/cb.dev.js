@@ -2088,7 +2088,7 @@ window.addEventListener("load", function () {
                     'ad_storage': 'granted'
                 });
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
-                _hsp.push(['doNotTrack', { track: true }]);
+
                 _hsp.push(['setHubSpotConsent', {
                     analytics: true,
                     advertisement: true,
@@ -2155,7 +2155,6 @@ window.addEventListener("load", function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'granted'
                 });
-                _hsp.push(['doNotTrack', { track: true }]);
                 _hsp.push(['setHubSpotConsent', {
                     analytics: true,
                     advertisement: true,
@@ -2214,7 +2213,6 @@ window.addEventListener("load", function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'denied'
                 });
-                _hsp.push(['doNotTrack', { track: false }]);
                 _hsp.push(['setHubSpotConsent', {
                     analytics: false,
                     advertisement: false,
@@ -2319,7 +2317,7 @@ window.addEventListener("load", function () {
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("denied");
 
-                    _hsp.push(['doNotTrack', { track: false }]);
+
                     _hsp.push(['revokeCookieConsent']);
                     _hsp.push(['setHubSpotConsent', {
                         analytics: false,
@@ -2384,8 +2382,6 @@ window.addEventListener("load", function () {
                     });
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
-
-                    _hsp.push(['doNotTrack', { track: false }]);
                     _hsp.push(['setHubSpotConsent', {
                         analytics: true,
                         advertisement: true,
@@ -2511,8 +2507,6 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'denied'
                     });
-
-                    _hsp.push(['doNotTrack', { track: false }]);
                     _hsp.push(['revokeCookieConsent']);
                     _hsp.push(['setHubSpotConsent', {
                         analytics: true,
@@ -2574,8 +2568,6 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
                     });
-
-                    _hsp.push(['doNotTrack', { track: true }]);
                     _hsp.push(['setHubSpotConsent', {
                         analytics: true,
                         advertisement: true,
@@ -3721,8 +3713,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-        _hsp.push(['doNotTrack', { track: true }]);
-        _hsp.push(['setConsent', { consent: true }]);
+      
         _hsp.push(['setHubSpotConsent', {
             analytics: false,
             advertisement: true,
@@ -3742,8 +3733,6 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
-        _hsp.push(['doNotTrack', { track: true }]);
-        _hsp.push(['setConsent', { consent: false }]);
         _hsp.push(['setHubSpotConsent', {
             analytics: false,
             advertisement: false,
@@ -3778,7 +3767,6 @@ function saveINTCookieSettings(consent, type = null) {
             'functionality_storage': 'granted',
             'url_passthrough': true,
         })
-        _hsp.push(['doNotTrack', { track: false }]);
         _hsp.push(['setHubSpotConsent', {
             analytics: false,
             advertisement: false,
@@ -3798,7 +3786,6 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
-        _hsp.push(['doNotTrack', { track: true }]);
         _hsp.push(['setHubSpotConsent', {
             analytics: false,
             advertisement: false,
@@ -3831,7 +3818,6 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
 
-        _hsp.push(['doNotTrack', { track: false }]);
         _hsp.push(['setHubSpotConsent', {
             analytics: true,
             advertisement: false,
@@ -3862,8 +3848,6 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
         });
-
-        _hsp.push(['doNotTrack', { track: false }]);
         _hsp.push(['setHubSpotConsent', {
             analytics: false,
             advertisement: false,
