@@ -1963,7 +1963,7 @@ window.addEventListener("load", function () {
                 }, 1000); */
 
                 // Replace the old cookie with the new one
-                window.location.reload();
+                //window.location.reload();
             });
         });
 
