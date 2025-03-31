@@ -1886,7 +1886,11 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
     fbq('consent', 'grant');
-
+    _hsp.push(['setHubSpotConsent', {
+        analytics: false,
+        advertisement: true,
+        functionality: false,
+    }]);
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 0;
@@ -1899,12 +1903,28 @@ if (intaCookieConsents?.staticsticCookies) {
         'url_passthrough': true,
     })
     window.clarity('consent');
+    window.uetq.push('consent', 'update', {
+        'analytics_storage': 'granted'
+    });
+    _hsp.push(['setHubSpotConsent', {
+        analytics: true,
+        advertisement: false,
+        functionality: false,
+    }]);
 }
 
 if (intaCookieConsents?.functionalCookies) {
     gtag('consent', 'update', {
         'functionality_storage': 'granted',
     })
+    window.uetq.push('consent', 'update', {
+        'functionality_storage': 'granted'
+    });
+    _hsp.push(['setHubSpotConsent', {
+        analytics: false,
+        advertisement: true,
+        functionality: false,
+    }]);
 
 }
 
