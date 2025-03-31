@@ -3713,7 +3713,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-
+      
         _hsp.push(['setHubSpotConsent', {
             analytics: false,
             advertisement: true,
