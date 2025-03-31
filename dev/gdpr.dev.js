@@ -1808,7 +1808,7 @@ window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
 var _hsp = (window._hsp = window._hsp || []);
-_hsq.push(['doNotTrack']);
+_hsp.push(['doNotTrack']);
 _hsp.push(['revokeCookieConsent']);
 /* window._hsp.push(['_setDomainName', window.location.host]);
 if (window.INTA?.settings?.hubspotId) {
