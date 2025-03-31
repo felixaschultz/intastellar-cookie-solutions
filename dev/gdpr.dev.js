@@ -1832,7 +1832,16 @@ window.clarity = window.clarity || function () { };
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
+window.disableHubSpotCookieBanner = true;
 var _hsp = (window._hsp = window._hsp || []);
+_hsp.push([
+    'setHubSpotCookieConsent',
+    {
+        'analytics': intaCookieType('statisticCookies'),
+        'advertisement': intaCookieType('advertisementCookies'),
+        'functional': intaCookieType('functionalCookies'),
+    }
+]);
 _hsp.push(['doNotTrack']);
 _hsp.push(['revokeCookieConsent']);
 /* window._hsp.push(['_setDomainName', window.location.host]);
