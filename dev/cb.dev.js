@@ -1963,7 +1963,7 @@ window.addEventListener("load", function () {
                 }, 1000); */
 
                 // Replace the old cookie with the new one
-                window.location.reload();
+                //window.location.reload();
             });
         });
 
@@ -3713,7 +3713,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-      
+
         _hsp.push(['setHubSpotConsent', {
             analytics: false,
             advertisement: true,
