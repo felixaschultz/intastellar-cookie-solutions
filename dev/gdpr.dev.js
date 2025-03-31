@@ -656,6 +656,31 @@ const inta_requiredCookieList = [{
     domains: [
         window.location.host
     ]
+},
+{
+    vendor: "HubSpot",
+    cookies: [
+        {
+            cookie: "__hs_opt_out",
+            purpose: "This cookie is used by the opt-in privacy policy to remember not to ask the visitor to accept cookies again.",
+        },
+        {
+            cookie: "__hs_do_not_track",
+            purpose: "This cookie can be set to prevent the HubSpot tracking cookie from being set.",
+        },
+        {
+            cookie: "__hs_initial_opt_in",
+            purpose: "This cookie is used to prevent the banner from always displaying when visitors are browsing in strict mode.",
+        },
+        {
+            cookie: "__hs_cookie_cat_prefs",
+            purpose: "This cookie is used to store the HubSpot cookie category preferences of a visitor.",
+        }
+    ],
+    vendor_privacy: "https://legal.hubspot.com/privacy-policy",
+    domains: [
+        window.location.host
+    ]
 }
 ];
 /* - - - List of Analytics / Statistics cookie names - - - */
@@ -1807,7 +1832,29 @@ window.clarity = window.clarity || function () { };
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
-
+window.disableHubSpotCookieBanner = true;
+var _hsp = (window._hsp = window._hsp || []);
+_hsp.push([
+    'setHubSpotCookieConsent',
+    {
+        'analytics': false,
+        'advertisement': false,
+        'functional': false,
+    }
+]);
+_hsp.push(['doNotTrack']);
+_hsp.push(['revokeCookieConsent']);
+/* window._hsp.push(['_setDomainName', window.location.host]);
+if (window.INTA?.settings?.hubspotId) {
+    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
+    window._hsp.push(['_trackPageview']);
+    window._hsp.push(['_trackPageLoadTime']);
+    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
+    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
+    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
+    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
+    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
+} */
 
 fbq('consent', 'revoke');
 window.clarity('consent', false);
@@ -1839,7 +1886,11 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
     fbq('consent', 'grant');
-
+    _hsp.push(['setHubSpotConsent', {
+        analytics: false,
+        advertisement: true,
+        functionality: false,
+    }]);
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 0;
@@ -1852,12 +1903,28 @@ if (intaCookieConsents?.staticsticCookies) {
         'url_passthrough': true,
     })
     window.clarity('consent');
+    window.uetq.push('consent', 'update', {
+        'analytics_storage': 'granted'
+    });
+    _hsp.push(['setHubSpotConsent', {
+        analytics: true,
+        advertisement: false,
+        functionality: false,
+    }]);
 }
 
 if (intaCookieConsents?.functionalCookies) {
     gtag('consent', 'update', {
         'functionality_storage': 'granted',
     })
+    window.uetq.push('consent', 'update', {
+        'functionality_storage': 'granted'
+    });
+    _hsp.push(['setHubSpotConsent', {
+        analytics: false,
+        advertisement: true,
+        functionality: false,
+    }]);
 
 }
 
