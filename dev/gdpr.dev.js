@@ -1839,9 +1839,9 @@ _hsp.push(['revokeCookieConsent']);
 _hsp.push([
     'setHubSpotCookieConsent',
     {
-        'analytics': false,
-        'advertisement': false,
-        'functional': false,
+        'analytics': intaCookieConsents?.staticsticCookies === "checked" ? true : false,
+        'advertisement': intaCookieConsents?.advertisementCookies === "checked" ? true : false,
+        'functional': intaCookieConsents?.functionalCookies === "checked" ? true : false,
     }
 ]);
 /* window._hsp.push(['_setDomainName', window.location.host]);
