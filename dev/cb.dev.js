@@ -2319,7 +2319,7 @@ window.addEventListener("load", function () {
 
 
                     _hsp.push(['revokeCookieConsent']);
-                    _hsp.push(['setHubSpotConsent', {
+                    _hsp.push(['setHubSpotCookieConsent', {
                         analytics: false,
                         advertisement: false,
                         functionality: false,
@@ -2382,7 +2382,7 @@ window.addEventListener("load", function () {
                     });
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
-                    _hsp.push(['setHubSpotConsent', {
+                    _hsp.push(['setHubSpotCookieConsent', {
                         analytics: true,
                         advertisement: true,
                         functionality: true,
@@ -2507,9 +2507,8 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'denied'
                     });
-                    _hsp.push(['revokeCookieConsent']);
-                    _hsp.push(['setHubSpotConsent', {
-                        analytics: true,
+                    _hsp.push(['setHubSpotCookieConsent', {
+                        analytics: false,
                         advertisement: false,
                         functionality: false,
                     }]);
@@ -2568,7 +2567,7 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
                     });
-                    _hsp.push(['setHubSpotConsent', {
+                    _hsp.push(['setHubSpotCookieConsent', {
                         analytics: true,
                         advertisement: true,
                         functionality: true,
@@ -3713,8 +3712,8 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-      
-        _hsp.push(['setHubSpotConsent', {
+
+        _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: true,
             functionality: false,
@@ -3733,7 +3732,9 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
-        _hsp.push(['setHubSpotConsent', {
+        _hsq.push(['doNotTrack']);
+        _hsp.push(['revokeCookieConsent']);
+        _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: false,
             functionality: false,
@@ -3767,7 +3768,7 @@ function saveINTCookieSettings(consent, type = null) {
             'functionality_storage': 'granted',
             'url_passthrough': true,
         })
-        _hsp.push(['setHubSpotConsent', {
+        _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: false,
             functionality: true,
@@ -3786,7 +3787,9 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
-        _hsp.push(['setHubSpotConsent', {
+        _hsq.push(['doNotTrack']);
+        _hsp.push(['revokeCookieConsent']);
+        _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: false,
             functionality: false,
@@ -3818,7 +3821,7 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
 
-        _hsp.push(['setHubSpotConsent', {
+        _hsp.push(['setHubSpotCookieConsent', {
             analytics: true,
             advertisement: false,
             functionality: false,
@@ -3838,6 +3841,8 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
+        _hsq.push(['doNotTrack']);
+        _hsp.push(['revokeCookieConsent']);
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
             'ad_user_data': 'denied',
@@ -3848,7 +3853,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
         });
-        _hsp.push(['setHubSpotConsent', {
+        _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: false,
             functionality: false,
