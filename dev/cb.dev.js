@@ -3717,7 +3717,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-        _hsq.push([
+
         _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: true,
@@ -3737,8 +3737,8 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
-        _hsq.push(['doNotTrack']);
-        _hsp.push(['revokeCookieConsent']);
+        /* _hsp.push(['doNotTrack']);
+        _hsp.push(['revokeCookieConsent']); */
         _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: false,
