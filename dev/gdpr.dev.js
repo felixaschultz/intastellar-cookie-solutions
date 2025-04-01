@@ -1834,6 +1834,8 @@ window.uetq.push('consent', 'default', {
 });
 window.disableHubSpotCookieBanner = true;
 var _hsp = (window._hsp = window._hsp || []);
+_hsq.push(['doNotTrack']);
+_hsp.push(['revokeCookieConsent']);
 _hsp.push([
     'setHubSpotCookieConsent',
     {
@@ -1884,7 +1886,7 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
     fbq('consent', 'grant');
-    _hsp.push(['setHubSpotConsent', {
+    _hsp.push(['setHubSpotCookieConsent', {
         analytics: false,
         advertisement: true,
         functionality: false,
@@ -1904,7 +1906,7 @@ if (intaCookieConsents?.staticsticCookies) {
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
-    _hsp.push(['setHubSpotConsent', {
+    _hsp.push(['setHubSpotCookieConsent', {
         analytics: true,
         advertisement: false,
         functionality: false,
@@ -1918,7 +1920,7 @@ if (intaCookieConsents?.functionalCookies) {
     window.uetq.push('consent', 'update', {
         'functionality_storage': 'granted'
     });
-    _hsp.push(['setHubSpotConsent', {
+    _hsp.push(['setHubSpotCookieConsent', {
         analytics: false,
         advertisement: true,
         functionality: false,
