@@ -2509,7 +2509,6 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'denied'
                     });
-
                     _hsq.push(['doNotTrack']);
                     _hsp.push(['revokeCookieConsent']);
                     _hsp.push(['setHubSpotCookieConsent', {
@@ -3718,7 +3717,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-        _hsq.push(['doNotTrack', false]);
+        _hsq.push([
         _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: true,
