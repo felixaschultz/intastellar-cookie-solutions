@@ -1886,11 +1886,6 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
     fbq('consent', 'grant');
-    _hsp.push(['setHubSpotCookieConsent', {
-        analytics: false,
-        advertisement: true,
-        functionality: false,
-    }]);
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 0;
@@ -1906,11 +1901,6 @@ if (intaCookieConsents?.staticsticCookies) {
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
-    _hsp.push(['setHubSpotCookieConsent', {
-        analytics: true,
-        advertisement: false,
-        functionality: false,
-    }]);
 }
 
 if (intaCookieConsents?.functionalCookies) {
@@ -1920,11 +1910,6 @@ if (intaCookieConsents?.functionalCookies) {
     window.uetq.push('consent', 'update', {
         'functionality_storage': 'granted'
     });
-    _hsp.push(['setHubSpotCookieConsent', {
-        analytics: false,
-        advertisement: true,
-        functionality: false,
-    }]);
 
 }
 
