@@ -11,6 +11,12 @@
 - [Trackers & Supported Consents Mode](#trackers--supported-consents-mode)
 - [Support](#support)
 - [License](#license)
+- [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
+- [Intastellar Solutions](https://www.intastellarsolutions.com)
+- [Intastellar Consents](https://www.intastellar-consents.com)
+- [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
+- [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
 
 ## General Info
 
