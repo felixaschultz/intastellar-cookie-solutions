@@ -1834,8 +1834,8 @@ window.uetq.push('consent', 'default', {
 });
 window.disableHubSpotCookieBanner = true;
 var _hsp = (window._hsp = window._hsp || []);
-_hsq.push(['doNotTrack']);
-_hsp.push(['revokeCookieConsent']);
+/* _hsp.push(['doNotTrack']);
+_hsp.push(['revokeCookieConsent']); */
 _hsp.push([
     'setHubSpotCookieConsent',
     {
@@ -1844,6 +1844,19 @@ _hsp.push([
         'functional': intaCookieConsents?.functionalCookies === "checked" ? true : false,
     }
 ]);
+
+document.addEventListener("thirdPartyConsentEvent", (e) => {
+    window._hsp.push([
+        'setHubSpotConsent',
+        {
+            analytics: e.detail.analytics,
+            advertisement: e.detail.advertisement,
+            functionality: e.detail.functionality,
+        },
+    ])
+}
+)
+
 /* window._hsp.push(['_setDomainName', window.location.host]);
 if (window.INTA?.settings?.hubspotId) {
     window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
