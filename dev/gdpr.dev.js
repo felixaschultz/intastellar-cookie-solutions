@@ -3081,9 +3081,13 @@ function clearLocalStorage(ls) {
             localStorage.clear();
             sessionStorage.clear();
         }
+    } else {
+        localStorage.clear();
+        sessionStorage.clear();
     }
 }
 deleteAllCookies();
+clearLocalStorage();
 if (!isGtmMode) {
     checkCookieStatus();
 }
