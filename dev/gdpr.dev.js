@@ -1048,6 +1048,22 @@ inta_statisticCookieList.push({
     vendor_privacy: "https://legal.hubspot.com/privacy-policy"
 })
 
+inta_statisticCookieList.push({
+    vendor: "x.clearbitjs.com",
+    cookies: [
+        {
+            cookie: "cb%3Atest",
+            purpose: "Collects data on the user's visits to the website, such as the number of visits, average time spent on the website and what pages have been loaded with the purpose of generating reports for optimising the website content."
+        }
+    ],
+    domains: [
+        "x.clearbitjs.com",
+        "clearbit.com",
+        window.location.host
+    ],
+    vendor_privacy: "https://clearbit.com/privacy"
+});
+
 /* - - - List of Marketing cookies - - - */
 const inta_marketingCookieList = [];
 inta_marketingCookieList.push(
@@ -1206,6 +1222,42 @@ inta_marketingCookieList.push({
     ],
     vendor_privacy: "https://legal.hubspot.com/privacy-policy"
 });
+
+inta_marketingCookieList.push({
+    vendor: "x.clearbitjs.com",
+    cookies: [
+        {
+            cookie: "__tld__",
+            purpose: "Used to track visitors on multiple websites, in order to present relevant advertisement based on the visitor's preferences.",
+        },
+        {
+            cookie: "cb_anonymous_id",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement."
+        },
+        {
+            cookie: "cb_user_id",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement"
+        },
+        {
+            cookie: "cb_group_id",
+            purpose: "Collects data on visitors. This information is used to assign visitors into segments, making website advertisement more efficient."
+        },
+        {
+            cookie: "cb_group_properties",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement."
+        },
+        {
+            cookie: "cb_user_traits",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement"
+        }
+    ],
+    domains: [
+        "x.clearbitjs.com",
+        "clearbit.com",
+        window.location.host
+    ],
+    vendor_privacy: "https://clearbit.com/privacy"
+})
 
 inta_marketingCookieList.push({
     vendor: "LinkedIn Inc",
@@ -1753,6 +1805,8 @@ const allScripts = window.allScripts = [
             "([\-\.]amazon-adsystem+)",
             "([\-\.]adfrom+)",
             "([\-\.]demdex+)",
+            "([\-\.]criteo+)",
+            "([\-\.]clearbitjs+)",
             "([\-\.]instagram+)",
             "([\-\.]stickyadstv+)",
             "([\-\.]mookie1+)",
