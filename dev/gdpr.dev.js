@@ -1779,6 +1779,8 @@ const allScripts = window.allScripts = [
             "([\-\.]consensu+)",
             "([\-\.]ip-only+)",
             "([\-\.]ggpht+)",
+            "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
             "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -1807,6 +1809,7 @@ const allScripts = window.allScripts = [
             "([\-\.]demdex+)",
             "([\-\.]criteo+)",
             "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
             "([\-\.]instagram+)",
             "([\-\.]stickyadstv+)",
             "([\-\.]mookie1+)",
