@@ -2571,6 +2571,7 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
                     });
+                  
                     window._hsp.push(['doNotTrack', false]);
                     window._hsp.push(['setHubSpotCookieConsent', {
                         analytics: true,
@@ -3723,7 +3724,6 @@ function saveINTCookieSettings(consent, type = null) {
             advertisement: true,
             functionality: false,
         }]);
-
         window._hsp.push(['doNotTrack', false]);
 
         /* window.allScripts.map((script) => {
@@ -3776,6 +3776,7 @@ function saveINTCookieSettings(consent, type = null) {
             'functionality_storage': 'granted',
             'url_passthrough': true,
         })
+
         window._hsp.push(['doNotTrack', false]);
         window._hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
@@ -3850,6 +3851,7 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
+
         window._hsp.push(['doNotTrack']);
         window._hsp.push(['revokeCookieConsent']);
         gtag('consent', 'update', {
