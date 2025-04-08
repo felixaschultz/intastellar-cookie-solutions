@@ -30,7 +30,9 @@ testSection.appendChild(moreintHeader);
 
 testSection.appendChild(moreContentText);
 
-moreSettingsContent.appendChild(intastellarCookieConstents__Container);
+
+intastellarConsentsBannerContentContent.appendChild(intastellarCookieConstents__Container);
+
 intastellarCookieConstents__Container.appendChild(testSection);
 intastellarCookieConstents__Container.appendChild(intastellarCookieButtons);
 intastellarCookieConstents__Container.appendChild(moreFooter);
@@ -62,6 +64,7 @@ moreintHeader.innerHTML = `
 
 intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
 cookieSettings.appendChild(cookieSettingsContent);
+
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
 
 intaconsentsContainer.appendChild(intastellarConsentsBanner);

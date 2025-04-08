@@ -656,6 +656,31 @@ const inta_requiredCookieList = [{
     domains: [
         window.location.host
     ]
+},
+{
+    vendor: "HubSpot",
+    cookies: [
+        {
+            cookie: "__hs_opt_out",
+            purpose: "This cookie is used by the opt-in privacy policy to remember not to ask the visitor to accept cookies again.",
+        },
+        {
+            cookie: "__hs_do_not_track",
+            purpose: "This cookie can be set to prevent the HubSpot tracking cookie from being set.",
+        },
+        {
+            cookie: "__hs_initial_opt_in",
+            purpose: "This cookie is used to prevent the banner from always displaying when visitors are browsing in strict mode.",
+        },
+        {
+            cookie: "__hs_cookie_cat_prefs",
+            purpose: "This cookie is used to store the HubSpot cookie category preferences of a visitor.",
+        }
+    ],
+    vendor_privacy: "https://legal.hubspot.com/privacy-policy",
+    domains: [
+        window.location.host
+    ]
 }
 ];
 /* - - - List of Analytics / Statistics cookie names - - - */
@@ -1023,6 +1048,22 @@ inta_statisticCookieList.push({
     vendor_privacy: "https://legal.hubspot.com/privacy-policy"
 })
 
+inta_statisticCookieList.push({
+    vendor: "x.clearbitjs.com",
+    cookies: [
+        {
+            cookie: "cb%3Atest",
+            purpose: "Collects data on the user's visits to the website, such as the number of visits, average time spent on the website and what pages have been loaded with the purpose of generating reports for optimising the website content."
+        }
+    ],
+    domains: [
+        "x.clearbitjs.com",
+        "clearbit.com",
+        window.location.host
+    ],
+    vendor_privacy: "https://clearbit.com/privacy"
+});
+
 /* - - - List of Marketing cookies - - - */
 const inta_marketingCookieList = [];
 inta_marketingCookieList.push(
@@ -1181,6 +1222,42 @@ inta_marketingCookieList.push({
     ],
     vendor_privacy: "https://legal.hubspot.com/privacy-policy"
 });
+
+inta_marketingCookieList.push({
+    vendor: "x.clearbitjs.com",
+    cookies: [
+        {
+            cookie: "__tld__",
+            purpose: "Used to track visitors on multiple websites, in order to present relevant advertisement based on the visitor's preferences.",
+        },
+        {
+            cookie: "cb_anonymous_id",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement."
+        },
+        {
+            cookie: "cb_user_id",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement"
+        },
+        {
+            cookie: "cb_group_id",
+            purpose: "Collects data on visitors. This information is used to assign visitors into segments, making website advertisement more efficient."
+        },
+        {
+            cookie: "cb_group_properties",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement."
+        },
+        {
+            cookie: "cb_user_traits",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement"
+        }
+    ],
+    domains: [
+        "x.clearbitjs.com",
+        "clearbit.com",
+        window.location.host
+    ],
+    vendor_privacy: "https://clearbit.com/privacy"
+})
 
 inta_marketingCookieList.push({
     vendor: "LinkedIn Inc",
@@ -1702,6 +1779,8 @@ const allScripts = window.allScripts = [
             "([\-\.]consensu+)",
             "([\-\.]ip-only+)",
             "([\-\.]ggpht+)",
+            "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
             "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -1728,6 +1807,9 @@ const allScripts = window.allScripts = [
             "([\-\.]amazon-adsystem+)",
             "([\-\.]adfrom+)",
             "([\-\.]demdex+)",
+            "([\-\.]criteo+)",
+            "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
             "([\-\.]instagram+)",
             "([\-\.]stickyadstv+)",
             "([\-\.]mookie1+)",
@@ -1807,7 +1889,30 @@ window.clarity = window.clarity || function () { };
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
+window.disableHubSpotCookieBanner = true;
+var _hsp = (window._hsp = window._hsp || []);
+/* _hsp.push(['doNotTrack']);
+_hsp.push(['revokeCookieConsent']); */
+window._hsp.push([
+    'setHubSpotCookieConsent',
+    {
+        'analytics': intaCookieConsents?.staticsticCookies === "checked",
+        'advertisement': intaCookieConsents?.advertisementCookies === "checked",
+        'functional': intaCookieConsents?.functionalCookies === "checked",
+    }
+]);
 
+/* window._hsp.push(['_setDomainName', window.location.host]);
+if (window.INTA?.settings?.hubspotId) {
+    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
+    window._hsp.push(['_trackPageview']);
+    window._hsp.push(['_trackPageLoadTime']);
+    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
+    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
+    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
+    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
+    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
+} */
 
 fbq('consent', 'revoke');
 window.clarity('consent', false);
@@ -1839,7 +1944,6 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
     fbq('consent', 'grant');
-
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 0;
@@ -1852,12 +1956,18 @@ if (intaCookieConsents?.staticsticCookies) {
         'url_passthrough': true,
     })
     window.clarity('consent');
+    window.uetq.push('consent', 'update', {
+        'analytics_storage': 'granted'
+    });
 }
 
 if (intaCookieConsents?.functionalCookies) {
     gtag('consent', 'update', {
         'functionality_storage': 'granted',
     })
+    window.uetq.push('consent', 'update', {
+        'functionality_storage': 'granted'
+    });
 
 }
 
@@ -1920,7 +2030,7 @@ intHead.appendChild(s);
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
     let p = "";
     if (window.location.host.indexOf("intastellarsolutions.com") == -1) {
-        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="90px" height="40px" style="width: 90px !important; height: 40px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg" alt="Intastellar Solutions, International"></a>`;
+        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="90px" height="40px" style="width: 90px !important; height: 40px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg" alt="Intastellar Solutions, International"></a>`;
     }
     if (img !== undefined && img != "") {
         return `
@@ -2959,9 +3069,13 @@ function clearLocalStorage(ls) {
             localStorage.clear();
             sessionStorage.clear();
         }
+    } else {
+        localStorage.clear();
+        sessionStorage.clear();
     }
 }
 deleteAllCookies();
+clearLocalStorage();
 if (!isGtmMode) {
     checkCookieStatus();
 }
