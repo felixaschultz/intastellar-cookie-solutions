@@ -2571,7 +2571,7 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
                     });
-                  
+
                     window._hsp.push(['doNotTrack', false]);
                     window._hsp.push(['setHubSpotCookieConsent', {
                         analytics: true,

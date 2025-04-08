@@ -1896,9 +1896,9 @@ _hsp.push(['revokeCookieConsent']); */
 window._hsp.push([
     'setHubSpotCookieConsent',
     {
-        'analytics': intaCookieConsents?.staticsticCookies === "checked" ? true : false,
-        'advertisement': intaCookieConsents?.advertisementCookies === "checked" ? true : false,
-        'functional': intaCookieConsents?.functionalCookies === "checked" ? true : false,
+        'analytics': intaCookieConsents?.staticsticCookies === "checked",
+        'advertisement': intaCookieConsents?.advertisementCookies === "checked",
+        'functional': intaCookieConsents?.functionalCookies === "checked",
     }
 ]);
 
