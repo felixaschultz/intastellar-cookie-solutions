@@ -2317,7 +2317,7 @@ window.addEventListener("load", function () {
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("denied");
 
-                    _hsq.push(['doNotTrack']);
+                    _hsp.push(['doNotTrack']);
                     _hsp.push(['revokeCookieConsent']);
                     _hsp.push(['setHubSpotCookieConsent', {
                         analytics: false,
@@ -2383,7 +2383,7 @@ window.addEventListener("load", function () {
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
 
-                    _hsq.push(['doNotTrack', false]);
+                    _hsp.push(['doNotTrack', false]);
                     _hsp.push(['setHubSpotCookieConsent', {
                         analytics: true,
                         advertisement: true,
@@ -2509,7 +2509,7 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'denied'
                     });
-                    _hsq.push(['doNotTrack']);
+                    _hsp.push(['doNotTrack']);
                     _hsp.push(['revokeCookieConsent']);
                     _hsp.push(['setHubSpotCookieConsent', {
                         analytics: false,
@@ -2571,7 +2571,7 @@ window.addEventListener("load", function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
                     });
-                    _hsq.push(['doNotTrack', false]);
+                    _hsp.push(['doNotTrack', false]);
                     _hsp.push(['setHubSpotCookieConsent', {
                         analytics: true,
                         advertisement: true,
@@ -3723,6 +3723,9 @@ function saveINTCookieSettings(consent, type = null) {
             advertisement: true,
             functionality: false,
         }]);
+
+        _hsp.push(['doNotTrack', false]);
+
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -3773,7 +3776,7 @@ function saveINTCookieSettings(consent, type = null) {
             'functionality_storage': 'granted',
             'url_passthrough': true,
         })
-        _hsq.push(['doNotTrack', false]);
+        _hsp.push(['doNotTrack', false]);
         _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
             advertisement: false,
@@ -3793,7 +3796,7 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
-        _hsq.push(['doNotTrack']);
+        _hsp.push(['doNotTrack']);
         _hsp.push(['revokeCookieConsent']);
         _hsp.push(['setHubSpotCookieConsent', {
             analytics: false,
@@ -3826,7 +3829,7 @@ function saveINTCookieSettings(consent, type = null) {
             'ad_personalization': 'granted',
             'url_passthrough': true,
         })
-        _hsq.push(['doNotTrack', false]);
+        _hsp.push(['doNotTrack', false]);
         _hsp.push(['setHubSpotCookieConsent', {
             analytics: true,
             advertisement: false,
@@ -3847,7 +3850,7 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
-        _hsq.push(['doNotTrack']);
+        _hsp.push(['doNotTrack']);
         _hsp.push(['revokeCookieConsent']);
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
