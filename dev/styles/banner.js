@@ -1,7 +1,7 @@
 
 const intaconsentsContainer = window.intaconsentsContainer = document.createElement("intastellarconsents");
 const intastellarLogoLight = "https://www.intastellar-consents.com/assets/icons/intastellar-logo-white.svg";
-const intastellarLogoDark = "https://www.intastellar-consents.com/assets/icons/intastellar-logo-black.svg";
+let intastellarLogoDark = "https://www.intastellar-consents.com/assets/icons/intastellar-logo-black.svg";
 let intastellarSettingsButton = document.createElement("inta-consents-settings-btn");
 let intastellarSettingsButtonContent = document.createElement("button");
 const intastellarConsentsBanner = document.createElement("inta-consents-banner");
