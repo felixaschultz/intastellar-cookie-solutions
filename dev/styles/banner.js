@@ -1,13 +1,14 @@
 
 const intaconsentsContainer = window.intaconsentsContainer = document.createElement("intastellarconsents");
-/* const intastellarLogoLight = "https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new-white.svg";
-const intastellarLogoDark = "https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg"; */
+const intastellarLogoLight = "https://www.intastellar-consents.com/assets/icons/intastellar-logo-white.svg";
+const intastellarLogoDark = "https://www.intastellar-consents.com/assets/icons/intastellar-logo-black.svg";
 let intastellarSettingsButton = document.createElement("inta-consents-settings-btn");
 let intastellarSettingsButtonContent = document.createElement("button");
 const intastellarConsentsBanner = document.createElement("inta-consents-banner");
 const intastellarConsentsBannerContent = document.createElement("section");
 const moreintHeader = document.createElement("intheader");
 const moreContentText = document.createElement("section");
+const moreSettingsContent = document.createElement("section");
 const moreFooter = document.createElement("div");
 
 const intastellarCookieConstents__Container = document.createElement("article");
@@ -22,16 +23,19 @@ intastellarConsentsBannerContent.setAttribute("class", "intastellarCookieConsten
 moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
 moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer");
 moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");;
+moreSettingsContent.setAttribute("class", "intastellarCookieConstents__content");
 
 testSection.setAttribute("class", "intastellarCookieConstents__contentC");
 testSection.appendChild(moreintHeader);
 
 testSection.appendChild(moreContentText);
 
-intastellarConsentsBannerContent.appendChild(intastellarCookieConstents__Container);
+moreSettingsContent.appendChild(intastellarCookieConstents__Container);
 intastellarCookieConstents__Container.appendChild(testSection);
 intastellarCookieConstents__Container.appendChild(intastellarCookieButtons);
 intastellarCookieConstents__Container.appendChild(moreFooter);
+
+intastellarConsentsBannerContent.appendChild(intastellarCookieConstents__Container);
 
 intastellarSettingsButtonContent.setAttribute("class", "intastellarCookie-settingsContainer");
 intastellarCookieButtons.setAttribute("class", "intastellarCookie-settings__buttons");
@@ -48,16 +52,21 @@ if (arrange == "ltr") {
     cookieSettings.classList.add("intastellarCookie-settings__container--otherSide");
 }
 
+let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
+let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
+
+moreintHeader.innerHTML = `
+    ${typeof window?.INTA?.settings.logo != "undefined" ? '<img class="intSettingsCompanyLogo" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '">' : ``}
+    `;
+
+moreContentText.innerHTML = settingsMessage;
+intastellarCookieButtons.appendChild(moreSettingsContent);
+
 intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
-
 intaconsentsContainer.appendChild(intastellarSettingsButton);
-intaconsentsContainer.appendChild(cookieSettings);
-
 cookieSettings.appendChild(cookieSettingsContent);
-intastellarConsentsBannerContent.appendChild(intaconsentsContainer);
-
-intastellarConsentsBannerContent.appendChild(poweredBy);
-
-intastellarConsentsBannerContent.appendChild(cookieSettings);
-
+intastellarConsentsBannerContent.appendChild(moreintHeader);
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
+
+intastellarConsentsBanner.appendChild(cookieSettings);
+intaconsentsContainer.appendChild(intastellarConsentsBanner);
