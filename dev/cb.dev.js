@@ -3708,6 +3708,12 @@ function saveINTCookieSettings(consent, type = null) {
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");
 
+    window._hsp.push(['setHubSpotCookieConsent', {
+        analytics: StaticsCheckBox?.checked,
+        advertisement: MarketingCheckBox?.checked,
+        functionality: FunctionalCheckbox?.checked,
+    }]);
+
     if (MarketingCheckBox?.checked) {
         gtag('consent', 'update', {
             'ad_storage': 'granted',
@@ -3718,12 +3724,6 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-
-        window._hsp.push(['setHubSpotCookieConsent', {
-            analytics: false,
-            advertisement: true,
-            functionality: false,
-        }]);
         window._hsp.push(['doNotTrack', false]);
 
         /* window.allScripts.map((script) => {
@@ -3742,11 +3742,6 @@ function saveINTCookieSettings(consent, type = null) {
     } else {
         window._hsp.push(['doNotTrack']);
         window._hsp.push(['revokeCookieConsent']);
-        window._hsp.push(['setHubSpotCookieConsent', {
-            analytics: false,
-            advertisement: false,
-            functionality: false,
-        }]);
         gtag('consent', 'update', {
             'ad_storage': 'denied',
             'ad_user_data': 'denied',
@@ -3778,11 +3773,6 @@ function saveINTCookieSettings(consent, type = null) {
         })
 
         window._hsp.push(['doNotTrack', false]);
-        window._hsp.push(['setHubSpotCookieConsent', {
-            analytics: false,
-            advertisement: false,
-            functionality: true,
-        }]);
         /* window.allScripts.map((script) => {
             if (script.type == "functional") {
                 script.scripts.forEach((src) => {
@@ -3799,11 +3789,7 @@ function saveINTCookieSettings(consent, type = null) {
     } else {
         window._hsp.push(['doNotTrack']);
         window._hsp.push(['revokeCookieConsent']);
-        window._hsp.push(['setHubSpotCookieConsent', {
-            analytics: false,
-            advertisement: false,
-            functionality: false,
-        }]);
+
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
         })
@@ -3831,11 +3817,6 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
         window._hsp.push(['doNotTrack', false]);
-        window._hsp.push(['setHubSpotCookieConsent', {
-            analytics: true,
-            advertisement: false,
-            functionality: false,
-        }]);
 
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
@@ -3864,11 +3845,6 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
         });
-        window._hsp.push(['setHubSpotCookieConsent', {
-            analytics: false,
-            advertisement: false,
-            functionality: false,
-        }]);
 
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
