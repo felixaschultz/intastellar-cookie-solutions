@@ -34,7 +34,7 @@ let intaConsentsObjectVariable = {
     },
     time: new Date().toGMTString(),
     uid: Math.random().toString(16).slice(2),
-    domain: window.location.host,
+    domain: window.INTA.settings.rootDomain || window.location.host,
     sharingDomains: [],
 }
 let scriptTypelang = {};
@@ -2863,7 +2863,12 @@ function checkCookieStatus() {
 
                             src = node.src;
                             if (src.indexOf(window.location.hostname) == -1) {
+                                if (src.trim() === "") {
+                                    return;
+                                }
                                 window.foundScripts.push(src);
+                                // Filter out scripts that are empty or contain only whitespace
+
                             }
 
                             if (intaCookieConsents?.advertisementCookies === "checked" || intaCookieConsents?.functionalCookies === "checked" || intaCookieConsents?.staticsticCookies === "checked"
