@@ -43,12 +43,10 @@ moreintHeader.innerHTML = `
     `;
 
 moreContentText.innerHTML = settingsMessage;
-intastellarCookieButtons.appendChild(moreSettingsContent);
 
 intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
 intaconsentsContainer.appendChild(intastellarSettingsButton);
 cookieSettings.appendChild(cookieSettingsContent);
-intastellarConsentsBannerContent.appendChild(moreintHeader);
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
 
 intastellarConsentsBanner.appendChild(cookieSettings);
