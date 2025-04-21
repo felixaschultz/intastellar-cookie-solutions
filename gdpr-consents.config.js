@@ -11,7 +11,7 @@ window.INTA = {
         /* color: "#e2000f", */
         text: false,
         language: "english",
-        design: "banner",
+        design: "overlay",
         requiredCookies: [
             {
                 cookie: "region",

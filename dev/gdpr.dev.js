@@ -2023,6 +2023,8 @@ let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
 
+console.log("Loaded via gdpr.js", intastellarDevMode);
+
 if (!intastellarDevMode) {
     // intHead.appendChild(s);
 }

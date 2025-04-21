@@ -1658,8 +1658,14 @@ if (textSettings) {
 }
 intaCookieBannerStyle.innerHTML = ".intastellarCookie-settingsContainer,.intastellarCookieConstents__contentC, .intastellarCookie-settings__btn.--bg, .intastellarCCPAContainer{background: " + cookieColor + " !important;color: #fff !important;} .intCookie_ConsentLogo-container{border-color: #fff; background: linear-gradient(#fff 0 0) padding-box, " + cookieColor + " border-box;} .intCookie_ConsentContainer-content{border-color: #fff; background: linear-gradient(#fff 0 0) padding-box, " + cookieColor + " border-box;} .intastellarCookie-settings__btn.--changePermission{background: transparent !important; border-image-slice: 1;border-color: " + cookieColor + ";border-image:" + cookieColor + " 1 !important; border-width: 3px; border-style: solid; transition: background .25s ease-in-out; width: max-content; margin-inline: auto !important;} .intastellarCookie-settings__btn.--changePermission:hover{background: " + cookieColor + " !important; color: #fff !important;} .intCookieSetting__checkbox:checked ~ .checkmark{background: " + checkMarkColor + ";}.intastellarCCPA__popupClose{background:" + cookieColor + "; color: #fff;} .intastellarCookie-settings__btn.--bg:hover{background: " + brightColor + " !important;}.intastellarCookie-settings__close:hover{background: " + brightColor + " !important;} .intastellarCookieConstents__content-main .intastellarCookie-settings__privacyLink{color: #fff !important;} .intastellarCookie-settings__privacyLink{text-decoration: underline !important;}.intastellarCookie-settings__content .intastellarCookie-settings__privacyLink{color: " + cookieTextColor + ";}.intastellarCookie-settings__content p{color: " + cookieTextColor + " !important;}.intastellarCookie-settings__intHeader{color:" + cookieTextColor + " !important;}.intastellarCookie-settings__container{background-color: " + backgroundColor + " !important;} .intastellarCookie-settingsMoreContainer{display:none;position: fixed; top: 50%; left: 50%; background: #fff; padding: 15px;z-index: 1000; transform: translate(-50%,-50%);}" + withText;
 intHead.appendChild(intaCookieBannerStyle);
+let intastellarBannerStyleUrl = intastellarCookieBannerRootDomain + "/dev/styles/" + window.INTA.settings.design + ".js" || "overlay.js";
+if (intastellarDevMode) {
+    intastellarBannerStyleUrl = "/dev/styles/" + window.INTA.settings.design + ".js" || "overlay.js";
+}
 
-fetchStyleing.open("GET", "/dev/styles/" + window.INTA.settings.design + ".js" || "overlay.js", true);
+console.log(intastellarBannerStyleUrl, intastellarDevMode);
+
+fetchStyleing.open("GET", intastellarBannerStyleUrl, true);
 fetchStyleing.responseType = "javascript";
 fetchStyleing.send();
 fetchStyleing.onreadystatechange = function () {

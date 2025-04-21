@@ -1,3 +1,6 @@
+/* 
+Code for Intastellar Consents banner: Banner v1 styling
+*/
 intastellarConsentsBanner.setAttribute("class", "intastellarCookieConstents");
 intastellarConsentsBannerContent.setAttribute("class", "intastellarCookieConstents__content");
 moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
