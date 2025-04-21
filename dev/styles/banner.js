@@ -1,23 +1,3 @@
-
-const intaconsentsContainer = window.intaconsentsContainer = document.createElement("intastellarconsents");
-const intastellarLogoLight = "https://www.intastellar-consents.com/assets/icons/intastellar-logo-white.svg";
-let intastellarLogoDark = "https://www.intastellar-consents.com/assets/icons/intastellar-logo-black.svg";
-let intastellarSettingsButton = document.createElement("inta-consents-settings-btn");
-let intastellarSettingsButtonContent = document.createElement("button");
-const intastellarConsentsBanner = document.createElement("inta-consents-banner");
-const intastellarConsentsBannerContent = document.createElement("section");
-const moreintHeader = document.createElement("intheader");
-const moreContentText = document.createElement("section");
-const moreSettingsContent = document.createElement("section");
-const moreFooter = document.createElement("div");
-
-const intastellarCookieConstents__Container = document.createElement("article");
-const intastellarCookieButtons = document.createElement("section");
-const testSection = document.createElement("section");
-
-const cookieSettings = document.createElement("article");
-const cookieSettingsContent = document.createElement("section");
-
 intastellarConsentsBanner.setAttribute("class", "intastellarCookieConstents");
 intastellarConsentsBannerContent.setAttribute("class", "intastellarCookieConstents__content");
 moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
