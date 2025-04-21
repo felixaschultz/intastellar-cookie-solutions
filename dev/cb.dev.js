@@ -1664,7 +1664,6 @@ fetchStyleing.responseType = "javascript";
 fetchStyleing.send();
 fetchStyleing.onreadystatechange = function () {
     if (fetchStyleing.readyState === 4 && fetchStyleing.status === 200) {
-        console.log(fetchStyleing.responseText);
         try {
             const script = document.createElement("script");
             script.type = "text/javascript";
