@@ -2023,8 +2023,9 @@ let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
 
-
-intHead.appendChild(s);
+if (!intastellarDevMode) {
+    // intHead.appendChild(s);
+}
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
