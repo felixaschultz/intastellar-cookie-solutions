@@ -46,12 +46,6 @@ moreintHeader.innerHTML = `
     <section class="intSettingsPoweredBy">${poweredBy}</section>
     `;
 
-
-moreintHeader.innerHTML = `
-    ${typeof window?.INTA?.settings.logo != "undefined" ? '<img class="intSettingsCompanyLogo" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '">' : ``}
-    <section class="intSettingsPoweredBy">${poweredBy}</section>
-    `;
-
 intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
 cookieSettings.appendChild(cookieSettingsContent);
 
