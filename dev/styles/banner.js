@@ -48,3 +48,4 @@ intastellarSettingsButton.appendChild(intastellarSettingsButtonContent);
 intaconsentsContainer.appendChild(intastellarSettingsButton);
 cookieSettings.appendChild(cookieSettingsContent);
 intastellarConsentsBanner.appendChild(intastellarConsentsBannerContent);
+intaconsentsContainer.appendChild(intastellarConsentsBanner);
