@@ -539,15 +539,6 @@ inta-consents-banner button {
     scroll-snap-stop: normal;
 }
 
-.intastellarCookieConstents__content h1,
-.intastellarCookieConstents__content h2,
-.intastellarCookieConstents__content h3,
-.intastellarCookieConstents__content h4,
-.intastellarCookieConstents__content h5,
-.intastellarCookieConstents__content h6 {
-    color: #000 !important;
-}
-
 .intaCookieListOverview {
     height: 0;
     overflow: hidden;
