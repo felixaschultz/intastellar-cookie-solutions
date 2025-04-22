@@ -16,7 +16,9 @@ const button__acceptAll = document.querySelector(".intastellarCookieBanner__acce
 const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
 let adsbygoogle = window.adsbygoogle || [];
-const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
+const intastellarCookieBannerRootDomain = document.currentScript.src.includes("beta.intastellar-consents.com")
+    ? "https://beta.intastellar-consents.com"
+    : "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
