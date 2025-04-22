@@ -8,6 +8,16 @@
 - [Development](#development)
 - [Beta testing](#beta-testing)
 - [Implementation](#implementation)
+- [Trackers & Supported Consents Mode](#trackers--supported-consents-mode)
+- [Support](#support)
+- [License](#license)
+- [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
+- [Intastellar Solutions](https://www.intastellarsolutions.com)
+- [Intastellar Consents](https://www.intastellar-consents.com)
+- [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
+- [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
+
 
 ## General Info
 
@@ -58,3 +68,36 @@ You can add and load it direct via loading https://consents.cdn.intastellarsolut
 ```html
 <script src="https://consents.cdn.intastellarsolutions.com/uc.js"></script>
 ```
+
+## Trackers & Supported Consents Mode
+
+We support the following trackers and consents mode:
+| Tracker | Description | Consent Mode |
+| ------- | ----------- | ------------ |
+| Google Analytics | Google Analytics is a web analytics service offered by Google that tracks and reports website traffic. | [Google Consent Mode](https://developers.google.com/tag-platform/devguides/consent) |
+| Google Ads | Google Ads is an online advertising platform developed by Google, where advertisers pay to display brief advertisements, service offerings, product listings, or videos to web users. | [Google Consent Mode](https://developers.google.com/tag-platform/devguides/consent) |
+| Facebook Pixel | The Facebook pixel is a piece of code that you place on your website to track conversions from Facebook ads, optimize ads based on collected data, and retarget website visitors. | [Facebook Consent Mode](https://developers.facebook.com/docs/facebook-pixel/) |
+| Google Tag Manager | Google Tag Manager is a tag management system that allows you to quickly and easily update tags and code snippets on your website or mobile app. | [Google Consent Mode](https://developers.google.com/tag-platform/devguides/consent) |
+| HubSpot | HubSpot is a marketing, sales, and service software that helps businesses grow by providing tools for email marketing, social media marketing, content management, web analytics, and landing pages. | [HubSpot Cookie Banner API](https://developers.hubspot.com/docs/reference/api/analytics-and-events/cookie-banner/cookie-banner-api) |
+| LinkedIn Insight Tag | The LinkedIn Insight Tag is a piece of JavaScript code that you can add to your website to enable conversion tracking, retargeting, and web analytics for LinkedIn ads. | [LinkedIn Consent Mode](https://www.linkedin.com/help/linkedin/answer/67587/linkedin-insight-tag?lang=en) |
+
+## Support
+
+- [Intastellar Solutions](https://www.intastellarsolutions.com)
+- [Intastellar Consents](https://www.intastellar-consents.com)
+- [Intastellar Consents Solutions](https://www.intastellar-consents.com/solutions)
+- [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+If you want to contribute to this project, please fork the repository and create a pull request. We are glad if you want to contribute to this project so we can develop it further and we can make it secure.
+
+## Acknowledgements
+
+- [Intastellar Solutions](https://www.intastellarsolutions.com)
+- [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
+
