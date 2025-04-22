@@ -80,7 +80,6 @@ let intastellarSettingsButton = document.createElement("inta-consents-settings-b
 let intastellarSettingsButtonContent = document.createElement("button");
 const intastellarConsentsBanner = document.createElement("inta-consents-banner");
 const intastellarConsentsBannerContent = document.createElement("section");
-const intaconsents = document.createElement("intastellarconsents");
 
 const moreintHeader = document.createElement("intheader");
 const moreContentText = document.createElement("section");
@@ -1790,8 +1789,7 @@ fetchStyleing.onreadystatechange = function () {
             /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
 
             if (isValidPolicyLink()) {
-                intaconsents.appendChild(intaconsentsContainer);
-                IntastellarCookieConsent.initialize(intaconsents);
+                IntastellarCookieConsent.initialize(intaconsentsContainer);
                 document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
                     if (window?.INTA?.settings.company != "" && window?.INTA?.settings.company != undefined && vendor.innerText == window.location.host) {
                         vendor.innerText = window?.INTA?.settings.company;
