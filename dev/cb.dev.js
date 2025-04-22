@@ -101,6 +101,7 @@ window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : f
 
 const fetchStyleing = new XMLHttpRequest();
 
+
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
 if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
@@ -1953,6 +1954,17 @@ fetchStyleing.onreadystatechange = function () {
                     }
                     saveINTCookieSettings("changePermission", accepted);
                 });
+                _hsp.push(['doNotTrack', { track: true }]);
+                _hsp.push(['setHubSpotConsent', {
+                    analytics: true,
+                    advertisement: true,
+                    functionality: true,
+                }]);
+                dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
+                updateConsents("all");
+                /*window.location.reload();*/
+            });
+        }
 
                 if (window?.INTA?.settings.ccpa !== undefined && window?.INTA?.settings.ccpa.on) {
                     const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
@@ -2330,7 +2342,7 @@ fetchStyleing.onreadystatechange = function () {
                     const analyticsBTN = document.querySelector(".analytics");
                     const closeSettings = document.querySelector(".intastellarCookie-settings__close");
                     let settings = document.querySelector(".intastellarCookie-settings__container");
-
+                  
                     changePermission.forEach((change) => {
                         change.addEventListener("click", function () {
                             if (this.getAttribute("data-type") == "intMarketingCookies") {
@@ -2536,7 +2548,6 @@ fetchStyleing.onreadystatechange = function () {
 
                 errorMessage.appendChild(errorMessageContent);
                 /* document.body.appendChild(errorMessage); */
-
                 throw new IntastellarSolutionsSDK("Please add a valid privacy & cookie policy to the banner. Read more at https://developers.intastellarsolutions.com/cookie-solutions/docs/add-privacy-policy")
             }
 
@@ -3718,7 +3729,6 @@ function saveINTCookieSettings(consent, type = null) {
             'ad_storage': 'granted'
         });
         window._hsp.push(['doNotTrack', false]);
-
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -3782,7 +3792,6 @@ function saveINTCookieSettings(consent, type = null) {
     } else {
         window._hsp.push(['doNotTrack']);
         window._hsp.push(['revokeCookieConsent']);
-
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
         })
@@ -3811,6 +3820,13 @@ function saveINTCookieSettings(consent, type = null) {
         })
         window._hsp.push(['doNotTrack', false]);
 
+        _hsp.push(['doNotTrack', { track: false }]);
+        _hsp.push(['setHubSpotConsent', {
+            analytics: true,
+            advertisement: false,
+            functionality: false,
+        }]);
+
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
@@ -3838,6 +3854,13 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
         });
+
+        _hsp.push(['doNotTrack', { track: false }]);
+        _hsp.push(['setHubSpotConsent', {
+            analytics: false,
+            advertisement: false,
+            functionality: false,
+        }]);
 
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {

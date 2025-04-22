@@ -18,6 +18,7 @@
 - [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
 - [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
 
+
 ## General Info
 
 With this project I wanted to build my own cookie banner witch is free to use. I was not always happy about all the cookie banners solutions I´ve found online, either the banner wasn´t all that good or you needed an account to get access to the banner for implementation.
@@ -99,3 +100,4 @@ If you want to contribute to this project, please fork the repository and create
 
 - [Intastellar Solutions](https://www.intastellarsolutions.com)
 - [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
+

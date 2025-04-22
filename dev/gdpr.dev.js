@@ -1901,7 +1901,6 @@ window._hsp.push([
         'functional': intaCookieConsents?.functionalCookies === "checked",
     }
 ]);
-
 /* window._hsp.push(['_setDomainName', window.location.host]);
 if (window.INTA?.settings?.hubspotId) {
     window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);

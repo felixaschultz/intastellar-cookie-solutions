@@ -3,6 +3,7 @@ Code for Intastellar Consents banner: Overlay v1 styling
 */
 intastellarConsentsBanner.setAttribute("class", "intastellarCookieConstents");
 intastellarConsentsBannerContent.setAttribute("class", "intastellarCookieConstents__content");
+
 moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
 moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer");
 
@@ -14,8 +15,8 @@ testSection.appendChild(moreintHeader);
 
 testSection.appendChild(moreContentText);
 
-
 intastellarConsentsBannerContent.appendChild(intastellarCookieConstents__Container);
+
 
 intastellarCookieConstents__Container.appendChild(testSection);
 intastellarCookieConstents__Container.appendChild(intastellarCookieButtons);

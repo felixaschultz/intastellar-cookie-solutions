@@ -20,8 +20,6 @@ window.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    // Removed duplicate 'isURL' function definition to avoid redundancy.
-
     function isURL(str) {
         const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
             '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
