@@ -18,7 +18,6 @@
 - [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
 - [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
 
-
 ## General Info
 
 With this project I wanted to build my own cookie banner witch is free to use. I was not always happy about all the cookie banners solutions I´ve found online, either the banner wasn´t all that good or you needed an account to get access to the banner for implementation.
@@ -40,6 +39,18 @@ Available languages:
 - Russian
 - Dutch
 
+- German
+- Danish
+- English
+- Spanish
+- French
+- Swedish
+- Norwegian
+- Finnish
+- Italian
+- Russian
+- Dutch
+
 You can read more about the cookie banner under: https://www.intastellarsolutions.com/solutions/cookie-consents.
 This banner is free to use as long as the powered by logo is not removed. We are glad if you want to contribuate to this project so we can develop it further and we can make it secure.
 
@@ -48,7 +59,19 @@ We support your own cookiebanner design. Just use our technology to block thrid 
 ## Development
 
 If you want to develop on the banner you must do that in your own branch and in all \*.dev.js files. You create your branch from the "development" branch, and merge your also into
+
+If you want to develop on the banner you must do that in your own branch and in all \*.dev.js files. You create your branch from the "development" branch, and merge your also into
 that. The "cb(.dev).js" file is the function to create the banner via HTML and CSS and styling. The "gdpr(.dev).js" file is all the functionality of the banner
+
+## Beta testing
+
+If you want to beta test the banner you can do that by loading the beta version of the banner. Just load the beta version of the banner via https://beta.intastellar-consents.com/uc.js.
+
+```html
+<script src="https://beta.intastellar-consents.com/uc.js"></script>
+```
+
+Remember that the beta version is not stable and can have bugs. If you find a bug please report it to us.
 
 ## Beta testing
 
@@ -100,4 +123,3 @@ If you want to contribute to this project, please fork the repository and create
 
 - [Intastellar Solutions](https://www.intastellarsolutions.com)
 - [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
-

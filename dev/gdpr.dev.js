@@ -681,6 +681,31 @@ const inta_requiredCookieList = [{
     domains: [
         window.location.host
     ]
+},
+{
+    vendor: "HubSpot",
+    cookies: [
+        {
+            cookie: "__hs_opt_out",
+            purpose: "This cookie is used by the opt-in privacy policy to remember not to ask the visitor to accept cookies again.",
+        },
+        {
+            cookie: "__hs_do_not_track",
+            purpose: "This cookie can be set to prevent the HubSpot tracking cookie from being set.",
+        },
+        {
+            cookie: "__hs_initial_opt_in",
+            purpose: "This cookie is used to prevent the banner from always displaying when visitors are browsing in strict mode.",
+        },
+        {
+            cookie: "__hs_cookie_cat_prefs",
+            purpose: "This cookie is used to store the HubSpot cookie category preferences of a visitor.",
+        }
+    ],
+    vendor_privacy: "https://legal.hubspot.com/privacy-policy",
+    domains: [
+        window.location.host
+    ]
 }
 ];
 /* - - - List of Analytics / Statistics cookie names - - - */
@@ -1222,6 +1247,42 @@ inta_marketingCookieList.push({
     ],
     vendor_privacy: "https://legal.hubspot.com/privacy-policy"
 });
+
+inta_marketingCookieList.push({
+    vendor: "x.clearbitjs.com",
+    cookies: [
+        {
+            cookie: "__tld__",
+            purpose: "Used to track visitors on multiple websites, in order to present relevant advertisement based on the visitor's preferences.",
+        },
+        {
+            cookie: "cb_anonymous_id",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement."
+        },
+        {
+            cookie: "cb_user_id",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement"
+        },
+        {
+            cookie: "cb_group_id",
+            purpose: "Collects data on visitors. This information is used to assign visitors into segments, making website advertisement more efficient."
+        },
+        {
+            cookie: "cb_group_properties",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement."
+        },
+        {
+            cookie: "cb_user_traits",
+            purpose: "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that they are shown the same advertisement"
+        }
+    ],
+    domains: [
+        "x.clearbitjs.com",
+        "clearbit.com",
+        window.location.host
+    ],
+    vendor_privacy: "https://clearbit.com/privacy"
+})
 
 inta_marketingCookieList.push({
     vendor: "x.clearbitjs.com",
@@ -1810,6 +1871,9 @@ const allScripts = window.allScripts = [
             "([\-\.]criteo+)",
             "([\-\.]clearbitjs+)",
             "([\-\.]clearbitscripts+)",
+            "([\-\.]criteo+)",
+            "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
             "([\-\.]instagram+)",
             "([\-\.]stickyadstv+)",
             "([\-\.]mookie1+)",
@@ -1958,6 +2022,9 @@ if (intaCookieConsents?.staticsticCookies) {
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
+    window.uetq.push('consent', 'update', {
+        'analytics_storage': 'granted'
+    });
 }
 
 if (intaCookieConsents?.functionalCookies) {
@@ -2022,7 +2089,6 @@ let s = document.createElement("script");
 s.async = true;
 s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
 
-console.log("Loaded via gdpr.js", intastellarDevMode);
 
 if (!intastellarDevMode) {
     // intHead.appendChild(s);
@@ -3071,13 +3137,9 @@ function clearLocalStorage(ls) {
             localStorage.clear();
             sessionStorage.clear();
         }
-    } else {
-        localStorage.clear();
-        sessionStorage.clear();
     }
 }
 deleteAllCookies();
-clearLocalStorage();
 if (!isGtmMode) {
     checkCookieStatus();
 }
