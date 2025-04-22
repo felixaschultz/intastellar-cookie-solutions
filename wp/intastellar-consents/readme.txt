@@ -11,7 +11,7 @@ Requires PHP:       7.4
 = Short Description =
 Get compliance with EU GDPR cookie law.
 == Description ==
-This plugin loads a cookiebanner to your Wordpress site. It´s blocking full automatic all 3rd party cookies and scripts that a Website uses. There is no need for searching for all scripts it self.
+This plugin loads a cookiebanner to your Wordpress site. It´s blocking full automatic all 3rd party cookies and scripts that a Website uses. There is no need for searching for all scripts itself.
 This plugin is loading external JavaScript files, mainly the script for the Cookiebanner, from our server. This is necessary to keep the plugin up to date and to provide the best possible service.
 The script is loaded on every page load, so the cookiebanner is always up to date. The script is loading the cookiebanner in the language that is set in the settings page.
 
@@ -56,7 +56,7 @@ You can change the banner style by going to the settings page and choosing a ban
 1. This is the intro menu, where you can add a privacy policy & choose a language.
 2. This is the branding menu, here you can choose what logo you want to use as well as choose your brand color.
 3. The settings page helps you with the placement & cookie notice text, fullscreen mode & language.
-4. The privacy menu here you can seperatly change the link / url to you privacy policy.
+4. The privacy menu here you can separately change the link / url to your privacy policy.
 5. This is how the cookiebanner looks like in fullscreen mode.
 6. This is how the cookiebanner looks like in compact mode.
 
@@ -86,11 +86,11 @@ In this Version we´ve redesigned the admin page for the plugin. We have categor
 = 1.1.1 =
 Fixed a bug where the main script was loaded inside the admin panel and update page.
 = 1.1.0 =
-Added on intro page the posibillity to add the Privacy Policy link & added on settings page the possibility to say you want start with the cookie settings page direct.
+Added on intro page the possibility to add the Privacy Policy link & added on settings page the possibility to say you want start with the cookie settings page direct.
 = 1.0.2 =
 Added CCPA – California Consumer Privacy Act to the banner. It´s currently under dev and only showing the user a link to your CCPA policy.
 = 1.0.1 =
-Added a source parameter to the script to find out, wich plugin source the outgoing link is coming from.
+Added a source parameter to the script to find out, which plugin source the outgoing link is coming from.
 = 1.0 =
 Created the plugins menu as well as the settings page and the plugin in it´s self.
 

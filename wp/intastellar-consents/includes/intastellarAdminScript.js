@@ -20,32 +20,7 @@ window.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    function isURL(str) {
-        const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-            '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-
-        const tmp = document.createElement('a');
-        tmp.href = str;
-
-        if (tmp.host !== window.location.host || tmp.host == window.location.host) {
-            if (pattern.test(str) && str.indexOf("policy") != -1 ||
-                pattern.test(str) && str.indexOf("cookie") != -1 ||
-                pattern.test(str) && str.indexOf("privat") != -1 ||
-                pattern.test(str) && str.indexOf("privacy") != -1 ||
-                pattern.test(str) && str.indexOf("datenschutz") != -1 ||
-                pattern.test(str) && str.indexOf("handelsbetingelser") != -1) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
+    // Removed duplicate 'isURL' function definition to avoid redundancy.
 
     function isURL(str) {
         const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
