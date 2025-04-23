@@ -37,6 +37,67 @@ let intaConsentsObjectVariable = {
     domain: window.location.host,
     sharingDomains: [],
 }
+const IntastellarCookieConsent = {
+    renew: function () {
+        document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        document.querySelector("html").classList.add("noScroll");
+        dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+    },
+    remove: function (template) {
+        template.classList.remove("--active");
+    },
+    initialize: function (template) {
+        if (document.readyState === 'complete') {
+            if (
+                document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
+                || window.INTA === undefined
+            ) {
+                // Get the host and remove all subdomains
+                let host = window.location.host;
+                host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
+                // Remove the port if it exists
+                host = host.replace(/:\d+$/, "");
+                const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
+                const configScript = document.createElement("script");
+                configScript.src = intastellarDefaultConfigFile;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", intastellarDefaultConfigFile);
+                xhr.send();
+
+                if (xhr.status === 200) {
+                    document.head.insertBefore(configScript, document.currentScript);
+                }
+            }
+            document.body.append(template);
+        } else {
+            window.addEventListener("load", function () {
+                if (
+                    document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
+                    || window.INTA === undefined
+                ) {
+                    // Get the host and remove all subdomains
+                    let host = window.location.host;
+                    host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
+                    // Remove the port if it exists
+                    host = host.replace(/:\d+$/, "");
+                    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
+                    const configScript = document.createElement("script");
+                    configScript.src = intastellarDefaultConfigFile;
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("GET", intastellarDefaultConfigFile);
+                    xhr.send();
+
+                    if (xhr.status === 200) {
+                        document.head.insertBefore(configScript, document.currentScript);
+                    }
+                }
+                document.body.append(template);
+            })
+        }
+    }
+}
 let scriptTypelang = {};
 let settingsMessage;
 const foundScripts = window.foundScripts = [];
