@@ -3019,8 +3019,11 @@ function checkCookieStatus() {
         });
     });
     startObserving(observer, document.documentElement);
-    observer.disconnect();
+    window.addEventListener("DOMContentLoaded", () => {
+        observer.disconnect();
+    });
     return observer;
+
 }
 
 function startObserving(observer) {
