@@ -2612,6 +2612,11 @@ const beforeScriptExecuteListener = function (event, node) {
         "beforescriptexecute",
         (e, node) => beforeScriptExecuteListener(e, node)
     );
+
+    // Disconnect the observer if it exists
+    if (window.currentObserver) {
+        window.currentObserver.disconnect();
+    }
 };
 
 function checkCookieStatus() {
@@ -3019,9 +3024,6 @@ function checkCookieStatus() {
         });
     });
     startObserving(observer, document.documentElement);
-    window.addEventListener("DOMContentLoaded", () => {
-        observer.disconnect();
-    });
     return observer;
 
 }
