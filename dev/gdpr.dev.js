@@ -1914,7 +1914,9 @@ if (window.INTA?.settings?.hubspotId) {
     window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
 } */
 
-fbq('consent', 'revoke');
+if (intaCookieConsents?.advertisementCookies !== "checked") {
+    fbq('consent', 'revoke');
+}
 window.clarity('consent', false);
 
 gtag('consent', 'default', {
@@ -2451,15 +2453,29 @@ function updateNotRequiredRegexp() {
     if (intaCookieConsents?.functionalCookies === "checked" &&
         intaCookieConsents?.staticsticCookies !== "checked" &&
         intaCookieConsents?.advertisementCookies !== "checked") {
-        m = merge(allScripts[1].scripts, allScripts[0].scripts);
+        allScripts.forEach((script) => {
+            if (script.type === "functional") {
+                m = merge(allScripts[1].scripts, allScripts[0].scripts);
+            }
+        });
     } else if (intaCookieConsents?.advertisementCookies === "checked" &&
         intaCookieConsents?.staticsticCookies !== "checked" &&
         intaCookieConsents?.functionalCookies !== "checked") {
-        m = merge(allScripts[2].scripts, allScripts[0].scripts);
+
+        allScripts.forEach((script) => {
+            if (script.type === "marketing") {
+                m = merge(script.scripts, allScripts[0].scripts);
+            }
+        });
+
     } else if (intaCookieConsents?.staticsticCookies === "checked" &&
         intaCookieConsents?.functionalCookies !== "checked" &&
         intaCookieConsents?.advertisementCookies !== "checked") {
-        m = merge(allScripts[1].scripts, allScripts[2].scripts);
+        allScripts.forEach((script) => {
+            if (script.type === "statics") {
+                m = merge(script.scripts, allScripts[2].scripts);
+            }
+        });
     } else if (intaCookieConsents?.functionalCookies === "checked" &&
         intaCookieConsents?.staticsticCookies === "checked") {
         m = allScripts[1].scripts;
@@ -2597,23 +2613,6 @@ const beforeScriptExecuteListener = function (event, node) {
         (e, node) => beforeScriptExecuteListener(e, node)
     );
 };
-
-function restartObserver() {
-    // Disconnect any existing observer
-    if (window.currentObserver) {
-        window.currentObserver.disconnect();
-    }
-
-    if (!isGtmMode) {
-        window.currentObserver = checkCookieStatus();
-    }
-    // Create a new observer with updated consent settings
-
-
-    // Process any existing blocked content that should now be allowed
-    processExistingScripts();
-
-}
 
 function checkCookieStatus() {
     if (isGtmMode) {
@@ -3020,11 +3019,8 @@ function checkCookieStatus() {
         });
     });
     startObserving(observer, document.documentElement);
-    window.addEventListener("load", () => {
-        observer.disconnect();
-    });
+    observer.disconnect();
     return observer;
-
 }
 
 function startObserving(observer) {
