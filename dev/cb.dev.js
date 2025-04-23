@@ -1753,7 +1753,15 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
     })
 }
 
-window.addEventListener("load", function () {
+function onWindowLoad(callback) {
+    if (document.readyState === 'complete') {
+        callback();
+    } else {
+        window.addEventListener('load', callback);
+    }
+}
+
+onWindowLoad(function () {
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
