@@ -185,6 +185,9 @@ function decodeIntaConsentsObject(number) {
 const intastellarDevMode = (function () {
     return window.location.host === "localhost"
         || window.location.host.indexOf("127.0.0.1") > -1
+        || window.location.host.indexOf("0.0.0.0") > -1
+        || window.location.host.indexOf("192.168.") > -1
+        || window.location.host.indexOf("::1") > -1
         ? true : false;
 })();
 
