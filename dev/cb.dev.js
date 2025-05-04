@@ -2020,7 +2020,7 @@ onWindowLoad(function () {
                     'ad_storage': 'granted'
                 });
                 accepted.push("advertisementCookies");
-            } else if (!MarketingCheckBox?.checked) {
+            } else if (!MarketingCheckBox?.checked || intastellar) {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'denied'
                 });

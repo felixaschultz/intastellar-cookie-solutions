@@ -1989,18 +1989,21 @@ if (intaCookieConsents?.advertisementCookies !== "checked") {
 }
 window.clarity('consent', false);
 
-gtag('consent', 'default', {
-    'ad_storage': 'denied',
-    'personalization_storage': 'denied',
-    'analytics_storage': 'denied',
-    'functionality_storage': 'denied',
-    'ads_data_redaction': 'denied',
-    'ad_user_data': 'denied',
-    'ad_personalization': 'denied',
-    'security_storage': 'granted',
-    'url_passthrough': true,
-    'wait_for_update': 500,
-});
+if (!window._gtagDefaultFired) {
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'personalization_storage': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'denied',
+        'ads_data_redaction': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'security_storage': 'granted',
+        'url_passthrough': true,
+        'wait_for_update': 500,
+    });
+    window._gtagDefaultFired = true;
+}
 
 if (intaCookieConsents?.advertisementCookies) {
     gtag('consent', 'update', {
