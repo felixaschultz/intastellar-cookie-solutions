@@ -2094,12 +2094,12 @@ if (intaCookieConsents?.functionalCookies === "checked" &&
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
 }
 notRequired = window.notRequired = new RegExp(m.join("|"), "ig");
-let s = document.createElement("script");
-s.async = true;
-s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
+let analyticsScript = document.createElement("script");
+analyticsScript.async = true;
+analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
 
 
-intHead.appendChild(s);
+intHead.appendChild(analyticsScript);
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
