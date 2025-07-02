@@ -656,6 +656,7 @@ const inta_requiredCookieList = [{
     domains: [
         "intastellarsolutions.com",
         "consents.cdn.intastellarsolutions.com",
+        "intastellarconsents.com",
         window.location.host,
         window.INTA.settings.rootDomain
     ]

@@ -2712,10 +2712,15 @@ function listAllCookies(cookieList) {
                         <h4 class="intaCookieList-CookieName">Domæne</h4>
                         ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                                
-                                <p>${cookie}</p>
-                            `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                                <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                            `
+                } else {
+                    return `
+                                                <p>${cookie}</p>
+                                            `;
+                }
             }).join(" ")}
                     </section>
                     <section>
@@ -2745,9 +2750,15 @@ function listAllCookies(cookieList) {
                     <h4 class="intaCookieList-CookieName">Domain</h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                            <p>${cookie}</p>
-                        `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -2777,9 +2788,15 @@ function listAllCookies(cookieList) {
                     <h4 class="intaCookieList-CookieName">Domains</h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                            <p>${cookie}</p>
-                        `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -2810,9 +2827,15 @@ function listAllCookies(cookieList) {
                     <h4 class="intaCookieList-CookieName">Dominios</h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                            <p>${cookie}</p>
-                        `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -2845,9 +2868,15 @@ function listAllCookies(cookieList) {
                     <h4 class="intaCookieList-CookieName">Domäner</h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                                    <p>${cookie}</p>
-                                `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -2883,9 +2912,15 @@ function listAllCookies(cookieList) {
                     </h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                                    <p>${cookie}</p>
-                                `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -2921,9 +2956,15 @@ function listAllCookies(cookieList) {
                     </h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                                    <p>${cookie}</p>
-                                `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -2961,9 +3002,15 @@ function listAllCookies(cookieList) {
                     </h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                                    <p>${cookie}</p>
-                                `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -2999,9 +3046,15 @@ function listAllCookies(cookieList) {
                     </h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                            <p>${cookie}</p>
-                        `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -3040,9 +3093,15 @@ function listAllCookies(cookieList) {
                     </h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                            <p>${cookie}</p>
-                        `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -3081,9 +3140,15 @@ function listAllCookies(cookieList) {
                     </h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                            <p>${cookie}</p>
-                        `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -3122,9 +3187,15 @@ function listAllCookies(cookieList) {
                     </h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                            <p>${cookie}</p>
-                        `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
@@ -3155,9 +3226,15 @@ function listAllCookies(cookieList) {
                     <h4 class="intaCookieList-CookieName">Domæne</h4>
                     ${cookie.domains.map((cookie) => {
                 if (cookie == undefined) return;
-                return `
-                            <p>${cookie}</p>
-                        `
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
             }).join(" ")}
                 </section>
                 <section>
