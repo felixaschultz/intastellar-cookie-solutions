@@ -3428,6 +3428,53 @@ function listAllCookies(cookieList) {
                 </section>
             </section>
             `
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pl" || intastellarCookieLanguage === "pl-PL") {
+            // polish
+            return `
+            <section class="intaCookieListOverview-grid">
+                <section class="intaCookieList-left">
+                    <h3 class="intaCookieListOverview-heading">
+                        Dostawca
+                    </h3>
+                    <p class="intaCookieListOverview-vendor">${vendor}</p>
+                    <p class="intaCookieListOverview-heading">
+                        Polityka prywatności
+                    </p>
+                    ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`
+                        Polityka prywatności`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">Polityka prywatności</a>`}
+                    <h4 class="intaCookieList-CookieName">
+                        Domeny
+                    </h4>
+                    ${cookie.domains.map((cookie) => {
+                if (cookie == undefined) return;
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
+            }).join(" ")}
+                </section>
+                <section>
+                    <h3 class="intaCookieListOverview-heading">
+                        Cookies
+                    </h3>
+                    <section>
+                        ${cookie.cookies.map((cookie) => {
+                return `
+                                <article class="intaCookieList-cookie">
+                                    <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
+                                    <p>${cookie.purpose}</p>
+                                </article>
+                            `
+            }).join(" ")}
+                    </section>
+                </section>
+            </section>
+            `
         } else {
             return `
             <section class="intaCookieListOverview-grid">
