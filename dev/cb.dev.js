@@ -3618,6 +3618,8 @@ function showPrivacy() {
     let paddingTop = "100px";
     if (window.INTA.settings.design === "banner") {
         paddingTop = "56px";
+    } else if (window.INTA.settings.design === "bannerV2") {
+        paddingTop = "26px";
     }
 
     document.querySelector(".intLearnMoreBtn").style.display = "none";
@@ -3731,6 +3733,8 @@ function learnMore(e) {
     let paddingTop = "140px";
     if (window.INTA.settings.design === "banner") {
         paddingTop = "56px";
+    } else if (window.INTA.settings.design === "bannerV2") {
+        paddingTop = "16px";
     }
 
 
