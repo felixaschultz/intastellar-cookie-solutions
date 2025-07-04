@@ -2099,6 +2099,27 @@ onWindowLoad(function () {
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no" || intastellarCookieLanguage === "no-NO") {
             settingsSaveLang.necessaryCookiesText = "Avvis";
             settingsSaveLang.saveSettingsText = "Lagre";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
+            settingsSaveLang.necessaryCookiesText = "Hylkää";
+            settingsSaveLang.saveSettingsText = "Tallenna";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "cs" || intastellarCookieLanguage === "cs-CZ") {
+            settingsSaveLang.necessaryCookiesText = "Odmítnout";
+            settingsSaveLang.saveSettingsText = "Uložit";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "hu" || intastellarCookieLanguage === "hu-HU") {
+            settingsSaveLang.necessaryCookiesText = "Elutasít";
+            settingsSaveLang.saveSettingsText = "Mentés";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "tr" || intastellarCookieLanguage === "tr-TR") {
+            settingsSaveLang.necessaryCookiesText = "Reddet";
+            settingsSaveLang.saveSettingsText = "Ayarları Kaydet";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ch" || intastellarCookieLanguage === "zh-CN") {
+            settingsSaveLang.necessaryCookiesText = "拒绝";
+            settingsSaveLang.saveSettingsText = "保存设置";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "jp" || intastellarCookieLanguage === "ja-JP") {
+            settingsSaveLang.necessaryCookiesText = "拒否";
+            settingsSaveLang.saveSettingsText = "設定を保存";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pl" || intastellarCookieLanguage === "pl-PL") {
+            settingsSaveLang.necessaryCookiesText = "Odrzuć";
+            settingsSaveLang.saveSettingsText = "Zapisz";
         } else {
             settingsSaveLang.necessaryCookiesText = "Afvis";
             settingsSaveLang.saveSettingsText = "Gem";
