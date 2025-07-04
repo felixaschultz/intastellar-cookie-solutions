@@ -10,8 +10,8 @@ window.INTA = {
         color: "#c33333",
         /* color: "#e2000f", */
         text: false,
-        language: "english",
-        design: "banner",
+        language: "polish",
+        design: "bannerV2",
         requiredCookies: [
             {
                 cookie: "region",

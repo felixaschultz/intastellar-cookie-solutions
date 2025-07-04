@@ -1897,6 +1897,7 @@ const int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function (en
 
 const cookieBannerStyles = {
     banner: "banner.css",
+    bannerV2: "bannerV2.css",
     overlay: "overlay.css"
 };
 
@@ -1921,7 +1922,35 @@ let intastellarCookieLanguage
                                         : window.INTA?.settings?.language == "russian" ? "ru"
                                             : window.INTA?.settings?.language == "swedish" ? "sv"
                                                 : window.INTA?.settings?.language == "norwegian" ? "no"
-                                                    : document.querySelector("html").getAttribute("lang");
+                                                    : window.INTA?.settings?.language == "polish" ? "pl"
+                                                        : window.INTA?.settings?.language == "turkish" ? "tr"
+                                                            : window.INTA?.settings?.language == "arabic" ? "ar"
+                                                                : window.INTA?.settings?.language == "japanese" ? "ja"
+                                                                    : window.INTA?.settings?.language == "korean" ? "ko"
+                                                                        : window.INTA?.settings?.language == "chinese" ? "zh"
+                                                                            : window.INTA?.settings?.language == "ukrainian" ? "uk"
+                                                                                : window.INTA?.settings?.language == "czech" ? "cs"
+                                                                                    : window.INTA?.settings?.language == "hungarian" ? "hu"
+                                                                                        : window.INTA?.settings?.language == "finnish" ? "fi"
+                                                                                            : window.INTA?.settings?.language == "greek" ? "el"
+                                                                                                : window.INTA?.settings?.language == "bulgarian" ? "bg"
+                                                                                                    : window.INTA?.settings?.language == "slovak" ? "sk"
+                                                                                                        : window.INTA?.settings?.language == "slovenian" ? "sl"
+                                                                                                            : window.INTA?.settings?.language == "croatian" ? "hr"
+                                                                                                                : window.INTA?.settings?.language == "lithuanian" ? "lt"
+                                                                                                                    : window.INTA?.settings?.language == "latvian" ? "lv"
+                                                                                                                        : window.INTA?.settings?.language == "estonian" ? "et"
+                                                                                                                            : window.INTA?.settings?.language == "arabic" ? "ar"
+                                                                                                                                : window.INTA?.settings?.language == "malay" ? "ms"
+                                                                                                                                    : window.INTA?.settings?.language == "thai" ? "th"
+                                                                                                                                        : window.INTA?.settings?.language == "vietnamese" ? "vi"
+                                                                                                                                            : window.INTA?.settings?.language == "indonesian" ? "id"
+                                                                                                                                                : window.INTA?.settings?.language == "filipino" ? "tl"
+                                                                                                                                                    : window.INTA?.settings?.language == "hebrew" ? "he"
+                                                                                                                                                        : window.INTA?.settings?.language == "afrikaans" ? "af"
+                                                                                                                                                            : window.INTA?.settings?.language == "arabic" ? "ar"
+
+                                                                                                                                                                : document.querySelector("html").getAttribute("lang");
 
 if (document.querySelector("html").getAttribute("lang") == null) {
     intastellarCookieLanguage = "en";
