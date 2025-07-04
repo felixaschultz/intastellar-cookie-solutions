@@ -430,6 +430,120 @@ const intastellarSupportedLanguages = {
             title: "Markkinointi",
             description: "Käytämme valittujen kumppaneiden web-tekniikoita (myös evästeitä) voidaksemme näyttää sinulle sisältöä ja mainoksia, jotka on räätälöity sinulle erityisesti verkkosivustoilla ja sosiaalisissa medioissa. Tämä sisältö valitaan ja näytetään käyttäytymisesi perusteella. Mainos- tai markkinointievästeitä käytetään tarjoamaan vierailijoille relevantteja mainoksia ja markkinointikampanjoita. Nämä evästeet seuraavat vierailijoita sivustoilla ja keräävät tietoja räätälöityjen mainosten tarjoamiseksi."
         }
+    },
+    polish: {
+        saveSettings: "Odrzuć",
+        necessary: {
+            title: "Niezbędne", //"Necessary Cookies:",
+            description: "Niezbędne technologie internetowe i pliki cookie sprawiają, że nasza strona internetowa jest technicznie dostępna i użyteczna dla Ciebie. Dotyczy to podstawowych funkcji, takich jak nawigacja po stronie, prawidłowe wyświetlanie w przeglądarce internetowej lub żądanie Twojej zgody. Bez tych technologii internetowych i plików cookie nasza strona nie działa.",
+        },
+        functional: {
+            title: "Funkcjonalne",
+            description: "Pliki cookie funkcjonalne umożliwiają przechowywanie informacji, które zmieniają wygląd lub działanie strony. Na przykład preferowany język lub region."
+        },
+        statisic: {
+            title: "Statystyki",
+            description: "Stale dążymy do poprawy użyteczności i wydajności naszych stron internetowych. Dlatego korzystamy z technologii analitycznych (w tym plików cookie), które pseudonimizują pomiar i ocenę, które funkcje i treści naszych stron są używane, jak i jak często. Na tej podstawie możemy poprawić nasze strony dla użytkowników."
+        },
+        marketing: {
+            title: "Marketing",
+            description: "Korzystamy z technologii internetowych (w tym plików cookie) od wybranych partnerów, aby móc wyświetlać Ci treści i reklamy specjalnie dostosowane do Ciebie na stronach internetowych i w mediach społecznościowych. Treści te są wybierane i wyświetlane na podstawie Twojego zachowania podczas korzystania z sieci. Pliki cookie reklamowe lub marketingowe są używane do dostarczania odwiedzającym odpowiednich reklam i kampanii marketingowych. Te pliki cookie śledzą odwiedzających na różnych stronach internetowych i zbierają informacje w celu dostarczenia spersonalizowanych reklam."
+        }
+    },
+    chinese: {
+        saveSettings: "拒绝",
+        necessary: {
+            title: "必要的", //"Necessary Cookies:",
+            description: "必要的网络技术和Cookie使我们的网站在技术上对您可访问和可用。这适用于基本的基本功能，例如网站导航、在您的互联网浏览器中的正确显示或请求您的同意。没有这些网络技术和Cookie，我们的网站无法正常工作。",
+        },
+        functional: {
+            title: "功能性",
+            description: "功能性Cookie允许我们存储更改网站外观或行为的信息。例如，您首选的语言或地区。"
+        },
+        statisic: {
+            title: "统计",
+            description: "我们希望不断改善我们网站的可用性和性能。因此，我们使用分析技术（包括Cookie），这些技术以假名方式测量和评估我们网站的哪些功能和内容被使用、如何使用以及使用频率。基于此，我们可以改善我们的网站以满足用户需求。"
+        },
+        marketing: {
+            title: "营销",
+            description: "我们使用来自精选合作伙伴的网络技术（包括Cookie），以便在网站和社交媒体上向您展示特别为您量身定制的内容和广告。这些内容根据您的使用行为进行选择和显示。广告或营销Cookie用于向访问者提供相关的广告和营销活动。这些Cookie在不同的网站上跟踪访问者，并收集信息以提供个性化的广告。"
+        }
+    },
+    japanese: {
+        saveSettings: "拒否",
+        necessary: {
+            title: "必要な", //"Necessary Cookies:",
+            description: "必要なWeb技術とCookieは、当社のWebサイトを技術的にアクセス可能で使用可能にします。これは、Webサイトのナビゲーション、インターネットブラウザでの正しい表示、または同意の要求など、基本的な機能に適用されます。これらのWeb技術とCookieがないと、当社のWebサイトは機能しません。",
+        },
+        functional: {
+            title: "機能的",
+            description: "機能的なCookieは、Webサイトの外観や動作を変更する情報を保存できます。たとえば、お好みの言語や地域などです。"
+        },
+        statisic: {
+            title: "統計",
+            description: "当社は、Webサイトの使いやすさとパフォーマンスを継続的に改善したいと考えています。そのため、分析技術（Cookieを含む）を使用して、当社のWebサイトのどの機能やコンテンツがどのように使用されているかを匿名で測定および評価しています。これに基づいて、ユーザー向けにWebサイトを改善できます。"
+        },
+        marketing: {
+            title: "マーケティング",
+            description: "当社は、選択されたパートナーからのWeb技術（Cookieも含む）を使用して、Webサイトやソーシャルメディア上で特にあなた向けにカスタマイズされたコンテンツや広告を表示します。これらのコンテンツは、あなたの使用行動に基づいて選択および表示されます。広告またはマーケティングCookieは、訪問者に関連する広告やマーケティングキャンペーンを提供するために使用されます。これらのCookieは、異なるWebサイトで訪問者を追跡し、個別化された広告を提供するための情報を収集します。"
+        }
+    },
+    greek: {
+        saveSettings: "Απόρριψη",
+        necessary: {
+            title: "Απαραίτητα", //"Necessary Cookies:",
+            description: "Οι απαραίτητες τεχνολογίες ιστού και τα cookies καθιστούν τον ιστότοπό μας τεχνικά προσβάσιμο και χρήσιμο για εσάς. Αυτό ισχύει για βασικές λειτουργίες όπως η πλοήγηση στον ιστότοπο, η σωστή εμφάνιση στον περιηγητή σας στο διαδίκτυο ή η αίτηση της συγκατάθεσής σας. Χωρίς αυτές τις τεχνολογίες ιστού και cookies, ο ιστότοπός μας δεν λειτουργεί.",
+        },
+        functional: {
+            title: "Λειτουργικά",
+            description: "Τα λειτουργικά cookies επιτρέπουν την αποθήκευση πληροφοριών που αλλάζουν την εμφάνιση ή τη λειτουργία του ιστότοπου. Για παράδειγμα, η προτιμώμενη γλώσσα ή περιοχή σας."
+        },
+        statisic: {
+            title: "Στατιστικά",
+            description: "Θέλουμε να βελτιώνουμε συνεχώς τη χρησιμότητα και την απόδοση των ιστότοπών μας. Για το λόγο αυτό, χρησιμοποιούμε τεχνολογίες ανάλυσης (συμπεριλαμβανομένων των cookies) που μετρούν και αξιολογούν ανώνυμα ποιες λειτουργίες και περιεχόμενο των ιστότοπών μας χρησιμοποιούνται, πώς και πόσο συχνά. Με βάση αυτό, μπορούμε να βελτιώσουμε τους ιστότοπούς για τους χρήστες."
+        },
+        marketing: {
+            title: "Μάρκετινγκ",
+            description: "Χρησιμοποι    ούμε τεχνολογίες ιστού (συμπεριλαμβανομένων των cookies) από επιλεγμένους συνεργάτες για να σας δείχνουμε περιεχόμενο και διαφημίσεις ειδικά προσαρμοσμένες για εσάς σε ιστότοπους και κοινωνικά μέσα. Αυτό το περιεχόμενο επιλέγεται και εμφανίζεται με βάση τη συμπεριφορά χρήσης σας. Τα cookies διαφήμισης ή μάρκετινγκ χρησιμοποιούνται για να παρέχουν στους επισκέπτες σχετικές διαφημίσεις και εκστρατείες μάρκετινγκ. Αυτά τα cookies παρακολουθούν τους επισκέπτες σε διάφορους ιστότοπους και συλλέγουν πληροφορίες για την παροχή εξατομικευμένων διαφημίσεων."
+        }
+    },
+    afrikaans: {
+        saveSettings: "Weier",
+        necessary: {
+            title: "Noodsaaklik", //"Necessary Cookies:",
+            description: "Noodsaaklike webtegnologieë en koekies maak ons webwerf tegnies toeganklik en bruikbaar vir u. Dit geld vir fundamentele basiese funksies soos navigasie op die webwerf, korrekte vertoon in u internetblaaier of versoek om u toestemming. Sonder hierdie webtegnologieë en koekies werk ons webwerf nie.",
+        },
+        functional: {
+            title: "Funksioneel",
+            description: "Funksionele koekies maak dit moontlik om inligting te stoor wat die voorkoms of gedrag van die webwerf verander. Byvoorbeeld, u voorkeurtaal of -streek."
+        },
+        statisic: {
+            title: "Statistiek",
+            description: "Ons wil die bruikbaarheid en prestasie van ons webwerwe voortdurend verbeter. Daarom gebruik ons analise tegnologieë (insluitend koekies) wat pseudoniem meet en evalueer watter funksies en inhoud van ons webwerwe gebruik word, hoe en hoe gereeld. Op hierdie basis kan ons ons webwerwe vir gebruikers verbeter."
+        },
+        marketing: {
+            title: "Bemarking",
+            description: "Ons gebruik webtegnologieë (ook koekies) van geselekte vennote om u inhoud en advertensies te wys wat spesifiek vir u opgestel is op webwerwe en sosiale media. Hierdie inhoud word gekies en vertoon op grond van u gebruiksgedrag. Advertensie- of bemarkingskoekies word gebruik om besoekers relevante advertensies en bemarkingsveldtogte te bied. Hierdie koekies volg besoekers oor verskillende webwerwe en versamel inligting om gepersonaliseerde advertensies te lewer."
+        }
+    },
+    arabic: {
+        saveSettings: "رفض",
+        necessary: {
+            title: "ضروري", //"Necessary Cookies:",
+            description: "تجعل تقنيات الويب وملفات تعريف الارتباط الضرورية موقعنا الإلكتروني متاحًا تقنيًا وقابلًا للاستخدام بالنسبة لك. ينطبق هذا على الوظائف الأساسية الأساسية مثل التنقل في الموقع، والعرض الصحيح في متصفح الإنترنت الخاص بك، أو طلب موافقتك. بدون هذه التقنيات وملفات تعريف الارتباط، لا يعمل موقعنا الإلكتروني.",
+        },
+        functional: {
+            title: "وظيفي",
+            description: "تسمح ملفات تعريف الارتباط الوظيفية بتخزين المعلومات التي تغير مظهر الموقع أو سلوكه. على سبيل المثال، لغتك المفضلة أو منطقتك."
+        },
+        statisic: {
+            title: "إحصائيات",
+            description: "نريد تحسين سهولة استخدام وأداء مواقعنا الإلكترونية باستمرار. لهذا السبب، نستخدم تقنيات التحليل (بما في ذلك ملفات تعريف الارتباط) التي تقيس وتقييم بشكل مجهول أي الميزات والمحتوى من مواقعنا الإلكترونية يتم استخدامه، وكيف ومتى. بناءً على ذلك، يمكننا تحسين مواقعنا الإلكترونية للمستخدمين."
+        },
+        marketing: {
+            title: "تسويق",
+            description: "نستخدم تقنيات الويب (بما في ذلك ملفات تعريف الارتباط) من شركاء مختارين لعرض محتوى وإعلانات مصممة خصيصًا لك على مواقع الويب ووسائل التواصل الاجتماعي. يتم اختيار هذا المحتوى وعرضه بناءً على سلوك استخدامك. تُستخدم ملفات تعريف الارتباط الإعلانية أو التسويقية لتزويد الزوار بإعلانات وحملات تسويقية ذات صلة. تتبع هذه الملفات الزوار عبر مواقع الويب المختلفة وتجمع المعلومات لتقديم إعلانات مخصصة."
+        }
     }
 }
 
