@@ -446,7 +446,7 @@ const intastellarSupportedLanguages = {
             description: "Stale dążymy do poprawy użyteczności i wydajności naszych stron internetowych. Dlatego korzystamy z technologii analitycznych (w tym plików cookie), które pseudonimizują pomiar i ocenę, które funkcje i treści naszych stron są używane, jak i jak często. Na tej podstawie możemy poprawić nasze strony dla użytkowników."
         },
         marketing: {
-            title: "Marketing",
+            title: "Reklama",
             description: "Korzystamy z technologii internetowych (w tym plików cookie) od wybranych partnerów, aby móc wyświetlać Ci treści i reklamy specjalnie dostosowane do Ciebie na stronach internetowych i w mediach społecznościowych. Treści te są wybierane i wyświetlane na podstawie Twojego zachowania podczas korzystania z sieci. Pliki cookie reklamowe lub marketingowe są używane do dostarczania odwiedzającym odpowiednich reklam i kampanii marketingowych. Te pliki cookie śledzą odwiedzających na różnych stronach internetowych i zbierają informacje w celu dostarczenia spersonalizowanych reklam."
         }
     },
