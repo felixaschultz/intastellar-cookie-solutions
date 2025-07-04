@@ -1948,9 +1948,8 @@ let intastellarCookieLanguage
                                                                                                                                                 : window.INTA?.settings?.language == "filipino" ? "tl"
                                                                                                                                                     : window.INTA?.settings?.language == "hebrew" ? "he"
                                                                                                                                                         : window.INTA?.settings?.language == "afrikaans" ? "af"
-                                                                                                                                                            : window.INTA?.settings?.language == "arabic" ? "ar"
 
-                                                                                                                                                                : document.querySelector("html").getAttribute("lang");
+                                                                                                                                                            : document.querySelector("html").getAttribute("lang");
 
 if (document.querySelector("html").getAttribute("lang") == null) {
     intastellarCookieLanguage = "en";
@@ -2639,6 +2638,21 @@ const bannerContentMessage = (domain, node) => {
         norwegian: `<p>Dette innholdet leveres av ${domain}.</p>`,
         finish: `<p>Tämä sisältö toimitetaan ${domain}.</p>`,
         dutch: `<p>Deze inhoud wordt geleverd door ${domain}.</p>`,
+        polish: `<p>Ta zawartość jest dostarczana przez ${domain}.</p>`,
+        afrikaans: `<p>Hierdie inhoud word verskaf deur ${domain}.</p>`,
+        arabic: `<p>هذا المحتوى مقدم من ${domain}.</p>`,
+        hindi: `<p>यह सामग्री ${domain} द्वारा प्रदान की गई है।</p>`,
+        turkish: `<p>Bu içerik ${domain} tarafından sağlanmaktadır.</p>`,
+        japanese: `<p>このコンテンツは${domain}によって提供されています。</p>`,
+        korean: `<p>이 콘텐츠는 ${domain}에서 제공됩니다.</p>`,
+        thai: `<p>เนื้อหานี้จัดทำโดย ${domain}.</p>`,
+        vietnamese: `<p>Nội dung này được cung cấp bởi ${domain}.</p>`,
+        indonesian: `<p>Konten ini disediakan oleh ${domain}.</p>`,
+        filipino: `<p>Ang nilalamang ito ay ibinibigay ng ${domain}.</p>`,
+        malay: `<p>Kandungan ini disediakan oleh ${domain}.</p>`,
+        ukrainian: `<p>Цей контент надається ${domain}.</p>`,
+        hebrew: `<p>תוכן זה מסופק על ידי ${domain}.</p>`,
+        arabic: `<p>هذا المحتوى مقدم من ${domain}.</p>`,
     }
 };
 
@@ -2866,7 +2880,22 @@ function checkCookieStatus() {
                                         russian: "реклама",
                                         norwegian: "markedsføring",
                                         finish: "mainonta",
-                                        dutch: "reclame"
+                                        dutch: "reclame",
+                                        polish: "reklama",
+                                        afrikaans: "bemarking",
+                                        arabic: "تسويق",
+                                        hindi: "विपणन",
+                                        turkish: "pazarlama",
+                                        japanese: "マーケティング",
+                                        korean: "마케팅",
+                                        thai: "การตลาด",
+                                        vietnamese: "tiếp thị",
+                                        indonesian: "pemasaran",
+                                        filipino: "pagmemerkado",
+                                        malay: "pemasaran",
+                                        chinese: "营销",
+                                        ukrainian: "маркетинг",
+                                        hebrew: "שיווק",
                                     }
                                 } else if (script.type == "functional") {
                                     scriptTypelang = {
@@ -2881,7 +2910,22 @@ function checkCookieStatus() {
                                         russian: "функциональный",
                                         norwegian: "funksjonelle",
                                         finish: "toiminnallinen",
-                                        dutch: "functioneel"
+                                        dutch: "functioneel",
+                                        polish: "funkcjonalne",
+                                        afrikaans: "funksionele",
+                                        arabic: "وظيفي",
+                                        hindi: "कार्यात्मक",
+                                        turkish: "fonksiyonel",
+                                        japanese: "機能的",
+                                        korean: "기능적",
+                                        thai: "ฟังก์ชัน",
+                                        vietnamese: "chức năng",
+                                        indonesian: "fungsional",
+                                        filipino: "pampagana",
+                                        chinese: "功能性",
+                                        malay: "fungsional",
+                                        ukrainian: "функціональний",
+                                        hebrew: "פונקציונלי",
                                     }
                                 } else if (script.type == "statics") {
                                     scriptTypelang = {
@@ -2896,7 +2940,22 @@ function checkCookieStatus() {
                                         russian: "статистика",
                                         norwegian: "statistiske",
                                         finish: "tilastollinen",
-                                        dutch: "statistieken"
+                                        dutch: "statistieken",
+                                        polish: "statystyczne",
+                                        afrikaans: "statistiese",
+                                        arabic: "إحصائية",
+                                        hindi: "सांख्यिकी",
+                                        turkish: "istatistik",
+                                        japanese: "統計",
+                                        korean: "통계",
+                                        thai: "สถิติ",
+                                        vietnamese: "thống kê",
+                                        indonesian: "statistik",
+                                        filipino: "istatiska",
+                                        malay: "statistik",
+                                        chinese: "统计",
+                                        ukrainian: "статистичний",
+                                        hebrew: "סטטיסטי",
                                     }
                                 }
 
@@ -2912,7 +2971,22 @@ function checkCookieStatus() {
                                     russian: `Принять файлы cookie ${scriptTypelang.russian}`,
                                     norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
                                     finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`
+                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`,
+                                    polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
+                                    afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
+                                    arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
+                                    hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
+                                    turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
+                                    japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
+                                    korean: `쿠키 수락 ${scriptTypelang.korean}`,
+                                    thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
+                                    vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
+                                    indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
+                                    filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
+                                    malay: `Terima kuki ${scriptTypelang.malay}`,
+                                    chinese: `接受 ${scriptTypelang.chinese} cookies`,
+                                    ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
+                                    hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
@@ -2936,7 +3010,22 @@ function checkCookieStatus() {
                                         russian: "реклама",
                                         norwegian: "markedsføring",
                                         finish: "mainonta",
-                                        dutch: "reclame"
+                                        dutch: "reclame",
+                                        polish: "reklama",
+                                        afrikaans: "bemarking",
+                                        arabic: "تسويق",
+                                        hindi: "विपणन",
+                                        turkish: "pazarlama",
+                                        japanese: "マーケティング",
+                                        korean: "마케팅",
+                                        thai: "การตลาด",
+                                        vietnamese: "tiếp thị",
+                                        indonesian: "pemasaran",
+                                        filipino: "pagmemerkado",
+                                        malay: "pemasaran",
+                                        chinese: "营销",
+                                        ukrainian: "маркетинг",
+                                        hebrew: "שיווק",
                                     }
                                 } else if (script.type == "functional") {
                                     scriptTypelang = {
@@ -2951,7 +3040,22 @@ function checkCookieStatus() {
                                         russian: "функциональный",
                                         norwegian: "funksjonelle",
                                         finish: "toiminnallinen",
-                                        dutch: "functioneel"
+                                        dutch: "functioneel",
+                                        polish: "funkcjonalne",
+                                        afrikaans: "funksionele",
+                                        arabic: "وظيفي",
+                                        hindi: "कार्यात्मक",
+                                        turkish: "fonksiyonel",
+                                        japanese: "機能的",
+                                        korean: "기능적",
+                                        thai: "ฟังก์ชัน",
+                                        vietnamese: "chức năng",
+                                        indonesian: "fungsional",
+                                        filipino: "pampagana",
+                                        chinese: "功能性",
+                                        malay: "fungsional",
+                                        ukrainian: "функціональний",
+                                        hebrew: "פונקציונלי",
                                     }
                                 } else if (script.type == "statics") {
                                     scriptTypelang = {
@@ -2966,7 +3070,22 @@ function checkCookieStatus() {
                                         russian: "статистика",
                                         norwegian: "statistiske",
                                         finish: "tilastollinen",
-                                        dutch: "statistieken"
+                                        dutch: "statistieken",
+                                        polish: "statystyczne",
+                                        afrikaans: "statistiese",
+                                        arabic: "إحصائية",
+                                        hindi: "सांख्यिकी",
+                                        turkish: "istatistik",
+                                        japanese: "統計",
+                                        korean: "통계",
+                                        thai: "สถิติ",
+                                        vietnamese: "thống kê",
+                                        indonesian: "statistik",
+                                        filipino: "istatiska",
+                                        malay: "statistik",
+                                        chinese: "统计",
+                                        ukrainian: "статистичний",
+                                        hebrew: "סטטיסטי",
                                     }
                                 }
 
@@ -2982,7 +3101,22 @@ function checkCookieStatus() {
                                     russian: `Принять файлы cookie ${scriptTypelang.russian}`,
                                     norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
                                     finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`
+                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`,
+                                    polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
+                                    afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
+                                    arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
+                                    hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
+                                    turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
+                                    japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
+                                    korean: `쿠키 수락 ${scriptTypelang.korean}`,
+                                    thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
+                                    vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
+                                    indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
+                                    filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
+                                    malay: `Terima kuki ${scriptTypelang.malay}`,
+                                    chinese: `接受 ${scriptTypelang.chinese} cookies`,
+                                    ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
+                                    hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
@@ -3008,7 +3142,22 @@ function checkCookieStatus() {
                                             russian: "реклама",
                                             norwegian: "markedsføring",
                                             finish: "mainonta",
-                                            dutch: "reclame"
+                                            dutch: "reclame",
+                                            polish: "reklama",
+                                            afrikaans: "bemarking",
+                                            arabic: "تسويق",
+                                            hindi: "विपणन",
+                                            turkish: "pazarlama",
+                                            japanese: "マーケティング",
+                                            korean: "마케팅",
+                                            thai: "การตลาด",
+                                            vietnamese: "tiếp thị",
+                                            indonesian: "pemasaran",
+                                            filipino: "pagmemerkado",
+                                            malay: "pemasaran",
+                                            chinese: "营销",
+                                            ukrainian: "маркетинг",
+                                            hebrew: "שיווק",
                                         }
                                     } else if (script.type == "functional") {
                                         scriptTypelang = {
@@ -3023,7 +3172,22 @@ function checkCookieStatus() {
                                             russian: "функциональный",
                                             norwegian: "funksjonelle",
                                             finish: "toiminnallinen",
-                                            dutch: "functioneel"
+                                            dutch: "functioneel",
+                                            polish: "funkcjonalne",
+                                            afrikaans: "funksionele",
+                                            arabic: "وظيفي",
+                                            hindi: "कार्यात्मक",
+                                            turkish: "fonksiyonel",
+                                            japanese: "機能的",
+                                            korean: "기능적",
+                                            thai: "ฟังก์ชัน",
+                                            vietnamese: "chức năng",
+                                            indonesian: "fungsional",
+                                            filipino: "pampagana",
+                                            chinese: "功能性",
+                                            malay: "fungsional",
+                                            ukrainian: "функціональний",
+                                            hebrew: "פונקציונלי",
                                         }
                                     } else if (script.type == "statics") {
                                         scriptTypelang = {
@@ -3038,7 +3202,22 @@ function checkCookieStatus() {
                                             russian: "статистика",
                                             norwegian: "statistiske",
                                             finish: "tilastollinen",
-                                            dutch: "statistieken"
+                                            dutch: "statistieken",
+                                            polish: "statystyczne",
+                                            afrikaans: "statistiese",
+                                            arabic: "إحصائية",
+                                            hindi: "सांख्यिकी",
+                                            turkish: "istatistik",
+                                            japanese: "統計",
+                                            korean: "통계",
+                                            thai: "สถิติ",
+                                            vietnamese: "thống kê",
+                                            indonesian: "statistik",
+                                            filipino: "istatiska",
+                                            malay: "statistik",
+                                            chinese: "统计",
+                                            ukrainian: "статистичний",
+                                            hebrew: "סטטיסטי",
                                         }
                                     }
 
@@ -3054,7 +3233,22 @@ function checkCookieStatus() {
                                         russian: `Принять файлы cookie ${scriptTypelang.russian}`,
                                         norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
                                         finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                        dutch: `Accepteer ${scriptTypelang.danish} cookies`
+                                        dutch: `Accepteer ${scriptTypelang.danish} cookies`,
+                                        polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
+                                        afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
+                                        arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
+                                        hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
+                                        turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
+                                        japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
+                                        korean: `쿠키 수락 ${scriptTypelang.korean}`,
+                                        thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
+                                        vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
+                                        indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
+                                        filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
+                                        malay: `Terima kuki ${scriptTypelang.malay}`,
+                                        chinese: `接受 ${scriptTypelang.chinese} cookies`,
+                                        ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
+                                        hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
                                     }
                                 }
                                 let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
