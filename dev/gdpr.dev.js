@@ -2996,7 +2996,7 @@ function checkCookieStatus() {
                             loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
                         })
                     }
-                    if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
+                    if (node.nodeType === 1 && node.tagName === "IFRAME") {
                         allScripts.map((script) => {
 
                             const buttonText = () => {
