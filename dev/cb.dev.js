@@ -235,6 +235,7 @@ const messages = {
     greek: "Αποδεχόμενοι όλα τα cookies, υποστηρίζετε το " + document.domain + " στην ανάπτυξη μιας καλύτερης λύσης για εσάς.</p><p>Επιλέξτε αν θέλετε να επιτρέψετε μόνο τα απαραίτητα cookies ή αν θέλετε να επιτρέψετε όλα τα cookies.",
     afrikaans: "Deur alle koekies te aanvaar, ondersteun u " + document.domain + " in die ontwikkeling van 'n beter oplossing vir u.</p><p>Kies of u slegs die nodige koekies wil toelaat of of u alle koekies wil toelaat.",
     arabic: "من خلال قبول جميع ملفات تعريف الارتباط، فإنك تدعم " + document.domain + " في تطوير حل أفضل لك.</p><p>اختر ما إذا كنت تريد السماح فقط بملفات تعريف الارتباط الضرورية أو ما إذا كنت تريد السماح بجميع ملفات تعريف الارتباط.",
+    korean: "모든 쿠키를 수락함으로써 " + document.domain + "이(가) 더 나은 솔루션을 개발할 수 있도록 지원합니다.</p><p>필수 쿠키만 허용할지 아니면 모든 쿠키를 허용할지 선택하세요.",
 };
 const messageWrapStart = "<div class='intastellarCookie-settings__contentConatiner'><p>";
 const messageWrapEnd = "</p></div>";
@@ -476,6 +477,19 @@ const settingsMessagesLanguages = {
     <p>ウェブサイトの下部 ${(window?.INTA?.settings.arrange == "ltr") ? "左側" : "右側"} 角にある小さなアイコンをクリックすることで、いつでも同意を撤回できます。</p>
     ${generatePolicyUrl('私たちのプライバシーとクッキーポリシー')}
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International プライバシーポリシー</button>
+    ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")
+        }`,
+    korean: `<h3 style="    font-size: 25px;">당신이 통제합니다</h3>
+    <p>우리는 우리의 비즈니스 파트너와 함께 쿠키와 같은 기술을 사용하여 다양한 목적을 위해 귀하에 대한 정보를 수집합니다. 여기에는 다음이 포함됩니다:</p>
+    <ol>
+        <li>기능성</li>
+        <li>통계</li>
+        <li>광고</li>
+    </ol>
+    <p>'수락'을 클릭함으로써, 당신은 이 모든 목적에 동의합니다. 또한, 목적 옆의 체크박스를 선택하고 '설정 저장'을 클릭함으로써 동의할 특정 목적을 선택할 수 있습니다.</p>
+    <p>웹사이트 하단 ${(window?.INTA?.settings.arrange == "ltr") ? "왼쪽" : "오른쪽"} 모서리에 있는 작은 아이콘을 클릭하여 언제든지 동의를 철회할 수 있습니다.</p>
+    ${generatePolicyUrl('우리의 개인정보 보호정책 및 쿠키 정책')}
+    <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International 개인정보 보호정책</button>
     ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
 
@@ -1658,7 +1672,7 @@ if (intastellarCookieLanguage != null) {
     ` + generateCookieButtons('Aanvaar', 'Weier', 'Instellings');
         moreFooter.innerHTML =
             `
-        <section class="intastellar_privacyPolicy">
+        <section class="intastellar_privacyPolicy"></section>
         <article class="intReadMore">
             <section class="required">
                 <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.afrikaans.necessary.title} <i class="intastellar__arrow"></i></h3>
@@ -1731,8 +1745,103 @@ if (intastellarCookieLanguage != null) {
                     </label>
                     </section>
             </article>
-        </section>
     `;
+    } else if (intastellarCookieLanguage == "ko" || intastellarCookieLanguage == "ko-KR") {
+        // Korean
+        settingsMessage = settingsMessagesLanguages.korean;
+        intastellarShowHideDetailsText = "세부정보 보기";
+        message =
+            messageWrapStart
+            + messages.korean
+            + messageWrapEnd
+            + generatePolicyUrl('개인정보 보호정책 및 쿠키 정책');
+        intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+    ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `
+         <img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">`
+                : ""}
+        ${generateCookieSettingsButton(intastellarSupportedLanguages.korean.saveSettings, '동의')}
+        <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+    </section>`;
+        cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
+        ${window.INTA.settings.logo && window.INTA.settings.logo != "" ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
+    ` + generateCookieButtons('동의', '거부', '설정');
+        moreFooter.innerHTML =
+            `
+        <section class="intastellar_privacyPolicy"></section>
+        <article class="intReadMore">
+            <section class="required">
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.korean.necessary.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.korean.necessary.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_requiredCookieList)
+            }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.korean.functional.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.korean.functional.description}</p>
+                <article class="intaCookieListOverview">
+                    ${listAllCookies(inta_functionalCookieList)
+            }
+                </article>  
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.korean.statisic.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.korean.statisic.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_statisticCookieList)
+            }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.korean.marketing.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.korean.marketing.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_marketingCookieList)
+            }
+                </article>
+            </section>
+        </article>
+        <article class="intCookieSetting__form">
+                <section class="intastellarSettings__control">
+                    <label class="intSettingDisabled checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.korean.necessary.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.korean.functional.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer"> 
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.korean.statisic.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.korean.marketing.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+            </article>`;
+
+
     } else if (intastellarCookieLanguage == "ar" || intastellarCookieLanguage == "ar-SA") {
         // Afrikaans
         settingsMessage = settingsMessagesLanguages.arabic;
@@ -3699,9 +3808,105 @@ function listAllCookies(cookieList) {
                 </section>
             </section>
             `
-        } else {
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "af" || intastellarCookieLanguage === "af-ZA") {
+            // Afrikaans
             return `
             <section class="intaCookieListOverview-grid">
+                <section class="intaCookieList-left">
+                    <h3 class="intaCookieListOverview-heading">
+                        Verskaffer
+                    </h3>
+                    <p class="intaCookieListOverview-vendor">${vendor}</p>
+                    <p class="intaCookieListOverview-heading">
+                        Privaatheidsbeleid
+                    </p>
+                    ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`
+                        Privaatheidsbeleid`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">Privaatheidsbeleid</a>`}
+                    <h4 class="intaCookieList-CookieName">
+                        Domeine
+                    </h4>
+                    ${cookie.domains.map((cookie) => {
+                if (cookie == undefined) return;
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
+            }).join(" ")}
+                </section>
+                <section>
+                    <h3 class="intaCookieListOverview-heading">
+                        Cookies
+                    </h3>
+                    <section>
+                        ${cookie.cookies.map((cookie) => {
+                return `
+                                <article class="intaCookieList-cookie">
+                                    <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
+                                    <p>${cookie.purpose}</p>
+                                </article>
+                            `
+            }).join(" ")}
+                    </section>
+                </section>
+            </section>
+            `;
+
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
+            // Korean
+            return `
+            <section class="intaCookieListOverview-grid">
+                <section class="intaCookieList-left">
+                    <h3 class="intaCookieListOverview-heading">
+                        공급자
+                    </h3>
+                    <p class="intaCookieListOverview-vendor">${vendor}</p>
+                    <p class="intaCookieListOverview-heading">
+                        개인정보 처리방침
+                    </p>
+                    ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`
+                        개인정보 처리방침`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">개인정보 처리방침</a>`}
+                    <h4 class="intaCookieList-CookieName">
+                        도메인
+                    </h4>
+                    ${cookie.domains.map((cookie) => {
+                if (cookie == undefined) return;
+                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
+                    return `
+                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
+                                        `;
+                } else {
+                    return `
+                                            <p>${cookie}</p>
+                                        `;
+                }
+            }).join(" ")}
+                </section>
+                <section>
+                    <h3 class="intaCookieListOverview-heading">
+                        쿠키
+                    </h3>
+                    <section>
+                        ${cookie.cookies.map((cookie) => {
+                return `
+                                <article class="intaCookieList-cookie">
+                                    <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
+                                    <p>${cookie.purpose}</p>
+                                </article>
+                            `;
+            }).join(" ")}
+                    </section>
+                </section>
+            </section>
+            `;
+
+        } else {
+            return `
+                <section class="intaCookieListOverview-grid">
                 <section class="intaCookieList-left">
                     <h3 class="intaCookieListOverview-heading">Udbyder</h3>
                     <p class="intaCookieListOverview-vendor">${vendor}</p>
@@ -3734,8 +3939,8 @@ function listAllCookies(cookieList) {
             }).join(" ")}
                     </section>
                 </section>
-            </section>
-            `
+            </ >
+                `
         }
     }).join(" ")
 }
@@ -3855,11 +4060,11 @@ function showPrivacy() {
     moreContentText.style.borderBottom = "1px solid #c4c4c4"
     moreContentText.style.textAlign = "left";
     moreContentText.innerHTML = `
-        <div style="padding: 25px;">
-            <button onClick="hidePrivacy()" class="intastellarCookieBannerPrivacy-BackButton">Back</button>
+                < div style = "padding: 25px;" >
+                    <button onClick="hidePrivacy()" class="intastellarCookieBannerPrivacy-BackButton">Back</button>
             ${intastellarSolutionsPrivacyPolicy}
-        </div>
-    `;
+        </ >
+                `;
 
     moreContentText.scrollIntoView({
         behavior: "smooth",
@@ -3988,6 +4193,14 @@ function learnMore(e) {
             e.innerHTML = "Скрыть детали";
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "sv" || intastellarCookieLanguage === "sv-SE") {
             e.innerHTML = "Dölj detaljer";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "af" || intastellarCookieLanguage === "af-ZA") {
+            e.innerHTML = "Versteek besonderhede";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
+            e.innerHTML = "세부정보 숨기기";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
+            e.innerHTML = "Piilota yksityiskohdat";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no" || intastellarCookieLanguage === "no-NO") {
+            e.innerHTML = "Skjul detaljer";
         }
 
         document.querySelector(".intReadMore").scrollIntoView({
@@ -4017,6 +4230,10 @@ function learnMore(e) {
             e.innerHTML = "Показать детали";
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "sv" || intastellarCookieLanguage === "sv-SE") {
             e.innerHTML = "Visa detaljer";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "af" || intastellarCookieLanguage === "af-ZA") {
+            e.innerHTML = "Wys besonderhede";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
+            e.innerHTML = "세부정보 표시";
         }
 
         document.querySelector(".intastellarCookieConstents__contentC").scrollIntoView({
