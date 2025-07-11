@@ -492,6 +492,19 @@ const settingsMessagesLanguages = {
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International 개인정보 보호정책</button>
     ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
+    estonian: `<h3 style="    font-size: 25px;">Sa oled kontrolli all</h3>
+    <p>Meie ja meie äripartnerid kasutame tehnoloogiaid, sealhulgas küpsiseid, et koguda teavet teie kohta erinevatel eesmärkidel, sealhulgas:</p>
+    <ol>
+        <li>Funktsionaalsus</li>
+        <li>Statistika</li>
+        <li>Reklaam</li>
+    </ol>
+    <p>Klikkides "Nõustu", annate nõusoleku kõikidele nendele eesmärkidele. Samuti saate valida, millistele eesmärkidele te nõustute, märkides ruudud eesmärkide kõrval ja klõpsates "Salvesta seaded".</p>
+    <p>Te saate oma nõusoleku igal ajal tagasi võtta, klõpsates veebilehe alumises ${(window?.INTA?.settings.arrange == "ltr") ? "vasakus" : "paremas"} nurgas asuvale väikesele ikoonile.</p>
+    ${generatePolicyUrl('Meie privaatsus- ja küpsiste poliitika')}
+    <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privatsuspoliitika</button>
+    ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")
+        }`,
 
 }
 
@@ -1843,7 +1856,7 @@ if (intastellarCookieLanguage != null) {
 
 
     } else if (intastellarCookieLanguage == "ar" || intastellarCookieLanguage == "ar-SA") {
-        // Afrikaans
+        // Arabic
         settingsMessage = settingsMessagesLanguages.arabic;
         intastellarShowHideDetailsText = "إظهار التفاصيل";
         message =
@@ -1938,6 +1951,100 @@ if (intastellarCookieLanguage != null) {
             </article>
         </section>
     `;
+    } else if (intastellarCookieLanguage == "et" || intastellarCookieLanguage == "et-EE") {
+        // Estonian
+        settingsMessage = settingsMessagesLanguages.estonian;
+        intastellarShowHideDetailsText = "Näita üksikasju";
+        message =
+            messageWrapStart
+            + messages.estonian
+            + messageWrapEnd
+            + generatePolicyUrl('Meie privaatsus- ja küpsistepoliitika');
+        intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+    ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `
+         <img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">`
+                : ""}
+        ${generateCookieSettingsButton(intastellarSupportedLanguages.estonian.saveSettings, 'Nõustu')}
+        <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+    </section>`;
+        cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
+        ${window.INTA.settings.logo && window.INTA.settings.logo != "" ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
+    ` + generateCookieButtons('Nõustu', 'Keeldu', 'Seaded');
+        moreFooter.innerHTML =
+            `
+        <section class="intastellar_privacyPolicy"></section>
+        <article class="intReadMore">
+            <section class="required">
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.estonian.necessary.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.estonian.necessary.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_requiredCookieList)
+            }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.estonian.functional.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.estonian.functional.description}</p>
+                <article class="intaCookieListOverview">
+                    ${listAllCookies(inta_functionalCookieList)
+            }
+                </article>  
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.estonian.statisic.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.estonian.statisic.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_statisticCookieList)
+            }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.estonian.marketing.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.estonian.marketing.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_marketingCookieList)
+            }
+                </article>
+            </section>
+        </article>
+        <article class="intCookieSetting__form">
+                <section class="intastellarSettings__control">
+                    <label class="intSettingDisabled checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.estonian.necessary.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.estonian.functional.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.estonian.statisic.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.estonian.marketing.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+            </article>`;
     } else {
         /* Default */
         settingsMessage = settingsMessagesLanguages.danish;
@@ -2453,6 +2560,9 @@ onWindowLoad(function () {
         } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
             settingsSaveLang.necessaryCookiesText = "거부";
             settingsSaveLang.saveSettingsText = "저장";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "et" || intastellarCookieLanguage === "et-EE") {
+            settingsSaveLang.necessaryCookiesText = "Keeldu";
+            settingsSaveLang.saveSettingsText = "Salvesta seaded";
         } else {
             settingsSaveLang.necessaryCookiesText = "Afvis";
             settingsSaveLang.saveSettingsText = "Gem";

@@ -563,6 +563,25 @@ const intastellarSupportedLanguages = {
             title: "마케팅",
             description: "우리는 선택된 파트너의 웹 기술(쿠키 포함)을 사용하여 웹사이트와 소셜 미디어에서 귀하에게 맞춤형 콘텐츠와 광고를 표시합니다. 이 콘텐츠는 귀하의 사용 행동에 따라 선택되고 표시됩니다. 광고 또는 마케팅 쿠키는 방문자에게 관련 광고와 마케팅 캠페인을 제공하는 데 사용됩니다. 이러한 쿠키는 다양한 웹사이트에서 방문자를 추적하고 개인화된 광고를 제공하기 위해 정보를 수집합니다."
         }
+    },
+    estonian: {
+        saveSettings: "Keeldu",
+        necessary: {
+            title: "Nõutav", //"Necessary Cookies:",
+            description: "Nõutavad veebitehnoloogiad ja küpsised muudavad meie veebisaidi tehniliselt kättesaadavaks ja kasutatavaks. See kehtib põhiliste funktsioonide kohta, nagu veebisaidil navigeerimine, õige kuvamine teie veebibrauseris või teie nõusoleku küsimine. Ilma nende veebitehnoloogiate ja küpsisteta meie veebisait ei tööta.",
+        },
+        functional: {
+            title: "Funktsionaalne",
+            description: "Funktsionaalsed küpsised võimaldavad salvestada teavet, mis muudab veebisaidi välimust või käitumist. Näiteks teie eelistatud keel või piirkond."
+        },
+        statisic: {
+            title: "Statistika",
+            description: "Soovime pidevalt parandada meie veebisaitide kasutatavust ja jõudlust. Selleks kasutame analüüsitehnoloogiaid (sealhulgas küpsiseid), mis mõõdavad ja hindavad anonüümselt, milliseid funktsioone ja sisu meie veebisaitidel kasutatakse, kuidas ja kui sageli. Selle alusel saame oma veebisaite kasutajatele paremaks muuta."
+        },
+        marketing: {
+            title: "Turundus",
+            description: "Kasutame valitud partnerite veebitehnoloogiaid (ka küpsiseid), et näidata teile sisu ja reklaame, mis on spetsiaalselt teie jaoks kohandatud veebisaitidel ja sotsiaalmeedias. See sisu valitakse ja kuvatakse vastavalt teie kasutuskäitumisele. Reklaami- või turundusküpsiseid kasutatakse külastajatele asjakohaste reklaamide ja turunduskampaaniate pakkumiseks. Need küpsised jälgivad külastajaid erinevatel veebisaitidel ja koguvad teavet isikupärastatud reklaamide esitamiseks."
+        }
     }
 }
 
