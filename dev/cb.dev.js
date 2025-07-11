@@ -2338,6 +2338,12 @@ onWindowLoad(function () {
             settingsSaveLang.necessaryCookiesText = "رفض";
             settingsSaveLang.saveSettingsText = "حفظ الإعدادات";
 
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "af" || intastellarCookieLanguage === "af-ZA") {
+            settingsSaveLang.necessaryCookiesText = "Afwys";
+            settingsSaveLang.saveSettingsText = "Stoor instellings";
+        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
+            settingsSaveLang.necessaryCookiesText = "거부";
+            settingsSaveLang.saveSettingsText = "저장";
         } else {
             settingsSaveLang.necessaryCookiesText = "Afvis";
             settingsSaveLang.saveSettingsText = "Gem";
