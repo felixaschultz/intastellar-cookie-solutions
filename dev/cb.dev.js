@@ -4170,10 +4170,10 @@ function showPrivacy() {
     moreContentText.style.borderBottom = "1px solid #c4c4c4"
     moreContentText.style.textAlign = "left";
     moreContentText.innerHTML = `
-                < div style = "padding: 25px;" >
+                <div style = "padding: 25px;">
                     <button onClick="hidePrivacy()" class="intastellarCookieBannerPrivacy-BackButton">Back</button>
             ${intastellarSolutionsPrivacyPolicy}
-        </ >
+        </div>
                 `;
 
     moreContentText.scrollIntoView({
