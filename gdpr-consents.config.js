@@ -1,4 +1,5 @@
 window.INTA = {
+    dev: true,
     policy_link: {
         target: "_blank",
         url: "https://www.intastellarsolutions.com/about/legal/privacy"
