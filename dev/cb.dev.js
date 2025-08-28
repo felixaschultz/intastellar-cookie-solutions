@@ -2676,11 +2676,21 @@ onWindowLoad(function () {
                     'ad_storage': 'granted',
                     'ad_user_data': 'granted',
                 })
+                window.clarity('consentV2', {
+                    ad_storage: "denied",
+                    analytics_storage: "granted"
+                });
                 accepted.push("staticsticCookies");
             } else if (!StaticsCheckBox?.checked) {
                 gtag('consent', 'update', {
                     'analytics_storage': 'denied',
                 })
+
+                window.clarity('consentV2', {
+                    ad_storage: "denied",
+                    analytics_storage: "denied"
+                });
+
                 const index = accepted.indexOf("staticsticCookies");
                 if (index > -1) { // only splice array when item is found
                     accepted.splice(index, 1); // 2nd parameter means remove one item only
@@ -2698,6 +2708,10 @@ onWindowLoad(function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'granted'
                 });
+                window.clarity('consentV2', {
+                    ad_storage: "granted",
+                    analytics_storage: "denied"
+                });
                 accepted.push("advertisementCookies");
             } else if (!MarketingCheckBox?.checked || intastellar) {
                 window.uetq.push('consent', 'update', {
@@ -2710,6 +2724,12 @@ onWindowLoad(function () {
                     'ad_user_data': 'denied',
                     'ad_personalization': 'denied',
                 });
+
+                window.clarity('consentV2', {
+                    ad_storage: "denied",
+                    analytics_storage: "denied"
+                });
+
                 const index = accepted.indexOf("advertisementCookies");
                 if (index > -1) { // only splice array when item is found
                     accepted.splice(index, 1); // 2nd parameter means remove one item only
@@ -3010,6 +3030,10 @@ onWindowLoad(function () {
                         advertisement: false,
                         functionality: false,
                     }]);
+                    window.clarity('consentV2', {
+                        ad_storage: "denied",
+                        analytics_storage: "denied"
+                    });
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
                     document.querySelector("#functional").checked = false;
@@ -3065,6 +3089,10 @@ onWindowLoad(function () {
                     });
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
+                    });
+                    window.clarity('consentV2', {
+                        ad_storage: "granted",
+                        analytics_storage: "granted"
                     });
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
@@ -3202,6 +3230,10 @@ onWindowLoad(function () {
                         advertisement: false,
                         functionality: false,
                     }]);
+                    window.clarity('consentV2', {
+                        ad_storage: "denied",
+                        analytics_storage: "denied"
+                    });
 
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     /*window.location.reload();*/
@@ -3264,6 +3296,11 @@ onWindowLoad(function () {
                         advertisement: true,
                         functionality: true,
                     }]);
+
+                    window.clarity('consentV2', {
+                        ad_storage: "granted",
+                        analytics_storage: "granted"
+                    });
 
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     updateConsents("all");
@@ -4608,6 +4645,10 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
+        window.clarity('consentV2', {
+            ad_storage: "granted",
+            analytics_storage: "denied"
+        });
         window._hsp.push(['doNotTrack', false]);
 
         /* window.allScripts.map((script) => {
@@ -4635,6 +4676,10 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
         });
+        window.clarity('consentV2', {
+            ad_storage: "denied",
+            analytics_storage: "denied"
+        });
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -4656,6 +4701,11 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
 
+        window.clarity('consentV2', {
+            ad_storage: "denied",
+            analytics_storage: "denied"
+        });
+
         window._hsp.push(['doNotTrack', false]);
         /* window.allScripts.map((script) => {
             if (script.type == "functional") {
@@ -4673,7 +4723,10 @@ function saveINTCookieSettings(consent, type = null) {
     } else {
         window._hsp.push(['doNotTrack']);
         window._hsp.push(['revokeCookieConsent']);
-
+        window.clarity('consentV2', {
+            ad_storage: "denied",
+            analytics_storage: "denied"
+        });
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
         })
@@ -4701,6 +4754,10 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
         window._hsp.push(['doNotTrack', false]);
+        window.clarity('consentV2', {
+            ad_storage: "denied",
+            analytics_storage: "granted"
+        });
 
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
@@ -4728,6 +4785,10 @@ function saveINTCookieSettings(consent, type = null) {
 
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
+        });
+        window.clarity('consentV2', {
+            ad_storage: "denied",
+            analytics_storage: "denied"
         });
 
         /* window.allScripts.map((script) => {

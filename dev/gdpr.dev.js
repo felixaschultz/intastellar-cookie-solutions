@@ -2172,7 +2172,10 @@ if (window.INTA?.settings?.hubspotId) {
 if (intaCookieConsents?.advertisementCookies !== "checked") {
     fbq('consent', 'revoke');
 }
-window.clarity('consent', false);
+window.clarity('consentV2', {
+    ad_storage: "denied",
+    analytics_storage: "denied"
+});
 
 if (!window._gtagDefaultFired) {
     gtag('consent', 'default', {
@@ -2203,6 +2206,11 @@ if (intaCookieConsents?.advertisementCookies) {
     window.uetq.push('consent', 'update', {
         'ad_storage': 'granted'
     });
+
+    window.clarity('consentV2', {
+        ad_storage: "granted",
+        analytics_storage: "denied"
+    });
     fbq('consent', 'grant');
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
@@ -2215,7 +2223,10 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted',
         'url_passthrough': true,
     })
-    window.clarity('consent');
+    window.clarity('consentV2', {
+        ad_storage: "denied",
+        analytics_storage: "granted"
+    });
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
