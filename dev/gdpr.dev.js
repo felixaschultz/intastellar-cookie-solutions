@@ -2234,21 +2234,31 @@ const allScripts = window.allScripts = [
     }
 ];
 
+if (window._intaConsentInitialized) {
+    console.log('Intastellar consent already initialized, skipping...');
+}
 
-if (!window._gtagDefaultFired) {
-    gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'personalization_storage': 'denied',
-        'analytics_storage': 'denied',
-        'functionality_storage': 'denied',
-        'ads_data_redaction': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied',
-        'security_storage': 'granted',
-        'url_passthrough': true,
-        'wait_for_update': 500,
-    });
-    window._gtagDefaultFired = true;
+window._intaConsentInitialized = true;
+
+if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
+    // Only set defaults if GTM hasn't already done so
+    if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'personalization_storage': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'ads_data_redaction': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'security_storage': 'granted',
+            'url_passthrough': true,
+            'wait_for_update': 500,
+        });
+        window._gtagDefaultFired = true;
+    }
+} else if (isGtmMode) {
+    console.log('GTM mode detected - skipping consent default initialization');
 }
 
 if (intaCookieConsents?.advertisementCookies) {
