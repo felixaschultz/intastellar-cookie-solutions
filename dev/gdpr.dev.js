@@ -45,10 +45,67 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
 }
 
+// Add a function to safely call clarity after it's loaded
+function safeClarity(method, data) {
+    if (typeof window.clarity === 'function') {
+        try {
+            window.clarity(method, data);
+        } catch (error) {
+            console.warn('Clarity error:', error);
+        }
+    } else {
+        // Queue the call if clarity isn't loaded yet
+        window.clarity = window.clarity || function () {
+            (window.clarity.q = window.clarity.q || []).push(arguments);
+        };
+        window.clarity(method, data);
+    }
+}
+
+// Replace your current clarity consent calls with safe versions:
+// Instead of:
+// window.clarity('consentV2', {
+//     ad_Storage: "denied",
+//     analytics_Storage: "denied"
+// });
+
+// Use:
+safeClarity('consentV2', {
+    ad_Storage: "denied",
+    analytics_Storage: "denied"
+});
+
+// Add a function to safely call clarity after it's loaded
+function safeClarity(method, data) {
+    if (typeof window.clarity === 'function') {
+        try {
+            window.clarity(method, data);
+        } catch (error) {
+            console.warn('Clarity error:', error);
+        }
+    } else {
+        // Queue the call if clarity isn't loaded yet
+        window.clarity = window.clarity || function () {
+            (window.clarity.q = window.clarity.q || []).push(arguments);
+        };
+        window.clarity(method, data);
+    }
+}
+
+// Replace your current clarity consent calls with safe versions:
+// Instead of:
+// window.clarity('consentV2', {
+//     ad_Storage: "denied",
+//     analytics_Storage: "denied"
+// });
+
+// Use:
+safeClarity('consentV2', {
+    ad_Storage: "denied",
+    analytics_Storage: "denied"
+});
+
 window.uetq = window.uetq || [];
-window.clarity = window.clarity || function () {
-    (window.clarity.q = window.clarity.q || []).push(arguments)
-};
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
@@ -80,11 +137,6 @@ if (window.INTA?.settings?.hubspotId) {
 if (intaCookieConsents?.advertisementCookies !== "checked") {
     fbq('consent', 'revoke');
 }
-
-window.clarity('consentV2', {
-    ad_Storage: "denied",
-    analytics_Storage: "denied"
-});
 
 const IntastellarCookieConsent = {
     renew: function () {
@@ -2213,10 +2265,11 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
 
-    window.clarity('consentV2', {
+    safeClarity('consentV2', {
         ad_Storage: "granted",
         analytics_Storage: "denied"
     });
+
     fbq('consent', 'grant');
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
@@ -2229,7 +2282,7 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted',
         'url_passthrough': true,
     })
-    window.clarity('consentV2', {
+    safeClarity('consentV2', {
         ad_Storage: "denied",
         analytics_Storage: "granted"
     });
