@@ -80,8 +80,8 @@ if (intaCookieConsents?.advertisementCookies !== "checked") {
 }
 
 window.clarity('consentV2', {
-    ad_storage: "denied",
-    analytics_storage: "denied"
+    ad_Storage: "denied",
+    analytics_Storage: "denied"
 });
 
 const IntastellarCookieConsent = {
@@ -2212,8 +2212,8 @@ if (intaCookieConsents?.advertisementCookies) {
     });
 
     window.clarity('consentV2', {
-        ad_storage: "granted",
-        analytics_storage: "denied"
+        ad_Storage: "granted",
+        analytics_Storage: "denied"
     });
     fbq('consent', 'grant');
     // Enable ads
@@ -2228,8 +2228,8 @@ if (intaCookieConsents?.staticsticCookies) {
         'url_passthrough': true,
     })
     window.clarity('consentV2', {
-        ad_storage: "denied",
-        analytics_storage: "granted"
+        ad_Storage: "denied",
+        analytics_Storage: "granted"
     });
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
