@@ -37,6 +37,53 @@ let intaConsentsObjectVariable = {
     domain: window.location.host,
     sharingDomains: [],
 }
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+if (typeof fbq === "undefined" || typeof fbq === "null") {
+    function fbq() { }
+}
+
+window.uetq = window.uetq || [];
+window.clarity = window.clarity || function () { };
+window.uetq.push('consent', 'default', {
+    'ad_storage': 'denied'
+});
+window.disableHubSpotCookieBanner = true;
+var _hsp = (window._hsp = window._hsp || []);
+/* _hsp.push(['doNotTrack']);
+_hsp.push(['revokeCookieConsent']); */
+window._hsp.push([
+    'setHubSpotCookieConsent',
+    {
+        'analytics': intaCookieConsents?.staticsticCookies === "checked",
+        'advertisement': intaCookieConsents?.advertisementCookies === "checked",
+        'functional': intaCookieConsents?.functionalCookies === "checked",
+    }
+]);
+
+/* window._hsp.push(['_setDomainName', window.location.host]);
+if (window.INTA?.settings?.hubspotId) {
+    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
+    window._hsp.push(['_trackPageview']);
+    window._hsp.push(['_trackPageLoadTime']);
+    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
+    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
+    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
+    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
+    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
+} */
+
+if (intaCookieConsents?.advertisementCookies !== "checked") {
+    fbq('consent', 'revoke');
+}
+
+window.clarity('consentV2', {
+    ad_storage: "denied",
+    analytics_storage: "denied"
+});
+
 const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
@@ -2132,50 +2179,7 @@ const allScripts = window.allScripts = [
         ]
     }
 ];
-function gtag() {
-    dataLayer.push(arguments);
-}
-if (typeof fbq === "undefined" || typeof fbq === "null") {
-    function fbq() { }
-}
 
-window.uetq = window.uetq || [];
-window.clarity = window.clarity || function () { };
-window.uetq.push('consent', 'default', {
-    'ad_storage': 'denied'
-});
-window.disableHubSpotCookieBanner = true;
-var _hsp = (window._hsp = window._hsp || []);
-/* _hsp.push(['doNotTrack']);
-_hsp.push(['revokeCookieConsent']); */
-window._hsp.push([
-    'setHubSpotCookieConsent',
-    {
-        'analytics': intaCookieConsents?.staticsticCookies === "checked",
-        'advertisement': intaCookieConsents?.advertisementCookies === "checked",
-        'functional': intaCookieConsents?.functionalCookies === "checked",
-    }
-]);
-
-/* window._hsp.push(['_setDomainName', window.location.host]);
-if (window.INTA?.settings?.hubspotId) {
-    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
-    window._hsp.push(['_trackPageview']);
-    window._hsp.push(['_trackPageLoadTime']);
-    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
-    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
-    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
-    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
-    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
-} */
-
-if (intaCookieConsents?.advertisementCookies !== "checked") {
-    fbq('consent', 'revoke');
-}
-window.clarity('consentV2', {
-    ad_storage: "denied",
-    analytics_storage: "denied"
-});
 
 if (!window._gtagDefaultFired) {
     gtag('consent', 'default', {
