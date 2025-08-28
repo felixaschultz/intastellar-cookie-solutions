@@ -3030,10 +3030,7 @@ onWindowLoad(function () {
                         advertisement: false,
                         functionality: false,
                     }]);
-                    window.clarity('consentV2', {
-                        ad_storage: "denied",
-                        analytics_storage: "denied"
-                    });
+                    window.clarity('consent', false);
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
                     document.querySelector("#functional").checked = false;
@@ -3230,10 +3227,7 @@ onWindowLoad(function () {
                         advertisement: false,
                         functionality: false,
                     }]);
-                    window.clarity('consentV2', {
-                        ad_storage: "denied",
-                        analytics_storage: "denied"
-                    });
+                    window.clarity('consent', false);
 
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     /*window.location.reload();*/
