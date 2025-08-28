@@ -2790,6 +2790,10 @@ onWindowLoad(function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'granted'
                 });
+                window.clarity('consentV2', {
+                    ad_Storage: "granted",
+                    analytics_Storage: "granted"
+                });
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
 
                 window._hsp.push(['setHubSpotConsent', {
@@ -2863,6 +2867,10 @@ onWindowLoad(function () {
                     advertisement: true,
                     functionality: true,
                 }]);
+                window.clarity('consentV2', {
+                    ad_Storage: "granted",
+                    analytics_Storage: "granted"
+                });
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 updateConsents("all");
                 /*window.location.reload();*/
@@ -2921,6 +2929,10 @@ onWindowLoad(function () {
                     advertisement: false,
                     functionality: false,
                 }]);
+                window.clarity('consentV2', {
+                    ad_Storage: "granted",
+                    analytics_Storage: "granted"
+                });
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 /*window.location.reload();*/
 
