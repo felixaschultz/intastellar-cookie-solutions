@@ -26,6 +26,7 @@ const FunctionalCheckbox = document.querySelector("#functional");
 const StaticsCheckBox = document.querySelector("#statics");
 const MarketingCheckBox = document.querySelector("#marketing");
 let poweredBy = "";
+window.dataLayer = window.dataLayer || [];
 let intaConsentsObjectVariable = {
     consents: {
         staticsticCookies: false,
