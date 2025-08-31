@@ -9,7 +9,7 @@ window.INTA = {
         logo: "https://www.intastellarsolutions.com/assets/logos/intastellar-new-planet.svg",
         /* color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)", */
         /* color: "#c33333", */
-        color: "#e2d700ff",
+        color: "#197da1ff",
         text: false,
         language: "auto",
         design: "floating",

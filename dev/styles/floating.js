@@ -252,7 +252,7 @@ const messageWrapStart = "<div class='intastellarCookie-settings__contentConatin
 const messageWrapEnd = "</p></div>";
 
 const settingsMessagesLanguages = {
-    danish: `<h3 style="    font-size: 25px;">Du bestemmer selv over dine data!</h3>
+    danish: `<h3 class="intastellarconsents-heading">Du bestemmer selv over dine data!</h3>
     ${generatePoweredBy()}
     <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
     <ol>
@@ -264,7 +264,7 @@ const settingsMessagesLanguages = {
     Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i ${(window?.INTA?.settings.arrange == "ltr") ? "venstre" : "højre"} hjørne af hjemmesiden.</p>
     ${generatePolicyUrl('Vores privat og cookie politik')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")}`,
-    german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
+    german: `<h3 class="intastellarconsents-heading">Sie haben die Kontrolle über Ihre Daten</h3>
     <p>Wir und unsere Geschäftspartner nutzen Technologien wie Cookies dazu, personenbezogene Informationen für verschiedene Zwecke zu sammeln, darunter:</p>
     <ol>
         <li>Funktion</li>
@@ -276,7 +276,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('Unsere Datenschutz Erklährung und Cookie politik')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    english: `<h3 style="    font-size: 25px;">You´re in control</h3>
+    english: `<h3 class="intastellarconsents-heading">You´re in control</h3>
     <p>We and our trusted partners use technologies, such as cookies, to collect information for various purposes, including:</p>
     <ol>
         <li>Functionality</li>
@@ -289,7 +289,7 @@ const settingsMessagesLanguages = {
     
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    spanish: `<h3 style="    font-size: 25px;">Tienes el control</h3>
+    spanish: `<h3 class="intastellarconsents-heading">Tienes el control</h3>
     <p>Nosotros y nuestros socios comerciales utilizamos tecnologías, incluidas las cookies, para recopilar información sobre usted con diversos fines, incluidos:</p>
     <ol>
         <li>Funcional</li>
@@ -302,7 +302,7 @@ const settingsMessagesLanguages = {
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidad</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    french: `<h3 style="    font-size: 25px;">Vous êtes aux commandes</h3>
+    french: `<h3 class="intastellarconsents-heading">Vous êtes aux commandes</h3>
     <p>Nous et nos partenaires commerciaux utilisons des technologies, y compris des cookies, pour collecter des informations vous concernant à diverses fins, notamment:</p>
     <ol>
         <li>Fonctionnel</li>
@@ -314,7 +314,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('Notre politique de confidentialité et de cookies')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    swedish: `<h3 style="    font-size: 25px;">Du har kontrollen</h3>
+    swedish: `<h3 class="intastellarconsents-heading">Du har kontrollen</h3>
     <p>Vi och våra affärspartners använder teknik, inklusive cookies, för att samla in information om dig för olika ändamål, inklusive:</p>
     <ol>
         <li>Funktionell</li>
@@ -327,7 +327,7 @@ const settingsMessagesLanguages = {
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International integritetspolicy</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    norwegian: `<h3 style="    font-size: 25px;">Du har kontrollen</h3>
+    norwegian: `<h3 class="intastellarconsents-heading">Du har kontrollen</h3>
     <p>Vi og våre forretningspartnere bruker teknologi, inkludert informasjonskapsler, for å samle inn informasjon om deg for ulike formål, inkludert:</p>
     <ol>
         
@@ -340,7 +340,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('Vår personvern- og informasjonskapsler')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    finnish: `<h3 style="    font-size: 25px;">Olet ohjaimissa</h3>
+    finnish: `<h3 class="intastellarconsents-heading">Olet ohjaimissa</h3>
     <p>Me ja liikekumppanimme käytämme teknologioita, mukaan lukien evästeet, kerätäksemme tietoja sinusta eri tarkoituksiin, mukaan lukien:</p>
     <ol>
         <li>Toiminnallinen</li>
@@ -352,7 +352,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('Tietosuojakäytäntömme ja evästekäytäntömme')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    dutch: `<h3 style="    font-size: 25px;">U bent in controle</h3>
+    dutch: `<h3 class="intastellarconsents-heading">U bent in controle</h3>
     <p>Wij en onze zakenpartners gebruiken technologieën, waaronder cookies, om informatie over u te verzamelen voor verschillende doeleinden, waaronder:</p>
     <ol>
         <li>Functioneel</li>
@@ -364,7 +364,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('Ons privacy- en cookiebeleid')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    italian: `<h3 style="    font-size: 25px;">Sei al comando</h3>
+    italian: `<h3 class="intastellarconsents-heading">Sei al comando</h3>
     <p>Noi e i nostri partner commerciali utilizziamo tecnologie, tra cui i cookie, per raccogliere informazioni su di te per vari scopi, tra cui:</p>
     <ol>
         <li>Funzionale</li>
@@ -377,7 +377,7 @@ const settingsMessagesLanguages = {
     
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    portuguese: `<h3 style="    font-size: 25px;">Você está no controle</h3>
+    portuguese: `<h3 class="intastellarconsents-heading">Você está no controle</h3>
     <p>Nós e nossos parceiros comerciais usamos tecnologias, incluindo cookies, para coletar informações sobre você para diversos fins, incluindo:</p>
     <ol>
         <li>Funcional</li>
@@ -389,7 +389,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('Nossa política de privacidade e cookies')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    russian: `<h3 style="    font-size: 25px;">Вы в контроле</h3>
+    russian: `<h3 class="intastellarconsents-heading">Вы в контроле</h3>
     <p>Мы и наши деловые партнеры используем технологии, включая файлы cookie, для сбора информации о вас для различных целей, включая:</p>
     <ol>
         <li>Функциональный</li>
@@ -402,7 +402,7 @@ const settingsMessagesLanguages = {
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International политика конфиденциальности</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    polish: `<h3 style="    font-size: 25px;">Ty decydujesz o swoich danych</h3>
+    polish: `<h3 class="intastellarconsents-heading">Ty decydujesz o swoich danych</h3>
     <p>My i nasi partnerzy biznesowi wykorzystujemy technologie, w tym pliki cookie, do zbierania informacji o Tobie w różnych celach, w tym:</p>
     <ol>
         <li>Funkcjonalność</li>
@@ -415,7 +415,7 @@ const settingsMessagesLanguages = {
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International polityka prywatności</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    afrikaans: `<h3 style="    font-size: 25px;">Jy is in beheer</h3>
+    afrikaans: `<h3 class="intastellarconsents-heading">Jy is in beheer</h3>
     <p>Ons en ons sakevennote gebruik tegnologieë, insluitend koekies, om inligting oor jou vir verskillende doeleindes in te samel, insluitend:</p>
     <ol>
         <li>Funksionaliteit</li>
@@ -428,7 +428,7 @@ const settingsMessagesLanguages = {
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privaatheidsbeleid</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    arabic: `<h3 style="    font-size: 25px;">أنت المتحكم</h3>
+    arabic: `<h3 class="intastellarconsents-heading">أنت المتحكم</h3>
     <p>نحن وشركاؤنا التجاريون نستخدم تقنيات، بما في ذلك ملفات تعريف الارتباط، لجمع المعلومات عنك لأغراض مختلفة، بما في ذلك:</p>
     <ol>
         <li>الوظائف</li>
@@ -440,7 +440,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('سياسة الخصوصية وملفات تعريف الارتباط الخاصة بنا')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    greek: `<h3 style="    font-size: 25px;">Είστε σε έλεγχο</h3>
+    greek: `<h3 class="intastellarconsents-heading">Είστε σε έλεγχο</h3>
     <p>Εμείς και οι επιχειρηματικοί μας συνεργάτες χρησιμοποιούμε τεχνολογίες, όπως τα cookies, για να συλλέγουμε πληροφορίες για
     εσάς για διάφορους σκοπούς, συμπεριλαμβανομένων:</p>
     <ol>
@@ -454,7 +454,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('Η Πολιτική Απορρήτου και Cookies μας')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    chinese: `<h3 style="    font-size: 25px;">你掌控一切</h3>
+    chinese: `<h3 class="intastellarconsents-heading">你掌控一切</h3>
     <p>我们和我们的商业伙伴使用技术，包括 cookies，收集关于您的信息用于各种目的，包括：</p>
     <ol>
         <li>功能性</li>
@@ -466,7 +466,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('我们的隐私和 Cookie 政策')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    japanese: `<h3 style="    font-size: 25px;">あなたがコントロール</h3>
+    japanese: `<h3 class="intastellarconsents-heading">あなたがコントロール</h3>
     <p>私たちと私たちのビジネスパートナーは、クッキーなどの技術を使用して、あなたに関する情報をさまざまな目的で収集しています。これには以下が含まれます：</p>
     <ol>
         <li>機能性</li>
@@ -479,7 +479,7 @@ const settingsMessagesLanguages = {
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International プライバシーポリシー</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    korean: `<h3 style="    font-size: 25px;">당신이 통제합니다</h3>
+    korean: `<h3 class="intastellarconsents-heading">당신이 통제합니다</h3>
     <p>우리는 우리의 비즈니스 파트너와 함께 쿠키와 같은 기술을 사용하여 다양한 목적을 위해 귀하에 대한 정보를 수집합니다. 여기에는 다음이 포함됩니다:</p>
     <ol>
         <li>기능성</li>
@@ -491,7 +491,7 @@ const settingsMessagesLanguages = {
     ${generatePolicyUrl('우리의 개인정보 보호정책 및 쿠키 정책')}
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
-    estonian: `<h3 style="    font-size: 25px;">Sa oled kontrolli all</h3>
+    estonian: `<h3 class="intastellarconsents-heading">Sa oled kontrolli all</h3>
     <p>Meie ja meie äripartnerid kasutame tehnoloogiaid, sealhulgas küpsiseid, et koguda teavet teie kohta erinevatel eesmärkidel, sealhulgas:</p>
     <ol>
         <li>Funktsionaalsus</li>
