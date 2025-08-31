@@ -269,9 +269,17 @@ const intastellarDevMode = (function () {
 })();
 
 const intastellarCreateBanner = document.createElement("script");
+
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+if (window.INTA.settings.design === "floating") {
+    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+}
 if (intastellarDevMode) {
-    intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = "../../dev/styles/floating.js";
+    } else {
+        intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    }
 }
 // Adding the script to the head
 setTimeout(() => {
@@ -2013,7 +2021,8 @@ const int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function (en
 const cookieBannerStyles = {
     banner: "banner.css",
     bannerV2: "bannerV2.css",
-    overlay: "overlay.css"
+    overlay: "overlay.css",
+    floating: "floating.css"
 };
 
 window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
