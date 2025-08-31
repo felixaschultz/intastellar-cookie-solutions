@@ -11,8 +11,8 @@ window.INTA = {
         /* color: "#c33333", */
         color: "#e2000f",
         text: false,
-        language: "korean",
-        design: "overlay",
+        language: "auto",
+        design: "bannerV2",
         requiredCookies: [
             {
                 cookie: "region",
