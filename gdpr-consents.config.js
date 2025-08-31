@@ -9,7 +9,7 @@ window.INTA = {
         logo: "https://www.intastellarsolutions.com/assets/logos/intastellar-new-planet.svg",
         /* color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)", */
         /* color: "#c33333", */
-        color: "#e2000f",
+        color: "#e2d700ff",
         text: false,
         language: "auto",
         design: "floating",
@@ -30,7 +30,7 @@ window.INTA = {
             "intastellarsolutions.com"
         ],
         gtagId: "G-XDDJRGFS76",
-        arrange: "ltr",
+        arrange: "rtl",
         styleSheets: [
             "https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;600;700;800&display=swap",
             "https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;900&display=swap"
