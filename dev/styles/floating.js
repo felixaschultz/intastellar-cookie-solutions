@@ -146,8 +146,8 @@ if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" ||
 moreSettings.setAttribute("class", "intastellarCookieConstents");
 moreSettingsContent.setAttribute("class", "intastellarCookieConstents__content");
 
-if (window.INTA.settings.arrange == "ltr") {
-    moreSettingsContent.classList.add("--left");
+if (window.INTA.settings.arrange == "rtl") {
+    moreSettingsContent.setAttribute("class", "intastellarCookieConstents__content --right");
 }
 
 moreintHeader.setAttribute("class", "intastellarCookieConstents__content-intHeader");
@@ -213,12 +213,12 @@ function setIntastellarPartnerDomain() {
 function generatePoweredBy() {
     if (window.location.host.indexOf("intastellarsolutions") == -1) {
         let intastellarLogo = intastellarLogoLight;
-        if (window.INTA.settings.design == "bannerV2") {
+        if (window.INTA.settings.design == "bannerV2" || window.INTA.settings.design == "floating") {
             intastellarLogo = intastellarLogoDark;
         }
         poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Consents Solutions'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='" + intastellarLogo + "' alt='Intastellar Solutions, International'></a></span>";
     }
-    return `<section class="intSettingsPoweredBy" > ${poweredBy}</section>`;
+    return `${poweredBy}`;
 }
 
 /* - - - Set the intastellarCookieLanguageuage dependent messages */
@@ -249,6 +249,7 @@ const messageWrapEnd = "</p></div>";
 
 const settingsMessagesLanguages = {
     danish: `<h3 style="    font-size: 25px;">Du bestemmer selv over dine data!</h3>
+    ${generatePoweredBy()}
     <p>Vi og vores samarbejdspartnere bruger teknologier, herunder cookies, til at indsamle oplysninger om dig til forskellige formål, herunder:</p>
     <ol>
         <li>Funktion</li>
