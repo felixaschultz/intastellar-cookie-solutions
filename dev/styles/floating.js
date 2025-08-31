@@ -155,6 +155,7 @@ moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer");
 
 if (window.INTA.settings.arrange == "rtl") {
     moreFooter.setAttribute("class", "intastellarCookieConstents__content-footer --left");
+    moreSettings.setAttribute("dir", "rtl");
 }
 
 moreContentText.setAttribute("class", "intastellarCookieConstents__content-main");;
