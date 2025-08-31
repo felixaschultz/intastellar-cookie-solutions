@@ -571,7 +571,7 @@ if (intastellarCookieLanguage != null) {
         <section class="intastellar_privacyPolicy"></section>
         <article class="intReadMore">
             <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                
                 <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.danish.necessary.title} <i class="intastellar__arrow"></i></h3>
                 <p>${intastellarSupportedLanguages.danish.necessary.description}</p>
                 <article class="intaCookieListOverview">
@@ -666,7 +666,7 @@ if (intastellarCookieLanguage != null) {
         <section class="intastellar_privacyPolicy"></section>
         <article class="intReadMore">
             <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                
                 <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.german.necessary.title} <i class="intastellar__arrow"></i></h3>
                 <p>${intastellarSupportedLanguages.german.necessary.description}</p>
                 <article class="intaCookieListOverview">
@@ -766,7 +766,7 @@ if (intastellarCookieLanguage != null) {
         <section class="intastellar_privacyPolicy"></section>
         <article class="intReadMore">
             <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                
                 <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.english.necessary.title} <i class="intastellar__arrow"></i></h3>
                 <p>${intastellarSupportedLanguages.english.necessary.description}</p>
                 <article class="intaCookieListOverview">
@@ -863,7 +863,7 @@ if (intastellarCookieLanguage != null) {
         <section class="intastellar_privacyPolicy"></section>
         <article class="intReadMore">
             <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                
                 <h3 class="intaExpandCookieList">
                     ${intastellarSupportedLanguages.spanish.necessary.title} <i class="intastellar__arrow"></i>
                 </h3>
@@ -957,7 +957,7 @@ if (intastellarCookieLanguage != null) {
         <section class="intastellar_privacyPolicy"></section>
         <article class="intReadMore">
             <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                
                 <h3 class="intaExpandCookieList">
                     ${intastellarSupportedLanguages.french.necessary.title} <i class="intastellar__arrow"></i>
                 </h3>
@@ -1054,7 +1054,7 @@ if (intastellarCookieLanguage != null) {
         <section class="intastellar_privacyPolicy"></section>
         <article class="intReadMore">
             <section class="required">
-                <p>ID: ${(getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])).uid : intaConsentsObjectVariable.uid}</p>
+                
                 <h3 class="intaExpandCookieList">
                     ${intastellarSupportedLanguages.swedish.necessary.title} <i class="intastellar__arrow"></i>
                 </h3>
@@ -2502,7 +2502,7 @@ onWindowLoad(function () {
                 if (!intCookieSettingsMore?.classList.contains("--active")) {
                     intCookieSettingsMore?.classList.add("--active");
                     dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
-                    document.querySelector(".intastellarCookie-settings__container").classList.remove("intastellarCookie-settings__container--expand")
+
                 }
             });
         });
