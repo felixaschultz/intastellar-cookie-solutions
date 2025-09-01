@@ -2470,7 +2470,7 @@ onWindowLoad(function () {
 
         if (getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName).indexOf("__inta") == -1) {
             document.querySelector(".intastellarCookieConstents").classList.add("--active");
-            dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+            dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
         }
 
         document.querySelectorAll(".intaExpandCookieList").forEach((btn, i) => {
@@ -2504,7 +2504,7 @@ onWindowLoad(function () {
                 let intCookieSettingsMore = document.querySelector(".intastellarCookieConstents");
                 if (!intCookieSettingsMore?.classList.contains("--active")) {
                     intCookieSettingsMore?.classList.add("--active");
-                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                    dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
                     document.querySelector(".intastellarCookie-settings__container").classList.remove("intastellarCookie-settings__container--expand")
                 }
             });
@@ -2775,7 +2775,7 @@ onWindowLoad(function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
 
                 gtag('consent', 'update', {
                     'ad_storage': 'granted',
@@ -2837,7 +2837,7 @@ onWindowLoad(function () {
                 }
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
                 const intastellarShared = {
                     intaConsentsObjectVariable: intaConsentsObjectVariable,
                     partnerDomain: window?.INTA?.settings.partnerDomain,
@@ -2901,7 +2901,7 @@ onWindowLoad(function () {
 
                 document.querySelector("html").classList.toggle("noScroll");
                 document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
                 const intastellarShared = {
                     intaConsentsObjectVariable: intaConsentsObjectVariable,
                     partnerDomain: window?.INTA?.settings.partnerDomain,
@@ -2976,7 +2976,7 @@ onWindowLoad(function () {
                         let settings = document.querySelector(".intastellarCookieConstents");
                         /* document.querySelector("html").classList.toggle("noScroll"); */
                         settings.classList.toggle("--active");
-                        dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                        dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
                     });
                 })
             }
@@ -3011,7 +3011,7 @@ onWindowLoad(function () {
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                    dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -3078,7 +3078,7 @@ onWindowLoad(function () {
 
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                    dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -3174,7 +3174,7 @@ onWindowLoad(function () {
                         let settings = document.querySelector(".intastellarCookieConstents");
                         document.querySelector("html").classList.toggle("noScroll");
                         settings.classList.add("--active");
-                        dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                        dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
                     });
                 })
             }
@@ -3208,7 +3208,7 @@ onWindowLoad(function () {
                         "";
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                    dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
@@ -3274,7 +3274,7 @@ onWindowLoad(function () {
                     }
                     document.querySelector("html").classList.toggle("noScroll");
                     document.querySelector(".intastellarCookieConstents").classList.toggle("--active");
-                    dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+                    dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
 
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");

@@ -118,13 +118,13 @@ const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
         document.querySelector("html").classList.add("noScroll");
-        dataLayer.push({ 'event': 'cookie_consent_widget_visible' });
+        dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
     },
     remove: function (template) {
         template.classList.remove("--active");
     },
     initialize: function (template) {
-        dataLayer.push({ 'event': 'cookie_consent_widget_initialized' });
+        dataLayer.push({ 'event': 'intastellar_consent_widget_initialized' });
         if (document.readyState === 'complete') {
             if (
                 document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
