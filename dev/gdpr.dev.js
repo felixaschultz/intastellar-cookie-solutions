@@ -124,6 +124,7 @@ const IntastellarCookieConsent = {
         template.classList.remove("--active");
     },
     initialize: function (template) {
+        dataLayer.push({ 'event': 'cookie_consent_widget_initialized' });
         if (document.readyState === 'complete') {
             if (
                 document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
