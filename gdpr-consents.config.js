@@ -1,4 +1,5 @@
 window.INTA = {
+    dev: true,
     policy_link: {
         target: "_blank",
         url: "https://www.intastellarsolutions.com/about/legal/privacy"
@@ -7,11 +8,11 @@ window.INTA = {
         company: "Test Company",
         logo: "https://www.intastellarsolutions.com/assets/logos/intastellar-new-planet.svg",
         /* color: "radial-gradient(circle,rgba(226, 0, 15, 1) 0%,rgba(182, 0, 15, 1) 100%)", */
-        color: "#c33333",
-        /* color: "#e2000f", */
+        /* color: "#c33333", */
+        color: "#197da1ff",
         text: false,
-        language: "english",
-        design: "banner",
+        language: "auto",
+        design: "floating",
         requiredCookies: [
             {
                 cookie: "region",
@@ -34,14 +35,5 @@ window.INTA = {
             "https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;600;700;800&display=swap",
             "https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;900&display=swap"
         ],
-        ccpa: {
-            on: true,
-            url: "https://www.intastellarsolutions.com/about/legal/california-consumer-privacy-act",
-            collection: [
-                "Email",
-                "Name",
-                "Phone number"
-            ]
-        },
     }
 };

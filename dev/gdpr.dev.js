@@ -26,6 +26,7 @@ const FunctionalCheckbox = document.querySelector("#functional");
 const StaticsCheckBox = document.querySelector("#statics");
 const MarketingCheckBox = document.querySelector("#marketing");
 let poweredBy = "";
+window.dataLayer = window.dataLayer || [];
 let intaConsentsObjectVariable = {
     consents: {
         staticsticCookies: false,
@@ -36,6 +37,144 @@ let intaConsentsObjectVariable = {
     uid: Math.random().toString(16).slice(2),
     domain: window.INTA.settings.rootDomain || window.location.host,
     sharingDomains: [],
+}
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+if (window._intaConsentInitialized) {
+    console.log('Intastellar consent already initialized, skipping...');
+}
+
+window._intaConsentInitialized = true;
+
+if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
+    // Only set defaults if GTM hasn't already done so
+    if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'personalization_storage': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'ads_data_redaction': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'security_storage': 'granted',
+            'url_passthrough': true,
+            'wait_for_update': 500,
+        });
+        window._gtagDefaultFired = true;
+    }
+} else if (isGtmMode) {
+    console.log('GTM mode detected - skipping consent default initialization');
+}
+
+if (typeof fbq === "undefined" || typeof fbq === "null") {
+    function fbq() { }
+}
+
+window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
+
+window.clarity('consentv2', {
+    ad_Storage: "denied",
+    analytics_Storage: "denied"
+});
+
+window.uetq = window.uetq || [];
+window.uetq.push('consent', 'default', {
+    'ad_storage': 'denied'
+});
+window.disableHubSpotCookieBanner = true;
+var _hsp = (window._hsp = window._hsp || []);
+/* _hsp.push(['doNotTrack']);
+_hsp.push(['revokeCookieConsent']); */
+window._hsp.push([
+    'setHubSpotCookieConsent',
+    {
+        'analytics': intaCookieConsents?.staticsticCookies === "checked",
+        'advertisement': intaCookieConsents?.advertisementCookies === "checked",
+        'functional': intaCookieConsents?.functionalCookies === "checked",
+    }
+]);
+
+/* window._hsp.push(['_setDomainName', window.location.host]);
+if (window.INTA?.settings?.hubspotId) {
+    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
+    window._hsp.push(['_trackPageview']);
+    window._hsp.push(['_trackPageLoadTime']);
+    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
+    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
+    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
+    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
+    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
+} */
+
+if (intaCookieConsents?.advertisementCookies !== "checked") {
+    fbq('consent', 'revoke');
+}
+
+const IntastellarCookieConsent = {
+    renew: function () {
+        document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        document.querySelector("html").classList.add("noScroll");
+        dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
+    },
+    remove: function (template) {
+        template.classList.remove("--active");
+    },
+    initialize: function (template) {
+        dataLayer.push({ 'event': 'intastellar_consent_widget_initialized' });
+        if (document.readyState === 'complete') {
+            if (
+                document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
+                || window.INTA === undefined
+            ) {
+                // Get the host and remove all subdomains
+                let host = window.location.host;
+                host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
+                // Remove the port if it exists
+                host = host.replace(/:\d+$/, "");
+                const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
+                const configScript = document.createElement("script");
+                configScript.src = intastellarDefaultConfigFile;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", intastellarDefaultConfigFile);
+                xhr.send();
+
+                if (xhr.status === 200) {
+                    document.head.insertBefore(configScript, document.currentScript);
+                }
+            }
+            document.body.append(template);
+        } else {
+            window.addEventListener("load", function () {
+                if (
+                    document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
+                    || window.INTA === undefined
+                ) {
+                    // Get the host and remove all subdomains
+                    let host = window.location.host;
+                    host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
+                    // Remove the port if it exists
+                    host = host.replace(/:\d+$/, "");
+                    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
+                    const configScript = document.createElement("script");
+                    configScript.src = intastellarDefaultConfigFile;
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("GET", intastellarDefaultConfigFile);
+                    xhr.send();
+
+                    if (xhr.status === 200) {
+                        document.head.insertBefore(configScript, document.currentScript);
+                    }
+                }
+                document.body.append(template);
+            })
+        }
+    }
 }
 let scriptTypelang = {};
 let settingsMessage;
@@ -124,13 +263,25 @@ function decodeIntaConsentsObject(number) {
 const intastellarDevMode = (function () {
     return window.location.host === "localhost"
         || window.location.host.indexOf("127.0.0.1") > -1
+        || window.location.host.indexOf("0.0.0.0") > -1
+        || window.location.host.indexOf("192.168.") > -1
+        || window.location.host.indexOf("::1") > -1
+        && window.INTA.dev === true
         ? true : false;
 })();
 
 const intastellarCreateBanner = document.createElement("script");
+
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+if (window.INTA.settings.design === "floating") {
+    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+}
 if (intastellarDevMode) {
-    intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = "../../dev/styles/floating.js";
+    } else {
+        intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    }
 }
 // Adding the script to the head
 setTimeout(() => {
@@ -366,6 +517,158 @@ const intastellarSupportedLanguages = {
             title: "Markkinointi",
             description: "Käytämme valittujen kumppaneiden web-tekniikoita (myös evästeitä) voidaksemme näyttää sinulle sisältöä ja mainoksia, jotka on räätälöity sinulle erityisesti verkkosivustoilla ja sosiaalisissa medioissa. Tämä sisältö valitaan ja näytetään käyttäytymisesi perusteella. Mainos- tai markkinointievästeitä käytetään tarjoamaan vierailijoille relevantteja mainoksia ja markkinointikampanjoita. Nämä evästeet seuraavat vierailijoita sivustoilla ja keräävät tietoja räätälöityjen mainosten tarjoamiseksi."
         }
+    },
+    polish: {
+        saveSettings: "Odrzuć",
+        necessary: {
+            title: "Niezbędne", //"Necessary Cookies:",
+            description: "Niezbędne technologie internetowe i pliki cookie sprawiają, że nasza strona internetowa jest technicznie dostępna i użyteczna dla Ciebie. Dotyczy to podstawowych funkcji, takich jak nawigacja po stronie, prawidłowe wyświetlanie w przeglądarce internetowej lub żądanie Twojej zgody. Bez tych technologii internetowych i plików cookie nasza strona nie działa.",
+        },
+        functional: {
+            title: "Funkcjonalne",
+            description: "Pliki cookie funkcjonalne umożliwiają przechowywanie informacji, które zmieniają wygląd lub działanie strony. Na przykład preferowany język lub region."
+        },
+        statisic: {
+            title: "Statystyki",
+            description: "Stale dążymy do poprawy użyteczności i wydajności naszych stron internetowych. Dlatego korzystamy z technologii analitycznych (w tym plików cookie), które pseudonimizują pomiar i ocenę, które funkcje i treści naszych stron są używane, jak i jak często. Na tej podstawie możemy poprawić nasze strony dla użytkowników."
+        },
+        marketing: {
+            title: "Reklama",
+            description: "Korzystamy z technologii internetowych (w tym plików cookie) od wybranych partnerów, aby móc wyświetlać Ci treści i reklamy specjalnie dostosowane do Ciebie na stronach internetowych i w mediach społecznościowych. Treści te są wybierane i wyświetlane na podstawie Twojego zachowania podczas korzystania z sieci. Pliki cookie reklamowe lub marketingowe są używane do dostarczania odwiedzającym odpowiednich reklam i kampanii marketingowych. Te pliki cookie śledzą odwiedzających na różnych stronach internetowych i zbierają informacje w celu dostarczenia spersonalizowanych reklam."
+        }
+    },
+    chinese: {
+        saveSettings: "拒绝",
+        necessary: {
+            title: "必要的", //"Necessary Cookies:",
+            description: "必要的网络技术和Cookie使我们的网站在技术上对您可访问和可用。这适用于基本的基本功能，例如网站导航、在您的互联网浏览器中的正确显示或请求您的同意。没有这些网络技术和Cookie，我们的网站无法正常工作。",
+        },
+        functional: {
+            title: "功能性",
+            description: "功能性Cookie允许我们存储更改网站外观或行为的信息。例如，您首选的语言或地区。"
+        },
+        statisic: {
+            title: "统计",
+            description: "我们希望不断改善我们网站的可用性和性能。因此，我们使用分析技术（包括Cookie），这些技术以假名方式测量和评估我们网站的哪些功能和内容被使用、如何使用以及使用频率。基于此，我们可以改善我们的网站以满足用户需求。"
+        },
+        marketing: {
+            title: "营销",
+            description: "我们使用来自精选合作伙伴的网络技术（包括Cookie），以便在网站和社交媒体上向您展示特别为您量身定制的内容和广告。这些内容根据您的使用行为进行选择和显示。广告或营销Cookie用于向访问者提供相关的广告和营销活动。这些Cookie在不同的网站上跟踪访问者，并收集信息以提供个性化的广告。"
+        }
+    },
+    japanese: {
+        saveSettings: "拒否",
+        necessary: {
+            title: "必要な", //"Necessary Cookies:",
+            description: "必要なWeb技術とCookieは、当社のWebサイトを技術的にアクセス可能で使用可能にします。これは、Webサイトのナビゲーション、インターネットブラウザでの正しい表示、または同意の要求など、基本的な機能に適用されます。これらのWeb技術とCookieがないと、当社のWebサイトは機能しません。",
+        },
+        functional: {
+            title: "機能的",
+            description: "機能的なCookieは、Webサイトの外観や動作を変更する情報を保存できます。たとえば、お好みの言語や地域などです。"
+        },
+        statisic: {
+            title: "統計",
+            description: "当社は、Webサイトの使いやすさとパフォーマンスを継続的に改善したいと考えています。そのため、分析技術（Cookieを含む）を使用して、当社のWebサイトのどの機能やコンテンツがどのように使用されているかを匿名で測定および評価しています。これに基づいて、ユーザー向けにWebサイトを改善できます。"
+        },
+        marketing: {
+            title: "マーケティング",
+            description: "当社は、選択されたパートナーからのWeb技術（Cookieも含む）を使用して、Webサイトやソーシャルメディア上で特にあなた向けにカスタマイズされたコンテンツや広告を表示します。これらのコンテンツは、あなたの使用行動に基づいて選択および表示されます。広告またはマーケティングCookieは、訪問者に関連する広告やマーケティングキャンペーンを提供するために使用されます。これらのCookieは、異なるWebサイトで訪問者を追跡し、個別化された広告を提供するための情報を収集します。"
+        }
+    },
+    greek: {
+        saveSettings: "Απόρριψη",
+        necessary: {
+            title: "Απαραίτητα", //"Necessary Cookies:",
+            description: "Οι απαραίτητες τεχνολογίες ιστού και τα cookies καθιστούν τον ιστότοπό μας τεχνικά προσβάσιμο και χρήσιμο για εσάς. Αυτό ισχύει για βασικές λειτουργίες όπως η πλοήγηση στον ιστότοπο, η σωστή εμφάνιση στον περιηγητή σας στο διαδίκτυο ή η αίτηση της συγκατάθεσής σας. Χωρίς αυτές τις τεχνολογίες ιστού και cookies, ο ιστότοπός μας δεν λειτουργεί.",
+        },
+        functional: {
+            title: "Λειτουργικά",
+            description: "Τα λειτουργικά cookies επιτρέπουν την αποθήκευση πληροφοριών που αλλάζουν την εμφάνιση ή τη λειτουργία του ιστότοπου. Για παράδειγμα, η προτιμώμενη γλώσσα ή περιοχή σας."
+        },
+        statisic: {
+            title: "Στατιστικά",
+            description: "Θέλουμε να βελτιώνουμε συνεχώς τη χρησιμότητα και την απόδοση των ιστότοπών μας. Για το λόγο αυτό, χρησιμοποιούμε τεχνολογίες ανάλυσης (συμπεριλαμβανομένων των cookies) που μετρούν και αξιολογούν ανώνυμα ποιες λειτουργίες και περιεχόμενο των ιστότοπών μας χρησιμοποιούνται, πώς και πόσο συχνά. Με βάση αυτό, μπορούμε να βελτιώσουμε τους ιστότοπούς για τους χρήστες."
+        },
+        marketing: {
+            title: "Μάρκετινγκ",
+            description: "Χρησιμοποι    ούμε τεχνολογίες ιστού (συμπεριλαμβανομένων των cookies) από επιλεγμένους συνεργάτες για να σας δείχνουμε περιεχόμενο και διαφημίσεις ειδικά προσαρμοσμένες για εσάς σε ιστότοπους και κοινωνικά μέσα. Αυτό το περιεχόμενο επιλέγεται και εμφανίζεται με βάση τη συμπεριφορά χρήσης σας. Τα cookies διαφήμισης ή μάρκετινγκ χρησιμοποιούνται για να παρέχουν στους επισκέπτες σχετικές διαφημίσεις και εκστρατείες μάρκετινγκ. Αυτά τα cookies παρακολουθούν τους επισκέπτες σε διάφορους ιστότοπους και συλλέγουν πληροφορίες για την παροχή εξατομικευμένων διαφημίσεων."
+        }
+    },
+    afrikaans: {
+        saveSettings: "Weier",
+        necessary: {
+            title: "Noodsaaklik", //"Necessary Cookies:",
+            description: "Noodsaaklike webtegnologieë en koekies maak ons webwerf tegnies toeganklik en bruikbaar vir u. Dit geld vir fundamentele basiese funksies soos navigasie op die webwerf, korrekte vertoon in u internetblaaier of versoek om u toestemming. Sonder hierdie webtegnologieë en koekies werk ons webwerf nie.",
+        },
+        functional: {
+            title: "Funksioneel",
+            description: "Funksionele koekies maak dit moontlik om inligting te stoor wat die voorkoms of gedrag van die webwerf verander. Byvoorbeeld, u voorkeurtaal of -streek."
+        },
+        statisic: {
+            title: "Statistiek",
+            description: "Ons wil die bruikbaarheid en prestasie van ons webwerwe voortdurend verbeter. Daarom gebruik ons analise tegnologieë (insluitend koekies) wat pseudoniem meet en evalueer watter funksies en inhoud van ons webwerwe gebruik word, hoe en hoe gereeld. Op hierdie basis kan ons ons webwerwe vir gebruikers verbeter."
+        },
+        marketing: {
+            title: "Bemarking",
+            description: "Ons gebruik webtegnologieë (ook koekies) van geselekte vennote om u inhoud en advertensies te wys wat spesifiek vir u opgestel is op webwerwe en sosiale media. Hierdie inhoud word gekies en vertoon op grond van u gebruiksgedrag. Advertensie- of bemarkingskoekies word gebruik om besoekers relevante advertensies en bemarkingsveldtogte te bied. Hierdie koekies volg besoekers oor verskillende webwerwe en versamel inligting om gepersonaliseerde advertensies te lewer."
+        }
+    },
+    arabic: {
+        saveSettings: "رفض",
+        necessary: {
+            title: "ضروري", //"Necessary Cookies:",
+            description: "تجعل تقنيات الويب وملفات تعريف الارتباط الضرورية موقعنا الإلكتروني متاحًا تقنيًا وقابلًا للاستخدام بالنسبة لك. ينطبق هذا على الوظائف الأساسية الأساسية مثل التنقل في الموقع، والعرض الصحيح في متصفح الإنترنت الخاص بك، أو طلب موافقتك. بدون هذه التقنيات وملفات تعريف الارتباط، لا يعمل موقعنا الإلكتروني.",
+        },
+        functional: {
+            title: "وظيفي",
+            description: "تسمح ملفات تعريف الارتباط الوظيفية بتخزين المعلومات التي تغير مظهر الموقع أو سلوكه. على سبيل المثال، لغتك المفضلة أو منطقتك."
+        },
+        statisic: {
+            title: "إحصائيات",
+            description: "نريد تحسين سهولة استخدام وأداء مواقعنا الإلكترونية باستمرار. لهذا السبب، نستخدم تقنيات التحليل (بما في ذلك ملفات تعريف الارتباط) التي تقيس وتقييم بشكل مجهول أي الميزات والمحتوى من مواقعنا الإلكترونية يتم استخدامه، وكيف ومتى. بناءً على ذلك، يمكننا تحسين مواقعنا الإلكترونية للمستخدمين."
+        },
+        marketing: {
+            title: "تسويق",
+            description: "نستخدم تقنيات الويب (بما في ذلك ملفات تعريف الارتباط) من شركاء مختارين لعرض محتوى وإعلانات مصممة خصيصًا لك على مواقع الويب ووسائل التواصل الاجتماعي. يتم اختيار هذا المحتوى وعرضه بناءً على سلوك استخدامك. تُستخدم ملفات تعريف الارتباط الإعلانية أو التسويقية لتزويد الزوار بإعلانات وحملات تسويقية ذات صلة. تتبع هذه الملفات الزوار عبر مواقع الويب المختلفة وتجمع المعلومات لتقديم إعلانات مخصصة."
+        }
+    },
+    korean: {
+        saveSettings: "거부",
+        necessary: {
+            title: "필수", //"Necessary Cookies:",
+            description: "필수 웹 기술과 쿠키는 웹사이트를 기술적으로 접근 가능하고 사용 가능하게 만듭니다. 이는 웹사이트 탐색, 인터넷 브라우저에서 올바르게 표시 또는 동의 요청과 같은 기본 기능에 적용됩니다. 이러한 웹 기술과 쿠키가 없으면 웹사이트가 작동하지 않습니다.",
+        },
+        functional: {
+            title: "기능적",
+            description: "기능적 쿠키는 웹사이트의 모양이나 동작을 변경하는 정보를 저장할 수 있습니다. 예를 들어, 선호하는 언어나 지역입니다."
+        },
+        statisic: {
+            title: "통계",
+            description: "우리는 웹사이트의 사용 편의성과 성능을 지속적으로 개선하고자 합니다. 이를 위해 분석 기술(쿠키 포함)을 사용하여 웹사이트의 어떤 기능과 콘텐츠가 어떻게, 얼마나 자주 사용되는지를 익명으로 측정하고 평가합니다. 이를 바탕으로 사용자에게 더 나은 웹사이트를 제공할 수 있습니다."
+        },
+        marketing: {
+            title: "마케팅",
+            description: "우리는 선택된 파트너의 웹 기술(쿠키 포함)을 사용하여 웹사이트와 소셜 미디어에서 귀하에게 맞춤형 콘텐츠와 광고를 표시합니다. 이 콘텐츠는 귀하의 사용 행동에 따라 선택되고 표시됩니다. 광고 또는 마케팅 쿠키는 방문자에게 관련 광고와 마케팅 캠페인을 제공하는 데 사용됩니다. 이러한 쿠키는 다양한 웹사이트에서 방문자를 추적하고 개인화된 광고를 제공하기 위해 정보를 수집합니다."
+        }
+    },
+    estonian: {
+        saveSettings: "Keeldu",
+        necessary: {
+            title: "Nõutav", //"Necessary Cookies:",
+            description: "Nõutavad veebitehnoloogiad ja küpsised muudavad meie veebisaidi tehniliselt kättesaadavaks ja kasutatavaks. See kehtib põhiliste funktsioonide kohta, nagu veebisaidil navigeerimine, õige kuvamine teie veebibrauseris või teie nõusoleku küsimine. Ilma nende veebitehnoloogiate ja küpsisteta meie veebisait ei tööta.",
+        },
+        functional: {
+            title: "Funktsionaalne",
+            description: "Funktsionaalsed küpsised võimaldavad salvestada teavet, mis muudab veebisaidi välimust või käitumist. Näiteks teie eelistatud keel või piirkond."
+        },
+        statisic: {
+            title: "Statistika",
+            description: "Soovime pidevalt parandada meie veebisaitide kasutatavust ja jõudlust. Selleks kasutame analüüsitehnoloogiaid (sealhulgas küpsiseid), mis mõõdavad ja hindavad anonüümselt, milliseid funktsioone ja sisu meie veebisaitidel kasutatakse, kuidas ja kui sageli. Selle alusel saame oma veebisaite kasutajatele paremaks muuta."
+        },
+        marketing: {
+            title: "Turundus",
+            description: "Kasutame valitud partnerite veebitehnoloogiaid (ka küpsiseid), et näidata teile sisu ja reklaame, mis on spetsiaalselt teie jaoks kohandatud veebisaitidel ja sotsiaalmeedias. See sisu valitakse ja kuvatakse vastavalt teie kasutuskäitumisele. Reklaami- või turundusküpsiseid kasutatakse külastajatele asjakohaste reklaamide ja turunduskampaaniate pakkumiseks. Need küpsised jälgivad külastajaid erinevatel veebisaitidel ja koguvad teavet isikupärastatud reklaamide esitamiseks."
+        }
     }
 }
 
@@ -556,6 +859,7 @@ const inta_requiredCookieList = [{
         }
     ],
     domains: [
+        window.INTA.settings.rootDomain,
         window.location.host
     ]
 },
@@ -591,7 +895,9 @@ const inta_requiredCookieList = [{
     domains: [
         "intastellarsolutions.com",
         "consents.cdn.intastellarsolutions.com",
-        window.location.host
+        "intastellarconsents.com",
+        window.location.host,
+        window.INTA.settings.rootDomain
     ]
 },
 {
@@ -620,7 +926,8 @@ const inta_requiredCookieList = [{
     ],
     vendor_privacy: "https://automattic.com/privacy/",
     domains: [
-        window.location.host
+        window.location.host,
+        window.INTA.settings.rootDomain
     ]
 },
 {
@@ -637,7 +944,8 @@ const inta_requiredCookieList = [{
     ],
     vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement",
     domains: [
-        window.location.host
+        window.location.host,
+        window.INTA.settings.rootDomain
     ]
 },
 {
@@ -654,7 +962,8 @@ const inta_requiredCookieList = [{
     ],
     vendor_privacy: "https://aws.amazon.com/privacy/",
     domains: [
-        window.location.host
+        window.location.host,
+        window.INTA.settings.rootDomain
     ]
 },
 {
@@ -1059,7 +1368,8 @@ inta_statisticCookieList.push({
     domains: [
         "x.clearbitjs.com",
         "clearbit.com",
-        window.location.host
+        window.location.host,
+        window.INTA.settings.rootDomain
     ],
     vendor_privacy: "https://clearbit.com/privacy"
 });
@@ -1712,7 +2022,9 @@ const int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function (en
 
 const cookieBannerStyles = {
     banner: "banner.css",
-    overlay: "overlay.css"
+    bannerV2: "bannerV2.css",
+    overlay: "overlay.css",
+    floating: "floating.css"
 };
 
 window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
@@ -1736,7 +2048,34 @@ let intastellarCookieLanguage
                                         : window.INTA?.settings?.language == "russian" ? "ru"
                                             : window.INTA?.settings?.language == "swedish" ? "sv"
                                                 : window.INTA?.settings?.language == "norwegian" ? "no"
-                                                    : document.querySelector("html").getAttribute("lang");
+                                                    : window.INTA?.settings?.language == "polish" ? "pl"
+                                                        : window.INTA?.settings?.language == "turkish" ? "tr"
+                                                            : window.INTA?.settings?.language == "arabic" ? "ar"
+                                                                : window.INTA?.settings?.language == "japanese" ? "ja"
+                                                                    : window.INTA?.settings?.language == "korean" ? "ko"
+                                                                        : window.INTA?.settings?.language == "chinese" ? "zh"
+                                                                            : window.INTA?.settings?.language == "ukrainian" ? "uk"
+                                                                                : window.INTA?.settings?.language == "czech" ? "cs"
+                                                                                    : window.INTA?.settings?.language == "hungarian" ? "hu"
+                                                                                        : window.INTA?.settings?.language == "finnish" ? "fi"
+                                                                                            : window.INTA?.settings?.language == "greek" ? "el"
+                                                                                                : window.INTA?.settings?.language == "bulgarian" ? "bg"
+                                                                                                    : window.INTA?.settings?.language == "slovak" ? "sk"
+                                                                                                        : window.INTA?.settings?.language == "slovenian" ? "sl"
+                                                                                                            : window.INTA?.settings?.language == "croatian" ? "hr"
+                                                                                                                : window.INTA?.settings?.language == "lithuanian" ? "lt"
+                                                                                                                    : window.INTA?.settings?.language == "latvian" ? "lv"
+                                                                                                                        : window.INTA?.settings?.language == "estonian" ? "et"
+                                                                                                                            : window.INTA?.settings?.language == "arabic" ? "ar"
+                                                                                                                                : window.INTA?.settings?.language == "malay" ? "ms"
+                                                                                                                                    : window.INTA?.settings?.language == "thai" ? "th"
+                                                                                                                                        : window.INTA?.settings?.language == "vietnamese" ? "vi"
+                                                                                                                                            : window.INTA?.settings?.language == "indonesian" ? "id"
+                                                                                                                                                : window.INTA?.settings?.language == "filipino" ? "tl"
+                                                                                                                                                    : window.INTA?.settings?.language == "hebrew" ? "he"
+                                                                                                                                                        : window.INTA?.settings?.language == "afrikaans" ? "af"
+
+                                                                                                                                                            : document.querySelector("html").getAttribute("lang");
 
 if (document.querySelector("html").getAttribute("lang") == null) {
     intastellarCookieLanguage = "en";
@@ -1777,6 +2116,9 @@ const allScripts = window.allScripts = [
             "([\-\.]poultons+)",
             "([\-\.]chartbeat+)",
             "([\-\.]consensu+)",
+            "([\-\.]clarity+)",
+            "([\-\.]clarity-cdn+)",
+            "([\-\.]vwo+)",
             "([\-\.]ip-only+)",
             "([\-\.]ggpht+)",
             "([\-\.]clearbitjs+)",
@@ -1877,58 +2219,6 @@ const allScripts = window.allScripts = [
         ]
     }
 ];
-function gtag() {
-    dataLayer.push(arguments);
-}
-if (typeof fbq === "undefined" || typeof fbq === "null") {
-    function fbq() { }
-}
-
-window.uetq = window.uetq || [];
-window.clarity = window.clarity || function () { };
-window.uetq.push('consent', 'default', {
-    'ad_storage': 'denied'
-});
-window.disableHubSpotCookieBanner = true;
-var _hsp = (window._hsp = window._hsp || []);
-/* _hsp.push(['doNotTrack']);
-_hsp.push(['revokeCookieConsent']); */
-window._hsp.push([
-    'setHubSpotCookieConsent',
-    {
-        'analytics': intaCookieConsents?.staticsticCookies === "checked",
-        'advertisement': intaCookieConsents?.advertisementCookies === "checked",
-        'functional': intaCookieConsents?.functionalCookies === "checked",
-    }
-]);
-
-/* window._hsp.push(['_setDomainName', window.location.host]);
-if (window.INTA?.settings?.hubspotId) {
-    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
-    window._hsp.push(['_trackPageview']);
-    window._hsp.push(['_trackPageLoadTime']);
-    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
-    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
-    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
-    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
-    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
-} */
-
-fbq('consent', 'revoke');
-window.clarity('consent', false);
-
-gtag('consent', 'default', {
-    'ad_storage': 'denied',
-    'personalization_storage': 'denied',
-    'analytics_storage': 'denied',
-    'functionality_storage': 'denied',
-    'ads_data_redaction': 'denied',
-    'ad_user_data': 'denied',
-    'ad_personalization': 'denied',
-    'security_storage': 'granted',
-    'url_passthrough': true,
-    'wait_for_update': 500,
-});
 
 if (intaCookieConsents?.advertisementCookies) {
     gtag('consent', 'update', {
@@ -1943,6 +2233,12 @@ if (intaCookieConsents?.advertisementCookies) {
     window.uetq.push('consent', 'update', {
         'ad_storage': 'granted'
     });
+
+    window.clarity('consentV2', {
+        ad_Storage: "granted",
+        analytics_Storage: "denied"
+    });
+
     fbq('consent', 'grant');
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
@@ -1955,7 +2251,10 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted',
         'url_passthrough': true,
     })
-    window.clarity('consent');
+    window.clarity('consentV2', {
+        ad_Storage: "denied",
+        analytics_Storage: "granted"
+    });
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
@@ -2019,12 +2318,12 @@ if (intaCookieConsents?.functionalCookies === "checked" &&
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
 }
 notRequired = window.notRequired = new RegExp(m.join("|"), "ig");
-let s = document.createElement("script");
-s.async = true;
-s.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
+let analyticsScript = document.createElement("script");
+analyticsScript.async = true;
+analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
 
 
-intHead.appendChild(s);
+intHead.appendChild(analyticsScript);
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
@@ -2420,6 +2719,21 @@ const bannerContentMessage = (domain, node) => {
         norwegian: `<p>Dette innholdet leveres av ${domain}.</p>`,
         finish: `<p>Tämä sisältö toimitetaan ${domain}.</p>`,
         dutch: `<p>Deze inhoud wordt geleverd door ${domain}.</p>`,
+        polish: `<p>Ta zawartość jest dostarczana przez ${domain}.</p>`,
+        afrikaans: `<p>Hierdie inhoud word verskaf deur ${domain}.</p>`,
+        arabic: `<p>هذا المحتوى مقدم من ${domain}.</p>`,
+        hindi: `<p>यह सामग्री ${domain} द्वारा प्रदान की गई है।</p>`,
+        turkish: `<p>Bu içerik ${domain} tarafından sağlanmaktadır.</p>`,
+        japanese: `<p>このコンテンツは${domain}によって提供されています。</p>`,
+        korean: `<p>이 콘텐츠는 ${domain}에서 제공됩니다.</p>`,
+        thai: `<p>เนื้อหานี้จัดทำโดย ${domain}.</p>`,
+        vietnamese: `<p>Nội dung này được cung cấp bởi ${domain}.</p>`,
+        indonesian: `<p>Konten ini disediakan oleh ${domain}.</p>`,
+        filipino: `<p>Ang nilalamang ito ay ibinibigay ng ${domain}.</p>`,
+        malay: `<p>Kandungan ini disediakan oleh ${domain}.</p>`,
+        ukrainian: `<p>Цей контент надається ${domain}.</p>`,
+        hebrew: `<p>תוכן זה מסופק על ידי ${domain}.</p>`,
+        arabic: `<p>هذا المحتوى مقدم من ${domain}.</p>`,
     }
 };
 
@@ -2451,15 +2765,29 @@ function updateNotRequiredRegexp() {
     if (intaCookieConsents?.functionalCookies === "checked" &&
         intaCookieConsents?.staticsticCookies !== "checked" &&
         intaCookieConsents?.advertisementCookies !== "checked") {
-        m = merge(allScripts[1].scripts, allScripts[0].scripts);
+        allScripts.forEach((script) => {
+            if (script.type === "functional") {
+                m = merge(allScripts[1].scripts, allScripts[0].scripts);
+            }
+        });
     } else if (intaCookieConsents?.advertisementCookies === "checked" &&
         intaCookieConsents?.staticsticCookies !== "checked" &&
         intaCookieConsents?.functionalCookies !== "checked") {
-        m = merge(allScripts[2].scripts, allScripts[0].scripts);
+
+        allScripts.forEach((script) => {
+            if (script.type === "marketing") {
+                m = merge(script.scripts, allScripts[0].scripts);
+            }
+        });
+
     } else if (intaCookieConsents?.staticsticCookies === "checked" &&
         intaCookieConsents?.functionalCookies !== "checked" &&
         intaCookieConsents?.advertisementCookies !== "checked") {
-        m = merge(allScripts[1].scripts, allScripts[2].scripts);
+        allScripts.forEach((script) => {
+            if (script.type === "statics") {
+                m = merge(script.scripts, allScripts[2].scripts);
+            }
+        });
     } else if (intaCookieConsents?.functionalCookies === "checked" &&
         intaCookieConsents?.staticsticCookies === "checked") {
         m = allScripts[1].scripts;
@@ -2596,24 +2924,12 @@ const beforeScriptExecuteListener = function (event, node) {
         "beforescriptexecute",
         (e, node) => beforeScriptExecuteListener(e, node)
     );
-};
 
-function restartObserver() {
-    // Disconnect any existing observer
+    // Disconnect the observer if it exists
     if (window.currentObserver) {
         window.currentObserver.disconnect();
     }
-
-    if (!isGtmMode) {
-        window.currentObserver = checkCookieStatus();
-    }
-    // Create a new observer with updated consent settings
-
-
-    // Process any existing blocked content that should now be allowed
-    processExistingScripts();
-
-}
+};
 
 function checkCookieStatus() {
     if (isGtmMode) {
@@ -2645,7 +2961,22 @@ function checkCookieStatus() {
                                         russian: "реклама",
                                         norwegian: "markedsføring",
                                         finish: "mainonta",
-                                        dutch: "reclame"
+                                        dutch: "reclame",
+                                        polish: "reklama",
+                                        afrikaans: "bemarking",
+                                        arabic: "تسويق",
+                                        hindi: "विपणन",
+                                        turkish: "pazarlama",
+                                        japanese: "マーケティング",
+                                        korean: "마케팅",
+                                        thai: "การตลาด",
+                                        vietnamese: "tiếp thị",
+                                        indonesian: "pemasaran",
+                                        filipino: "pagmemerkado",
+                                        malay: "pemasaran",
+                                        chinese: "营销",
+                                        ukrainian: "маркетинг",
+                                        hebrew: "שיווק",
                                     }
                                 } else if (script.type == "functional") {
                                     scriptTypelang = {
@@ -2660,7 +2991,22 @@ function checkCookieStatus() {
                                         russian: "функциональный",
                                         norwegian: "funksjonelle",
                                         finish: "toiminnallinen",
-                                        dutch: "functioneel"
+                                        dutch: "functioneel",
+                                        polish: "funkcjonalne",
+                                        afrikaans: "funksionele",
+                                        arabic: "وظيفي",
+                                        hindi: "कार्यात्मक",
+                                        turkish: "fonksiyonel",
+                                        japanese: "機能的",
+                                        korean: "기능적",
+                                        thai: "ฟังก์ชัน",
+                                        vietnamese: "chức năng",
+                                        indonesian: "fungsional",
+                                        filipino: "pampagana",
+                                        chinese: "功能性",
+                                        malay: "fungsional",
+                                        ukrainian: "функціональний",
+                                        hebrew: "פונקציונלי",
                                     }
                                 } else if (script.type == "statics") {
                                     scriptTypelang = {
@@ -2675,7 +3021,22 @@ function checkCookieStatus() {
                                         russian: "статистика",
                                         norwegian: "statistiske",
                                         finish: "tilastollinen",
-                                        dutch: "statistieken"
+                                        dutch: "statistieken",
+                                        polish: "statystyczne",
+                                        afrikaans: "statistiese",
+                                        arabic: "إحصائية",
+                                        hindi: "सांख्यिकी",
+                                        turkish: "istatistik",
+                                        japanese: "統計",
+                                        korean: "통계",
+                                        thai: "สถิติ",
+                                        vietnamese: "thống kê",
+                                        indonesian: "statistik",
+                                        filipino: "istatiska",
+                                        malay: "statistik",
+                                        chinese: "统计",
+                                        ukrainian: "статистичний",
+                                        hebrew: "סטטיסטי",
                                     }
                                 }
 
@@ -2691,14 +3052,29 @@ function checkCookieStatus() {
                                     russian: `Принять файлы cookie ${scriptTypelang.russian}`,
                                     norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
                                     finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`
+                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`,
+                                    polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
+                                    afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
+                                    arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
+                                    hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
+                                    turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
+                                    japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
+                                    korean: `쿠키 수락 ${scriptTypelang.korean}`,
+                                    thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
+                                    vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
+                                    indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
+                                    filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
+                                    malay: `Terima kuki ${scriptTypelang.malay}`,
+                                    chinese: `接受 ${scriptTypelang.chinese} cookies`,
+                                    ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
+                                    hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
                             loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
                         })
                     }
-                    if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
+                    if (node.nodeType === 1 && node.tagName === "IFRAME") {
                         allScripts.map((script) => {
 
                             const buttonText = () => {
@@ -2715,7 +3091,22 @@ function checkCookieStatus() {
                                         russian: "реклама",
                                         norwegian: "markedsføring",
                                         finish: "mainonta",
-                                        dutch: "reclame"
+                                        dutch: "reclame",
+                                        polish: "reklama",
+                                        afrikaans: "bemarking",
+                                        arabic: "تسويق",
+                                        hindi: "विपणन",
+                                        turkish: "pazarlama",
+                                        japanese: "マーケティング",
+                                        korean: "마케팅",
+                                        thai: "การตลาด",
+                                        vietnamese: "tiếp thị",
+                                        indonesian: "pemasaran",
+                                        filipino: "pagmemerkado",
+                                        malay: "pemasaran",
+                                        chinese: "营销",
+                                        ukrainian: "маркетинг",
+                                        hebrew: "שיווק",
                                     }
                                 } else if (script.type == "functional") {
                                     scriptTypelang = {
@@ -2730,7 +3121,22 @@ function checkCookieStatus() {
                                         russian: "функциональный",
                                         norwegian: "funksjonelle",
                                         finish: "toiminnallinen",
-                                        dutch: "functioneel"
+                                        dutch: "functioneel",
+                                        polish: "funkcjonalne",
+                                        afrikaans: "funksionele",
+                                        arabic: "وظيفي",
+                                        hindi: "कार्यात्मक",
+                                        turkish: "fonksiyonel",
+                                        japanese: "機能的",
+                                        korean: "기능적",
+                                        thai: "ฟังก์ชัน",
+                                        vietnamese: "chức năng",
+                                        indonesian: "fungsional",
+                                        filipino: "pampagana",
+                                        chinese: "功能性",
+                                        malay: "fungsional",
+                                        ukrainian: "функціональний",
+                                        hebrew: "פונקציונלי",
                                     }
                                 } else if (script.type == "statics") {
                                     scriptTypelang = {
@@ -2745,7 +3151,22 @@ function checkCookieStatus() {
                                         russian: "статистика",
                                         norwegian: "statistiske",
                                         finish: "tilastollinen",
-                                        dutch: "statistieken"
+                                        dutch: "statistieken",
+                                        polish: "statystyczne",
+                                        afrikaans: "statistiese",
+                                        arabic: "إحصائية",
+                                        hindi: "सांख्यिकी",
+                                        turkish: "istatistik",
+                                        japanese: "統計",
+                                        korean: "통계",
+                                        thai: "สถิติ",
+                                        vietnamese: "thống kê",
+                                        indonesian: "statistik",
+                                        filipino: "istatiska",
+                                        malay: "statistik",
+                                        chinese: "统计",
+                                        ukrainian: "статистичний",
+                                        hebrew: "סטטיסטי",
                                     }
                                 }
 
@@ -2761,7 +3182,22 @@ function checkCookieStatus() {
                                     russian: `Принять файлы cookie ${scriptTypelang.russian}`,
                                     norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
                                     finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`
+                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`,
+                                    polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
+                                    afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
+                                    arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
+                                    hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
+                                    turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
+                                    japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
+                                    korean: `쿠키 수락 ${scriptTypelang.korean}`,
+                                    thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
+                                    vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
+                                    indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
+                                    filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
+                                    malay: `Terima kuki ${scriptTypelang.malay}`,
+                                    chinese: `接受 ${scriptTypelang.chinese} cookies`,
+                                    ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
+                                    hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
                                 }
                             }
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
@@ -2787,7 +3223,22 @@ function checkCookieStatus() {
                                             russian: "реклама",
                                             norwegian: "markedsføring",
                                             finish: "mainonta",
-                                            dutch: "reclame"
+                                            dutch: "reclame",
+                                            polish: "reklama",
+                                            afrikaans: "bemarking",
+                                            arabic: "تسويق",
+                                            hindi: "विपणन",
+                                            turkish: "pazarlama",
+                                            japanese: "マーケティング",
+                                            korean: "마케팅",
+                                            thai: "การตลาด",
+                                            vietnamese: "tiếp thị",
+                                            indonesian: "pemasaran",
+                                            filipino: "pagmemerkado",
+                                            malay: "pemasaran",
+                                            chinese: "营销",
+                                            ukrainian: "маркетинг",
+                                            hebrew: "שיווק",
                                         }
                                     } else if (script.type == "functional") {
                                         scriptTypelang = {
@@ -2802,7 +3253,22 @@ function checkCookieStatus() {
                                             russian: "функциональный",
                                             norwegian: "funksjonelle",
                                             finish: "toiminnallinen",
-                                            dutch: "functioneel"
+                                            dutch: "functioneel",
+                                            polish: "funkcjonalne",
+                                            afrikaans: "funksionele",
+                                            arabic: "وظيفي",
+                                            hindi: "कार्यात्मक",
+                                            turkish: "fonksiyonel",
+                                            japanese: "機能的",
+                                            korean: "기능적",
+                                            thai: "ฟังก์ชัน",
+                                            vietnamese: "chức năng",
+                                            indonesian: "fungsional",
+                                            filipino: "pampagana",
+                                            chinese: "功能性",
+                                            malay: "fungsional",
+                                            ukrainian: "функціональний",
+                                            hebrew: "פונקציונלי",
                                         }
                                     } else if (script.type == "statics") {
                                         scriptTypelang = {
@@ -2817,7 +3283,22 @@ function checkCookieStatus() {
                                             russian: "статистика",
                                             norwegian: "statistiske",
                                             finish: "tilastollinen",
-                                            dutch: "statistieken"
+                                            dutch: "statistieken",
+                                            polish: "statystyczne",
+                                            afrikaans: "statistiese",
+                                            arabic: "إحصائية",
+                                            hindi: "सांख्यिकी",
+                                            turkish: "istatistik",
+                                            japanese: "統計",
+                                            korean: "통계",
+                                            thai: "สถิติ",
+                                            vietnamese: "thống kê",
+                                            indonesian: "statistik",
+                                            filipino: "istatiska",
+                                            malay: "statistik",
+                                            chinese: "统计",
+                                            ukrainian: "статистичний",
+                                            hebrew: "סטטיסטי",
                                         }
                                     }
 
@@ -2833,7 +3314,22 @@ function checkCookieStatus() {
                                         russian: `Принять файлы cookie ${scriptTypelang.russian}`,
                                         norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
                                         finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                        dutch: `Accepteer ${scriptTypelang.danish} cookies`
+                                        dutch: `Accepteer ${scriptTypelang.danish} cookies`,
+                                        polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
+                                        afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
+                                        arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
+                                        hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
+                                        turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
+                                        japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
+                                        korean: `쿠키 수락 ${scriptTypelang.korean}`,
+                                        thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
+                                        vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
+                                        indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
+                                        filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
+                                        malay: `Terima kuki ${scriptTypelang.malay}`,
+                                        chinese: `接受 ${scriptTypelang.chinese} cookies`,
+                                        ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
+                                        hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
                                     }
                                 }
                                 let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
@@ -3025,9 +3521,6 @@ function checkCookieStatus() {
         });
     });
     startObserving(observer, document.documentElement);
-    window.addEventListener("load", () => {
-        observer.disconnect();
-    });
     return observer;
 
 }
