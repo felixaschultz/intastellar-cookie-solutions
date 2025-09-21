@@ -35,7 +35,7 @@ let intaConsentsObjectVariable = {
     },
     time: new Date().toGMTString(),
     uid: Math.random().toString(16).slice(2),
-    domain: window.INTA.settings.rootDomain || window.location.host,
+    domain: window?.INTA?.settings?.rootDomain || window.location.host,
     sharingDomains: [],
 }
 
