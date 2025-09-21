@@ -63,6 +63,32 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             'security_storage': 'granted',
             'url_passthrough': true,
             'wait_for_update': 500,
+            'region': ['EU']
+        });
+        gtag('consent', 'default', {
+            ad_storage: 'granted',
+            personalization_storage: 'granted',
+            analytics_storage: 'granted',
+            functionality_storage: 'granted',
+            ads_data_redaction: 'denied',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted',
+            security_storage: 'granted',
+            url_passthrough: true,
+            wait_for_update: 500,
+            region: ['US-CA']
+        });
+        gtag('consent', 'default', {
+            'ad_storage': 'granted',
+            'personalization_storage': 'granted',
+            'analytics_storage': 'granted',
+            'functionality_storage': 'granted',
+            'ads_data_redaction': 'granted',
+            'ad_user_data': 'granted',
+            'ad_personalization': 'granted',
+            'security_storage': 'granted',
+            'url_passthrough': true,
+            'wait_for_update': 500,
         });
         window._gtagDefaultFired = true;
     }
@@ -98,6 +124,18 @@ window._hsp.push([
     }
 ]);
 
+function optOutCCPA() {
+    gtag('consent', 'update', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied'
+    });
+
+    // Optional: store the choice locally so you don’t ask again
+    localStorage.setItem('ccpa_opt_out', 'true');
+
+    alert("Your opt-out has been saved. We won’t sell or share your personal information.");
+}
 /* window._hsp.push(['_setDomainName', window.location.host]);
 if (window.INTA?.settings?.hubspotId) {
     window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
@@ -697,6 +735,16 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
+
+    const optedOut = localStorage.getItem('ccpa_opt_out');
+    if (optedOut === 'true') {
+        gtag('consent', 'update', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied'
+        });
+    }
+
     if (document.getElementById("intastellar-gdpr-settings-js-after") !== null) {
         console.warn(`IntastellarSolutionsSDK: You´re using an old version of our cookie solutions for WordPress. To make sure to get the latest updates and features, please download the latest version from our Website:
         https://www.intastellarsolutions.com/cookie-solutions/downloads`);
