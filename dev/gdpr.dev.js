@@ -194,7 +194,7 @@ const IntastellarCookieConsent = {
                 }
             }
             document.body.append(template);
-            if (getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName).indexOf("__inta") == -1) {
+            if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName) == undefined) {
                 document.querySelector(".intastellarCookieConstents").classList.add("--active");
                 dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
             }
@@ -222,7 +222,7 @@ const IntastellarCookieConsent = {
                     }
                 }
                 document.body.append(template);
-                if (getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName).indexOf("__inta") == -1) {
+                if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName) == undefined){
                     document.querySelector(".intastellarCookieConstents").classList.add("--active");
                     dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
                 }
