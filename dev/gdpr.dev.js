@@ -108,8 +108,6 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
 }
 
-window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
-
 window.clarity && window.clarity('consentV2', {
     ad_Storage: "denied",
     analytics_Storage: "denied"
