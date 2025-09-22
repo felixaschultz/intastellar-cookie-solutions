@@ -222,6 +222,10 @@ const IntastellarCookieConsent = {
                     }
                 }
                 document.body.append(template);
+                if (getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName).indexOf("__inta") == -1) {
+                    document.querySelector(".intastellarCookieConstents").classList.add("--active");
+                    dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
+                }
             })
         }
     }
