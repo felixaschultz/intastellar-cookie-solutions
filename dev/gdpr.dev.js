@@ -54,48 +54,48 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
     if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
         // Strict opt-in regions (GDPR-style)
         gtag('consent', 'default', {
-            ad_storage: 'denied',
-            personalization_storage: 'denied',
-            analytics_storage: 'denied',
-            functionality_storage: 'denied',
-            ads_data_redaction: 'granted',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied',
-            security_storage: 'granted',
-            url_passthrough: true,
-            wait_for_update: 500,
-            region: ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
+            "ad_storage": 'denied',
+            "personalization_storage": 'denied',
+            "analytics_storage": 'denied',
+            "functionality_storage": 'denied',
+            "ads_data_redaction": 'granted',
+            "ad_user_data": 'denied',
+            "ad_personalization": 'denied',
+            "security_storage": 'granted',
+            "url_passthrough": true,
+            "wait_for_update": 500,
+            "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
         });
         console.log("Intastellar Consents: Applied STRICT defaults (EU/UK/CA/BR/etc.)");
 
         // California opt-out (Do Not Sell)
         gtag('consent', 'default', {
-            ad_storage: 'granted',
-            personalization_storage: 'granted',
-            analytics_storage: 'granted',
-            functionality_storage: 'granted',
-            ads_data_redaction: 'denied',
-            ad_user_data: 'granted',
-            ad_personalization: 'granted',
-            security_storage: 'granted',
-            url_passthrough: true,
-            wait_for_update: 500,
-            region: ['US-CA']
+            "ad_storage": 'granted',
+            "personalization_storage": 'granted',
+            "analytics_storage": 'granted',
+            "functionality_storage": 'granted',
+            "ads_data_redaction": 'denied',
+            "ad_user_data": 'granted',
+            "ad_personalization": 'granted',
+            "security_storage": 'granted',
+            "url_passthrough": true,
+            "wait_for_update": 500,
+            "region": ['US-CA']
         });
         console.log("Intastellar Consents: Applied CALIFORNIA defaults (US-CA)");
 
         // Rest of the world fallback
         gtag('consent', 'default', {
-            ad_storage: 'granted',
-            personalization_storage: 'granted',
-            analytics_storage: 'granted',
-            functionality_storage: 'granted',
-            ads_data_redaction: 'granted',
-            ad_user_data: 'granted',
-            ad_personalization: 'granted',
-            security_storage: 'granted',
-            url_passthrough: true,
-            wait_for_update: 500
+            "ad_storage": 'granted',
+            "personalization_storage": 'granted',
+            "analytics_storage": 'granted',
+            "functionality_storage": 'granted',
+            "ads_data_redaction": 'granted',
+            "ad_user_data": 'granted',
+            "ad_personalization": 'granted',
+            "security_storage": 'granted',
+            "url_passthrough": true,
+            "wait_for_update": 500
         });
         console.log("Intastellar Consents: Applied REST-OF-WORLD defaults");
         window._gtagDefaultFired = true;
@@ -2441,7 +2441,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
         }
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
             // Check if an element is from Facebook, check by looking at the class name if it contains "fb"
-            if (containsClass(frae, "fb-") && frae.getAttribute("data-href").indexOf("facebook.com") > -1) {
+            if (containsClass(frae, "fb-") && frae.getAttribute("data-href")?.indexOf("facebook.com") > -1) {
                 frae?.parentElement?.replaceChild(settingsContent, frae);
             }
             if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
