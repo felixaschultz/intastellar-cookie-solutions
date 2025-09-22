@@ -52,19 +52,39 @@ window._intaConsentInitialized = true;
 if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
     // Only set defaults if GTM hasn't already done so
     if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
+        // Strict opt-in regions (GDPR-style)
         gtag('consent', 'default', {
-            'ad_storage': 'denied',
-            'personalization_storage': 'denied',
-            'analytics_storage': 'denied',
-            'functionality_storage': 'denied',
-            'ads_data_redaction': 'granted',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied',
-            'security_storage': 'granted',
-            'url_passthrough': true,
-            'wait_for_update': 500,
-            'region': ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
+            ad_storage: 'denied',
+            personalization_storage: 'denied',
+            analytics_storage: 'denied',
+            functionality_storage: 'denied',
+            ads_data_redaction: 'granted',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            security_storage: 'granted',
+            url_passthrough: true,
+            wait_for_update: 500,
+            region: ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
         });
+        console.log("Intastellar Consents: Applied STRICT defaults (EU/UK/CA/BR/etc.)");
+
+        // California opt-out (Do Not Sell)
+        gtag('consent', 'default', {
+            ad_storage: 'granted',
+            personalization_storage: 'granted',
+            analytics_storage: 'granted',
+            functionality_storage: 'granted',
+            ads_data_redaction: 'denied',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted',
+            security_storage: 'granted',
+            url_passthrough: true,
+            wait_for_update: 500,
+            region: ['US-CA']
+        });
+        console.log("Intastellar Consents: Applied CALIFORNIA defaults (US-CA)");
+
+        // Rest of the world fallback
         gtag('consent', 'default', {
             ad_storage: 'granted',
             personalization_storage: 'granted',
@@ -75,22 +95,16 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             ad_personalization: 'granted',
             security_storage: 'granted',
             url_passthrough: true,
-            wait_for_update: 500,
-            region: ['US-CA']
+            wait_for_update: 500
         });
-        gtag('consent', 'default', {
-            'ad_storage': 'granted',
-            'personalization_storage': 'granted',
-            'analytics_storage': 'granted',
-            'functionality_storage': 'granted',
-            'ads_data_redaction': 'granted',
-            'ad_user_data': 'granted',
-            'ad_personalization': 'granted',
-            'security_storage': 'granted',
-            'url_passthrough': true,
-            'wait_for_update': 500,
-        });
+        console.log("Intastellar Consents: Applied REST-OF-WORLD defaults");
         window._gtagDefaultFired = true;
+
+        if (typeof gtag === 'function') {
+            gtag('get', 'consent', 'default', (consent) => {
+                console.log("Intastellar Consents: FINAL CONSENT STATE →", consent);
+            });
+        }
     }
 } else if (isGtmMode) {
     console.log('GTM mode detected - skipping consent default initialization');
