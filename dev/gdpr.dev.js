@@ -101,9 +101,26 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
         window._gtagDefaultFired = true;
 
         if (typeof gtag === 'function') {
-            gtag('get', 'consent', 'default', (consent) => {
-                console.log("Intastellar Consents: FINAL CONSENT STATE →", consent);
+            gtag('get', 'ad_storage', 'default', (value) => {
+                console.log('ad_storage default:', value);
             });
+
+            gtag('get', 'analytics_storage', 'default', (value) => {
+                console.log('analytics_storage default:', value);
+            });
+
+            gtag('get', 'personalization_storage', 'default', (value) => {
+                console.log('personalization_storage default:', value);
+            });
+
+            gtag('get', 'functionality_storage', 'default', (value) => {
+                console.log('functionality_storage default:', value);
+            });
+
+            gtag('get', 'security_storage', 'default', (value) => {
+                console.log('security_storage default:', value);
+            });
+
         }
     }
 } else if (isGtmMode) {
