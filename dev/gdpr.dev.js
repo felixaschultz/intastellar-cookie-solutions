@@ -57,20 +57,20 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             'personalization_storage': 'denied',
             'analytics_storage': 'denied',
             'functionality_storage': 'denied',
-            'ads_data_redaction': 'denied',
+            'ads_data_redaction': 'granted',
             'ad_user_data': 'denied',
             'ad_personalization': 'denied',
             'security_storage': 'granted',
             'url_passthrough': true,
             'wait_for_update': 500,
-            'region': ['EU']
+            'region': ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
         });
         gtag('consent', 'default', {
             ad_storage: 'granted',
             personalization_storage: 'granted',
             analytics_storage: 'granted',
             functionality_storage: 'granted',
-            ads_data_redaction: 'denied',
+            ads_data_redaction: 'granted',
             ad_user_data: 'granted',
             ad_personalization: 'granted',
             security_storage: 'granted',
