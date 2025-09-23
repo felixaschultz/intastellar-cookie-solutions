@@ -170,36 +170,6 @@ const IntastellarCookieConsent = {
         template.classList.remove("--active");
     },
     initialize: function (template) {
-        dataLayer.push({ 'event': 'intastellar_consent_widget_initialized' });
-        function loadConfigIfNeeded() {
-            if (typeof window.INTA !== "undefined") {
-                console.info("Using existing INTA object, skipping config load");
-                return Promise.resolve();
-            }
-
-            let host = window.location.host
-                .replace(/^(?:www\.)?/i, "")
-                .replace(/:\d+$/, "");
-
-            const url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
-
-            return fetch(url, { method: "HEAD" })
-                .then(res => {
-                    if (res.ok) {
-                        const script = document.createElement("script");
-                        script.src = url;
-                        document.head.appendChild(script);
-                        return new Promise(resolve => {
-                            script.onload = resolve;
-                            script.onerror = resolve; // fail gracefully
-                        });
-                    }
-                })
-                .catch(() => {
-                    console.warn("No INTA config found for host:", host);
-                });
-        }
-
         function initTemplate() {
             if (!document.querySelector(".intastellarCookieConstents")) {
                 document.body.append(template);
@@ -214,14 +184,59 @@ const IntastellarCookieConsent = {
             }
         }
 
-        // Core: only fetch config if INTA missing
-        loadConfigIfNeeded().then(() => {
-            // either INTA existed, or config script loaded
-            if (typeof window.INTA !== "undefined") {
+        function loadRemoteConfig() {
+            let host = window.location.host
+                .replace(/^(?:www\.)?/i, "")
+                .replace(/:\d+$/, "");
+
+            const url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
+
+            return fetch(url, { method: "HEAD" })
+                .then(res => {
+                    if (res.ok) {
+                        return new Promise(resolve => {
+                            const script = document.createElement("script");
+                            script.src = url;
+                            script.onload = resolve;
+                            script.onerror = resolve;
+                            document.head.appendChild(script);
+                        });
+                    }
+                })
+                .catch(() => {
+                    console.warn("No INTA config found for host:", host);
+                });
+        }
+
+        function waitForINTA(timeout = 3000) {
+            return new Promise(resolve => {
+                if (typeof window.INTA !== "undefined") {
+                    return resolve(true);
+                }
+
+                const start = Date.now();
+                const timer = setInterval(() => {
+                    if (typeof window.INTA !== "undefined") {
+                        clearInterval(timer);
+                        resolve(true);
+                    } else if (Date.now() - start > timeout) {
+                        clearInterval(timer);
+                        resolve(false);
+                    }
+                }, 100);
+            });
+        }
+
+        // Core logic
+        waitForINTA().then(found => {
+            if (found) {
+                console.info("Using existing INTA");
                 initTemplate();
             } else {
-                console.warn("INTA still missing after config load");
-                initTemplate(); // fallback so UI at least shows
+                console.info("INTA not found, loading remote config…");
+                loadRemoteConfig().then(() => {
+                    initTemplate();
+                });
             }
         });
     }
