@@ -213,7 +213,7 @@ const IntastellarCookieConsent = {
                             script.src = url;
                             script.onload = resolve;
                             script.onerror = resolve;
-                            //document.head.appendChild(script);
+                            document.head.appendChild(script);
                         });
                     } else {
                         console.info("Skipping remote config because INTA is already present");
