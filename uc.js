@@ -267,23 +267,6 @@ window.dataLayer = window.dataLayer || [];
 (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
 
 /* - - - Setup - - - */
-if (window.INTA === undefined) {
-    window.INTA = {
-        policy_link: undefined,
-        settings: {
-            company: undefined,
-            lang: "auto",
-            color: "rgba(0, 51, 153, 1)",
-            keepInLocalStorage: ["firstLoad", int_FunctionalCookies, int_hideCookieBannerName, int_marketingCookies, int_staticsticCookies],
-            arrange: "ltr",
-            logo: intCookieIcon,
-            partnerDomain: null,
-            StyleSheet: null,
-            design: "overlay",
-        }
-    }
-}
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
