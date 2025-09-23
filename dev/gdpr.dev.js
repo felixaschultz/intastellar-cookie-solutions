@@ -173,8 +173,8 @@ const IntastellarCookieConsent = {
         dataLayer.push({ 'event': 'intastellar_consent_widget_initialized' });
         function loadConfigIfNeeded() {
             if (typeof window.INTA !== "undefined") {
-                // Already present → no need to load config
-                return Promise.resolve("INTA already present");
+                console.info("Using existing INTA object, skipping config load");
+                return Promise.resolve();
             }
 
             let host = window.location.host
@@ -188,15 +188,15 @@ const IntastellarCookieConsent = {
                     if (res.ok) {
                         const script = document.createElement("script");
                         script.src = url;
-                        document.head.insertBefore(script, document.currentScript);
-                        return "Config loaded";
-                    } else {
-                        throw new Error("Config not found");
+                        document.head.appendChild(script);
+                        return new Promise(resolve => {
+                            script.onload = resolve;
+                            script.onerror = resolve; // fail gracefully
+                        });
                     }
                 })
-                .catch(err => {
-                    console.warn("INTA config not available:", err.message);
-                    return "Config not loaded";
+                .catch(() => {
+                    console.warn("No INTA config found for host:", host);
                 });
         }
 
@@ -214,27 +214,16 @@ const IntastellarCookieConsent = {
             }
         }
 
-        function waitForINTA(cb, timeout = 5000) {
-            const start = Date.now();
-            const timer = setInterval(() => {
-                if (typeof window.INTA !== "undefined") {
-                    clearInterval(timer);
-                    cb();
-                } else if (Date.now() - start > timeout) {
-                    clearInterval(timer);
-                    console.warn("INTA never showed up.");
-                    cb();
-                }
-            }, 100);
-        }
-
-        if (document.readyState === "complete" || document.readyState === "interactive") {
-            loadConfigIfNeeded().then(() => waitForINTA(initTemplate));
-        } else {
-            window.addEventListener("DOMContentLoaded", () => {
-                loadConfigIfNeeded().then(() => waitForINTA(initTemplate));
-            });
-        }
+        // Core: only fetch config if INTA missing
+        loadConfigIfNeeded().then(() => {
+            // either INTA existed, or config script loaded
+            if (typeof window.INTA !== "undefined") {
+                initTemplate();
+            } else {
+                console.warn("INTA still missing after config load");
+                initTemplate(); // fallback so UI at least shows
+            }
+        });
     }
 }
 let scriptTypelang = {};
