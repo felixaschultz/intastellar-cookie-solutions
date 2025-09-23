@@ -171,62 +171,67 @@ const IntastellarCookieConsent = {
     },
     initialize: function (template) {
         dataLayer.push({ 'event': 'intastellar_consent_widget_initialized' });
-        if (document.readyState === 'complete') {
+        function loadConfigIfNeeded() {
             if (
-                document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
-                || window.INTA === undefined
+                !document.querySelector('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]')
+                || typeof window.INTA === "undefined"
             ) {
-                // Get the host and remove all subdomains
-                let host = window.location.host;
-                host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
-                // Remove the port if it exists
-                host = host.replace(/:\d+$/, "");
-                const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
-                const configScript = document.createElement("script");
-                configScript.src = intastellarDefaultConfigFile;
+                let host = window.location.host
+                    .replace(/^(?:www\.)?/i, "")
+                    .replace(/:\d+$/, "");
 
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", intastellarDefaultConfigFile);
-                xhr.send();
+                const url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
 
-                if (xhr.status === 200) {
-                    document.head.insertBefore(configScript, document.currentScript);
-                }
+                fetch(url, { method: "HEAD" })
+                    .then(res => {
+                        if (res.ok) {
+                            const script = document.createElement("script");
+                            script.src = url;
+                            document.head.insertBefore(script, document.currentScript);
+                        }
+                    })
+                    .catch(() => {
+                        console.warn("INTA config not found for", host);
+                    });
             }
-            document.body.append(template);
-            if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName) == undefined) {
-                document.querySelector(".intastellarCookieConstents").classList.add("--active");
-                dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
-            }
-        } else {
-            window.addEventListener("load", function () {
-                if (
-                    document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
-                    || window.INTA === undefined
-                ) {
-                    // Get the host and remove all subdomains
-                    let host = window.location.host;
-                    host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
-                    // Remove the port if it exists
-                    host = host.replace(/:\d+$/, "");
-                    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
-                    const configScript = document.createElement("script");
-                    configScript.src = intastellarDefaultConfigFile;
+        }
 
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("GET", intastellarDefaultConfigFile);
-                    xhr.send();
-
-                    if (xhr.status === 200) {
-                        document.head.insertBefore(configScript, document.currentScript);
-                    }
-                }
+        function initTemplate() {
+            if (!document.querySelector(".intastellarCookieConstents")) {
                 document.body.append(template);
-                if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName) == undefined){
-                    document.querySelector(".intastellarCookieConstents").classList.add("--active");
-                    dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
+            }
+
+            if (!getCookie(int_hideCookieBannerName)) {
+                const el = document.querySelector(".intastellarCookieConstents");
+                if (el) el.classList.add("--active");
+                if (window.dataLayer) {
+                    window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
                 }
-            })
+            }
+        }
+
+        function waitForINTA(cb, timeout = 5000) {
+            const start = Date.now();
+            const timer = setInterval(() => {
+                if (typeof window.INTA !== "undefined") {
+                    clearInterval(timer);
+                    cb();
+                } else if (Date.now() - start > timeout) {
+                    clearInterval(timer);
+                    console.warn("INTA never showed up.");
+                    cb();
+                }
+            }, 100);
+        }
+
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            loadConfigIfNeeded();
+            waitForINTA(initTemplate);
+        } else {
+            window.addEventListener("DOMContentLoaded", () => {
+                loadConfigIfNeeded();
+                waitForINTA(initTemplate);
+            });
         }
     }
 }
