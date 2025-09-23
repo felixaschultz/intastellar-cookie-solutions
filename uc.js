@@ -178,6 +178,7 @@ const IntastellarCookieConsent = {
     },
     initialize: function (template) {
         function initTemplate() {
+            window.dataLayer.push({ event: "intastellar_consents_widget_initialize" });
             if (!document.querySelector(".intastellarCookieConstents")) {
                 document.body.append(template);
             }
@@ -243,6 +244,7 @@ const IntastellarCookieConsent = {
 
         // Core logic
         waitForINTA().then(found => {
+            console.log(found);
             if (found) {
                 console.info("Using existing INTA");
                 initTemplate();
