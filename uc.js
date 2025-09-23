@@ -193,6 +193,7 @@ const IntastellarCookieConsent = {
         }
 
         function loadRemoteConfig() {
+            console.trace("loadRemoteConfig CALLED");
             if (typeof window.INTA !== "undefined") {
                 console.info("INTA appeared, skipping remote config load");
                 return Promise.resolve();
