@@ -2099,8 +2099,6 @@ const cookieBannerStyles = {
     floating: "floating.css"
 };
 
-window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
-    window.INTA?.settings?.language : window.INTA?.settings?.language;
 
 let intastellarCookieLanguage
     = window.intastellarCookieLanguage
