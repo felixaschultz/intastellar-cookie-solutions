@@ -172,28 +172,32 @@ const IntastellarCookieConsent = {
     initialize: function (template) {
         dataLayer.push({ 'event': 'intastellar_consent_widget_initialized' });
         function loadConfigIfNeeded() {
-            if (
-                !document.querySelector('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]')
-                || typeof window.INTA === "undefined"
-            ) {
-                let host = window.location.host
-                    .replace(/^(?:www\.)?/i, "")
-                    .replace(/:\d+$/, "");
-
-                const url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
-
-                fetch(url, { method: "HEAD" })
-                    .then(res => {
-                        if (res.ok) {
-                            const script = document.createElement("script");
-                            script.src = url;
-                            document.head.insertBefore(script, document.currentScript);
-                        }
-                    })
-                    .catch(() => {
-                        console.warn("INTA config not found for", host);
-                    });
+            if (typeof window.INTA !== "undefined") {
+                // Already present → no need to load config
+                return Promise.resolve("INTA already present");
             }
+
+            let host = window.location.host
+                .replace(/^(?:www\.)?/i, "")
+                .replace(/:\d+$/, "");
+
+            const url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
+
+            return fetch(url, { method: "HEAD" })
+                .then(res => {
+                    if (res.ok) {
+                        const script = document.createElement("script");
+                        script.src = url;
+                        document.head.insertBefore(script, document.currentScript);
+                        return "Config loaded";
+                    } else {
+                        throw new Error("Config not found");
+                    }
+                })
+                .catch(err => {
+                    console.warn("INTA config not available:", err.message);
+                    return "Config not loaded";
+                });
         }
 
         function initTemplate() {
@@ -225,12 +229,10 @@ const IntastellarCookieConsent = {
         }
 
         if (document.readyState === "complete" || document.readyState === "interactive") {
-            loadConfigIfNeeded();
-            waitForINTA(initTemplate);
+            loadConfigIfNeeded().then(() => waitForINTA(initTemplate));
         } else {
             window.addEventListener("DOMContentLoaded", () => {
-                loadConfigIfNeeded();
-                waitForINTA(initTemplate);
+                loadConfigIfNeeded().then(() => waitForINTA(initTemplate));
             });
         }
     }
