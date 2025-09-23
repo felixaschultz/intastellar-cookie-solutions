@@ -255,6 +255,7 @@ const IntastellarCookieConsent = {
                     initTemplate();
                 });
             }
+            document.head.insertBefore(intastellarCreateBanner, document.currentScript);
         });
     }
 }
@@ -347,10 +348,6 @@ if (intastellarDevMode) {
         intastellarCreateBanner.src = "../../dev/cb.dev.js";
     }
 }
-// Adding the script to the head
-setTimeout(() => {
-    document.head.insertBefore(intastellarCreateBanner, document.currentScript);
-}, 222);
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
