@@ -178,6 +178,22 @@ const IntastellarCookieConsent = {
     },
     initialize: function (template) {
         function initTemplate() {
+
+            const intastellarCreateBanner = document.createElement("script");
+
+            intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+            /* if (window.INTA.settings.design === "floating") {
+                intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+            } */
+            if (intastellarDevMode) {
+                if (window.INTA.settings.design === "floating") {
+                    intastellarCreateBanner.src = "../../dev/styles/floating.js";
+                } else {
+                    intastellarCreateBanner.src = "../../dev/cb.dev.js";
+                }
+            }
+            document.head.insertBefore(intastellarCreateBanner, document.currentScript);
+
             window.dataLayer.push({ event: "intastellar_consents_widget_initialize" });
             if (!document.querySelector(".intastellarCookieConstents")) {
                 document.body.append(template);
@@ -255,7 +271,6 @@ const IntastellarCookieConsent = {
                     initTemplate();
                 });
             }
-            document.head.insertBefore(intastellarCreateBanner, document.currentScript);
         });
     }
 }
@@ -335,19 +350,6 @@ const intastellarDevMode = (function () {
         ? true : false;
 })();
 
-const intastellarCreateBanner = document.createElement("script");
-
-intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-/* if (window.INTA.settings.design === "floating") {
-    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-} */
-if (intastellarDevMode) {
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = "../../dev/styles/floating.js";
-    } else {
-        intastellarCreateBanner.src = "../../dev/cb.dev.js";
-    }
-}
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
