@@ -63,7 +63,7 @@ intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
         intastellarCreateBanner.src = "../../dev/cb.dev.js";
     }
 } */
-document.head.insertBefore(intastellarCreateBanner, document.currentScript);
+document.currentScript.parentNode.insertBefore(intastellarCreateBanner, document.currentScript);
 
 if (window._intaConsentInitialized) {
     console.log('Intastellar consent already initialized, skipping...');
