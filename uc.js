@@ -192,6 +192,11 @@ const IntastellarCookieConsent = {
         }
 
         function loadRemoteConfig() {
+            if (typeof window.INTA !== "undefined") {
+                console.info("INTA appeared, skipping remote config load");
+                return Promise.resolve();
+            }
+
             let host = window.location.host
                 .replace(/^(?:www\.)?/i, "")
                 .replace(/:\d+$/, "");
@@ -200,7 +205,7 @@ const IntastellarCookieConsent = {
 
             return fetch(url, { method: "HEAD" })
                 .then(res => {
-                    if (res.ok) {
+                    if (res.ok && typeof window.INTA === "undefined") { // <-- guard here
                         return new Promise(resolve => {
                             const script = document.createElement("script");
                             script.src = url;
@@ -208,6 +213,8 @@ const IntastellarCookieConsent = {
                             script.onerror = resolve;
                             document.head.appendChild(script);
                         });
+                    } else {
+                        console.info("Skipping remote config because INTA is already present");
                     }
                 })
                 .catch(() => {
