@@ -50,21 +50,6 @@ function gtag() {
     dataLayer.push(arguments);
 }
 
-const intastellarCreateBanner = document.createElement("script");
-
-intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-/* if (window.INTA.settings.design === "floating") {
-    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-} */
-/* if (intastellarDevMode) {
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = "../../dev/styles/floating.js";
-    } else {
-        intastellarCreateBanner.src = "../../dev/cb.dev.js";
-    }
-} */
-document.currentScript.parentNode.insertBefore(intastellarCreateBanner, document.currentScript.nextSibling);
-
 if (window._intaConsentInitialized) {
     console.log('Intastellar consent already initialized, skipping...');
 }
@@ -2151,6 +2136,21 @@ let intastellarCookieLanguage
 if (document.querySelector("html").getAttribute("lang") == null) {
     intastellarCookieLanguage = "en";
 }
+
+const intastellarCreateBanner = document.createElement("script");
+
+intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+/* if (window.INTA.settings.design === "floating") {
+    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+} */
+/* if (intastellarDevMode) {
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = "../../dev/styles/floating.js";
+    } else {
+        intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    }
+} */
+document.currentScript.parentNode.insertBefore(intastellarCreateBanner, document.currentScript.nextSibling);
 
 const allScripts = window.allScripts = [
     {
