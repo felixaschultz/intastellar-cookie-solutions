@@ -50,6 +50,21 @@ function gtag() {
     dataLayer.push(arguments);
 }
 
+const intastellarCreateBanner = document.createElement("script");
+
+intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+/* if (window.INTA.settings.design === "floating") {
+    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+} */
+/* if (intastellarDevMode) {
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = "../../dev/styles/floating.js";
+    } else {
+        intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    }
+} */
+document.head.insertBefore(intastellarCreateBanner, document.currentScript);
+
 if (window._intaConsentInitialized) {
     console.log('Intastellar consent already initialized, skipping...');
 }
@@ -166,21 +181,6 @@ if (window.INTA?.settings?.hubspotId) {
 if (intaCookieConsents?.advertisementCookies !== "checked") {
     fbq('consent', 'revoke');
 }
-
-const intastellarCreateBanner = document.createElement("script");
-
-intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-/* if (window.INTA.settings.design === "floating") {
-    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-} */
-if (intastellarDevMode) {
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = "../../dev/styles/floating.js";
-    } else {
-        intastellarCreateBanner.src = "../../dev/cb.dev.js";
-    }
-}
-document.head.insertBefore(intastellarCreateBanner, document.currentScript);
 
 const IntastellarCookieConsent = {
     renew: function () {
