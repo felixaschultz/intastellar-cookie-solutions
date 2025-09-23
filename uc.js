@@ -337,9 +337,9 @@ const intastellarDevMode = (function () {
 const intastellarCreateBanner = document.createElement("script");
 
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-if (window.INTA.settings.design === "floating") {
+/* if (window.INTA.settings.design === "floating") {
     intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-}
+} */
 if (intastellarDevMode) {
     if (window.INTA.settings.design === "floating") {
         intastellarCreateBanner.src = "../../dev/styles/floating.js";
