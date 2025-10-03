@@ -348,6 +348,11 @@ if (intastellarDevMode) {
     }
 }
 
+window.addEventListener("load", function(){
+    // Adding the script to the head
+    document.head.appendChild(intastellarCreateBanner);
+})
+
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
@@ -759,8 +764,6 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    // Adding the script to the head
-    document.head.appendChild(intastellarCreateBanner);
     const optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
         gtag('consent', 'update', {
