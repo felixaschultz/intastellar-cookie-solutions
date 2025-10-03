@@ -358,10 +358,16 @@ if (intastellarDevMode) {
     }
 }
 
-intHead.insertBefore(
-    intastellarCreateBanner,
-    document.currentScript.previousSibling
-);
+try {
+    document.currentScript.parentNode.insertBefore(
+        intastellarCreateBanner,
+        document.currentScript.previousSibling
+    );
+    console.log("Injected!");
+} catch (e) {
+    console.error("Injection failed:", e);
+}
+
 
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
