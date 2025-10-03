@@ -342,6 +342,7 @@ const intastellarDevMode = (function () {
 })();
 
 const intastellarCreateBanner = document.createElement("script");
+intastellarCreateBanner.async = true;
 
 intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
 if (window.INTA.settings.design === "floating") {
