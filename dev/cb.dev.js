@@ -2398,11 +2398,7 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
 }
 
 function onWindowLoad(callback) {
-    if (document.readyState === 'complete') {
-        callback();
-    } else {
-        window.addEventListener('load', callback);
-    }
+    window.addEventListener('load', callback);
 }
 
 onWindowLoad(function () {

@@ -5,13 +5,6 @@
  *  @copy 2022-2024 Intastellar Solutions, International
  *
 */
-/*
- *  Cookie Consents Banner by Intastellar Solutions, International
- *  intastellarsolutions.com/gdpr-cookiebanner
- *  consents.cdn.intastellarsolutions.com/uc.js
- *  @copy 2022-2025 Intastellar Solutions, International
- *
-*/
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
     if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) return null;
@@ -2405,11 +2398,7 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
 }
 
 function onWindowLoad(callback) {
-    if (document.readyState === 'complete') {
-        callback();
-    } else {
-        window.addEventListener('load', callback);
-    }
+    window.addEventListener('load', callback);
 }
 
 onWindowLoad(function () {

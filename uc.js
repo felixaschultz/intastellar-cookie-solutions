@@ -2404,7 +2404,7 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 intHead.appendChild(analyticsScript);
 intHead.insertBefore(
     intastellarCreateBanner,
-    document.currentScript
+    document.currentScript.previousSibling
 );
 
 
