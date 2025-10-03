@@ -348,7 +348,7 @@ if (intastellarDevMode) {
     }
 }
 // Adding the script to the head
-document.head.insertBefore(intastellarCreateBanner, document.currentScript);
+document.head.appendChild(intastellarCreateBanner);
 
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
