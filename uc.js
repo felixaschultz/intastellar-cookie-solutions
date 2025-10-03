@@ -73,10 +73,7 @@ if (intastellarDevMode) {
 }
 
 try {
-    document.currentScript.parentNode.insertBefore(
-        intastellarCreateBanner,
-        document.currentScript.previousSibling
-    );
+    intHead.appendChild(intastellarCreateBanner);
     console.log("Injected!");
 } catch (e) {
     console.error("Injection failed:", e);
