@@ -2401,7 +2401,11 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 
 
 intHead.appendChild(analyticsScript);
-intHead.appendChild(intastellarCreateBanner);
+intHead.insertBefore(
+    intastellarCreateBanner,
+    document.currentScript
+);
+
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
