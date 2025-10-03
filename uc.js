@@ -57,6 +57,28 @@ const intastellarDevMode = (function () {
         ? true : false;
 })();
 
+const intastellarCreateBanner = document.createElement("script");
+intastellarCreateBanner.async = true;
+
+intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+if (window.INTA.settings.design === "floating") {
+    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+}
+if (intastellarDevMode) {
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = "../../dev/styles/floating.js";
+    } else {
+        intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    }
+}
+
+try {
+    intHead.appendChild(intastellarCreateBanner);
+    console.log("Injected!");
+} catch (e) {
+    console.error("Injection failed:", e);
+}
+
 function gtag() {
     dataLayer.push(arguments);
 }
@@ -2144,28 +2166,6 @@ let intastellarCookieLanguage
 
 if (document.querySelector("html").getAttribute("lang") == null) {
     intastellarCookieLanguage = "en";
-}
-
-const intastellarCreateBanner = document.createElement("script");
-intastellarCreateBanner.async = true;
-
-intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-if (window.INTA.settings.design === "floating") {
-    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-}
-if (intastellarDevMode) {
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = "../../dev/styles/floating.js";
-    } else {
-        intastellarCreateBanner.src = "../../dev/cb.dev.js";
-    }
-}
-
-try {
-    intHead.appendChild(intastellarCreateBanner);
-    console.log("Injected!");
-} catch (e) {
-    console.error("Injection failed:", e);
 }
 
 const allScripts = window.allScripts = [
