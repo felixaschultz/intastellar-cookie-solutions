@@ -32,6 +32,8 @@ const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== 
 const FunctionalCheckbox = document.querySelector("#functional");
 const StaticsCheckBox = document.querySelector("#statics");
 const MarketingCheckBox = document.querySelector("#marketing");
+const intHead = document.querySelector("head");
+
 let poweredBy = "";
 window.dataLayer = window.dataLayer || [];
 let intaConsentsObjectVariable = {
@@ -355,6 +357,11 @@ if (intastellarDevMode) {
         intastellarCreateBanner.src = "../../dev/cb.dev.js";
     }
 }
+
+intHead.insertBefore(
+    intastellarCreateBanner,
+    document.currentScript.previousSibling
+);
 
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
@@ -899,7 +906,6 @@ const allowAllCookieName = "__all__cookies";
 const essentialsCookieName = "__essential__cookies";
 const blockTrackingCookies = "__hideTrackingCookies";
 const blockAdvertismentCookies = "__hideAdvertisementCookies";
-const intHead = document.querySelector("head");
 
 const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
@@ -2402,10 +2408,6 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 
 
 intHead.appendChild(analyticsScript);
-intHead.insertBefore(
-    intastellarCreateBanner,
-    document.currentScript.previousSibling
-);
 
 
 /* Helper function to create Consents Block message for iframes etc.*/
