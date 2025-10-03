@@ -355,11 +355,6 @@ if (intastellarDevMode) {
     }
 }
 
-window.addEventListener("load", function(){
-    // Adding the script to the head
-    document.head.appendChild(intastellarCreateBanner);
-})
-
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
@@ -2406,6 +2401,7 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 
 
 intHead.appendChild(analyticsScript);
+intHead.appendChild(intastellarCreateBanner);
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
