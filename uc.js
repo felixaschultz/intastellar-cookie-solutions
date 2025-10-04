@@ -178,10 +178,14 @@ const IntastellarCookieConsent = {
     remove: function (template) {
         template.classList.remove("--active");
     },
-    initialize: function (template) {
+    initialize: function () {
         function initTemplate() {
-            if (!document.querySelector(".intastellarCookieConstents")) {
-                document.body.append(template);
+            try {
+                intHead.appendChild(intastellarCreateBanner);
+                console.log("Injected!");
+                document.body.appendChild(window.intaconsents);
+            } catch (e) {
+                console.error("Injection failed:", e);
             }
 
             if (!getCookie(int_hideCookieBannerName)) {
@@ -745,43 +749,8 @@ function intaSetCookieSettings() {
     }
 };
 
-const intastellarCreateBanner = document.createElement("script");
-
 window.addEventListener("DOMContentLoaded", (event) => {
-
-    const intastellarDevMode = (function () {
-        return window.location.host === "localhost"
-            || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
-            || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
-            || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
-            || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
-            ? true : false;
-    })();
-
-    intastellarCreateBanner.async = true;
-
-    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-    }
-    if (intastellarDevMode) {
-        if (window.INTA.settings.design === "floating") {
-            intastellarCreateBanner.src = "../../dev/styles/floating.js";
-        } else {
-            intastellarCreateBanner.src = "../../dev/cb.dev.js";
-        }
-    }
-
-    setTimeout(() => {
-        console.log(intastellarCreateBanner);
-        try {
-            intHead.appendChild(intastellarCreateBanner);
-            console.log("Injected!");
-        } catch(e) {
-            console.error("Injection failed:", e);
-        }
-    }, 200)
-
+    IntastellarCookieConsent.initialize();
     const optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
         gtag('consent', 'update', {
