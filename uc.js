@@ -165,20 +165,11 @@ if (window.INTA?.settings?.hubspotId) {
     window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
 } */
 
-let intastellarDevMode = (function () {
-    return window.location.host === "localhost"
-        || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
-        ? true : false;
-})();
-
 if (intaCookieConsents?.advertisementCookies !== "checked") {
     fbq('consent', 'revoke');
 }
 
-let IntastellarCookieConsent = {
+const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
         document.querySelector("html").classList.add("noScroll");
@@ -187,56 +178,48 @@ let IntastellarCookieConsent = {
     remove: function (template) {
         template.classList.remove("--active");
     },
-    initialize: function () {
+    initialize: function (template) {
         function initTemplate() {
-            let intastellarCreateBanner = document.createElement("script");
-            intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-            if (window.INTA.settings.design === "floating") {
-                intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-            }
-            if (intastellarDevMode) {
-                if (window.INTA.settings.design === "floating") {
-                    intastellarCreateBanner.src = "../../dev/styles/floating.js";
-                } else {
-                    intastellarCreateBanner.src = "../../dev/cb.dev.js";
-                }
-            }
-            try {
-                intHead.appendChild(intastellarCreateBanner);
-                console.log("Injected!");
-            } catch (e) {
-                console.error("Injection failed:", e);
+
+            window.dataLayer.push({ event: "intastellar_consents_widget_initialize" });
+            if (!document.querySelector(".intastellarCookieConstents")) {
+                document.body.append(template);
             }
 
-            setTimeout(() => {
-                
-                if (!getCookie(int_hideCookieBannerName)) {
-                    let el = document.querySelector(".intastellarCookieConstents");
-                    if (el) el.classList.add("--active");
-                    if (window.dataLayer) {
-                        window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
-                    }
+            if (!getCookie(int_hideCookieBannerName)) {
+                const el = document.querySelector(".intastellarCookieConstents");
+                if (el) el.classList.add("--active");
+                if (window.dataLayer) {
+                    window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
                 }
-            }, 200)
+            }
         }
 
         function loadRemoteConfig() {
+            console.trace("loadRemoteConfig CALLED");
+            if (typeof window.INTA !== "undefined") {
+                console.info("INTA appeared, skipping remote config load");
+                return Promise.resolve();
+            }
+
             let host = window.location.host
                 .replace(/^(?:www\.)?/i, "")
                 .replace(/:\d+$/, "");
 
-            let url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
+            const url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
 
             return fetch(url, { method: "HEAD" })
                 .then(res => {
-                    if (res.ok) {
+                    if (res.ok && typeof window.INTA === "undefined") { // <-- guard here
                         return new Promise(resolve => {
-                            let script = document.createElement("script");
+                            const script = document.createElement("script");
                             script.src = url;
                             script.onload = resolve;
                             script.onerror = resolve;
                             document.head.appendChild(script);
                         });
+                    } else {
+                        console.info("Skipping remote config because INTA is already present");
                     }
                 })
                 .catch(() => {
@@ -250,8 +233,8 @@ let IntastellarCookieConsent = {
                     return resolve(true);
                 }
 
-                let start = Date.now();
-                let timer = setInterval(() => {
+                const start = Date.now();
+                const timer = setInterval(() => {
                     if (typeof window.INTA !== "undefined") {
                         clearInterval(timer);
                         resolve(true);
@@ -265,6 +248,7 @@ let IntastellarCookieConsent = {
 
         // Core logic
         waitForINTA().then(found => {
+            console.log(found);
             if (found) {
                 console.info("Using existing INTA");
                 initTemplate();
@@ -279,30 +263,13 @@ let IntastellarCookieConsent = {
 }
 let scriptTypelang = {};
 let settingsMessage;
-let foundScripts = window.foundScripts = [];
-let intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
+const foundScripts = window.foundScripts = [];
+const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
 window.dataLayer = window.dataLayer || [];
 (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
 (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
 
 /* - - - Setup - - - */
-if (window.INTA === undefined) {
-    window.INTA = {
-        policy_link: undefined,
-        settings: {
-            company: undefined,
-            lang: "auto",
-            color: "rgba(0, 51, 153, 1)",
-            keepInLocalStorage: ["firstLoad", int_FunctionalCookies, int_hideCookieBannerName, int_marketingCookies, int_staticsticCookies],
-            arrange: "ltr",
-            logo: intCookieIcon,
-            partnerDomain: null,
-            StyleSheet: null,
-            design: "overlay",
-        }
-    }
-}
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -325,7 +292,7 @@ function getCookie(cname) {
 }
 
 function findScriptParameter(value) {
-    let currentURL = document.currentScript.src;
+    const currentURL = document.currentScript.src;
 
     if (currentURL.indexOf(value) > -1) {
         let url = new URL(currentURL);
@@ -361,9 +328,17 @@ function decodeIntaConsentsObject(number) {
     return string;
 }
 
+const intastellarDevMode = (function () {
+    return window.location.host === "localhost"
+        || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
+        ? true : false;
+})();
 
 /* Object for supported languages */
-let intastellarSupportedLanguages = {
+const intastellarSupportedLanguages = {
     english: {
         saveSettings: "Decline All",
         necessary: { // Object for cookie info
@@ -755,9 +730,15 @@ tmpl.innerHTML = `
 
 /* - - - Function to get Cookie Settings from url and set the cookie - - - */
 function intaSetCookieSettings() {
+<<<<<<< HEAD
     let urlParams = new URLSearchParams(window.location.search);
     let cookieSettings = urlParams.get('intaCookieSettings');
     let reload = urlParams.get('reload');
+=======
+    const urlParams = new URLSearchParams(window.location.search);
+    const cookieSettings = urlParams.get('intaCookieSettings');
+    const reload = urlParams.get('reload');
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
 
     /*  console.log("Cookie Settings from URL", window.location.host); */
     if (cookieSettings && !reload) {
@@ -773,8 +754,8 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    IntastellarCookieConsent.initialize();
-    let optedOut = localStorage.getItem('ccpa_opt_out');
+
+    const optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
         gtag('consent', 'update', {
             'ad_storage': 'denied',
@@ -878,7 +859,11 @@ class IntastellarSolutionsSDK extends Error {
     }
 };
 
+<<<<<<< HEAD
 let intCookieDomain = (function () {
+=======
+const intCookieDomain = (function () {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     "use strict";
     var i = 0,
         d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "" || window.location.host === "127.0.0.1" || window.location.host.indexOf("127.0.0.1") > -1) ? "127.0.0.1" : document.domain || window.location.host,
@@ -890,7 +875,11 @@ let intCookieDomain = (function () {
     return "domain=." + d + ";";
 })();
 
+<<<<<<< HEAD
 let intCookieDomainWithWWW = (function () {
+=======
+const intCookieDomainWithWWW = (function () {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     "use strict";
     var i = 0,
         d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1") ? "" : document.domain || window.location.host,
@@ -902,15 +891,15 @@ let intCookieDomainWithWWW = (function () {
     return "domain=www." + d + ";";
 })();
 
-let allowAllCookieName = "__all__cookies";
-let essentialsCookieName = "__essential__cookies";
-let blockTrackingCookies = "__hideTrackingCookies";
-let blockAdvertismentCookies = "__hideAdvertisementCookies";
+const allowAllCookieName = "__all__cookies";
+const essentialsCookieName = "__essential__cookies";
+const blockTrackingCookies = "__hideTrackingCookies";
+const blockAdvertismentCookies = "__hideAdvertisementCookies";
 
-let cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
+const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
 
-let inta_requiredCookieList = [{
+const inta_requiredCookieList = [{
     vendor: (window.INTA?.settings?.company) ? window.INTA?.settings?.company : window.location.host,
     cookies: [
         {
@@ -943,7 +932,11 @@ let inta_requiredCookieList = [{
         }
     ],
     domains: [
+<<<<<<< HEAD
         window.INTA.settings.rootDomain,
+=======
+        window?.INTA?.settings?.rootDomain,
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
         window.location.host
     ]
 },
@@ -1011,7 +1004,11 @@ let inta_requiredCookieList = [{
     vendor_privacy: "https://automattic.com/privacy/",
     domains: [
         window.location.host,
+<<<<<<< HEAD
         window.INTA.settings.rootDomain
+=======
+        window?.INTA?.settings?.rootDomain
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     ]
 },
 {
@@ -1029,7 +1026,11 @@ let inta_requiredCookieList = [{
     vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement",
     domains: [
         window.location.host,
+<<<<<<< HEAD
         window.INTA.settings.rootDomain
+=======
+        window?.INTA?.settings?.rootDomain
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     ]
 },
 {
@@ -1047,7 +1048,11 @@ let inta_requiredCookieList = [{
     vendor_privacy: "https://aws.amazon.com/privacy/",
     domains: [
         window.location.host,
+<<<<<<< HEAD
         window.INTA.settings.rootDomain
+=======
+        window?.INTA?.settings?.rootDomain
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     ]
 },
 {
@@ -1077,7 +1082,11 @@ let inta_requiredCookieList = [{
 }
 ];
 /* - - - List of Analytics / Statistics cookie names - - - */
+<<<<<<< HEAD
 let inta_statisticCookieList = [];
+=======
+const inta_statisticCookieList = [];
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
 inta_statisticCookieList.push({
     vendor: "Microsoft Inc",
     cookies: [
@@ -1453,13 +1462,21 @@ inta_statisticCookieList.push({
         "x.clearbitjs.com",
         "clearbit.com",
         window.location.host,
+<<<<<<< HEAD
         window.INTA.settings.rootDomain
+=======
+        window?.INTA?.settings?.rootDomain
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     ],
     vendor_privacy: "https://clearbit.com/privacy"
 });
 
 /* - - - List of Marketing cookies - - - */
+<<<<<<< HEAD
 let inta_marketingCookieList = [];
+=======
+const inta_marketingCookieList = [];
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
 inta_marketingCookieList.push(
     {
         vendor: "Meta Inc",
@@ -1855,7 +1872,11 @@ inta_marketingCookieList.push({
 });
 
 /* - - - List of functional cookies - - - */
+<<<<<<< HEAD
 let inta_functionalCookieList = [];
+=======
+const inta_functionalCookieList = [];
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
 inta_functionalCookieList.push({
     vendor: (window.INTA?.settings?.company) ? window.INTA?.settings?.company : window.location.host,
     cookies: [
@@ -2066,7 +2087,11 @@ window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
         });
     }
 });
+<<<<<<< HEAD
 let int__cookiesToKeep = [...requiredToKeep.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
+=======
+const int__cookiesToKeep = [...requiredToKeep.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
@@ -2102,17 +2127,26 @@ if (getCookie(int_hideCookieBannerName) != ""
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
+<<<<<<< HEAD
 let int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function (entry) { return entry.trim() != ''; }).join("|"), "i");
 
 let cookieBannerStyles = {
+=======
+const int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function (entry) { return entry.trim() != ''; }).join("|"), "i");
+
+const cookieBannerStyles = {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     banner: "banner.css",
     bannerV2: "bannerV2.css",
     overlay: "overlay.css",
     floating: "floating.css"
 };
 
+<<<<<<< HEAD
 window.INTA.settings.language = typeof window.INTA?.settings?.language === "undefined" ?
     window.INTA?.settings?.language : window.INTA?.settings?.language;
+=======
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
 
 let intastellarCookieLanguage
     = window.intastellarCookieLanguage
@@ -2165,7 +2199,26 @@ if (document.querySelector("html").getAttribute("lang") == null) {
     intastellarCookieLanguage = "en";
 }
 
+<<<<<<< HEAD
 let allScripts = window.allScripts = [
+=======
+const intastellarCreateBanner = document.createElement("script");
+
+intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+/* if (window.INTA.settings.design === "floating") {
+    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+} */
+/* if (intastellarDevMode) {
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = "../../dev/styles/floating.js";
+    } else {
+        intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    }
+} */
+document.currentScript.parentNode.insertBefore(intastellarCreateBanner, document.currentScript.nextSibling);
+
+const allScripts = window.allScripts = [
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     {
         /* Analytics Scripts which are beeing blocked */
         /* "([\-\.]clarity+)", */
@@ -2363,7 +2416,11 @@ if (window.INTA?.settings?.gtagId) {
 let notRequired;
 let m;
 /* Helper function to merge arrays */
+<<<<<<< HEAD
 let merge = (first, second, third) => {
+=======
+const merge = (first, second, third) => {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     /* first.splice(1, 0, "^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+"); */
     for (let i = 0; i < second.length; i++) {
         first.push(second[i]);
@@ -2409,7 +2466,10 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 
 intHead.appendChild(analyticsScript);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
     let p = "";
@@ -2775,7 +2835,11 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
 }
 
 /* - - - Helper function for message on the content block - - - */
+<<<<<<< HEAD
 let bannerContentMessage = (domain, node) => {
+=======
+const bannerContentMessage = (domain, node) => {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     if (node?.classList?.contains("trustpilot-widget")) {
         domain = "www.trustpilot.com";
     }
@@ -2823,7 +2887,11 @@ let bannerContentMessage = (domain, node) => {
 };
 
 function handleInputChange(event) {
+<<<<<<< HEAD
     let target = event.target;
+=======
+    const target = event.target;
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') {
 
         // Update consent tracker object for checkbox inputs
@@ -2902,10 +2970,17 @@ function updateNotRequiredRegexp() {
 function processExistingScripts() {
     // Process blocked scripts that should now be allowed
     document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
+<<<<<<< HEAD
         let src = script.src || '';
         if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
             // This script should now be allowed - replace it
             let newScript = document.createElement('script');
+=======
+        const src = script.src || '';
+        if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
+            // This script should now be allowed - replace it
+            const newScript = document.createElement('script');
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
             newScript.type = 'text/javascript';
             if (script.src) newScript.src = script.src;
             if (script.innerText) newScript.text = script.innerText;
@@ -2915,12 +2990,20 @@ function processExistingScripts() {
 
     // Process blocked iframes that should now be allowed
     document.querySelectorAll('inta-consents-iframe[data-src], inta-consents[data-src]').forEach(blocked => {
+<<<<<<< HEAD
         let type = blocked.querySelector('.--changePermission')?.dataset?.type;
+=======
+        const type = blocked.querySelector('.--changePermission')?.dataset?.type;
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
         if ((type === 'intMarketingCookies' && intaCookieConsents?.advertisementCookies === "checked") ||
             (type === 'intFunctionalCookies' && intaCookieConsents?.functionalCookies === "checked") ||
             (type === 'intStaticsCookies' && intaCookieConsents?.staticsticCookies === "checked")) {
 
+<<<<<<< HEAD
             let iframe = document.createElement('iframe');
+=======
+            const iframe = document.createElement('iframe');
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
             iframe.src = blocked.getAttribute('data-src');
             iframe.border = '0';
             iframe.frameBorder = '0';
@@ -2952,7 +3035,11 @@ function restartObserver() {
 
 }
 
+<<<<<<< HEAD
 let beforeScriptExecuteListener = function (event, node) {
+=======
+const beforeScriptExecuteListener = function (event, node) {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
     let src = node.src || "";
 
     if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
@@ -3024,7 +3111,11 @@ function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     /* - - - Observer - - - */
 
+<<<<<<< HEAD
     let observer = new MutationObserver((mutations) => {
+=======
+    const observer = new MutationObserver((mutations) => {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
         requestAnimationFrame(() => {
             mutations.forEach(({ addedNodes }) => {
                 addedNodes.forEach((node) => {
@@ -3032,7 +3123,11 @@ function checkCookieStatus() {
                     if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
                         allScripts.map((script) => {
 
+<<<<<<< HEAD
                             let buttonText = () => {
+=======
+                            const buttonText = () => {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
                                 if (script.type == "marketing") {
                                     scriptTypelang = {
                                         danish: "marketing",
@@ -3162,7 +3257,11 @@ function checkCookieStatus() {
                     if (node.nodeType === 1 && node.tagName === "IFRAME") {
                         allScripts.map((script) => {
 
+<<<<<<< HEAD
                             let buttonText = () => {
+=======
+                            const buttonText = () => {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
                                 if (script.type == "marketing") {
                                     scriptTypelang = {
                                         danish: "marketing",
@@ -3294,7 +3393,11 @@ function checkCookieStatus() {
                         allScripts.map((script) => {
                             addedNodes.forEach((tweet) => {
 
+<<<<<<< HEAD
                                 let buttonText = () => {
+=======
+                                const buttonText = () => {
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
                                     if (script.type == "marketing") {
                                         scriptTypelang = {
                                             danish: "marketing",
@@ -3427,7 +3530,11 @@ function checkCookieStatus() {
                         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
                         if (node.nodeType === 1 && node.tagName === "LINK") {
                             addedNodes.forEach((link) => {
+<<<<<<< HEAD
                                 let linkSrc = link.href;
+=======
+                                const linkSrc = link.href;
+>>>>>>> parent of 0c5f5ac (Reverted to the original)
                                 if (notRequired.test(linkSrc)) {
                                     link.disabled = true;
                                 }
