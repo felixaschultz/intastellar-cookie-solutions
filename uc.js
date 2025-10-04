@@ -207,15 +207,17 @@ const IntastellarCookieConsent = {
             } catch (e) {
                 console.error("Injection failed:", e);
             }
-            
-            document.body.appendChild(window.intaconsents);
-            if (!getCookie(int_hideCookieBannerName)) {
-                const el = document.querySelector(".intastellarCookieConstents");
-                if (el) el.classList.add("--active");
-                if (window.dataLayer) {
-                    window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
+
+            setTimeout(() => {
+                
+                if (!getCookie(int_hideCookieBannerName)) {
+                    const el = document.querySelector(".intastellarCookieConstents");
+                    if (el) el.classList.add("--active");
+                    if (window.dataLayer) {
+                        window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
+                    }
                 }
-            }
+            }, 200)
         }
 
         function loadRemoteConfig() {
