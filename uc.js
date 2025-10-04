@@ -165,6 +165,15 @@ if (window.INTA?.settings?.hubspotId) {
     window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
 } */
 
+const intastellarDevMode = (function () {
+    return window.location.host === "localhost"
+        || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
+        ? true : false;
+})();
+
 if (intaCookieConsents?.advertisementCookies !== "checked") {
     fbq('consent', 'revoke');
 }
