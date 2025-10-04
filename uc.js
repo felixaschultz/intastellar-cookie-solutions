@@ -204,11 +204,11 @@ const IntastellarCookieConsent = {
             try {
                 intHead.appendChild(intastellarCreateBanner);
                 console.log("Injected!");
-                document.body.appendChild(window.intaconsents);
             } catch (e) {
                 console.error("Injection failed:", e);
             }
-
+            
+            document.body.appendChild(window.intaconsents);
             if (!getCookie(int_hideCookieBannerName)) {
                 const el = document.querySelector(".intastellarCookieConstents");
                 if (el) el.classList.add("--active");
