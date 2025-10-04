@@ -84,7 +84,7 @@ const moreSettingsContent = document.createElement("section");
 const moreintHeader = document.createElement("intheader");
 const moreContentText = document.createElement("section");
 const moreFooter = document.createElement("div");
-const intaconsents = document.createElement("intastellarconsents");
+const intaconsents = window.intaconsents = document.createElement("intastellarconsents");
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
@@ -2390,7 +2390,6 @@ banner.appendChild(bannerContent);
 moreSettings.appendChild(moreSettingsContent);
 intaconsents.appendChild(banner);
 intaconsents.appendChild(moreSettings);
-IntastellarCookieConsent.initialize(intaconsents);
 
 if (document.querySelector(".intastellarCCPAContainer") != null) {
     document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
