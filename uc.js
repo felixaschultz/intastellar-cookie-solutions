@@ -771,12 +771,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
         }
     }
 
-    try {
-        intHead.appendChild(intastellarCreateBanner);
-        console.log("Injected!");
-    } catch (e) {
-        console.error("Injection failed:", e);
-    }
+    setTimeout(() => {
+        try {
+            intHead.appendChild(intastellarCreateBanner);
+            console.log("Injected!");
+        } catch(e) {
+            console.error("Injection failed:", e);
+        }
+    }, 200)
 
     const optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
