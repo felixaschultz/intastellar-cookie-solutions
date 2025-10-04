@@ -48,37 +48,6 @@ let intaConsentsObjectVariable = {
     sharingDomains: [],
 }
 
-const intastellarDevMode = (function () {
-    return window.location.host === "localhost"
-        || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
-        ? true : false;
-})();
-
-const intastellarCreateBanner = document.createElement("script");
-intastellarCreateBanner.async = true;
-
-intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-if (window.INTA.settings.design === "floating") {
-    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-}
-if (intastellarDevMode) {
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = "../../dev/styles/floating.js";
-    } else {
-        intastellarCreateBanner.src = "../../dev/cb.dev.js";
-    }
-}
-
-try {
-    intHead.appendChild(intastellarCreateBanner);
-    console.log("Injected!");
-} catch (e) {
-    console.error("Injection failed:", e);
-}
-
 function gtag() {
     dataLayer.push(arguments);
 }
@@ -777,6 +746,38 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
+
+    const intastellarDevMode = (function () {
+        return window.location.host === "localhost"
+            || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
+            || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
+            || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
+            || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
+            ? true : false;
+    })();
+
+    const intastellarCreateBanner = document.createElement("script");
+    intastellarCreateBanner.async = true;
+
+    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+    }
+    if (intastellarDevMode) {
+        if (window.INTA.settings.design === "floating") {
+            intastellarCreateBanner.src = "../../dev/styles/floating.js";
+        } else {
+            intastellarCreateBanner.src = "../../dev/cb.dev.js";
+        }
+    }
+
+    try {
+        intHead.appendChild(intastellarCreateBanner);
+        console.log("Injected!");
+    } catch (e) {
+        console.error("Injection failed:", e);
+    }
+
     const optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
         gtag('consent', 'update', {
