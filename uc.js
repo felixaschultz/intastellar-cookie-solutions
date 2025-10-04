@@ -745,6 +745,8 @@ function intaSetCookieSettings() {
     }
 };
 
+const intastellarCreateBanner = document.createElement("script");
+
 window.addEventListener("DOMContentLoaded", (event) => {
 
     const intastellarDevMode = (function () {
@@ -756,7 +758,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
             ? true : false;
     })();
 
-    const intastellarCreateBanner = document.createElement("script");
     intastellarCreateBanner.async = true;
 
     intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
@@ -772,6 +773,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     }
 
     setTimeout(() => {
+        console.log(intastellarCreateBanner);
         try {
             intHead.appendChild(intastellarCreateBanner);
             console.log("Injected!");
