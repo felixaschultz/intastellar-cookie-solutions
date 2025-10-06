@@ -2391,6 +2391,10 @@ moreSettings.appendChild(moreSettingsContent);
 intaconsents.appendChild(banner);
 intaconsents.appendChild(moreSettings);
 
+setTimeout(()=> {
+    document.body.appendChild(intaconsents);
+}, 200)
+
 if (document.querySelector(".intastellarCCPAContainer") != null) {
     document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
         document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
@@ -2403,7 +2407,6 @@ function onWindowLoad(callback) {
 }
 
 onWindowLoad(function () {
-    document.body.appendChild(intaconsents);
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
