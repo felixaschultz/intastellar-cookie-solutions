@@ -751,8 +751,7 @@ function intaSetCookieSettings() {
     }
 };
 
-window.addEventListener("DOMContentLoaded", (event) => {
-
+window.addEventListener("load", function(){
     const intastellarCreateBanner = document.createElement("script");
 
     intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
@@ -768,6 +767,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
     }
 
     document.head.appendChild(intastellarCreateBanner);
+});
+
+window.addEventListener("DOMContentLoaded", (event) => {
 
     const optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
