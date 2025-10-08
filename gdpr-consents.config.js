@@ -12,7 +12,7 @@ window.INTA = {
         color: "#197da1ff",
         text: false,
         language: "auto",
-        design: "floating",
+        design: "bannerV2",
         requiredCookies: [
             {
                 cookie: "region",
