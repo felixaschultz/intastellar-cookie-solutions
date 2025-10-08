@@ -84,7 +84,7 @@ const moreSettingsContent = document.createElement("section");
 const moreintHeader = document.createElement("intheader");
 const moreContentText = document.createElement("section");
 const moreFooter = document.createElement("div");
-const intaconsents = document.createElement("intastellarconsents");
+const intaconsents = window.intaconsents = document.createElement("intastellarconsents");
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
@@ -2390,7 +2390,10 @@ banner.appendChild(bannerContent);
 moreSettings.appendChild(moreSettingsContent);
 intaconsents.appendChild(banner);
 intaconsents.appendChild(moreSettings);
-IntastellarCookieConsent.initialize(intaconsents);
+
+setTimeout(() => {
+    document.body.appendChild(intaconsents);
+}, 200)
 
 if (document.querySelector(".intastellarCCPAContainer") != null) {
     document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
@@ -2436,7 +2439,7 @@ onWindowLoad(function () {
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
 
-    
+
     if (isValidPolicyLink()) {
         document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
             if (window?.INTA?.settings.company != "" && window?.INTA?.settings.company != undefined && vendor.innerText == window.location.host) {
