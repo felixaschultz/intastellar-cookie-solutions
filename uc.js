@@ -2445,7 +2445,7 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
 
 /* Helper function to check class names */
 function containsClass(element, searchString) {
-    return element.classList.contains(searchString) || element.className.split(' ').some(cls => cls.includes(searchString));
+    return element?.classList?.contains(searchString) || element?.className?.split(' ')?.some(cls => cls?.includes(searchString));
 }
 
 function loopBlock(addedNodes, message, script, buttonText, logo) {
