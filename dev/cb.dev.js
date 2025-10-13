@@ -2393,6 +2393,7 @@ intaconsents.appendChild(moreSettings);
 
 setTimeout(() => {
     document.body.appendChild(intaconsents);
+    IntastellarCookieConsent.initialize();
 }, 200)
 
 if (document.querySelector(".intastellarCCPAContainer") != null) {

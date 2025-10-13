@@ -171,7 +171,7 @@ const IntastellarCookieConsent = {
     },
     initialize: function (template) {
         function initTemplate() {
-            if (!document.querySelector(".intastellarCookieConstents")) {
+            if (!document.querySelector(".intastellarCookieConstents") && template !== false) {
                 document.body.append(template);
             }
 
