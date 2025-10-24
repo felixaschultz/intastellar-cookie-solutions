@@ -2391,10 +2391,7 @@ moreSettings.appendChild(moreSettingsContent);
 intaconsents.appendChild(banner);
 intaconsents.appendChild(moreSettings);
 
-setTimeout(()=> {
-    document.body.appendChild(intaconsents);
-    IntastellarCookieConsent.initialize();
-}, 200)
+IntastellarCookieConsent.initialize(intaconsents);
 
 if (document.querySelector(".intastellarCCPAContainer") != null) {
     document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
