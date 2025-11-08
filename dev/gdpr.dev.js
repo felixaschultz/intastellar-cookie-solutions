@@ -132,6 +132,30 @@ window._hsp.push([
     }
 ]);
 
+window.Shopify.loadFeatures(
+    [
+        {
+            name: 'consent-tracking-api',
+            version: '0.1',
+        },
+    ],
+    error => {
+        if (error) {
+            // Rescue error
+            throw error;
+        }
+        // If error is false, the API has loaded and ready to use!
+        window.Shopify.customerPrivacy.setTrackingConsent(
+            {
+                'analytics': intaCookieConsents?.staticsticCookies === "checked",
+                'marketing': intaCookieConsents?.advertisementCookies === "checked",
+                'preferences': intaCookieConsents?.functionalCookies === "checked",
+            },
+            () => console.log("Consent captured")
+        );
+    },
+);
+
 function optOutCCPA() {
     gtag('consent', 'update', {
         'ad_storage': 'denied',
@@ -2313,6 +2337,15 @@ if (intaCookieConsents?.advertisementCookies) {
         analytics_Storage: "denied"
     });
 
+    window.Shopify.customerPrivacy.setTrackingConsent(
+        {
+            'analytics': false,
+            'marketing': true,
+            'preferences': false,
+        },
+        () => console.log("Consent captured")
+    );
+
     fbq('consent', 'grant');
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
@@ -2332,6 +2365,15 @@ if (intaCookieConsents?.staticsticCookies) {
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
+
+    window.Shopify.customerPrivacy.setTrackingConsent(
+        {
+            'analytics': true,
+            'marketing': false,
+            'preferences': false,
+        },
+        () => console.log("Consent captured")
+    );
 }
 
 if (intaCookieConsents?.functionalCookies) {
@@ -2341,6 +2383,15 @@ if (intaCookieConsents?.functionalCookies) {
     window.uetq.push('consent', 'update', {
         'functionality_storage': 'granted'
     });
+
+    window.Shopify.customerPrivacy.setTrackingConsent(
+        {
+            'analytics': false,
+            'marketing': false,
+            'preferences': true,
+        },
+        () => console.log("Consent captured")
+    );
 
 }
 
