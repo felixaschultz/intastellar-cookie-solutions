@@ -132,7 +132,7 @@ window._hsp.push([
     }
 ]);
 
-window.Shopify ?? window.Shopify.loadFeatures(
+window.Shopify ?? window?.Shopify?.loadFeatures(
     [
         {
             name: 'consent-tracking-api',
