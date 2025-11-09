@@ -142,6 +142,7 @@ window.Shopify ?? window?.Shopify?.loadFeatures(
     error => {
         if (error) {
             // Rescue error
+            console.error(error);
         }
         // If error is false, the API has loaded and ready to use!
         window.Shopify.customerPrivacy.setTrackingConsent(
