@@ -2356,7 +2356,7 @@ if (intaCookieConsents?.advertisementCookies) {
         analytics_Storage: "denied"
     });
 
-    window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': false,
             'marketing': true,
@@ -2385,7 +2385,7 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted'
     });
 
-    window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': true,
             'marketing': false,
@@ -2403,7 +2403,7 @@ if (intaCookieConsents?.functionalCookies) {
         'functionality_storage': 'granted'
     });
 
-    window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': false,
             'marketing': false,
