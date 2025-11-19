@@ -4295,21 +4295,6 @@ function getCookies() {
     return ret;
 }
 
-/* Find specific parameter on current Script */
-
-function findScriptParameter(value) {
-    const currentURL = document.currentScript.src;
-
-    if (currentURL.indexOf(value) > -1) {
-        let url = new URL(currentURL);
-        let param = url.searchParams;
-        return param.get(value);
-    }
-
-    return undefined;
-
-}
-
 /* Adding Privacy Policy of Intastellar Solutions, International */
 
 let intastellarSolutionsPrivacyPolicy = "https://www.intastellarsolutions.com/about/legal/privacy/gdpr-cookiebanner/embedded/privacy-policy";

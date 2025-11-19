@@ -25,6 +25,9 @@ const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== 
 const FunctionalCheckbox = document.querySelector("#functional");
 const StaticsCheckBox = document.querySelector("#statics");
 const MarketingCheckBox = document.querySelector("#marketing");
+const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
+window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
+
 let poweredBy = "";
 window.dataLayer = window.dataLayer || [];
 let intaConsentsObjectVariable = {
@@ -41,6 +44,19 @@ let intaConsentsObjectVariable = {
 
 function gtag() {
     dataLayer.push(arguments);
+}
+
+function findScriptParameter(value) {
+    const currentURL = document.currentScript.src;
+
+    if (currentURL.indexOf(value) > -1) {
+        let url = new URL(currentURL);
+        let param = url.searchParams;
+        return param.get(value);
+    }
+
+    return undefined;
+
 }
 
 if (window._intaConsentInitialized) {
