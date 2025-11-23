@@ -63,50 +63,63 @@
        Fetch Interception
     -------------------------------------------------------------- */
     const originalFetch = window.fetch;
-    window.fetch = async function (...args) {
-        const url = typeof args[0] === "string" ? args[0] : args[0].url;
+    // Create unique symbol so nobody can fake it
+    const INTA_INTERNAL_CALL = Symbol("inta_internal_call");
 
-        if (!BLOCKED.has(url)) {
-            const resp = await classifyVendor(url, "fetch");
+    window.fetch = async function (resource, init = {}) {
+        try {
+            const url = typeof resource === "string" ? resource : resource.url;
 
-            if (resp.risky) {
-                console.warn("[Intastellar Consents] Blocked fetch:", url);
-                reportEvent({ type: "fetch_blocked", url });
-                BLOCKED.add(url);
-                return new Response("", { status: 204 });
+            // 1. Skip calls that the interceptor itself makes
+            if (init[INTA_INTERNAL_CALL]) {
+                return originalFetch(resource, init);
             }
-        }
 
-        return originalFetch.apply(this, args);
-    };
+            // 2. Skip internal allowed domains
+            const allowedDomains = [
+                location.origin,
+                "https://cdn.intastellar.app",
+                "https://intastellar.com",
+                "https://api.intastellarsolutions.com"
+            ];
 
-    /* -------------------------------------------------------------
-       XHR Interception
-    -------------------------------------------------------------- */
-    const origOpen = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function (method, url, ...rest) {
-        this._intastellarUrl = url;
-        return origOpen.call(this, method, url, ...rest);
-    };
-
-    const origSend = XMLHttpRequest.prototype.send;
-    XMLHttpRequest.prototype.send = async function (body) {
-        const url = this._intastellarUrl;
-
-        if (!BLOCKED.has(url)) {
-            const resp = await classifyVendor(url, "xhr");
-
-            if (resp.risky) {
-                console.warn("[Intastellar Consents] Blocked XHR:", url);
-                reportEvent({ type: "xhr_blocked", url });
-                BLOCKED.add(url);
-                this.abort();
-                return;
+            if (allowedDomains.some(d => url.startsWith(d))) {
+                return originalFetch(resource, init);
             }
-        }
 
-        return origSend.call(this, body);
+            // 3. Classify third-party request
+            const category = classifyUrl(url);
+
+            // 4. Block if not consented
+            if (!ConsentState.hasConsent(category)) {
+                // Report via BEACON (not fetch)
+                navigator.sendBeacon(
+                    "/consent/report",
+                    JSON.stringify({
+                        type: "fetch_block",
+                        url,
+                        category
+                    })
+                );
+
+                return new Response(null, { status: 204 });
+            }
+
+            // 5. Execute normally
+            return originalFetch(resource, init);
+
+        } catch (err) {
+            console.error("Interceptor error:", err);
+            return originalFetch(resource, init);
+        }
     };
+
+    // Utility to make internal calls safely
+    function intaFetch(url, init = {}) {
+        init[INTA_INTERNAL_CALL] = true;
+        return originalFetch(url, init);
+    }
+
 
     /* -------------------------------------------------------------
        Script Injection Monitoring
