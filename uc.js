@@ -65,6 +65,11 @@ if (window._intaConsentInitialized) {
 
 window._intaConsentInitialized = true;
 
+const intercepterScript = document.createElement("script");
+intercepterScript.src = intastellarCookieBannerRootDomain + "/dev/intercepter.js";
+document.head.appendChild(intercepterScript);
+
+
 if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
     // Only set defaults if GTM hasn't already done so
     if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
