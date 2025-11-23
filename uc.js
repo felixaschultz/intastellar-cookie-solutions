@@ -67,7 +67,7 @@ window._intaConsentInitialized = true;
 
 const intercepterScript = document.createElement("script");
 intercepterScript.src = intastellarCookieBannerRootDomain + "/dev/intercepter.js";
-document.head.appendChild(intercepterScript);
+//document.head.appendChild(intercepterScript);
 
 
 if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
