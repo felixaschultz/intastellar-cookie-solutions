@@ -189,3 +189,15 @@
         subtree: true,
     });
 })();
+
+function classifyUrl(url, context = "") {
+    const hay = url.toLowerCase();
+    for (const cat of Object.keys(VENDOR_PATTERNS)) {
+        for (const regex of VENDOR_PATTERNS[cat]) {
+            if (regex.test(hay)) {
+                return cat;
+            }
+        }
+    }
+    return "functional"; // fallback
+}
