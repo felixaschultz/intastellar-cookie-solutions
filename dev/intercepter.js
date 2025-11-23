@@ -11,7 +11,7 @@
         try {
             // Async event to your backend or classifier
             navigator.sendBeacon(
-                "https://api.intastellarsolutions.com/cmp/behavior",
+                "https://apis.intastellarsolutions.com/cmp/behavior",
                 JSON.stringify(details)
             );
         } catch (_) { }
@@ -23,7 +23,7 @@
     -------------------------------------------------------------- */
     async function classifyVendor(url, context) {
         // Replace this with your real API endpoint
-        return fetch("https://api.intastellarsolutions.com/classify", {
+        return fetch("https://apis.intastellarsolutions.com/classify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ url, context }),
