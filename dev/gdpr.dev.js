@@ -25,6 +25,8 @@ const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== 
 const FunctionalCheckbox = document.querySelector("#functional");
 const StaticsCheckBox = document.querySelector("#statics");
 const MarketingCheckBox = document.querySelector("#marketing");
+const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
+window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 let poweredBy = "";
 window.dataLayer = window.dataLayer || [];
 let intaConsentsObjectVariable = {
@@ -35,7 +37,7 @@ let intaConsentsObjectVariable = {
     },
     time: new Date().toGMTString(),
     uid: Math.random().toString(16).slice(2),
-    domain: window.INTA.settings.rootDomain || window.location.host,
+    domain: window?.INTA?.settings?.rootDomain || window.location.host,
     sharingDomains: [],
 }
 
@@ -52,6 +54,52 @@ window._intaConsentInitialized = true;
 if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
     // Only set defaults if GTM hasn't already done so
     if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
+        // Strict opt-in regions (GDPR-style)
+        gtag('consent', 'default', {
+            "ad_storage": 'denied',
+            "personalization_storage": 'denied',
+            "analytics_storage": 'denied',
+            "functionality_storage": 'denied',
+            "ads_data_redaction": 'granted',
+            "ad_user_data": 'denied',
+            "ad_personalization": 'denied',
+            "security_storage": 'granted',
+            "url_passthrough": true,
+            "wait_for_update": 500,
+            "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
+        });
+        console.log("Intastellar Consents: Applied STRICT defaults (EU/UK/CA/BR/etc.)");
+
+        // California opt-out (Do Not Sell)
+        gtag('consent', 'default', {
+            "ad_storage": 'granted',
+            "personalization_storage": 'granted',
+            "analytics_storage": 'granted',
+            "functionality_storage": 'granted',
+            "ads_data_redaction": 'denied',
+            "ad_user_data": 'granted',
+            "ad_personalization": 'granted',
+            "security_storage": 'granted',
+            "url_passthrough": true,
+            "wait_for_update": 500,
+            "region": ['US-CA']
+        });
+        console.log("Intastellar Consents: Applied CALIFORNIA defaults (US-CA)");
+
+        // Rest of the world fallback
+        gtag('consent', 'default', {
+            "ad_storage": 'granted',
+            "personalization_storage": 'granted',
+            "analytics_storage": 'granted',
+            "functionality_storage": 'granted',
+            "ads_data_redaction": 'granted',
+            "ad_user_data": 'granted',
+            "ad_personalization": 'granted',
+            "security_storage": 'granted',
+            "url_passthrough": true,
+            "wait_for_update": 500
+        });
+        console.log("Intastellar Consents: Applied REST-OF-WORLD defaults");
         gtag('consent', 'default', {
             'ad_storage': 'denied',
             'personalization_storage': 'denied',
@@ -76,7 +124,7 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
 
 window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
 
-window.clarity('consentv2', {
+window.clarity && window.clarity('consentV2', {
     ad_Storage: "denied",
     analytics_Storage: "denied"
 });
@@ -98,6 +146,42 @@ window._hsp.push([
     }
 ]);
 
+window.Shopify ?? window?.Shopify?.loadFeatures(
+    [
+        {
+            name: 'consent-tracking-api',
+            version: '0.1',
+        },
+    ],
+    error => {
+        if (error) {
+            // Rescue error
+            console.error(error);
+        }
+        // If error is false, the API has loaded and ready to use!
+        window.Shopify.customerPrivacy.setTrackingConsent(
+            {
+                'analytics': intaCookieConsents?.staticsticCookies === "checked",
+                'marketing': intaCookieConsents?.advertisementCookies === "checked",
+                'preferences': intaCookieConsents?.functionalCookies === "checked",
+            },
+            () => console.log("Consent captured")
+        );
+    },
+);
+
+function optOutCCPA() {
+    gtag('consent', 'update', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied'
+    });
+
+    // Optional: store the choice locally so you don’t ask again
+    localStorage.setItem('ccpa_opt_out', 'true');
+
+    alert("Your opt-out has been saved. We won’t sell or share your personal information.");
+}
 /* window._hsp.push(['_setDomainName', window.location.host]);
 if (window.INTA?.settings?.hubspotId) {
     window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
@@ -124,56 +208,76 @@ const IntastellarCookieConsent = {
         template.classList.remove("--active");
     },
     initialize: function (template) {
-        dataLayer.push({ 'event': 'intastellar_consent_widget_initialized' });
-        if (document.readyState === 'complete') {
-            if (
-                document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
-                || window.INTA === undefined
-            ) {
-                // Get the host and remove all subdomains
-                let host = window.location.host;
-                host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
-                // Remove the port if it exists
-                host = host.replace(/:\d+$/, "");
-                const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
-                const configScript = document.createElement("script");
-                configScript.src = intastellarDefaultConfigFile;
+        function initTemplate() {
+            if (!document.querySelector(".intastellarCookieConstents") && template !== false) {
+                document.body.append(template);
+            }
 
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", intastellarDefaultConfigFile);
-                xhr.send();
-
-                if (xhr.status === 200) {
-                    document.head.insertBefore(configScript, document.currentScript);
+            if (!getCookie(int_hideCookieBannerName)) {
+                const el = document.querySelector(".intastellarCookieConstents");
+                if (el) el.classList.add("--active");
+                if (window.dataLayer) {
+                    window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
                 }
             }
-            document.body.append(template);
-        } else {
-            window.addEventListener("load", function () {
-                if (
-                    document.querySelectorAll('script[src^="https://downloads.intastellarsolutions.com/cookieconsents/"][src$="/config.js"]').length === 0
-                    || window.INTA === undefined
-                ) {
-                    // Get the host and remove all subdomains
-                    let host = window.location.host;
-                    host.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
-                    // Remove the port if it exists
-                    host = host.replace(/:\d+$/, "");
-                    const intastellarDefaultConfigFile = "https://downloads.intastellarsolutions.com/cookieconsents/" + host + "/config.js";
-                    const configScript = document.createElement("script");
-                    configScript.src = intastellarDefaultConfigFile;
-
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("GET", intastellarDefaultConfigFile);
-                    xhr.send();
-
-                    if (xhr.status === 200) {
-                        document.head.insertBefore(configScript, document.currentScript);
-                    }
-                }
-                document.body.append(template);
-            })
         }
+
+        function loadRemoteConfig() {
+            let host = window.location.host
+                .replace(/^(?:www\.)?/i, "")
+                .replace(/:\d+$/, "");
+
+            const url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
+
+            return fetch(url, { method: "HEAD" })
+                .then(res => {
+                    if (res.ok) {
+                        return new Promise(resolve => {
+                            const script = document.createElement("script");
+                            script.src = url;
+                            script.onload = resolve;
+                            script.onerror = resolve;
+                            document.head.appendChild(script);
+                        });
+                    }
+                })
+                .catch(() => {
+                    console.warn("No INTA config found for host:", host);
+                });
+        }
+
+        function waitForINTA(timeout = 3000) {
+            return new Promise(resolve => {
+                if (typeof window.INTA !== "undefined") {
+                    return resolve(true);
+                }
+
+                const start = Date.now();
+                const timer = setInterval(() => {
+                    if (typeof window.INTA !== "undefined") {
+                        clearInterval(timer);
+                        resolve(true);
+                    } else if (Date.now() - start > timeout) {
+                        clearInterval(timer);
+                        resolve(false);
+                    }
+                }, 100);
+            });
+        }
+
+        // Core logic
+        waitForINTA().then(found => {
+            if (found) {
+                console.info("Using existing INTA");
+                initTemplate();
+                
+            } else {
+                console.info("INTA not found, loading remote config…");
+                loadRemoteConfig().then(() => {
+                    initTemplate();
+                });
+            }
+        });
     }
 }
 let scriptTypelang = {};
@@ -254,7 +358,7 @@ function decodeIntaConsentsObject(number) {
     var length = number?.length;
     for (var i = 0; i < length;) {
         var code = number?.slice(i, i += 2);
-        string += String.fromCharCode(parseInt(code, parseInt(getCookie(int_hideCookieBannerName).split(".")[1])));
+        string += String.fromCharCode(parseInt(code, parseInt(getCookie(int_hideCookieBannerName)?.split(".")[1])));
     }
 
     return string;
@@ -262,31 +366,13 @@ function decodeIntaConsentsObject(number) {
 
 const intastellarDevMode = (function () {
     return window.location.host === "localhost"
-        || window.location.host.indexOf("127.0.0.1") > -1
-        || window.location.host.indexOf("0.0.0.0") > -1
-        || window.location.host.indexOf("192.168.") > -1
-        || window.location.host.indexOf("::1") > -1
-        && window.INTA.dev === true
+        || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
         ? true : false;
 })();
 
-const intastellarCreateBanner = document.createElement("script");
-
-intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-if (window.INTA.settings.design === "floating") {
-    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-}
-if (intastellarDevMode) {
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = "../../dev/styles/floating.js";
-    } else {
-        intastellarCreateBanner.src = "../../dev/cb.dev.js";
-    }
-}
-// Adding the script to the head
-setTimeout(() => {
-    document.head.insertBefore(intastellarCreateBanner, document.currentScript);
-}, 200);
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
     english: {
@@ -698,6 +784,32 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
+
+    const intastellarCreateBanner = document.createElement("script");
+
+    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
+    }
+    if (intastellarDevMode) {
+        if (window.INTA.settings.design === "floating") {
+            intastellarCreateBanner.src = "../../dev/styles/floating.js";
+        } else {
+            intastellarCreateBanner.src = "../../dev/cb.dev.js";
+        }
+    }
+
+    document.head.appendChild(intastellarCreateBanner);
+
+    const optedOut = localStorage.getItem('ccpa_opt_out');
+    if (optedOut === 'true') {
+        gtag('consent', 'update', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied'
+        });
+    }
+
     if (document.getElementById("intastellar-gdpr-settings-js-after") !== null) {
         console.warn(`IntastellarSolutionsSDK: You´re using an old version of our cookie solutions for WordPress. To make sure to get the latest updates and features, please download the latest version from our Website:
         https://www.intastellarsolutions.com/cookie-solutions/downloads`);
@@ -816,6 +928,21 @@ const intCookieDomainWithWWW = (function () {
 
     return "domain=www." + d + ";";
 })();
+
+/* Find specific parameter on current Script */
+
+function findScriptParameter(value) {
+    const currentURL = document.currentScript.src;
+
+    if (currentURL.indexOf(value) > -1) {
+        let url = new URL(currentURL);
+        let param = url.searchParams;
+        return param.get(value);
+    }
+
+    return undefined;
+
+}
 
 const allowAllCookieName = "__all__cookies";
 const essentialsCookieName = "__essential__cookies";
@@ -1991,13 +2118,13 @@ function intaCookieType(type) {
 
 /* function generateCookieRegex(item){ */
 /* Cookie name list for functional cookies */
-if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies) {
+if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies) {
     let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
 }
 /* Cookie name list for statistical cookies */
 if (getCookie(int_hideCookieBannerName) != ""
-    && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1
+    && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1
     && intaCookieConsents?.staticsticCookies) {
     let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
@@ -2005,14 +2132,14 @@ if (getCookie(int_hideCookieBannerName) != ""
 
 /* Cookie name list for marketing / advertisment cookies */
 if (getCookie(int_hideCookieBannerName) != ""
-    && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1
+    && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1
     && intaCookieConsents?.advertisementCookies) {
     let newArray = [...inta_marketingCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
 if (getCookie(int_hideCookieBannerName) != ""
-    && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1
+    && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1
     && intaCookieConsents?.functionalCookies) {
     let newArray = [...inta_functionalCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
@@ -2234,10 +2361,19 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
 
-    window.clarity('consentV2', {
+    window.clarity && window.clarity('consentV2', {
         ad_Storage: "granted",
         analytics_Storage: "denied"
     });
+
+    window.Shopify.customerPrivacy.setTrackingConsent(
+        {
+            'analytics': false,
+            'marketing': true,
+            'preferences': false,
+        },
+        () => console.log("Consent captured")
+    );
 
     fbq('consent', 'grant');
     // Enable ads
@@ -2251,13 +2387,22 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted',
         'url_passthrough': true,
     })
-    window.clarity('consentV2', {
+    window.clarity && window.clarity('consentV2', {
         ad_Storage: "denied",
         analytics_Storage: "granted"
     });
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
+
+    window.Shopify.customerPrivacy.setTrackingConsent(
+        {
+            'analytics': true,
+            'marketing': false,
+            'preferences': false,
+        },
+        () => console.log("Consent captured")
+    );
 }
 
 if (intaCookieConsents?.functionalCookies) {
@@ -2267,6 +2412,15 @@ if (intaCookieConsents?.functionalCookies) {
     window.uetq.push('consent', 'update', {
         'functionality_storage': 'granted'
     });
+
+    window.Shopify.customerPrivacy.setTrackingConsent(
+        {
+            'analytics': false,
+            'marketing': false,
+            'preferences': true,
+        },
+        () => console.log("Consent captured")
+    );
 
 }
 
@@ -2363,24 +2517,24 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
 
 /* Helper function to check class names */
 function containsClass(element, searchString) {
-    return element.classList.contains(searchString) || element.className.split(' ').some(cls => cls.includes(searchString));
+    return element?.classList?.contains(searchString) || element?.className?.split(' ')?.some(cls => cls?.includes(searchString));
 }
 
 function loopBlock(addedNodes, message, script, buttonText, logo) {
     addedNodes.forEach((frae) => {
-        if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies === "checked"
+        if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies === "checked"
             && intaCookieConsents?.functionalCookies === "checked" && intaCookieConsents?.staticsticCookies === "checked") {
             return;
         }
         let settingsContent = document.createElement("inta-consents-iframe");
-        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
             if (frae?.src?.indexOf("hs-sites.com") > -1) {
                 frae?.parentElement?.replaceChild("", frae);
             }
         }
-        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
             // Check if an element is from Facebook, check by looking at the class name if it contains "fb"
-            if (containsClass(frae, "fb-") && frae.getAttribute("data-href").indexOf("facebook.com") > -1) {
+            if (containsClass(frae, "fb-") && frae.getAttribute("data-href")?.indexOf("facebook.com") > -1) {
                 frae?.parentElement?.replaceChild(settingsContent, frae);
             }
             if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
@@ -2482,7 +2636,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 }
 
             }
-        } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies && script.type == "functional") {
+        } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies && script.type == "functional") {
             if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
                 frae.sandbox = "";
                 let a = document.createElement('a');
@@ -2609,7 +2763,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
 }
 
 function blockBlockQuotes(tweet, message, script, buttonText, logo) {
-    if (tweet != " " && getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
+    if (tweet != " " && getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
         let a = document.createElement('a');
         a.href = tweet.querySelector("a").href;
         let externalDomain = a.hostname;
@@ -2870,7 +3024,7 @@ function restartObserver() {
 const beforeScriptExecuteListener = function (event, node) {
     let src = node.src || "";
 
-    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
         || !FunctionalCheckbox?.checked || !StaticsCheckBox?.checked || !MarketingCheckBox?.checked
     ) {
@@ -3338,7 +3492,7 @@ function checkCookieStatus() {
                         });
                     }
 
-                    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+                    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
                         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
                         if (node.nodeType === 1 && node.tagName === "LINK") {
                             addedNodes.forEach((link) => {
@@ -3376,7 +3530,7 @@ function checkCookieStatus() {
 
 
 
-                            if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+                            if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
                                 || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
                                 || !FunctionalCheckbox?.checked && !StaticsCheckBox?.checked && !MarketingCheckBox?.checked
                             ) {
@@ -3411,13 +3565,13 @@ function checkCookieStatus() {
                                     /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
                                     deleteAllCookies();
                                 }
-                            } else if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1
+                            } else if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1
                                 || intaCookieConsents?.advertisementCookies == "false" &&
                                 getCookie(int_hideCookieBannerName) != "" &&
-                                getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 &&
+                                getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 &&
                                 intaCookieConsents?.functionalCookies == "false" &&
                                 getCookie(int_hideCookieBannerName) != "" &&
-                                getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 &&
+                                getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 &&
                                 intaCookieConsents?.staticsticCookies == "false" ||
                                 intaCookieConsents?.advertisementCookies == "null" &&
                                 intaCookieConsents?.functionalCookies == "null" &&
@@ -3466,7 +3620,7 @@ function checkCookieStatus() {
                             }
                         });
                     } else if (node.nodeType === 1 && node.tagName === "NOSCRIPT" && node.type !== 'application/ld+json' && node.innerText.indexOf("window.INTA") == -1 && node.innerText.indexOf("window.INT") == -1 && node.innerText.toLowerCase().indexOf("elementor") == -1) {
-                        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName).indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName).indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+                        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
                             || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
                             || FunctionalCheckbox?.checked && StaticsCheckBox?.checked && MarketingCheckBox?.checked
                         ) {

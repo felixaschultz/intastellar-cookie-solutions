@@ -32,8 +32,11 @@
             return "";
         }
 
-        window.addEventListener("message", (event) => {
+        /* window.addEventListener("message", (event) => {
             const origin = event.origin || event.originalEvent.origin;
+
+            console.log(event);
+
             const rootDomain = partnerDomains?.domain;
             const localStorageData = localStorage.getItem("cookieSharing#" + rootDomain.replace("https://", "").replace("http://", "").replace("www.", ""));
             const partnerDomains = JSON.parse(localStorage.getItem("cookieSharing#" + rootDomain.replace("https://", "").replace("http://", "").replace("www.", "")));
@@ -50,7 +53,7 @@
 
         });
 
-        window.parent.postMessage("ready", "*");
+        window.parent.postMessage("ready", "*"); */
         /* })(); */
     </script>
 </body>
