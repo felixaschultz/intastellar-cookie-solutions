@@ -1,6 +1,11 @@
 ![Intastellar Consents Banner](/img/github__banner.jpg "Intastellar Consents Banner")
 
 # Intastellar Consents Solutions
+![version](https://img.shields.io/github/v/tag/felixaschultz/intastellar-cookie-solutions?label=version)
+![license](https://img.shields.io/github/license/felixaschultz/intastellar-cookie-solutions)
+![CI](https://github.com/felixaschultz/intastellar-cookie-solutions/actions/workflows/build.yml/badge.svg)
+![Bundle Size](https://img.shields.io/badge/size-12kb-green)
+![PRs welcome](https://img.shields.io/badge/PRs-welcome-blue)
 
 ## Table of contents
 
