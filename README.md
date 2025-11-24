@@ -18,6 +18,11 @@
 - [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
 - [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
 
+## Who is it for
+
+## How to use it
+
+
 ## General Info
 
 With this project I wanted to build my own cookie banner witch is free to use. I was not always happy about all the cookie banners solutions I´ve found online, either the banner wasn´t all that good or you needed an account to get access to the banner for implementation.
@@ -65,9 +70,20 @@ Read our documentation under: https://developers.intastellarsolutions.com/cookie
 You can add and load it direct via loading https://consents.cdn.intastellarsolutions.com/uc.js into your website.
 
 ```html
+<script>
+  window.INTA = {
+    policy_link: "[Link to your privacy policy]",
+    settings: {
+      color: "Your brand color",
+      logo: "Link to your logo",
+      rootDomain: "example.com",
+      arrange: "ltr or rtl",
+      design: "banner | bannerV2 | overlay"
+    }
+  }
+</script>
 <script src="https://consents.cdn.intastellarsolutions.com/uc.js"></script>
 ```
-
 ## Trackers & Supported Consents Mode
 
 We support the following trackers and consents mode:
