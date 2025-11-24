@@ -1,6 +1,11 @@
 ![Intastellar Consents Banner](/img/github__banner.jpg "Intastellar Consents Banner")
 
 # Intastellar Consents Solutions
+![version](https://img.shields.io/github/v/tag/felixaschultz/intastellar-cookie-solutions?label=version)
+![license](https://img.shields.io/github/license/felixaschultz/intastellar-cookie-solutions)
+![CI](https://github.com/felixaschultz/intastellar-cookie-solutions/actions/workflows/build.yml/badge.svg)
+![Bundle Size](https://img.shields.io/badge/size-12kb-green)
+![PRs welcome](https://img.shields.io/badge/PRs-welcome-blue)
 
 ## Table of contents
 
@@ -17,6 +22,11 @@
 - [Intastellar Consents](https://www.intastellar-consents.com)
 - [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
 - [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
+
+## Who is it for
+
+## How to use it
+
 
 ## General Info
 
@@ -65,9 +75,20 @@ Read our documentation under: https://developers.intastellarsolutions.com/cookie
 You can add and load it direct via loading https://consents.cdn.intastellarsolutions.com/uc.js into your website.
 
 ```html
+<script>
+  window.INTA = {
+    policy_link: "[Link to your privacy policy]",
+    settings: {
+      color: "Your brand color",
+      logo: "Link to your logo",
+      rootDomain: "example.com",
+      arrange: "ltr or rtl",
+      design: "banner | bannerV2 | overlay"
+    }
+  }
+</script>
 <script src="https://consents.cdn.intastellarsolutions.com/uc.js"></script>
 ```
-
 ## Trackers & Supported Consents Mode
 
 We support the following trackers and consents mode:

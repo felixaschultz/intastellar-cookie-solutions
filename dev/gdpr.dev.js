@@ -100,6 +100,18 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "wait_for_update": 500
         });
         console.log("Intastellar Consents: Applied REST-OF-WORLD defaults");
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'personalization_storage': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'ads_data_redaction': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'security_storage': 'granted',
+            'url_passthrough': true,
+            'wait_for_update': 500,
+        });
         window._gtagDefaultFired = true;
     }
 } else if (isGtmMode) {
