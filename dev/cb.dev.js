@@ -2485,12 +2485,12 @@ onWindowLoad(function () {
 
         let settings = document.querySelector(".intastellarCookie-settings__container");
         if (document.querySelector(".intastellarCookieBanner") != null) {
-            if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
+            if (getCookie(int_hideCookieBannerName)?.split(".")[0].indexOf("1") > -1) {
                 document.querySelector(".intastellarCookieBanner").style.display = "none";
             } else {
                 document.querySelector(".intastellarCookieBanner").style.display = "";
             }
-        } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
+        } else if (getCookie(int_hideCookieBannerName)?.split(".")[0].indexOf("1") > -1) {
             /* if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) { */
             document.querySelector("html").classList.remove("noScroll");
             if (document.querySelector(".intastellarCookieConstents") != null) {
