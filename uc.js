@@ -124,13 +124,6 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
 }
 
-window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
-
-window.clarity && window.clarity('consentV2', {
-    ad_Storage: "denied",
-    analytics_Storage: "denied"
-});
-
 window.uetq = window.uetq || [];
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
@@ -787,6 +780,13 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
+
+    window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
+
+    window.clarity && window.clarity('consentV2', {
+        ad_Storage: "denied",
+        analytics_Storage: "denied"
+    });
 
     const intastellarCreateBanner = document.createElement("script");
 
