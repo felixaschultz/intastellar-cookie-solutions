@@ -1,0 +1,19 @@
+{
+  "name": "@intastellar/consents-react",
+  "version": "1.0.0",
+  "description": "Get complient with data regulations and the GDPR in the EU, in a few simple steps. Reduce your chance to get a legal fine because of using Analytics tools and marketing tools.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Intastellar Consents",
+    "GDPR",
+    "cookie banner",
+    "cookie consents",
+    "react cookie consents",
+    "website compliance script"
+  ],
+  "author": "Intastellar Solutions, International",
+  "license": "ISC"
+}
