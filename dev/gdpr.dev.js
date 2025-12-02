@@ -184,6 +184,26 @@ function optOutCCPA() {
 }
 
 // --- Server-Side Tagging & Interception Implementation ---
+// Helper: Determine consent type for a given URL using allScripts regex
+function getConsentTypeForUrl(url) {
+    if (!url) return 'marketing';
+    for (let i = 0; i < allScripts.length; i++) {
+        const scriptType = allScripts[i].type;
+        const patterns = allScripts[i].scripts;
+        for (let j = 0; j < patterns.length; j++) {
+            try {
+                const regex = new RegExp(patterns[j], 'i');
+                if (regex.test(url)) {
+                    // statics => statistics
+                    if (scriptType === 'statics') return 'statistics';
+                    return scriptType;
+                }
+            } catch (e) { /* ignore invalid regex */ }
+        }
+    }
+    // Default fallback
+    return 'marketing';
+}
 
 // Helper: Send intercepted data to backend for storage/categorization
 async function sendToBackend(data) {
@@ -221,10 +241,7 @@ window.fetch = function (resource, config) {
     }
     const isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
-        // Example: block marketing/analytics/functional fetches if no consent
-        // You may want to categorize URLs for more granular control
-        const consentType = 'marketing'; // Default, or use logic to categorize
-        //sendToBackend({ url, config, type: 'fetch', initiator: window.location.href, consent: hasConsent(consentType) });
+        const consentType = getConsentTypeForUrl(url);
         if (!hasConsent(consentType)) {
             return Promise.reject(new Error('Blocked by consent/interceptor: ' + url));
         }
@@ -238,13 +255,12 @@ function CustomXHR() {
     const xhr = new OriginalXHR();
     const open = xhr.open;
     xhr.open = function (method, url, ...args) {
-        if (url.includes('/tests/backend/test.php')) {
+        if (url.includes('/tests/backend/test.php') || url.includes("intastellarsolutions.com")) {
             return open.apply(this, arguments);
         }
         const isExternal = !url.startsWith(window.location.origin);
         if (isExternal) {
-            const consentType = 'marketing'; // Default, or use logic to categorize
-            //sendToBackend({ url, method, type: 'xhr', initiator: window.location.href, consent: hasConsent(consentType) });
+            const consentType = getConsentTypeForUrl(url);
             if (!hasConsent(consentType)) {
                 throw new Error('Blocked by consent/interceptor: ' + url);
             }
@@ -263,12 +279,10 @@ navigator.sendBeacon = function(url, data) {
     }
     const isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
-        const consentType = 'marketing'; // Or use logic to categorize
+        const consentType = getConsentTypeForUrl(url);
         if (!hasConsent(consentType)) {
-            // Optionally block beacon if no consent
             return false;
         }
-        // Optionally log beacon
         sendToBackend({
             type: 'beacon',
             url,
