@@ -126,7 +126,7 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
 
 window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
 
-window.clarity && window.clarity('consentV2', {
+window.clarity && window.clarity('consentv2', {
     ad_Storage: "denied",
     analytics_Storage: "denied"
 });
@@ -2351,7 +2351,7 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
 
-    window.clarity && window.clarity('consentV2', {
+    window.clarity && window.clarity('consentv2', {
         ad_Storage: "granted",
         analytics_Storage: "denied"
     });
@@ -2377,7 +2377,7 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted',
         'url_passthrough': true,
     })
-    window.clarity && window.clarity('consentV2', {
+    window.clarity && window.clarity('consentv2', {
         ad_Storage: "denied",
         analytics_Storage: "granted"
     });

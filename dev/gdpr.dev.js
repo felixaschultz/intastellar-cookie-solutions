@@ -124,7 +124,7 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
 
 window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
 
-window.clarity && window.clarity('consentV2', {
+window.clarity && window.clarity('consentv2', {
     ad_Storage: "denied",
     analytics_Storage: "denied"
 });
@@ -182,17 +182,105 @@ function optOutCCPA() {
 
     alert("Your opt-out has been saved. We won’t sell or share your personal information.");
 }
-/* window._hsp.push(['_setDomainName', window.location.host]);
-if (window.INTA?.settings?.hubspotId) {
-    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
-    window._hsp.push(['_trackPageview']);
-    window._hsp.push(['_trackPageLoadTime']);
-    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
-    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
-    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
-    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
-    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
-} */
+
+// --- Server-Side Tagging & Interception Implementation ---
+
+// Helper: Send intercepted data to backend for storage/categorization
+async function sendToBackend(data) {
+    try {
+        // Use await to ensure the fetch is handled as an async background request
+        await fetch('/tests/backend/test.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+    } catch (e) {
+        // Optionally log error
+        console.log(e);
+    }
+    // Never trigger navigation or download
+    return;
+}
+
+// Consent check helper
+function hasConsent(type) {
+    // type: 'functional', 'statistics', 'marketing'
+    if (!window.intaCookieConsents) return false;
+    if (type === 'functional') return window.intaCookieConsents.functionalCookies === 'checked';
+    if (type === 'statistics') return window.intaCookieConsents.staticsticCookies === 'checked';
+    if (type === 'marketing') return window.intaCookieConsents.advertisementCookies === 'checked';
+    return false;
+}
+
+// Intercept fetch with consent check
+const originalFetch = window.fetch;
+window.fetch = function (resource, config) {
+    const url = typeof resource === 'string' ? resource : resource.url;
+    if (url.includes('/tests/backend/test.php')) {
+        return open.apply(this, arguments);
+    }
+    const isExternal = !url.startsWith(window.location.origin);
+    if (isExternal) {
+        // Example: block marketing/analytics/functional fetches if no consent
+        // You may want to categorize URLs for more granular control
+        const consentType = 'marketing'; // Default, or use logic to categorize
+        //sendToBackend({ url, config, type: 'fetch', initiator: window.location.href, consent: hasConsent(consentType) });
+        if (!hasConsent(consentType)) {
+            return Promise.reject(new Error('Blocked by consent/interceptor: ' + url));
+        }
+    }
+    return originalFetch.apply(this, arguments);
+};
+
+// Intercept XMLHttpRequest with consent check
+const OriginalXHR = window.XMLHttpRequest;
+function CustomXHR() {
+    const xhr = new OriginalXHR();
+    const open = xhr.open;
+    xhr.open = function (method, url, ...args) {
+        if (url.includes('/tests/backend/test.php')) {
+            return open.apply(this, arguments);
+        }
+        const isExternal = !url.startsWith(window.location.origin);
+        if (isExternal) {
+            const consentType = 'marketing'; // Default, or use logic to categorize
+            //sendToBackend({ url, method, type: 'xhr', initiator: window.location.href, consent: hasConsent(consentType) });
+            if (!hasConsent(consentType)) {
+                throw new Error('Blocked by consent/interceptor: ' + url);
+            }
+        }
+        return open.apply(this, arguments);
+    };
+    return xhr;
+}
+window.XMLHttpRequest = CustomXHR;
+// Intercept navigator.sendBeacon with consent check
+const originalSendBeacon = navigator.sendBeacon;
+navigator.sendBeacon = function(url, data) {
+    // Prevent recursion for backend endpoint
+    if (url.includes('/tests/backend/test.php')) {
+        return originalSendBeacon.apply(this, arguments);
+    }
+    const isExternal = !url.startsWith(window.location.origin);
+    if (isExternal) {
+        const consentType = 'marketing'; // Or use logic to categorize
+        if (!hasConsent(consentType)) {
+            // Optionally block beacon if no consent
+            return false;
+        }
+        // Optionally log beacon
+        sendToBackend({
+            type: 'beacon',
+            url,
+            data: typeof data === 'string' ? data : '[binary]',
+            consentType,
+            timestamp: Date.now()
+        });
+    }
+    return originalSendBeacon.apply(this, arguments);
+};
+// --- End Server-Side Tagging & Interception Implementtion ---
+
 
 if (intaCookieConsents?.advertisementCookies !== "checked") {
     fbq('consent', 'revoke');
@@ -2361,7 +2449,7 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_storage': 'granted'
     });
 
-    window.clarity && window.clarity('consentV2', {
+    window.clarity && window.clarity('consentv2', {
         ad_Storage: "granted",
         analytics_Storage: "denied"
     });
@@ -2387,7 +2475,7 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted',
         'url_passthrough': true,
     })
-    window.clarity && window.clarity('consentV2', {
+    window.clarity && window.clarity('consentv2', {
         ad_Storage: "denied",
         analytics_Storage: "granted"
     });

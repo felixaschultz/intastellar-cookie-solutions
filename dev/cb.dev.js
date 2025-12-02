@@ -2697,7 +2697,7 @@ onWindowLoad(function () {
                     'ad_storage': 'granted',
                     'ad_user_data': 'granted',
                 })
-                window.clarity('consentV2', {
+                window.clarity('consentv2', {
                     ad_Storage: "denied",
                     analytics_Storage: "granted"
                 });
@@ -2715,7 +2715,7 @@ onWindowLoad(function () {
                     'analytics_storage': 'denied',
                 })
 
-                window.clarity('consentV2', {
+                window.clarity('consentv2', {
                     ad_Storage: "denied",
                     analytics_Storage: "denied"
                 });
@@ -2746,7 +2746,7 @@ onWindowLoad(function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'granted'
                 });
-                window.clarity('consentV2', {
+                window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "denied"
                 });
@@ -2847,7 +2847,7 @@ onWindowLoad(function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'granted'
                 });
-                window.clarity('consentV2', {
+                window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
                 });
@@ -2934,7 +2934,7 @@ onWindowLoad(function () {
                     advertisement: true,
                     functionality: true,
                 }]);
-                window.clarity('consentV2', {
+                window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
                 });
@@ -3006,7 +3006,7 @@ onWindowLoad(function () {
                     advertisement: false,
                     functionality: false,
                 }]);
-                window.clarity('consentV2', {
+                window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
                 });
@@ -3189,7 +3189,7 @@ onWindowLoad(function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
                     });
-                    window.clarity('consentV2', {
+                    window.clarity('consentv2', {
                         ad_Storage: "granted",
                         analytics_Storage: "granted"
                     });
@@ -3417,7 +3417,7 @@ onWindowLoad(function () {
                         functionality: true,
                     }]);
 
-                    window.clarity('consentV2', {
+                    window.clarity('consentv2', {
                         ad_Storage: "granted",
                         analytics_Storage: "granted"
                     });
@@ -4749,7 +4749,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-        window.clarity('consentV2', {
+        window.clarity('consentv2', {
             ad_Storage: "granted",
             analytics_Storage: "denied"
         });
@@ -4885,7 +4885,7 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
         window._hsp.push(['doNotTrack', false]);
-        window.clarity('consentV2', {
+        window.clarity('consentv2', {
             ad_Storage: "denied",
             analytics_Storage: "granted"
         });
