@@ -1,0 +1,14 @@
+{
+  "name": "Intastellar Consents",
+  "version": "1.0.0",
+  "description": "Cookie consent banner & CMP for Squarespace sites, powered by Intastellar Consents.",
+  "author": "Intastellar Solutions, International",
+  "homepage": "https://intastellarconsents.com",
+  "scripts": {
+    "loader": "dist/loader.js"
+  },
+  "compatibility": {
+    "platform": "Squarespace",
+    "supported_versions": ["7.1"]
+  }
+}
