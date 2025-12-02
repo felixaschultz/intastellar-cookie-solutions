@@ -232,11 +232,20 @@ function hasConsent(type) {
     return false;
 }
 
+const ALLOWLIST = [
+    location.origin,
+    "https://intastellar.app",
+    "https://www.intastellarsolutions.com",
+    "https://analytics.intastellarsolutions.com",
+    "https://api.intastellarsolutions.com"
+];
+
+
 // Intercept fetch with consent check
 const originalFetch = window.fetch;
 window.fetch = function (resource, config) {
     const url = typeof resource === 'string' ? resource : resource.url;
-    if (url.includes('/tests/backend/test.php')) {
+    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
         return open.apply(this, arguments);
     }
     const isExternal = !url.startsWith(window.location.origin);
@@ -255,7 +264,7 @@ function CustomXHR() {
     const xhr = new OriginalXHR();
     const open = xhr.open;
     xhr.open = function (method, url, ...args) {
-        if (url.includes('/tests/backend/test.php') || url.includes("intastellarsolutions.com")) {
+        if (ALLOWLIST.some(domain => url.startsWith(domain))) {
             return open.apply(this, arguments);
         }
         const isExternal = !url.startsWith(window.location.origin);
@@ -274,7 +283,7 @@ window.XMLHttpRequest = CustomXHR;
 const originalSendBeacon = navigator.sendBeacon;
 navigator.sendBeacon = function(url, data) {
     // Prevent recursion for backend endpoint
-    if (url.includes('/tests/backend/test.php')) {
+    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
         return originalSendBeacon.apply(this, arguments);
     }
     const isExternal = !url.startsWith(window.location.origin);
