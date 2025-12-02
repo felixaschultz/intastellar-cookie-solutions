@@ -122,7 +122,6 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
 }
 
-window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
 
 window.clarity && window.clarity('consentv2', {
     ad_Storage: "denied",
@@ -907,6 +906,13 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
+
+    window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
+
+    window.clarity && window.clarity('consentv2', {
+        ad_Storage: "denied",
+        analytics_Storage: "denied"
+    });
 
     const intastellarCreateBanner = document.createElement("script");
 
@@ -2489,7 +2495,7 @@ if (intaCookieConsents?.advertisementCookies) {
         analytics_Storage: "denied"
     });
 
-    window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': false,
             'marketing': true,
@@ -2518,7 +2524,7 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted'
     });
 
-    window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': true,
             'marketing': false,
@@ -2536,7 +2542,7 @@ if (intaCookieConsents?.functionalCookies) {
         'functionality_storage': 'granted'
     });
 
-    window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': false,
             'marketing': false,

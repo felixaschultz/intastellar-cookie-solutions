@@ -162,7 +162,7 @@ window.Shopify ?? window?.Shopify?.loadFeatures(
             return;
         }
         // If error is false, the API has loaded and ready to use!
-        window.Shopify.customerPrivacy.setTrackingConsent(
+        window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
             {
                 'analytics': intaCookieConsents?.staticsticCookies === "checked",
                 'marketing': intaCookieConsents?.advertisementCookies === "checked",
@@ -787,6 +787,13 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
+
+    window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
+
+    window.clarity && window.clarity('consentv2', {
+        ad_Storage: "denied",
+        analytics_Storage: "denied"
+    });
 
     const intastellarCreateBanner = document.createElement("script");
 
@@ -2356,7 +2363,7 @@ if (intaCookieConsents?.advertisementCookies) {
         analytics_Storage: "denied"
     });
 
-    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': false,
             'marketing': true,
@@ -2385,7 +2392,7 @@ if (intaCookieConsents?.staticsticCookies) {
         'analytics_storage': 'granted'
     });
 
-    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': true,
             'marketing': false,
@@ -2403,7 +2410,7 @@ if (intaCookieConsents?.functionalCookies) {
         'functionality_storage': 'granted'
     });
 
-    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': false,
             'marketing': false,
