@@ -246,13 +246,17 @@ const originalFetch = window.fetch;
 window.fetch = function (resource, config) {
     const url = typeof resource === 'string' ? resource : resource.url;
     if (ALLOWLIST.some(domain => url.startsWith(domain))) {
-        return open.apply(this, arguments);
+        return originalFetch.apply(this, arguments);
     }
     const isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
         const consentType = getConsentTypeForUrl(url);
         if (!hasConsent(consentType)) {
-            return Promise.reject(new Error('Blocked by consent/interceptor: ' + url));
+            if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+                console.log('[GDPR] Blocked fetch:', url, 'type:', consentType);
+            }
+            // Silently block: return a resolved Promise with undefined
+            return Promise.resolve(undefined);
         }
     }
     return originalFetch.apply(this, arguments);
@@ -271,7 +275,11 @@ function CustomXHR() {
         if (isExternal) {
             const consentType = getConsentTypeForUrl(url);
             if (!hasConsent(consentType)) {
-                throw new Error('Blocked by consent/interceptor: ' + url);
+                if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+                    console.log('[GDPR] Blocked XHR:', url, 'type:', consentType);
+                }
+                // Silently block: do not send request
+                return; // open not called, so request never sent
             }
         }
         return open.apply(this, arguments);
@@ -290,6 +298,10 @@ navigator.sendBeacon = function(url, data) {
     if (isExternal) {
         const consentType = getConsentTypeForUrl(url);
         if (!hasConsent(consentType)) {
+            if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+                console.log('[GDPR] Blocked beacon:', url, 'type:', consentType);
+            }
+            // Silently block: do not send beacon
             return false;
         }
         sendToBackend({
