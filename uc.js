@@ -6,6 +6,14 @@
  *
 */
 /* - - - Setup - - - */
+const intastellarDevMode = (function () {
+    return window.location.host === "localhost"
+        || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
+        || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
+        ? true : false;
+})();
 
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.js";
@@ -501,15 +509,6 @@ function decodeIntaConsentsObject(number) {
 
     return string;
 }
-
-const intastellarDevMode = (function () {
-    return window.location.host === "localhost"
-        || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
-        ? true : false;
-})();
 
 /* Object for supported languages */
 const intastellarSupportedLanguages = {
