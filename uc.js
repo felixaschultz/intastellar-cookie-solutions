@@ -5,42 +5,44 @@
  *  @copy 2022-2025 Intastellar Solutions, International
  *
 */
+/* - - - Setup - - - */
+const intaCookiePref = "IntastellarConsentSolution";
+const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
+const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
+const int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
+const int_staticsticCookies = intaCookiePref + ":Statistics-cookies";
+const int_visitorCheck = intaCookiePref + "visitorCheck";
+const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
+const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
+let intastellarShowHideDetailsText = "Show details";
+let adsbygoogle = window.adsbygoogle || [];
+const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
+const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
+const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
+const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
+const isGtmMode = findScriptParameter("ref") === "gtm";
+const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
+const FunctionalCheckbox = document.querySelector("#functional");
+const StaticsCheckBox = document.querySelector("#statics");
+const MarketingCheckBox = document.querySelector("#marketing");
+const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
+window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
+let poweredBy = "";
+window.dataLayer = window.dataLayer || [];
+let intaConsentsObjectVariable = {
+    consents: {
+        staticsticCookies: false,
+        functionalCookies: false,
+        advertisementCookies: false,
+    },
+    time: new Date().toGMTString(),
+    uid: Math.random().toString(16).slice(2),
+    domain: window?.INTA?.settings?.rootDomain || window.location.host,
+    sharingDomains: [],
+}
+
 if (!(window.location.hostname === "intastellarconsents.com" && window.location.pathname.startsWith("/gdpr"))) {
-    /* - - - Setup - - - */
-    const intaCookiePref = "IntastellarConsentSolution";
-    const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
-    const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
-    const int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
-    const int_staticsticCookies = intaCookiePref + ":Statistics-cookies";
-    const int_visitorCheck = intaCookiePref + "visitorCheck";
-    const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
-    const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
-    let intastellarShowHideDetailsText = "Show details";
-    let adsbygoogle = window.adsbygoogle || [];
-    const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
-    const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
-    const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
-    const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
-    const isGtmMode = findScriptParameter("ref") === "gtm";
-    const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
-    const FunctionalCheckbox = document.querySelector("#functional");
-    const StaticsCheckBox = document.querySelector("#statics");
-    const MarketingCheckBox = document.querySelector("#marketing");
-    const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
-    window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
-    let poweredBy = "";
-    window.dataLayer = window.dataLayer || [];
-    let intaConsentsObjectVariable = {
-        consents: {
-            staticsticCookies: false,
-            functionalCookies: false,
-            advertisementCookies: false,
-        },
-        time: new Date().toGMTString(),
-        uid: Math.random().toString(16).slice(2),
-        domain: window?.INTA?.settings?.rootDomain || window.location.host,
-        sharingDomains: [],
-    }
+    
 
         // --- Begin main consent script logic ---
         // ...existing code...
