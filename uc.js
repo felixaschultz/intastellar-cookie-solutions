@@ -231,8 +231,23 @@ function hasConsent(type) {
     return false;
 }
 
+
+// Helper to extract root domain (e.g., intastellarconsents.com from sub.api.intastellarconsents.com)
+function getRootDomain(hostname) {
+    const parts = hostname.split('.');
+    if (parts.length > 2) {
+        return parts.slice(-2).join('.');
+    }
+    return hostname;
+}
+
+const ROOT_DOMAIN = getRootDomain(window.location.hostname);
 const ALLOWLIST = [
     location.origin,
+    // Also allow all subdomains of the root domain
+    `https://${ROOT_DOMAIN}`,
+    `https://www.${ROOT_DOMAIN}`,
+    // Add more as needed
     "https://intastellar.app",
     "https://www.intastellarsolutions.com",
     "https://analytics.intastellarsolutions.com",
@@ -240,6 +255,7 @@ const ALLOWLIST = [
     "https://apis.intastellarsolutions.com",
     "https://api.intastellaraccounts.com",
     "https://apis.intastellaraccounts.com",
+    ...window?.INTA?.settings?.sharingDomains
 ];
 
 
