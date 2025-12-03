@@ -7,21 +7,6 @@
 */
 /* - - - Setup - - - */
 
-const intastellarCreateBanner = document.createElement("script");
-intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.js";
-if (window.INTA.settings.design === "floating") {
-    intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/floating.js";
-}
-if (intastellarDevMode) {
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = "../../dev/styles/floating.js";
-    } else {
-        intastellarCreateBanner.src = "../../dev/cb.dev.js";
-    }
-}
-
-document.head.appendChild(intastellarCreateBanner);
-
 const intaCookiePref = "IntastellarConsentSolution";
 const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
 const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
