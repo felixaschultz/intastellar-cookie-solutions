@@ -237,7 +237,8 @@ const ALLOWLIST = [
     "https://intastellar.app",
     "https://www.intastellarsolutions.com",
     "https://analytics.intastellarsolutions.com",
-    "https://api.intastellarsolutions.com"
+    "https://api.intastellarsolutions.com",
+    "https://apis.intastellarsolutions.com"
 ];
 
 
