@@ -1,11 +1,27 @@
 /*
- *  Intastellar Consents Solutions
- *  intastellarsolutions.com/solutions/cookie-consents
+ *  Cookie Consents Banner by Intastellar Solutions, International
+ *  intastellarsolutions.com/gdpr-cookiebanner
  *  consents.cdn.intastellarsolutions.com/uc.js
  *  @copy 2022-2025 Intastellar Solutions, International
  *
 */
 /* - - - Setup - - - */
+
+const intastellarCreateBanner = document.createElement("script");
+intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.js";
+if (window.INTA.settings.design === "floating") {
+    intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/floating.js";
+}
+if (intastellarDevMode) {
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = "../../dev/styles/floating.js";
+    } else {
+        intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    }
+}
+
+document.head.appendChild(intastellarCreateBanner);
+
 const intaCookiePref = "IntastellarConsentSolution";
 const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
 const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
@@ -27,7 +43,6 @@ const StaticsCheckBox = document.querySelector("#statics");
 const MarketingCheckBox = document.querySelector("#marketing");
 const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
-
 let poweredBy = "";
 window.dataLayer = window.dataLayer || [];
 let intaConsentsObjectVariable = {
@@ -44,19 +59,6 @@ let intaConsentsObjectVariable = {
 
 function gtag() {
     dataLayer.push(arguments);
-}
-
-function findScriptParameter(value) {
-    const currentURL = document.currentScript.src;
-
-    if (currentURL.indexOf(value) > -1) {
-        let url = new URL(currentURL);
-        let param = url.searchParams;
-        return param.get(value);
-    }
-
-    return undefined;
-
 }
 
 if (window._intaConsentInitialized) {
@@ -114,6 +116,18 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "wait_for_update": 500
         });
         console.log("Intastellar Consents: Applied REST-OF-WORLD defaults");
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'personalization_storage': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'ads_data_redaction': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'security_storage': 'granted',
+            'url_passthrough': true,
+            'wait_for_update': 500,
+        });
         window._gtagDefaultFired = true;
     }
 } else if (isGtmMode) {
@@ -124,7 +138,6 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
 }
 
-window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
 
 window.clarity && window.clarity('consentv2', {
     ad_Storage: "denied",
@@ -158,11 +171,10 @@ window.Shopify ?? window?.Shopify?.loadFeatures(
     error => {
         if (error) {
             // Rescue error
-            console.warn("Consent API failed to load:", error);
-            return;
+            console.error(error);
         }
         // If error is false, the API has loaded and ready to use!
-        window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
+        window.Shopify.customerPrivacy.setTrackingConsent(
             {
                 'analytics': intaCookieConsents?.staticsticCookies === "checked",
                 'marketing': intaCookieConsents?.advertisementCookies === "checked",
@@ -185,17 +197,140 @@ function optOutCCPA() {
 
     alert("Your opt-out has been saved. We won’t sell or share your personal information.");
 }
-/* window._hsp.push(['_setDomainName', window.location.host]);
-if (window.INTA?.settings?.hubspotId) {
-    window._hsp.push(['_setAccount', window.INTA?.settings?.hubspotId]);
-    window._hsp.push(['_trackPageview']);
-    window._hsp.push(['_trackPageLoadTime']);
-    window._hsp.push(['_setCustomVar', 1, 'Page', window.location.pathname, 1]);
-    window._hsp.push(['_setCustomVar', 2, 'Referrer', document.referrer, 1]);
-    window._hsp.push(['_setCustomVar', 3, 'Language', intastellarCookieLanguage, 1]);
-    window._hsp.push(['_setCustomVar', 4, 'User Agent', navigator.userAgent, 1]);
-    window._hsp.push(['_setCustomVar', 5, 'Cookie Consent', intaCookieConsentsUserId, 1]);
-} */
+
+// --- Server-Side Tagging & Interception Implementation ---
+// Helper: Determine consent type for a given URL using allScripts regex
+function getConsentTypeForUrl(url) {
+    if (!url) return 'marketing';
+    for (let i = 0; i < allScripts.length; i++) {
+        const scriptType = allScripts[i].type;
+        const patterns = allScripts[i].scripts;
+        for (let j = 0; j < patterns.length; j++) {
+            try {
+                const regex = new RegExp(patterns[j], 'i');
+                if (regex.test(url)) {
+                    // statics => statistics
+                    if (scriptType === 'statics') return 'statistics';
+                    return scriptType;
+                }
+            } catch (e) { /* ignore invalid regex */ }
+        }
+    }
+    // Default fallback
+    return 'marketing';
+}
+
+// Helper: Send intercepted data to backend for storage/categorization
+async function sendToBackend(data) {
+    try {
+        // Use await to ensure the fetch is handled as an async background request
+        await fetch('/tests/backend/test.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+    } catch (e) {
+        // Optionally log error
+        console.log(e);
+    }
+    // Never trigger navigation or download
+    return;
+}
+
+// Consent check helper
+function hasConsent(type) {
+    // type: 'functional', 'statistics', 'marketing'
+    if (!window.intaCookieConsents) return false;
+    if (type === 'functional') return window.intaCookieConsents.functionalCookies === 'checked';
+    if (type === 'statistics') return window.intaCookieConsents.staticsticCookies === 'checked';
+    if (type === 'marketing') return window.intaCookieConsents.advertisementCookies === 'checked';
+    return false;
+}
+
+const ALLOWLIST = [
+    location.origin,
+    "https://intastellar.app",
+    "https://www.intastellarsolutions.com",
+    "https://analytics.intastellarsolutions.com",
+    "https://api.intastellarsolutions.com"
+];
+
+
+// Intercept fetch with consent check
+const originalFetch = window.fetch;
+window.fetch = function (resource, config) {
+    const url = typeof resource === 'string' ? resource : resource.url;
+    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+        return originalFetch.apply(this, arguments);
+    }
+    const isExternal = !url.startsWith(window.location.origin);
+    if (isExternal) {
+        const consentType = getConsentTypeForUrl(url);
+        if (!hasConsent(consentType)) {
+            if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+                console.log('[GDPR] Blocked fetch:', url, 'type:', consentType);
+            }
+            // Silently block: return a resolved Promise with undefined
+            return Promise.resolve(undefined);
+        }
+    }
+    return originalFetch.apply(this, arguments);
+};
+
+// Intercept XMLHttpRequest with consent check
+const OriginalXHR = window.XMLHttpRequest;
+function CustomXHR() {
+    const xhr = new OriginalXHR();
+    const open = xhr.open;
+    xhr.open = function (method, url, ...args) {
+        if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+            return open.apply(this, arguments);
+        }
+        const isExternal = !url.startsWith(window.location.origin);
+        if (isExternal) {
+            const consentType = getConsentTypeForUrl(url);
+            if (!hasConsent(consentType)) {
+                if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+                    console.log('[GDPR] Blocked XHR:', url, 'type:', consentType);
+                }
+                // Silently block: do not send request
+                return; // open not called, so request never sent
+            }
+        }
+        return open.apply(this, arguments);
+    };
+    return xhr;
+}
+window.XMLHttpRequest = CustomXHR;
+// Intercept navigator.sendBeacon with consent check
+const originalSendBeacon = navigator.sendBeacon;
+navigator.sendBeacon = function (url, data) {
+    // Prevent recursion for backend endpoint
+    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+        return originalSendBeacon.apply(this, arguments);
+    }
+    const isExternal = !url.startsWith(window.location.origin);
+    if (isExternal) {
+        const consentType = getConsentTypeForUrl(url);
+        if (!hasConsent(consentType)) {
+            if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+                console.log('[GDPR] Blocked beacon:', url, 'type:', consentType);
+            }
+            // Silently block: do not send beacon
+            return false;
+        }
+        sendToBackend({
+            type: 'beacon',
+            url,
+            data: typeof data === 'string' ? data : '[binary]',
+            consentType,
+            timestamp: Date.now()
+        });
+    }
+    return originalSendBeacon.apply(this, arguments);
+};
+// --- End Server-Side Tagging & Interception Implementtion ---
+
 
 if (intaCookieConsents?.advertisementCookies !== "checked") {
     fbq('consent', 'revoke');
@@ -273,7 +408,7 @@ const IntastellarCookieConsent = {
             if (found) {
                 console.info("Using existing INTA");
                 initTemplate();
-                
+
             } else {
                 console.info("INTA not found, loading remote config…");
                 loadRemoteConfig().then(() => {
@@ -795,24 +930,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
         analytics_Storage: "denied"
     });
 
-    const intastellarCreateBanner = document.createElement("script");
-
-    intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/cb.js";
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = intastellarCookieBannerRootDomain + "/floating.js";
-    }
-    if (intastellarDevMode) {
-        if (window.INTA.settings.design === "floating") {
-            intastellarCreateBanner.src = "../../dev/styles/floating.js";
-        } else {
-            intastellarCreateBanner.src = "../../dev/cb.dev.js";
-        }
-    }
-
-    setTimeout(() => {
-        document.head.appendChild(intastellarCreateBanner);
-    }, 200)
-
     const optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
         gtag('consent', 'update', {
@@ -940,6 +1057,21 @@ const intCookieDomainWithWWW = (function () {
 
     return "domain=www." + d + ";";
 })();
+
+/* Find specific parameter on current Script */
+
+function findScriptParameter(value) {
+    const currentURL = document.currentScript.src;
+
+    if (currentURL.indexOf(value) > -1) {
+        let url = new URL(currentURL);
+        let param = url.searchParams;
+        return param.get(value);
+    }
+
+    return undefined;
+
+}
 
 const allowAllCookieName = "__all__cookies";
 const essentialsCookieName = "__essential__cookies";
