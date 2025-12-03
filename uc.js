@@ -2606,7 +2606,7 @@ if (intastellarDevMode) {
 }
 
 console.log("Debugging: " + intastellarCreateBanner.src);
-analyticsScript.async = true;
+intastellarCreateBanner.async = true;
 intHead.appendChild(intastellarCreateBanner);
 
 /* Helper function to create Consents Block message for iframes etc.*/
