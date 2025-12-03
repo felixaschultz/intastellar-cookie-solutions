@@ -245,7 +245,7 @@ const ROOT_DOMAIN = getRootDomain(window.location.hostname);
 const ALLOWLIST = [
     location.origin,
     // Also allow all subdomains of the root domain
-    `https://${ROOT_DOMAIN}`,
+    `${ROOT_DOMAIN}`,
     `https://www.${ROOT_DOMAIN}`,
     // Add more as needed
     "https://intastellar.app",
@@ -262,7 +262,7 @@ const ALLOWLIST = [
 const originalFetch = window.fetch;
 window.fetch = function (resource, config) {
     const url = typeof resource === 'string' ? resource : resource.url;
-    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+    if (ALLOWLIST.some(domain => url.startsWith(domain) || url.includes(domain))) {
         return originalFetch.apply(this, arguments);
     }
     const isExternal = !url.startsWith(window.location.origin);
