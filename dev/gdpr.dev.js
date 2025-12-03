@@ -3662,7 +3662,7 @@ function checkCookieStatus() {
 
                                         /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
 
-                                        deleteAllCookies();
+                                        /* deleteAllCookies(); */
                                     }
                                 } else if (src.indexOf(window.location.hostname) == -1
                                     && src.indexOf("jquery") == 1) {
@@ -3678,7 +3678,7 @@ function checkCookieStatus() {
                                     node.async = true;
                                     node.type = "text/blocked";
                                     /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                    deleteAllCookies();
+                                    /* deleteAllCookies(); */
                                 }
                             } else if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1
                                 || intaCookieConsents?.advertisementCookies == "false" &&
@@ -3748,7 +3748,7 @@ function checkCookieStatus() {
                                 node.async = true;
                                 node.type = "text/blocked";
                                 /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
-                                deleteAllCookies();
+                                /* deleteAllCookies(); */
                             }
                         } else if (intaCookieConsents?.functionalCookies == "false" && intaCookieConsents?.advertisementCookies == "false" && intaCookieConsents?.staticsticCookies == "false"
                             || !FunctionalCheckbox?.checked && !StaticsCheckBox?.checked && !MarketingCheckBox?.checked
@@ -3841,8 +3841,8 @@ function clearLocalStorage(ls) {
         sessionStorage.clear();
     }
 }
-deleteAllCookies();
-clearLocalStorage();
+/* deleteAllCookies();
+clearLocalStorage(); */
 if (!isGtmMode) {
     checkCookieStatus();
 }
