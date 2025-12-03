@@ -2697,7 +2697,7 @@ onWindowLoad(function () {
                     'ad_storage': 'granted',
                     'ad_user_data': 'granted',
                 })
-                window.clarity('consentv2', {
+                window.clarity && window.clarity('consentv2', {
                     ad_Storage: "denied",
                     analytics_Storage: "granted"
                 });
@@ -2715,7 +2715,7 @@ onWindowLoad(function () {
                     'analytics_storage': 'denied',
                 })
 
-                window.clarity('consentv2', {
+                window.clarity && window.clarity('consentv2', {
                     ad_Storage: "denied",
                     analytics_Storage: "denied"
                 });
@@ -2746,7 +2746,7 @@ onWindowLoad(function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'granted'
                 });
-                window.clarity('consentv2', {
+                window.clarity && window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "denied"
                 });
@@ -2782,7 +2782,7 @@ onWindowLoad(function () {
                     () => console.log("Consent captured")
                 );
 
-                window.clarity('consent', false);
+                window.clarity && window.clarity('consent', false);
 
                 const index = accepted.indexOf("advertisementCookies");
                 if (index > -1) { // only splice array when item is found
@@ -2847,7 +2847,7 @@ onWindowLoad(function () {
                 window.uetq.push('consent', 'update', {
                     'ad_storage': 'granted'
                 });
-                window.clarity('consentv2', {
+                window.clarity && window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
                 });
@@ -2934,7 +2934,7 @@ onWindowLoad(function () {
                     advertisement: true,
                     functionality: true,
                 }]);
-                window.clarity('consentv2', {
+                window.clarity && window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
                 });
@@ -3006,7 +3006,7 @@ onWindowLoad(function () {
                     advertisement: false,
                     functionality: false,
                 }]);
-                window.clarity('consentv2', {
+                window.clarity && window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
                 });
@@ -3132,7 +3132,7 @@ onWindowLoad(function () {
                         },
                         () => console.log("Consent captured")
                     );
-                    window.clarity('consent', false);
+                    window.clarity && window.clarity('consent', false);
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
                     document.querySelector("#functional").checked = false;
@@ -3189,7 +3189,7 @@ onWindowLoad(function () {
                     window.uetq.push('consent', 'update', {
                         'ad_storage': 'granted'
                     });
-                    window.clarity('consentv2', {
+                    window.clarity && window.clarity('consentv2', {
                         ad_Storage: "granted",
                         analytics_Storage: "granted"
                     });
@@ -3345,7 +3345,7 @@ onWindowLoad(function () {
                         advertisement: false,
                         functionality: false,
                     }]);
-                    window.clarity('consent', false);
+                    window.clarity && window.clarity('consent', false);
 
                     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                     /*window.location.reload();*/
@@ -3417,7 +3417,7 @@ onWindowLoad(function () {
                         functionality: true,
                     }]);
 
-                    window.clarity('consentv2', {
+                    window.clarity && window.clarity('consentv2', {
                         ad_Storage: "granted",
                         analytics_Storage: "granted"
                     });
@@ -4749,7 +4749,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
-        window.clarity('consentv2', {
+        window.clarity && window.clarity('consentv2', {
             ad_Storage: "granted",
             analytics_Storage: "denied"
         });
@@ -4789,7 +4789,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
         });
-        window.clarity('consent', false);
+        window.clarity && window.clarity('consent', false);
 
         window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
             {
@@ -4820,7 +4820,7 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
 
-        window.clarity('consent', false);
+        window.clarity && window.clarity('consent', false);
 
         window._hsp.push(['doNotTrack', false]);
 
@@ -4848,7 +4848,7 @@ function saveINTCookieSettings(consent, type = null) {
     } else {
         window._hsp.push(['doNotTrack']);
         window._hsp.push(['revokeCookieConsent']);
-        window.clarity('consent', false);
+        window.clarity && window.clarity('consent', false);
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
         })
@@ -4885,7 +4885,7 @@ function saveINTCookieSettings(consent, type = null) {
             'url_passthrough': true,
         })
         window._hsp.push(['doNotTrack', false]);
-        window.clarity('consentv2', {
+        window.clarity && window.clarity('consentv2', {
             ad_Storage: "denied",
             analytics_Storage: "granted"
         });
@@ -4924,7 +4924,7 @@ function saveINTCookieSettings(consent, type = null) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
         });
-        window.clarity('consent', false);
+        window.clarity && window.clarity('consent', false);
 
         window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
             {
