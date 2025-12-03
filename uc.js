@@ -41,6 +41,14 @@ let intaConsentsObjectVariable = {
     sharingDomains: [],
 }
 
+if (
+    window.location.hostname === "intastellarconsents.com" &&
+    window.location.pathname.startsWith("/gdpr")
+) {
+    // Prevent further execution
+    return;
+}
+
 function gtag() {
     dataLayer.push(arguments);
 }
