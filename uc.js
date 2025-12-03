@@ -907,23 +907,6 @@ function intaSetCookieSettings() {
 
 window.addEventListener("DOMContentLoaded", (event) => {
 
-    const intastellarCreateBanner = document.createElement("script");
-    intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.js";
-    if (window.INTA.settings.design === "floating") {
-        intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/floating.js";
-    }
-    if (intastellarDevMode) {
-        if (window.INTA.settings.design === "floating") {
-            intastellarCreateBanner.src = "../../dev/styles/floating.js";
-        } else {
-            intastellarCreateBanner.src = "../../dev/cb.dev.js";
-        }
-    }
-
-    console.log("Debugging: " + intastellarCreateBanner.src);
-
-    document.head.appendChild(intastellarCreateBanner);
-
     window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
 
     window.clarity && window.clarity('consentv2', {
@@ -2608,6 +2591,23 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 
 
 intHead.appendChild(analyticsScript);
+
+const intastellarCreateBanner = document.createElement("script");
+intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.js";
+if (window.INTA.settings.design === "floating") {
+    intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/floating.js";
+}
+if (intastellarDevMode) {
+    if (window.INTA.settings.design === "floating") {
+        intastellarCreateBanner.src = "../../dev/styles/floating.js";
+    } else {
+        intastellarCreateBanner.src = "../../dev/cb.dev.js";
+    }
+}
+
+console.log("Debugging: " + intastellarCreateBanner.src);
+
+intHead.appendChild(intastellarCreateBanner);
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
