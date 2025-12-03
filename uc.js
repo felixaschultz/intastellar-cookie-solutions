@@ -811,7 +811,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     setTimeout(() => {
         document.head.appendChild(intastellarCreateBanner);
-    }, 100);
+    }, 200)
 
     const optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
