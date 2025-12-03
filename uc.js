@@ -254,8 +254,7 @@ const ALLOWLIST = [
     "https://api.intastellarsolutions.com",
     "https://apis.intastellarsolutions.com",
     "https://api.intastellaraccounts.com",
-    "https://apis.intastellaraccounts.com",
-    ...window?.INTA?.settings?.partnerDomains
+    "https://apis.intastellaraccounts.com"
 ];
 
 
