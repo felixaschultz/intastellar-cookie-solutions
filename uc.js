@@ -2623,9 +2623,13 @@ if (intastellarDevMode) {
     }
 }
 
-console.log("Debugging: " + intastellarCreateBanner.src);
 intastellarCreateBanner.async = true;
-intHead.appendChild(intastellarCreateBanner);
+
+setTimeout(() => {
+    if(window.INTA.settings) {
+        intHead.appendChild(intastellarCreateBanner);
+    }
+}, 500);
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
