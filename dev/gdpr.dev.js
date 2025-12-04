@@ -6,29 +6,35 @@ consentIframe.src = 'https://consents.cdn.intastellarsolutions.com/cookieSharing
 document.body.appendChild(consentIframe);
 
 // Request consent state for a user
-function requestConsentState(userId) {
-    consentIframe.contentWindow.postMessage({ type: 'getConsent', userId }, 'https://consents.cdn.intastellarsolutions.com');
+// Request consent state for a user
+function requestConsentState(userId, rootDomain, partnerDomains = []) {
+    consentIframe.contentWindow.postMessage({ type: 'getConsent', userId, rootDomain, partnerDomains }, 'https://consents.cdn.intastellarsolutions.com');
 }
 
 // Set consent state for a user
-function setConsentState(userId, consents) {
-    consentIframe.contentWindow.postMessage({ type: 'setConsent', userId, consents }, 'https://consents.cdn.intastellarsolutions.com');
+function setConsentState(userId, consents, rootDomain, partnerDomains = []) {
+    consentIframe.contentWindow.postMessage({ type: 'setConsent', userId, consents, rootDomain, partnerDomains }, 'https://consents.cdn.intastellarsolutions.com');
 }
 
 // Listen for consent state response
 window.addEventListener('message', (event) => {
     if (event.origin !== 'https://consents.cdn.intastellarsolutions.com') return;
     if (event.data.type === 'consentState') {
-        // Use event.data.consents (object)
+        // Integrate with your banner logic
+        window.intaCookieConsents = event.data.consents;
+        // Optionally, update checkboxes or UI elements
+        if (typeof updateConsentUI === 'function') {
+            updateConsentUI(event.data.consents);
+        }
         console.log('Received consent state:', event.data.consents);
-        // TODO: Integrate with your banner logic
-        
     }
 });
 
 // Example usage:
-// requestConsentState('user-123');
-// setConsentState('user-123', { marketing: true, statistics: false, functional: true });
+// const rootDomain = "group1.com";
+// const partnerDomains = ["domain-a.com", "domain-b.com"];
+// requestConsentState('user-123', rootDomain, partnerDomains);
+// setConsentState('user-123', { marketing: true, statistics: false, functional: true }, rootDomain, partnerDomains);
 // --- End Cross-site Consent Tracking ---
 /*
  *  Cookie Consents Banner by Intastellar Solutions, International

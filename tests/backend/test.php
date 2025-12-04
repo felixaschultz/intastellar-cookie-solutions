@@ -18,14 +18,21 @@ function saveConsentData($file, $data) {
 
 $method = $_SERVER['REQUEST_METHOD'];
 
+
 if ($method === 'GET') {
     $userId = isset($_GET['userId']) ? $_GET['userId'] : null;
-    if (!$userId) {
-        echo json_encode(['error' => 'Missing userId']);
+    $rootDomain = isset($_GET['rootDomain']) ? $_GET['rootDomain'] : null;
+    if (!$userId || !$rootDomain) {
+        echo json_encode(['error' => 'Missing userId or rootDomain']);
         exit;
     }
     $data = loadConsentData($consentFile);
-    echo json_encode(isset($data[$userId]) ? $data[$userId] : new stdClass());
+    // Consent is stored under rootDomain, then userId
+    if (isset($data[$rootDomain]) && isset($data[$rootDomain][$userId])) {
+        echo json_encode($data[$rootDomain][$userId]);
+    } else {
+        echo json_encode(new stdClass());
+    }
     exit;
 }
 
@@ -33,12 +40,20 @@ if ($method === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
     $userId = isset($input['userId']) ? $input['userId'] : null;
     $consents = isset($input['consents']) ? $input['consents'] : null;
-    if (!$userId || !$consents) {
-        echo json_encode(['error' => 'Missing userId or consents']);
+    $rootDomain = isset($input['rootDomain']) ? $input['rootDomain'] : null;
+    $partnerDomains = isset($input['partnerDomains']) ? $input['partnerDomains'] : [];
+    if (!$userId || !$consents || !$rootDomain) {
+        echo json_encode(['error' => 'Missing userId, consents, or rootDomain']);
         exit;
     }
     $data = loadConsentData($consentFile);
-    $data[$userId] = $consents;
+    if (!isset($data[$rootDomain])) {
+        $data[$rootDomain] = [];
+    }
+    $data[$rootDomain][$userId] = [
+        'consents' => $consents,
+        'partnerDomains' => $partnerDomains
+    ];
     saveConsentData($consentFile, $data);
     echo json_encode(['success' => true]);
     exit;

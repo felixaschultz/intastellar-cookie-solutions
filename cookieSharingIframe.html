@@ -9,31 +9,33 @@
 
 <body>
     <script>
-    // Proxy consent requests between parent and backend
+    // Proxy consent requests between parent and backend, supporting domain groups
     window.addEventListener("message", async (event) => {
         // Optionally, validate event.origin against allowed domains
         // Example: if (!['https://domain-a.com', 'https://domain-b.com'].includes(event.origin)) return;
 
-        if (event.data.type === "getConsent") {
-            // Fetch consent from backend
+        const { type, userId, consents, rootDomain, partnerDomains } = event.data;
+
+        if (type === "getConsent") {
+            // Fetch consent from backend, passing rootDomain
             try {
-                const res = await fetch("/tests/backend/test.php?userId=" + encodeURIComponent(event.data.userId));
-                const consents = await res.json();
-                event.source.postMessage({ type: "consentState", consents }, event.origin);
+                const res = await fetch(`/tests/backend/test.php?userId=${encodeURIComponent(userId)}&rootDomain=${encodeURIComponent(rootDomain)}`);
+                const result = await res.json();
+                event.source.postMessage({ type: "consentState", consents: result.consents || result, partnerDomains: result.partnerDomains || [], rootDomain }, event.origin);
             } catch (e) {
-                event.source.postMessage({ type: "consentState", consents: {} }, event.origin);
+                event.source.postMessage({ type: "consentState", consents: {}, partnerDomains: [], rootDomain }, event.origin);
             }
         }
-        if (event.data.type === "setConsent") {
+        if (type === "setConsent") {
             try {
                 await fetch("/tests/backend/test.php", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId: event.data.userId, consents: event.data.consents })
+                    body: JSON.stringify({ userId, consents, rootDomain, partnerDomains })
                 });
-                event.source.postMessage({ type: "consentState", consents: event.data.consents }, event.origin);
+                event.source.postMessage({ type: "consentState", consents, partnerDomains, rootDomain }, event.origin);
             } catch (e) {
-                event.source.postMessage({ type: "consentState", consents: event.data.consents }, event.origin);
+                event.source.postMessage({ type: "consentState", consents, partnerDomains, rootDomain }, event.origin);
             }
         }
     });
