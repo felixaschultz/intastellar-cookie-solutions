@@ -2684,27 +2684,27 @@ onWindowLoad(function () {
         }
 
         FunctionalCheckbox?.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save")?.innerText = FunctionalCheckbox?.checked === false
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
                 && StaticsCheckBox?.checked === false
                 && MarketingCheckBox?.checked === false
                 ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
         })
 
         StaticsCheckBox?.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save")?.innerText = FunctionalCheckbox?.checked === false
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
                 && StaticsCheckBox?.checked === false
                 && MarketingCheckBox?.checked === false
                 ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
         })
 
         MarketingCheckBox?.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save")?.innerText = FunctionalCheckbox?.checked === false
+            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
                 && StaticsCheckBox?.checked === false
                 && MarketingCheckBox?.checked === false
                 ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
         })
 
-        document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save")?.innerText = FunctionalCheckbox?.checked === true
+        document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === true
             && StaticsCheckBox?.checked === true
             && MarketingCheckBox?.checked === true
             || FunctionalCheckbox?.checked === true
