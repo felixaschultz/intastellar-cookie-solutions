@@ -2488,15 +2488,34 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
     })
 }
 
-function onWindowLoad(callback) {
+function onWindowLoad(selector, callback, timeout = 3000) {
+    function checkAndRun() {
+        const el = document.querySelector(selector);
+        if (el) {
+            callback();
+            return true;
+        }
+        return false;
+    }
+
     if (document.readyState === 'complete') {
-        callback();
+        let tries = 0;
+        const interval = setInterval(() => {
+            if (checkAndRun() || ++tries > timeout / 100) clearInterval(interval);
+        }, 100);
     } else {
-        window.addEventListener('load', callback);
+        window.addEventListener('load', () => {
+            let tries = 0;
+            const interval = setInterval(() => {
+                if (checkAndRun() || ++tries > timeout / 100) clearInterval(interval);
+            }, 100);
+        });
     }
 }
 
-onWindowLoad(function () {
+onWindowLoad(
+    ".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save",
+    function () {
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
