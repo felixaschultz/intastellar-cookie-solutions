@@ -87,6 +87,89 @@ const moreFooter = document.createElement("div");
 const intaconsents = window.intaconsents = document.createElement("intastellarconsents");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
+const IntastellarCookieConsent = {
+    renew: function () {
+        document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        document.querySelector("html").classList.add("noScroll");
+        dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
+    },
+    remove: function (template) {
+        template.classList.remove("--active");
+    },
+    initialize: function (template) {
+        function initTemplate() {
+            if (!document.querySelector(".intastellarCookieConstents") && template !== false) {
+                document.body.append(template);
+            }
+
+            if (!getCookie(int_hideCookieBannerName)) {
+                const el = document.querySelector(".intastellarCookieConstents");
+                if (el) el.classList.add("--active");
+                if (window.dataLayer) {
+                    window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
+                }
+            }
+        }
+
+        function loadRemoteConfig() {
+            let host = window.location.host
+                .replace(/^(?:www\.)?/i, "")
+                .replace(/:\d+$/, "");
+
+            const url = `https://downloads.intastellarsolutions.com/cookieconsents/${host}/config.js`;
+
+            return fetch(url, { method: "HEAD" })
+                .then(res => {
+                    if (res.ok) {
+                        return new Promise(resolve => {
+                            const script = document.createElement("script");
+                            script.src = url;
+                            script.onload = resolve;
+                            script.onerror = resolve;
+                            document.head.appendChild(script);
+                        });
+                    }
+                })
+                .catch(() => {
+                    console.warn("No INTA config found for host:", host);
+                });
+        }
+
+        function waitForINTA(timeout = 3000) {
+            return new Promise(resolve => {
+                if (typeof window.INTA !== "undefined") {
+                    return resolve(true);
+                }
+
+                const start = Date.now();
+                const timer = setInterval(() => {
+                    if (typeof window.INTA !== "undefined") {
+                        clearInterval(timer);
+                        resolve(true);
+                    } else if (Date.now() - start > timeout) {
+                        clearInterval(timer);
+                        resolve(false);
+                    }
+                }, 100);
+            });
+        }
+
+        // Core logic
+        waitForINTA().then(found => {
+            if (found) {
+                console.info("Using existing INTA");
+                initTemplate();
+
+            } else {
+                console.info("INTA not found, loading remote config…");
+                loadRemoteConfig().then(() => {
+                    initTemplate();
+                });
+            }
+        });
+    }
+}
+
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
 if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
