@@ -2476,12 +2476,12 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
 }
 
 function onWindowLoad(callback) {
+    IntastellarCookieConsent.initialize(intaconsents);
     if (document.readyState === 'complete') {
-        IntastellarCookieConsent.initialize(intaconsents);
         callback();
     } else {
+        IntastellarCookieConsent.initialize(intaconsents);
         window.addEventListener('load', () => {
-            IntastellarCookieConsent.initialize(intaconsents);
             callback();
         });
     }
