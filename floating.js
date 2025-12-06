@@ -2477,14 +2477,17 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
 
 function onWindowLoad(callback) {
     if (document.readyState === 'complete') {
+        IntastellarCookieConsent.initialize(intaconsents);
         callback();
     } else {
-        window.addEventListener('load', callback);
+        window.addEventListener('load', () => {
+            IntastellarCookieConsent.initialize(intaconsents);
+            callback();
+        });
     }
 }
 
 onWindowLoad(function () {
-    IntastellarCookieConsent.initialize(intaconsents);
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
