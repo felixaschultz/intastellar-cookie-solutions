@@ -1,10 +1,4 @@
 // --- Cross-site Consent Tracking ---
-// Embed the consent iframe
-const consentIframe = document.createElement('iframe');
-consentIframe.style.display = 'none';
-consentIframe.src = 'https://consents.cdn.intastellarsolutions.com/cookieSharingIframe.html';
-document.body.appendChild(consentIframe);
-
 // Request consent state for a user
 // Request consent state for a user
 function requestConsentState(userId, rootDomain, partnerDomains = []) {
@@ -78,14 +72,6 @@ let intaConsentsObjectVariable = {
     uid: Math.random().toString(16).slice(2),
     domain: window?.INTA?.settings?.rootDomain || window.location.host,
     sharingDomains: [],
-}
-
-if (
-  window.location.hostname === "intastellarconsents.com" &&
-  window.location.pathname.startsWith("/gdpr")
-) {
-  // Prevent further execution
-  return;
 }
 
 function gtag() {
@@ -872,7 +858,6 @@ function intaSetCookieSettings() {
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
-
     window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
 
     window.clarity && window.clarity('consentv2', {

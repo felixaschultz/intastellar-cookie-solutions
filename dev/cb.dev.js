@@ -2498,6 +2498,10 @@ onWindowLoad(function () {
     trImage.style.display = "none";
     trImage.title = "Intastellar Solutions cookie sharing library";
     trImage.src = intastellarCookieBannerRootDomain + "/cookieSharingIframe.html";
+    
+    if(intastellarDevMode){
+        trImage.src = "/cookieSharingIframe.html";
+    }
 
     document.body.appendChild(trImage);
 
