@@ -106,7 +106,9 @@ const IntastellarCookieConsent = {
     initialize: function (template) {
         function initTemplate() {
             if (!document.querySelector(".intastellarCookieConstents") && template !== false) {
-                document.body.append(template);
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.append(template);
+                })
             }
 
             if (!getCookie(int_hideCookieBannerName)) {
