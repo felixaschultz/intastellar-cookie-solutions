@@ -207,8 +207,14 @@ function getConsentTypeForUrl(url) {
 // Helper: Send intercepted data to backend for storage/categorization
 async function sendToBackend(data) {
     try {
+        let intastellarAPIConsentDomain = "/tests/backend/test.php"
+        if(!intastellarDevMode){
+            /* let intastellarAPIConsentDomain = "https://consents.api.intastellarsolutions.com"; */
+            intastellarAPIConsentDomain = "https://apis.intastellarsolutions.com/tests/backend/test.php";
+        }
+
         // Use await to ensure the fetch is handled as an async background request
-        await fetch('/tests/backend/test.php', {
+        await fetch(intastellarAPIConsentDomain, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -254,7 +260,8 @@ const ALLOWLIST = [
     "https://api.intastellarsolutions.com",
     "https://apis.intastellarsolutions.com",
     "https://api.intastellaraccounts.com",
-    "https://apis.intastellaraccounts.com"
+    "https://apis.intastellaraccounts.com",
+    ...window.INTA.settings.partnerDomain || []
 ];
 
 function isAllowed(url) {
