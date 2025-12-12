@@ -155,6 +155,9 @@ if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
 }
 
+window._paq = window._paq || [];
+_paq.push(['requireConsent']);
+
 
 window.clarity && window.clarity('consentv2', {
     ad_Storage: "denied",
@@ -2458,6 +2461,8 @@ if (intaCookieConsents?.staticsticCookies) {
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
+
+    _paq.push(['setConsentGiven']);
 
     window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
         {

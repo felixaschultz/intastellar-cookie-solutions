@@ -2789,6 +2789,7 @@ onWindowLoad(function () {
                     analytics_Storage: "granted"
                 });
                 accepted.push("staticsticCookies");
+                _paq.push(['setConsentGiven']);
                 window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
                     {
                         'analytics': true,
@@ -2801,6 +2802,8 @@ onWindowLoad(function () {
                 gtag('consent', 'update', {
                     'analytics_storage': 'denied',
                 })
+
+                _paq.push(['forgetConsentGiven']);
 
                 window.clarity && window.clarity('consentv2', {
                     ad_Storage: "denied",
@@ -4675,6 +4678,7 @@ function updateConsents(consent, type = null) {
     if (intaCookieConsents?.staticsticCookies === "checked") {
         let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
         int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
+        _paq.push(['setConsentGiven']);
         deleteAllCookies();
 
         window.allScripts.map((script) => {
@@ -4689,6 +4693,7 @@ function updateConsents(consent, type = null) {
             }
         })
     } else {
+        _paq.push(['forgetConsentGiven']);
         window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
