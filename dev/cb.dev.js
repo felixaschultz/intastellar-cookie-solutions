@@ -87,48 +87,79 @@ const moreFooter = document.createElement("div");
 const intaconsents = window.intaconsents = document.createElement("intastellarconsents");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
-(function () {
-    // TCF 2.2 API stub
-    window.__tcfapi = function (command, version, callback, parameter) {
-        // Example: respond to 'getTCData' with a minimal dummy TC string and consent state
-        if (command === 'getTCData') {
-            // You should later generate a real TC string and fill in real consent data
-            const tcData = {
-                tcString: 'COwK5GYOwK5GYABABBENAPCgAAAAAAAAAAwAAIYgAAAAAAAA.YAAAAAAAAAA', // Dummy string
-                eventStatus: 'tcloaded',
-                cmpStatus: 'loaded',
-                gdprApplies: true,
-                listenerId: Math.floor(Math.random() * 100000),
-                // Add more fields as needed by TCF spec
-            };
-            callback(tcData, true);
-        } else if (command === 'addEventListener') {
-            // Register a listener and immediately call it with dummy data
-            const tcData = {
-                tcString: 'COwK5GYOwK5GYABABBENAPCgAAAAAAAAAAwAAIYgAAAAAAAA.YAAAAAAAAAA',
-                eventStatus: 'tcloaded',
-                cmpStatus: 'loaded',
-                gdprApplies: true,
-                listenerId: Math.floor(Math.random() * 100000),
-            };
-            callback(tcData, true);
-        } else if (command === 'removeEventListener') {
-            // No-op for now
-            callback(true);
-        } else {
-            // Not implemented
-            callback(null, false);
-        }
-    };
+// Minimal dynamic TCF 2.x tcString generator (for demo/testing)
+function generateTcString(consentObj) {
+    // consentObj: {purposes: [bool,...], vendors: [bool,...]}
+    // Only supports first 24 purposes and vendors for demo
 
-    // TCF API locator frame (required for cross-frame communication)
-    if (!window.frames['__tcfapiLocator']) {
-        var tcfApiLocator = document.createElement('iframe');
-        tcfApiLocator.style.display = 'none';
-        tcfApiLocator.name = '__tcfapiLocator';
-        document.body.appendChild(tcfApiLocator);
+    // TCF 2.x: Version (6 bits), Created (36 bits), LastUpdated (36 bits), CmpId (12), CmpVersion (12), ConsentScreen (6), ConsentLanguage (12), VendorListVersion (12), TCFPolicyVersion (6), IsServiceSpecific (1), UseNonStandardStacks (1), SpecialFeatureOptIns (12), PurposeConsents (24), PurposeLegitInterests (24), PurposeOneTreatment (1), PublisherCC (12), VendorConsents (24)
+    // We'll fill most fields with defaults, and only set PurposeConsents and VendorConsents dynamically
+
+    function padBits(num, len) {
+        let s = num.toString(2);
+        return "0".repeat(len - s.length) + s;
     }
-})();
+
+    function strToBits(str) {
+        // 2 chars, each 6 bits (A=0, Z=25, a=26, z=51)
+        return padBits(str.charCodeAt(0) - 65, 6) + padBits(str.charCodeAt(1) - 65, 6);
+    }
+
+    let bits = "";
+    bits += padBits(2, 6); // Version
+    let now = Math.floor(Date.now() / 100); // 0.1s increments
+    bits += padBits(now, 36); // Created
+    bits += padBits(now, 36); // LastUpdated
+    bits += padBits(1, 12); // CmpId
+    bits += padBits(1, 12); // CmpVersion
+    bits += padBits(0, 6); // ConsentScreen
+    bits += strToBits("EN"); // ConsentLanguage
+    bits += padBits(1, 12); // VendorListVersion
+    bits += padBits(2, 6); // TCFPolicyVersion
+    bits += padBits(0, 1); // IsServiceSpecific
+    bits += padBits(0, 1); // UseNonStandardStacks
+    bits += padBits(0, 12); // SpecialFeatureOptIns
+
+    // PurposeConsents (24 bits)
+    for (let i = 0; i < 24; i++) bits += consentObj.purposes && consentObj.purposes[i] ? "1" : "0";
+    // PurposeLegitInterests (24 bits, all 0)
+    bits += "0".repeat(24);
+    bits += padBits(0, 1); // PurposeOneTreatment
+    bits += strToBits("EN"); // PublisherCC
+
+    // VendorConsents (maxVendorId=24, 16 bits for maxVendorId, then 24 bits for consents)
+    bits += padBits(24, 16);
+    for (let i = 0; i < 24; i++) bits += consentObj.vendors && consentObj.vendors[i] ? "1" : "0";
+
+    // Convert bits to bytes
+    let bytes = [];
+    for (let i = 0; i < bits.length; i += 8) {
+        bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
+    }
+
+    // Base64-url encode
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+// Example usage:
+let userConsent = {
+    purposes: [true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], // 24
+    vendors: [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] // 24
+};
+var tcString = generateTcString(userConsent);
+console.log(tcString);
+
+// --- Patch: Wire consent save/deny to TCF update ---
+// Find the save/deny consent logic and call __tcfapiDispatchConsentChanged after consent changes
+
+// Utility: Call this after any consent change (save/deny)
+function dispatchTCFConsentChangedIfAvailable() {
+    if (typeof window.__tcfapiDispatchConsentChanged === 'function') {
+        window.__tcfapiDispatchConsentChanged();
+    }
+}
 
 const IntastellarCookieConsent = {
     renew: function () {
@@ -212,6 +243,139 @@ const IntastellarCookieConsent = {
         });
     }
 }
+
+// Patch: Hook into consent save/deny actions
+// Try to patch IntastellarCookieConsent.remove and any save/deny logic
+const originalRemove = IntastellarCookieConsent.remove;
+IntastellarCookieConsent.remove = function(template) {
+    if (typeof originalRemove === 'function') {
+        originalRemove.apply(this, arguments);
+    }
+    // After consent is removed/denied, dispatch TCF update
+    dispatchTCFConsentChangedIfAvailable();
+};
+
+// Patch: Hook into consent save logic (look for save/accept button logic)
+// If you have a function that handles consent save, call dispatchTCFConsentChangedIfAvailable() at the end
+// Example: If you have a function like saveConsent() or acceptAllCookies(), patch it here
+
+// Try to patch global save/accept/deny functions if they exist
+if (typeof window.saveConsent === 'function') {
+    const originalSaveConsent = window.saveConsent;
+    window.saveConsent = function() {
+        const result = originalSaveConsent.apply(this, arguments);
+        dispatchTCFConsentChangedIfAvailable();
+        return result;
+    };
+}
+if (typeof window.acceptAllCookies === 'function') {
+    const originalAcceptAllCookies = window.acceptAllCookies;
+    window.acceptAllCookies = function() {
+        const result = originalAcceptAllCookies.apply(this, arguments);
+        dispatchTCFConsentChangedIfAvailable();
+        return result;
+    };
+}
+if (typeof window.denyAllCookies === 'function') {
+    const originalDenyAllCookies = window.denyAllCookies;
+    window.denyAllCookies = function() {
+        const result = originalDenyAllCookies.apply(this, arguments);
+        dispatchTCFConsentChangedIfAvailable();
+        return result;
+    };
+}
+
+// Use tcString in your __tcfapi response
+
+
+// --- TCF 2.2 API stub with event listener registry and dynamic dispatch ---
+(function () {
+    // TCF event listener registry
+    var tcfListeners = {};
+    var tcfListenerId = 1;
+
+    function getCurrentConsentForTCF() {
+        try {
+            var consentCookie = typeof getCookie === 'function' ? getCookie(int_hideCookieBannerName) : null;
+            if (consentCookie && consentCookie.indexOf('__inta') > -1) {
+                var consentsObj = JSON.parse(decodeIntaConsentsObject(consentCookie.split('.')[2]));
+                var purposes = [
+                    true, // 1: Always necessary
+                    !!consentsObj.consents?.functionalCookies, // 2: functional
+                    !!consentsObj.consents?.staticsticCookies, // 3: statistic
+                    !!consentsObj.consents?.advertisementCookies // 4: marketing
+                ];
+                while (purposes.length < 24) purposes.push(false);
+                var vendors = Array(24).fill(true);
+                return { purposes, vendors };
+            }
+        } catch (e) {}
+        return {
+            purposes: [true, false, false, false].concat(Array(20).fill(false)),
+            vendors: Array(24).fill(true)
+        };
+    }
+
+    function buildTCData(eventStatus, listenerIdOverride) {
+        var consentObj = getCurrentConsentForTCF();
+        var tcString = generateTcString(consentObj);
+        return {
+            tcString: tcString,
+            eventStatus: eventStatus || 'tcloaded',
+            cmpStatus: 'loaded',
+            gdprApplies: true,
+            listenerId: listenerIdOverride || null
+        };
+    }
+
+    // Always use 'useractioncomplete' for user-triggered dispatches
+    function dispatchTCFEvent() {
+        Object.keys(tcfListeners).forEach(function (id) {
+            var cb = tcfListeners[id];
+            if (typeof cb === 'function') {
+                var tcData = buildTCData('useractioncomplete', parseInt(id));
+                cb(tcData, true);
+            }
+        });
+    }
+
+    window.__tcfapi = function (command, version, callback, parameter) {
+        if (command === 'getTCData') {
+            var tcData = buildTCData('tcloaded');
+            callback(tcData, true);
+        } else if (command === 'addEventListener') {
+            var id = tcfListenerId++;
+            tcfListeners[id] = callback;
+            // Initial eventStatus is 'tcloaded' per spec
+            var tcData = buildTCData('tcloaded', id);
+            callback(tcData, true);
+        } else if (command === 'removeEventListener') {
+            // parameter is the listenerId
+            if (parameter && tcfListeners[parameter]) {
+                delete tcfListeners[parameter];
+                callback(true);
+            } else {
+                callback(false);
+            }
+        } else {
+            callback(null, false);
+        }
+    };
+
+    // Expose a function to dispatch TCF events after consent changes
+    window.__tcfapiDispatchConsentChanged = function () {
+        dispatchTCFEvent('useractioncomplete');
+    };
+
+    // TCF API locator frame (required for cross-frame communication)
+    if (!window.frames['__tcfapiLocator']) {
+        var tcfApiLocator = document.createElement('iframe');
+        tcfApiLocator.style.display = 'none';
+        tcfApiLocator.name = '__tcfapiLocator';
+        document.body.appendChild(tcfApiLocator);
+    }
+})();
+
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
 if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
@@ -2954,6 +3118,8 @@ onWindowLoad(function () {
                 }
             }
             saveINTCookieSettings("changePermission", accepted);
+            // Dispatch TCF event after user action
+            dispatchTCFConsentChangedIfAvailable();
         });
 
         if (window?.INTA?.settings.ccpa !== undefined && window?.INTA?.settings.ccpa.on) {
@@ -3033,6 +3199,8 @@ onWindowLoad(function () {
                 );
                 
                 updateConsents("all");
+                // Dispatch TCF event after user action
+                dispatchTCFConsentChangedIfAvailable();
                 /*window.location.reload();*/
             });
         }
@@ -3183,6 +3351,8 @@ onWindowLoad(function () {
                     () => console.log("Consent captured")
                 );
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
+                // Dispatch TCF event after user action
+                dispatchTCFConsentChangedIfAvailable();
                 /*window.location.reload();*/
 
             });
@@ -3300,6 +3470,8 @@ onWindowLoad(function () {
                     document.querySelector("#marketing").checked = false;
                     document.querySelector("#statics").checked = false;
                     document.querySelector("#functional").checked = false;
+                    // Dispatch TCF event after user action
+                    dispatchTCFConsentChangedIfAvailable();
                     /*window.location.reload();*/
                 });
             });
@@ -3378,6 +3550,8 @@ onWindowLoad(function () {
                     document.querySelector("#marketing").checked = true;
                     document.querySelector("#statics").checked = true;
                     document.querySelector("#functional").checked = true;
+                    // Dispatch TCF event after user action
+                    dispatchTCFConsentChangedIfAvailable();
                     /*window.location.reload();*/
                 })
             });
@@ -3404,6 +3578,8 @@ onWindowLoad(function () {
                     saveINTCookieSettings("changePermission", this.getAttribute("data-type"));
                     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
                         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+                    // Dispatch TCF event after user action
+                    dispatchTCFConsentChangedIfAvailable();
 
                 })
             })
