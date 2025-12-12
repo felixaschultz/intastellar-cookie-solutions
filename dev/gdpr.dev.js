@@ -342,7 +342,9 @@ const ALLOWLIST = [
     "https://www.intastellarsolutions.com",
     "https://analytics.intastellarsolutions.com",
     "https://api.intastellarsolutions.com",
-    "https://apis.intastellarsolutions.com"
+    "https://apis.intastellarsolutions.com",
+    "https://vendor-list.consensu.org",
+    "/dev/gvl-local.json"
 ];
 
 

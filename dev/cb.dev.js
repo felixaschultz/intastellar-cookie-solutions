@@ -5,6 +5,53 @@
  *  @copy 2022-2024 Intastellar Solutions, International
  *
 */
+// --- IAB Global Vendor List (GVL) fetch & cache utility ---
+const GVL_URL = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    ? "/dev/gvl-local.json"
+    : "https://vendor-list.consensu.org/v3/vendor-list.json";
+let gvlCache = null;
+let gvlCacheTimestamp = 0;
+const GVL_CACHE_TTL = 60 * 60 * 1000; // 1 hour
+
+/**
+ * Fetches the IAB Global Vendor List (GVL), with caching.
+ * @returns {Promise<Object>} The GVL JSON object.
+ */
+async function fetchGVL() {
+  const now = Date.now();
+  if (gvlCache && (now - gvlCacheTimestamp < GVL_CACHE_TTL)) {
+    return gvlCache;
+  }
+  const response = await fetch(GVL_URL);
+  if (!response.ok) throw new Error('Failed to fetch GVL');
+  gvlCache = await response.json();
+  gvlCacheTimestamp = now;
+  return gvlCache;
+}
+
+/**
+ * Gets the list of vendors for UI rendering. Usage: await getVendorsForUI()
+ * @returns {Promise<Array>} Array of vendor objects
+ */
+async function getVendorsForUI() {
+  const gvl = await fetchGVL();
+  // Returns an array of vendor objects (id, name, purposes, policyUrl, etc.)
+  return Object.values(gvl.vendors || {});
+}
+
+if (window.INTA?.settings?.tcf) {
+    // Fetch GVL, show Manage Vendors button, enable TCF UI
+    getVendorsForUI().then(vendors => {
+        // vendors is an array of { id, name, purposes, policyUrl, ... }
+        // Render in your UI as needed
+        console.log(vendors);
+    });
+}
+
+// Example usage (for development):
+// getVendorsForUI().then(vendors => console.log('GVL Vendors:', vendors));
+// You can now use getVendorsForUI() to populate your Manage Vendors modal.
+
 const pSBC = (p, c0, c1, l) => {
     let r, g, b, P, f, t, h, i = parseInt, m = Math.round, a = typeof (c1) == "string";
     if (typeof (p) != "number" || p < -1 || p > 1 || typeof (c0) != "string" || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a)) return null;
