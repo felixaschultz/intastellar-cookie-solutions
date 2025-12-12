@@ -1,3 +1,10 @@
+/*
+ *  Cookie Consents Banner by Intastellar Solutions, International
+ *  intastellarsolutions.com/gdpr-cookiebanner
+ *  consents.cdn.intastellarsolutions.com/uc.js
+ *  @copy 2022-2025 Intastellar Solutions, International
+ *
+*/
 // --- Cross-site Consent Tracking ---
 // Request consent state for a user
 // Request consent state for a user
@@ -30,13 +37,7 @@ window.addEventListener('message', (event) => {
 // requestConsentState('user-123', rootDomain, partnerDomains);
 // setConsentState('user-123', { marketing: true, statistics: false, functional: true }, rootDomain, partnerDomains);
 // --- End Cross-site Consent Tracking ---
-/*
- *  Cookie Consents Banner by Intastellar Solutions, International
- *  intastellarsolutions.com/gdpr-cookiebanner
- *  consents.cdn.intastellarsolutions.com/uc.js
- *  @copy 2022-2025 Intastellar Solutions, International
- *
-*/
+
 /* - - - Setup - - - */
 
 const intaCookiePref = "IntastellarConsentSolution";
