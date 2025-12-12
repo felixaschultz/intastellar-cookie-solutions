@@ -342,15 +342,31 @@ const ALLOWLIST = [
     "https://www.intastellarsolutions.com",
     "https://analytics.intastellarsolutions.com",
     "https://api.intastellarsolutions.com",
-    "https://apis.intastellarsolutions.com"
+    "https://apis.intastellarsolutions.com",
+    "https://vendor-list.consensu.org",
+    "/dev/gvl-local.json"
 ];
+
+
+
+function isAllowed(url) {
+    try {
+        const parsedUrl = new URL(url, window.location.origin);
+        // Allow all requests to the same origin
+        if (parsedUrl.origin === window.location.origin) return true;
+        // Optionally allow other trusted domains here
+        return ALLOWLIST.some(domain => parsedUrl.origin === domain || parsedUrl.hostname.endsWith(ROOT_DOMAIN));
+    } catch (e) {
+        return false;
+    }
+}
 
 
 // Intercept fetch with consent check
 const originalFetch = window.fetch;
 window.fetch = function (resource, config) {
     const url = typeof resource === 'string' ? resource : resource.url;
-    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+    if (isAllowed(url)) {
         return originalFetch.apply(this, arguments);
     }
     const isExternal = !url.startsWith(window.location.origin);
@@ -373,7 +389,7 @@ function CustomXHR() {
     const xhr = new OriginalXHR();
     const open = xhr.open;
     xhr.open = function (method, url, ...args) {
-        if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+        if (isAllowed(url)) {
             return open.apply(this, arguments);
         }
         const isExternal = !url.startsWith(window.location.origin);
@@ -396,7 +412,7 @@ window.XMLHttpRequest = CustomXHR;
 const originalSendBeacon = navigator.sendBeacon;
 navigator.sendBeacon = function (url, data) {
     // Prevent recursion for backend endpoint
-    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+    if (isAllowed(url)) {
         return originalSendBeacon.apply(this, arguments);
     }
     const isExternal = !url.startsWith(window.location.origin);
