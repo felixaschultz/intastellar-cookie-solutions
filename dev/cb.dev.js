@@ -87,6 +87,49 @@ const moreFooter = document.createElement("div");
 const intaconsents = window.intaconsents = document.createElement("intastellarconsents");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
+(function () {
+    // TCF 2.2 API stub
+    window.__tcfapi = function (command, version, callback, parameter) {
+        // Example: respond to 'getTCData' with a minimal dummy TC string and consent state
+        if (command === 'getTCData') {
+            // You should later generate a real TC string and fill in real consent data
+            const tcData = {
+                tcString: 'COwK5GYOwK5GYABABBENAPCgAAAAAAAAAAwAAIYgAAAAAAAA.YAAAAAAAAAA', // Dummy string
+                eventStatus: 'tcloaded',
+                cmpStatus: 'loaded',
+                gdprApplies: true,
+                listenerId: Math.floor(Math.random() * 100000),
+                // Add more fields as needed by TCF spec
+            };
+            callback(tcData, true);
+        } else if (command === 'addEventListener') {
+            // Register a listener and immediately call it with dummy data
+            const tcData = {
+                tcString: 'COwK5GYOwK5GYABABBENAPCgAAAAAAAAAAwAAIYgAAAAAAAA.YAAAAAAAAAA',
+                eventStatus: 'tcloaded',
+                cmpStatus: 'loaded',
+                gdprApplies: true,
+                listenerId: Math.floor(Math.random() * 100000),
+            };
+            callback(tcData, true);
+        } else if (command === 'removeEventListener') {
+            // No-op for now
+            callback(true);
+        } else {
+            // Not implemented
+            callback(null, false);
+        }
+    };
+
+    // TCF API locator frame (required for cross-frame communication)
+    if (!window.frames['__tcfapiLocator']) {
+        var tcfApiLocator = document.createElement('iframe');
+        tcfApiLocator.style.display = 'none';
+        tcfApiLocator.name = '__tcfapiLocator';
+        document.body.appendChild(tcfApiLocator);
+    }
+})();
+
 const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
