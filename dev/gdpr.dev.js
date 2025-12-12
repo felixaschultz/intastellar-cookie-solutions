@@ -74,6 +74,23 @@ let intaConsentsObjectVariable = {
     sharingDomains: [],
 }
 
+fetch('https://ipapi.co/json/')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // For California only:
+        if (data.country === "US" && data.region_code === "CA") {
+            window.INTA = window.INTA || {};
+            window.INTA.settings = window.INTA.settings || {};
+            window.INTA.settings.ccpa = window.INTA.settings.ccpa || {};
+            window.INTA.settings.ccpa.on = true;
+        } else {
+            // Optionally disable CCPA for non-CA users
+            if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa.on = false;
+        }
+        // Now continue with your banner initialization
+    });
+
 function gtag() {
     dataLayer.push(arguments);
 }
