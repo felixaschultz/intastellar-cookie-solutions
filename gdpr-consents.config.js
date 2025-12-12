@@ -12,7 +12,7 @@ window.INTA = {
         color: "#197da1ff",
         text: false,
         language: "auto",
-        design: "floating",
+        design: "bannerV2",
         requiredCookies: [
             {
                 cookie: "region",
@@ -29,6 +29,9 @@ window.INTA = {
         partnerDomain: [
             "intastellarsolutions.com"
         ],
+        ccpa: {
+            on: true
+        },
         gtagId: "G-XDDJRGFS76",
         arrange: "rtl",
         styleSheets: [

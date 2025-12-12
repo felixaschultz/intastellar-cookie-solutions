@@ -2397,7 +2397,7 @@ intaCookieBannerStyle.innerHTML = ".intastellarCookie-settingsContainer,.intaste
 intHead.appendChild(intaCookieBannerStyle);
 
 /* Checking for CCPA "Do not sell my personal data" is enabled if so create an info link on the right side of the screen  */
-if (ccpa && isValidCCPALink()) {
+if (ccpa) {
     const intastellarCCPAContainer = document.createElement("inta-consents-ccpa");
     const intastellarCCPAContainer__content = document.createElement("section");
 
@@ -2405,12 +2405,43 @@ if (ccpa && isValidCCPALink()) {
     intastellarCCPAContainer.setAttribute("title", "California Consumer Privacy Act: Do not sell my information!");
     intastellarCCPAContainer__content.setAttribute("class", "intastellarCCPAContainer__content")
     intastellarCCPAContainer__content.innerHTML = `
-        <svg class="intastellarCCPA__icon" height="14" viewBox=".2 0 19.4 20" width="13" xmlns="http://www.w3.org/2000/svg"><path d="m2.2 20c1 0 1.7-.5 2.4-.9.6-.3 1.2-.7 1.9-1 3.2-1.7 6.4-3.5 9.6-5.3 1-.5 2.3-1 3-1.9.2-.3.5-.7.4-1.2-.3-1.1-1.7-1.5-2.6-2-2.2-1.2-4.5-2.5-6.7-3.7-.8-.5-2-1.4-3-.7-.4.2-.6.4-.7.7-.1.4 0 .9 0 1.3v3.2c0 .9-.1 1.6.5 2 .2.1.6.2.9.1 1-.4.7-2.2.7-3.6v-1.1c1.7.9 3.4 1.8 5.1 2.6.6.3 1.6.6 1.8 1.4.2.9-1.7 1.6-2.3 1.9l-6.9 3.9c-.5.3-1.8 1.3-2.6 1-.3-.1-.5-.4-.5-.6-.1-.4-.1-1-.1-1.5v-3.2-5.4c0-.8-.1-1.8.2-2.3.7-1 2.3.8 2.8-.8.1-.4-.1-.8-.3-1-.4-.6-2.2-1.5-2.9-1.7-.2-.1-.7-.2-1-.2-1.7.3-1.3 3-1.3 5v9.9c0 1.5-.2 3.5.4 4.4.3.5.6.5 1.2.7zm5.2-6.5c1.5 0 1.6-1.9.2-2.2-.8-.1-1.4.7-1.2 1.4.2.5.5.6 1 .8z" fill="#fff"/></svg> Do not sell my personal data!
+    <svg class="intastellarCCPA__icon" height="14" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 30 14" style="enable-background:new 0 0 30 14;" xml:space="preserve">
+        <style type="text/css">
+            .st0{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+            .st1{fill-rule:evenodd;clip-rule:evenodd;fill:#0066FF;}
+            .st2{fill:#FFFFFF;}
+            .st3{fill:#0066FF;}
+        </style>
+        <g>
+            <g id="final---dec.11-2020_1_">
+                <g id="_x30_208-our-toggle_2_" transform="translate(-1275.000000, -200.000000)">
+                    <g id="Final-Copy-2_2_" transform="translate(1275.000000, 200.000000)">
+                        <path class="st0" d="M7.4,12.8h6.8l3.1-11.6H7.4C4.2,1.2,1.6,3.8,1.6,7S4.2,12.8,7.4,12.8z"/>
+                    </g>
+                </g>
+            </g>
+            <g id="final---dec.11-2020">
+                <g id="_x30_208-our-toggle" transform="translate(-1275.000000, -200.000000)">
+                    <g id="Final-Copy-2" transform="translate(1275.000000, 200.000000)">
+                        <path class="st1" d="M22.6,0H7.4c-3.9,0-7,3.1-7,7s3.1,7,7,7h15.2c3.9,0,7-3.1,7-7S26.4,0,22.6,0z M1.6,7c0-3.2,2.6-5.8,5.8-5.8
+                            h9.9l-3.1,11.6H7.4C4.2,12.8,1.6,10.2,1.6,7z"/>
+                        <path id="x" class="st2" d="M24.6,4c0.2,0.2,0.2,0.6,0,0.8l0,0L22.5,7l2.2,2.2c0.2,0.2,0.2,0.6,0,0.8c-0.2,0.2-0.6,0.2-0.8,0
+                            l0,0l-2.2-2.2L19.5,10c-0.2,0.2-0.6,0.2-0.8,0c-0.2-0.2-0.2-0.6,0-0.8l0,0L20.8,7l-2.2-2.2c-0.2-0.2-0.2-0.6,0-0.8
+                            c0.2-0.2,0.6-0.2,0.8,0l0,0l2.2,2.2L23.8,4C24,3.8,24.4,3.8,24.6,4z"/>
+                        <path id="y" class="st3" d="M12.7,4.1c0.2,0.2,0.3,0.6,0.1,0.8l0,0L8.6,9.8C8.5,9.9,8.4,10,8.3,10c-0.2,0.1-0.5,0.1-0.7-0.1l0,0
+                            L5.4,7.7c-0.2-0.2-0.2-0.6,0-0.8c0.2-0.2,0.6-0.2,0.8,0l0,0L8,8.6l3.8-4.5C12,3.9,12.4,3.9,12.7,4.1z"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+        </svg> Do not sell my personal data!
     `;
 
     intastellarCCPAContainer.appendChild(intastellarCCPAContainer__content);
     intaconsents.appendChild(intastellarCCPAContainer);
-
+    
+    intastellarCCPAContainer.addEventListener("click", optOutCCPA)
 
     const intastellarCCPApopup = document.createElement("inta-consents-ccpa-popup");
     intastellarCCPApopup.setAttribute("class", "intastellarCCPApopup");
@@ -2441,9 +2472,9 @@ if (ccpa && isValidCCPALink()) {
     }
     intastellarCCPApopup.appendChild(instastellarCCPApopupContent);
     intaconsents.appendChild(intastellarCCPApopup);
-} else if (!isValidCCPALink() && "ccpa" in window?.INTA?.settings && window?.INTA?.settings.ccpa.on === "true") {
+} /* else if (!isValidCCPALink() && "ccpa" in window?.INTA?.settings && window?.INTA?.settings.ccpa.on === "true") {
     throw new IntastellarSolutionsSDK("Please add your valid 'California Consumer Privacy Act' url to the banner. Read more at https://www.intastellarsolutions.com/solutions/cookie-consents");
-}
+} */
 
 cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
 
@@ -2883,11 +2914,11 @@ onWindowLoad(function () {
         });
 
         if (window?.INTA?.settings.ccpa !== undefined && window?.INTA?.settings.ccpa.on) {
-            const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
+            /* const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
 
             closeCCPAButton.addEventListener("click", () => {
                 document.querySelector(".intastellarCCPApopup").classList.remove("--active");
-            });
+            }); */
         }
 
         if (button__acceptAll != null || button__acceptAll != undefined) {

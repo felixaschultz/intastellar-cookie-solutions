@@ -206,13 +206,65 @@ window.Shopify ?? window?.Shopify?.loadFeatures(
 );
 
 function optOutCCPA() {
+    // Google Tag Manager / gtag
     gtag('consent', 'update', {
         'ad_storage': 'denied',
         'ad_user_data': 'denied',
         'ad_personalization': 'denied'
     });
 
-    // Optional: store the choice locally so you don’t ask again
+    // Microsoft Clarity
+    if (window.clarity) {
+        try {
+            window.clarity('consent', 'denied');
+            // For Clarity V2, if used:
+            window.clarity('consentv2', {
+                ad_Storage: "denied",
+                analytics_Storage: "denied"
+            });
+        } catch (e) { /* ignore */ }
+    }
+
+    // Matomo
+    if (window._paq) {
+        try {
+            window._paq.push(['requireConsent']);
+            window._paq.push(['forgetUserOptOut']);
+        } catch (e) { /* ignore */ }
+    }
+
+    // Microsoft UET
+    if (window.uetq) {
+        try {
+            window.uetq.push('consent', 'update', { 'ad_storage': 'denied' });
+        } catch (e) { /* ignore */ }
+    }
+
+    // HubSpot
+    if (window._hsp) {
+        try {
+            window._hsp.push(['setHubSpotCookieConsent', {
+                analytics: false,
+                advertisement: false,
+                functional: false
+            }]);
+        } catch (e) { /* ignore */ }
+    }
+
+    // Shopify
+    if (window.Shopify && window.Shopify.customerPrivacy) {
+        try {
+            window.Shopify.customerPrivacy.setTrackingConsent({
+                analytics: false,
+                marketing: false,
+                preferences: false
+            }, function () {
+                console.log("Shopify CCPA opt-out set");
+            });
+        } catch (e) { /* ignore */ }
+    }
+
+    // Store the choice locally
     localStorage.setItem('ccpa_opt_out', 'true');
 
     alert("Your opt-out has been saved. We won’t sell or share your personal information.");
