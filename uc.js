@@ -352,7 +352,7 @@ async function sendToBackend(data) {
     // Minimal TCString encoder
     var TCString = {
         encode: function (tcModel) {
-            // Only supports first 24 purposes and vendors for demo
+            // Support all vendors (not just first 24)
             let bits = "";
             bits += padBits(2, 6); // Version
             let now = Math.floor(Date.now() / 100); // 0.1s increments
@@ -373,9 +373,10 @@ async function sendToBackend(data) {
             bits += "0".repeat(24);
             bits += padBits(0, 1); // PurposeOneTreatment
             bits += strToBits("EN"); // PublisherCC
-            // VendorConsents (maxVendorId=24, 16 bits for maxVendorId, then 24 bits for consents)
-            bits += padBits(24, 16);
-            for (let i = 0; i < 24; i++) bits += tcModel.vendorConsents && tcModel.vendorConsents[i] ? "1" : "0";
+            // VendorConsents (maxVendorId, 16 bits for maxVendorId, then maxVendorId bits for consents)
+            let maxVendorId = (tcModel.vendorConsents && tcModel.vendorConsents.length) || 0;
+            bits += padBits(maxVendorId, 16);
+            for (let i = 0; i < maxVendorId; i++) bits += tcModel.vendorConsents && tcModel.vendorConsents[i] ? "1" : "0";
             // Convert bits to bytes
             let bytes = [];
             for (let i = 0; i < bits.length; i += 8) {
