@@ -41,11 +41,42 @@ async function getVendorsForUI() {
 
 if (window.INTA?.settings?.tcf) {
     // Fetch GVL, show Manage Vendors button, enable TCF UI
+    // 1. Fetch vendors and render checkboxes
     getVendorsForUI().then(vendors => {
-        // vendors is an array of { id, name, purposes, policyUrl, ... }
-        // Render in your UI as needed
-        console.log(vendors);
+        const vendorContainer = document.getElementById('vendor-list');
+        vendors.slice(0, 24).forEach((vendor, idx) => {
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = 'vendor' + vendor.id;
+            checkbox.value = vendor.id;
+            // Optionally: checkbox.checked = ... (load previous consent)
+            const label = document.createElement('label');
+            label.htmlFor = checkbox.id;
+            label.textContent = vendor.name;
+            vendorContainer.appendChild(checkbox);
+            vendorContainer.appendChild(label);
+            vendorContainer.appendChild(document.createElement('br'));
+        });
     });
+}
+
+function onSaveConsent() {
+    // Purposes: collect from your UI (e.g., checkboxes with ids purpose1, purpose2, ...)
+    const purposes = [];
+    for (let i = 1; i <= 24; i++) {
+        const el = document.getElementById('purpose' + i);
+        purposes.push(el && el.checked);
+    }
+    // Vendors: collect from rendered checkboxes
+    const vendors = [];
+    for (let i = 1; i <= 24; i++) {
+        const el = document.getElementById('vendor' + i);
+        vendors.push(el && el.checked);
+    }
+    const userConsent = { purposes, vendors };
+    const tcString = generateTcString(userConsent);
+    // Save tcString, update __tcfapi, etc.
+    console.log('User TCString:', tcString);
 }
 
 // Example usage (for development):
@@ -222,6 +253,10 @@ function generateTcString(consentObj) {
     // Set purposes and vendors as boolean arrays (first 24)
     model.purposeConsents = (consentObj.purposes || []).slice(0, 24);
     model.vendorConsents = (consentObj.vendors || []).slice(0, 24);
+    // Add vendorLegitimateInterests if present
+    if (Array.isArray(consentObj.vendorLegitimateInterests)) {
+        model.vendorLegitimateInterests = consentObj.vendorLegitimateInterests.slice(0, 24);
+    }
     return window.IABTCF.TCString.encode(model);
 }
 
@@ -232,7 +267,6 @@ const exampleConsent = {
     vendors:  [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 };
 const tcString = generateTcString(exampleConsent);
-console.log('Generated TCString:', tcString);
 
 // --- Patch: Wire consent save/deny to TCF update ---
 // Find the save/deny consent logic and call __tcfapiDispatchConsentChanged after consent changes
@@ -525,11 +559,63 @@ moreContentText.setAttribute("class", "intastellarCookieConstents__content-main"
 const intastellarCookieConstents__Container = document.createElement("article");
 const intastellarCookieButtons = document.createElement("section");
 
+
 const testSection = document.createElement("section");
 testSection.setAttribute("class", "intastellarCookieConstents__contentC");
 testSection.appendChild(moreintHeader);
-
 testSection.appendChild(moreContentText);
+
+// --- Vendor List Container for TCF ---
+let vendorListContainer = document.createElement('div');
+vendorListContainer.id = 'vendor-list';
+vendorListContainer.style.maxHeight = '190px';
+vendorListContainer.style.overflowY = 'auto';
+vendorListContainer.style.background = '#5b5b5bff';
+vendorListContainer.innerHTML = '<strong>Vendors</strong><br>';
+testSection.appendChild(vendorListContainer);
+
+// Only render vendor checkboxes if TCF is enabled
+if (window.INTA?.settings?.tcf) {
+    getVendorsForUI().then(vendors => {
+        vendorListContainer.innerHTML += vendors.map(vendor => {
+            const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
+            return `<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:2px;">
+                <label style='flex:1;'><input type="checkbox" class="vendor-consent" id="vendor${vendor.id}" value="${vendor.id}"> ${vendor.name}</label>
+                ${hasLegit ? `<label style='color:#888;font-size:12px;'><input type="checkbox" class="vendor-legit" id="vendor${vendor.id}-legit" value="${vendor.id}" style="margin-left:4px;"> Legitimate interest</label>` : ''}
+            </div>`;
+        }).join('');
+
+        // Patch: Attach vendor consent/legit state to main Save button
+        const mainSaveBtn = document.querySelector('.intastellarCookie-settings__btn.--save');
+        if (mainSaveBtn) {
+            mainSaveBtn.addEventListener('click', function handleVendorSave() {
+                // Only run once per click
+                if (mainSaveBtn._vendorSaveHandled) return;
+                mainSaveBtn._vendorSaveHandled = true;
+                setTimeout(() => { mainSaveBtn._vendorSaveHandled = false; }, 500);
+
+                const vendorConsents = vendors.map(vendor => {
+                    const cb = document.getElementById('vendor' + vendor.id);
+                    return !!(cb && cb.checked);
+                });
+                const vendorLegitInterests = vendors.map(vendor => {
+                    const legitCb = document.getElementById('vendor' + vendor.id + '-legit');
+                    return !!(legitCb && legitCb.checked);
+                });
+                // For demo: all purposes true (replace with real UI logic)
+                const purposes = Array(24).fill(true);
+                const userConsent = { purposes, vendors: vendorConsents, vendorLegitimateInterests: vendorLegitInterests };
+                const tcString = generateTcString(userConsent);
+                window._latestTcString = tcString;
+                // Save tcString, update __tcfapi, etc.
+                if (typeof decodeTcString === 'function') {
+                    console.log('Decoded:', decodeTcString(tcString));
+                }
+                console.log('User TCString:', tcString);
+            });
+        }
+    });
+}
 
 moreSettingsContent.appendChild(intastellarCookieConstents__Container);
 intastellarCookieConstents__Container.appendChild(testSection);

@@ -383,8 +383,53 @@ async function sendToBackend(data) {
             return base64UrlEncode(bytes);
         },
         decode: function (tcString) {
-            // Not implemented in minimal version
-            return null;
+            const binary = base64UrlDecode(tcString);
+            let bits = '';
+            for (let i = 0; i < binary.length; i++) {
+                bits += ('00000000' + binary.charCodeAt(i).toString(2)).slice(-8);
+            }
+            // Parse fields (see encoder for bit lengths)
+            let offset = 0;
+            function read(len) {
+                const val = bits.substr(offset, len);
+                offset += len;
+                return val;
+            }
+            const version = parseInt(read(6), 2);
+            const created = parseInt(read(36), 2);
+            const lastUpdated = parseInt(read(36), 2);
+            const cmpId = parseInt(read(12), 2);
+            const cmpVersion = parseInt(read(12), 2);
+            const consentScreen = parseInt(read(6), 2);
+            const consentLanguage = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
+            const vendorListVersion = parseInt(read(12), 2);
+            const tcfPolicyVersion = parseInt(read(6), 2);
+            const isServiceSpecific = !!parseInt(read(1), 2);
+            const useNonStandardStacks = !!parseInt(read(1), 2);
+            const specialFeatureOptIns = read(12);
+            const purposes = read(24).split('').map(b => b === '1');
+            const purposeLegitInterests = read(24);
+            const purposeOneTreatment = !!parseInt(read(1), 2);
+            const publisherCC = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
+            const maxVendorId = parseInt(read(16), 2);
+            const vendors = read(24).split('').map(b => b === '1');
+            return {
+                version,
+                created,
+                lastUpdated,
+                cmpId,
+                cmpVersion,
+                consentScreen,
+                consentLanguage,
+                vendorListVersion,
+                tcfPolicyVersion,
+                isServiceSpecific,
+                useNonStandardStacks,
+                specialFeatureOptIns,
+                purposes,
+                maxVendorId,
+                vendors
+            };
         }
     };
 
@@ -415,12 +460,24 @@ const ALLOWLIST = [
     "/dev/gvl-local.json"
 ];
 
+function isAllowed(url) {
+    try {
+        const parsedUrl = new URL(url, window.location.origin);
+        // Allow all requests to the same origin
+        if (parsedUrl.origin === window.location.origin) return true;
+        // Optionally allow other trusted domains here
+        return ALLOWLIST.some(domain => parsedUrl.origin === domain || parsedUrl.hostname.endsWith(ROOT_DOMAIN));
+    } catch (e) {
+        return false;
+    }
+}
+
 
 // Intercept fetch with consent check
 const originalFetch = window.fetch;
 window.fetch = function (resource, config) {
     const url = typeof resource === 'string' ? resource : resource.url;
-    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+    if (isAllowed(url)) {
         return originalFetch.apply(this, arguments);
     }
     const isExternal = !url.startsWith(window.location.origin);
@@ -443,7 +500,7 @@ function CustomXHR() {
     const xhr = new OriginalXHR();
     const open = xhr.open;
     xhr.open = function (method, url, ...args) {
-        if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+        if (isAllowed(url)) {
             return open.apply(this, arguments);
         }
         const isExternal = !url.startsWith(window.location.origin);
@@ -466,7 +523,7 @@ window.XMLHttpRequest = CustomXHR;
 const originalSendBeacon = navigator.sendBeacon;
 navigator.sendBeacon = function(url, data) {
     // Prevent recursion for backend endpoint
-    if (ALLOWLIST.some(domain => url.startsWith(domain))) {
+    if (isAllowed(url)) {
         return originalSendBeacon.apply(this, arguments);
     }
     const isExternal = !url.startsWith(window.location.origin);
