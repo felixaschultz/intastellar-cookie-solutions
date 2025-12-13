@@ -1,0 +1,1 @@
+// Paste the contents of Vector.js/ts here from the iab-tcf-es repo

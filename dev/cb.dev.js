@@ -119,6 +119,74 @@ function darkLightCheck(color) {
     }
 }
 
+(function (window) {
+    // Minimal IAB TCF encoder for browser use
+    function padBits(num, len) {
+        let s = num.toString(2);
+        return "0".repeat(len - s.length) + s;
+    }
+    function strToBits(str) {
+        // 2 chars, each 6 bits (A=0, Z=25, a=26, z=51)
+        return padBits(str.charCodeAt(0) - 65, 6) + padBits(str.charCodeAt(1) - 65, 6);
+    }
+    function base64UrlEncode(bytes) {
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+        return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    // Minimal TCModel
+    function TCModel() {
+        this.purposeConsents = [];
+        this.vendorConsents = [];
+    }
+
+    // Minimal TCString encoder
+    var TCString = {
+        encode: function (tcModel) {
+            // Only supports first 24 purposes and vendors for demo
+            let bits = "";
+            bits += padBits(2, 6); // Version
+            let now = Math.floor(Date.now() / 100); // 0.1s increments
+            bits += padBits(now, 36); // Created
+            bits += padBits(now, 36); // LastUpdated
+            bits += padBits(1, 12); // CmpId
+            bits += padBits(1, 12); // CmpVersion
+            bits += padBits(0, 6); // ConsentScreen
+            bits += strToBits("EN"); // ConsentLanguage
+            bits += padBits(1, 12); // VendorListVersion
+            bits += padBits(2, 6); // TCFPolicyVersion
+            bits += padBits(0, 1); // IsServiceSpecific
+            bits += padBits(0, 1); // UseNonStandardStacks
+            bits += padBits(0, 12); // SpecialFeatureOptIns
+            // PurposeConsents (24 bits)
+            for (let i = 0; i < 24; i++) bits += tcModel.purposeConsents && tcModel.purposeConsents[i] ? "1" : "0";
+            // PurposeLegitInterests (24 bits, all 0)
+            bits += "0".repeat(24);
+            bits += padBits(0, 1); // PurposeOneTreatment
+            bits += strToBits("EN"); // PublisherCC
+            // VendorConsents (maxVendorId=24, 16 bits for maxVendorId, then 24 bits for consents)
+            bits += padBits(24, 16);
+            for (let i = 0; i < 24; i++) bits += tcModel.vendorConsents && tcModel.vendorConsents[i] ? "1" : "0";
+            // Convert bits to bytes
+            let bytes = [];
+            for (let i = 0; i < bits.length; i += 8) {
+                bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
+            }
+            return base64UrlEncode(bytes);
+        },
+        decode: function (tcString) {
+            // Not implemented in minimal version
+            return null;
+        }
+    };
+
+    window.IABTCF = {
+        TCModel: TCModel,
+        TCString: TCString
+    };
+})(window);
+
 let message = "";
 let cookieBtn = "";
 /* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
@@ -134,69 +202,37 @@ const moreFooter = document.createElement("div");
 const intaconsents = window.intaconsents = document.createElement("intastellarconsents");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
-// Minimal dynamic TCF 2.x tcString generator (for demo/testing)
+
+// --- IAB TCF encoder bundle must be loaded above this script ---
+// Paste the browser-ready bundle here or load it before this script.
+// window.IABTCF.TCModel and window.IABTCF.TCString must be available.
+
+
+/**
+ * Generates a valid TCF 2.x TC string using the minimal IAB encoder bundle.
+ * @param {Object} consentObj - {purposes: [bool,...], vendors: [bool,...]}
+ * @returns {string} Encoded TC string
+ */
 function generateTcString(consentObj) {
-    // consentObj: {purposes: [bool,...], vendors: [bool,...]}
-    // Only supports first 24 purposes and vendors for demo
-
-    // TCF 2.x: Version (6 bits), Created (36 bits), LastUpdated (36 bits), CmpId (12), CmpVersion (12), ConsentScreen (6), ConsentLanguage (12), VendorListVersion (12), TCFPolicyVersion (6), IsServiceSpecific (1), UseNonStandardStacks (1), SpecialFeatureOptIns (12), PurposeConsents (24), PurposeLegitInterests (24), PurposeOneTreatment (1), PublisherCC (12), VendorConsents (24)
-    // We'll fill most fields with defaults, and only set PurposeConsents and VendorConsents dynamically
-
-    function padBits(num, len) {
-        let s = num.toString(2);
-        return "0".repeat(len - s.length) + s;
+    if (!window.IABTCF || !window.IABTCF.TCModel || !window.IABTCF.TCString) {
+        throw new Error('IAB TCF encoder bundle not loaded.');
     }
-
-    function strToBits(str) {
-        // 2 chars, each 6 bits (A=0, Z=25, a=26, z=51)
-        return padBits(str.charCodeAt(0) - 65, 6) + padBits(str.charCodeAt(1) - 65, 6);
-    }
-
-    let bits = "";
-    bits += padBits(2, 6); // Version
-    let now = Math.floor(Date.now() / 100); // 0.1s increments
-    bits += padBits(now, 36); // Created
-    bits += padBits(now, 36); // LastUpdated
-    bits += padBits(1, 12); // CmpId
-    bits += padBits(1, 12); // CmpVersion
-    bits += padBits(0, 6); // ConsentScreen
-    bits += strToBits("EN"); // ConsentLanguage
-    bits += padBits(1, 12); // VendorListVersion
-    bits += padBits(2, 6); // TCFPolicyVersion
-    bits += padBits(0, 1); // IsServiceSpecific
-    bits += padBits(0, 1); // UseNonStandardStacks
-    bits += padBits(0, 12); // SpecialFeatureOptIns
-
-    // PurposeConsents (24 bits)
-    for (let i = 0; i < 24; i++) bits += consentObj.purposes && consentObj.purposes[i] ? "1" : "0";
-    // PurposeLegitInterests (24 bits, all 0)
-    bits += "0".repeat(24);
-    bits += padBits(0, 1); // PurposeOneTreatment
-    bits += strToBits("EN"); // PublisherCC
-
-    // VendorConsents (maxVendorId=24, 16 bits for maxVendorId, then 24 bits for consents)
-    bits += padBits(24, 16);
-    for (let i = 0; i < 24; i++) bits += consentObj.vendors && consentObj.vendors[i] ? "1" : "0";
-
-    // Convert bits to bytes
-    let bytes = [];
-    for (let i = 0; i < bits.length; i += 8) {
-        bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
-    }
-
-    // Base64-url encode
-    let binary = '';
-    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    var model = new window.IABTCF.TCModel();
+    model.cmpId = 1;
+    // Set purposes and vendors as boolean arrays (first 24)
+    model.purposeConsents = (consentObj.purposes || []).slice(0, 24);
+    model.vendorConsents = (consentObj.vendors || []).slice(0, 24);
+    return window.IABTCF.TCString.encode(model);
 }
 
-// Example usage:
-let userConsent = {
-    purposes: [true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], // 24
-    vendors: [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] // 24
+// --- Example usage ---
+// Suppose you have a consent object from your UI:
+const exampleConsent = {
+    purposes: [true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+    vendors:  [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 };
-var tcString = generateTcString(userConsent);
-console.log(tcString);
+const tcString = generateTcString(exampleConsent);
+console.log('Generated TCString:', tcString);
 
 // --- Patch: Wire consent save/deny to TCF update ---
 // Find the save/deny consent logic and call __tcfapiDispatchConsentChanged after consent changes
