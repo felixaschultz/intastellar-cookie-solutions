@@ -39,7 +39,7 @@ async function getVendorsForUI() {
   return Object.values(gvl.vendors || {});
 }
 
-if (window.INTA?.settings?.tcf) {
+/* if (window.INTA?.settings?.tcf) {
     // Fetch GVL, show Manage Vendors button, enable TCF UI
     // 1. Fetch vendors and render checkboxes
     getVendorsForUI().then(vendors => {
@@ -58,7 +58,7 @@ if (window.INTA?.settings?.tcf) {
             vendorContainer.appendChild(document.createElement('br'));
         });
     });
-}
+} */
 
 function onSaveConsent() {
     // Purposes: collect from your UI (e.g., checkboxes with ids purpose1, purpose2, ...)
@@ -496,24 +496,39 @@ const testSection = document.createElement("section");
 testSection.setAttribute("class", "intastellarCookieConstents__contentC");
 testSection.appendChild(moreintHeader);
 testSection.appendChild(moreContentText);
-
-// --- Vendor List Container for TCF ---
 let vendorListContainer = document.createElement('div');
-vendorListContainer.id = 'vendor-list';
-vendorListContainer.style.maxHeight = '190px';
-vendorListContainer.style.overflowY = 'auto';
-vendorListContainer.style.background = '#5b5b5bff';
-vendorListContainer.innerHTML = '<strong>Vendors</strong><br>';
-testSection.appendChild(vendorListContainer);
 
 // Only render vendor checkboxes if TCF is enabled
 if (window.INTA?.settings?.tcf) {
+    // --- Vendor List Container for TCF ---
+    vendorListContainer.id = 'vendor-list';
+    vendorListContainer.style.maxHeight = '190px';
+    vendorListContainer.style.overflowY = 'auto';
+    vendorListContainer.classList.add("vendor-container");
+    vendorListContainer.style.background = '#5b5b5bff';
+    vendorListContainer.innerHTML = '<h3>Vendors</h3>';
     getVendorsForUI().then(vendors => {
         vendorListContainer.innerHTML += vendors.map(vendor => {
             const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
-            return `<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:2px;">
-                <label style='flex:1;'><input type="checkbox" class="vendor-consent" id="vendor${vendor.id}" value="${vendor.id}"> ${vendor.name}</label>
-                ${hasLegit ? `<label style='color:#888;font-size:12px;'><input type="checkbox" class="vendor-legit" id="vendor${vendor.id}-legit" value="${vendor.id}" style="margin-left:4px;"> Legitimate interest</label>` : ''}
+            return `<div class="vendor-item" style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #444;">
+                <label class="checkMarkContainer">
+                    <span class="intSettingsTitle">${vendor.name}</span>
+                    <span class="intCheckmarkSliderContainer">
+                        <input id="vendor${vendor.id}" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
+                        <span class="checkmark round"></span>
+                    </span>
+                </label>
+                ${
+                    hasLegit ? `
+                        <label class="checkMarkContainer">
+                            <span class="intSettingsTitle">Legitimate Interest</span>
+                            <span class="intCheckmarkSliderContainer">
+                                <input id="vendor${vendor.id}-legit" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
+                                <span class="checkmark round"></span>
+                            </span>
+                        </label>
+                    ` : ``
+                }
             </div>`;
         }).join('');
 
@@ -547,6 +562,8 @@ if (window.INTA?.settings?.tcf) {
             });
         }
     });
+    testSection.appendChild(vendorListContainer);
+
 }
 
 moreSettingsContent.appendChild(intastellarCookieConstents__Container);

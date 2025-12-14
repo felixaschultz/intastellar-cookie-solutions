@@ -453,6 +453,16 @@ function hasConsent(type) {
 
 const ALLOWLIST = [
     location.origin,
+    // Add all subdomains of the current host
+    ...(() => {
+        const host = location.host;
+        const parts = host.split('.');
+        const subdomains = [];
+        for (let i = 0; i < parts.length - 1; i++) {
+            subdomains.push('https://' + parts.slice(i).join('.'));
+        }
+        return subdomains;
+    })(),
     "https://intastellar.app",
     "https://www.intastellarsolutions.com",
     "https://analytics.intastellarsolutions.com",
