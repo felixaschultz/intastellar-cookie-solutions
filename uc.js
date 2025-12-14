@@ -459,7 +459,7 @@ const ALLOWLIST = [
         const parts = host.split('.');
         const subdomains = [];
         for (let i = 0; i < parts.length - 1; i++) {
-            subdomains.push('https://' + parts.slice(i).join('.'));
+            subdomains.push(parts.slice(i).join('.'));
         }
         return subdomains;
     })(),
