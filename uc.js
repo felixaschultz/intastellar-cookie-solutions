@@ -479,8 +479,17 @@ function isAllowed(url) {
         const parsedUrl = new URL(url, window.location.origin);
         // Allow all requests to the same origin
         if (parsedUrl.origin === window.location.origin) return true;
+
+        // Allow if matches any allowlist origin
+        if (ALLOWLIST.some(domain => parsedUrl.origin === domain)) return true;
+
+        // Allow all subdomains of the current host/root domain
+        const rootHost = window.location.hostname.replace(/^www\./, "");
+        const parsedHost = parsedUrl.hostname.replace(/^www\./, "");
+        if (parsedHost === rootHost || parsedHost.endsWith('.' + rootHost)) return true;
+
         // Optionally allow other trusted domains here
-        return ALLOWLIST.some(domain => parsedUrl.origin === domain || parsedUrl.hostname.endsWith(ROOT_DOMAIN));
+        return false;
     } catch (e) {
         return false;
     }
