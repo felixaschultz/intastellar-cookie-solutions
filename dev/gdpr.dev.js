@@ -466,13 +466,14 @@ function isAllowed(url) {
         const parsedUrl = new URL(url, window.location.origin);
         // Allow all requests to the same origin
         if (parsedUrl.origin === window.location.origin) return true;
+        // Always allow requests to ROOT_DOMAIN and its subdomains (even from localhost)
+        if (typeof ROOT_DOMAIN === 'string' && parsedUrl.hostname.endsWith(ROOT_DOMAIN)) return true;
         // Optionally allow other trusted domains here
-        return ALLOWLIST.some(domain => parsedUrl.origin === domain || parsedUrl.hostname.endsWith(ROOT_DOMAIN));
+        return ALLOWLIST.some(domain => parsedUrl.origin === domain);
     } catch (e) {
         return false;
     }
 }
-
 
 // Intercept fetch with consent check
 const originalFetch = window.fetch;

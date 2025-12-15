@@ -6,27 +6,47 @@
  *
 */
 // --- IAB Global Vendor List (GVL) fetch & cache utility ---
-const GVL_URL = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-    ? "/dev/gvl-local.json"
-    : "https://vendor-list.consensu.org/v3/vendor-list.json";
+const GVL_URL = "https://apis.intastellarsolutions.com/gvl.php";
 let gvlCache = null;
 let gvlCacheTimestamp = 0;
 const GVL_CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
 /**
- * Fetches the IAB Global Vendor List (GVL), with caching.
+ * Fetches the IAB Global Vendor List (GVL), with session-based caching.
  * @returns {Promise<Object>} The GVL JSON object.
  */
 async function fetchGVL() {
-  const now = Date.now();
-  if (gvlCache && (now - gvlCacheTimestamp < GVL_CACHE_TTL)) {
-    return gvlCache;
-  }
-  const response = await fetch(GVL_URL);
-  if (!response.ok) throw new Error('Failed to fetch GVL');
-  gvlCache = await response.json();
-  gvlCacheTimestamp = now;
-  return gvlCache;
+    // Check session storage for cached GVL
+    const cachedGVL = sessionStorage.getItem("gvlCache");
+    const cachedTimestamp = sessionStorage.getItem("gvlCacheTimestamp");
+
+    /* if (cachedGVL && cachedTimestamp) {
+        const age = Date.now() - parseInt(cachedTimestamp, 10);
+        if (age < GVL_CACHE_TTL) {
+            gvlCache = JSON.parse(cachedGVL);
+            gvlCacheTimestamp = parseInt(cachedTimestamp, 10);
+            return gvlCache;
+        }
+    } */
+
+    // Fetch GVL from server if not in cache or expired
+    try {
+        const response = await fetch(GVL_URL);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch GVL: ${response.statusText}`);
+        }
+        gvlCache = await response.json();
+        gvlCacheTimestamp = Date.now();
+
+        // Store in session storage
+        //sessionStorage.setItem("gvlCache", JSON.stringify(gvlCache));
+        //sessionStorage.setItem("gvlCacheTimestamp", gvlCacheTimestamp.toString());
+
+        return gvlCache;
+    } catch (error) {
+        console.error("Error fetching GVL:", error);
+        return null;
+    }
 }
 
 /**
@@ -35,30 +55,10 @@ async function fetchGVL() {
  */
 async function getVendorsForUI() {
   const gvl = await fetchGVL();
-  // Returns an array of vendor objects (id, name, purposes, policyUrl, etc.)
-  return Object.values(gvl.vendors || {});
-}
 
-/* if (window.INTA?.settings?.tcf) {
-    // Fetch GVL, show Manage Vendors button, enable TCF UI
-    // 1. Fetch vendors and render checkboxes
-    getVendorsForUI().then(vendors => {
-        const vendorContainer = document.getElementById('vendor-list');
-        vendors.slice(0, 24).forEach((vendor, idx) => {
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.id = 'vendor' + vendor.id;
-            checkbox.value = vendor.id;
-            // Optionally: checkbox.checked = ... (load previous consent)
-            const label = document.createElement('label');
-            label.htmlFor = checkbox.id;
-            label.textContent = vendor.name;
-            vendorContainer.appendChild(checkbox);
-            vendorContainer.appendChild(label);
-            vendorContainer.appendChild(document.createElement('br'));
-        });
-    });
-} */
+  // Returns an array of vendor objects (id, name, purposes, policyUrl, etc.)
+  return Object.values(gvl || {});
+}
 
 function onSaveConsent() {
     // Purposes: collect from your UI (e.g., checkboxes with ids purpose1, purpose2, ...)
@@ -496,11 +496,9 @@ const testSection = document.createElement("section");
 testSection.setAttribute("class", "intastellarCookieConstents__contentC");
 testSection.appendChild(moreintHeader);
 testSection.appendChild(moreContentText);
-let vendorListContainer = document.createElement('div');
 
-// Only render vendor checkboxes if TCF is enabled
-if (window.INTA?.settings?.tcf) {
-    // --- Vendor List Container for TCF ---
+function openVendorList() {
+    let vendorListContainer = document.createElement('div');
     vendorListContainer.id = 'vendor-list';
     vendorListContainer.style.maxHeight = '190px';
     vendorListContainer.style.overflowY = 'auto';
@@ -508,9 +506,12 @@ if (window.INTA?.settings?.tcf) {
     vendorListContainer.style.background = '#5b5b5bff';
     vendorListContainer.innerHTML = '<h3>Vendors</h3>';
     getVendorsForUI().then(vendors => {
-        vendorListContainer.innerHTML += vendors.map(vendor => {
+        console.log(vendors);
+        vendors.forEach(vendor => {
+            const vendorDiv = document.createElement('div');
+            vendorDiv.classList.add('vendor-item');
             const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
-            return `<div class="vendor-item" style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #444;">
+            vendorDiv.innerHTML = `
                 <label class="checkMarkContainer">
                     <span class="intSettingsTitle">${vendor.name}</span>
                     <span class="intCheckmarkSliderContainer">
@@ -518,8 +519,7 @@ if (window.INTA?.settings?.tcf) {
                         <span class="checkmark round"></span>
                     </span>
                 </label>
-                ${
-                    hasLegit ? `
+                ${hasLegit ? `
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Legitimate Interest</span>
                             <span class="intCheckmarkSliderContainer">
@@ -529,8 +529,9 @@ if (window.INTA?.settings?.tcf) {
                         </label>
                     ` : ``
                 }
-            </div>`;
-        }).join('');
+            `;
+            vendorListContainer.appendChild(vendorDiv);
+        });
 
         // Patch: Attach vendor consent/legit state to main Save button
         const mainSaveBtn = document.querySelector('.intastellarCookie-settings__btn.--save');
@@ -563,7 +564,6 @@ if (window.INTA?.settings?.tcf) {
         }
     });
     testSection.appendChild(vendorListContainer);
-
 }
 
 moreSettingsContent.appendChild(intastellarCookieConstents__Container);
@@ -931,6 +931,7 @@ if (intastellarCookieLanguage != null) {
         + `<section class="intCookieSaveSettingsContainer">
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
@@ -938,6 +939,7 @@ if (intastellarCookieLanguage != null) {
         ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn">${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         moreFooter.innerHTML =
@@ -1030,6 +1032,7 @@ if (intastellarCookieLanguage != null) {
         ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.german.saveSettings, 'Akzeptieren')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1129,6 +1132,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.english.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1227,6 +1231,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.spanish.saveSettings, 'Aceptar')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1321,6 +1326,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.french.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1418,6 +1424,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.swedish.saveSettings, 'Acceptera')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1516,6 +1523,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.norwegian.saveSettings, 'Godta')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1527,6 +1535,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
 
@@ -1624,6 +1633,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.dutch.saveSettings, 'Accepteren')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1720,6 +1730,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.italian.saveSettings, 'Accetta')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1816,6 +1827,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.finnish.saveSettings, 'Hyväksy')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1912,6 +1924,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.russian.saveSettings, 'Принять')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2008,6 +2021,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.polish.saveSettings, 'Zaakceptuj')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2104,6 +2118,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.afrikaans.saveSettings, 'Aanvaar')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2200,6 +2215,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.korean.saveSettings, '동의')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2297,6 +2313,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.arabic.saveSettings, 'قبول')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2394,6 +2411,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.estonian.saveSettings, 'Nõustu')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2489,6 +2507,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" >${intastellarShowHideDetailsText}</button>
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
 
@@ -2900,6 +2919,8 @@ onWindowLoad(function () {
                 learnMore(this);
             })
         })
+
+        document.querySelector(".openVendorList").addEventListener("click", openVendorList);
 
         window?.INTA?.settings?.partnerDomain?.forEach((domain) => {
             intaConsentsObjectVariable.sharingDomains.push(domain);
