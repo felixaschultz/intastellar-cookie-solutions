@@ -2921,7 +2921,9 @@ onWindowLoad(function () {
             })
         })
 
-        document.querySelector(".openVendorList").addEventListener("click", openVendorList);
+        if(window.INTA.settings.tcf){
+            document.querySelector(".openVendorList").addEventListener("click", openVendorList);
+        }
 
         window?.INTA?.settings?.partnerDomain?.forEach((domain) => {
             intaConsentsObjectVariable.sharingDomains.push(domain);
