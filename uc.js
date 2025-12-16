@@ -2781,12 +2781,13 @@ if (intastellarDevMode) {
 }
 
 intastellarCreateBanner.async = true;
+intastellarCreateBanner.defer = true;
 
 setTimeout(() => {
     if (window.INTA.settings) {
-        intHead.appendChild(intastellarCreateBanner);
+        document.body.appendChild(intastellarCreateBanner);
     }
-}, 500);
+}, 800);
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
