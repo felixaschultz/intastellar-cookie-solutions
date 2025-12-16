@@ -2785,7 +2785,7 @@ intastellarCreateBanner.defer = true;
 
 setTimeout(() => {
     if (window.INTA.settings) {
-        document.body.appendChild(intastellarCreateBanner);
+        intHead.appendChild(intastellarCreateBanner);
     }
 }, 800);
 
