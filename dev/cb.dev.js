@@ -492,7 +492,6 @@ testSection.appendChild(moreContentText);
 function openVendorList() {
     let vendorListContainer = document.createElement('div');
     vendorListContainer.id = 'vendor-list';
-    vendorListContainer.style.maxHeight = '190px';
     vendorListContainer.style.overflowY = 'auto';
     vendorListContainer.classList.add("vendor-container");
     vendorListContainer.style.background = '#5b5b5bff';
@@ -555,7 +554,7 @@ function openVendorList() {
             });
         }
     });
-    testSection.appendChild(vendorListContainer);
+    moreFooter.appendChild(vendorListContainer);
 }
 
 moreSettingsContent.appendChild(intastellarCookieConstents__Container);
