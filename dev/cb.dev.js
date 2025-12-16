@@ -415,14 +415,6 @@ if (typeof window.denyAllCookies === 'function') {
     window.__tcfapiDispatchConsentChanged = function () {
         dispatchTCFEvent('useractioncomplete');
     };
-
-    // TCF API locator frame (required for cross-frame communication)
-    if (!window.frames['__tcfapiLocator']) {
-        var tcfApiLocator = document.createElement('iframe');
-        tcfApiLocator.style.display = 'none';
-        tcfApiLocator.name = '__tcfapiLocator';
-        document.body.appendChild(tcfApiLocator);
-    }
 })();
 
 
@@ -2865,6 +2857,15 @@ function onWindowLoad(callback) {
 }
 
 onWindowLoad(function () {
+
+    // TCF API locator frame (required for cross-frame communication)
+    if (!window.frames['__tcfapiLocator']) {
+        var tcfApiLocator = document.createElement('iframe');
+        tcfApiLocator.style.display = 'none';
+        tcfApiLocator.name = '__tcfapiLocator';
+        document.body.appendChild(tcfApiLocator);
+    }
+
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     const temp = location.host.split('.').reverse();
     const domain = encodeURI(temp[1] + '.' + temp[0]);
