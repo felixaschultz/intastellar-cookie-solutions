@@ -3147,7 +3147,7 @@ onWindowLoad(function () {
             });
         });
 
-        document.querySelector(".--save").addEventListener("click", () => {
+        moreSettings.addEventListener("click", () => {
             const accepted = [];
             if (FunctionalCheckbox?.checked) {
                 gtag('consent', 'update', {
