@@ -221,7 +221,7 @@ const IntastellarCookieConsent = {
     },
     initialize: function (template) {
         function initTemplate() {
-            if (!document.querySelector(".intastellarCookieConstents") && template !== false) {
+            if (!document.querySelector(".intastellarCookieConstents") && template !== false) {  
                 document.body.append(template);
             }
 
@@ -2848,7 +2848,7 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
 }
 
 function onWindowLoad(callback) {
-    if (document.readyState === 'complete') {
+    if (document.readyState === 'complete' && document.body) {
         callback();
     } else {
         window.addEventListener('load', callback);
