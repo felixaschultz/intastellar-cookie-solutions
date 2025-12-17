@@ -2848,7 +2848,9 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
 }
 
 function onWindowLoad(callback) {
-    if (document.readyState === 'complete' && document.body) {
+    if (document.readyState === 'complete' && document.body 
+        && document.querySelector("intastellarconsents") != null
+    ) {
         callback();
     } else {
         window.addEventListener('load', callback);
