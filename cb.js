@@ -2868,6 +2868,148 @@ function onWindowLoad(callback) {
     }
 }
 
+function IntaSaveSettings() {
+    const accepted = [];
+    if (FunctionalCheckbox?.checked) {
+        gtag('consent', 'update', {
+            'functionality_storage': 'granted',
+        })
+        accepted.push("functionalCookies");
+
+        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+            {
+                'analytics': false,
+                'marketing': false,
+                'preferences': true,
+            },
+            () => console.log("Consent captured")
+        );
+    } else if (!FunctionalCheckbox?.checked) {
+        gtag('consent', 'update', {
+            'functionality_storage': 'denied',
+        });
+
+        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+            {
+                'analytics': false,
+                'marketing': false,
+                'preferences': false,
+            },
+            () => console.log("Consent captured")
+        );
+
+        const index = accepted.indexOf("functionalCookies");
+        if (index > -1) { // only splice array when item is found
+            accepted.splice(index, 1); // 2nd parameter means remove one item only
+        }
+    }
+
+    if (StaticsCheckBox?.checked) {
+        gtag('consent', 'update', {
+            'analytics_storage': 'granted',
+            'ad_storage': 'granted',
+            'ad_user_data': 'granted',
+        })
+        window.clarity && window.clarity('consentv2', {
+            ad_Storage: "denied",
+            analytics_Storage: "granted"
+        });
+        accepted.push("staticsticCookies");
+        _paq.push(['setConsentGiven']);
+        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+            {
+                'analytics': true,
+                'marketing': false,
+                'preferences': false,
+            },
+            () => console.log("Consent captured")
+        );
+    } else if (!StaticsCheckBox?.checked) {
+        gtag('consent', 'update', {
+            'analytics_storage': 'denied',
+        })
+
+        _paq.push(['forgetConsentGiven']);
+
+        window.clarity && window.clarity('consentv2', {
+            ad_Storage: "denied",
+            analytics_Storage: "denied"
+        });
+
+        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+            {
+                'analytics': false,
+                'marketing': false,
+                'preferences': false,
+            },
+            () => console.log("Consent captured")
+        );
+
+        const index = accepted.indexOf("staticsticCookies");
+        if (index > -1) { // only splice array when item is found
+            accepted.splice(index, 1); // 2nd parameter means remove one item only
+        }
+    }
+
+    if (MarketingCheckBox?.checked) {
+        gtag('consent', 'update', {
+            'ad_storage': 'granted',
+            'personalization_storage': 'granted',
+            'ads_data_redaction': 'granted',
+            'ad_user_data': 'granted',
+            'ad_personalization': 'granted',
+        });
+        window.uetq.push('consent', 'update', {
+            'ad_storage': 'granted'
+        });
+        window.clarity && window.clarity('consentv2', {
+            ad_Storage: "granted",
+            analytics_Storage: "denied"
+        });
+        accepted.push("advertisementCookies");
+
+        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+            {
+                'analytics': false,
+                'marketing': true,
+                'preferences': false,
+            },
+            () => console.log("Consent captured")
+        );
+
+    } else if (!MarketingCheckBox?.checked || intastellar) {
+        window.uetq.push('consent', 'update', {
+            'ad_storage': 'denied'
+        });
+        gtag('consent', 'update', {
+            'ad_storage': 'denied',
+            'personalization_storage': 'denied',
+            'ads_data_redaction': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+        });
+
+        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+            {
+                'analytics': false,
+                'marketing': false,
+                'preferences': false,
+            },
+            () => console.log("Consent captured")
+        );
+
+        window.clarity && window.clarity('consent', false);
+
+        const index = accepted.indexOf("advertisementCookies");
+        if (index > -1) { // only splice array when item is found
+            accepted.splice(index, 1); // 2nd parameter means remove one item only
+        }
+    }
+    saveINTCookieSettings("changePermission", accepted);
+    // Dispatch TCF event after user action
+    dispatchTCFConsentChangedIfAvailable();
+};
+
 onWindowLoad(function () {
 
     // TCF API locator frame (required for cross-frame communication)
@@ -3114,180 +3256,6 @@ onWindowLoad(function () {
             || MarketingCheckBox?.checked === true
             ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
 
-        const ness = document.getElementsByClassName("intastellarCookieBanner__accpetNecssery");
-        const all = document.getElementsByClassName("intastellarCookieSettings--acceptAll");
-        const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
-
-        changePermission.forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-                const intaCookieSettings = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : intaConsentsObjectVariable.consents;
-                const newIframe = document.createElement("iframe");
-                let type = e.target.getAttribute("data-type");
-                if (type === "intFunctionalCookies") {
-                    intaCookieSettings.functionalCookies = "checked";
-                    newIframe.src = e.target.parentElement.parentElement.parentElement.getAttribute("data-src");
-                } else if (type === "intMarketingCookies") {
-                    intaCookieSettings.advertisementCookies = "checked";
-                    newIframe.src = e.target.parentElement.parentElement.parentElement.getAttribute("data-src");
-                } else if (type === "intStaticsticCookies") {
-                    intaCookieSettings.staticsticCookies = "checked";
-                    newIframe.src = e.target.parentElement.parentElement.parentElement.getAttribute("data-src");
-                }
-                document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaCookieSettings), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
-
-                const parent = e.target.parentElement.parentElement.parentElement.parentNode;
-                /* setTimeout(() => {
-                    parent.insertBefore(newIframe, e.target.parentElement.parentElement.parentElement);
-                    // Step 3: Remove the existing element
-                    console.log(JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents);
-                }, 1000); */
-
-                // Replace the old cookie with the new one
-                //window.location.reload();
-            });
-        });
-
-        moreSettings.addEventListener("click", () => {
-            const accepted = [];
-            if (FunctionalCheckbox?.checked) {
-                gtag('consent', 'update', {
-                    'functionality_storage': 'granted',
-                })
-                accepted.push("functionalCookies");
-
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-                    {
-                        'analytics': false,
-                        'marketing': false,
-                        'preferences': true,
-                    },
-                    () => console.log("Consent captured")
-                );
-            } else if (!FunctionalCheckbox?.checked) {
-                gtag('consent', 'update', {
-                    'functionality_storage': 'denied',
-                });
-
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-                    {
-                        'analytics': false,
-                        'marketing': false,
-                        'preferences': false,
-                    },
-                    () => console.log("Consent captured")
-                );
-
-                const index = accepted.indexOf("functionalCookies");
-                if (index > -1) { // only splice array when item is found
-                    accepted.splice(index, 1); // 2nd parameter means remove one item only
-                }
-            }
-
-            if (StaticsCheckBox?.checked) {
-                gtag('consent', 'update', {
-                    'analytics_storage': 'granted',
-                    'ad_storage': 'granted',
-                    'ad_user_data': 'granted',
-                })
-                window.clarity && window.clarity('consentv2', {
-                    ad_Storage: "denied",
-                    analytics_Storage: "granted"
-                });
-                accepted.push("staticsticCookies");
-                _paq.push(['setConsentGiven']);
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-                    {
-                        'analytics': true,
-                        'marketing': false,
-                        'preferences': false,
-                    },
-                    () => console.log("Consent captured")
-                );
-            } else if (!StaticsCheckBox?.checked) {
-                gtag('consent', 'update', {
-                    'analytics_storage': 'denied',
-                })
-
-                _paq.push(['forgetConsentGiven']);
-
-                window.clarity && window.clarity('consentv2', {
-                    ad_Storage: "denied",
-                    analytics_Storage: "denied"
-                });
-
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-                    {
-                        'analytics': false,
-                        'marketing': false,
-                        'preferences': false,
-                    },
-                    () => console.log("Consent captured")
-                );
-
-                const index = accepted.indexOf("staticsticCookies");
-                if (index > -1) { // only splice array when item is found
-                    accepted.splice(index, 1); // 2nd parameter means remove one item only
-                }
-            }
-
-            if (MarketingCheckBox?.checked) {
-                gtag('consent', 'update', {
-                    'ad_storage': 'granted',
-                    'personalization_storage': 'granted',
-                    'ads_data_redaction': 'granted',
-                    'ad_user_data': 'granted',
-                    'ad_personalization': 'granted',
-                });
-                window.uetq.push('consent', 'update', {
-                    'ad_storage': 'granted'
-                });
-                window.clarity && window.clarity('consentv2', {
-                    ad_Storage: "granted",
-                    analytics_Storage: "denied"
-                });
-                accepted.push("advertisementCookies");
-
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-                    {
-                        'analytics': false,
-                        'marketing': true,
-                        'preferences': false,
-                    },
-                    () => console.log("Consent captured")
-                );
-
-            } else if (!MarketingCheckBox?.checked || intastellar) {
-                window.uetq.push('consent', 'update', {
-                    'ad_storage': 'denied'
-                });
-                gtag('consent', 'update', {
-                    'ad_storage': 'denied',
-                    'personalization_storage': 'denied',
-                    'ads_data_redaction': 'denied',
-                    'ad_user_data': 'denied',
-                    'ad_personalization': 'denied',
-                });
-
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-                    {
-                        'analytics': false,
-                        'marketing': false,
-                        'preferences': false,
-                    },
-                    () => console.log("Consent captured")
-                );
-
-                window.clarity && window.clarity('consent', false);
-
-                const index = accepted.indexOf("advertisementCookies");
-                if (index > -1) { // only splice array when item is found
-                    accepted.splice(index, 1); // 2nd parameter means remove one item only
-                }
-            }
-            saveINTCookieSettings("changePermission", accepted);
-            // Dispatch TCF event after user action
-            dispatchTCFConsentChangedIfAvailable();
-        });
 
         if (window?.INTA?.settings.ccpa !== undefined && window?.INTA?.settings.ccpa.on) {
             /* const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
@@ -4908,7 +4876,7 @@ function generateCookieButtons(allCookiesText, necessaryCookiesText, cookieSetti
 }
 
 function generateCookieSettingsButton(settingsText, allCookiesText) {
-    return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save">' + settingsText + '</button>'
+    return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save" onclick="javascript:IntaSaveSettings()">' + settingsText + '</button>'
         + '<button class="intastellarCookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll">' + allCookiesText + '</button></section>'
         ;
 }
