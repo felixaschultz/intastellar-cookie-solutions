@@ -214,12 +214,10 @@ const IntastellarCookieConsent = {
     // Store reference to the banner element
     _banner: null,
     renew: function () {
-        if (!this._banner) {
-            this._banner = document.createElement("div");
-            this._banner.className = "intastellarCookieConstents";
-            document.body.appendChild(this._banner);
+        // Add --active to <inta-consents-banner> (referenced by moreSettings)
+        if (typeof moreSettings !== 'undefined') {
+            moreSettings.classList.add("--active");
         }
-        this._banner.classList.add("--active");
         document.documentElement.classList.add("noScroll");
         if (window.dataLayer) {
             window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
