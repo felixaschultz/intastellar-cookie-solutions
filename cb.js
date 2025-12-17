@@ -4876,7 +4876,7 @@ function generateCookieButtons(allCookiesText, necessaryCookiesText, cookieSetti
 }
 
 function generateCookieSettingsButton(settingsText, allCookiesText) {
-    return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save" onclick="javascript:IntaSaveSettings()">' + settingsText + '</button>'
+    return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save" onclick="javascript:IntaSaveSettings();">' + settingsText + '</button>'
         + '<button class="intastellarCookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll">' + allCookiesText + '</button></section>'
         ;
 }
