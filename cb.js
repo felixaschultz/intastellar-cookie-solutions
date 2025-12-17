@@ -2851,7 +2851,7 @@ banner.appendChild(bannerContent);
 moreSettings.appendChild(moreSettingsContent);
 intaconsents.appendChild(banner);
 intaconsents.appendChild(moreSettings);
-
+window._intaCookieConstents = intaconsents;
 IntastellarCookieConsent.initialize(intaconsents);
 
 if (document.querySelector(".intastellarCCPAContainer") != null) {
