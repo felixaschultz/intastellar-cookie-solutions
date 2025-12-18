@@ -4873,6 +4873,8 @@ function updateConsents(consent, type = null) {
         int__cookiesToKeep.push.apply(int__cookiesToKeep, marketingCookie);
         int__cookiesToKeep.push.apply(int__cookiesToKeep, functionalCookies);
         deleteAllCookies();
+
+        return;
     }
 
     /*  if (consent == "all" || type.length > 0 && type.includes("advertisementCookies")) {
@@ -4884,7 +4886,7 @@ function updateConsents(consent, type = null) {
          (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
      } */
 
-    if (type.length > 0) {
+    if (type != null && type.length > 0) {
         type.forEach((t) => {
 
             if (t == "staticsticCookies") {
