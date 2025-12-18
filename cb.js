@@ -3039,7 +3039,7 @@ function IntaAcceptAll(){
 
 
     document.querySelector("html").classList.toggle("noScroll");
-    window._intaCookieConstents.classList.toggle("--active");
+    window._IntastellarConsentsBanner.classList.remove("--active");
     dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
 
     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
@@ -3085,7 +3085,6 @@ function IntaAcceptAll(){
     document.querySelector("#functional").checked = true;
     // Dispatch TCF event after user action
     dispatchTCFConsentChangedIfAvailable();
-    window._IntastellarConsentsBanner.classList.remove("--active");
 }
 
 function IntaSaveNeccessary(){
