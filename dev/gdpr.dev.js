@@ -342,6 +342,27 @@ async function sendToBackend(data) {
         return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
 
+    function base64UrlDecode(str){
+        console.log('Decoding base64url:', str);
+        // Replace URL-safe characters with base64 characters
+        str = str.replace(/-/g, '+').replace(/_/g, '/');
+        // Pad with '=' to make length a multiple of 4
+        while (str.length % 4) {
+            str += '=';
+        }
+
+        console.log(str);
+
+        // Decode base64 string to binary string
+        const binary = atob(str);
+        // Convert binary string to byte array
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return bytes;
+    }
+
     // Minimal TCModel
     function TCModel() {
         this.purposeConsents = [];
@@ -387,7 +408,7 @@ async function sendToBackend(data) {
             const binary = base64UrlDecode(tcString);
             let bits = '';
             for (let i = 0; i < binary.length; i++) {
-                bits += ('00000000' + binary.charCodeAt(i).toString(2)).slice(-8);
+                bits += ('00000000' + binary[i].toString(2)).slice(-8);
             }
             // Parse fields (see encoder for bit lengths)
             let offset = 0;
@@ -414,6 +435,7 @@ async function sendToBackend(data) {
             const publisherCC = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
             const maxVendorId = parseInt(read(16), 2);
             const vendors = read(24).split('').map(b => b === '1');
+            const vendorConsents = [];
             return {
                 version,
                 created,
@@ -429,7 +451,11 @@ async function sendToBackend(data) {
                 specialFeatureOptIns,
                 purposes,
                 maxVendorId,
-                vendors
+                vendorConsents: vendors,
+                purposeLegitInterests,
+                purposeOneTreatment,
+                publisherCC,
+                vendorConsents
             };
         }
     };
