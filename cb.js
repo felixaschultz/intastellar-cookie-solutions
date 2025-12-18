@@ -3249,12 +3249,12 @@ onWindowLoad(function () {
         })
 
         // --- Banner and settings direct references ---
-        if (!window._intaCookieBanner) {
+        /* if (!window._intaCookieBanner) {
             // If you create the banner dynamically, do it here and keep the reference
             window._intaCookieBanner = document.createElement('div');
             window._intaCookieBanner.className = 'intastellarCookieBanner';
             document.body.appendChild(window._intaCookieBanner);
-        }
+        } */
         if (!window._intaCookieSettingsContainer) {
             window._intaCookieSettingsContainer = document.createElement('div');
             window._intaCookieSettingsContainer.className = 'intastellarCookie-settings__container';
