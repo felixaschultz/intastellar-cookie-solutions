@@ -3085,7 +3085,7 @@ function IntaAcceptAll(){
     document.querySelector("#functional").checked = true;
     // Dispatch TCF event after user action
     dispatchTCFConsentChangedIfAvailable();
-    /*window.location.reload();*/
+    window._IntastellarConsentsBanner.classList.remove("--active");
 }
 
 function IntaSaveNeccessary(){
