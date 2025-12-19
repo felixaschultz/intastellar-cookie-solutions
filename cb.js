@@ -239,7 +239,7 @@ const IntastellarCookieConsent = {
                 document.body.append(self._banner);
             }
             if (!getCookie(int_hideCookieBannerName)) {
-                if (self._banner) self._banner.classList.add("--active");
+                if (self._banner) window._IntastellarConsentsBanner.classList.add("--active");
                 if (window.dataLayer) {
                     window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
                 }
