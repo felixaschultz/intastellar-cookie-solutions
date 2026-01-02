@@ -2777,6 +2777,7 @@ intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.
 if (window.INTA.settings.design === "floating") {
     intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/floating.js";
 }
+
 if (intastellarDevMode) {
     if (window.INTA.settings.design === "floating") {
         intastellarCreateBanner.src = "../../dev/styles/floating.js";

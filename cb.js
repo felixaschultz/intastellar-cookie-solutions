@@ -501,6 +501,11 @@ testSection.appendChild(moreintHeader);
 testSection.appendChild(moreContentText);
 
 function openVendorList() {
+
+    if (!window.INTA.settings.tcf) {
+        return;
+    }
+
     let vendorListContainer = document.createElement('div');
     vendorListContainer.id = 'vendor-list';
     vendorListContainer.style.overflowY = 'auto';
@@ -517,7 +522,7 @@ function openVendorList() {
                 <label class="checkMarkContainer">
                     <span class="intSettingsTitle">${vendor.name}</span>
                     <span class="intCheckmarkSliderContainer">
-                        <input id="vendor${vendor.id}" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
+                        <input onchange="updateSaveButtonText()" id="vendor${vendor.id}" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
                         <span class="checkmark round"></span>
                     </span>
                 </label>
@@ -525,7 +530,7 @@ function openVendorList() {
                         <label class="checkMarkContainer">
                             <span class="intSettingsTitle">Legitimate Interest</span>
                             <span class="intCheckmarkSliderContainer">
-                                <input id="vendor${vendor.id}-legit" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
+                                <input onchange="updateSaveButtonText()" id="vendor${vendor.id}-legit" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
                                 <span class="checkmark round"></span>
                             </span>
                         </label>
@@ -565,7 +570,9 @@ function openVendorList() {
             });
         }
     });
+
     moreFooter.appendChild(vendorListContainer);
+
 }
 
 moreSettingsContent.appendChild(intastellarCookieConstents__Container);
@@ -933,7 +940,7 @@ if (intastellarCookieLanguage != null) {
         + `<section class="intCookieSaveSettingsContainer">
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
@@ -941,7 +948,7 @@ if (intastellarCookieLanguage != null) {
         ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)">${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         moreFooter.innerHTML =
@@ -960,7 +967,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -969,7 +976,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -978,7 +985,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1034,7 +1041,7 @@ if (intastellarCookieLanguage != null) {
         ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.german.saveSettings, 'Akzeptieren')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1056,7 +1063,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.german.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1065,7 +1072,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.german.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1074,7 +1081,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.german.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1134,7 +1141,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.english.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1157,7 +1164,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.english.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1166,7 +1173,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.english.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1175,7 +1182,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.english.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1233,7 +1240,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.spanish.saveSettings, 'Aceptar')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1255,7 +1262,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.spanish.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1264,7 +1271,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.spanish.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1273,7 +1280,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.spanish.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1328,7 +1335,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.french.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1350,7 +1357,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.french.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1359,7 +1366,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.french.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1368,7 +1375,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.french.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1426,7 +1433,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.swedish.saveSettings, 'Acceptera')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1448,7 +1455,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.swedish.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1457,7 +1464,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.swedish.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1466,7 +1473,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.swedish.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1525,7 +1532,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.norwegian.saveSettings, 'Godta')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1537,7 +1544,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
 
@@ -1595,7 +1602,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.dutch.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1604,7 +1611,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.dutch.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1613,7 +1620,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.dutch.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1635,7 +1642,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.dutch.saveSettings, 'Accepteren')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1692,7 +1699,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.dutch.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1701,7 +1708,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.dutch.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1710,7 +1717,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.dutch.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1732,7 +1739,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.italian.saveSettings, 'Accetta')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1789,7 +1796,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.italian.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1798,7 +1805,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.italian.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1807,7 +1814,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.italian.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1829,7 +1836,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.finnish.saveSettings, 'Hyväksy')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1886,7 +1893,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.finnish.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1895,7 +1902,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.finnish.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1904,7 +1911,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.finnish.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1926,7 +1933,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.russian.saveSettings, 'Принять')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1983,7 +1990,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.russian.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -1992,7 +1999,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.russian.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2001,7 +2008,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.russian.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2023,7 +2030,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.polish.saveSettings, 'Zaakceptuj')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2080,7 +2087,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.polish.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2089,7 +2096,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.polish.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2098,7 +2105,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.polish.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2120,7 +2127,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.afrikaans.saveSettings, 'Aanvaar')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2177,7 +2184,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.afrikaans.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2186,7 +2193,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.afrikaans.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2195,7 +2202,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.afrikaans.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2217,7 +2224,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.korean.saveSettings, '동의')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2274,7 +2281,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.korean.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2283,7 +2290,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer"> 
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.korean.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2292,7 +2299,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.korean.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2315,7 +2322,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.arabic.saveSettings, 'قبول')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2372,7 +2379,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.arabic.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2381,7 +2388,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.arabic.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2390,7 +2397,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.arabic.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2413,7 +2420,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.estonian.saveSettings, 'Nõustu')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2470,7 +2477,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.estonian.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2479,7 +2486,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.estonian.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2488,7 +2495,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.estonian.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2509,7 +2516,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        ${(window.INTA.settings.tcf) ? `<button class="openVendorList">Vendor list</button>` : ""}
+        ${(window.INTA.settings.tcf) ? `<button class="openVendorList" onclick="openVendorList()">Vendor list</button>` : ""}
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
 
@@ -2567,7 +2574,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.functional.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2576,7 +2583,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.statisic.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2585,7 +2592,7 @@ if (intastellarCookieLanguage != null) {
                     <label class="checkMarkContainer">
                         <span class="intSettingsTitle">${intastellarSupportedLanguages.danish.marketing.title}</span>
                         <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
                             <span class="checkmark round"></span>
                         </span>
                     </label>
@@ -2859,7 +2866,7 @@ if (document.querySelector(".intastellarCCPAContainer") != null) {
 }
 
 function onWindowLoad(callback) {
-    if (document.readyState === 'complete' && document.body 
+    if (document.readyState === 'complete' && document.body
         && document.querySelector("intastellarconsents") != null
     ) {
         callback();
@@ -3010,7 +3017,7 @@ function IntaSaveSettings() {
     dispatchTCFConsentChangedIfAvailable();
 };
 
-function IntaAcceptAll(){
+function IntaAcceptAll() {
     intaConsentsObjectVariable.consents = {
         staticsticCookies: "checked",
         functionalCookies: "checked",
@@ -3087,7 +3094,7 @@ function IntaAcceptAll(){
     dispatchTCFConsentChangedIfAvailable();
 }
 
-function IntaSaveNeccessary(){
+function IntaSaveNeccessary() {
     intaConsentsObjectVariable.consents = {
         staticsticCookies: false,
         functionalCookies: false,
@@ -3154,6 +3161,102 @@ function IntaSaveNeccessary(){
     /*window.location.reload();*/
 }
 
+const settingsSaveLang = {};
+
+if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
+    settingsSaveLang.necessaryCookiesText = "Decline All";
+    settingsSaveLang.saveSettingsText = "Save settings";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
+    settingsSaveLang.necessaryCookiesText = "Ablehnen";
+    settingsSaveLang.saveSettingsText = "Speichern";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
+    settingsSaveLang.necessaryCookiesText = "Afvis";
+    settingsSaveLang.saveSettingsText = "Gem";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
+    settingsSaveLang.necessaryCookiesText = "Rechazar";
+    settingsSaveLang.saveSettingsText = "Guardar";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fr" || intastellarCookieLanguage === "fr-FR") {
+    settingsSaveLang.necessaryCookiesText = "Refuser";
+    settingsSaveLang.saveSettingsText = "Enregistrer";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "it" || intastellarCookieLanguage === "it-IT") {
+    settingsSaveLang.necessaryCookiesText = "Rifiuta";
+    settingsSaveLang.saveSettingsText = "Salva";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
+    settingsSaveLang.necessaryCookiesText = "Weigeren";
+    settingsSaveLang.saveSettingsText = "Opslaan";
+
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pl" || intastellarCookieLanguage === "pl-PL") {
+    settingsSaveLang.necessaryCookiesText = "Odrzuć";
+    settingsSaveLang.saveSettingsText = "Zapisz";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "sv" || intastellarCookieLanguage === "sv-SE") {
+    settingsSaveLang.necessaryCookiesText = "Avvisa";
+    settingsSaveLang.saveSettingsText = "Spara";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pt" || intastellarCookieLanguage === "pt-PT") {
+    settingsSaveLang.necessaryCookiesText = "Recusar";
+    settingsSaveLang.saveSettingsText = "Salvar";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ru" || intastellarCookieLanguage === "ru-RU") {
+    settingsSaveLang.necessaryCookiesText = "Отклонить";
+    settingsSaveLang.saveSettingsText = "Сохранить";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no" || intastellarCookieLanguage === "no-NO") {
+    settingsSaveLang.necessaryCookiesText = "Avvis";
+    settingsSaveLang.saveSettingsText = "Lagre";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
+    settingsSaveLang.necessaryCookiesText = "Hylkää";
+    settingsSaveLang.saveSettingsText = "Tallenna";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "cs" || intastellarCookieLanguage === "cs-CZ") {
+    settingsSaveLang.necessaryCookiesText = "Odmítnout";
+    settingsSaveLang.saveSettingsText = "Uložit";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "hu" || intastellarCookieLanguage === "hu-HU") {
+    settingsSaveLang.necessaryCookiesText = "Elutasít";
+    settingsSaveLang.saveSettingsText = "Mentés";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "tr" || intastellarCookieLanguage === "tr-TR") {
+    settingsSaveLang.necessaryCookiesText = "Reddet";
+    settingsSaveLang.saveSettingsText = "Ayarları Kaydet";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ch" || intastellarCookieLanguage === "zh-CN") {
+    settingsSaveLang.necessaryCookiesText = "拒绝";
+    settingsSaveLang.saveSettingsText = "保存设置";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "jp" || intastellarCookieLanguage === "ja-JP") {
+    settingsSaveLang.necessaryCookiesText = "拒否";
+    settingsSaveLang.saveSettingsText = "設定を保存";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pl" || intastellarCookieLanguage === "pl-PL") {
+    settingsSaveLang.necessaryCookiesText = "Odrzuć";
+    settingsSaveLang.saveSettingsText = "Zapisz";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ar" || intastellarCookieLanguage === "ar-SA") {
+    settingsSaveLang.necessaryCookiesText = "رفض";
+    settingsSaveLang.saveSettingsText = "حفظ الإعدادات";
+
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "af" || intastellarCookieLanguage === "af-ZA") {
+    settingsSaveLang.necessaryCookiesText = "Afwys";
+    settingsSaveLang.saveSettingsText = "Stoor instellings";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
+    settingsSaveLang.necessaryCookiesText = "거부";
+    settingsSaveLang.saveSettingsText = "저장";
+} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "et" || intastellarCookieLanguage === "et-EE") {
+    settingsSaveLang.necessaryCookiesText = "Keeldu";
+    settingsSaveLang.saveSettingsText = "Salvesta seaded";
+} else {
+    settingsSaveLang.necessaryCookiesText = "Afvis";
+    settingsSaveLang.saveSettingsText = "Gem";
+}
+
+function updateSaveButtonText() {
+    const FunctionalCheckbox = document.querySelector("#functional");
+    const StaticsCheckBox = document.querySelector("#statics");
+    const MarketingCheckBox = document.querySelector("#marketing");
+    const saveBtn = document.querySelector(".intastellarCookie-settings__btn.--save");
+
+    if (!saveBtn) return;
+    if (
+        (FunctionalCheckbox && FunctionalCheckbox.checked) ||
+        (StaticsCheckBox && StaticsCheckBox.checked) ||
+        (MarketingCheckBox && MarketingCheckBox.checked)
+    ) {
+        saveBtn.innerText = settingsSaveLang.saveSettingsText;
+    } else {
+        saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
+    }
+}
+
 onWindowLoad(function () {
 
     // TCF API locator frame (required for cross-frame communication)
@@ -3200,8 +3303,10 @@ onWindowLoad(function () {
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
 
+    console.log("Initial consent values:", intaConsentsObjectVariable.consents);
 
     if (isValidPolicyLink()) {
+        console.log("Hello Loaded");
         document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
             if (window?.INTA?.settings.company != "" && window?.INTA?.settings.company != undefined && vendor.innerText == window.location.host) {
                 vendor.innerText = window?.INTA?.settings.company;
@@ -3219,9 +3324,9 @@ onWindowLoad(function () {
             })
         }) */
 
-        if (window.INTA.settings.tcf) {
+        /* if (window.INTA.settings.tcf) {
             document.querySelector(".openVendorList").addEventListener("click", openVendorList);
-        }
+        } */
 
         window?.INTA?.settings?.partnerDomain?.forEach((domain) => {
             intaConsentsObjectVariable.sharingDomains.push(domain);
@@ -3275,11 +3380,14 @@ onWindowLoad(function () {
             }
         }
 
+        console.log("Test");
         if (!window._intaCookieBannerSettings) {
             window._intaCookieBannerSettings = document.createElement('button');
             window._intaCookieBannerSettings.className = 'intastellarCookieBanner__settings';
-            banner.appendChild(window._intaCookieBannerSettings);
+            //banner.appendChild(window._intaCookieBannerSettings);
         }
+
+
         const bannerSettings = window._intaCookieBannerSettings;
         bannerSettings.addEventListener("click", () => {
             const consentBanner = window.IntastellarCookieConsent && window.IntastellarCookieConsent._banner;
@@ -3290,115 +3398,19 @@ onWindowLoad(function () {
             }
         });
 
-        const FunctionalCheckbox = document.querySelector("#functional");
-        const StaticsCheckBox = document.querySelector("#statics");
-        const MarketingCheckBox = document.querySelector("#marketing");
-        const settingsSaveLang = {};
 
-        if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-            settingsSaveLang.necessaryCookiesText = "Decline All";
-            settingsSaveLang.saveSettingsText = "Save settings";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-            settingsSaveLang.necessaryCookiesText = "Ablehnen";
-            settingsSaveLang.saveSettingsText = "Speichern";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-            settingsSaveLang.necessaryCookiesText = "Afvis";
-            settingsSaveLang.saveSettingsText = "Gem";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
-            settingsSaveLang.necessaryCookiesText = "Rechazar";
-            settingsSaveLang.saveSettingsText = "Guardar";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fr" || intastellarCookieLanguage === "fr-FR") {
-            settingsSaveLang.necessaryCookiesText = "Refuser";
-            settingsSaveLang.saveSettingsText = "Enregistrer";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "it" || intastellarCookieLanguage === "it-IT") {
-            settingsSaveLang.necessaryCookiesText = "Rifiuta";
-            settingsSaveLang.saveSettingsText = "Salva";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
-            settingsSaveLang.necessaryCookiesText = "Weigeren";
-            settingsSaveLang.saveSettingsText = "Opslaan";
 
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pl" || intastellarCookieLanguage === "pl-PL") {
-            settingsSaveLang.necessaryCookiesText = "Odrzuć";
-            settingsSaveLang.saveSettingsText = "Zapisz";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "sv" || intastellarCookieLanguage === "sv-SE") {
-            settingsSaveLang.necessaryCookiesText = "Avvisa";
-            settingsSaveLang.saveSettingsText = "Spara";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pt" || intastellarCookieLanguage === "pt-PT") {
-            settingsSaveLang.necessaryCookiesText = "Recusar";
-            settingsSaveLang.saveSettingsText = "Salvar";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ru" || intastellarCookieLanguage === "ru-RU") {
-            settingsSaveLang.necessaryCookiesText = "Отклонить";
-            settingsSaveLang.saveSettingsText = "Сохранить";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no" || intastellarCookieLanguage === "no-NO") {
-            settingsSaveLang.necessaryCookiesText = "Avvis";
-            settingsSaveLang.saveSettingsText = "Lagre";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
-            settingsSaveLang.necessaryCookiesText = "Hylkää";
-            settingsSaveLang.saveSettingsText = "Tallenna";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "cs" || intastellarCookieLanguage === "cs-CZ") {
-            settingsSaveLang.necessaryCookiesText = "Odmítnout";
-            settingsSaveLang.saveSettingsText = "Uložit";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "hu" || intastellarCookieLanguage === "hu-HU") {
-            settingsSaveLang.necessaryCookiesText = "Elutasít";
-            settingsSaveLang.saveSettingsText = "Mentés";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "tr" || intastellarCookieLanguage === "tr-TR") {
-            settingsSaveLang.necessaryCookiesText = "Reddet";
-            settingsSaveLang.saveSettingsText = "Ayarları Kaydet";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ch" || intastellarCookieLanguage === "zh-CN") {
-            settingsSaveLang.necessaryCookiesText = "拒绝";
-            settingsSaveLang.saveSettingsText = "保存设置";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "jp" || intastellarCookieLanguage === "ja-JP") {
-            settingsSaveLang.necessaryCookiesText = "拒否";
-            settingsSaveLang.saveSettingsText = "設定を保存";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pl" || intastellarCookieLanguage === "pl-PL") {
-            settingsSaveLang.necessaryCookiesText = "Odrzuć";
-            settingsSaveLang.saveSettingsText = "Zapisz";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ar" || intastellarCookieLanguage === "ar-SA") {
-            settingsSaveLang.necessaryCookiesText = "رفض";
-            settingsSaveLang.saveSettingsText = "حفظ الإعدادات";
-
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "af" || intastellarCookieLanguage === "af-ZA") {
-            settingsSaveLang.necessaryCookiesText = "Afwys";
-            settingsSaveLang.saveSettingsText = "Stoor instellings";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
-            settingsSaveLang.necessaryCookiesText = "거부";
-            settingsSaveLang.saveSettingsText = "저장";
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "et" || intastellarCookieLanguage === "et-EE") {
-            settingsSaveLang.necessaryCookiesText = "Keeldu";
-            settingsSaveLang.saveSettingsText = "Salvesta seaded";
-        } else {
-            settingsSaveLang.necessaryCookiesText = "Afvis";
-            settingsSaveLang.saveSettingsText = "Gem";
+        // Patch: re-attach listeners after banner/settings are shown
+        if (window._intaCookieBannerSettings) {
+            window._intaCookieBannerSettings.addEventListener("click", function () {
+                setTimeout(attachConsentCheckboxListeners, 100); // Wait for DOM update
+            });
         }
-
-        FunctionalCheckbox?.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
-                && StaticsCheckBox?.checked === false
-                && MarketingCheckBox?.checked === false
-                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
-        })
-
-        StaticsCheckBox?.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
-                && StaticsCheckBox?.checked === false
-                && MarketingCheckBox?.checked === false
-                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
-        })
-
-        MarketingCheckBox?.addEventListener("change", () => {
-            document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
-                && StaticsCheckBox?.checked === false
-                && MarketingCheckBox?.checked === false
-                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
-        })
-
-        document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === true
-            && StaticsCheckBox?.checked === true
-            && MarketingCheckBox?.checked === true
-            || FunctionalCheckbox?.checked === true
-            || StaticsCheckBox?.checked === true
-            || MarketingCheckBox?.checked === true
-            ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
+        if (window.IntastellarCookieConsent && window.IntastellarCookieConsent._banner) {
+            window.IntastellarCookieConsent._banner.addEventListener("transitionend", function () {
+                setTimeout(attachConsentCheckboxListeners, 100);
+            });
+        }
 
 
         if (window?.INTA?.settings.ccpa !== undefined && window?.INTA?.settings.ccpa.on) {
@@ -3755,7 +3767,7 @@ onWindowLoad(function () {
                 })
             }
 
-            
+
         }
 
 
