@@ -485,6 +485,16 @@ const ALLOWLIST = [
     "https://apis.intastellarsolutions.com",
     "https://vendor-list.consensu.org",
     "/dev/gvl-local.json"
+    // HubSpot forms & embeds (legitimate interest)
+    ,"https://forms.hsforms.com"
+    ,"https://js.hs-scripts.com"
+    ,"https://js.hsforms.net"
+    ,"https://api.hsforms.com"
+    ,"https://forms.hubspot.com"
+    ,"https://track.hubspot.com"
+    ,"https://js.usemessages.com"
+    ,"https://cdn2.hubspot.net"
+    ,"https://cdn.hsforms.net"
 ];
 
 function isAllowed(url) {
@@ -494,6 +504,12 @@ function isAllowed(url) {
         if (parsedUrl.origin === window.location.origin) return true;
         // Always allow requests to ROOT_DOMAIN and its subdomains (even from localhost)
         if (typeof ROOT_DOMAIN === 'string' && parsedUrl.hostname.endsWith(ROOT_DOMAIN)) return true;
+        // HubSpot forms & embeds as legitimate interest
+        if (
+            /(?:\.hubspot\.com|\.hsforms\.com|\.hs-scripts\.com|\.hsforms\.net|\.usemessages\.com|\.cdn2\.hubspot\.net|\.cdn\.hsforms\.net)$/i.test(parsedUrl.hostname)
+        ) {
+            return true;
+        }
         // Optionally allow other trusted domains here
         return ALLOWLIST.some(domain => parsedUrl.origin === domain);
     } catch (e) {

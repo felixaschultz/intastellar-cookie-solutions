@@ -469,7 +469,16 @@ const ALLOWLIST = [
     "https://api.intastellarsolutions.com",
     "https://apis.intastellarsolutions.com",
     "https://vendor-list.consensu.org",
-    "/dev/gvl-local.json"
+    "/dev/gvl-local.json",
+    "https://forms.hsforms.com",
+    "https://js.hs-scripts.com",
+    "https://js.hsforms.net",
+    "https://api.hsforms.com",
+    "https://forms.hubspot.com",
+    "https://track.hubspot.com",
+    "https://js.usemessages.com",
+    "https://cdn2.hubspot.net",
+    "https://cdn.hsforms.net"
 ];
 
 
@@ -479,6 +488,12 @@ function isAllowed(url) {
         const parsedUrl = new URL(url, window.location.origin);
         // Allow all requests to the same origin
         if (parsedUrl.origin === window.location.origin) return true;
+
+        if (
+            /(?:\.hubspot\.com|\.hsforms\.com|\.hs-scripts\.com|\.hsforms\.net|\.usemessages\.com|\.cdn2\.hubspot\.net|\.cdn\.hsforms\.net)$/i.test(parsedUrl.hostname)
+        ) {
+            return true;
+        }
 
         // Allow if matches any allowlist origin
         if (ALLOWLIST.some(domain => parsedUrl.origin === domain)) return true;
