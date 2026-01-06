@@ -161,7 +161,7 @@ let cookieBtn = "";
 const banner = document.createElement("inta-consents-settings-btn");
 const bannerContent = document.createElement("button");
 const intastellarLogoLight = "https://www.intastellarsolutions.com/assets/logos/intastellar-consents-logo-white.svg";
-const intastellarLogoDark = window.intastellarLogoDark = "https://www.intastellarsolutions.com/assets/logos/intastellar-consents-logo.svg";
+const intastellarLogoDark = "https://www.intastellarsolutions.com/assets/logos/intastellar-consents-logo.svg";
 const moreSettings = window._IntastellarConsentsBanner = document.createElement("inta-consents-banner");
 const moreSettingsContent = document.createElement("section");
 const moreintHeader = document.createElement("intheader");

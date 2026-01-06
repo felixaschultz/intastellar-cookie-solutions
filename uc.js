@@ -2833,7 +2833,7 @@ setTimeout(() => {
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
     let p = "";
     if (window.location.host.indexOf("intastellarsolutions.com") == -1) {
-        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="90px" height="40px" style="width: 90px !important; height: 40px !important;margin-left: 10px;" src="${window.intastellarLogoDark}" alt="Intastellar Solutions, International"></a>`;
+        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="90px" height="40px" style="width: 90px !important; height: 40px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/logos/intastellar-consents-logo.svg" alt="Intastellar Solutions, International"></a>`;
     }
     if (img !== undefined && img != "") {
         return `
