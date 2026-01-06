@@ -33,6 +33,10 @@ window.addEventListener('message', (event) => {
     }
 });
 
+window.VWO = window.VWO || [];
+window.VWO.init = window.VWO.init || function(s) { window.VWO.consentState = s; };
+window.VWO.init(2); // default to pending
+
 // --- VWO Cookie Consent Integration (latest, per docs) ---
 function updateVwoConsent(consents) {
     // VWO expects: 1 = accepted, 2 = pending, 3 = rejected
