@@ -77,6 +77,11 @@ function onSaveConsent() {
     const tcString = generateTcString(userConsent);
     // Save tcString, update __tcfapi, etc.
     console.log('User TCString:', tcString);
+    // Call updateVwoConsent if available, pass a consent object if you have it
+    if (typeof updateVwoConsent === 'function') {
+        // You may need to adapt this to your actual consent object structure
+        updateVwoConsent(window.intaCookieConsents || {});
+    }
 }
 
 // Example usage (for development):
@@ -325,6 +330,7 @@ if (typeof window.saveConsent === 'function') {
     window.saveConsent = function () {
         const result = originalSaveConsent.apply(this, arguments);
         dispatchTCFConsentChangedIfAvailable();
+        if (typeof updateVwoConsent === 'function') updateVwoConsent(window.intaCookieConsents || {});
         return result;
     };
 }
@@ -333,6 +339,7 @@ if (typeof window.acceptAllCookies === 'function') {
     window.acceptAllCookies = function () {
         const result = originalAcceptAllCookies.apply(this, arguments);
         dispatchTCFConsentChangedIfAvailable();
+        if (typeof updateVwoConsent === 'function') updateVwoConsent(window.intaCookieConsents || {});
         return result;
     };
 }
@@ -341,6 +348,7 @@ if (typeof window.denyAllCookies === 'function') {
     window.denyAllCookies = function () {
         const result = originalDenyAllCookies.apply(this, arguments);
         dispatchTCFConsentChangedIfAvailable();
+        if (typeof updateVwoConsent === 'function') updateVwoConsent(window.intaCookieConsents || {});
         return result;
     };
 }
@@ -2891,6 +2899,7 @@ function IntaSaveSettings() {
             },
             () => console.log("Consent captured")
         );
+        
     } else if (!FunctionalCheckbox?.checked) {
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
@@ -2984,6 +2993,8 @@ function IntaSaveSettings() {
             () => console.log("Consent captured")
         );
 
+        updateVwoConsent(intaConsentsObjectVariable.consents);
+
     } else if (!MarketingCheckBox?.checked || intastellar) {
         window.uetq.push('consent', 'update', {
             'ad_storage': 'denied'
@@ -2995,6 +3006,8 @@ function IntaSaveSettings() {
             'ad_user_data': 'denied',
             'ad_personalization': 'denied',
         });
+
+        updateVwoConsent(intaConsentsObjectVariable.consents);
 
         window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
             {

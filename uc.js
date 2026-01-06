@@ -15,6 +15,8 @@ function requestConsentState(userId, rootDomain, partnerDomains = []) {
 // Set consent state for a user
 function setConsentState(userId, consents, rootDomain, partnerDomains = []) {
     consentIframe.contentWindow.postMessage({ type: 'setConsent', userId, consents, rootDomain, partnerDomains }, 'https://consents.cdn.intastellarsolutions.com');
+    // VWO consent update
+    updateVwoConsent(consents);
 }
 
 // Listen for consent state response
@@ -30,6 +32,23 @@ window.addEventListener('message', (event) => {
         console.log('Received consent state:', event.data.consents);
     }
 });
+
+// --- VWO Cookie Consent Integration (latest, per docs) ---
+function updateVwoConsent(consents) {
+    // VWO expects: 1 = accepted, 2 = pending, 3 = rejected
+    let state = 2; // default to pending
+    if (consents) {
+        if (consents.advertisementCookies === true || consents.advertisementCookies === "checked" || consents.marketing === true) {
+            state = 1; // accepted
+        } else if (consents.advertisementCookies === false || consents.advertisementCookies === "unchecked" || consents.marketing === false) {
+            state = 3; // rejected
+        }
+    }
+    window.VWO = window.VWO || [];
+    window.VWO.init = window.VWO.init || function(s) { window.VWO.consentState = s; };
+    window.VWO.init(state);
+}
+// --- End VWO Cookie Consent Integration ---
 
 // Example usage:
 // const rootDomain = "group1.com";
@@ -53,6 +72,10 @@ let adsbygoogle = window.adsbygoogle || [];
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
+// On page load, update VWO consent if consent object exists
+if (intaCookieConsents) {
+    updateVwoConsent(intaCookieConsents);
+}
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 const isGtmMode = findScriptParameter("ref") === "gtm";
 const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
@@ -480,8 +503,6 @@ const ALLOWLIST = [
     "https://cdn2.hubspot.net",
     "https://cdn.hsforms.net"
 ];
-
-
 
 function isAllowed(url) {
     try {
