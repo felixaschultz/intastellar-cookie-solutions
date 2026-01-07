@@ -227,7 +227,7 @@ window._hsp.push([
 
 window.Shopify = window.Shopify || {};
 window.Shopify.customerPrivacy = window.Shopify.customerPrivacy || {};
-window.Shopify.customerPrivacy.shouldShowBanner = false;
+window.Shopify.customerPrivacy.shouldShowBanner = function() { return false; };
 
 window.Shopify ?? window?.Shopify?.loadFeatures(
     [
