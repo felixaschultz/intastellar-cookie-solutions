@@ -225,6 +225,10 @@ window._hsp.push([
     }
 ]);
 
+window.Shopify = window.Shopify || {};
+window.Shopify.customerPrivacy = window.Shopify.customerPrivacy || {};
+window.Shopify.customerPrivacy.shouldShowBanner = false;
+
 window.Shopify ?? window?.Shopify?.loadFeatures(
     [
         {
