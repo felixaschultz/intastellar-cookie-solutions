@@ -176,7 +176,7 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "wait_for_update": 500,
             "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
         });
-        console.log("Intastellar Consents: Applied STRICT defaults (EU/UK/CA/BR/etc.)");
+        /* console.log("Intastellar Consents: Applied STRICT defaults (EU/UK/CA/BR/etc.)"); */
 
         // California opt-out (Do Not Sell)
         gtag('consent', 'default', {
@@ -192,7 +192,7 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "wait_for_update": 500,
             "region": ['US-CA']
         });
-        console.log("Intastellar Consents: Applied CALIFORNIA defaults (US-CA)");
+        /* console.log("Intastellar Consents: Applied CALIFORNIA defaults (US-CA)"); */
 
         // Rest of the world fallback
         gtag('consent', 'default', {
@@ -207,7 +207,7 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "url_passthrough": true,
             "wait_for_update": 500
         });
-        console.log("Intastellar Consents: Applied REST-OF-WORLD defaults");
+        /* console.log("Intastellar Consents: Applied REST-OF-WORLD defaults"); */
         gtag('consent', 'default', {
             'ad_storage': 'denied',
             'personalization_storage': 'denied',
@@ -222,9 +222,7 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
         });
         window._gtagDefaultFired = true;
     }
-} else if (isGtmMode) {
-    console.log('GTM mode detected - skipping consent default initialization');
-}
+} else if (isGtmMode) {}
 
 if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
