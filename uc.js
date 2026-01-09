@@ -66,13 +66,13 @@ function updateVwoConsent(consents) {
         set: function(cookieString) {
             try{
                 const cookieName = cookieString.split('=')[0].trim();
-                const rawValue = cookieString.split('=')[1]?.split(';')[0]?.trim() || '';
+                const rawValue = cookieString.split('=')[1]?.split(';')[0];
                 recordCookie({
                     name: cookieName,
                     source: 'document.cookie',
                     ts: Date.now(),
                     path: window.location.pathname,
-                    hadValuePreConsent: rawValue.length > 0 ? true : false,
+                    hadValuePreConsent: rawValue && rawValue.length > 0,
                     consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
                 })
             } catch(e){ /* ignore */ }
