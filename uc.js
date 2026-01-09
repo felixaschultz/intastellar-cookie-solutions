@@ -2858,7 +2858,7 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
             <inta-consents-bg class="intCookie_ConsentContainer-bgIMG" inta-bg-img="${img}"></inta-consents-bg>
             <inta-consents-section class="intCookie_ConsentContainer-info">
                 ${textLanguage}
-                <button class='intastellarCookie-settings__btn --changePermission' onClick='() => {updateCookiePreferenceOfBlockedIframes("${datatype}")}' data-type='${datatype}'>${btnText}</button>
+                <button class='intastellarCookie-settings__btn --changePermission' onClick='updateCookiePreferenceOfBlockedIframes("${datatype}")' data-type='${datatype}'>${btnText}</button>
                 ${p}
             </inta-consents-section>
         </inta-consents-content>
@@ -2874,7 +2874,7 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
                 
                 <inta-consents-section class="intCookie_ConsentContainer-info">
                     ${textLanguage}
-                    <button class='intastellarCookie-settings__btn --changePermission' onClick='() => {updateCookiePreferenceOfBlockedIframes("${datatype}")}' data-type='${datatype}'>${btnText}</button>
+                    <button class='intastellarCookie-settings__btn --changePermission' onClick='updateCookiePreferenceOfBlockedIframes("${datatype}")' data-type='${datatype}'>${btnText}</button>
                     ${p}
                 </inta-consents-section>
             </inta-consents-content>
