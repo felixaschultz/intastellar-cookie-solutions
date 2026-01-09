@@ -54,6 +54,11 @@ function updateVwoConsent(consents) {
 }
 // --- End VWO Cookie Consent Integration ---
 
+// --- Start Cookie Interception ---
+(function() {
+    
+})();
+
 // Example usage:
 // const rootDomain = "group1.com";
 // const partnerDomains = ["domain-a.com", "domain-b.com"];
@@ -2832,6 +2837,19 @@ setTimeout(() => {
         intHead.appendChild(intastellarCreateBanner);
     }
 }, 800);
+
+function updateCookiePreferenceOfBlockedIframes(dataType) {
+    if (dataType == "intMarketingCookies") {
+        document.querySelector("#marketing").checked = true;
+    } else if (dataType == "intFunctionalCookies") {
+        document.querySelector("#functional").checked = true;
+    }
+    saveINTCookieSettings("changePermission", dataType);
+    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    // Dispatch TCF event after user action
+    dispatchTCFConsentChangedIfAvailable();
+}
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {

@@ -5051,19 +5051,6 @@ function updateConsents(consent, type = null) {
     }
 }
 
-function updateCookiePreferenceOfBlockedIframes(dataType) {
-    if (dataType == "intMarketingCookies") {
-        document.querySelector("#marketing").checked = true;
-    } else if (dataType == "intFunctionalCookies") {
-        document.querySelector("#functional").checked = true;
-    }
-    saveINTCookieSettings("changePermission", dataType);
-    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-    // Dispatch TCF event after user action
-    dispatchTCFConsentChangedIfAvailable();
-}
-
 function saveINTCookieSettings(consent, type = null) {
     document.querySelector("html").classList.remove("noScroll");
     window._IntastellarConsentsBanner.classList.remove("--active");
