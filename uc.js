@@ -80,9 +80,7 @@ function updateVwoConsent(consents) {
 })();
 
 function IntastellarSnapShot(stage){
-    try{
-        
-    } catch(e){ /* ignore */ }
+    
 }
 
 // Example usage:
@@ -2880,7 +2878,7 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
 }
 
 function recordCookie(value) {
-    return value;
+    
 }
 
 /* Helper function to create Consents Block message for iframes etc.*/
