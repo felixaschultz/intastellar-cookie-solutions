@@ -2878,7 +2878,7 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
 }
 
 function recordCookie(value) {
-    
+    console.log(value);
 }
 
 /* Helper function to create Consents Block message for iframes etc.*/
