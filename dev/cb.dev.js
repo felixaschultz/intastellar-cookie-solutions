@@ -3303,8 +3303,6 @@ onWindowLoad(function () {
     /* Setting Google consent default values to denied & granted based on user selection. Via that Google Ads can be shown on Webpage if user gives consents to Advertisment / Marketing cookies */
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
 
-    console.log("Initial consent values:", intaConsentsObjectVariable.consents);
-
     if (isValidPolicyLink()) {
         console.log("Hello Loaded");
         document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
