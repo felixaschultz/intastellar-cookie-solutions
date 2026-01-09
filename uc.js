@@ -19,6 +19,19 @@ function setConsentState(userId, consents, rootDomain, partnerDomains = []) {
     updateVwoConsent(consents);
 }
 
+function updateCookiePreferenceOfBlockedIframes(dataType) {
+    if (dataType == "intMarketingCookies") {
+        document.querySelector("#marketing").checked = true;
+    } else if (dataType == "intFunctionalCookies") {
+        document.querySelector("#functional").checked = true;
+    }
+    saveINTCookieSettings("changePermission", dataType);
+    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    // Dispatch TCF event after user action
+    dispatchTCFConsentChangedIfAvailable();
+}
+
 // Listen for consent state response
 window.addEventListener('message', (event) => {
     if (event.origin !== 'https://consents.cdn.intastellarsolutions.com') return;
@@ -2845,7 +2858,7 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
             <inta-consents-bg class="intCookie_ConsentContainer-bgIMG" inta-bg-img="${img}"></inta-consents-bg>
             <inta-consents-section class="intCookie_ConsentContainer-info">
                 ${textLanguage}
-                <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
+                <button class='intastellarCookie-settings__btn --changePermission' onClick="() => {updateCookiePreferenceOfBlockedIframes(${datatype})}" data-type='${datatype}'>${btnText}</button>
                 ${p}
             </inta-consents-section>
         </inta-consents-content>
@@ -2861,7 +2874,7 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
                 
                 <inta-consents-section class="intCookie_ConsentContainer-info">
                     ${textLanguage}
-                    <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
+                    <button class='intastellarCookie-settings__btn --changePermission' onClick="() => {updateCookiePreferenceOfBlockedIframes(${datatype})} data-type='${datatype}'>${btnText}</button>
                     ${p}
                 </inta-consents-section>
             </inta-consents-content>

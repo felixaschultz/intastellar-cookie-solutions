@@ -3670,20 +3670,6 @@ onWindowLoad(function () {
 
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
-            const changePermission = document.querySelectorAll(".intastellarCookie-settings__btn.--changePermission");
-
-            changePermission.forEach((change) => {
-                change.addEventListener("click", function () {
-                    if (this.getAttribute("data-type") == "intMarketingCookies") {
-                        document.querySelector("#marketing").checked = true;
-                    } else if (this.getAttribute("data-type") == "intFunctionalCookies") {
-                        document.querySelector("#functional").checked = true;
-                    }
-                    saveINTCookieSettings("changePermission", this.getAttribute("data-type"));
-                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-                })
-            })
 
             if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) {
                 configBtn.forEach((configs) => {
@@ -3721,22 +3707,6 @@ onWindowLoad(function () {
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
             let settings = document.querySelector(".intastellarCookie-settings__container");
-
-            changePermission.forEach((change) => {
-                change.addEventListener("click", function () {
-                    if (this.getAttribute("data-type") == "intMarketingCookies") {
-                        document.querySelector("#marketing").checked = true;
-                    } else if (this.getAttribute("data-type") == "intFunctionalCookies") {
-                        document.querySelector("#functional").checked = true;
-                    }
-                    saveINTCookieSettings("changePermission", this.getAttribute("data-type"));
-                    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-                        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-                    // Dispatch TCF event after user action
-                    dispatchTCFConsentChangedIfAvailable();
-
-                })
-            })
             /* Showing default banner when no custom banner is set */
             /*  if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
                  if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) {
