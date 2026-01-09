@@ -80,7 +80,9 @@ function updateVwoConsent(consents) {
 })();
 
 function IntastellarSnapShot(stage){
-
+    try{
+        
+    } catch(e){ /* ignore */ }
 }
 
 // Example usage:
@@ -2868,7 +2870,7 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
     } else if (dataType == "intFunctionalCookies") {
         document.querySelector("#functional").checked = true;
     }
-    saveINTCookieSettings("changePermission", dataType);
+    saveINTCookieSettings("changePermission");
     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
     // Dispatch TCF event after user action
