@@ -2873,6 +2873,8 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
     // Dispatch TCF event after user action
     dispatchTCFConsentChangedIfAvailable();
+
+    window.location.reload();
 }
 
 function recordCookie(value) {
