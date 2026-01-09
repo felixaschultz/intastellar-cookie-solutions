@@ -72,7 +72,7 @@ function updateVwoConsent(consents) {
                     source: 'document.cookie',
                     ts: Date.now(),
                     path: window.location.pathname,
-                    hadValuePreConsent: rawValue && rawValue.length > 0,
+                    hadValuePreConsent: typeof rawValue === 'string' && rawValue.length > 0,
                     consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
                 })
             } catch(e){ /* ignore */ }
