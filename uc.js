@@ -2875,6 +2875,10 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
     dispatchTCFConsentChangedIfAvailable();
 }
 
+function recordCookie(value) {
+    return value;
+}
+
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
     let p = "";
