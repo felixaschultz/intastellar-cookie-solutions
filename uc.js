@@ -56,8 +56,32 @@ function updateVwoConsent(consents) {
 
 // --- Start Cookie Interception ---
 (function() {
-    
+    const desc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
+    Object.defineProperty(document, 'cookie', {
+        configurable: true,
+        enumerable: true,
+        get: function() {
+            return desc.get.call(this);
+        },
+        set: function(cookieString) {
+            try{
+                const cookieName = cookieString.split('=')[0].trim();
+
+                recordCookie({
+                    name: cookieName,
+                    source: 'document.cookie',
+                    ts: Date.now(),
+                    path: window.location.pathname,
+                })
+            } catch(e){ /* ignore */ }
+            return desc.set.call(this, cookieString);
+        }
+    });
 })();
+
+function IntastellarSnapShot(stage){
+
+}
 
 // Example usage:
 // const rootDomain = "group1.com";
