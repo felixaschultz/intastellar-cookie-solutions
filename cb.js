@@ -297,10 +297,8 @@ const IntastellarCookieConsent = {
         // Core logic
         waitForINTA().then(found => {
             if (found) {
-                console.info("Using existing INTA");
                 initTemplate();
             } else {
-                console.info("INTA not found, loading remote config…");
                 loadRemoteConfig().then(() => {
                     initTemplate();
                 });
