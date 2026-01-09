@@ -2877,9 +2877,11 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
 
     window.location.reload();
 }
+window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
 
 function recordCookie(value) {
-    console.log(value);
+    console.table(value);
+    window.__INTA__COOKIE_EVENTS__.push(value);
 }
 
 /* Helper function to create Consents Block message for iframes etc.*/
