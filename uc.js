@@ -70,7 +70,7 @@ function updateVwoConsent(consents) {
                 recordCookie({
                     name: cookieName,
                     source: 'document.cookie',
-                    ts: Date.now(),
+                    observedAt: Date.now(),
                     path: window.location.pathname,
                     hadValuePreConsent: typeof rawValue === 'string' && rawValue.length > 0,
                     consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
