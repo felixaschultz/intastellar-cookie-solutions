@@ -19,19 +19,6 @@ function setConsentState(userId, consents, rootDomain, partnerDomains = []) {
     updateVwoConsent(consents);
 }
 
-function updateCookiePreferenceOfBlockedIframes(dataType) {
-    if (dataType == "intMarketingCookies") {
-        document.querySelector("#marketing").checked = true;
-    } else if (dataType == "intFunctionalCookies") {
-        document.querySelector("#functional").checked = true;
-    }
-    saveINTCookieSettings("changePermission", dataType);
-    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
-    // Dispatch TCF event after user action
-    dispatchTCFConsentChangedIfAvailable();
-}
-
 // Listen for consent state response
 window.addEventListener('message', (event) => {
     if (event.origin !== 'https://consents.cdn.intastellarsolutions.com') return;
