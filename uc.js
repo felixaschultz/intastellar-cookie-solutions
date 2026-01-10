@@ -613,17 +613,6 @@ function isAllowed(url) {
 // Intercept fetch with consent check
 const originalFetch = window.fetch;
 window.fetch = function(resource, config) {
-    window.INTA.observedCookieSource = 'fetch';
-    recordCookie({
-        name: typeof resource === 'string' ? resource : (resource.url || 'unknown'),
-        source: 'fetch',
-        observedAt: Date.now(),
-        path: window.location.pathname,
-        domain: window.location.hostname,
-        rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
-        hadValuePreConsent: false,
-        consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
-    });
     const isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
         const consentType = getConsentTypeForUrl(url);
