@@ -36,7 +36,7 @@ window.addEventListener('message', (event) => {
 window.VWO = window.VWO || [];
 window.VWO.init = window.VWO.init || function(s) { window.VWO.consentState = s; };
 window.VWO.init(2); // default to pending
-
+window.INTA.observedCookieSource = 'unknown';
 // --- VWO Cookie Consent Integration (latest, per docs) ---
 function updateVwoConsent(consents) {
     // VWO expects: 1 = accepted, 2 = pending, 3 = rejected
@@ -64,12 +64,13 @@ function updateVwoConsent(consents) {
             return desc.get.call(this);
         },
         set: function(cookieString) {
+            window.INTA.observedCookieSource = 'cookie';
             try{
                 const cookieName = cookieString.split('=')[0].trim();
                 const rawValue = cookieString.split('=')[1]?.split(';')[0];
                 recordCookie({
                     name: cookieName,
-                    source: 'document.cookie',
+                    source: window.INTA.observedCookieSource || 'unknown',
                     observedAt: Date.now(),
                     path: window.location.pathname,
                     domain: window.location.hostname,
@@ -82,6 +83,43 @@ function updateVwoConsent(consents) {
         }
     });
 })();
+// --- Start localStorage Interception ---
+(function() {
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function(key, value) {
+        window.INTA.observedCookieSource = 'localStorage';
+        recordCookie({
+            name: key,
+            value: value,
+            source: 'localStorage',
+            observedAt: Date.now(),
+            path: window.location.pathname,
+            domain: window.location.hostname,
+            rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+            hadValuePreConsent: typeof value === 'string' && value.length > 0,
+            consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
+        });
+        return originalSetItem.apply(this, arguments);
+    };
+})();
+
+// --- Start memory Interception (example) ---
+window.INTA.memorySet = function(key, value) {
+    window.INTA.observedCookieSource = 'memory';
+    recordCookie({
+        name: key,
+        value: value,
+        source: 'memory',
+        observedAt: Date.now(),
+        path: window.location.pathname,
+        domain: window.location.hostname,
+        rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+        hadValuePreConsent: typeof value === 'string' && value.length > 0,
+        consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
+    });
+    window.INTA._memory = window.INTA._memory || {};
+    window.INTA._memory[key] = value;
+};
 
 function IntastellarSnapShot(stage){
     
@@ -574,11 +612,18 @@ function isAllowed(url) {
 
 // Intercept fetch with consent check
 const originalFetch = window.fetch;
-window.fetch = function (resource, config) {
-    const url = typeof resource === 'string' ? resource : resource.url;
-    if (isAllowed(url)) {
-        return originalFetch.apply(this, arguments);
-    }
+window.fetch = function(resource, config) {
+    window.INTA.observedCookieSource = 'fetch';
+    recordCookie({
+        name: typeof resource === 'string' ? resource : (resource.url || 'unknown'),
+        source: 'fetch',
+        observedAt: Date.now(),
+        path: window.location.pathname,
+        domain: window.location.hostname,
+        rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+        hadValuePreConsent: false,
+        consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
+    });
     const isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
         const consentType = getConsentTypeForUrl(url);
