@@ -72,6 +72,8 @@ function updateVwoConsent(consents) {
                     source: 'document.cookie',
                     observedAt: Date.now(),
                     path: window.location.pathname,
+                    domain: window.location.hostname,
+                    rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
                     hadValuePreConsent: typeof rawValue === 'string' && rawValue.length > 0,
                     consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
                 })
@@ -2881,6 +2883,29 @@ window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
 function recordCookie(value) {
     console.table(value);
     window.__INTA__COOKIE_EVENTS__.push(value);
+
+    try{
+        // Save the collected cookies in the DB
+
+        // Fetch call saving the data
+        const IntastellarCookieSave = fetch('https://consents.intastellarsolutions.com/api/v1/cookie-events', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                event: value,
+                website: window.location.href,
+                timestamp: new Date().toISOString()
+            })
+        });
+
+        IntastellarCookieSave.then(response => {
+            return response.json();
+        })
+
+    } catch (e) {}
+
 }
 
 /* Helper function to create Consents Block message for iframes etc.*/
