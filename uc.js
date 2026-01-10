@@ -613,6 +613,11 @@ function isAllowed(url) {
 // Intercept fetch with consent check
 const originalFetch = window.fetch;
 window.fetch = function(resource, config) {
+    const url = (typeof resource === 'string') ? resource : resource.url;
+    // Prevent recursion for backend endpoint
+    if (isAllowed(url)) {
+        return originalFetch.apply(this, arguments);
+    }
     const isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
         const consentType = getConsentTypeForUrl(url);
