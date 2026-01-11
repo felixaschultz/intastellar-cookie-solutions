@@ -68,12 +68,14 @@ function updateVwoConsent(consents) {
             try{
                 const cookieName = cookieString.split('=')[0].trim();
                 const rawValue = cookieString.split('=')[1]?.split(';')[0];
+                const cookieDomain = cookieString.split(';').find(part => part.trim().toLowerCase().startsWith('domain='))?.split('=')[1]?.trim() || window.location.hostname;
                 recordCookie({
                     name: cookieName,
                     source: window.INTA.observedCookieSource || 'unknown',
                     observedAt: Date.now(),
                     path: window.location.pathname,
                     domain: window.location.hostname,
+                    cookieDomain,
                     rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
                     hadValuePreConsent: typeof rawValue === 'string' && rawValue.length > 0,
                     consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
