@@ -581,7 +581,8 @@ const ALLOWLIST = [
     "https://track.hubspot.com",
     "https://js.usemessages.com",
     "https://cdn2.hubspot.net",
-    "https://cdn.hsforms.net"
+    "https://cdn.hsforms.net",
+    "https://cdn.weglot.com"
 ];
 
 function isAllowed(url) {
