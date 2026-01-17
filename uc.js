@@ -99,7 +99,7 @@ if ("cookieStore" in window) {
                 domain: cookie.domain || window.location.hostname,
                 rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
                 hadValuePreConsent: typeof cookie.value === 'string' && cookie.value.length > 0,
-                consentGiven: hasConsent(getConsentTypeForUrl(cookie.domain || window.location.href))
+                consentGiven: 1
             })
         })
     });
