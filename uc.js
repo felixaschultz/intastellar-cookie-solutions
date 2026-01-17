@@ -98,8 +98,8 @@ if ("cookieStore" in window) {
                 path: cookie.path || window.location.pathname,
                 domain: cookie.domain || window.location.hostname,
                 rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
-                hadValuePreConsent: typeof cookie.value === 'string' && cookie.value.length > 0,
-                consentGiven: 1
+                hadValuePreConsent: 0,
+                consentGiven: "unknown"
             })
         })
     });
