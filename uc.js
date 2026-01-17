@@ -85,6 +85,26 @@ function updateVwoConsent(consents) {
         }
     });
 })();
+
+// --- CookieStorage Observer ---
+if ("cookieStore" in window) {
+    cookieStore.addEventListener("change", (event) => {
+        event.changed.forEach(cookie => {
+            window.INTA.observedCookieSource = 'cookieStore';
+            recordCookie({
+                name: cookie.name,
+                source: 'cookieStore',
+                observedAt: Date.now(),
+                path: cookie.path || window.location.pathname,
+                domain: cookie.domain || window.location.hostname,
+                rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+                hadValuePreConsent: typeof cookie.value === 'string' && cookie.value.length > 0,
+                consentGiven: hasConsent(getConsentTypeForUrl(cookie.domain || window.location.href))
+            })
+        })
+    });
+}
+
 // --- Start localStorage Interception ---
 (function() {
     const originalSetItem = localStorage.setItem;
@@ -92,7 +112,6 @@ function updateVwoConsent(consents) {
         window.INTA.observedCookieSource = 'localStorage';
         recordCookie({
             name: key,
-            value: value,
             source: 'localStorage',
             observedAt: Date.now(),
             path: window.location.pathname,
