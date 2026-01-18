@@ -3499,9 +3499,9 @@ onWindowLoad(function () {
                 );
 
                 updateConsents("all");
-                intaCookieConsents?.advertisementCookies = true;
-                intaCookieConsents?.staticsticCookies = true;
-                intaCookieConsents?.functionalCookies = true;
+                intaCookieConsents.advertisementCookies = true;
+                intaCookieConsents.staticsticCookies = true;
+                intaCookieConsents.functionalCookies = true;
 
                 // Dispatch TCF event after user action
                 dispatchTCFConsentChangedIfAvailable();
@@ -3519,9 +3519,9 @@ onWindowLoad(function () {
                     advertisementCookies: "checked",
                 };
 
-                intaCookieConsents?.advertisementCookies = true;
-                intaCookieConsents?.staticsticCookies = true;
-                intaCookieConsents?.functionalCookies = true;
+                intaCookieConsents.advertisementCookies = true;
+                intaCookieConsents.staticsticCookies = true;
+                intaCookieConsents.functionalCookies = true;
 
                 intaConsentsObjectVariable.time = new Date().getTime()
                 document.cookie =
@@ -3602,9 +3602,9 @@ onWindowLoad(function () {
                     functionalCookies: false,
                     advertisementCookies: false,
                 };
-                intaCookieConsents?.advertisementCookies = false;
-                intaCookieConsents?.staticsticCookies = false;
-                intaCookieConsents?.functionalCookies = false;
+                intaCookieConsents.advertisementCookies = false;
+                intaCookieConsents.staticsticCookies = false;
+                intaCookieConsents.functionalCookies = false;
 
                 intaConsentsObjectVariable.time = new Date().getTime()
                 var cV = 1;
@@ -3663,9 +3663,9 @@ onWindowLoad(function () {
                     },
                     () => console.log("Consent captured")
                 );
-                intaCookieConsents?.advertisementCookies = "false" ;
-                intaCookieConsents?.functionalCookies = "false" ;
-                intaCookieConsents?.staticsticCookies = "false" ;
+                intaCookieConsents.advertisementCookies = "false" ;
+                intaCookieConsents.functionalCookies = "false" ;
+                intaCookieConsents.staticsticCookies = "false" ;
                 updateConsents("denied");
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 // Dispatch TCF event after user action
