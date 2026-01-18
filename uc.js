@@ -1807,100 +1807,6 @@ inta_statisticCookieList.push({
 })
 
 inta_statisticCookieList.push({
-    vendor: "Hotjar Ltd.",
-    cookies: [
-        {
-            cookie: "_hjSessionUser_",
-            purpose: "",
-        },
-        {
-            cookie: "_hjid",
-            purpose: "_hjUserAttributesHash",
-        },
-        {
-            cookie: "_hjFirstSeen",
-            purpose: "",
-        },
-        {
-            cookie: "_hjUserAttributesHash",
-            purpose: "",
-        },
-        {
-            cookie: "_hjCachedUserAttributes",
-            purpose: "",
-        },
-        {
-            cookie: "_hjViewportId",
-            purpose: "",
-        },
-        {
-            cookie: "_hjSession_",
-            purpose: "",
-        },
-        {
-            cookie: "_hjSessionTooLarge",
-            purpose: "",
-        },
-        {
-            cookie: "_hjSessionRejected",
-            purpose: "",
-        },
-        {
-            cookie: "_hjSessionResumed",
-            purpose: "",
-        },
-        {
-            cookie: "_hjLocalStorageTest",
-            purpose: "",
-        },
-        {
-            cookie: "_hjIncludedInPageviewSample",
-            purpose: "",
-        },
-        {
-            cookie: "_hjIncludedInSessionSample",
-            purpose: "",
-        },
-        {
-            cookie: "_hjAbsoluteSessionInProgress",
-            purpose: "",
-        },
-        {
-            cookie: "_hjTLDTest",
-            purpose: "",
-        },
-        {
-            cookie: "_hjRecordingEnabled",
-            purpose: "",
-        },
-        {
-            cookie: "_hjRecordingLastActivity",
-            purpose: "",
-        },
-        {
-            cookie: "_hjShownFeedbackMessage",
-            purpose: "",
-        },
-        {
-            cookie: "_hjMinimizedPolls",
-            purpose: "",
-        },
-        {
-            cookie: "_hjDonePolls",
-            purpose: "",
-        },
-        {
-            cookie: "_hjClosedSurveyInvites",
-            purpose: "",
-        }
-    ],
-    domains: [
-        "hotjar.com"
-    ],
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-
-inta_statisticCookieList.push({
     vendor: "HubSpot Inc",
     cookies: [
         {
@@ -1959,6 +1865,84 @@ inta_statisticCookieList.push({
         window.INTA.settings.rootDomain
     ],
     vendor_privacy: "https://clearbit.com/privacy"
+});
+
+inta_statisticCookieList.push({
+    vendor: "Hotjar Ltd.",
+    cookies: [
+        {
+            cookie: "_hjIncludedInSample",
+            purpose: "Used to determine whether a user is included in the sample which is used to generate funnels."
+        },
+        {
+            cookie: "_hjMinimizedPolls",
+            purpose: "This cookie is set when a visitor minimizes a feedback poll."
+        },
+        {
+            cookie: "_hjDonePolls",
+            purpose: "This cookie is set once a visitor has completed a feedback poll."
+        },
+        {
+            cookie: "_hjClosedSurveyInvites",
+            purpose: "This cookie is set when a visitor closes a survey invitation."
+        },
+        {
+            cookie: "_hjSession",
+            purpose: "This cookie is used to identify a single user session."
+        },
+        {
+            cookie: "_hjSessionTooLarge",
+            purpose: "This cookie is set to let Hotjar know whether a session recording size exceeded the limit."
+        },
+        {
+            cookie: "_hjSessionResumed",
+            purpose: "This cookie is set when a visitor resumes a session recording."
+        },
+        {
+            cookie: "_hjLocalStorageTest",
+            purpose: "This cookie is used to check if the visitor's browser supports local storage."
+        },
+        {
+            cookie: "_hjAbsoluteSessionInProgress",
+            purpose: "This cookie is used to count how many times a visitor has visited a site in a 30-minute time frame."
+        },
+        {
+            cookie: "_hjTLDTest",
+            purpose: "This cookie is used to determine the most generic domain possible to set the cookie for the site."
+        },
+        {
+            cookie: "_hjRecordingEnabled",
+            purpose: "This cookie is set to let Hotjar know whether recording is enabled for the session."
+        },
+        {
+            cookie: "_hjRecordingLastActivity",
+            purpose: "This cookie is used to store the last activity time of a visitor when they are recording a session."
+        },
+        {
+            cookie: "_hjShownFeedbackMessage",
+            purpose: "This cookie is set when a visitor has seen the 'Thank you' message after submitting feedback."
+        },
+        {
+            cookie: "_hjViewportId",
+            purpose: "This cookie is used to store the visitor's viewport size."
+        },
+        {
+            cookie: "_hjFirstSeen",
+            purpose: "This cookie is set to identify a new user’s first session."
+        },
+        {
+            cookie: "_hjSessionUser_",
+            purpose: "This cookie is used to persist the user ID of a returning user."
+        },
+        {
+            cookie: "_hjid",
+            purpose: "This cookie is set when the Hotjar script loads and is used to persist the Hotjar User ID."
+        }
+    ],
+    domains: [
+        "hotjar.com"
+    ],
+    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
 });
 
 /* - - - List of Marketing cookies - - - */
