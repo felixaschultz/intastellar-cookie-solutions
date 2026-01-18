@@ -131,6 +131,7 @@ if ("cookieStore" in window) {
                 observedAt: Date.now(),
                 path: cookie.path || window.location.pathname,
                 domain: cookie.domain || window.location.hostname,
+                cookieDomain: cookie.domain || window.location.hostname,
                 rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
                 hadValuePreConsent: 0,
                 consentGiven: "unknown",
