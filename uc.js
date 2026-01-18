@@ -57,25 +57,110 @@ function updateVwoConsent(consents) {
 // --- Helper function to detect Vendors of Cookies ---
 function detectCookieVendor(cookie) {
     const VENDOR_MAP = {
-        'Google': ['_ga', '_gid', '_gat', '1P_JAR', 'NID', 'CONSENT', '_gcl_au', 'ANID'],
-        'Facebook': ['fr', 'datr', 'sb', 'c_user'],
-        'LinkedIn': ['bcookie', 'lidc', 'bscookie'],
-        'Twitter': ['_twitter_sess', 'personalization_id', 'guest_id'],
-        'Hotjar': ['_hjIncludedInSample', '_hjSessionUser', '_hjFirstSeen', '_hjSession'],
-        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID', '_clsk', 'MSCC'],
-        'HubSpot': ['hubspotutk', '__hssc', '__hstc', '__hs_opt_out', '__hssrc'],
-        'Adobe': ['AMCV_', 's_cc', 's_sq'],
-        'Pinterest': ['_pinterest_cm', 'csrftoken', 'sessionid'],
-        'TikTok': ['tt_webid', 'tt_webid_v2', 'tt_csrf_token'],
-        'Snapchat': ['sc_at', 'scid', 'sctr'],
-        'Reddit': ['_reddit_session', 'session_tracker', 'loid'],
-        'YouTube': ['YSC', 'VISITOR_INFO1_LIVE'],
-        'Vimeo': ['vuid', 'vimeo_sessionid'],
-        'Spotify': ['sp_t', 'sp_landing'],
-        'Salesforce': ['BrowserId', 'CookieConsent'],
-        'CrazyEgg': ['__ceg.s', '__ceg.u'],
-        "Intastellar Solutions": ['IntastellarConsentSolution', 'intastellar_cookie_consent']
-    }
+        'Google': ['_ga', '_gid', '_gat', '1P_JAR', 'NID', 'CONSENT', '_gcl_au', 'ANID', 'DV', 'OTZ', 'SID', 'HSID', 'APISID', 'SAPISID', 'SSID', 'SIDCC', 'SEARCH_SAMESITE'],
+        'Google Ads': ['IDE', 'DSID', 'FLC', 'AID', 'TAID', '__gads', '__gac'],
+        'Google Tag Manager': ['_dc_gtm_', '_gat_gtag_'],
+        'Google Optimize': ['_gaexp', '_opt_awcid', '_opt_awmid', '_opt_awgid', '_opt_awkid', '_opt_utmc'],
+        'Facebook': ['fr', 'datr', 'sb', 'c_user', 'xs', 'wd', 'spin', 'presence', 'act', 'fbm_', 'fbsr_', 'fblo_', 'fbp'],
+        'LinkedIn': ['bcookie', 'lidc', 'bscookie', 'lang', 'li_gc', 'li_mc', 'liap', 'lissc', 'UserMatchHistory'],
+        'Twitter': ['_twitter_sess', 'personalization_id', 'guest_id', 'ct0', 'external_referer', 'gt'],
+        'Hotjar': ['_hjIncludedInSample', '_hjSessionUser', '_hjFirstSeen', '_hjSession', '_hjTLDTest', '_hjAbsoluteSessionInProgress', '_hjIncludedInPageviewSample'],
+        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID', '_clsk', 'MSCC', 'SRCHUSR', 'SRCHHPGUSR', 'NAP', 'MH', 'MR', 'MS0', 'MSFPC'],
+        'HubSpot': ['hubspotutk', '__hssc', '__hstc', '__hs_opt_out', '__hssrc', '__hs_do_not_track', '__hs_initial_opt_in', '__hs_cookie_cat_pref'],
+        'Adobe': ['AMCV_', 's_cc', 's_sq', 'AMCVS_', 'demdex', 'mbox'],
+        'Pinterest': ['_pinterest_cm', 'csrftoken', 'sessionid', '_auth', '_pinterest_sess', '_routing_id'],
+        'TikTok': ['tt_webid', 'tt_webid_v2', 'tt_csrf_token', 'ttwid', 's_v_web_id'],
+        'Snapchat': ['sc_at', 'scid', 'sctr', 'xsrf_token'],
+        'Reddit': ['_reddit_session', 'session_tracker', 'loid', 'token_v2', 'clkt', 'edgebucket'],
+        'YouTube': ['YSC', 'VISITOR_INFO1_LIVE', 'PREF', 'LOGIN_INFO', 'SID', 'HSID', 'SSID', 'APISID', 'SAPISID'],
+        'Vimeo': ['vuid', 'vimeo_sessionid', '__cf_bm'],
+        'Spotify': ['sp_t', 'sp_landing', 'sp_ab', 'sp_usid'],
+        'Salesforce': ['BrowserId', 'CookieConsent', 'inst', 'oid', 'sid'],
+        'CrazyEgg': ['__ceg.s', '__ceg.u', '__utma', '__utmb', '__utmc', '__utmz'],
+        'Intastellar Solutions': ['IntastellarConsentSolution', 'intastellar_cookie_consent'],
+        'Cloudflare': ['__cfduid', '__cfruid', '__cf_bm'],
+        'Segment': ['ajs_anonymous_id', 'ajs_group_id', 'ajs_user_id', 'ajs_group_properties', 'ajs_user_traits'],
+        'Matomo': ['_pk_id', '_pk_ses', '_pk_ref', '_pk_cvar'],
+        'Mixpanel': ['mp_', 'mp_.*_mixpanel'],
+        'Amplitude': ['amplitude_id', 'amplitude_cookie_test'],
+        'Intercom': ['intercom-id-', 'intercom-session-', 'intercom-device-id-'],
+        'Zendesk': ['__zlcid', '__zlcstore', '__zlcmid', '__cfruid'],
+        'Optimizely': ['optimizelyBuckets', 'optimizelyEndUserId', 'optimizelySegments', 'optimizelyRumLB'],
+        'AppNexus': ['uuid2', 'anj', 'sess', 'icu', 'token'],
+        'DoubleClick': ['id', 'IDE', 'test_cookie'],
+        'Taboola': ['t_gid', 'taboola_session_id'],
+        'Outbrain': ['obuid', 'adrl'],
+        'Quantcast': ['__qca'],
+        'Criteo': ['uid', 'eid', 'cto_bundle', 'cto_lwid'],
+        'Adform': ['uid', 'cid', 'tid', 'CTAB', 'CTAT'],
+        'Teads': ['tt_viewer'],
+        'Bing': ['_uetsid', '_uetvid'],
+        'Mailchimp': ['mc_cid', 'mc_eid'],
+        'Shopify': ['_shopify_y', '_shopify_s', '_shopify_sa_t', '_shopify_sa_p', '_y', '_s'],
+        'Stripe': ['__stripe_mid', '__stripe_sid'],
+        'Paypal': ['ts', 'ts_c', 'tsrce', 'x-pp-s', 'nsid', 'LANG'],
+        'OneTrust': ['OptanonConsent', 'OptanonAlertBoxClosed'],
+        'TrustArc': ['notice_preferences', 'notice_gdpr_prefs', 'cmapi_cookie_privacy'],
+        'Cookiebot': ['CookieConsent'],
+        'Sentry': ['sentryReplaySession'],
+        'New Relic': ['NRAGENT', 'JSESSIONID'],
+        'Heap': ['heapanalytics'],
+        'Clicky': ['_jsuid', 'cluid'],
+        'Plausible': ['_plausible_ses', '_plausible_id'],
+        'Vercel': ['__vercel_faas'],
+        'Cloudinary': ['cloudinary_media_library_last_path'],
+        'Calendly': ['calendly_session'],
+        'Drift': ['driftt_aid', 'drift_campaign_refresh'],
+        'Typeform': ['tf_'],
+        'SurveyMonkey': ['ep201', 'ep202'],
+        'Mailjet': ['mjx', 'mjx.session'],
+        'Sendinblue': ['sib_cuid'],
+        'ActiveCampaign': ['prism_'],
+        'Zoho': ['zohocares', 'zabUserId'],
+        'Pipedrive': ['pipedrive-csrf-token'],
+        'Freshdesk': ['_x_w', '_x_m'],
+        'LiveChat': ['__lc_cid', '__lc_cst'],
+        'Olark': ['hblid', 'wcsid', 'olfsk'],
+        'Tawk.to': ['TawkConnectionTime', '__tawkuuid'],
+        'Userlike': ['uslk_e'],
+        'LogRocket': ['lr_'],
+        'FullStory': ['fs_uid'],
+        'Mouseflow': ['mf_user'],
+        'Lucky Orange': ['lo_uid', 'lo_session'],
+        'ClickCease': ['_clickcease'],
+        'AdRoll': ['adroll', 'adroll_fpc', 'adroll_s_ref'],
+        'Quora': ['m-b', 'm-b_lax', 'm-b_strict'],
+        'SnapEngage': ['SnapABugHistory', 'SnapABugRef'],
+        'Yandex': ['yandexuid', 'ymex'],
+        'Baidu': ['BAIDUID', 'BIDUPSID'],
+        'Weibo': ['WBtopGlobal_register_version'],
+        'VK': ['remixlang', 'remixstid'],
+        'Discord': ['__dcfduid', '__sdcfduid'],
+        'Slack': ['d', 'b'],
+        'Trello': ['token'],
+        'Asana': ['asana-session'],
+        'Monday.com': ['visitor_id'],
+        'Notion': ['token_v2'],
+        'Figma': ['__Host-figma_csrf'],
+        'Canva': ['canva.user'],
+        'Dropbox': ['gvc'],
+        'Box': ['box_visitor_id'],
+        'GitHub': ['_octo', 'user_session'],
+        'GitLab': ['_gitlab_session'],
+        'Bitbucket': ['BITBUCKETSESSION'],
+        'Atlassian': ['atlassian.xsrf.token'],
+        'Jira': ['JSESSIONID'],
+        'Confluence': ['confluence.session.token'],
+        'Zoom': ['zm_aid'],
+        'Webex': ['SSO_SESSION_ID'],
+        'GoToMeeting': ['GoToMeeting'],
+        'BlueJeans': ['BJSESSIONID'],
+        'TeamViewer': ['TVSESSIONID'],
+        'DocuSign': ['__cf_bm', 'docusign'],
+        'HelloSign': ['__cf_bm', 'hellosign'],
+        'Adobe Sign': ['adobe_sign'],
+        // Add more as needed
+    };
 
     for (const [vendor, identifiers] of Object.entries(VENDOR_MAP)) {
         for (const id of identifiers) {
@@ -96,73 +181,390 @@ const COOKIE_CONSENT_TYPE_MAP = {
     '1P_JAR': 'statistics',
     'NID': 'statistics',
     'CONSENT': 'statistics',
-    '_gcl_au': 'marketing',
-    'ANID': 'marketing',
+    'DV': 'statistics',
+    'OTZ': 'statistics',
+    'SID': 'functional',
+    'HSID': 'functional',
+    'APISID': 'functional',
+    'SAPISID': 'functional',
+    'SSID': 'functional',
+    'SIDCC': 'functional',
+    'SEARCH_SAMESITE': 'functional',
+    // Google Ads
+    'IDE': 'marketing',
+    'DSID': 'marketing',
+    'FLC': 'marketing',
+    'AID': 'marketing',
+    'TAID': 'marketing',
+    '__gads': 'marketing',
+    '__gac': 'marketing',
+    // Google Tag Manager
+    '_dc_gtm_': 'statistics',
+    '_gat_gtag_': 'statistics',
+    // Google Optimize
+    '_gaexp': 'statistics',
+    '_opt_awcid': 'statistics',
+    '_opt_awmid': 'statistics',
+    '_opt_awgid': 'statistics',
+    '_opt_awkid': 'statistics',
+    '_opt_utmc': 'statistics',
     // Facebook
     'fr': 'marketing',
     'datr': 'marketing',
     'sb': 'marketing',
     'c_user': 'marketing',
+    'xs': 'marketing',
+    'wd': 'functional',
+    'spin': 'marketing',
+    'presence': 'functional',
+    'act': 'functional',
+    'fbm_': 'marketing',
+    'fbsr_': 'marketing',
+    'fblo_': 'marketing',
+    'fbp': 'marketing',
     // LinkedIn
     'bcookie': 'marketing',
     'lidc': 'marketing',
     'bscookie': 'marketing',
+    'lang': 'functional',
+    'li_gc': 'functional',
+    'li_mc': 'functional',
+    'liap': 'functional',
+    'lissc': 'functional',
+    'UserMatchHistory': 'marketing',
+    // Twitter
+    '_twitter_sess': 'marketing',
+    'personalization_id': 'marketing',
+    'guest_id': 'marketing',
+    'ct0': 'functional',
+    'external_referer': 'functional',
+    'gt': 'functional',
     // Hotjar
     '_hjIncludedInSample': 'statistics',
     '_hjSessionUser': 'statistics',
     '_hjFirstSeen': 'statistics',
     '_hjSession': 'statistics',
+    '_hjTLDTest': 'statistics',
+    '_hjAbsoluteSessionInProgress': 'statistics',
+    '_hjIncludedInPageviewSample': 'statistics',
     // Microsoft
     'MUID': 'marketing',
     'ANON': 'marketing',
     'SRCHD': 'marketing',
     'SRCHUID': 'marketing',
     '_clsk': 'statistics',
+    '_clck': 'statistics',
     'MSCC': 'functional',
+    'SRCHUSR': 'marketing',
+    'SRCHHPGUSR': 'marketing',
+    'NAP': 'functional',
+    'MH': 'functional',
+    'MR': 'functional',
+    'MS0': 'functional',
+    'MSFPC': 'functional',
     // HubSpot
     'hubspotutk': 'marketing',
     '__hssc': 'marketing',
     '__hstc': 'marketing',
     '__hs_opt_out': 'functional',
     '__hssrc': 'marketing',
+    '__hs_do_not_track': 'functional',
+    '__hs_initial_opt_in': 'functional',
+    '__hs_cookie_cat_pref': 'functional',
     // Adobe
     'AMCV_': 'marketing',
     's_cc': 'statistics',
     's_sq': 'statistics',
+    'AMCVS_': 'marketing',
+    'demdex': 'marketing',
+    'mbox': 'marketing',
     // Pinterest
     '_pinterest_cm': 'marketing',
     'csrftoken': 'functional',
     'sessionid': 'functional',
+    '_auth': 'functional',
+    '_pinterest_sess': 'functional',
+    '_routing_id': 'functional',
     // TikTok
     'tt_webid': 'marketing',
     'tt_webid_v2': 'marketing',
     'tt_csrf_token': 'functional',
+    'ttwid': 'marketing',
+    's_v_web_id': 'marketing',
     // Snapchat
     'sc_at': 'marketing',
     'scid': 'marketing',
     'sctr': 'marketing',
+    'xsrf_token': 'functional',
     // Reddit
     '_reddit_session': 'marketing',
     'session_tracker': 'marketing',
     'loid': 'marketing',
+    'token_v2': 'marketing',
+    'clkt': 'marketing',
+    'edgebucket': 'marketing',
     // YouTube
     'YSC': 'marketing',
     'VISITOR_INFO1_LIVE': 'marketing',
+    'PREF': 'functional',
+    'LOGIN_INFO': 'functional',
     // Vimeo
     'vuid': 'marketing',
     'vimeo_sessionid': 'marketing',
+    '__cf_bm': 'functional',
     // Spotify
     'sp_t': 'marketing',
     'sp_landing': 'marketing',
+    'sp_ab': 'marketing',
+    'sp_usid': 'marketing',
     // Salesforce
     'BrowserId': 'functional',
     'CookieConsent': 'functional',
+    'inst': 'functional',
+    'oid': 'functional',
+    'sid': 'functional',
     // CrazyEgg
     '__ceg.s': 'statistics',
     '__ceg.u': 'statistics',
+    '__utma': 'statistics',
+    '__utmb': 'statistics',
+    '__utmc': 'statistics',
+    '__utmz': 'statistics',
     // Intastellar
     'IntastellarConsentSolution': 'functional',
     'intastellar_cookie_consent': 'functional',
+    // Cloudflare
+    '__cfduid': 'functional',
+    '__cfruid': 'functional',
+    // Segment
+    'ajs_anonymous_id': 'statistics',
+    'ajs_group_id': 'statistics',
+    'ajs_user_id': 'statistics',
+    'ajs_group_properties': 'statistics',
+    'ajs_user_traits': 'statistics',
+    // Matomo
+    '_pk_id': 'statistics',
+    '_pk_ses': 'statistics',
+    '_pk_ref': 'statistics',
+    '_pk_cvar': 'statistics',
+    // Mixpanel
+    'mp_': 'statistics',
+    // Amplitude
+    'amplitude_id': 'statistics',
+    'amplitude_cookie_test': 'statistics',
+    // Intercom
+    'intercom-id-': 'functional',
+    'intercom-session-': 'functional',
+    'intercom-device-id-': 'functional',
+    // Zendesk
+    '__zlcid': 'functional',
+    '__zlcstore': 'functional',
+    '__zlcmid': 'functional',
+    // Optimizely
+    'optimizelyBuckets': 'statistics',
+    'optimizelyEndUserId': 'statistics',
+    'optimizelySegments': 'statistics',
+    'optimizelyRumLB': 'statistics',
+    // AppNexus
+    'uuid2': 'marketing',
+    'anj': 'marketing',
+    'sess': 'marketing',
+    'icu': 'marketing',
+    'token': 'marketing',
+    // DoubleClick
+    'id': 'marketing',
+    'test_cookie': 'marketing',
+    // Taboola
+    't_gid': 'marketing',
+    'taboola_session_id': 'marketing',
+    // Outbrain
+    'obuid': 'marketing',
+    'adrl': 'marketing',
+    // Quantcast
+    '__qca': 'marketing',
+    // Criteo
+    'uid': 'marketing',
+    'eid': 'marketing',
+    'cto_bundle': 'marketing',
+    'cto_lwid': 'marketing',
+    // Adform
+    'cid': 'marketing',
+    'tid': 'marketing',
+    'CTAB': 'marketing',
+    'CTAT': 'marketing',
+    // Teads
+    'tt_viewer': 'marketing',
+    // Bing
+    '_uetsid': 'marketing',
+    '_uetvid': 'marketing',
+    // Mailchimp
+    'mc_cid': 'marketing',
+    'mc_eid': 'marketing',
+    // Shopify
+    '_shopify_y': 'functional',
+    '_shopify_s': 'functional',
+    '_shopify_sa_t': 'marketing',
+    '_shopify_sa_p': 'marketing',
+    '_y': 'functional',
+    '_s': 'functional',
+    // Stripe
+    '__stripe_mid': 'functional',
+    '__stripe_sid': 'functional',
+    // Paypal
+    'ts': 'functional',
+    'ts_c': 'functional',
+    'tsrce': 'functional',
+    'x-pp-s': 'functional',
+    'nsid': 'functional',
+    'LANG': 'functional',
+    // OneTrust
+    'OptanonConsent': 'functional',
+    'OptanonAlertBoxClosed': 'functional',
+    // TrustArc
+    'notice_preferences': 'functional',
+    'notice_gdpr_prefs': 'functional',
+    'cmapi_cookie_privacy': 'functional',
+    // Cookiebot
+    'CookieConsent': 'functional',
+    // Sentry
+    'sentryReplaySession': 'statistics',
+    // New Relic
+    'NRAGENT': 'statistics',
+    'JSESSIONID': 'functional',
+    // Heap
+    'heapanalytics': 'statistics',
+    // Clicky
+    '_jsuid': 'statistics',
+    'cluid': 'statistics',
+    // Plausible
+    '_plausible_ses': 'statistics',
+    '_plausible_id': 'statistics',
+    // Vercel
+    '__vercel_faas': 'functional',
+    // Cloudinary
+    'cloudinary_media_library_last_path': 'functional',
+    // Calendly
+    'calendly_session': 'functional',
+    // Drift
+    'driftt_aid': 'marketing',
+    'drift_campaign_refresh': 'marketing',
+    // Typeform
+    'tf_': 'functional',
+    // SurveyMonkey
+    'ep201': 'functional',
+    'ep202': 'functional',
+    // Mailjet
+    'mjx': 'functional',
+    'mjx.session': 'functional',
+    // Sendinblue
+    'sib_cuid': 'marketing',
+    // ActiveCampaign
+    'prism_': 'marketing',
+    // Zoho
+    'zohocares': 'functional',
+    'zabUserId': 'functional',
+    // Pipedrive
+    'pipedrive-csrf-token': 'functional',
+    // Freshdesk
+    '_x_w': 'functional',
+    '_x_m': 'functional',
+    // LiveChat
+    '__lc_cid': 'functional',
+    '__lc_cst': 'functional',
+    // Olark
+    'hblid': 'functional',
+    'wcsid': 'functional',
+    'olfsk': 'functional',
+    // Tawk.to
+    'TawkConnectionTime': 'functional',
+    '__tawkuuid': 'functional',
+    // Userlike
+    'uslk_e': 'functional',
+    // LogRocket
+    'lr_': 'statistics',
+    // FullStory
+    'fs_uid': 'statistics',
+    // Mouseflow
+    'mf_user': 'statistics',
+    // Lucky Orange
+    'lo_uid': 'statistics',
+    'lo_session': 'statistics',
+    // ClickCease
+    '_clickcease': 'marketing',
+    // AdRoll
+    'adroll': 'marketing',
+    'adroll_fpc': 'marketing',
+    'adroll_s_ref': 'marketing',
+    // Quora
+    'm-b': 'marketing',
+    'm-b_lax': 'marketing',
+    'm-b_strict': 'marketing',
+    // SnapEngage
+    'SnapABugHistory': 'functional',
+    'SnapABugRef': 'functional',
+    // Yandex
+    'yandexuid': 'marketing',
+    'ymex': 'marketing',
+    // Baidu
+    'BAIDUID': 'marketing',
+    'BIDUPSID': 'marketing',
+    // Weibo
+    'WBtopGlobal_register_version': 'functional',
+    // VK
+    'remixlang': 'functional',
+    'remixstid': 'functional',
+    // Discord
+    '__dcfduid': 'functional',
+    '__sdcfduid': 'functional',
+    // Slack
+    'd': 'functional',
+    'b': 'functional',
+    // Trello
+    'token': 'functional',
+    // Asana
+    'asana-session': 'functional',
+    // Monday.com
+    'visitor_id': 'functional',
+    // Notion
+    'token_v2': 'functional',
+    // Figma
+    '__Host-figma_csrf': 'functional',
+    // Canva
+    'canva.user': 'functional',
+    // Dropbox
+    'gvc': 'functional',
+    // Box
+    'box_visitor_id': 'functional',
+    // GitHub
+    '_octo': 'functional',
+    'user_session': 'functional',
+    // GitLab
+    '_gitlab_session': 'functional',
+    // Bitbucket
+    'BITBUCKETSESSION': 'functional',
+    // Atlassian
+    'atlassian.xsrf.token': 'functional',
+    // Jira
+    'JSESSIONID': 'functional',
+    // Confluence
+    'confluence.session.token': 'functional',
+    // Zoom
+    'zm_aid': 'functional',
+    // Webex
+    'SSO_SESSION_ID': 'functional',
+    // GoToMeeting
+    'GoToMeeting': 'functional',
+    // BlueJeans
+    'BJSESSIONID': 'functional',
+    // TeamViewer
+    'TVSESSIONID': 'functional',
+    // DocuSign
+    'docusign': 'functional',
+    // HelloSign
+    'hellosign': 'functional',
+    // Adobe Sign
+    'adobe_sign': 'functional',
+    // Add more as needed
 };
 
 function getConsentTypeForCookie(cookieName) {
