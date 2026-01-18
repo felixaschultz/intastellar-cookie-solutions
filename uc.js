@@ -57,13 +57,13 @@ function updateVwoConsent(consents) {
 // --- Helper function to detect Vendors of Cookies ---
 function detectCookieVendor(cookie) {
     const VENDOR_MAP = {
-        'Google': ['_ga', '_gid', '_gat', '1P_JAR', 'NID', 'CONSENT'],
+        'Google': ['_ga', '_gid', '_gat', '1P_JAR', 'NID', 'CONSENT', '_gcl_au', 'ANID'],
         'Facebook': ['fr', 'datr', 'sb', 'c_user'],
         'LinkedIn': ['bcookie', 'lidc', 'bscookie'],
         'Twitter': ['_twitter_sess', 'personalization_id', 'guest_id'],
         'Hotjar': ['_hjIncludedInSample', '_hjSessionUser', '_hjFirstSeen'],
-        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID'],
-        'HubSpot': ['hubspotutk', '__hssc', '__hstc', '__hs_opt_out'],
+        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID', '_clsk'],
+        'HubSpot': ['hubspotutk', '__hssc', '__hstc', '__hs_opt_out', '__hssrc'],
         'Adobe': ['AMCV_', 's_cc', 's_sq'],
         'Pinterest': ['_pinterest_cm', 'csrftoken', 'sessionid'],
         'TikTok': ['tt_webid', 'tt_webid_v2', 'tt_csrf_token'],
