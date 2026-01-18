@@ -1954,6 +1954,26 @@ inta_marketingCookieList.push(
             {
                 cookie: "_fbp",
                 purpose: "to store and track visits across websites."
+            },
+            {
+                cookie: "fr",
+                purpose: "to deliver, measure and improve the relevancy of ads."
+            },
+            {
+                cookie: "datr",
+                purpose: "to identify browsers and devices for security and site integrity purposes."
+            },
+            {
+                cookie: "sb",
+                purpose: "to identify browsers and devices for security and site integrity purposes."
+            },
+            {
+                cookie: "c_user",
+                purpose: ""
+            },
+            {
+                cookie: "xs",
+                purpose: ""
             }
         ],
         domains: [
