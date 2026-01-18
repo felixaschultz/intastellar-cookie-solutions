@@ -61,8 +61,8 @@ function detectCookieVendor(cookie) {
         'Facebook': ['fr', 'datr', 'sb', 'c_user'],
         'LinkedIn': ['bcookie', 'lidc', 'bscookie'],
         'Twitter': ['_twitter_sess', 'personalization_id', 'guest_id'],
-        'Hotjar': ['_hjIncludedInSample', '_hjSessionUser', '_hjFirstSeen'],
-        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID', '_clsk'],
+        'Hotjar': ['_hjIncludedInSample', '_hjSessionUser', '_hjFirstSeen', '_hjSession'],
+        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID', '_clsk', 'MSCC'],
         'HubSpot': ['hubspotutk', '__hssc', '__hstc', '__hs_opt_out', '__hssrc'],
         'Adobe': ['AMCV_', 's_cc', 's_sq'],
         'Pinterest': ['_pinterest_cm', 'csrftoken', 'sessionid'],
@@ -74,6 +74,7 @@ function detectCookieVendor(cookie) {
         'Spotify': ['sp_t', 'sp_landing'],
         'Salesforce': ['BrowserId', 'CookieConsent'],
         'CrazyEgg': ['__ceg.s', '__ceg.u'],
+        "Intastellar Solutions": ['IntastellarConsentSolution', 'intastellar_cookie_consent']
     }
 
     for (const [vendor, identifiers] of Object.entries(VENDOR_MAP)) {
