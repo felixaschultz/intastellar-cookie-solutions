@@ -54,6 +54,38 @@ function updateVwoConsent(consents) {
 }
 // --- End VWO Cookie Consent Integration ---
 
+// --- Helper function to detect Vendors of Cookies ---
+function detectCookieVendor(cookie) {
+    const VENDOR_MAP = {
+        'Google': ['_ga', '_gid', '_gat', '1P_JAR', 'NID', 'CONSENT'],
+        'Facebook': ['fr', 'datr', 'sb', 'c_user'],
+        'LinkedIn': ['bcookie', 'lidc', 'bscookie'],
+        'Twitter': ['_twitter_sess', 'personalization_id', 'guest_id'],
+        'Hotjar': ['_hjIncludedInSample', '_hjSessionUser', '_hjFirstSeen'],
+        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID'],
+        'HubSpot': ['hubspotutk', '__hssc', '__hstc', '__hs_opt_out'],
+        'Adobe': ['AMCV_', 's_cc', 's_sq'],
+        'Pinterest': ['_pinterest_cm', 'csrftoken', 'sessionid'],
+        'TikTok': ['tt_webid', 'tt_webid_v2', 'tt_csrf_token'],
+        'Snapchat': ['sc_at', 'scid', 'sctr'],
+        'Reddit': ['_reddit_session', 'session_tracker', 'loid'],
+        'YouTube': ['YSC', 'VISITOR_INFO1_LIVE'],
+        'Vimeo': ['vuid', 'vimeo_sessionid'],
+        'Spotify': ['sp_t', 'sp_landing'],
+        'Salesforce': ['BrowserId', 'CookieConsent'],
+        'CrazyEgg': ['__ceg.s', '__ceg.u'],
+    }
+
+    for (const [vendor, identifiers] of Object.entries(VENDOR_MAP)) {
+        for (const id of identifiers) {
+            if (cookie.name.includes(id)) {
+                return vendor;
+            }
+        }
+    }
+    return 'Unknown';
+}
+
 // --- Start Cookie Interception ---
 (function() {
     const desc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
@@ -78,7 +110,8 @@ function updateVwoConsent(consents) {
                     cookieDomain,
                     rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
                     hadValuePreConsent: typeof rawValue === 'string' && rawValue.length > 0,
-                    consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
+                    consentGiven: hasConsent(getConsentTypeForUrl(window.location.href)),
+                    vendor: detectCookieVendor({ name: cookieName, value: rawValue })
                 })
             } catch(e){ /* ignore */ }
             return desc.set.call(this, cookieString);
@@ -99,7 +132,8 @@ if ("cookieStore" in window) {
                 domain: cookie.domain || window.location.hostname,
                 rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
                 hadValuePreConsent: 0,
-                consentGiven: "unknown"
+                consentGiven: "unknown",
+                vendor: detectCookieVendor({ name: cookie.name, value: cookie.value })
             })
         })
     });
@@ -118,7 +152,8 @@ if ("cookieStore" in window) {
             domain: window.location.hostname,
             rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
             hadValuePreConsent: typeof value === 'string' && value.length > 0,
-            consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
+            consentGiven: hasConsent(getConsentTypeForUrl(window.location.href)),
+            vendor: detectCookieVendor({ name: key, value: value })
         });
         return originalSetItem.apply(this, arguments);
     };
@@ -136,7 +171,8 @@ window.INTA.memorySet = function(key, value) {
         domain: window.location.hostname,
         rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
         hadValuePreConsent: typeof value === 'string' && value.length > 0,
-        consentGiven: hasConsent(getConsentTypeForUrl(window.location.href))
+        consentGiven: hasConsent(getConsentTypeForUrl(window.location.href)),
+        vendor: detectCookieVendor({ name: key, value: value })
     });
     window.INTA._memory = window.INTA._memory || {};
     window.INTA._memory[key] = value;
