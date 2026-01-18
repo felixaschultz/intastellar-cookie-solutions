@@ -87,6 +87,95 @@ function detectCookieVendor(cookie) {
     return 'Unknown';
 }
 
+// --- Helper: Map cookie name to consent type ---
+const COOKIE_CONSENT_TYPE_MAP = {
+    // Google Analytics
+    '_ga': 'statistics',
+    '_gid': 'statistics',
+    '_gat': 'statistics',
+    '1P_JAR': 'statistics',
+    'NID': 'statistics',
+    'CONSENT': 'statistics',
+    '_gcl_au': 'marketing',
+    'ANID': 'marketing',
+    // Facebook
+    'fr': 'marketing',
+    'datr': 'marketing',
+    'sb': 'marketing',
+    'c_user': 'marketing',
+    // LinkedIn
+    'bcookie': 'marketing',
+    'lidc': 'marketing',
+    'bscookie': 'marketing',
+    // Hotjar
+    '_hjIncludedInSample': 'statistics',
+    '_hjSessionUser': 'statistics',
+    '_hjFirstSeen': 'statistics',
+    '_hjSession': 'statistics',
+    // Microsoft
+    'MUID': 'marketing',
+    'ANON': 'marketing',
+    'SRCHD': 'marketing',
+    'SRCHUID': 'marketing',
+    '_clsk': 'statistics',
+    'MSCC': 'functional',
+    // HubSpot
+    'hubspotutk': 'marketing',
+    '__hssc': 'marketing',
+    '__hstc': 'marketing',
+    '__hs_opt_out': 'functional',
+    '__hssrc': 'marketing',
+    // Adobe
+    'AMCV_': 'marketing',
+    's_cc': 'statistics',
+    's_sq': 'statistics',
+    // Pinterest
+    '_pinterest_cm': 'marketing',
+    'csrftoken': 'functional',
+    'sessionid': 'functional',
+    // TikTok
+    'tt_webid': 'marketing',
+    'tt_webid_v2': 'marketing',
+    'tt_csrf_token': 'functional',
+    // Snapchat
+    'sc_at': 'marketing',
+    'scid': 'marketing',
+    'sctr': 'marketing',
+    // Reddit
+    '_reddit_session': 'marketing',
+    'session_tracker': 'marketing',
+    'loid': 'marketing',
+    // YouTube
+    'YSC': 'marketing',
+    'VISITOR_INFO1_LIVE': 'marketing',
+    // Vimeo
+    'vuid': 'marketing',
+    'vimeo_sessionid': 'marketing',
+    // Spotify
+    'sp_t': 'marketing',
+    'sp_landing': 'marketing',
+    // Salesforce
+    'BrowserId': 'functional',
+    'CookieConsent': 'functional',
+    // CrazyEgg
+    '__ceg.s': 'statistics',
+    '__ceg.u': 'statistics',
+    // Intastellar
+    'IntastellarConsentSolution': 'functional',
+    'intastellar_cookie_consent': 'functional',
+};
+
+function getConsentTypeForCookie(cookieName) {
+    // Try exact match first
+    if (COOKIE_CONSENT_TYPE_MAP[cookieName]) return COOKIE_CONSENT_TYPE_MAP[cookieName];
+    // Try partial match (for cookies with prefixes)
+    for (const key in COOKIE_CONSENT_TYPE_MAP) {
+        if (cookieName.startsWith(key)) return COOKIE_CONSENT_TYPE_MAP[key];
+    }
+    // Fallback
+    return 'marketing';
+}
+
 // --- Start Cookie Interception ---
 (function() {
     const desc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
@@ -102,6 +191,8 @@ function detectCookieVendor(cookie) {
                 const cookieName = cookieString.split('=')[0].trim();
                 const rawValue = cookieString.split('=')[1]?.split(';')[0];
                 const cookieDomain = cookieString.split(';').find(part => part.trim().toLowerCase().startsWith('domain='))?.split('=')[1]?.trim() || window.location.hostname;
+                // Use cookie name to determine consent type
+                const consentType = getConsentTypeForCookie(cookieName);
                 recordCookie({
                     name: cookieName,
                     source: window.INTA.observedCookieSource || 'unknown',
@@ -111,7 +202,7 @@ function detectCookieVendor(cookie) {
                     cookieDomain,
                     rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
                     hadValuePreConsent: typeof rawValue === 'string' && rawValue.length > 0,
-                    consentGiven: hasConsent(getConsentTypeForUrl(window.location.href)),
+                    consentGiven: hasConsent(consentType),
                     vendor: detectCookieVendor({ name: cookieName, value: rawValue })
                 })
             } catch(e){ /* ignore */ }
@@ -125,6 +216,7 @@ if ("cookieStore" in window) {
     cookieStore.addEventListener("change", (event) => {
         event.changed.forEach(cookie => {
             window.INTA.observedCookieSource = 'cookieStore';
+            const consentType = getConsentTypeForCookie(cookie.name);
             recordCookie({
                 name: cookie.name,
                 source: 'cookieStore',
@@ -134,7 +226,7 @@ if ("cookieStore" in window) {
                 cookieDomain: cookie.domain || window.location.hostname,
                 rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
                 hadValuePreConsent: 0,
-                consentGiven: "unknown",
+                consentGiven: hasConsent(consentType),
                 vendor: detectCookieVendor({ name: cookie.name, value: cookie.value })
             })
         })
@@ -146,6 +238,7 @@ if ("cookieStore" in window) {
     const originalSetItem = localStorage.setItem;
     localStorage.setItem = function(key, value) {
         window.INTA.observedCookieSource = 'localStorage';
+        const consentType = getConsentTypeForCookie(key);
         recordCookie({
             name: key,
             source: 'localStorage',
@@ -154,7 +247,7 @@ if ("cookieStore" in window) {
             domain: window.location.hostname,
             rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
             hadValuePreConsent: typeof value === 'string' && value.length > 0,
-            consentGiven: hasConsent(getConsentTypeForUrl(window.location.href)),
+            consentGiven: hasConsent(consentType),
             vendor: detectCookieVendor({ name: key, value: value })
         });
         return originalSetItem.apply(this, arguments);
@@ -164,6 +257,7 @@ if ("cookieStore" in window) {
 // --- Start memory Interception (example) ---
 window.INTA.memorySet = function(key, value) {
     window.INTA.observedCookieSource = 'memory';
+    const consentType = getConsentTypeForCookie(key);
     recordCookie({
         name: key,
         value: value,
@@ -173,7 +267,7 @@ window.INTA.memorySet = function(key, value) {
         domain: window.location.hostname,
         rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
         hadValuePreConsent: typeof value === 'string' && value.length > 0,
-        consentGiven: hasConsent(getConsentTypeForUrl(window.location.href)),
+        consentGiven: hasConsent(consentType),
         vendor: detectCookieVendor({ name: key, value: value })
     });
     window.INTA._memory = window.INTA._memory || {};
