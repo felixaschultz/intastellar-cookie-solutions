@@ -173,7 +173,7 @@ function detectCookieVendor(cookie) {
 }
 
 // --- Helper: Map cookie name to consent type ---
-const COOKIE_CONSENT_TYPE_MAP = {
+let COOKIE_CONSENT_TYPE_MAP = {
     // Google Analytics
     '_ga': 'statistics',
     '_gid': 'statistics',
