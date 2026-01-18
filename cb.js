@@ -3499,6 +3499,10 @@ onWindowLoad(function () {
                 );
 
                 updateConsents("all");
+                intaCookieConsents?.advertisementCookies = true;
+                intaCookieConsents?.staticsticCookies = true;
+                intaCookieConsents?.functionalCookies = true;
+
                 // Dispatch TCF event after user action
                 dispatchTCFConsentChangedIfAvailable();
                 /*window.location.reload();*/
@@ -3514,6 +3518,11 @@ onWindowLoad(function () {
                     functionalCookies: "checked",
                     advertisementCookies: "checked",
                 };
+
+                intaCookieConsents?.advertisementCookies = true;
+                intaCookieConsents?.staticsticCookies = true;
+                intaCookieConsents?.functionalCookies = true;
+
                 intaConsentsObjectVariable.time = new Date().getTime()
                 document.cookie =
                     int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
@@ -3593,6 +3602,10 @@ onWindowLoad(function () {
                     functionalCookies: false,
                     advertisementCookies: false,
                 };
+                intaCookieConsents?.advertisementCookies = false;
+                intaCookieConsents?.staticsticCookies = false;
+                intaCookieConsents?.functionalCookies = false;
+
                 intaConsentsObjectVariable.time = new Date().getTime()
                 var cV = 1;
                 document.cookie =
@@ -3650,6 +3663,10 @@ onWindowLoad(function () {
                     },
                     () => console.log("Consent captured")
                 );
+                intaCookieConsents?.advertisementCookies = "false" ;
+                intaCookieConsents?.functionalCookies = "false" ;
+                intaCookieConsents?.staticsticCookies = "false" ;
+                updateConsents("denied");
                 dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
                 // Dispatch TCF event after user action
                 dispatchTCFConsentChangedIfAvailable();
