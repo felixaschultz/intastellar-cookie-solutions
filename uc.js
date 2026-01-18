@@ -57,7 +57,7 @@ function updateVwoConsent(consents) {
 // --- Helper function to detect Vendors of Cookies ---
 function detectCookieVendor(cookie) {
     const VENDOR_MAP = {
-        'Google': ['_ga', '_gid', '_gat', '1P_JAR', 'NID', 'CONSENT', '_gcl_au', 'ANID', 'DV', 'OTZ', 'SID', 'HSID', 'APISID', 'SAPISID', 'SSID', 'SIDCC', 'SEARCH_SAMESITE'],
+        'Google': ['_ga', '_gid', '_gat', '1P_JAR', 'NID', 'CONSENT', '_gcl_au', 'ANID', 'DV', 'OTZ', 'SID', 'HSID', 'APISID', 'SAPISID', 'SSID', 'SIDCC', 'SEARCH_SAMESITE', '_grecaptcha'],
         'Google Ads': ['IDE', 'DSID', 'FLC', 'AID', 'TAID', '__gads', '__gac'],
         'Google Tag Manager': ['_dc_gtm_', '_gat_gtag_'],
         'Google Optimize': ['_gaexp', '_opt_awcid', '_opt_awmid', '_opt_awgid', '_opt_awkid', '_opt_utmc'],
@@ -137,6 +137,7 @@ function detectCookieVendor(cookie) {
         'VK': ['remixlang', 'remixstid'],
         'Discord': ['__dcfduid', '__sdcfduid'],
         'Slack': ['d', 'b'],
+        'Omnisend': ['omnisendSessionID', 'omnisendVisitorID'],
         'Trello': ['token'],
         'Asana': ['asana-session'],
         'Monday.com': ['visitor_id'],
