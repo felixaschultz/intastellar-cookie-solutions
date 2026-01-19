@@ -36,6 +36,7 @@ window.addEventListener('message', (event) => {
 window.VWO = window.VWO || [];
 window.VWO.init = window.VWO.init || function(s) { window.VWO.consentState = s; };
 window.VWO.init(2); // default to pending
+window.INTA = window.INTA || {};
 window.INTA.observedCookieSource = 'unknown';
 // --- VWO Cookie Consent Integration (latest, per docs) ---
 function updateVwoConsent(consents) {
