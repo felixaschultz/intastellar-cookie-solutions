@@ -3484,6 +3484,7 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
 window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
 
 function recordCookie(value) {
+    window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
     console.table(value);
     window.__INTA__COOKIE_EVENTS__.push(value);
 
