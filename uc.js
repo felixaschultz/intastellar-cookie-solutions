@@ -160,6 +160,7 @@ function detectCookieVendor(cookie) {
         'DocuSign': ['__cf_bm', 'docusign'],
         'HelloSign': ['__cf_bm', 'hellosign'],
         'Adobe Sign': ['adobe_sign'],
+        'CookieYes': ['CookieYesConsent', 'cookieyes-consent', 'CookieYesAnalytics'],
         // Add more as needed
     };
 
