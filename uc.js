@@ -171,7 +171,7 @@ function detectCookieVendor(cookie) {
             }
         }
     }
-    return 'Unknown';
+    return 'unknown vendor';
 }
 
 // --- Helper: Map cookie name to consent type ---
