@@ -19,6 +19,145 @@ function setConsentState(userId, consents, rootDomain, partnerDomains = []) {
     updateVwoConsent(consents);
 }
 
+const allScripts = window.allScripts = [
+    {
+        /* Analytics Scripts which are beeing blocked */
+        /* "([\-\.]clarity+)", */
+        type: "statics",
+        scripts: [
+            "(mixpanel)",
+            "([\-\.]googleoptimize+)",
+            "([\-\.]piwik+)",
+            "([\-\.]matomo+)",
+            "([\-\.]bing+)",
+            "([\-\.]slideshare+)",
+            "([\-\.]siteimproveanalytics+)",
+            "([\-\.]hotjar+)",
+            "([\-\.]snapchat)",
+            "([\-\.]contentsquare)",
+            "([\-\.]6sc)",
+            "([\-\.]nr-data)",
+            "([\-\.]2o7)",
+            "([\-\.]hackerone)",
+            "([\-\.]gstatic)",
+            "([\-\.]webtrends)",
+            "([\-\.]webtrendslive)",
+            "([\-\.]amplitude)",
+            "([\-\.]adobe)",
+            "([\-\.]mxpnl)",
+            "([\-\.]mixpanel)",
+            "([\-\.]gstatics+)",
+            "([\-\.]adobedtm)",
+            "([\-\.]adobedc)",
+            "([\-\.]qualtrics+)",
+            "([\-\.]pardot+)",
+            "([\-\.]poultons+)",
+            "([\-\.]chartbeat+)",
+            "([\-\.]consensu+)",
+            "([\-\.]clarity+)",
+            "([\-\.]clarity-cdn+)",
+            "([\-\.]vwo+)",
+            "([\-\.]ip-only+)",
+            "([\-\.]ggpht+)",
+            "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
+            "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ]
+    },
+    {
+        /* Marketing Scripts which are beeing blocked */
+        /* 
+            "([\-\.]googlesyndication+)",
+            "([\-\.]googletagservices+)",
+            "([\-\.]googleadservices+)",
+            "([\-\.]omnisnippet+)",
+        */
+        type: "marketing",
+        scripts: [
+            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
+            "([\-\.]twitter+)",
+            "([\-\.]ads-twitter+)",
+            "([\-\.]casalemedia+)",
+            "(chimpstatic+)",
+            "([\-\.]trustpilot+)",
+            "([\-\.]mailchimp+)",
+            "([\-\.]linkedin+)",
+            "([\-\.]bing+)",
+            "([\-\.]licdn+)",
+            "([\-\.]amazon-adsystem+)",
+            "([\-\.]adfrom+)",
+            "([\-\.]demdex+)",
+            "([\-\.]criteo+)",
+            "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
+            "([\-\.]instagram+)",
+            "([\-\.]stickyadstv+)",
+            "([\-\.]mookie1+)",
+            "([\-\.]doubleclick+)",
+            "([\-\.]bidswitch+)",
+            "([\-\.]jnqsge+)",
+            "([\-\.]syuh+)",
+            "([\-\.]youtube+)",
+            "([\-\.]vimeo+)",
+            "([\-\.]ninthdecimal+)",
+            "([\-\.]casalemedia+)",
+            "([\-\.]adsymptotic+)",
+            "([\-\.]tremorhub+)",
+            "([\-\.]agkn+)",
+            "([\-\.]myvisualiq+)",
+            "([\-\.]exelator+)",
+            "([\-\.]openx+)",
+            "([\-\.]adsrvr+)",
+            "([\-\.]justpremium+)",
+            "([\-\.]ants+)",
+            "([\-\.]bluekai+)",
+            "([\-\.]revcontent+)",
+            "([\-\.]outbrain+)",
+            "([\-\.]adscale+)",
+            "([\-\.]pdst+)",
+            "([\-\.]yahoo+)",
+            "([\-\.]advertising+)",
+            "([\-\.]adnxs+)",
+            "([\-\.]scdn+)",
+            "([\-\.]spotify+)",
+            "([\-\.]facebook+)",
+            "([\-\.]pinterest+)",
+            "([\-\.]adform+)",
+            "([\-\.]adnxs+)",
+            "([\-\.]advertising+)",
+            "([\-\.]adtech+)",
+            "([\-\.]soundestlink+)",
+            "([\-\.]soundest+)",
+            "([\-\.]soundestvid+)",
+            "([\-\.]soundestform+)",
+            "([\-\.]tiktok+)",
+            "([\-\.]taboola+)",
+            "([\-\.]hubspot+)",
+            /* "([\-\.]hs-sites+)", */
+            "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ]
+    },
+    {
+        /* Functional Scripts which are beeing blocked */
+        type: "functional",
+        scripts: [
+            "(maps.google.com+)",
+            "(www.google.com/maps/+)",
+            "([\-\.]googleapis+)",
+            "([\-\.]gstatics+)",
+            "([\-\.]cludo+)",
+            "([\-\.]qbrick+)",
+            "([\-\.]klarna+)",
+            "([\-\.]paypal+)",
+            "([\-\.]usersnap+)",
+            "([\-\.]zoom+)",
+            "([\-\.]cdnjs+)",
+            "([\-\.]jsdelivr+)",
+            "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ]
+    }
+];
+
 // Listen for consent state response
 window.addEventListener('message', (event) => {
     if (event.origin !== 'https://consents.cdn.intastellarsolutions.com') return;
@@ -949,9 +1088,9 @@ function optOutCCPA() {
 // Helper: Determine consent type for a given URL using allScripts regex
 function getConsentTypeForUrl(url) {
     if (!url) return 'marketing';
-    for (let i = 0; i < allScripts.length; i++) {
-        const scriptType = allScripts[i].type;
-        const patterns = allScripts[i].scripts;
+    for (let i = 0; i < window.allScripts.length; i++) {
+        const scriptType = window.allScripts[i].type;
+        const patterns = window.allScripts[i].scripts;
         for (let j = 0; j < patterns.length; j++) {
             try {
                 const regex = new RegExp(patterns[j], 'i');
@@ -3171,145 +3310,6 @@ let intastellarCookieLanguage
 if (document.querySelector("html").getAttribute("lang") == null) {
     intastellarCookieLanguage = "en";
 }
-
-const allScripts = window.allScripts = [
-    {
-        /* Analytics Scripts which are beeing blocked */
-        /* "([\-\.]clarity+)", */
-        type: "statics",
-        scripts: [
-            "(mixpanel)",
-            "([\-\.]googleoptimize+)",
-            "([\-\.]piwik+)",
-            "([\-\.]matomo+)",
-            "([\-\.]bing+)",
-            "([\-\.]slideshare+)",
-            "([\-\.]siteimproveanalytics+)",
-            "([\-\.]hotjar+)",
-            "([\-\.]snapchat)",
-            "([\-\.]contentsquare)",
-            "([\-\.]6sc)",
-            "([\-\.]nr-data)",
-            "([\-\.]2o7)",
-            "([\-\.]hackerone)",
-            "([\-\.]gstatic)",
-            "([\-\.]webtrends)",
-            "([\-\.]webtrendslive)",
-            "([\-\.]amplitude)",
-            "([\-\.]adobe)",
-            "([\-\.]mxpnl)",
-            "([\-\.]mixpanel)",
-            "([\-\.]gstatics+)",
-            "([\-\.]adobedtm)",
-            "([\-\.]adobedc)",
-            "([\-\.]qualtrics+)",
-            "([\-\.]pardot+)",
-            "([\-\.]poultons+)",
-            "([\-\.]chartbeat+)",
-            "([\-\.]consensu+)",
-            "([\-\.]clarity+)",
-            "([\-\.]clarity-cdn+)",
-            "([\-\.]vwo+)",
-            "([\-\.]ip-only+)",
-            "([\-\.]ggpht+)",
-            "([\-\.]clearbitjs+)",
-            "([\-\.]clearbitscripts+)",
-            "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
-        ]
-    },
-    {
-        /* Marketing Scripts which are beeing blocked */
-        /* 
-            "([\-\.]googlesyndication+)",
-            "([\-\.]googletagservices+)",
-            "([\-\.]googleadservices+)",
-            "([\-\.]omnisnippet+)",
-        */
-        type: "marketing",
-        scripts: [
-            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
-            "([\-\.]twitter+)",
-            "([\-\.]ads-twitter+)",
-            "([\-\.]casalemedia+)",
-            "(chimpstatic+)",
-            "([\-\.]trustpilot+)",
-            "([\-\.]mailchimp+)",
-            "([\-\.]linkedin+)",
-            "([\-\.]bing+)",
-            "([\-\.]licdn+)",
-            "([\-\.]amazon-adsystem+)",
-            "([\-\.]adfrom+)",
-            "([\-\.]demdex+)",
-            "([\-\.]criteo+)",
-            "([\-\.]clearbitjs+)",
-            "([\-\.]clearbitscripts+)",
-            "([\-\.]instagram+)",
-            "([\-\.]stickyadstv+)",
-            "([\-\.]mookie1+)",
-            "([\-\.]doubleclick+)",
-            "([\-\.]bidswitch+)",
-            "([\-\.]jnqsge+)",
-            "([\-\.]syuh+)",
-            "([\-\.]youtube+)",
-            "([\-\.]vimeo+)",
-            "([\-\.]ninthdecimal+)",
-            "([\-\.]casalemedia+)",
-            "([\-\.]adsymptotic+)",
-            "([\-\.]tremorhub+)",
-            "([\-\.]agkn+)",
-            "([\-\.]myvisualiq+)",
-            "([\-\.]exelator+)",
-            "([\-\.]openx+)",
-            "([\-\.]adsrvr+)",
-            "([\-\.]justpremium+)",
-            "([\-\.]ants+)",
-            "([\-\.]bluekai+)",
-            "([\-\.]revcontent+)",
-            "([\-\.]outbrain+)",
-            "([\-\.]adscale+)",
-            "([\-\.]pdst+)",
-            "([\-\.]yahoo+)",
-            "([\-\.]advertising+)",
-            "([\-\.]adnxs+)",
-            "([\-\.]scdn+)",
-            "([\-\.]spotify+)",
-            "([\-\.]facebook+)",
-            "([\-\.]pinterest+)",
-            "([\-\.]adform+)",
-            "([\-\.]adnxs+)",
-            "([\-\.]advertising+)",
-            "([\-\.]adtech+)",
-            "([\-\.]soundestlink+)",
-            "([\-\.]soundest+)",
-            "([\-\.]soundestvid+)",
-            "([\-\.]soundestform+)",
-            "([\-\.]tiktok+)",
-            "([\-\.]taboola+)",
-            "([\-\.]hubspot+)",
-            /* "([\-\.]hs-sites+)", */
-            "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
-        ]
-    },
-    {
-        /* Functional Scripts which are beeing blocked */
-        type: "functional",
-        scripts: [
-            "(maps.google.com+)",
-            "(www.google.com/maps/+)",
-            "([\-\.]googleapis+)",
-            "([\-\.]gstatics+)",
-            "([\-\.]cludo+)",
-            "([\-\.]qbrick+)",
-            "([\-\.]klarna+)",
-            "([\-\.]paypal+)",
-            "([\-\.]usersnap+)",
-            "([\-\.]zoom+)",
-            "([\-\.]cdnjs+)",
-            "([\-\.]jsdelivr+)",
-            "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
-        ]
-    }
-];
 
 if (intaCookieConsents?.advertisementCookies) {
     gtag('consent', 'update', {
