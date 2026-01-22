@@ -205,7 +205,7 @@ function detectCookieVendor(cookie) {
         'LinkedIn': ['bcookie', 'lidc', 'bscookie', 'lang', 'li_gc', 'li_mc', 'liap', 'lissc', 'UserMatchHistory'],
         'Twitter': ['_twitter_sess', 'personalization_id', 'guest_id', 'ct0', 'external_referer', 'gt'],
         'Hotjar': ['_hjIncludedInSample', '_hjSessionUser', '_hjFirstSeen', '_hjSession', '_hjTLDTest', '_hjAbsoluteSessionInProgress', '_hjIncludedInPageviewSample'],
-        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID', '_clsk', 'MSCC', 'SRCHUSR', 'SRCHHPGUSR', 'NAP', 'MH', 'MR', 'MS0', 'MSFPC'],
+        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID', '_clsk', 'MSCC', 'SRCHUSR', 'SRCHHPGUSR', 'NAP', 'MH', 'MR', 'MS0', 'MSFPC', '"MicrosoftApplicationsTelemetryFirstLaunchTime"', "MicrosoftApplicationsTelemetryDeviceId"],
         'HubSpot': ['hubspotutk', '__hssc', '__hstc', '__hs_opt_out', '__hssrc', '__hs_do_not_track', '__hs_initial_opt_in', '__hs_cookie_cat_pref'],
         'Adobe': ['AMCV_', 's_cc', 's_sq', 'AMCVS_', 'demdex', 'mbox'],
         'Pinterest': ['_pinterest_cm', 'csrftoken', 'sessionid', '_auth', '_pinterest_sess', '_routing_id'],
@@ -706,6 +706,8 @@ var COOKIE_CONSENT_TYPE_MAP = {
     'hellosign': 'functional',
     // Adobe Sign
     'adobe_sign': 'functional',
+    "MicrosoftApplicationsTelemetryFirstLaunchTime": 'functional',
+    "MicrosoftApplicationsTelemetryDeviceId": 'functional',
     // Add more as needed
 };
 
