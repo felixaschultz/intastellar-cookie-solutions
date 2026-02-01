@@ -238,10 +238,28 @@ const IntastellarCookieConsent = {
     },
     initialize: function (template) {
         const self = this;
+        function appendBannerWhenBodyReady() {
+            if (document.body) {
+                document.body.append(self._banner);
+                return;
+            }
+            function tryAppend() {
+                if (document.body) {
+                    document.body.append(self._banner);
+                } else {
+                    requestAnimationFrame(tryAppend);
+                }
+            }
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", tryAppend);
+            } else {
+                requestAnimationFrame(tryAppend);
+            }
+        }
         function initTemplate() {
             if (!self._banner && template !== false) {
                 self._banner = template;
-                document.body.append(self._banner);
+                appendBannerWhenBodyReady();
             }
             if (!getCookie(int_hideCookieBannerName)) {
                 if (self._banner) window._IntastellarConsentsBanner.classList.add("--active");
