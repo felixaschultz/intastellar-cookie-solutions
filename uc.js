@@ -1279,7 +1279,8 @@ const ALLOWLIST = [
     "https://js.usemessages.com",
     "https://cdn2.hubspot.net",
     "https://cdn.hsforms.net",
-    "https://cdn.weglot.com"
+    "https://cdn.weglot.com",
+    "https://dev.visualwebsiteoptimizer.com"
 ];
 
 function isAllowed(url) {
