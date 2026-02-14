@@ -62,6 +62,7 @@ const allScripts = window.allScripts = [
             "([\-\.]clearbitjs+)",
             "([\-\.]clearbitscripts+)",
             "([\-\.]optimizely+)",
+            "([\-\.]segment+)",
             "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -3399,6 +3400,66 @@ if (intaCookieConsents?.functionalCookies) {
     );
 
 }
+
+/* --- Segment Consent Integration (classic analytics.js) --- */
+(function initSegmentConsent() {
+    function getSegmentConsent() {
+        var c = window.intaCookieConsents || {};
+        var isChecked = function(v) { return v === "checked" || v === true; };
+        return {
+            categoryPreferences: {
+                Analytics: isChecked(c.staticsticCookies),
+                Advertising: isChecked(c.advertisementCookies),
+                Functional: isChecked(c.functionalCookies)
+            }
+        };
+    }
+    function injectConsentIntoOptions(opts) {
+        if (opts && typeof opts === "function") return injectConsentIntoOptions({});
+        var consent = getSegmentConsent();
+        opts = opts && typeof opts === "object" ? opts : {};
+        opts.context = Object.assign({}, opts.context || {}, { consent: consent });
+        return opts;
+    }
+    function wrapSegmentAnalytics() {
+        if (!window.analytics || typeof window.analytics.ready !== "function") return false;
+        window.analytics.ready(function() {
+            var origTrack = window.analytics.track;
+            var origPage = window.analytics.page;
+            var origIdentify = window.analytics.identify;
+            if (typeof origTrack === "function") {
+                window.analytics.track = function(event, properties, options, callback) {
+                    if (typeof options === "function") { callback = options; options = {}; }
+                    options = injectConsentIntoOptions(options);
+                    return callback ? origTrack.call(this, event, properties, options, callback) : origTrack.call(this, event, properties, options);
+                };
+            }
+            if (typeof origPage === "function") {
+                window.analytics.page = function() {
+                    var args = Array.prototype.slice.call(arguments);
+                    var opts = (args.length >= 4 && typeof args[3] === "object") ? args[3] : {};
+                    opts = injectConsentIntoOptions(opts);
+                    args.length >= 4 ? (args[3] = opts) : args.push(opts);
+                    return origPage.apply(this, args);
+                };
+            }
+            if (typeof origIdentify === "function") {
+                window.analytics.identify = function(userId, traits, options, callback) {
+                    if (typeof options === "function") { callback = options; options = {}; }
+                    options = injectConsentIntoOptions(options);
+                    return callback ? origIdentify.call(this, userId, traits, options, callback) : origIdentify.call(this, userId, traits, options);
+                };
+            }
+        });
+        return true;
+    }
+    if (wrapSegmentAnalytics()) return;
+    var attempts = 0;
+    var t = setInterval(function() {
+        if (wrapSegmentAnalytics() || ++attempts > 50) clearInterval(t);
+    }, 100);
+})();
+/* --- End Segment Consent Integration --- */
 
 if (window.INTA?.settings?.gtagId) {
     gtag('config', window.INTA?.settings?.gtagId, {

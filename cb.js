@@ -3052,6 +3052,7 @@ function IntaAcceptAll() {
         functionalCookies: "checked",
         advertisementCookies: "checked",
     };
+    window.intaCookieConsents = intaConsentsObjectVariable.consents;
     intaConsentsObjectVariable.time = new Date().getTime()
     var cV = 1;
     document.cookie =
@@ -3129,6 +3130,7 @@ function IntaSaveNeccessary() {
         functionalCookies: false,
         advertisementCookies: false,
     };
+    window.intaCookieConsents = intaConsentsObjectVariable.consents;
     intaConsentsObjectVariable.time = new Date().getTime()
     var cV = 1;
     document.cookie =
@@ -3457,6 +3459,7 @@ onWindowLoad(function () {
                     functionalCookies: "checked",
                     advertisementCookies: "checked",
                 };
+                window.intaCookieConsents = intaConsentsObjectVariable.consents;
                 intaConsentsObjectVariable.time = new Date().getTime()
                 document.cookie =
                     int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
@@ -3542,6 +3545,7 @@ onWindowLoad(function () {
                     functionalCookies: "checked",
                     advertisementCookies: "checked",
                 };
+                window.intaCookieConsents = intaConsentsObjectVariable.consents;
 
                 intaCookieConsents.advertisementCookies = true;
                 intaCookieConsents.staticsticCookies = true;
@@ -3630,6 +3634,7 @@ onWindowLoad(function () {
                     functionalCookies: false,
                     advertisementCookies: false,
                 };
+                window.intaCookieConsents = intaConsentsObjectVariable.consents;
                 intaCookieConsents.advertisementCookies = false;
                 intaCookieConsents.staticsticCookies = false;
                 intaCookieConsents.functionalCookies = false;
@@ -5337,6 +5342,7 @@ function saveINTCookieSettings(consent, type = null) {
         functionalCookies: (FunctionalCheckbox?.checked) ? "checked" : false,
         advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
     };
+    window.intaCookieConsents = intaConsentsObjectVariable.consents;
     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
     intaConsentsObjectVariable.time = new Date().getTime()
 
