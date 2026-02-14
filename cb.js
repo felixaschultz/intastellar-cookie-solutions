@@ -3516,6 +3516,12 @@ onWindowLoad(function () {
                     () => console.log("Consent captured")
                 );
 
+                window["optimizely"].push({
+                    "type": "optOut",
+                    "isOptOut": false
+                });
+
+
                 updateConsents("all");
                 intaCookieConsents.advertisementCookies = true;
                 intaCookieConsents.staticsticCookies = true;
@@ -3596,6 +3602,10 @@ onWindowLoad(function () {
                 window.clarity && window.clarity('consentv2', {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
+                });
+                window["optimizely"].push({
+                    "type": "optOut",
+                    "isOptOut": false
                 });
 
                 window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
@@ -3681,6 +3691,10 @@ onWindowLoad(function () {
                     },
                     () => console.log("Consent captured")
                 );
+                window["optimizely"].push({
+                    "type": "optOut",
+                    "isOptOut": true
+                });
                 intaCookieConsents.advertisementCookies = "false" ;
                 intaCookieConsents.functionalCookies = "false" ;
                 intaCookieConsents.staticsticCookies = "false" ;
@@ -4940,6 +4954,10 @@ function updateConsents(consent, type = null) {
     }
 
     if (intaCookieConsents?.staticsticCookies === "checked") {
+        window["optimizely"].push({
+            "type": "optOut",
+            "isOptOut": false
+        });
         let newArray = [...inta_statisticCookieList.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1)
         int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray);
         _paq.push(['setConsentGiven']);
@@ -4957,6 +4975,10 @@ function updateConsents(consent, type = null) {
             }
         })
     } else {
+        window["optimizely"].push({
+            "type": "optOut",
+            "isOptOut": true
+        });
         _paq.push(['forgetConsentGiven']);
         window.allScripts.map((script) => {
             if (script.type == "statics") {
@@ -5233,6 +5255,10 @@ function saveINTCookieSettings(consent, type = null) {
     }
 
     if (StaticsCheckBox?.checked) {
+        window["optimizely"].push({
+            "type": "optOut",
+            "isOptOut": false
+        });
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
             'ad_storage': 'granted',
@@ -5267,7 +5293,10 @@ function saveINTCookieSettings(consent, type = null) {
             }
         }) */
     } else {
-
+        window["optimizely"].push({
+            "type": "optOut",
+            "isOptOut": true
+        });
         window._hsp.push(['doNotTrack']);
         window._hsp.push(['revokeCookieConsent']);
         gtag('consent', 'update', {

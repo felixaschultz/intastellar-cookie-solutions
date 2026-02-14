@@ -172,6 +172,12 @@ window.addEventListener('message', (event) => {
     }
 });
 
+window["optimizely"] = window["optimizely"] || [];
+window["optimizely"].push({
+    "type": "optOut",
+    "isOptOut": true
+});
+
 window.VWO = window.VWO || [];
 window.VWO.init = window.VWO.init || function(s) { window.VWO.consentState = s; };
 window.VWO.init(2); // default to pending
