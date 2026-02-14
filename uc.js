@@ -61,6 +61,7 @@ const allScripts = window.allScripts = [
             "([\-\.]ggpht+)",
             "([\-\.]clearbitjs+)",
             "([\-\.]clearbitscripts+)",
+            "([\-\.]optimizely+)",
             "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -172,7 +173,7 @@ window.addEventListener('message', (event) => {
     }
 });
 
-window["optimizely"] = window["optimizely"] || [];
+ty = window["optimizely"] || [];
 window["optimizely"].push({
     "type": "optOut",
     "isOptOut": true
