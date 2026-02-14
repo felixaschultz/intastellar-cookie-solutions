@@ -175,7 +175,7 @@ window.addEventListener('message', (event) => {
 });
 
 ty = window["optimizely"] || [];
-window["optimizely"].push({
+ty.push({
     "type": "optOut",
     "isOptOut": true
 });
@@ -3579,9 +3579,7 @@ function recordCookie(value) {
             return response.json();
         })
 
-    } catch (e) {
-        console.error(e);
-    }
+    } catch (e) {}
 
 }
 
