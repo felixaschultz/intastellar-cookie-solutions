@@ -174,8 +174,8 @@ window.addEventListener('message', (event) => {
     }
 });
 
-ty = window["optimizely"] || [];
-ty.push({
+window["optimizely"] = window["optimizely"] || [];
+window["optimizely"].push({
     "type": "optOut",
     "isOptOut": true
 });
