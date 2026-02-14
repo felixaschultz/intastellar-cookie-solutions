@@ -3579,7 +3579,9 @@ function recordCookie(value) {
             return response.json();
         })
 
-    } catch (e) {}
+    } catch (e) {
+        console.error(e);
+    }
 
 }
 
