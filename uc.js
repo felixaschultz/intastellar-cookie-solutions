@@ -3403,6 +3403,11 @@ if (intaCookieConsents?.functionalCookies) {
 
 /* --- Segment Consent Integration (classic analytics.js) --- */
 (function initSegmentConsent() {
+    function hasAnalyticsConsent() {
+        const c = window.intaCookieConsents;
+        return c?.staticsticCookies === "checked" ||
+            c?.functionalCookies === "checked";
+    }
     function getSegmentConsent() {
         var c = window.intaCookieConsents || {};
         var isChecked = function(v) { return v === "checked" || v === true; };
@@ -3421,14 +3426,70 @@ if (intaCookieConsents?.functionalCookies) {
         opts.context = Object.assign({}, opts.context || {}, { consent: consent });
         return opts;
     }
+    function injectConsentIntoQueuedArgs(args) {
+        if (!Array.isArray(args) || args.length < 1) return;
+        var method = args[0];
+        if (method !== "track" && method !== "page" && method !== "identify") return;
+        var opts;
+        if (method === "track") {
+            opts = (args.length >= 4 && typeof args[3] === "object" && !Array.isArray(args[3])) ? args[3] : {};
+            opts = injectConsentIntoOptions(opts);
+            if (args.length >= 4) {
+                args[3] = opts;
+            } else {
+                args.push(opts);
+            }
+        } else if (method === "page") {
+            opts = (args.length >= 4 && typeof args[3] === "object" && !Array.isArray(args[3])) ? args[3] : {};
+            opts = injectConsentIntoOptions(opts);
+            if (args.length >= 4) {
+                args[3] = opts;
+            } else {
+                args.push(opts);
+            }
+        } else if (method === "identify") {
+            opts = (args.length >= 3 && typeof args[2] === "object" && !Array.isArray(args[2])) ? args[2] : {};
+            opts = injectConsentIntoOptions(opts);
+            if (args.length >= 3) {
+                args[2] = opts;
+            } else {
+                args.push(opts);
+            }
+        }
+    }
+    function wrapStubQueue(analytics) {
+        if (!analytics || !analytics.push) return;
+        var origPush = analytics.push;
+        analytics.push = function() {
+            if (!hasAnalyticsConsent()) return this.length;
+            for (var i = 0; i < arguments.length; i++) {
+                if (Array.isArray(arguments[i])) injectConsentIntoQueuedArgs(arguments[i]);
+            }
+            return origPush.apply(this, arguments);
+        };
+        if (hasAnalyticsConsent()) {
+            for (var j = 0; j < analytics.length; j++) {
+                if (Array.isArray(analytics[j])) injectConsentIntoQueuedArgs(analytics[j]);
+            }
+        } else {
+            for (var k = analytics.length - 1; k >= 0; k--) {
+                if (Array.isArray(analytics[k]) && ["track", "page", "identify"].indexOf(analytics[k][0]) >= 0) {
+                    analytics.splice(k, 1);
+                }
+            }
+        }
+    }
     function wrapSegmentAnalytics() {
-        if (!window.analytics || typeof window.analytics.ready !== "function") return false;
+        if (!window.analytics) return false;
+        wrapStubQueue(window.analytics);
+        if (typeof window.analytics.ready !== "function") return true;
         window.analytics.ready(function() {
             var origTrack = window.analytics.track;
             var origPage = window.analytics.page;
             var origIdentify = window.analytics.identify;
             if (typeof origTrack === "function") {
                 window.analytics.track = function(event, properties, options, callback) {
+                    if (!hasAnalyticsConsent()) return this;
                     if (typeof options === "function") { callback = options; options = {}; }
                     options = injectConsentIntoOptions(options);
                     return callback ? origTrack.call(this, event, properties, options, callback) : origTrack.call(this, event, properties, options);
@@ -3436,6 +3497,7 @@ if (intaCookieConsents?.functionalCookies) {
             }
             if (typeof origPage === "function") {
                 window.analytics.page = function() {
+                    if (!hasAnalyticsConsent()) return this;
                     var args = Array.prototype.slice.call(arguments);
                     var opts = (args.length >= 4 && typeof args[3] === "object") ? args[3] : {};
                     opts = injectConsentIntoOptions(opts);
@@ -3445,6 +3507,7 @@ if (intaCookieConsents?.functionalCookies) {
             }
             if (typeof origIdentify === "function") {
                 window.analytics.identify = function(userId, traits, options, callback) {
+                    if (!hasAnalyticsConsent()) return this;
                     if (typeof options === "function") { callback = options; options = {}; }
                     options = injectConsentIntoOptions(options);
                     return callback ? origIdentify.call(this, userId, traits, options, callback) : origIdentify.call(this, userId, traits, options);
@@ -3456,8 +3519,8 @@ if (intaCookieConsents?.functionalCookies) {
     if (wrapSegmentAnalytics()) return;
     var attempts = 0;
     var t = setInterval(function() {
-        if (wrapSegmentAnalytics() || ++attempts > 50) clearInterval(t);
-    }, 100);
+        if (wrapSegmentAnalytics() || ++attempts > 100) clearInterval(t);
+    }, 20);
 })();
 /* --- End Segment Consent Integration --- */
 
