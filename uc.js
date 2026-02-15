@@ -1324,7 +1324,8 @@ const ALLOWLIST = [
     "https://cdn.hsforms.net",
     "https://cdn.weglot.com",
     "https://dev.visualwebsiteoptimizer.com",
-    "https://www.google-analytics.com"
+    "https://www.google-analytics.com",
+    "https://region1.google-analytics.com"
 ];
 
 function isAllowed(url) {
