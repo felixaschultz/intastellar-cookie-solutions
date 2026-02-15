@@ -1323,7 +1323,8 @@ const ALLOWLIST = [
     "https://cdn2.hubspot.net",
     "https://cdn.hsforms.net",
     "https://cdn.weglot.com",
-    "https://dev.visualwebsiteoptimizer.com"
+    "https://dev.visualwebsiteoptimizer.com",
+    "https://www.google-analytics.com"
 ];
 
 function isAllowed(url) {
