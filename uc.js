@@ -1119,19 +1119,39 @@ function getConsentTypeForUrl(url) {
 // Helper: Send intercepted data to backend for storage/categorization
 async function sendToBackend(data) {
     try {
-        // Use await to ensure the fetch is handled as an async background request
-        await fetch('/tests/backend/test.php', {
+        const base = (typeof window.INTA?.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : '/tests/backend/test.php';
+        await fetch(base, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
     } catch (e) {
-        // Optionally log error
         console.log(e);
     }
-    // Never trigger navigation or download
     return;
 }
+
+// Helper: Server-side tagging - send GA4 events via backend (consent-aware, only when analytics consent given)
+window.sendEventToServerSideTagging = function (eventName, params, opts) {
+    if (typeof hasConsent === 'function' && !hasConsent('statistics')) return;
+    var consents = window.intaCookieConsents || {};
+    var uid = (window.intaConsentsObjectVariable && window.intaConsentsObjectVariable.uid) || '';
+    var base = (typeof window.INTA !== 'undefined' && typeof window.INTA.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : '/tests/backend/test.php';
+    fetch(base, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'ga4_event',
+            consents: consents,
+            client_id: (opts && opts.client_id) || ('cid_' + Date.now().toString(36) + Math.random().toString(36).slice(2)),
+            user_id: (opts && opts.user_id) || uid,
+            session_id: (opts && opts.session_id) || ('sess_' + Date.now()),
+            page_location: (opts && opts.page_location) || window.location.href,
+            page_title: (opts && opts.page_title) || (document.title || ''),
+            events: [{ name: eventName || 'page_view', params: params || {} }]
+        })
+    }).catch(function () {});
+};
 
 // IAB TC String generator
 (function (window) {

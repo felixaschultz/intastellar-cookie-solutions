@@ -4,6 +4,9 @@ node_modules/
 dist/
 .env
 *.log
+tests/backend/consent_store.json
+tests/backend/ga4_config.php
+tests/backend/consent_interception.log
 coverage/
 .idea/
 *.iml

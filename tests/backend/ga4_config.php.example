@@ -1,0 +1,11 @@
+<?php
+/**
+ * GA4 Measurement Protocol configuration
+ * Copy to ga4_config.php and fill in your GA4 credentials.
+ * 
+ * Get these from: GA4 Admin > Data Streams > [Your stream] > Measurement Protocol API secrets
+ */
+return [
+    'measurement_id' => 'G-XXXXXXXXXX',
+    'api_secret'     => 'your_api_secret_here',
+];
