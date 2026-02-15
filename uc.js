@@ -1119,7 +1119,7 @@ function getConsentTypeForUrl(url) {
 // Helper: Send intercepted data to backend for storage/categorization
 async function sendToBackend(data) {
     try {
-        const base = (typeof window.INTA?.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : '/tests/backend/test.php';
+        const base = (typeof window.INTA?.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
         await fetch(base, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1131,18 +1131,33 @@ async function sendToBackend(data) {
     return;
 }
 
-// Helper: Server-side tagging - send GA4 events via backend (consent-aware, only when analytics consent given)
+// Helper: Server-side tagging - send GA4 events via backend (consent-aware)
+// Server checks consents: accepted = full data (user_id, IP, etc); not accepted = minimal
 window.sendEventToServerSideTagging = function (eventName, params, opts) {
-    if (typeof hasConsent === 'function' && !hasConsent('statistics')) return;
-    var consents = window.intaCookieConsents || {};
-    var uid = (window.intaConsentsObjectVariable && window.intaConsentsObjectVariable.uid) || '';
-    var base = (typeof window.INTA !== 'undefined' && typeof window.INTA.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : '/tests/backend/test.php';
+    const measurementId = (opts && opts.measurement_id) || (window.INTA && window.INTA.settings && window.INTA.settings.gtagId) || '';
+    if (!measurementId || !/^G-[A-Z0-9]+$/i.test(measurementId)) return;
+    const consents = window.intaCookieConsents || {};
+    var consentAcceptedAt = null;
+    try {
+        if (typeof getCookie === 'function' && typeof decodeIntaConsentsObject === 'function' && typeof int_hideCookieBannerName !== 'undefined') {
+            var c = getCookie(int_hideCookieBannerName);
+            if (c && c.indexOf && c.indexOf('__inta') > -1) {
+                var parts = c.split('.');
+                var decoded = parts[2] ? JSON.parse(decodeIntaConsentsObject(parts[2]) || '{}') : {};
+                consentAcceptedAt = decoded.time || null;
+            }
+        }
+    } catch (e) {}
+    const uid = (window.intaConsentsObjectVariable && window.intaConsentsObjectVariable.uid) || '';
+    const base = (typeof window.INTA !== 'undefined' && typeof window.INTA.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
     fetch(base, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             action: 'ga4_event',
+            measurement_id: measurementId,
             consents: consents,
+            consent_accepted_at: consentAcceptedAt,
             client_id: (opts && opts.client_id) || ('cid_' + Date.now().toString(36) + Math.random().toString(36).slice(2)),
             user_id: (opts && opts.user_id) || uid,
             session_id: (opts && opts.session_id) || ('sess_' + Date.now()),
