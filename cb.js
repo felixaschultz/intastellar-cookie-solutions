@@ -547,6 +547,7 @@ vendorListContainer.classList.add("vendor-container");
 vendorListContainer.innerHTML = '<h3>Vendors</h3>';
 
 function applyTcStringToVendorCheckboxes(tcString, vendors) {
+    console.log(tcString, vendors);
     if (!tcString || !vendors || !vendors.length) return;
     try {
         var decoded = window.IABTCF && window.IABTCF.TCString && typeof window.IABTCF.TCString.decode === 'function'
@@ -564,7 +565,9 @@ function applyTcStringToVendorCheckboxes(tcString, vendors) {
                 legitCb.checked = !!decoded.vendorLegitimateInterests[i];
             }
         });
-    } catch (e) {}
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function getTcStringFromCookie() {
