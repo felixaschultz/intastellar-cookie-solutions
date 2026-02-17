@@ -3302,6 +3302,16 @@ function updateSaveButtonText() {
     const MarketingCheckBox = document.querySelector("#marketing");
     const saveBtn = document.querySelector(".intastellarCookie-settings__btn.--save");
 
+    const vendorChecks = document.querySelectorAll('.intCookieSetting__checkbox');
+    const vendorLegitChecks = document.querySelectorAll('.intCookieSetting__checkbox-legit');
+    const vendorChecksChecked = Array.from(vendorChecks).every(check => check.checked);
+    const vendorLegitChecksChecked = Array.from(vendorLegitChecks).every(check => check.checked);
+    if (vendorChecksChecked && vendorLegitChecksChecked) {
+        saveBtn.innerText = settingsSaveLang.saveSettingsText;
+    } else {
+        saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
+    }
+
     if (!saveBtn) return;
     if (
         (FunctionalCheckbox && FunctionalCheckbox.checked) ||
