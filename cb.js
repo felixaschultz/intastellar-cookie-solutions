@@ -547,10 +547,17 @@ function openVendorList() {
         return;
     } */
 
+    if(document.getElementById('vendor-list').classList.contains('--open')){
+        document.getElementById('vendor-list').classList.remove('--open');
+        document.getElementById('vendor-list').classList.add('--closed');
+        return;
+    }
+
     let vendorListContainer = document.createElement('div');
     vendorListContainer.id = 'vendor-list';
     vendorListContainer.style.overflowY = 'auto';
     vendorListContainer.classList.add("vendor-container");
+    vendorListContainer.classList.add("--open");
     vendorListContainer.style.background = '#5b5b5bff';
     vendorListContainer.innerHTML = '<h3>Vendors</h3>';
     getVendorsForUI().then(vendors => {
@@ -582,13 +589,7 @@ function openVendorList() {
         });
     });
 
-
-    
-    if (moreFooter.contains(vendorListContainer)){
-        moreFooter.removeChild(vendorListContainer);
-    } else {
-        moreFooter.appendChild(vendorListContainer);
-    }
+    moreFooter.appendChild(vendorListContainer);
 
 }
 
