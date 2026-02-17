@@ -1270,7 +1270,8 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
             const purposeOneTreatment = !!parseInt(read(1), 2);
             const publisherCC = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
             const maxVendorId = parseInt(read(16), 2);
-            const vendors = read(24).split('').map(b => b === '1');
+            const vendorBits = maxVendorId > 0 ? read(maxVendorId) : '';
+            const vendors = vendorBits.split('').map(b => b === '1');
             return {
                 version,
                 created,
