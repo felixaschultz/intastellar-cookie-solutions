@@ -547,15 +547,19 @@ vendorListContainer.classList.add("vendor-container");
 vendorListContainer.innerHTML = '<h3>Vendors</h3>';
 
 function applyTcStringToVendorCheckboxes(tcString, vendors) {
-    console.log(tcString, vendors);
-    if (!tcString || !vendors || !vendors.length) return;
+    console.log('[applyTcStringToVendorCheckboxes] called with tcString:', tcString ? 'present (' + tcString.length + ' chars)' : null, 'vendors:', vendors ? vendors.length : 0);
+    if (!tcString || !vendors || !vendors.length) {
+        console.log('[applyTcStringToVendorCheckboxes] early return: missing tcString or empty vendors');
+        return;
+    }
     try {
         var decoded = window.IABTCF && window.IABTCF.TCString && typeof window.IABTCF.TCString.decode === 'function'
             ? window.IABTCF.TCString.decode(tcString) : null;
-        if (!decoded || !decoded.vendors) return;
-
-
-        console.log(decoded);
+        console.log('[applyTcStringToVendorCheckboxes] decoded:', decoded);
+        if (!decoded || !decoded.vendors) {
+            console.log('[applyTcStringToVendorCheckboxes] early return: no decoded vendors');
+            return;
+        }
         vendors.forEach(function (vendor, i) {
             if (i >= decoded.vendors.length) return;
             var cb = document.getElementById('vendor' + vendor.id);
@@ -583,6 +587,9 @@ function getTcStringFromCookie() {
 }
 
 getVendorsForUI().then(vendors => {
+    console.log('[VendorList] getVendorsForUI resolved, vendors count:', (vendors && vendors.length) || 0);
+    var tcFromCookie = getTcStringFromCookie();
+    console.log('[VendorList] tcString from cookie:', tcFromCookie ? tcFromCookie.substring(0, 30) + '...' : null);
     vendors.forEach(vendor => {
         const vendorDiv = document.createElement('div');
         vendorDiv.classList.add('vendor-item');
@@ -638,6 +645,8 @@ getVendorsForUI().then(vendors => {
             dispatchTCFConsentChangedIfAvailable(true);
         });
     });
+}).catch(function (err) {
+    console.error('[VendorList] getVendorsForUI failed:', err);
 });
 
 function openVendorList() {

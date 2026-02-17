@@ -1199,6 +1199,14 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
         for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
         return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
+    function base64UrlDecode(str) {
+        str = (str || '').replace(/-/g, '+').replace(/_/g, '/');
+        while (str.length % 4) str += '=';
+        var binary = atob(str);
+        var out = '';
+        for (var i = 0; i < binary.length; i++) out += String.fromCharCode(binary.charCodeAt(i));
+        return out;
+    }
 
     // Minimal TCModel
     function TCModel() {
