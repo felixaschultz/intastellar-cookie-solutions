@@ -355,6 +355,8 @@ if (typeof window.denyAllCookies === 'function') {
     // TCF event listener registry
     var tcfListeners = {};
     var tcfListenerId = 1;
+    var lastUserActionAt = 0;  // timestamp when useractioncomplete was last dispatched
+    var USER_ACTION_WINDOW_MS = 2000;  // getTCData returns useractioncomplete for this long after dispatch
 
     function getCurrentConsentForTCF() {
         try {
@@ -392,6 +394,7 @@ if (typeof window.denyAllCookies === 'function') {
 
     function dispatchTCFEvent(eventStatus) {
         var status = (eventStatus === 'tcloaded' || eventStatus === 'cmpuishown') ? eventStatus : 'useractioncomplete';
+        if (status === 'useractioncomplete') lastUserActionAt = Date.now();
         Object.keys(tcfListeners).forEach(function (id) {
             var cb = tcfListeners[id];
             if (typeof cb === 'function') {
@@ -403,7 +406,9 @@ if (typeof window.denyAllCookies === 'function') {
 
     window.__tcfapi = function (command, version, callback, parameter) {
         if (command === 'getTCData') {
-            var tcData = buildTCData('tcloaded');
+            var getStatus = (lastUserActionAt && (Date.now() - lastUserActionAt) < USER_ACTION_WINDOW_MS)
+                ? 'useractioncomplete' : 'tcloaded';
+            var tcData = buildTCData(getStatus);
             callback(tcData, true);
         } else if (command === 'addEventListener') {
             var id = tcfListenerId++;
@@ -431,6 +436,15 @@ if (typeof window.denyAllCookies === 'function') {
     };
 })();
 
+// Recommended approach for monitoring: use addEventListener to detect user consent actions
+if (typeof window.__tcfapi === 'function') {
+    window.__tcfapi('addEventListener', 2, function (tcData, success) {
+        if (success && tcData.eventStatus === 'useractioncomplete') {
+            if (window.dataLayer) window.dataLayer.push({ event: 'intastellar_tcf_useractioncomplete', tcData: tcData });
+            window.dispatchEvent(new CustomEvent('intastellar_consent_user_action', { detail: tcData }));
+        }
+    });
+}
 
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
 if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
@@ -570,6 +584,7 @@ function openVendorList() {
                     console.log('Decoded:', decodeTcString(tcString));
                 }
                 console.log('User TCString:', tcString);
+                dispatchTCFConsentChangedIfAvailable(true);
             });
         }
     });

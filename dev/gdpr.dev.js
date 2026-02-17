@@ -4062,3 +4062,23 @@ clearLocalStorage(); */
 if (!isGtmMode) {
     checkCookieStatus();
 }
+
+// Recommended approach for monitoring: use addEventListener to detect user consent actions (TCF)
+function registerTCFEventListener(retries) {
+    retries = retries || 0;
+    if (typeof window.__tcfapi === 'function') {
+        window.__tcfapi('addEventListener', 2, function (tcData, success) {
+            if (success && tcData.eventStatus === 'useractioncomplete') {
+                if (window.dataLayer) window.dataLayer.push({ event: 'intastellar_tcf_useractioncomplete', tcData: tcData });
+                window.dispatchEvent(new CustomEvent('intastellar_consent_user_action', { detail: tcData }));
+            }
+        });
+    } else if (retries < 50) {
+        setTimeout(function () { registerTCFEventListener(retries + 1); }, 100);
+    }
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', registerTCFEventListener);
+} else {
+    registerTCFEventListener();
+}
