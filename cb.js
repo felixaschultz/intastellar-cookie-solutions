@@ -576,6 +576,8 @@ function getTcStringFromCookie() {
     return null;
 }
 
+console.log(JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])));
+
 getVendorsForUI().then(vendors => {
     vendors.forEach(vendor => {
         const vendorDiv = document.createElement('div');
@@ -602,6 +604,7 @@ getVendorsForUI().then(vendors => {
             `;
         vendorListContainer.appendChild(vendorDiv);
     });
+    applyTcStringToVendorCheckboxes(getTcStringFromCookie(), vendors);
 
     document.querySelectorAll('.intastellarCookie-settings__btn.--save').forEach(function (saveBtn) {
         if (saveBtn._vendorSaveListenerAttached) return;
@@ -636,6 +639,8 @@ getVendorsForUI().then(vendors => {
 function openVendorList() {
     vendorListContainer.classList.toggle('--open');
 }
+
+
 
 moreSettingsContent.appendChild(intastellarCookieConstents__Container);
 intastellarCookieConstents__Container.appendChild(testSection);
@@ -2666,7 +2671,6 @@ if (intastellarCookieLanguage != null) {
 
 moreContentText.innerHTML = settingsMessage;
 moreFooter.appendChild(vendorListContainer);
-applyTcStringToVendorCheckboxes(getTcStringFromCookie(), vendors);
 
 let ccpa = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.on;
 let ccpaUrl = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.url;
