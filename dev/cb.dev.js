@@ -204,9 +204,11 @@ const tcString = generateTcString(exampleConsent);
 // Find the save/deny consent logic and call __tcfapiDispatchConsentChanged after consent changes
 
 // Utility: Call this after any consent change (save/deny)
-function dispatchTCFConsentChangedIfAvailable() {
+// Pass true/ 'useractioncomplete' when user clicked; false/'tcloaded' when consent loaded/restored without user interaction
+function dispatchTCFConsentChangedIfAvailable(wasUserInteraction) {
     if (typeof window.__tcfapiDispatchConsentChanged === 'function') {
-        window.__tcfapiDispatchConsentChanged();
+        var eventStatus = (wasUserInteraction === false || wasUserInteraction === 'tcloaded') ? 'tcloaded' : 'useractioncomplete';
+        window.__tcfapiDispatchConsentChanged(eventStatus);
     }
 }
 
@@ -388,12 +390,12 @@ if (typeof window.denyAllCookies === 'function') {
         };
     }
 
-    // Always use 'useractioncomplete' for user-triggered dispatches
-    function dispatchTCFEvent() {
+    function dispatchTCFEvent(eventStatus) {
+        var status = (eventStatus === 'tcloaded' || eventStatus === 'cmpuishown') ? eventStatus : 'useractioncomplete';
         Object.keys(tcfListeners).forEach(function (id) {
             var cb = tcfListeners[id];
             if (typeof cb === 'function') {
-                var tcData = buildTCData('useractioncomplete', parseInt(id));
+                var tcData = buildTCData(status, parseInt(id));
                 cb(tcData, true);
             }
         });
@@ -423,8 +425,9 @@ if (typeof window.denyAllCookies === 'function') {
     };
 
     // Expose a function to dispatch TCF events after consent changes
-    window.__tcfapiDispatchConsentChanged = function () {
-        dispatchTCFEvent('useractioncomplete');
+    // eventStatus: 'useractioncomplete' (user clicked) | 'tcloaded' (no user action) | 'cmpuishown' (UI shown)
+    window.__tcfapiDispatchConsentChanged = function (eventStatus) {
+        dispatchTCFEvent(eventStatus);
     };
 })();
 
