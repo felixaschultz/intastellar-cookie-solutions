@@ -3008,7 +3008,12 @@ function IntaSaveSettings() {
             },
             () => console.log("Consent captured")
         );
-
+        // Pintrk
+        if (typeof pintrk === 'function') {
+            try {
+                pintrk('setconsent', true);
+            } catch (e) { /* ignore */ }
+        }
         updateVwoConsent(intaConsentsObjectVariable.consents);
 
     } else if (!MarketingCheckBox?.checked || intastellar) {
@@ -3024,7 +3029,12 @@ function IntaSaveSettings() {
         });
 
         updateVwoConsent(intaConsentsObjectVariable.consents);
-
+        // Pintrk
+        if (typeof pintrk === 'function') {
+            try {
+                pintrk('setconsent', false);
+            } catch (e) { /* ignore */ }
+        }
         window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
             {
                 'analytics': false,
@@ -3109,6 +3119,12 @@ function IntaAcceptAll() {
     );
     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
     updateConsents("all");
+    // Pintrk
+    if (typeof pintrk === 'function') {
+        try {
+            pintrk('setconsent', true);
+        } catch (e) { /* ignore */ }
+    }
 
     window._hsp.push(['doNotTrack', false]);
     window._hsp.push(['setHubSpotCookieConsent', {
@@ -3165,6 +3181,12 @@ function IntaSaveNeccessary() {
     window.uetq.push('consent', 'update', {
         'ad_storage': 'denied'
     });
+    // Pintrk
+    if (typeof pintrk === 'function') {
+        try {
+            pintrk('setconsent', false);
+        } catch (e) { /* ignore */ }
+    }
     dataLayer.push({ 'event': 'cookie_consent_update', 'cookie_consent': intaConsentsObjectVariable.consents });
     updateConsents("denied");
 

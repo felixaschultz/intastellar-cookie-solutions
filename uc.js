@@ -180,6 +180,13 @@ window["optimizely"].push({
     "isOptOut": true
 });
 
+window.pintrk = window.pintrk || function () {
+    window.pintrk.queue.push(Array.prototype.slice.call(arguments));
+};
+window.pintrk.queue = window.pintrk.queue || [];
+
+pintrk('setconsent', false);
+
 window.VWO = window.VWO || [];
 window.VWO.init = window.VWO.init || function(s) { window.VWO.consentState = s; };
 window.VWO.init(2); // default to pending
@@ -1054,6 +1061,13 @@ function optOutCCPA() {
         try {
             window._paq.push(['requireConsent']);
             window._paq.push(['forgetUserOptOut']);
+        } catch (e) { /* ignore */ }
+    }
+
+    // Pintrk
+    if (typeof pintrk === 'function') {
+        try {
+            pintrk('setconsent', false);
         } catch (e) { /* ignore */ }
     }
 
@@ -1955,6 +1969,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
             'ad_user_data': 'denied',
             'ad_personalization': 'denied'
         });
+        // Pintrk
+        if (typeof pintrk === 'function') {
+            try {
+                pintrk('setconsent', false);
+            } catch (e) { /* ignore */ }
+        }
     }
 
     if (document.getElementById("intastellar-gdpr-settings-js-after") !== null) {
@@ -3368,6 +3388,14 @@ if (intaCookieConsents?.advertisementCookies) {
         'ad_personalization': 'granted',
         'url_passthrough': true,
     });
+
+
+    // Pintrk
+    if (typeof pintrk === 'function') {
+        try {
+            pintrk('setconsent', true);
+        } catch (e) { /* ignore */ }
+    }
 
     window.uetq.push('consent', 'update', {
         'ad_storage': 'granted'
