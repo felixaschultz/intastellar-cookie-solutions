@@ -543,9 +543,7 @@ testSection.appendChild(moreContentText);
 
 let vendorListContainer = document.createElement('div');
 vendorListContainer.id = 'vendor-list';
-vendorListContainer.style.overflowY = 'auto';
 vendorListContainer.classList.add("vendor-container");
-vendorListContainer.style.background = '#5b5b5bff';
 vendorListContainer.innerHTML = '<h3>Vendors</h3>';
 getVendorsForUI().then(vendors => {
     console.log(vendors);
