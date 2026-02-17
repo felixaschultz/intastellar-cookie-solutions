@@ -3308,15 +3308,11 @@ function updateSaveButtonText() {
     const vendorLegitChecksChecked = Array.from(vendorLegitChecks).every(check => check.checked);
 
     if (!saveBtn) return;
-    if (vendorChecksChecked && vendorLegitChecksChecked) {
-        saveBtn.innerText = settingsSaveLang.saveSettingsText;
-    } else {
-        saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
-    }
     if (
         (FunctionalCheckbox && FunctionalCheckbox.checked) ||
         (StaticsCheckBox && StaticsCheckBox.checked) ||
-        (MarketingCheckBox && MarketingCheckBox.checked)
+        (MarketingCheckBox && MarketingCheckBox.checked) ||
+        vendorChecksChecked || vendorLegitChecksChecked
     ) {
         saveBtn.innerText = settingsSaveLang.saveSettingsText;
     } else {
