@@ -3306,13 +3306,13 @@ function updateSaveButtonText() {
     const vendorLegitChecks = document.querySelectorAll('.intCookieSetting__checkbox-legit');
     const vendorChecksChecked = Array.from(vendorChecks).every(check => check.checked);
     const vendorLegitChecksChecked = Array.from(vendorLegitChecks).every(check => check.checked);
+
+    if (!saveBtn) return;
     if (vendorChecksChecked && vendorLegitChecksChecked) {
         saveBtn.innerText = settingsSaveLang.saveSettingsText;
     } else {
         saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
     }
-
-    if (!saveBtn) return;
     if (
         (FunctionalCheckbox && FunctionalCheckbox.checked) ||
         (StaticsCheckBox && StaticsCheckBox.checked) ||
