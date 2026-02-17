@@ -541,32 +541,19 @@ testSection.setAttribute("class", "intastellarCookieConstents__contentC");
 testSection.appendChild(moreintHeader);
 testSection.appendChild(moreContentText);
 
-function openVendorList() {
-
-    /* if (!window.INTA.settings.tcf) {
-        return;
-    } */
-
-    if(document.getElementById('vendor-list').classList.contains('--open')){
-        document.getElementById('vendor-list').classList.remove('--open');
-        document.getElementById('vendor-list').classList.add('--closed');
-        return;
-    }
-
-    let vendorListContainer = document.createElement('div');
-    vendorListContainer.id = 'vendor-list';
-    vendorListContainer.style.overflowY = 'auto';
-    vendorListContainer.classList.add("vendor-container");
-    vendorListContainer.classList.add("--open");
-    vendorListContainer.style.background = '#5b5b5bff';
-    vendorListContainer.innerHTML = '<h3>Vendors</h3>';
-    getVendorsForUI().then(vendors => {
-        console.log(vendors);
-        vendors.forEach(vendor => {
-            const vendorDiv = document.createElement('div');
-            vendorDiv.classList.add('vendor-item');
-            const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
-            vendorDiv.innerHTML = `
+let vendorListContainer = document.createElement('div');
+vendorListContainer.id = 'vendor-list';
+vendorListContainer.style.overflowY = 'auto';
+vendorListContainer.classList.add("vendor-container");
+vendorListContainer.style.background = '#5b5b5bff';
+vendorListContainer.innerHTML = '<h3>Vendors</h3>';
+getVendorsForUI().then(vendors => {
+    console.log(vendors);
+    vendors.forEach(vendor => {
+        const vendorDiv = document.createElement('div');
+        vendorDiv.classList.add('vendor-item');
+        const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
+        vendorDiv.innerHTML = `
                 <label class="checkMarkContainer">
                     <span class="intSettingsTitle">${vendor.name}</span>
                     <span class="intCheckmarkSliderContainer">
@@ -583,14 +570,16 @@ function openVendorList() {
                             </span>
                         </label>
                     ` : ``
-                }
+            }
             `;
-            vendorListContainer.appendChild(vendorDiv);
-        });
+        vendorListContainer.appendChild(vendorDiv);
     });
+});
 
-    moreFooter.appendChild(vendorListContainer);
+moreFooter.appendChild(vendorListContainer);
 
+function openVendorList() {
+    vendorListContainer.classList.toggle('--open');
 }
 
 document.querySelectorAll('.intastellarCookie-settings__btn.--save').forEach(function (saveBtn) {
