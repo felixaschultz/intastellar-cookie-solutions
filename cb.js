@@ -552,6 +552,9 @@ function applyTcStringToVendorCheckboxes(tcString, vendors) {
         var decoded = window.IABTCF && window.IABTCF.TCString && typeof window.IABTCF.TCString.decode === 'function'
             ? window.IABTCF.TCString.decode(tcString) : null;
         if (!decoded || !decoded.vendors) return;
+
+
+        console.log(decoded);
         vendors.forEach(function (vendor, i) {
             if (i >= decoded.vendors.length) return;
             var cb = document.getElementById('vendor' + vendor.id);
@@ -575,8 +578,6 @@ function getTcStringFromCookie() {
     } catch (e) {}
     return null;
 }
-
-console.log(JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2])));
 
 getVendorsForUI().then(vendors => {
     vendors.forEach(vendor => {
