@@ -380,7 +380,7 @@ if (typeof window.denyAllCookies === 'function') {
     var tcfListeners = {};
     var tcfListenerId = 1;
     var lastUserActionAt = 0;  // timestamp when useractioncomplete was last dispatched
-    var USER_ACTION_WINDOW_MS = 2000;  // getTCData returns useractioncomplete for this long after dispatch
+    var USER_ACTION_WINDOW_MS = 30000;  // getTCData returns useractioncomplete for this long after dispatch
 
     function getCurrentConsentForTCF() {
         try {
@@ -580,42 +580,41 @@ function openVendorList() {
             `;
             vendorListContainer.appendChild(vendorDiv);
         });
-
-        // Patch: Attach vendor consent/legit state to main Save button
-        const mainSaveBtn = document.querySelector('.intastellarCookie-settings__btn.--save');
-        if (mainSaveBtn) {
-            mainSaveBtn.addEventListener('click', function handleVendorSave() {
-                // Only run once per click
-                if (mainSaveBtn._vendorSaveHandled) return;
-                mainSaveBtn._vendorSaveHandled = true;
-                setTimeout(() => { mainSaveBtn._vendorSaveHandled = false; }, 500);
-
-                const vendorConsents = vendors.map(vendor => {
-                    const cb = document.getElementById('vendor' + vendor.id);
-                    return !!(cb && cb.checked);
-                });
-                const vendorLegitInterests = vendors.map(vendor => {
-                    const legitCb = document.getElementById('vendor' + vendor.id + '-legit');
-                    return !!(legitCb && legitCb.checked);
-                });
-                // For demo: all purposes true (replace with real UI logic)
-                const purposes = Array(24).fill(true);
-                const userConsent = { purposes, vendors: vendorConsents, vendorLegitimateInterests: vendorLegitInterests };
-                const tcString = generateTcString(userConsent);
-                window._latestTcString = tcString;
-                // Save tcString, update __tcfapi, etc.
-                if (typeof decodeTcString === 'function') {
-                    console.log('Decoded:', decodeTcString(tcString));
-                }
-                console.log('User TCString:', tcString);
-                dispatchTCFConsentChangedIfAvailable(true);
-            });
-        }
     });
 
-    moreFooter.appendChild(vendorListContainer);
+
+    
+    if (moreFooter.contains(vendorListContainer)){
+        moreFooter.removeChild(vendorListContainer);
+    } else {
+        moreFooter.appendChild(vendorListContainer);
+    }
 
 }
+
+document.querySelectorAll('.intastellarCookie-settings__btn.--save').forEach(function (saveBtn) {
+    if (saveBtn._vendorSaveListenerAttached) return;
+    saveBtn._vendorSaveListenerAttached = true;
+    saveBtn.addEventListener('click', function handleVendorSave() {
+        const vendorConsents = vendors.map(vendor => {
+            const cb = document.getElementById('vendor' + vendor.id);
+            return !!(cb && cb.checked);
+        });
+        const vendorLegitInterests = vendors.map(vendor => {
+            const legitCb = document.getElementById('vendor' + vendor.id + '-legit');
+            return !!(legitCb && legitCb.checked);
+        });
+        const purposes = Array(24).fill(true);
+        const userConsent = { purposes, vendors: vendorConsents, vendorLegitimateInterests: vendorLegitInterests };
+        const tcString = generateTcString(userConsent);
+        window._latestTcString = tcString;
+        if (typeof decodeTcString === 'function') {
+            console.log('Decoded:', decodeTcString(tcString));
+        }
+        console.log('User TCString:', tcString);
+        dispatchTCFConsentChangedIfAvailable(true);
+    });
+});
 
 moreSettingsContent.appendChild(intastellarCookieConstents__Container);
 intastellarCookieConstents__Container.appendChild(testSection);
@@ -5397,4 +5396,5 @@ function saveINTCookieSettings(consent, type = null) {
     }, 1000);
     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
         .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    dispatchTCFConsentChangedIfAvailable(true);
 }
