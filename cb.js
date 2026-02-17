@@ -577,7 +577,6 @@ function getTcStringFromCookie() {
 }
 
 getVendorsForUI().then(vendors => {
-    console.log(vendors);
     vendors.forEach(vendor => {
         const vendorDiv = document.createElement('div');
         vendorDiv.classList.add('vendor-item');
@@ -603,7 +602,6 @@ getVendorsForUI().then(vendors => {
             `;
         vendorListContainer.appendChild(vendorDiv);
     });
-    applyTcStringToVendorCheckboxes(getTcStringFromCookie(), vendors);
 
     document.querySelectorAll('.intastellarCookie-settings__btn.--save').forEach(function (saveBtn) {
         if (saveBtn._vendorSaveListenerAttached) return;
@@ -2668,6 +2666,7 @@ if (intastellarCookieLanguage != null) {
 
 moreContentText.innerHTML = settingsMessage;
 moreFooter.appendChild(vendorListContainer);
+applyTcStringToVendorCheckboxes(getTcStringFromCookie(), vendors);
 
 let ccpa = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.on;
 let ccpaUrl = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.url;
