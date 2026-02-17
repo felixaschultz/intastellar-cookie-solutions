@@ -885,6 +885,7 @@ let intaConsentsObjectVariable = {
     uid: Math.random().toString(16).slice(2),
     domain: window?.INTA?.settings?.rootDomain || window.location.host,
     sharingDomains: [],
+    tcString: null,
 }
 
 function gtag() {
