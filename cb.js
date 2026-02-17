@@ -576,8 +576,6 @@ getVendorsForUI().then(vendors => {
     });
 });
 
-moreFooter.appendChild(vendorListContainer);
-
 function openVendorList() {
     vendorListContainer.classList.toggle('--open');
 }
@@ -2634,6 +2632,7 @@ if (intastellarCookieLanguage != null) {
 }
 
 moreContentText.innerHTML = settingsMessage;
+moreFooter.appendChild(vendorListContainer);
 
 let ccpa = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.on;
 let ccpaUrl = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.url;
