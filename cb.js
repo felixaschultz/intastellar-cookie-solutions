@@ -587,9 +587,6 @@ function getTcStringFromCookie() {
 }
 
 getVendorsForUI().then(vendors => {
-    console.log('[VendorList] getVendorsForUI resolved, vendors count:', (vendors && vendors.length) || 0);
-    var tcFromCookie = getTcStringFromCookie();
-    console.log('[VendorList] tcString from cookie:', tcFromCookie ? tcFromCookie.substring(0, 30) + '...' : null);
     vendors.forEach(vendor => {
         const vendorDiv = document.createElement('div');
         vendorDiv.classList.add('vendor-item');
