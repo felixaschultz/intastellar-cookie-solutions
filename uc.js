@@ -2163,7 +2163,7 @@ const inta_requiredCookieList = [{
         }
     ],
     domains: [
-        window.INTA.settings.rootDomain,
+        window.INTA?.settings?.rootDomain,
         window.location.host
     ]
 },
@@ -2201,7 +2201,7 @@ const inta_requiredCookieList = [{
         "consents.cdn.intastellarsolutions.com",
         "intastellarconsents.com",
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ]
 },
 {
@@ -2231,7 +2231,7 @@ const inta_requiredCookieList = [{
     vendor_privacy: "https://automattic.com/privacy/",
     domains: [
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ]
 },
 {
@@ -2249,7 +2249,7 @@ const inta_requiredCookieList = [{
     vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement",
     domains: [
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ]
 },
 {
@@ -2267,7 +2267,7 @@ const inta_requiredCookieList = [{
     vendor_privacy: "https://aws.amazon.com/privacy/",
     domains: [
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ]
 },
 {
@@ -2579,7 +2579,7 @@ inta_statisticCookieList.push({
         "x.clearbitjs.com",
         "clearbit.com",
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ],
     vendor_privacy: "https://clearbit.com/privacy"
 });
