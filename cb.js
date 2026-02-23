@@ -115,7 +115,7 @@ const pSBC = (p, c0, c1, l) => {
 }
 
 function darkLightCheck(color) {
-    if(!color) return 'light';
+    if(!color) return 'dark';
     let r, g, b, hsp;
 
     // Check the format of the color, HEX or RGB?
@@ -201,8 +201,9 @@ function generateTcString(consentObj) {
 // --- Example usage ---
 // Suppose you have a consent object from your UI:
 const exampleConsent = {
-    purposes: [true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-    vendors: [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+    /* Default declined purposes and vendors */
+    purposes: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+    vendors: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 };
 const tcString = generateTcString(exampleConsent);
 
