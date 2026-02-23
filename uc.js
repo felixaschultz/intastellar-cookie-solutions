@@ -1477,7 +1477,7 @@ if (window.INTA === undefined) {
         settings: {
             company: undefined,
             lang: "auto",
-            color: "rgba(0, 51, 153, 1)",
+            color: "#c09f53",
             keepInLocalStorage: ["firstLoad", int_FunctionalCookies, int_hideCookieBannerName, int_marketingCookies, int_staticsticCookies],
             arrange: "ltr",
             logo: intCookieIcon,
