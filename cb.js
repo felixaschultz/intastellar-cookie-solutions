@@ -171,7 +171,6 @@ const moreFooter = document.createElement("div");
 const intaconsents = window.intaconsents = document.createElement("intastellarconsents");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 
-
 // --- IAB TCF encoder bundle must be loaded above this script ---
 // Paste the browser-ready bundle here or load it before this script.
 // window.IABTCF.TCModel and window.IABTCF.TCString must be available.

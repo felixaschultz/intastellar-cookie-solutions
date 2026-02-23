@@ -3655,6 +3655,58 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 
 intHead.appendChild(analyticsScript);
 
+// --- A/B experiment: resolve variant and apply overrides from window.INTA.experiment ---
+(function applyIntaExperiment() {
+    var exp = window.INTA && window.INTA.experiment;
+    if (!exp || !exp.id || !exp.variants || !Object.keys(exp.variants).length) return;
+    var expKey = 'inta_exp_' + exp.id;
+    var stored = null;
+    try { stored = sessionStorage.getItem(expKey); } catch (e) {}
+    var variantId = stored;
+    if (!variantId) {
+        var variants = exp.variants;
+        var total = 0;
+        var ids = [];
+        for (var k in variants) {
+            if (variants.hasOwnProperty(k)) {
+                var w = Math.max(0, parseInt(variants[k].weight, 10) || 50);
+                total += w;
+                ids.push({ id: k, weight: w });
+            }
+        }
+        if (total <= 0) return;
+        var r = (function simpleHash() {
+            var s = exp.id + (navigator.userAgent || '') + (document.referrer || '') + (new Date().getDate());
+            var h = 0;
+            for (var i = 0; i < s.length; i++) h = ((h << 5) - h) + s.charCodeAt(i) | 0;
+            return Math.abs(h) % 10000 / 10000;
+        })();
+        var bucket = r * total;
+        for (var j = 0; j < ids.length; j++) {
+            bucket -= ids[j].weight;
+            if (bucket <= 0) {
+                variantId = ids[j].id;
+                break;
+            }
+        }
+        variantId = variantId || (ids[0] && ids[0].id);
+        try { sessionStorage.setItem(expKey, variantId); } catch (e) {}
+    }
+    var v = exp.variants[variantId];
+    var overrides = (v && v.settings) || (exp.overrides && exp.overrides[variantId]) || {};
+    if (overrides && typeof overrides === 'object' && window.INTA.settings) {
+        for (var key in overrides) {
+            if (overrides.hasOwnProperty(key)) {
+                window.INTA.settings[key] = overrides[key];
+            }
+        }
+    }
+    window.INTA.experimentVariant = variantId;
+    if (window.dataLayer) {
+        window.dataLayer.push({ event: 'intastellar_experiment_view', experiment_id: exp.id, variant: variantId });
+    }
+})();
+
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.js";
 if (window.INTA.settings.design === "floating") {
