@@ -115,6 +115,7 @@ const pSBC = (p, c0, c1, l) => {
 }
 
 function darkLightCheck(color) {
+    if(!color) return 'light';
     let r, g, b, hsp;
 
     // Check the format of the color, HEX or RGB?
