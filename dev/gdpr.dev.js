@@ -367,45 +367,56 @@ async function sendToBackend(data) {
     function TCModel() {
         this.purposeConsents = [];
         this.vendorConsents = [];
+        this.disclosedVendors = [];
+    }
+
+    function encodeDisclosedVendorsSegment(maxVendorId, disclosed) {
+        if (maxVendorId <= 0) return '';
+        let bits = '';
+        bits += padBits(1, 3);
+        bits += padBits(maxVendorId, 16);
+        for (let i = 0; i < maxVendorId; i++) bits += (disclosed && disclosed[i]) ? '1' : '0';
+        let bytes = [];
+        for (let i = 0; i < bits.length; i += 8) bytes.push(parseInt(bits.substr(i, 8).padEnd(8, '0'), 2));
+        return base64UrlEncode(bytes);
     }
 
     // Minimal TCString encoder
     var TCString = {
         encode: function (tcModel) {
-            // Support all vendors (not just first 24)
             let bits = "";
-            bits += padBits(2, 6); // Version
-            let now = Math.floor(Date.now() / 100); // 0.1s increments
-            bits += padBits(now, 36); // Created
-            bits += padBits(now, 36); // LastUpdated
-            bits += padBits(1, 12); // CmpId
-            bits += padBits(1, 12); // CmpVersion
-            bits += padBits(0, 6); // ConsentScreen
-            bits += strToBits("EN"); // ConsentLanguage
-            bits += padBits(1, 12); // VendorListVersion
-            bits += padBits(2, 6); // TCFPolicyVersion
-            bits += padBits(0, 1); // IsServiceSpecific
-            bits += padBits(0, 1); // UseNonStandardStacks
-            bits += padBits(0, 12); // SpecialFeatureOptIns
-            // PurposeConsents (24 bits)
+            bits += padBits(2, 6);
+            let now = Math.floor(Date.now() / 100);
+            bits += padBits(now, 36);
+            bits += padBits(now, 36);
+            bits += padBits(1, 12);
+            bits += padBits(1, 12);
+            bits += padBits(0, 6);
+            bits += strToBits("EN");
+            bits += padBits(1, 12);
+            bits += padBits(3, 6); // TCF 2.3
+            bits += padBits(0, 1);
+            bits += padBits(0, 1);
+            bits += padBits(0, 12);
             for (let i = 0; i < 24; i++) bits += tcModel.purposeConsents && tcModel.purposeConsents[i] ? "1" : "0";
-            // PurposeLegitInterests (24 bits, all 0)
             bits += "0".repeat(24);
-            bits += padBits(0, 1); // PurposeOneTreatment
-            bits += strToBits("EN"); // PublisherCC
-            // VendorConsents (maxVendorId, 16 bits for maxVendorId, then maxVendorId bits for consents)
+            bits += padBits(0, 1);
+            bits += strToBits("EN");
             let maxVendorId = (tcModel.vendorConsents && tcModel.vendorConsents.length) || 0;
             bits += padBits(maxVendorId, 16);
             for (let i = 0; i < maxVendorId; i++) bits += tcModel.vendorConsents && tcModel.vendorConsents[i] ? "1" : "0";
-            // Convert bits to bytes
             let bytes = [];
-            for (let i = 0; i < bits.length; i += 8) {
-                bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
-            }
-            return base64UrlEncode(bytes);
+            for (let i = 0; i < bits.length; i += 8) bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
+            let coreString = base64UrlEncode(bytes);
+            let disclosed = (tcModel.disclosedVendors && tcModel.disclosedVendors.length >= maxVendorId)
+                ? tcModel.disclosedVendors.slice(0, maxVendorId)
+                : (tcModel.vendorConsents || []).slice(0, maxVendorId).map(function () { return true; });
+            let disclosedSegment = encodeDisclosedVendorsSegment(maxVendorId, disclosed);
+            return disclosedSegment ? coreString + "." + disclosedSegment : coreString;
         },
         decode: function (tcString) {
-            const binary = base64UrlDecode(tcString);
+            const coreOnly = (tcString || '').split('.')[0];
+            const binary = base64UrlDecode(coreOnly);
             let bits = '';
             for (let i = 0; i < binary.length; i++) {
                 bits += ('00000000' + binary[i].toString(2)).slice(-8);

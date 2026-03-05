@@ -1212,6 +1212,20 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
     function TCModel() {
         this.purposeConsents = [];
         this.vendorConsents = [];
+        this.vendorLegitimateInterests = [];
+        this.disclosedVendors = []; // TCF 2.3: vendors disclosed to user in CMP
+    }
+
+    /** TCF 2.3: Encode Disclosed Vendors segment (segment type 1). */
+    function encodeDisclosedVendorsSegment(maxVendorId, disclosed) {
+        if (maxVendorId <= 0) return '';
+        let bits = '';
+        bits += padBits(1, 3);   // segment type 1 = vendorsDisclosed
+        bits += padBits(maxVendorId, 16);
+        for (let i = 0; i < maxVendorId; i++) bits += (disclosed && disclosed[i]) ? '1' : '0';
+        let bytes = [];
+        for (let i = 0; i < bits.length; i += 8) bytes.push(parseInt(bits.substr(i, 8).padEnd(8, '0'), 2));
+        return base64UrlEncode(bytes);
     }
 
     // Minimal TCString encoder
@@ -1228,7 +1242,7 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
             bits += padBits(0, 6); // ConsentScreen
             bits += strToBits("EN"); // ConsentLanguage
             bits += padBits(1, 12); // VendorListVersion
-            bits += padBits(2, 6); // TCFPolicyVersion
+            bits += padBits(3, 6); // TCFPolicyVersion 3 = TCF 2.3
             bits += padBits(0, 1); // IsServiceSpecific
             bits += padBits(0, 1); // UseNonStandardStacks
             bits += padBits(0, 12); // SpecialFeatureOptIns
@@ -1247,10 +1261,17 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
             for (let i = 0; i < bits.length; i += 8) {
                 bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
             }
-            return base64UrlEncode(bytes);
+            let coreString = base64UrlEncode(bytes);
+            // TCF 2.3: mandatory Disclosed Vendors segment (required for new/updated signals from Feb 28, 2026)
+            let disclosed = (tcModel.disclosedVendors && tcModel.disclosedVendors.length >= maxVendorId)
+                ? tcModel.disclosedVendors.slice(0, maxVendorId)
+                : (tcModel.vendorConsents || []).slice(0, maxVendorId).map(function () { return true; });
+            let disclosedSegment = encodeDisclosedVendorsSegment(maxVendorId, disclosed);
+            return disclosedSegment ? coreString + "." + disclosedSegment : coreString;
         },
         decode: function (tcString) {
-            const binary = base64UrlDecode(tcString);
+            const coreOnly = (tcString || '').split('.')[0];
+            const binary = base64UrlDecode(coreOnly);
             let bits = '';
             for (let i = 0; i < binary.length; i++) {
                 bits += ('00000000' + binary.charCodeAt(i).toString(2)).slice(-8);

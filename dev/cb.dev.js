@@ -173,8 +173,9 @@ window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : f
 
 /**
  * Generates a valid TCF 2.x TC string using the minimal IAB encoder bundle.
- * @param {Object} consentObj - {purposes: [bool,...], vendors: [bool,...]}
- * @returns {string} Encoded TC string
+ * TCF 2.3: includes the mandatory Disclosed Vendors segment (required for new/updated signals from Feb 28, 2026).
+ * @param {Object} consentObj - {purposes: [bool,...], vendors: [bool,...], disclosedVendors?: [bool,...]}
+ * @returns {string} Encoded TC string (core.disclosedVendors)
  */
 function generateTcString(consentObj) {
     if (!window.IABTCF || !window.IABTCF.TCModel || !window.IABTCF.TCString) {
@@ -182,10 +183,11 @@ function generateTcString(consentObj) {
     }
     var model = new window.IABTCF.TCModel();
     model.cmpId = 1;
-    // Set purposes and vendors as boolean arrays (first 24)
     model.purposeConsents = (consentObj.purposes || []).slice(0, 24);
     model.vendorConsents = (consentObj.vendors || []).slice(0, 24);
-    // Add vendorLegitimateInterests if present
+    model.disclosedVendors = Array.isArray(consentObj.disclosedVendors)
+        ? consentObj.disclosedVendors.slice(0, 24)
+        : (consentObj.vendors || []).slice(0, 24).map(function() { return true; });
     if (Array.isArray(consentObj.vendorLegitimateInterests)) {
         model.vendorLegitimateInterests = consentObj.vendorLegitimateInterests.slice(0, 24);
     }

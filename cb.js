@@ -178,8 +178,9 @@ window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : f
 
 /**
  * Generates a valid TCF 2.x TC string using the minimal IAB encoder bundle.
- * @param {Object} consentObj - {purposes: [bool,...], vendors: [bool,...]}
- * @returns {string} Encoded TC string
+ * TCF 2.3: includes the mandatory Disclosed Vendors segment (required for new/updated signals from Feb 28, 2026).
+ * @param {Object} consentObj - {purposes: [bool,...], vendors: [bool,...], disclosedVendors?: [bool,...]}
+ * @returns {string} Encoded TC string (core.disclosedVendors)
  */
 function generateTcString(consentObj) {
     if (!window.IABTCF || !window.IABTCF.TCModel || !window.IABTCF.TCString) {
@@ -189,10 +190,14 @@ function generateTcString(consentObj) {
     model.cmpId = 1;
     // Set purposes and vendors as boolean arrays (first 24)
     model.purposeConsents = (consentObj.purposes || []).slice(0, 24);
-    model.vendorConsents = (consentObj.vendors || []).slice(0, 24);
+    model.vendorConsents = (consentObj.vendors || []).slice(0);
+    // TCF 2.3: vendors disclosed to the user in the CMP (default: same as vendors we collect consent for)
+    model.disclosedVendors = Array.isArray(consentObj.disclosedVendors)
+        ? consentObj.disclosedVendors.slice(0)
+        : (consentObj.vendors || []).slice(0).map(function() { return true; });
     // Add vendorLegitimateInterests if present
     if (Array.isArray(consentObj.vendorLegitimateInterests)) {
-        model.vendorLegitimateInterests = consentObj.vendorLegitimateInterests.slice(0, 24);
+        model.vendorLegitimateInterests = consentObj.vendorLegitimateInterests.slice(0);
     }
     return window.IABTCF.TCString.encode(model);
 }
@@ -583,12 +588,13 @@ function applyTcStringToVendorCheckboxes(tcString, vendors) {
             return;
         }
         vendors.forEach(function (vendor, i) {
-            if (i >= decoded.vendors.length) return;
+            var idx = parseInt(vendor.id, 10) - 1;
+            if (idx < 0 || idx >= decoded.vendors.length) return;
             var cb = document.getElementById('vendor' + vendor.id);
             var legitCb = document.getElementById('vendor' + vendor.id + '-legit');
-            if (cb) cb.checked = !!decoded.vendors[i];
-            if (legitCb && decoded.vendorLegitimateInterests && decoded.vendorLegitimateInterests[i] !== undefined) {
-                legitCb.checked = !!decoded.vendorLegitimateInterests[i];
+            if (cb) cb.checked = !!decoded.vendors[idx];
+            if (legitCb && decoded.vendorLegitimateInterests && decoded.vendorLegitimateInterests[idx] !== undefined) {
+                legitCb.checked = !!decoded.vendorLegitimateInterests[idx];
             }
         });
     } catch (e) {
@@ -608,12 +614,12 @@ function getTcStringFromCookie() {
     return null;
 }
 
-getVendorsForUI().then(vendors => {
-    vendors.forEach(vendor => {
-        const vendorDiv = document.createElement('div');
-        vendorDiv.classList.add('vendor-item');
-        const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
-        vendorDiv.innerHTML = `
+    getVendorsForUI().then(vendors => {
+        vendors.forEach(vendor => {
+            const vendorDiv = document.createElement('div');
+            vendorDiv.classList.add('vendor-item');
+            const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
+            vendorDiv.innerHTML = `
                 <label class="checkMarkContainer">
                     <span class="intSettingsTitle">${vendor.name}</span>
                     <span class="intCheckmarkSliderContainer">
@@ -640,16 +646,38 @@ getVendorsForUI().then(vendors => {
         if (saveBtn._vendorSaveListenerAttached) return;
         saveBtn._vendorSaveListenerAttached = true;
         saveBtn.addEventListener('click', function handleVendorSave() {
-            const vendorConsents = vendors.map(vendor => {
-                const cb = document.getElementById('vendor' + vendor.id);
-                return !!(cb && cb.checked);
+            // Build consent and disclosed arrays by GVL vendor ID (required for TCF 2.3)
+            var maxVendorId = vendors.length ? Math.max.apply(null, vendors.map(function (v) { return parseInt(v.id, 10) || 0; })) : 0;
+            var vendorConsentsById = [];
+            var disclosedVendorsById = [];
+            for (var i = 0; i < maxVendorId; i++) {
+                vendorConsentsById[i] = false;
+                disclosedVendorsById[i] = false;
+            }
+            vendors.forEach(function (vendor) {
+                var id = parseInt(vendor.id, 10);
+                if (id > 0) {
+                    disclosedVendorsById[id - 1] = true;
+                    var cb = document.getElementById('vendor' + vendor.id);
+                    vendorConsentsById[id - 1] = !!(cb && cb.checked);
+                }
             });
-            const vendorLegitInterests = vendors.map(vendor => {
-                const legitCb = document.getElementById('vendor' + vendor.id + '-legit');
-                return !!(legitCb && legitCb.checked);
+            var vendorLegitInterests = [];
+            vendors.forEach(function (vendor) {
+                var id = parseInt(vendor.id, 10);
+                if (id > 0) {
+                    var legitCb = document.getElementById('vendor' + vendor.id + '-legit');
+                    while (vendorLegitInterests.length < id) vendorLegitInterests.push(false);
+                    vendorLegitInterests[id - 1] = !!(legitCb && legitCb.checked);
+                }
             });
-            const purposes = Array(24).fill(true);
-            const userConsent = { purposes, vendors: vendorConsents, vendorLegitimateInterests: vendorLegitInterests };
+            var purposes = Array(24).fill(true);
+            var userConsent = {
+                purposes: purposes,
+                vendors: vendorConsentsById,
+                disclosedVendors: disclosedVendorsById,
+                vendorLegitimateInterests: vendorLegitInterests.length ? vendorLegitimateInterests : undefined
+            };
             const tcString = generateTcString(userConsent);
             intaConsentsObjectVariable.tcString = tcString;
             intaConsentsObjectVariable.consents = {
