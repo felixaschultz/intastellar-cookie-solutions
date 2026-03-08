@@ -1,3 +1,10 @@
+/*
+ *  Cookie Consents Banner by Intastellar Solutions, International
+ *  intastellarsolutions.com/gdpr-cookiebanner
+ *  consents.cdn.intastellarsolutions.com/uc.js
+ *  @copy 2022-2025 Intastellar Solutions, International
+ *
+*/
 // --- Cross-site Consent Tracking ---
 // Request consent state for a user
 // Request consent state for a user
@@ -8,7 +15,150 @@ function requestConsentState(userId, rootDomain, partnerDomains = []) {
 // Set consent state for a user
 function setConsentState(userId, consents, rootDomain, partnerDomains = []) {
     consentIframe.contentWindow.postMessage({ type: 'setConsent', userId, consents, rootDomain, partnerDomains }, 'https://consents.cdn.intastellarsolutions.com');
+    // VWO consent update
+    updateVwoConsent(consents);
 }
+
+const allScripts = window.allScripts = [
+    {
+        /* Analytics Scripts which are beeing blocked */
+        /* "([\-\.]clarity+)", */
+        type: "statics",
+        scripts: [
+            "(mixpanel)",
+            "([\-\.]googleoptimize+)",
+            "([\-\.]piwik+)",
+            "([\-\.]matomo+)",
+            "([\-\.]bing+)",
+            "([\-\.]slideshare+)",
+            "([\-\.]siteimproveanalytics+)",
+            "([\-\.]hotjar+)",
+            "([\-\.]snapchat)",
+            "([\-\.]contentsquare)",
+            "([\-\.]6sc)",
+            "([\-\.]nr-data)",
+            "([\-\.]2o7)",
+            "([\-\.]hackerone)",
+            "([\-\.]gstatic)",
+            "([\-\.]webtrends)",
+            "([\-\.]webtrendslive)",
+            "([\-\.]amplitude)",
+            "([\-\.]adobe)",
+            "([\-\.]mxpnl)",
+            "([\-\.]mixpanel)",
+            "([\-\.]gstatics+)",
+            "([\-\.]adobedtm)",
+            "([\-\.]adobedc)",
+            "([\-\.]qualtrics+)",
+            "([\-\.]pardot+)",
+            "([\-\.]poultons+)",
+            "([\-\.]chartbeat+)",
+            "([\-\.]consensu+)",
+            "([\-\.]clarity+)",
+            "([\-\.]clarity-cdn+)",
+            "([\-\.]vwo+)",
+            "([\-\.]ip-only+)",
+            "([\-\.]ggpht+)",
+            "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
+            "([\-\.]optimizely+)",
+            "([\-\.]segment+)",
+            "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ]
+    },
+    {
+        /* Marketing Scripts which are beeing blocked */
+        /* 
+            "([\-\.]googlesyndication+)",
+            "([\-\.]googletagservices+)",
+            "([\-\.]googleadservices+)",
+            "([\-\.]omnisnippet+)",
+        */
+        type: "marketing",
+        scripts: [
+            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
+            "([\-\.]twitter+)",
+            "([\-\.]ads-twitter+)",
+            "([\-\.]casalemedia+)",
+            "(chimpstatic+)",
+            "([\-\.]trustpilot+)",
+            "([\-\.]mailchimp+)",
+            "([\-\.]linkedin+)",
+            "([\-\.]bing+)",
+            "([\-\.]licdn+)",
+            "([\-\.]amazon-adsystem+)",
+            "([\-\.]adfrom+)",
+            "([\-\.]demdex+)",
+            "([\-\.]criteo+)",
+            "([\-\.]clearbitjs+)",
+            "([\-\.]clearbitscripts+)",
+            "([\-\.]instagram+)",
+            "([\-\.]stickyadstv+)",
+            "([\-\.]mookie1+)",
+            "([\-\.]doubleclick+)",
+            "([\-\.]bidswitch+)",
+            "([\-\.]jnqsge+)",
+            "([\-\.]syuh+)",
+            "([\-\.]youtube+)",
+            "([\-\.]vimeo+)",
+            "([\-\.]ninthdecimal+)",
+            "([\-\.]casalemedia+)",
+            "([\-\.]adsymptotic+)",
+            "([\-\.]tremorhub+)",
+            "([\-\.]agkn+)",
+            "([\-\.]myvisualiq+)",
+            "([\-\.]exelator+)",
+            "([\-\.]openx+)",
+            "([\-\.]adsrvr+)",
+            "([\-\.]justpremium+)",
+            "([\-\.]ants+)",
+            "([\-\.]bluekai+)",
+            "([\-\.]revcontent+)",
+            "([\-\.]outbrain+)",
+            "([\-\.]adscale+)",
+            "([\-\.]pdst+)",
+            "([\-\.]yahoo+)",
+            "([\-\.]advertising+)",
+            "([\-\.]adnxs+)",
+            "([\-\.]scdn+)",
+            "([\-\.]spotify+)",
+            "([\-\.]facebook+)",
+            "([\-\.]pinterest+)",
+            "([\-\.]adform+)",
+            "([\-\.]adnxs+)",
+            "([\-\.]advertising+)",
+            "([\-\.]adtech+)",
+            "([\-\.]soundestlink+)",
+            "([\-\.]soundest+)",
+            "([\-\.]soundestvid+)",
+            "([\-\.]soundestform+)",
+            "([\-\.]tiktok+)",
+            "([\-\.]taboola+)",
+            "([\-\.]hubspot+)",
+            /* "([\-\.]hs-sites+)", */
+            "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ]
+    },
+    {
+        /* Functional Scripts which are beeing blocked */
+        type: "functional",
+        scripts: [
+            "(maps.google.com+)",
+            "(www.google.com/maps/+)",
+            "([\-\.]googleapis+)",
+            "([\-\.]gstatics+)",
+            "([\-\.]cludo+)",
+            "([\-\.]qbrick+)",
+            "([\-\.]klarna+)",
+            "([\-\.]paypal+)",
+            "([\-\.]usersnap+)",
+            "([\-\.]zoom+)",
+            "([\-\.]cdnjs+)",
+            "([\-\.]jsdelivr+)",
+            "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
+        ]
+    }
+];
 
 // Listen for consent state response
 window.addEventListener('message', (event) => {
@@ -24,19 +174,678 @@ window.addEventListener('message', (event) => {
     }
 });
 
+window["optimizely"] = window["optimizely"] || [];
+window["optimizely"].push({
+    "type": "optOut",
+    "isOptOut": true
+});
+
+window.pintrk = window.pintrk || function () {
+    window.pintrk.queue.push(Array.prototype.slice.call(arguments));
+};
+window.pintrk.queue = window.pintrk.queue || [];
+
+pintrk('setconsent', false);
+
+window.VWO = window.VWO || [];
+window.VWO.init = window.VWO.init || function (s) { window.VWO.consentState = s; };
+window.VWO.init(2); // default to pending
+window.INTA = window.INTA || {};
+window.INTA.observedCookieSource = 'unknown';
+// --- VWO Cookie Consent Integration (latest, per docs) ---
+function updateVwoConsent(consents) {
+    // VWO expects: 1 = accepted, 2 = pending, 3 = rejected
+    let state = 2; // default to pending
+    if (consents) {
+        if (consents.advertisementCookies === true || consents.advertisementCookies === "checked" || consents.marketing === true) {
+            state = 1; // accepted
+        } else if (consents.advertisementCookies === false || consents.advertisementCookies === "unchecked" || consents.marketing === false) {
+            state = 3; // rejected
+        }
+    }
+    window.VWO = window.VWO || [];
+    window.VWO.init = window.VWO.init || function (s) { window.VWO.consentState = s; };
+    window.VWO.init(state);
+}
+// --- End VWO Cookie Consent Integration ---
+
+// --- Helper function to detect Vendors of Cookies ---
+function detectCookieVendor(cookie) {
+    const VENDOR_MAP = {
+        'Google': ['_ga', '_gid', '_gat', '1P_JAR', 'NID', 'CONSENT', '_gcl_au', 'ANID', 'DV', 'OTZ', 'SID', 'HSID', 'APISID', 'SAPISID', 'SSID', 'SIDCC', 'SEARCH_SAMESITE', '_grecaptcha'],
+        'Google Ads': ['IDE', 'DSID', 'FLC', 'AID', 'TAID', '__gads', '__gac'],
+        'Google Tag Manager': ['_dc_gtm_', '_gat_gtag_'],
+        'Google Optimize': ['_gaexp', '_opt_awcid', '_opt_awmid', '_opt_awgid', '_opt_awkid', '_opt_utmc'],
+        'Facebook': ['fr', 'datr', 'sb', 'c_user', 'xs', 'wd', 'spin', 'presence', 'act', 'fbm_', 'fbsr_', 'fblo_', 'fbp'],
+        'LinkedIn': ['bcookie', 'lidc', 'bscookie', 'lang', 'li_gc', 'li_mc', 'liap', 'lissc', 'UserMatchHistory'],
+        'Twitter': ['_twitter_sess', 'personalization_id', 'guest_id', 'ct0', 'external_referer', 'gt'],
+        'Hotjar': ['_hjIncludedInSample', '_hjSessionUser', '_hjFirstSeen', '_hjSession', '_hjTLDTest', '_hjAbsoluteSessionInProgress', '_hjIncludedInPageviewSample'],
+        'Microsoft': ['MUID', 'ANON', 'SRCHD', 'SRCHUID', '_clsk', 'MSCC', 'SRCHUSR', 'SRCHHPGUSR', 'NAP', 'MH', 'MR', 'MS0', 'MSFPC', 'MicrosoftApplicationsTelemetryFirstLaunchTime', "MicrosoftApplicationsTelemetryDeviceId"],
+        'HubSpot': ['hubspotutk', '__hssc', '__hstc', '__hs_opt_out', '__hssrc', '__hs_do_not_track', '__hs_initial_opt_in', '__hs_cookie_cat_pref'],
+        'Adobe': ['AMCV_', 's_cc', 's_sq', 'AMCVS_', 'demdex', 'mbox'],
+        'Pinterest': ['_pinterest_cm', 'csrftoken', 'sessionid', '_auth', '_pinterest_sess', '_routing_id'],
+        'TikTok': ['tt_webid', 'tt_webid_v2', 'tt_csrf_token', 'ttwid', 's_v_web_id'],
+        'Snapchat': ['sc_at', 'scid', 'sctr', 'xsrf_token'],
+        'Reddit': ['_reddit_session', 'session_tracker', 'loid', 'token_v2', 'clkt', 'edgebucket'],
+        'YouTube': ['YSC', 'VISITOR_INFO1_LIVE', 'PREF', 'LOGIN_INFO', 'SID', 'HSID', 'SSID', 'APISID', 'SAPISID'],
+        'Vimeo': ['vuid', 'vimeo_sessionid', '__cf_bm'],
+        'Spotify': ['sp_t', 'sp_landing', 'sp_ab', 'sp_usid'],
+        'Salesforce': ['BrowserId', 'CookieConsent', 'inst', 'oid', 'sid'],
+        'CrazyEgg': ['__ceg.s', '__ceg.u', '__utma', '__utmb', '__utmc', '__utmz'],
+        'Intastellar Solutions': ['IntastellarConsentSolution', 'intastellar_cookie_consent'],
+        'Cloudflare': ['__cfduid', '__cfruid', '__cf_bm'],
+        'Segment': ['ajs_anonymous_id', 'ajs_group_id', 'ajs_user_id', 'ajs_group_properties', 'ajs_user_traits'],
+        'Matomo': ['_pk_id', '_pk_ses', '_pk_ref', '_pk_cvar'],
+        'Mixpanel': ['mp_', 'mp_.*_mixpanel'],
+        'Amplitude': ['amplitude_id', 'amplitude_cookie_test'],
+        'Intercom': ['intercom-id-', 'intercom-session-', 'intercom-device-id-'],
+        'Zendesk': ['__zlcid', '__zlcstore', '__zlcmid', '__cfruid'],
+        'Optimizely': ['optimizelyBuckets', 'optimizelyEndUserId', 'optimizelySegments', 'optimizelyRumLB'],
+        'AppNexus': ['uuid2', 'anj', 'sess', 'icu', 'token'],
+        'DoubleClick': ['id', 'IDE', 'test_cookie'],
+        'Taboola': ['t_gid', 'taboola_session_id'],
+        'Outbrain': ['obuid', 'adrl'],
+        'Quantcast': ['__qca'],
+        'Criteo': ['uid', 'eid', 'cto_bundle', 'cto_lwid'],
+        'Adform': ['uid', 'cid', 'tid', 'CTAB', 'CTAT'],
+        'Teads': ['tt_viewer'],
+        'Bing': ['_uetsid', '_uetvid'],
+        'Mailchimp': ['mc_cid', 'mc_eid'],
+        'Shopify': ['_shopify_y', '_shopify_s', '_shopify_sa_t', '_shopify_sa_p', '_y', '_s'],
+        'Stripe': ['__stripe_mid', '__stripe_sid'],
+        'Paypal': ['ts', 'ts_c', 'tsrce', 'x-pp-s', 'nsid', 'LANG'],
+        'OneTrust': ['OptanonConsent', 'OptanonAlertBoxClosed'],
+        'TrustArc': ['notice_preferences', 'notice_gdpr_prefs', 'cmapi_cookie_privacy'],
+        'Cookiebot': ['CookieConsent'],
+        'Sentry': ['sentryReplaySession'],
+        'New Relic': ['NRAGENT', 'JSESSIONID'],
+        'Heap': ['heapanalytics'],
+        'Clicky': ['_jsuid', 'cluid'],
+        'Plausible': ['_plausible_ses', '_plausible_id'],
+        'Vercel': ['__vercel_faas'],
+        'Cloudinary': ['cloudinary_media_library_last_path'],
+        'Calendly': ['calendly_session'],
+        'Drift': ['driftt_aid', 'drift_campaign_refresh'],
+        'Typeform': ['tf_'],
+        'SurveyMonkey': ['ep201', 'ep202'],
+        'Mailjet': ['mjx', 'mjx.session'],
+        'Sendinblue': ['sib_cuid'],
+        'ActiveCampaign': ['prism_'],
+        'Zoho': ['zohocares', 'zabUserId'],
+        'Pipedrive': ['pipedrive-csrf-token'],
+        'Freshdesk': ['_x_w', '_x_m'],
+        'LiveChat': ['__lc_cid', '__lc_cst'],
+        'Olark': ['hblid', 'wcsid', 'olfsk'],
+        'Tawk.to': ['TawkConnectionTime', '__tawkuuid'],
+        'Userlike': ['uslk_e'],
+        'LogRocket': ['lr_'],
+        'FullStory': ['fs_uid'],
+        'Mouseflow': ['mf_user'],
+        'Lucky Orange': ['lo_uid', 'lo_session'],
+        'ClickCease': ['_clickcease'],
+        'AdRoll': ['adroll', 'adroll_fpc', 'adroll_s_ref'],
+        'Quora': ['m-b', 'm-b_lax', 'm-b_strict'],
+        'SnapEngage': ['SnapABugHistory', 'SnapABugRef'],
+        'Yandex': ['yandexuid', 'ymex'],
+        'Baidu': ['BAIDUID', 'BIDUPSID'],
+        'Weibo': ['WBtopGlobal_register_version'],
+        'VK': ['remixlang', 'remixstid'],
+        'Discord': ['__dcfduid', '__sdcfduid'],
+        'Slack': ['d', 'b'],
+        'Omnisend': ['omnisendSessionID', 'omnisendVisitorID'],
+        'Trello': ['token'],
+        'Asana': ['asana-session'],
+        'Monday.com': ['visitor_id'],
+        'Notion': ['token_v2'],
+        'Figma': ['__Host-figma_csrf'],
+        'Canva': ['canva.user'],
+        'Dropbox': ['gvc'],
+        'Box': ['box_visitor_id'],
+        'GitHub': ['_octo', 'user_session'],
+        'GitLab': ['_gitlab_session'],
+        'Bitbucket': ['BITBUCKETSESSION'],
+        'Atlassian': ['atlassian.xsrf.token'],
+        'Jira': ['JSESSIONID'],
+        'Confluence': ['confluence.session.token'],
+        'Zoom': ['zm_aid'],
+        'Webex': ['SSO_SESSION_ID'],
+        'GoToMeeting': ['GoToMeeting'],
+        'BlueJeans': ['BJSESSIONID'],
+        'TeamViewer': ['TVSESSIONID'],
+        'DocuSign': ['__cf_bm', 'docusign'],
+        'HelloSign': ['__cf_bm', 'hellosign'],
+        'Adobe Sign': ['adobe_sign'],
+        'CookieYes': ['CookieYesConsent', 'cookieyes-consent', 'CookieYesAnalytics'],
+        // Add more as needed
+    };
+
+    for (const [vendor, identifiers] of Object.entries(VENDOR_MAP)) {
+        for (const id of identifiers) {
+            if (cookie.name.includes(id)) {
+                return vendor;
+            }
+        }
+    }
+    return 'unknown vendor';
+}
+
+// --- Helper: Map cookie name to consent type ---
+var COOKIE_CONSENT_TYPE_MAP = {
+    // Google Analytics
+    '_ga': 'statistics',
+    '_gid': 'statistics',
+    '_gat': 'statistics',
+    '1P_JAR': 'statistics',
+    'NID': 'statistics',
+    'CONSENT': 'statistics',
+    'DV': 'statistics',
+    'OTZ': 'statistics',
+    'SID': 'functional',
+    'HSID': 'functional',
+    'APISID': 'functional',
+    'SAPISID': 'functional',
+    'SSID': 'functional',
+    'SIDCC': 'functional',
+    'SEARCH_SAMESITE': 'functional',
+    // Google Ads
+    'IDE': 'marketing',
+    'DSID': 'marketing',
+    'FLC': 'marketing',
+    'AID': 'marketing',
+    'TAID': 'marketing',
+    '__gads': 'marketing',
+    '__gac': 'marketing',
+    // Google Tag Manager
+    '_dc_gtm_': 'statistics',
+    '_gat_gtag_': 'statistics',
+    // Google Optimize
+    '_gaexp': 'statistics',
+    '_opt_awcid': 'statistics',
+    '_opt_awmid': 'statistics',
+    '_opt_awgid': 'statistics',
+    '_opt_awkid': 'statistics',
+    '_opt_utmc': 'statistics',
+    // Facebook
+    'fr': 'marketing',
+    'datr': 'marketing',
+    'sb': 'marketing',
+    'c_user': 'marketing',
+    'xs': 'marketing',
+    'wd': 'functional',
+    'spin': 'marketing',
+    'presence': 'functional',
+    'act': 'functional',
+    'fbm_': 'marketing',
+    'fbsr_': 'marketing',
+    'fblo_': 'marketing',
+    'fbp': 'marketing',
+    // LinkedIn
+    'bcookie': 'marketing',
+    'lidc': 'marketing',
+    'bscookie': 'marketing',
+    'lang': 'functional',
+    'li_gc': 'functional',
+    'li_mc': 'functional',
+    'liap': 'functional',
+    'lissc': 'functional',
+    'UserMatchHistory': 'marketing',
+    // Twitter
+    '_twitter_sess': 'marketing',
+    'personalization_id': 'marketing',
+    'guest_id': 'marketing',
+    'ct0': 'functional',
+    'external_referer': 'functional',
+    'gt': 'functional',
+    // Hotjar
+    '_hjIncludedInSample': 'statistics',
+    '_hjSessionUser': 'statistics',
+    '_hjFirstSeen': 'statistics',
+    '_hjSession': 'statistics',
+    '_hjTLDTest': 'statistics',
+    '_hjAbsoluteSessionInProgress': 'statistics',
+    '_hjIncludedInPageviewSample': 'statistics',
+    // Microsoft
+    'MUID': 'marketing',
+    'ANON': 'marketing',
+    'SRCHD': 'marketing',
+    'SRCHUID': 'marketing',
+    '_clsk': 'statistics',
+    '_clck': 'statistics',
+    'MSCC': 'functional',
+    'SRCHUSR': 'marketing',
+    'SRCHHPGUSR': 'marketing',
+    'NAP': 'functional',
+    'MH': 'functional',
+    'MR': 'functional',
+    'MS0': 'functional',
+    'MSFPC': 'functional',
+    // HubSpot
+    'hubspotutk': 'marketing',
+    '__hssc': 'marketing',
+    '__hstc': 'marketing',
+    '__hs_opt_out': 'functional',
+    '__hssrc': 'marketing',
+    '__hs_do_not_track': 'functional',
+    '__hs_initial_opt_in': 'functional',
+    '__hs_cookie_cat_pref': 'functional',
+    // Adobe
+    'AMCV_': 'marketing',
+    's_cc': 'statistics',
+    's_sq': 'statistics',
+    'AMCVS_': 'marketing',
+    'demdex': 'marketing',
+    'mbox': 'marketing',
+    // Pinterest
+    '_pinterest_cm': 'marketing',
+    'csrftoken': 'functional',
+    'sessionid': 'functional',
+    '_auth': 'functional',
+    '_pinterest_sess': 'functional',
+    '_routing_id': 'functional',
+    // TikTok
+    'tt_webid': 'marketing',
+    'tt_webid_v2': 'marketing',
+    'tt_csrf_token': 'functional',
+    'ttwid': 'marketing',
+    's_v_web_id': 'marketing',
+    // Snapchat
+    'sc_at': 'marketing',
+    'scid': 'marketing',
+    'sctr': 'marketing',
+    'xsrf_token': 'functional',
+    // Reddit
+    '_reddit_session': 'marketing',
+    'session_tracker': 'marketing',
+    'loid': 'marketing',
+    'token_v2': 'marketing',
+    'clkt': 'marketing',
+    'edgebucket': 'marketing',
+    // YouTube
+    'YSC': 'marketing',
+    'VISITOR_INFO1_LIVE': 'marketing',
+    'PREF': 'functional',
+    'LOGIN_INFO': 'functional',
+    // Vimeo
+    'vuid': 'marketing',
+    'vimeo_sessionid': 'marketing',
+    '__cf_bm': 'functional',
+    // Spotify
+    'sp_t': 'marketing',
+    'sp_landing': 'marketing',
+    'sp_ab': 'marketing',
+    'sp_usid': 'marketing',
+    // Salesforce
+    'BrowserId': 'functional',
+    'CookieConsent': 'functional',
+    'inst': 'functional',
+    'oid': 'functional',
+    'sid': 'functional',
+    // CrazyEgg
+    '__ceg.s': 'statistics',
+    '__ceg.u': 'statistics',
+    '__utma': 'statistics',
+    '__utmb': 'statistics',
+    '__utmc': 'statistics',
+    '__utmz': 'statistics',
+    // Intastellar
+    'IntastellarConsentSolution': 'functional',
+    'intastellar_cookie_consent': 'functional',
+    // Cloudflare
+    '__cfduid': 'functional',
+    '__cfruid': 'functional',
+    // Segment
+    'ajs_anonymous_id': 'statistics',
+    'ajs_group_id': 'statistics',
+    'ajs_user_id': 'statistics',
+    'ajs_group_properties': 'statistics',
+    'ajs_user_traits': 'statistics',
+    // Matomo
+    '_pk_id': 'statistics',
+    '_pk_ses': 'statistics',
+    '_pk_ref': 'statistics',
+    '_pk_cvar': 'statistics',
+    // Mixpanel
+    'mp_': 'statistics',
+    // Amplitude
+    'amplitude_id': 'statistics',
+    'amplitude_cookie_test': 'statistics',
+    // Intercom
+    'intercom-id-': 'functional',
+    'intercom-session-': 'functional',
+    'intercom-device-id-': 'functional',
+    // Zendesk
+    '__zlcid': 'functional',
+    '__zlcstore': 'functional',
+    '__zlcmid': 'functional',
+    // Optimizely
+    'optimizelyBuckets': 'statistics',
+    'optimizelyEndUserId': 'statistics',
+    'optimizelySegments': 'statistics',
+    'optimizelyRumLB': 'statistics',
+    // AppNexus
+    'uuid2': 'marketing',
+    'anj': 'marketing',
+    'sess': 'marketing',
+    'icu': 'marketing',
+    'token': 'marketing',
+    // DoubleClick
+    'id': 'marketing',
+    'test_cookie': 'marketing',
+    // Taboola
+    't_gid': 'marketing',
+    'taboola_session_id': 'marketing',
+    // Outbrain
+    'obuid': 'marketing',
+    'adrl': 'marketing',
+    // Quantcast
+    '__qca': 'marketing',
+    // Criteo
+    'uid': 'marketing',
+    'eid': 'marketing',
+    'cto_bundle': 'marketing',
+    'cto_lwid': 'marketing',
+    // Adform
+    'cid': 'marketing',
+    'tid': 'marketing',
+    'CTAB': 'marketing',
+    'CTAT': 'marketing',
+    // Teads
+    'tt_viewer': 'marketing',
+    // Bing
+    '_uetsid': 'marketing',
+    '_uetvid': 'marketing',
+    // Mailchimp
+    'mc_cid': 'marketing',
+    'mc_eid': 'marketing',
+    // Shopify
+    '_shopify_y': 'functional',
+    '_shopify_s': 'functional',
+    '_shopify_sa_t': 'marketing',
+    '_shopify_sa_p': 'marketing',
+    '_y': 'functional',
+    '_s': 'functional',
+    // Stripe
+    '__stripe_mid': 'functional',
+    '__stripe_sid': 'functional',
+    // Paypal
+    'ts': 'functional',
+    'ts_c': 'functional',
+    'tsrce': 'functional',
+    'x-pp-s': 'functional',
+    'nsid': 'functional',
+    'LANG': 'functional',
+    // OneTrust
+    'OptanonConsent': 'functional',
+    'OptanonAlertBoxClosed': 'functional',
+    // TrustArc
+    'notice_preferences': 'functional',
+    'notice_gdpr_prefs': 'functional',
+    'cmapi_cookie_privacy': 'functional',
+    // Cookiebot
+    'CookieConsent': 'functional',
+    // Sentry
+    'sentryReplaySession': 'statistics',
+    // New Relic
+    'NRAGENT': 'statistics',
+    'JSESSIONID': 'functional',
+    // Heap
+    'heapanalytics': 'statistics',
+    // Clicky
+    '_jsuid': 'statistics',
+    'cluid': 'statistics',
+    // Plausible
+    '_plausible_ses': 'statistics',
+    '_plausible_id': 'statistics',
+    // Vercel
+    '__vercel_faas': 'functional',
+    // Cloudinary
+    'cloudinary_media_library_last_path': 'functional',
+    // Calendly
+    'calendly_session': 'functional',
+    // Drift
+    'driftt_aid': 'marketing',
+    'drift_campaign_refresh': 'marketing',
+    // Typeform
+    'tf_': 'functional',
+    // SurveyMonkey
+    'ep201': 'functional',
+    'ep202': 'functional',
+    // Mailjet
+    'mjx': 'functional',
+    'mjx.session': 'functional',
+    // Sendinblue
+    'sib_cuid': 'marketing',
+    // ActiveCampaign
+    'prism_': 'marketing',
+    // Zoho
+    'zohocares': 'functional',
+    'zabUserId': 'functional',
+    // Pipedrive
+    'pipedrive-csrf-token': 'functional',
+    // Freshdesk
+    '_x_w': 'functional',
+    '_x_m': 'functional',
+    // LiveChat
+    '__lc_cid': 'functional',
+    '__lc_cst': 'functional',
+    // Olark
+    'hblid': 'functional',
+    'wcsid': 'functional',
+    'olfsk': 'functional',
+    // Tawk.to
+    'TawkConnectionTime': 'functional',
+    '__tawkuuid': 'functional',
+    // Userlike
+    'uslk_e': 'functional',
+    // LogRocket
+    'lr_': 'statistics',
+    // FullStory
+    'fs_uid': 'statistics',
+    // Mouseflow
+    'mf_user': 'statistics',
+    // Lucky Orange
+    'lo_uid': 'statistics',
+    'lo_session': 'statistics',
+    // ClickCease
+    '_clickcease': 'marketing',
+    // AdRoll
+    'adroll': 'marketing',
+    'adroll_fpc': 'marketing',
+    'adroll_s_ref': 'marketing',
+    // Quora
+    'm-b': 'marketing',
+    'm-b_lax': 'marketing',
+    'm-b_strict': 'marketing',
+    // SnapEngage
+    'SnapABugHistory': 'functional',
+    'SnapABugRef': 'functional',
+    // Yandex
+    'yandexuid': 'marketing',
+    'ymex': 'marketing',
+    // Baidu
+    'BAIDUID': 'marketing',
+    'BIDUPSID': 'marketing',
+    // Weibo
+    'WBtopGlobal_register_version': 'functional',
+    // VK
+    'remixlang': 'functional',
+    'remixstid': 'functional',
+    // Discord
+    '__dcfduid': 'functional',
+    '__sdcfduid': 'functional',
+    // Slack
+    'd': 'functional',
+    'b': 'functional',
+    // Trello
+    'token': 'functional',
+    // Asana
+    'asana-session': 'functional',
+    // Monday.com
+    'visitor_id': 'functional',
+    // Notion
+    'token_v2': 'functional',
+    // Figma
+    '__Host-figma_csrf': 'functional',
+    // Canva
+    'canva.user': 'functional',
+    // Dropbox
+    'gvc': 'functional',
+    // Box
+    'box_visitor_id': 'functional',
+    // GitHub
+    '_octo': 'functional',
+    'user_session': 'functional',
+    // GitLab
+    '_gitlab_session': 'functional',
+    // Bitbucket
+    'BITBUCKETSESSION': 'functional',
+    // Atlassian
+    'atlassian.xsrf.token': 'functional',
+    // Jira
+    'JSESSIONID': 'functional',
+    // Confluence
+    'confluence.session.token': 'functional',
+    // Zoom
+    'zm_aid': 'functional',
+    // Webex
+    'SSO_SESSION_ID': 'functional',
+    // GoToMeeting
+    'GoToMeeting': 'functional',
+    // BlueJeans
+    'BJSESSIONID': 'functional',
+    // TeamViewer
+    'TVSESSIONID': 'functional',
+    // DocuSign
+    'docusign': 'functional',
+    // HelloSign
+    'hellosign': 'functional',
+    // Adobe Sign
+    'adobe_sign': 'functional',
+    "MicrosoftApplicationsTelemetryFirstLaunchTime": 'functional',
+    "MicrosoftApplicationsTelemetryDeviceId": 'functional',
+    // Add more as needed
+};
+
+function getConsentTypeForCookie(cookieName) {
+    // Try exact match first
+    if (COOKIE_CONSENT_TYPE_MAP[cookieName]) return COOKIE_CONSENT_TYPE_MAP[cookieName];
+    // Try partial match (for cookies with prefixes)
+    for (const key in COOKIE_CONSENT_TYPE_MAP) {
+        if (cookieName.startsWith(key)) return COOKIE_CONSENT_TYPE_MAP[key];
+    }
+    // Fallback
+    return 'marketing';
+}
+
+// --- Start Cookie Interception ---
+(function () {
+    const desc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
+    Object.defineProperty(document, 'cookie', {
+        configurable: true,
+        enumerable: true,
+        get: function () {
+            return desc.get.call(this);
+        },
+        set: function (cookieString) {
+            window.INTA.observedCookieSource = 'cookie';
+            try {
+                const cookieName = cookieString.split('=')[0].trim();
+                const rawValue = cookieString.split('=')[1]?.split(';')[0];
+                const cookieDomain = cookieString.split(';').find(part => part.trim().toLowerCase().startsWith('domain='))?.split('=')[1]?.trim() || window.location.hostname;
+                // Use cookie name to determine consent type
+                const consentType = getConsentTypeForCookie(cookieName);
+                recordCookie({
+                    name: cookieName,
+                    source: window.INTA.observedCookieSource || 'unknown',
+                    observedAt: Date.now(),
+                    path: window.location.pathname,
+                    domain: window.location.hostname,
+                    cookieDomain,
+                    rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+                    hadValuePreConsent: typeof rawValue === 'string' && rawValue.length > 0,
+                    consentGiven: hasConsent(consentType),
+                    vendor: detectCookieVendor({ name: cookieName, value: rawValue })
+                })
+            } catch (e) { /* ignore */ }
+            return desc.set.call(this, cookieString);
+        }
+    });
+})();
+
+// --- CookieStorage Observer ---
+if ("cookieStore" in window) {
+    cookieStore.addEventListener("change", (event) => {
+        event.changed.forEach(cookie => {
+            window.INTA.observedCookieSource = 'cookieStore';
+            const consentType = getConsentTypeForCookie(cookie.name);
+            recordCookie({
+                name: cookie.name,
+                source: 'cookieStore',
+                observedAt: Date.now(),
+                path: cookie.path || window.location.pathname,
+                domain: cookie.domain || window.location.hostname,
+                cookieDomain: cookie.domain || window.location.hostname,
+                rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+                hadValuePreConsent: 0,
+                consentGiven: hasConsent(consentType),
+                vendor: detectCookieVendor({ name: cookie.name, value: cookie.value })
+            })
+        })
+    });
+}
+
+// --- Start localStorage Interception ---
+(function () {
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key, value) {
+        window.INTA.observedCookieSource = 'localStorage';
+        const consentType = getConsentTypeForCookie(key);
+        recordCookie({
+            name: key,
+            source: 'localStorage',
+            observedAt: Date.now(),
+            path: window.location.pathname,
+            domain: window.location.hostname,
+            rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+            hadValuePreConsent: typeof value === 'string' && value.length > 0,
+            consentGiven: hasConsent(consentType),
+            vendor: detectCookieVendor({ name: key, value: value })
+        });
+        return originalSetItem.apply(this, arguments);
+    };
+})();
+
+// --- Start memory Interception (example) ---
+window.INTA.memorySet = function (key, value) {
+    window.INTA.observedCookieSource = 'memory';
+    const consentType = getConsentTypeForCookie(key);
+    recordCookie({
+        name: key,
+        value: value,
+        source: 'memory',
+        observedAt: Date.now(),
+        path: window.location.pathname,
+        domain: window.location.hostname,
+        rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+        hadValuePreConsent: typeof value === 'string' && value.length > 0,
+        consentGiven: hasConsent(consentType),
+        vendor: detectCookieVendor({ name: key, value: value })
+    });
+    window.INTA._memory = window.INTA._memory || {};
+    window.INTA._memory[key] = value;
+};
+
+function IntastellarSnapShot(stage) {
+
+}
+
 // Example usage:
 // const rootDomain = "group1.com";
 // const partnerDomains = ["domain-a.com", "domain-b.com"];
 // requestConsentState('user-123', rootDomain, partnerDomains);
 // setConsentState('user-123', { marketing: true, statistics: false, functional: true }, rootDomain, partnerDomains);
 // --- End Cross-site Consent Tracking ---
-/*
- *  Cookie Consents Banner by Intastellar Solutions, International
- *  intastellarsolutions.com/gdpr-cookiebanner
- *  consents.cdn.intastellarsolutions.com/uc.js
- *  @copy 2022-2025 Intastellar Solutions, International
- *
-*/
+
 /* - - - Setup - - - */
 
 const intaCookiePref = "IntastellarConsentSolution";
@@ -52,6 +861,10 @@ let adsbygoogle = window.adsbygoogle || [];
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
+// On page load, update VWO consent if consent object exists
+if (intaCookieConsents) {
+    updateVwoConsent(intaCookieConsents);
+}
 const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 const isGtmMode = findScriptParameter("ref") === "gtm";
 const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
@@ -72,12 +885,16 @@ let intaConsentsObjectVariable = {
     uid: Math.random().toString(16).slice(2),
     domain: window?.INTA?.settings?.rootDomain || window.location.host,
     sharingDomains: [],
+    tcString: null,
+}
+
+function gtag() {
+    dataLayer.push(arguments);
 }
 
 fetch('https://ipapi.co/json/')
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         // For California only:
         if (data.country === "US" && data.region_code === "CA") {
             window.INTA = window.INTA || {};
@@ -90,10 +907,6 @@ fetch('https://ipapi.co/json/')
         }
         // Now continue with your banner initialization
     });
-
-function gtag() {
-    dataLayer.push(arguments);
-}
 
 if (window._intaConsentInitialized) {
     console.log('Intastellar consent already initialized, skipping...');
@@ -118,7 +931,7 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "wait_for_update": 500,
             "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
         });
-        console.log("Intastellar Consents: Applied STRICT defaults (EU/UK/CA/BR/etc.)");
+        /* console.log("Intastellar Consents: Applied STRICT defaults (EU/UK/CA/BR/etc.)"); */
 
         // California opt-out (Do Not Sell)
         gtag('consent', 'default', {
@@ -134,7 +947,7 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "wait_for_update": 500,
             "region": ['US-CA']
         });
-        console.log("Intastellar Consents: Applied CALIFORNIA defaults (US-CA)");
+        /* console.log("Intastellar Consents: Applied CALIFORNIA defaults (US-CA)"); */
 
         // Rest of the world fallback
         gtag('consent', 'default', {
@@ -149,7 +962,7 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "url_passthrough": true,
             "wait_for_update": 500
         });
-        console.log("Intastellar Consents: Applied REST-OF-WORLD defaults");
+        /* console.log("Intastellar Consents: Applied REST-OF-WORLD defaults"); */
         gtag('consent', 'default', {
             'ad_storage': 'denied',
             'personalization_storage': 'denied',
@@ -164,9 +977,7 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
         });
         window._gtagDefaultFired = true;
     }
-} else if (isGtmMode) {
-    console.log('GTM mode detected - skipping consent default initialization');
-}
+} else if (isGtmMode) { }
 
 if (typeof fbq === "undefined" || typeof fbq === "null") {
     function fbq() { }
@@ -197,6 +1008,10 @@ window._hsp.push([
         'functional': intaCookieConsents?.functionalCookies === "checked",
     }
 ]);
+
+window.Shopify = window.Shopify || {};
+window.Shopify.customerPrivacy = window.Shopify.customerPrivacy || {};
+window.Shopify.customerPrivacy.shouldShowBanner = function () { return false; };
 
 window.Shopify ?? window?.Shopify?.loadFeatures(
     [
@@ -250,6 +1065,13 @@ function optOutCCPA() {
         } catch (e) { /* ignore */ }
     }
 
+    // Pintrk
+    if (typeof pintrk === 'function') {
+        try {
+            pintrk('setconsent', false);
+        } catch (e) { /* ignore */ }
+    }
+
     // Microsoft UET
     if (window.uetq) {
         try {
@@ -291,9 +1113,9 @@ function optOutCCPA() {
 // Helper: Determine consent type for a given URL using allScripts regex
 function getConsentTypeForUrl(url) {
     if (!url) return 'marketing';
-    for (let i = 0; i < allScripts.length; i++) {
-        const scriptType = allScripts[i].type;
-        const patterns = allScripts[i].scripts;
+    for (let i = 0; i < window.allScripts.length; i++) {
+        const scriptType = window.allScripts[i].type;
+        const patterns = window.allScripts[i].scripts;
         for (let j = 0; j < patterns.length; j++) {
             try {
                 const regex = new RegExp(patterns[j], 'i');
@@ -312,20 +1134,56 @@ function getConsentTypeForUrl(url) {
 // Helper: Send intercepted data to backend for storage/categorization
 async function sendToBackend(data) {
     try {
-        // Use await to ensure the fetch is handled as an async background request
-        await fetch('/tests/backend/test.php', {
+        const base = (typeof window.INTA?.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
+        await fetch(base, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
     } catch (e) {
-        // Optionally log error
         console.log(e);
     }
-    // Never trigger navigation or download
     return;
 }
 
+// Helper: Server-side tagging - send GA4 events via backend (consent-aware)
+// Server checks consents: accepted = full data (user_id, IP, etc); not accepted = minimal
+window.sendEventToServerSideTagging = function (eventName, params, opts) {
+    const measurementId = (opts && opts.measurement_id) || (window.INTA && window.INTA.settings && window.INTA.settings.gtagId) || '';
+    if (!measurementId || !/^G-[A-Z0-9]+$/i.test(measurementId)) return;
+    const consents = window.intaCookieConsents || {};
+    var consentAcceptedAt = null;
+    try {
+        if (typeof getCookie === 'function' && typeof decodeIntaConsentsObject === 'function' && typeof int_hideCookieBannerName !== 'undefined') {
+            var c = getCookie(int_hideCookieBannerName);
+            if (c && c.indexOf && c.indexOf('__inta') > -1) {
+                var parts = c.split('.');
+                var decoded = parts[2] ? JSON.parse(decodeIntaConsentsObject(parts[2]) || '{}') : {};
+                consentAcceptedAt = decoded.time || null;
+            }
+        }
+    } catch (e) { }
+    const uid = (window.intaConsentsObjectVariable && window.intaConsentsObjectVariable.uid) || '';
+    const base = (typeof window.INTA !== 'undefined' && typeof window.INTA.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
+    fetch(base, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'ga4_event',
+            measurement_id: measurementId,
+            consents: consents,
+            consent_accepted_at: consentAcceptedAt,
+            client_id: (opts && opts.client_id) || ('cid_' + Date.now().toString(36) + Math.random().toString(36).slice(2)),
+            user_id: (opts && opts.user_id) || uid,
+            session_id: (opts && opts.session_id) || ('sess_' + Date.now()),
+            page_location: (opts && opts.page_location) || window.location.href,
+            page_title: (opts && opts.page_title) || (document.title || ''),
+            events: [{ name: eventName || 'page_view', params: params || {} }]
+        })
+    }).catch(function () { });
+};
+
+// IAB TC String generator
 (function (window) {
     // Minimal IAB TCF encoder for browser use
     function padBits(num, len) {
@@ -341,39 +1199,28 @@ async function sendToBackend(data) {
         for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
         return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
-
-    function base64UrlDecode(str){
-        console.log('Decoding base64url:', str);
-        // Replace URL-safe characters with base64 characters
-        str = str.replace(/-/g, '+').replace(/_/g, '/');
-        // Pad with '=' to make length a multiple of 4
-        while (str.length % 4) {
-            str += '=';
-        }
-
-        console.log(str);
-
-        // Decode base64 string to binary string
-        const binary = atob(str);
-        // Convert binary string to byte array
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-            bytes[i] = binary.charCodeAt(i);
-        }
-        return bytes;
+    function base64UrlDecode(str) {
+        str = (str || '').replace(/-/g, '+').replace(/_/g, '/');
+        while (str.length % 4) str += '=';
+        var binary = atob(str);
+        var out = '';
+        for (var i = 0; i < binary.length; i++) out += String.fromCharCode(binary.charCodeAt(i));
+        return out;
     }
 
     // Minimal TCModel
     function TCModel() {
         this.purposeConsents = [];
         this.vendorConsents = [];
-        this.disclosedVendors = [];
+        this.vendorLegitimateInterests = [];
+        this.disclosedVendors = []; // TCF 2.3: vendors disclosed to user in CMP
     }
 
+    /** TCF 2.3: Encode Disclosed Vendors segment (segment type 1). */
     function encodeDisclosedVendorsSegment(maxVendorId, disclosed) {
         if (maxVendorId <= 0) return '';
         let bits = '';
-        bits += padBits(1, 3);
+        bits += padBits(1, 3);   // segment type 1 = vendorsDisclosed
         bits += padBits(maxVendorId, 16);
         for (let i = 0; i < maxVendorId; i++) bits += (disclosed && disclosed[i]) ? '1' : '0';
         let bytes = [];
@@ -384,30 +1231,38 @@ async function sendToBackend(data) {
     // Minimal TCString encoder
     var TCString = {
         encode: function (tcModel) {
+            // Support all vendors (not just first 24)
             let bits = "";
-            bits += padBits(2, 6);
-            let now = Math.floor(Date.now() / 100);
-            bits += padBits(now, 36);
-            bits += padBits(now, 36);
-            bits += padBits(1, 12);
-            bits += padBits(1, 12);
-            bits += padBits(0, 6);
-            bits += strToBits("EN");
-            bits += padBits(1, 12);
-            bits += padBits(3, 6); // TCF 2.3
-            bits += padBits(0, 1);
-            bits += padBits(0, 1);
-            bits += padBits(0, 12);
+            bits += padBits(2, 6); // Version
+            let now = Math.floor(Date.now() / 100); // 0.1s increments
+            bits += padBits(now, 36); // Created
+            bits += padBits(now, 36); // LastUpdated
+            bits += padBits(1, 12); // CmpId
+            bits += padBits(1, 12); // CmpVersion
+            bits += padBits(0, 6); // ConsentScreen
+            bits += strToBits("EN"); // ConsentLanguage
+            bits += padBits(1, 12); // VendorListVersion
+            bits += padBits(3, 6); // TCFPolicyVersion 3 = TCF 2.3
+            bits += padBits(0, 1); // IsServiceSpecific
+            bits += padBits(0, 1); // UseNonStandardStacks
+            bits += padBits(0, 12); // SpecialFeatureOptIns
+            // PurposeConsents (24 bits)
             for (let i = 0; i < 24; i++) bits += tcModel.purposeConsents && tcModel.purposeConsents[i] ? "1" : "0";
+            // PurposeLegitInterests (24 bits, all 0)
             bits += "0".repeat(24);
-            bits += padBits(0, 1);
-            bits += strToBits("EN");
+            bits += padBits(0, 1); // PurposeOneTreatment
+            bits += strToBits("EN"); // PublisherCC
+            // VendorConsents (maxVendorId, 16 bits for maxVendorId, then maxVendorId bits for consents)
             let maxVendorId = (tcModel.vendorConsents && tcModel.vendorConsents.length) || 0;
             bits += padBits(maxVendorId, 16);
             for (let i = 0; i < maxVendorId; i++) bits += tcModel.vendorConsents && tcModel.vendorConsents[i] ? "1" : "0";
+            // Convert bits to bytes
             let bytes = [];
-            for (let i = 0; i < bits.length; i += 8) bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
+            for (let i = 0; i < bits.length; i += 8) {
+                bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
+            }
             let coreString = base64UrlEncode(bytes);
+            // TCF 2.3: mandatory Disclosed Vendors segment (required for new/updated signals from Feb 28, 2026)
             let disclosed = (tcModel.disclosedVendors && tcModel.disclosedVendors.length >= maxVendorId)
                 ? tcModel.disclosedVendors.slice(0, maxVendorId)
                 : (tcModel.vendorConsents || []).slice(0, maxVendorId).map(function () { return true; });
@@ -419,7 +1274,7 @@ async function sendToBackend(data) {
             const binary = base64UrlDecode(coreOnly);
             let bits = '';
             for (let i = 0; i < binary.length; i++) {
-                bits += ('00000000' + binary[i].toString(2)).slice(-8);
+                bits += ('00000000' + binary.charCodeAt(i).toString(2)).slice(-8);
             }
             // Parse fields (see encoder for bit lengths)
             let offset = 0;
@@ -445,8 +1300,8 @@ async function sendToBackend(data) {
             const purposeOneTreatment = !!parseInt(read(1), 2);
             const publisherCC = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
             const maxVendorId = parseInt(read(16), 2);
-            const vendors = read(24).split('').map(b => b === '1');
-            const vendorConsents = [];
+            const vendorBits = maxVendorId > 0 ? read(maxVendorId) : '';
+            const vendors = vendorBits.split('').map(b => b === '1');
             return {
                 version,
                 created,
@@ -462,11 +1317,7 @@ async function sendToBackend(data) {
                 specialFeatureOptIns,
                 purposes,
                 maxVendorId,
-                vendorConsents: vendors,
-                purposeLegitInterests,
-                purposeOneTreatment,
-                publisherCC,
-                vendorConsents
+                vendors
             };
         }
     };
@@ -489,23 +1340,38 @@ function hasConsent(type) {
 
 const ALLOWLIST = [
     location.origin,
+    // Add all subdomains of the current host
+    ...(() => {
+        const host = location.host;
+        const parts = host.split('.');
+        const subdomains = [];
+        for (let i = 0; i < parts.length - 1; i++) {
+            subdomains.push(parts.slice(i).join('.'));
+        }
+        return subdomains;
+    })(),
     "https://intastellar.app",
     "https://www.intastellarsolutions.com",
     "https://analytics.intastellarsolutions.com",
     "https://api.intastellarsolutions.com",
     "https://apis.intastellarsolutions.com",
+    "https://apis.intastellaraccounts.com",
+    "https://consents.intastellarsolutions.com",
     "https://vendor-list.consensu.org",
-    "/dev/gvl-local.json"
-    // HubSpot forms & embeds (legitimate interest)
-    ,"https://forms.hsforms.com"
-    ,"https://js.hs-scripts.com"
-    ,"https://js.hsforms.net"
-    ,"https://api.hsforms.com"
-    ,"https://forms.hubspot.com"
-    ,"https://track.hubspot.com"
-    ,"https://js.usemessages.com"
-    ,"https://cdn2.hubspot.net"
-    ,"https://cdn.hsforms.net"
+    "/dev/gvl-local.json",
+    "https://forms.hsforms.com",
+    "https://js.hs-scripts.com",
+    "https://js.hsforms.net",
+    "https://api.hsforms.com",
+    "https://forms.hubspot.com",
+    "https://track.hubspot.com",
+    "https://js.usemessages.com",
+    "https://cdn2.hubspot.net",
+    "https://cdn.hsforms.net",
+    "https://cdn.weglot.com",
+    "https://dev.visualwebsiteoptimizer.com",
+    "https://www.google-analytics.com",
+    "https://region1.google-analytics.com"
 ];
 
 function isAllowed(url) {
@@ -513,25 +1379,34 @@ function isAllowed(url) {
         const parsedUrl = new URL(url, window.location.origin);
         // Allow all requests to the same origin
         if (parsedUrl.origin === window.location.origin) return true;
-        // Always allow requests to ROOT_DOMAIN and its subdomains (even from localhost)
-        if (typeof ROOT_DOMAIN === 'string' && parsedUrl.hostname.endsWith(ROOT_DOMAIN)) return true;
-        // HubSpot forms & embeds as legitimate interest
+
         if (
             /(?:\.hubspot\.com|\.hsforms\.com|\.hs-scripts\.com|\.hsforms\.net|\.usemessages\.com|\.cdn2\.hubspot\.net|\.cdn\.hsforms\.net)$/i.test(parsedUrl.hostname)
         ) {
             return true;
         }
+
+        // Allow if matches any allowlist origin
+        if (ALLOWLIST.some(domain => parsedUrl.origin === domain)) return true;
+
+        // Allow all subdomains of the current host/root domain
+        const rootHost = window.location.hostname.replace(/^www\./, "");
+        const parsedHost = parsedUrl.hostname.replace(/^www\./, "");
+        if (parsedHost === rootHost || parsedHost.endsWith('.' + rootHost)) return true;
+
         // Optionally allow other trusted domains here
-        return ALLOWLIST.some(domain => parsedUrl.origin === domain);
+        return false;
     } catch (e) {
         return false;
     }
 }
 
+
 // Intercept fetch with consent check
 const originalFetch = window.fetch;
 window.fetch = function (resource, config) {
-    const url = typeof resource === 'string' ? resource : resource.url;
+    const url = (typeof resource === 'string') ? resource : resource.url;
+    // Prevent recursion for backend endpoint
     if (isAllowed(url)) {
         return originalFetch.apply(this, arguments);
     }
@@ -576,7 +1451,7 @@ function CustomXHR() {
 window.XMLHttpRequest = CustomXHR;
 // Intercept navigator.sendBeacon with consent check
 const originalSendBeacon = navigator.sendBeacon;
-navigator.sendBeacon = function(url, data) {
+navigator.sendBeacon = function (url, data) {
     // Prevent recursion for backend endpoint
     if (isAllowed(url)) {
         return originalSendBeacon.apply(this, arguments);
@@ -623,7 +1498,7 @@ if (window.INTA === undefined) {
         settings: {
             company: undefined,
             lang: "auto",
-            color: "rgba(0, 51, 153, 1)",
+            color: "#c09f53",
             keepInLocalStorage: ["firstLoad", int_FunctionalCookies, int_hideCookieBannerName, int_marketingCookies, int_staticsticCookies],
             arrange: "ltr",
             logo: intCookieIcon,
@@ -1126,6 +2001,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
             'ad_user_data': 'denied',
             'ad_personalization': 'denied'
         });
+        // Pintrk
+        if (typeof pintrk === 'function') {
+            try {
+                pintrk('setconsent', false);
+            } catch (e) { /* ignore */ }
+        }
     }
 
     if (document.getElementById("intastellar-gdpr-settings-js-after") !== null) {
@@ -1304,7 +2185,7 @@ const inta_requiredCookieList = [{
         }
     ],
     domains: [
-        window.INTA.settings.rootDomain,
+        window.INTA?.settings?.rootDomain,
         window.location.host
     ]
 },
@@ -1342,7 +2223,7 @@ const inta_requiredCookieList = [{
         "consents.cdn.intastellarsolutions.com",
         "intastellarconsents.com",
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ]
 },
 {
@@ -1372,7 +2253,7 @@ const inta_requiredCookieList = [{
     vendor_privacy: "https://automattic.com/privacy/",
     domains: [
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ]
 },
 {
@@ -1390,7 +2271,7 @@ const inta_requiredCookieList = [{
     vendor_privacy: "https://privacy.microsoft.com/en-gb/privacystatement",
     domains: [
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ]
 },
 {
@@ -1408,7 +2289,7 @@ const inta_requiredCookieList = [{
     vendor_privacy: "https://aws.amazon.com/privacy/",
     domains: [
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ]
 },
 {
@@ -1665,100 +2546,6 @@ inta_statisticCookieList.push({
 })
 
 inta_statisticCookieList.push({
-    vendor: "Hotjar Ltd.",
-    cookies: [
-        {
-            cookie: "_hjSessionUser_",
-            purpose: "",
-        },
-        {
-            cookie: "_hjid",
-            purpose: "_hjUserAttributesHash",
-        },
-        {
-            cookie: "_hjFirstSeen",
-            purpose: "",
-        },
-        {
-            cookie: "_hjUserAttributesHash",
-            purpose: "",
-        },
-        {
-            cookie: "_hjCachedUserAttributes",
-            purpose: "",
-        },
-        {
-            cookie: "_hjViewportId",
-            purpose: "",
-        },
-        {
-            cookie: "_hjSession_",
-            purpose: "",
-        },
-        {
-            cookie: "_hjSessionTooLarge",
-            purpose: "",
-        },
-        {
-            cookie: "_hjSessionRejected",
-            purpose: "",
-        },
-        {
-            cookie: "_hjSessionResumed",
-            purpose: "",
-        },
-        {
-            cookie: "_hjLocalStorageTest",
-            purpose: "",
-        },
-        {
-            cookie: "_hjIncludedInPageviewSample",
-            purpose: "",
-        },
-        {
-            cookie: "_hjIncludedInSessionSample",
-            purpose: "",
-        },
-        {
-            cookie: "_hjAbsoluteSessionInProgress",
-            purpose: "",
-        },
-        {
-            cookie: "_hjTLDTest",
-            purpose: "",
-        },
-        {
-            cookie: "_hjRecordingEnabled",
-            purpose: "",
-        },
-        {
-            cookie: "_hjRecordingLastActivity",
-            purpose: "",
-        },
-        {
-            cookie: "_hjShownFeedbackMessage",
-            purpose: "",
-        },
-        {
-            cookie: "_hjMinimizedPolls",
-            purpose: "",
-        },
-        {
-            cookie: "_hjDonePolls",
-            purpose: "",
-        },
-        {
-            cookie: "_hjClosedSurveyInvites",
-            purpose: "",
-        }
-    ],
-    domains: [
-        "hotjar.com"
-    ],
-    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
-})
-
-inta_statisticCookieList.push({
     vendor: "HubSpot Inc",
     cookies: [
         {
@@ -1814,9 +2601,87 @@ inta_statisticCookieList.push({
         "x.clearbitjs.com",
         "clearbit.com",
         window.location.host,
-        window.INTA.settings.rootDomain
+        window.INTA?.settings?.rootDomain
     ],
     vendor_privacy: "https://clearbit.com/privacy"
+});
+
+inta_statisticCookieList.push({
+    vendor: "Hotjar Ltd.",
+    cookies: [
+        {
+            cookie: "_hjIncludedInSample",
+            purpose: "Used to determine whether a user is included in the sample which is used to generate funnels."
+        },
+        {
+            cookie: "_hjMinimizedPolls",
+            purpose: "This cookie is set when a visitor minimizes a feedback poll."
+        },
+        {
+            cookie: "_hjDonePolls",
+            purpose: "This cookie is set once a visitor has completed a feedback poll."
+        },
+        {
+            cookie: "_hjClosedSurveyInvites",
+            purpose: "This cookie is set when a visitor closes a survey invitation."
+        },
+        {
+            cookie: "_hjSession",
+            purpose: "This cookie is used to identify a single user session."
+        },
+        {
+            cookie: "_hjSessionTooLarge",
+            purpose: "This cookie is set to let Hotjar know whether a session recording size exceeded the limit."
+        },
+        {
+            cookie: "_hjSessionResumed",
+            purpose: "This cookie is set when a visitor resumes a session recording."
+        },
+        {
+            cookie: "_hjLocalStorageTest",
+            purpose: "This cookie is used to check if the visitor's browser supports local storage."
+        },
+        {
+            cookie: "_hjAbsoluteSessionInProgress",
+            purpose: "This cookie is used to count how many times a visitor has visited a site in a 30-minute time frame."
+        },
+        {
+            cookie: "_hjTLDTest",
+            purpose: "This cookie is used to determine the most generic domain possible to set the cookie for the site."
+        },
+        {
+            cookie: "_hjRecordingEnabled",
+            purpose: "This cookie is set to let Hotjar know whether recording is enabled for the session."
+        },
+        {
+            cookie: "_hjRecordingLastActivity",
+            purpose: "This cookie is used to store the last activity time of a visitor when they are recording a session."
+        },
+        {
+            cookie: "_hjShownFeedbackMessage",
+            purpose: "This cookie is set when a visitor has seen the 'Thank you' message after submitting feedback."
+        },
+        {
+            cookie: "_hjViewportId",
+            purpose: "This cookie is used to store the visitor's viewport size."
+        },
+        {
+            cookie: "_hjFirstSeen",
+            purpose: "This cookie is set to identify a new user’s first session."
+        },
+        {
+            cookie: "_hjSessionUser_",
+            purpose: "This cookie is used to persist the user ID of a returning user."
+        },
+        {
+            cookie: "_hjid",
+            purpose: "This cookie is set when the Hotjar script loads and is used to persist the Hotjar User ID."
+        }
+    ],
+    domains: [
+        "hotjar.com"
+    ],
+    vendor_privacy: "https://help.hotjar.com/hc/en-us/articles/115011789248-Hotjar-Cookies"
 });
 
 /* - - - List of Marketing cookies - - - */
@@ -1828,6 +2693,26 @@ inta_marketingCookieList.push(
             {
                 cookie: "_fbp",
                 purpose: "to store and track visits across websites."
+            },
+            {
+                cookie: "fr",
+                purpose: "to deliver, measure and improve the relevancy of ads."
+            },
+            {
+                cookie: "datr",
+                purpose: "to identify browsers and devices for security and site integrity purposes."
+            },
+            {
+                cookie: "sb",
+                purpose: "to identify browsers and devices for security and site integrity purposes."
+            },
+            {
+                cookie: "c_user",
+                purpose: ""
+            },
+            {
+                cookie: "xs",
+                purpose: ""
             }
         ],
         domains: [
@@ -2526,145 +3411,6 @@ if (document.querySelector("html").getAttribute("lang") == null) {
     intastellarCookieLanguage = "en";
 }
 
-const allScripts = window.allScripts = [
-    {
-        /* Analytics Scripts which are beeing blocked */
-        /* "([\-\.]clarity+)", */
-        type: "statics",
-        scripts: [
-            "(mixpanel)",
-            "([\-\.]googleoptimize+)",
-            "([\-\.]piwik+)",
-            "([\-\.]matomo+)",
-            "([\-\.]bing+)",
-            "([\-\.]slideshare+)",
-            "([\-\.]siteimproveanalytics+)",
-            "([\-\.]hotjar+)",
-            "([\-\.]snapchat)",
-            "([\-\.]contentsquare)",
-            "([\-\.]6sc)",
-            "([\-\.]nr-data)",
-            "([\-\.]2o7)",
-            "([\-\.]hackerone)",
-            "([\-\.]gstatic)",
-            "([\-\.]webtrends)",
-            "([\-\.]webtrendslive)",
-            "([\-\.]amplitude)",
-            "([\-\.]adobe)",
-            "([\-\.]mxpnl)",
-            "([\-\.]mixpanel)",
-            "([\-\.]gstatics+)",
-            "([\-\.]adobedtm)",
-            "([\-\.]adobedc)",
-            "([\-\.]qualtrics+)",
-            "([\-\.]pardot+)",
-            "([\-\.]poultons+)",
-            "([\-\.]chartbeat+)",
-            "([\-\.]consensu+)",
-            "([\-\.]clarity+)",
-            "([\-\.]clarity-cdn+)",
-            "([\-\.]vwo+)",
-            "([\-\.]ip-only+)",
-            "([\-\.]ggpht+)",
-            "([\-\.]clearbitjs+)",
-            "([\-\.]clearbitscripts+)",
-            "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
-        ]
-    },
-    {
-        /* Marketing Scripts which are beeing blocked */
-        /* 
-            "([\-\.]googlesyndication+)",
-            "([\-\.]googletagservices+)",
-            "([\-\.]googleadservices+)",
-            "([\-\.]omnisnippet+)",
-        */
-        type: "marketing",
-        scripts: [
-            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
-            "([\-\.]twitter+)",
-            "([\-\.]ads-twitter+)",
-            "([\-\.]casalemedia+)",
-            "(chimpstatic+)",
-            "([\-\.]trustpilot+)",
-            "([\-\.]mailchimp+)",
-            "([\-\.]linkedin+)",
-            "([\-\.]bing+)",
-            "([\-\.]licdn+)",
-            "([\-\.]amazon-adsystem+)",
-            "([\-\.]adfrom+)",
-            "([\-\.]demdex+)",
-            "([\-\.]criteo+)",
-            "([\-\.]clearbitjs+)",
-            "([\-\.]clearbitscripts+)",
-            "([\-\.]instagram+)",
-            "([\-\.]stickyadstv+)",
-            "([\-\.]mookie1+)",
-            "([\-\.]doubleclick+)",
-            "([\-\.]bidswitch+)",
-            "([\-\.]jnqsge+)",
-            "([\-\.]syuh+)",
-            "([\-\.]youtube+)",
-            "([\-\.]vimeo+)",
-            "([\-\.]ninthdecimal+)",
-            "([\-\.]casalemedia+)",
-            "([\-\.]adsymptotic+)",
-            "([\-\.]tremorhub+)",
-            "([\-\.]agkn+)",
-            "([\-\.]myvisualiq+)",
-            "([\-\.]exelator+)",
-            "([\-\.]openx+)",
-            "([\-\.]adsrvr+)",
-            "([\-\.]justpremium+)",
-            "([\-\.]ants+)",
-            "([\-\.]bluekai+)",
-            "([\-\.]revcontent+)",
-            "([\-\.]outbrain+)",
-            "([\-\.]adscale+)",
-            "([\-\.]pdst+)",
-            "([\-\.]yahoo+)",
-            "([\-\.]advertising+)",
-            "([\-\.]adnxs+)",
-            "([\-\.]scdn+)",
-            "([\-\.]spotify+)",
-            "([\-\.]facebook+)",
-            "([\-\.]pinterest+)",
-            "([\-\.]adform+)",
-            "([\-\.]adnxs+)",
-            "([\-\.]advertising+)",
-            "([\-\.]adtech+)",
-            "([\-\.]soundestlink+)",
-            "([\-\.]soundest+)",
-            "([\-\.]soundestvid+)",
-            "([\-\.]soundestform+)",
-            "([\-\.]tiktok+)",
-            "([\-\.]taboola+)",
-            "([\-\.]hubspot+)",
-            /* "([\-\.]hs-sites+)", */
-            "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
-        ]
-    },
-    {
-        /* Functional Scripts which are beeing blocked */
-        type: "functional",
-        scripts: [
-            "(maps.google.com+)",
-            "(www.google.com/maps/+)",
-            "([\-\.]googleapis+)",
-            "([\-\.]gstatics+)",
-            "([\-\.]cludo+)",
-            "([\-\.]qbrick+)",
-            "([\-\.]klarna+)",
-            "([\-\.]paypal+)",
-            "([\-\.]usersnap+)",
-            "([\-\.]zoom+)",
-            "([\-\.]cdnjs+)",
-            "([\-\.]jsdelivr+)",
-            "([\-\.]disqus+)([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
-        ]
-    }
-];
-
 if (intaCookieConsents?.advertisementCookies) {
     gtag('consent', 'update', {
         'personalization_storage': 'granted',
@@ -2675,6 +3421,14 @@ if (intaCookieConsents?.advertisementCookies) {
         'url_passthrough': true,
     });
 
+
+    // Pintrk
+    if (typeof pintrk === 'function') {
+        try {
+            pintrk('setconsent', true);
+        } catch (e) { /* ignore */ }
+    }
+
     window.uetq.push('consent', 'update', {
         'ad_storage': 'granted'
     });
@@ -2684,7 +3438,7 @@ if (intaCookieConsents?.advertisementCookies) {
         analytics_Storage: "denied"
     });
 
-    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': false,
             'marketing': true,
@@ -2715,7 +3469,7 @@ if (intaCookieConsents?.staticsticCookies) {
 
     _paq.push(['setConsentGiven']);
 
-    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': true,
             'marketing': false,
@@ -2733,7 +3487,7 @@ if (intaCookieConsents?.functionalCookies) {
         'functionality_storage': 'granted'
     });
 
-    window.Shopify && window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
         {
             'analytics': false,
             'marketing': false,
@@ -2743,6 +3497,129 @@ if (intaCookieConsents?.functionalCookies) {
     );
 
 }
+
+/* --- Segment Consent Integration (classic analytics.js) --- */
+(function initSegmentConsent() {
+    function hasAnalyticsConsent() {
+        const c = window.intaCookieConsents;
+        return c?.staticsticCookies === "checked" ||
+            c?.functionalCookies === "checked";
+    }
+    function getSegmentConsent() {
+        var c = window.intaCookieConsents || {};
+        var isChecked = function (v) { return v === "checked" || v === true; };
+        return {
+            categoryPreferences: {
+                Analytics: isChecked(c.staticsticCookies),
+                Advertising: isChecked(c.advertisementCookies),
+                Functional: isChecked(c.functionalCookies)
+            }
+        };
+    }
+    function injectConsentIntoOptions(opts) {
+        if (opts && typeof opts === "function") return injectConsentIntoOptions({});
+        var consent = getSegmentConsent();
+        opts = opts && typeof opts === "object" ? opts : {};
+        opts.context = Object.assign({}, opts.context || {}, { consent: consent });
+        return opts;
+    }
+    function injectConsentIntoQueuedArgs(args) {
+        if (!Array.isArray(args) || args.length < 1) return;
+        var method = args[0];
+        if (method !== "track" && method !== "page" && method !== "identify") return;
+        var opts;
+        if (method === "track") {
+            opts = (args.length >= 4 && typeof args[3] === "object" && !Array.isArray(args[3])) ? args[3] : {};
+            opts = injectConsentIntoOptions(opts);
+            if (args.length >= 4) {
+                args[3] = opts;
+            } else {
+                args.push(opts);
+            }
+        } else if (method === "page") {
+            opts = (args.length >= 4 && typeof args[3] === "object" && !Array.isArray(args[3])) ? args[3] : {};
+            opts = injectConsentIntoOptions(opts);
+            if (args.length >= 4) {
+                args[3] = opts;
+            } else {
+                args.push(opts);
+            }
+        } else if (method === "identify") {
+            opts = (args.length >= 3 && typeof args[2] === "object" && !Array.isArray(args[2])) ? args[2] : {};
+            opts = injectConsentIntoOptions(opts);
+            if (args.length >= 3) {
+                args[2] = opts;
+            } else {
+                args.push(opts);
+            }
+        }
+    }
+    function wrapStubQueue(analytics) {
+        if (!analytics || !analytics.push) return;
+        var origPush = analytics.push;
+        analytics.push = function () {
+            if (!hasAnalyticsConsent()) return this.length;
+            for (var i = 0; i < arguments.length; i++) {
+                if (Array.isArray(arguments[i])) injectConsentIntoQueuedArgs(arguments[i]);
+            }
+            return origPush.apply(this, arguments);
+        };
+        if (hasAnalyticsConsent()) {
+            for (var j = 0; j < analytics.length; j++) {
+                if (Array.isArray(analytics[j])) injectConsentIntoQueuedArgs(analytics[j]);
+            }
+        } else {
+            for (var k = analytics.length - 1; k >= 0; k--) {
+                if (Array.isArray(analytics[k]) && ["track", "page", "identify"].indexOf(analytics[k][0]) >= 0) {
+                    analytics.splice(k, 1);
+                }
+            }
+        }
+    }
+    function wrapSegmentAnalytics() {
+        if (!window.analytics) return false;
+        wrapStubQueue(window.analytics);
+        if (typeof window.analytics.ready !== "function") return true;
+        window.analytics.ready(function () {
+            var origTrack = window.analytics.track;
+            var origPage = window.analytics.page;
+            var origIdentify = window.analytics.identify;
+            if (typeof origTrack === "function") {
+                window.analytics.track = function (event, properties, options, callback) {
+                    if (!hasAnalyticsConsent()) return this;
+                    if (typeof options === "function") { callback = options; options = {}; }
+                    options = injectConsentIntoOptions(options);
+                    return callback ? origTrack.call(this, event, properties, options, callback) : origTrack.call(this, event, properties, options);
+                };
+            }
+            if (typeof origPage === "function") {
+                window.analytics.page = function () {
+                    if (!hasAnalyticsConsent()) return this;
+                    var args = Array.prototype.slice.call(arguments);
+                    var opts = (args.length >= 4 && typeof args[3] === "object") ? args[3] : {};
+                    opts = injectConsentIntoOptions(opts);
+                    args.length >= 4 ? (args[3] = opts) : args.push(opts);
+                    return origPage.apply(this, args);
+                };
+            }
+            if (typeof origIdentify === "function") {
+                window.analytics.identify = function (userId, traits, options, callback) {
+                    if (!hasAnalyticsConsent()) return this;
+                    if (typeof options === "function") { callback = options; options = {}; }
+                    options = injectConsentIntoOptions(options);
+                    return callback ? origIdentify.call(this, userId, traits, options, callback) : origIdentify.call(this, userId, traits, options);
+                };
+            }
+        });
+        return true;
+    }
+    if (wrapSegmentAnalytics()) return;
+    var attempts = 0;
+    var t = setInterval(function () {
+        if (wrapSegmentAnalytics() || ++attempts > 100) clearInterval(t);
+    }, 20);
+})();
+/* --- End Segment Consent Integration --- */
 
 if (window.INTA?.settings?.gtagId) {
     gtag('config', window.INTA?.settings?.gtagId, {
@@ -2799,12 +3676,63 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 
 intHead.appendChild(analyticsScript);
 
+// --- A/B experiment: resolve variant and apply overrides from window.INTA.experiment ---
+(function applyIntaExperiment() {
+    var exp = window.INTA && window.INTA.experiment;
+    if (!exp || !exp.id || !exp.variants || !Object.keys(exp.variants).length) return;
+    var expKey = 'inta_exp_' + exp.id;
+    var stored = null;
+    try { stored = sessionStorage.getItem(expKey); } catch (e) { }
+    var variantId = stored;
+    if (!variantId) {
+        var variants = exp.variants;
+        var total = 0;
+        var ids = [];
+        for (var k in variants) {
+            if (variants.hasOwnProperty(k)) {
+                var w = Math.max(0, parseInt(variants[k].weight, 10) || 50);
+                total += w;
+                ids.push({ id: k, weight: w });
+            }
+        }
+        if (total <= 0) return;
+        var r = (function simpleHash() {
+            var s = exp.id + (navigator.userAgent || '') + (document.referrer || '') + (new Date().getDate());
+            var h = 0;
+            for (var i = 0; i < s.length; i++) h = ((h << 5) - h) + s.charCodeAt(i) | 0;
+            return Math.abs(h) % 10000 / 10000;
+        })();
+        var bucket = r * total;
+        for (var j = 0; j < ids.length; j++) {
+            bucket -= ids[j].weight;
+            if (bucket <= 0) {
+                variantId = ids[j].id;
+                break;
+            }
+        }
+        variantId = variantId || (ids[0] && ids[0].id);
+        try { sessionStorage.setItem(expKey, variantId); } catch (e) { }
+    }
+    var v = exp.variants[variantId];
+    var overrides = (v && v.settings) || (exp.overrides && exp.overrides[variantId]) || {};
+    if (overrides && typeof overrides === 'object' && window.INTA.settings) {
+        for (var key in overrides) {
+            if (overrides.hasOwnProperty(key)) {
+                window.INTA.settings[key] = overrides[key];
+            }
+        }
+    }
+    window.INTA.experimentVariant = variantId;
+    if (window.dataLayer) {
+        window.dataLayer.push({ event: 'intastellar_experiment_view', experiment_id: exp.id, variant: variantId });
+    }
+})();
+
 const intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.js";
 if (window.INTA.settings.design === "floating") {
     intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/floating.js";
 }
-
 if (intastellarDevMode) {
     if (window.INTA.settings.design === "floating") {
         intastellarCreateBanner.src = "../../dev/styles/floating.js";
@@ -2814,18 +3742,63 @@ if (intastellarDevMode) {
 }
 
 intastellarCreateBanner.async = true;
+intastellarCreateBanner.defer = true;
 
 setTimeout(() => {
     if (window.INTA.settings) {
         intHead.appendChild(intastellarCreateBanner);
     }
-}, 500);
+}, 800);
+
+function updateCookiePreferenceOfBlockedIframes(dataType) {
+    if (dataType == "intMarketingCookies") {
+        document.querySelector("#marketing").checked = true;
+    } else if (dataType == "intFunctionalCookies") {
+        document.querySelector("#functional").checked = true;
+    }
+    saveINTCookieSettings("changePermission");
+    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    // Dispatch TCF event after user action
+    dispatchTCFConsentChangedIfAvailable();
+
+    window.location.reload();
+}
+window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
+
+function recordCookie(value) {
+    window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
+    window.__INTA__COOKIE_EVENTS__.push(value);
+
+    try {
+        // Save the collected cookies in the DB
+
+        // Fetch call saving the data
+        const IntastellarCookieSave = fetch('https://consents.intastellarsolutions.com/api/v1/cookie-events', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                event: value,
+                website: window.location.href,
+                timestamp: new Date().toISOString()
+            })
+        });
+
+        IntastellarCookieSave.then(response => {
+            return response.json();
+        })
+
+    } catch (e) { }
+
+}
 
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
     let p = "";
     if (window.location.host.indexOf("intastellarsolutions.com") == -1) {
-        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="90px" height="40px" style="width: 90px !important; height: 40px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/logos/intastellar-logo-new.svg" alt="Intastellar Solutions, International"></a>`;
+        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="90px" height="40px" style="width: 170px !important; height: 40px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/logos/intastellar-consents-logo.svg" alt="Intastellar Consents"></a>`;
     }
     if (img !== undefined && img != "") {
         return `
@@ -2833,7 +3806,7 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
             <inta-consents-bg class="intCookie_ConsentContainer-bgIMG" inta-bg-img="${img}"></inta-consents-bg>
             <inta-consents-section class="intCookie_ConsentContainer-info">
                 ${textLanguage}
-                <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
+                <button class='intastellarCookie-settings__btn --changePermission' onClick='updateCookiePreferenceOfBlockedIframes("${datatype}")' data-type='${datatype}'>${btnText}</button>
                 ${p}
             </inta-consents-section>
         </inta-consents-content>
@@ -2849,7 +3822,7 @@ function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
                 
                 <inta-consents-section class="intCookie_ConsentContainer-info">
                     ${textLanguage}
-                    <button class='intastellarCookie-settings__btn --changePermission' data-type='${datatype}'>${btnText}</button>
+                    <button class='intastellarCookie-settings__btn --changePermission' onClick='updateCookiePreferenceOfBlockedIframes("${datatype}")' data-type='${datatype}'>${btnText}</button>
                     ${p}
                 </inta-consents-section>
             </inta-consents-content>
