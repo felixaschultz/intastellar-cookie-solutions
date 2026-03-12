@@ -3442,7 +3442,48 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
                     textLanguage = message(externalDomain, frae).finish;
                     btnText = buttonText().finish;
-                } else {
+                }
+                else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "he" || intastellarCookieLanguage === "he-IL") {
+                    textLanguage = message(externalDomain, frae).hebrew;
+                    btnText = buttonText().hebrew;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ar" || intastellarCookieLanguage === "ar-SA") {
+                    textLanguage = message(externalDomain, frae).arabic;
+                    btnText = buttonText().arabic;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "hi" || intastellarCookieLanguage === "hi-IN") {
+                    textLanguage = message(externalDomain, frae).hindi;
+                    btnText = buttonText().hindi;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "tr" || intastellarCookieLanguage === "tr-TR") {
+                    textLanguage = message(externalDomain, frae).turkish;
+                    btnText = buttonText().turkish;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ja" || intastellarCookieLanguage === "ja-JP") {
+                    textLanguage = message(externalDomain, frae).japanese;
+                    btnText = buttonText().japanese;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
+                    textLanguage = message(externalDomain, frae).korean;
+                    btnText = buttonText().korean;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "th" || intastellarCookieLanguage === "th-TH") {
+                    textLanguage = message(externalDomain, frae).thai;
+                    btnText = buttonText().thai;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "vi" || intastellarCookieLanguage === "vi-VN") {
+                    textLanguage = message(externalDomain, frae).vietnamese;
+                    btnText = buttonText().vietnamese;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "id" || intastellarCookieLanguage === "id-ID") {
+                    textLanguage = message(externalDomain, frae).indonesian;
+                    btnText = buttonText().indonesian;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "tl" || intastellarCookieLanguage === "tl-PH") {
+                    textLanguage = message(externalDomain, frae).filipino;
+                    btnText = buttonText().filipino;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ms" || intastellarCookieLanguage === "ms-MY") {
+                    textLanguage = message(externalDomain, frae).malay;
+                    btnText = buttonText().malay;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pl" || intastellarCookieLanguage === "pl-PL") {
+                    textLanguage = message(externalDomain, frae).polish;
+                    btnText = buttonText().polish;
+                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "af" || intastellarCookieLanguage === "af-ZA") {
+                    textLanguage = message(externalDomain, frae).afrikaans;
+                    btnText = buttonText().afrikaans;
+                } 
+                else {
                     textLanguage = message(externalDomain, frae).danish;
                     btnText = buttonText().danish;
                 }

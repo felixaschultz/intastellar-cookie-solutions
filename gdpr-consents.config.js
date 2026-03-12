@@ -8,13 +8,13 @@ window.INTA = {
     //         variant_bannerV2: { weight: 50, settings: { design: 'bannerV2' } }
     //     }
     // },
-    experiment: {
+    /* experiment: {
         id: 'floating-banner-test',
         variants: {
             control: { weight: 25 },
             variant_bannerV2: { weight: 50, settings: { design: 'banner', color: '#c4c4c4' } }
         }
-    },
+    }, */
     policy_link: {
         target: "_blank",
         url: "https://www.intastellarsolutions.com/about/legal/privacy"
@@ -27,7 +27,7 @@ window.INTA = {
         rootDomain: "example.com",
         color: "#197da1ff",
         text: false,
-        language: "auto",
+        language: "japanese",
         design: "bannerV2",
         tcf: true,
         requiredCookies: [
