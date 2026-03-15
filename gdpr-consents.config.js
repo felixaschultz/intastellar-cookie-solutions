@@ -27,7 +27,7 @@ window.INTA = {
         rootDomain: "example.com",
         color: "#197da1ff",
         text: false,
-        language: "japanese",
+        language: "korean",
         design: "bannerV2",
         tcf: true,
         requiredCookies: [
