@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://www.intastellarsolutions.com/solutions/cookie-consents",
+      "permanent": true
+    }
+  ]
+}
