@@ -3781,6 +3781,61 @@ function handleInputChange(event) {
 
 document.addEventListener('change', handleInputChange);
 
+/* - - - Function to handle HubSpot Form submit events - - - */
+window.addEventListener('message', (event) => {
+    // Check if the event is from HubSpot
+    if (event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormSubmit') {
+        // Get form data
+        const IntastellarFormConsentState = event.data;
+        IntastellarFormConsentState.type = 'hsFormCallback';
+        IntastellarFormConsentState.eventName = 'onFormSubmit';
+        IntastellarFormConsentState.formId = event.data.formId;
+        IntastellarFormConsentState.formName = event.data.formName;
+        IntastellarFormConsentState.formSubmittedAt = event.data.submittedAt;
+        IntastellarFormConsentState.formSubmittedBy = event.data.submittedBy;
+        IntastellarFormConsentState.formSubmittedByEmail = event.data.submittedByEmail;
+        IntastellarFormConsentState.formSubmittedByFirstName = event.data.submittedByFirstName;
+        IntastellarFormConsentState.formSubmittedByLastName = event.data.submittedByLastName;
+        IntastellarFormConsentState.formSubmittedByPhone = event.data.submittedByPhone;
+        IntastellarFormConsentState.formSubmittedByCompany = event.data.submittedByCompany;
+        IntastellarFormConsentState.formSubmittedByCountry = event.data.submittedByCountry;
+        IntastellarFormConsentState.formSubmittedByState = event.data.submittedByState;
+        IntastellarFormConsentState.formSubmittedByCity = event.data.submittedByCity;
+        IntastellarFormConsentState.formSubmittedByZip = event.data.submittedByZip;
+        IntastellarFormConsentState.formSubmittedByIp = event.data.submittedByIp;
+        IntastellarFormConsentState.formSubmittedByUserAgent = event.data.submittedByUserAgent;
+        
+        navigator.beacon(
+            '',
+            JSON.stringify(IntastellarFormConsentState)
+        );
+    }
+});
+
+/* - - - Listen for Form submit events to caputre form consent state - - - */
+document.addEventListener('submit', inastellarFormConsentState);
+
+/* - - - Function to send form data to Intastellar Consents API - - - */
+function inastellarFormConsentState(event) {
+    event.preventDefault();
+    // Get form data
+    const formData = new FormData(event.target);
+    const IntastellarFormConsentState = Object.fromEntries(formData.entries());
+    IntastellarFormConsentState.type = 'formConsentState';
+    IntastellarFormConsentState.formId = event.target.id || 'unknown';
+    IntastellarFormConsentState.formName = event.target.name || 'unknown';
+
+    // Intastellar Cookie Consent State
+    const IntastellarCookieConsentState = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : intaCookieConsents;
+    IntastellarFormConsentState.cookieConsentState = IntastellarCookieConsentState;
+
+    navigator.beacon(
+        '',
+        JSON.stringify(IntastellarFormConsentState)
+    );
+
+}
+
 function updateNotRequiredRegexp() {
     // Create the correct RegExp based on current consent settings
     let m;
