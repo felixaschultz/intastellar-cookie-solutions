@@ -3809,6 +3809,7 @@ window.addEventListener('message', (event) => {
 
         IntastellarFormConsentState.uid = intaCookieConsentsUserId;
         IntastellarFormConsentState.domain = window.INTA?.settings?.rootDomain || window.location.host;
+        IntastellarFormConsentState.path = window.location.pathname;
 
         navigator.sendBeacon(
             'https://analytics.intastellarsolutions.com/form/collect',
@@ -3835,6 +3836,7 @@ function inastellarFormConsentState(event) {
 
     IntastellarFormConsentState.uid = intaCookieConsentsUserId;
     IntastellarFormConsentState.domain = window.INTA?.settings?.rootDomain || window.location.host;
+    IntastellarFormConsentState.path = window.location.pathname;
 
     navigator.sendBeacon(
         'https://analytics.intastellarsolutions.com/form/collect',
