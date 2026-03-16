@@ -3804,7 +3804,8 @@ window.addEventListener('message', (event) => {
         IntastellarFormConsentState.formSubmittedByZip = event.data.submittedByZip;
         IntastellarFormConsentState.formSubmittedByIp = event.data.submittedByIp;
         IntastellarFormConsentState.formSubmittedByUserAgent = event.data.submittedByUserAgent;
-        
+        IntastellarFormConsentState.provider = "hubspot";
+
         navigator.beacon(
             '',
             JSON.stringify(IntastellarFormConsentState)
@@ -3824,6 +3825,7 @@ function inastellarFormConsentState(event) {
     IntastellarFormConsentState.type = 'formConsentState';
     IntastellarFormConsentState.formId = event.target.id || 'unknown';
     IntastellarFormConsentState.formName = event.target.name || 'unknown';
+    IntastellarFormConsentState.provider = "native";
 
     // Intastellar Cookie Consent State
     const IntastellarCookieConsentState = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : intaCookieConsents;
