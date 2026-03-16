@@ -3824,8 +3824,8 @@ function inastellarFormConsentState(event) {
     const formData = new FormData(event.target);
     const IntastellarFormConsentState = Object.fromEntries(formData.entries());
     IntastellarFormConsentState.type = 'formConsentState';
-    IntastellarFormConsentState.formId = event.target.id || 'unknown';
-    IntastellarFormConsentState.formName = event.target.name || 'unknown';
+    IntastellarFormConsentState.formId = event.target.id || event.target.getAttribute('data-form-id');
+    IntastellarFormConsentState.formName = event.target.name || event.target.getAttribute('data-form-name');
     IntastellarFormConsentState.provider = "native";
     IntastellarFormConsentState.cookieConsentState = intaCookieConsents;
     IntastellarFormConsentState.timestamp = new Date().toISOString();
