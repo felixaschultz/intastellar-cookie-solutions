@@ -3818,24 +3818,19 @@ document.addEventListener('submit', inastellarFormConsentState);
 
 /* - - - Function to send form data to Intastellar Consents API - - - */
 function inastellarFormConsentState(event) {
-    event.preventDefault();
-    // Get form data
+    
+    // Collect form data without event prevent default
     const formData = new FormData(event.target);
     const IntastellarFormConsentState = Object.fromEntries(formData.entries());
     IntastellarFormConsentState.type = 'formConsentState';
     IntastellarFormConsentState.formId = event.target.id || 'unknown';
     IntastellarFormConsentState.formName = event.target.name || 'unknown';
     IntastellarFormConsentState.provider = "native";
-
-    // Intastellar Cookie Consent State
-    const IntastellarCookieConsentState = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : intaCookieConsents;
-    IntastellarFormConsentState.cookieConsentState = IntastellarCookieConsentState;
-
+    IntastellarFormConsentState.cookieConsentState = intaCookieConsents;
     navigator.beacon(
         '',
         JSON.stringify(IntastellarFormConsentState)
     );
-
 }
 
 function updateNotRequiredRegexp() {
