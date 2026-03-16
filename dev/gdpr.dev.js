@@ -3807,6 +3807,9 @@ window.addEventListener('message', (event) => {
         IntastellarFormConsentState.provider = "hubspot";
         IntastellarFormConsentState.timestamp = new Date().toISOString();
 
+        IntastellarFormConsentState.uid = intaCookieConsentsUserId;
+        IntastellarFormConsentState.domain = window.INTA?.settings?.rootDomain || window.location.host;
+
         navigator.sendBeacon(
             'https://analytics.intastellarsolutions.com/form/collect',
             JSON.stringify(IntastellarFormConsentState)
@@ -3829,6 +3832,10 @@ function inastellarFormConsentState(event) {
     IntastellarFormConsentState.provider = "native";
     IntastellarFormConsentState.cookieConsentState = intaCookieConsents;
     IntastellarFormConsentState.timestamp = new Date().toISOString();
+
+    IntastellarFormConsentState.uid = intaCookieConsentsUserId;
+    IntastellarFormConsentState.domain = window.INTA?.settings?.rootDomain || window.location.host;
+
     navigator.sendBeacon(
         'https://analytics.intastellarsolutions.com/form/collect',
         JSON.stringify(IntastellarFormConsentState)
