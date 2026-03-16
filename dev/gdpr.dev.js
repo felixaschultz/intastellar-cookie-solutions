@@ -3806,8 +3806,8 @@ window.addEventListener('message', (event) => {
         IntastellarFormConsentState.formSubmittedByUserAgent = event.data.submittedByUserAgent;
         IntastellarFormConsentState.provider = "hubspot";
 
-        navigator.beacon(
-            '',
+        navigator.sendBeacon(
+            'https://analytics.intastellarsolutions.com/form/collect',
             JSON.stringify(IntastellarFormConsentState)
         );
     }
@@ -3827,8 +3827,8 @@ function inastellarFormConsentState(event) {
     IntastellarFormConsentState.formName = event.target.name || 'unknown';
     IntastellarFormConsentState.provider = "native";
     IntastellarFormConsentState.cookieConsentState = intaCookieConsents;
-    navigator.beacon(
-        '',
+    navigator.sendBeacon(
+        'https://analytics.intastellarsolutions.com/form/collect',
         JSON.stringify(IntastellarFormConsentState)
     );
 }
