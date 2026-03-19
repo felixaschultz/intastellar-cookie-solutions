@@ -3839,10 +3839,10 @@ function inastellarFormConsentState(event) {
     IntastellarFormConsentState.path = window.location.pathname;
 
     // Send form consent state to Intastellar Consents API
-    navigator.sendBeacon(
-        'https://analytics.intastellarsolutions.com/form/collect',
-        JSON.stringify(IntastellarFormConsentState)
-    );
+    fetch('https://analytics.intastellarsolutions.com/form/collect', {
+        method: 'POST',
+        body: JSON.stringify(IntastellarFormConsentState)
+    });
 }
 
 function updateNotRequiredRegexp() {
