@@ -1,11 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/(?!uc\\.js$|cb\\.js$|uc-vendors\\.js$)(.*)",
-      "destination": "https://www.intastellarsolutions.com/solutions/cookie-consents",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/(uc|cb|uc-vendors)\\.js",
