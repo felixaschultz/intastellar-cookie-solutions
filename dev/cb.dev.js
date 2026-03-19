@@ -3859,7 +3859,6 @@ onWindowLoad(function () {
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
 
     if (isValidPolicyLink()) {
-        console.log("Hello Loaded");
         document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
             if (window?.INTA?.settings.company != "" && window?.INTA?.settings.company != undefined && vendor.innerText == window.location.host) {
                 vendor.innerText = window?.INTA?.settings.company;
