@@ -3838,6 +3838,7 @@ function inastellarFormConsentState(event) {
     IntastellarFormConsentState.domain = window.INTA?.settings?.rootDomain || window.location.host;
     IntastellarFormConsentState.path = window.location.pathname;
 
+    // Send form consent state to Intastellar Consents API
     navigator.sendBeacon(
         'https://analytics.intastellarsolutions.com/form/collect',
         JSON.stringify(IntastellarFormConsentState)
