@@ -537,6 +537,11 @@ window.Shopify ?? window?.Shopify?.loadFeatures(
             console.error(error);
         }
         // If error is false, the API has loaded and ready to use!
+        window.Shopify.customerPrivacy.preferencesProcessingAllowed();
+        window.Shopify.customerPrivacy.analyticsProcessingAllowed();
+        window.Shopify.customerPrivacy.marketingAllowed();
+        window.Shopify.customerPrivacy.saleOfDataAllowed();
+        
         window.Shopify.customerPrivacy.setTrackingConsent(
             {
                 'analytics': intaCookieConsents?.staticsticCookies === "checked",
@@ -3822,18 +3827,81 @@ window.addEventListener('message', (event) => {
     }
 });
 
-/* - - - Listen for Form submit events to caputre form consent state - - - */
-document.addEventListener('submit', inastellarFormConsentState);
+/* - - - Listen for Form submit events to capture form consent state - - - */
+// One fetch per real DOM submit: capture may run + preventDefault hook may run on same event.
+const intaSeenSubmitEvents = new WeakSet();
+
+// Capture on window + document (as early as possible). preventDefault() does not stop other
+// listeners; stopImmediatePropagation on an earlier capture listener can — see preventDefault patch.
+function intaIsDomSubmitEvent(event) {
+    return event && typeof event === 'object' && event.type === 'submit' && typeof Event !== 'undefined' && event instanceof Event;
+}
+
+window.addEventListener('submit', inastellarFormConsentState, true);
+document.addEventListener('submit', inastellarFormConsentState, true);
+
+/* - - - If a site handler calls preventDefault(), we still want a record (same event, deduped) - - - */
+(function intastellarPatchPreventDefaultForFormSubmit() {
+    if (typeof Event === 'undefined' || Event.prototype.__intaPreventDefaultPatched) {
+        return;
+    }
+    Event.prototype.__intaPreventDefaultPatched = true;
+    const nativePreventDefault = Event.prototype.preventDefault;
+    Event.prototype.preventDefault = function intastellarWrappedPreventDefault() {
+        try {
+            if (this.type === 'submit' && this.target && this.target.nodeName === 'FORM' && typeof inastellarFormConsentState === 'function') {
+                inastellarFormConsentState(this);
+            }
+        } catch (e) { /* ignore */ }
+        return nativePreventDefault.apply(this, arguments);
+    };
+})();
+
+/* - - - Programmatic submit: HTMLFormElement.prototype.submit() does NOT fire "submit" listeners - - - */
+(function intastellarPatchNativeFormSubmit() {
+    if (typeof HTMLFormElement === 'undefined' || HTMLFormElement.prototype.__intaNativeSubmitPatched) {
+        return;
+    }
+    HTMLFormElement.prototype.__intaNativeSubmitPatched = true;
+    const nativeSubmit = HTMLFormElement.prototype.submit;
+    HTMLFormElement.prototype.submit = function intastellarWrappedNativeSubmit() {
+        try {
+            if (typeof inastellarFormConsentState === 'function') {
+                inastellarFormConsentState({
+                    type: 'submit',
+                    target: this,
+                    preventDefault: function () {},
+                    stopPropagation: function () {}
+                });
+            }
+        } catch (e) { /* ignore */ }
+        return nativeSubmit.apply(this, arguments);
+    };
+})();
+
+/* jQuery $('form').submit(handler) still fires a real DOM submit event → capture listener runs first.
+   jQuery $('form').submit() with no args calls elem.submit() → patched HTMLFormElement.submit below. */
 
 /* - - - Function to send form data to Intastellar Consents API - - - */
 function inastellarFormConsentState(event) {
-    
+    const form = event.target;
+    if (!form || form.nodeName !== 'FORM') {
+        return;
+    }
+
+    if (intaIsDomSubmitEvent(event)) {
+        if (intaSeenSubmitEvents.has(event)) {
+            return;
+        }
+        intaSeenSubmitEvents.add(event);
+    }
+
     // Collect form data without event prevent default
-    const formData = new FormData(event.target);
+    const formData = new FormData(form);
     const IntastellarFormConsentState = Object.fromEntries(formData.entries());
     IntastellarFormConsentState.type = 'formConsentState';
-    IntastellarFormConsentState.formId = event.target.id || event.target.getAttribute('data-form-id');
-    IntastellarFormConsentState.formName = event.target.name || event.target.getAttribute('data-form-name');
+    IntastellarFormConsentState.formId = form.id || form.getAttribute('data-form-id');
+    IntastellarFormConsentState.formName = form.name || form.getAttribute('data-form-name');
     IntastellarFormConsentState.provider = "native";
     IntastellarFormConsentState.cookieConsentState = intaCookieConsents;
     IntastellarFormConsentState.timestamp = new Date().toISOString();
