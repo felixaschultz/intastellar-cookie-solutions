@@ -522,36 +522,70 @@ window._hsp.push([
 
 window.Shopify = window.Shopify || {};
 window.Shopify.customerPrivacy = window.Shopify.customerPrivacy || {};
+// Hide Shopify’s own banner when using Intastellar; real API methods come from loadFeatures below.
 window.Shopify.customerPrivacy.shouldShowBanner = function () { return false; };
 
-window.Shopify ?? window?.Shopify?.loadFeatures(
-    [
-        {
-            name: 'consent-tracking-api',
-            version: '0.1',
-        },
-    ],
-    error => {
-        if (error) {
-            // Rescue error
-            console.error("Shopify consent tracking API error:", error);
-        }
-        // If error is false, the API has loaded and ready to use!
-        window.Shopify.customerPrivacy.preferencesProcessingAllowed();
-        window.Shopify.customerPrivacy.analyticsProcessingAllowed();
-        window.Shopify.customerPrivacy.marketingAllowed();
-        window.Shopify.customerPrivacy.saleOfDataAllowed();
-
-        window.Shopify.customerPrivacy.setTrackingConsent(
+// BUGFIX: was `window.Shopify ?? loadFeatures(...)` — after assigning `window.Shopify = {}` above,
+// Shopify is always truthy so `??` never ran loadFeatures and customerPrivacy stayed a stub.
+let intaShopifyConsentApiLoadStarted = false;
+function intaShopifyLoadConsentTrackingApi() {
+    if (intaShopifyConsentApiLoadStarted) {
+        return true;
+    }
+    if (typeof window.Shopify.loadFeatures !== 'function') {
+        return false;
+    }
+    intaShopifyConsentApiLoadStarted = true;
+    window.Shopify.loadFeatures(
+        [
             {
-                'analytics': intaCookieConsents?.staticsticCookies === "checked",
-                'marketing': intaCookieConsents?.advertisementCookies === "checked",
-                'preferences': intaCookieConsents?.functionalCookies === "checked",
+                name: 'consent-tracking-api',
+                version: '0.1',
             },
-            () => console.log("Consent captured")
-        );
-    },
-);
+        ],
+        (error) => {
+            if (error) {
+                console.error("Shopify consent tracking API error:", error);
+                return;
+            }
+            // error is falsy when the API loaded successfully
+            if (typeof window.Shopify.customerPrivacy.preferencesProcessingAllowed === 'function') {
+                window.Shopify.customerPrivacy.preferencesProcessingAllowed();
+            }
+            if (typeof window.Shopify.customerPrivacy.analyticsProcessingAllowed === 'function') {
+                window.Shopify.customerPrivacy.analyticsProcessingAllowed();
+            }
+            if (typeof window.Shopify.customerPrivacy.marketingAllowed === 'function') {
+                window.Shopify.customerPrivacy.marketingAllowed();
+            }
+            if (typeof window.Shopify.customerPrivacy.saleOfDataAllowed === 'function') {
+                window.Shopify.customerPrivacy.saleOfDataAllowed();
+            }
+
+            if (typeof window.Shopify.customerPrivacy.setTrackingConsent === 'function') {
+                window.Shopify.customerPrivacy.setTrackingConsent(
+                    {
+                        'analytics': intaCookieConsents?.staticsticCookies === "checked",
+                        'marketing': intaCookieConsents?.advertisementCookies === "checked",
+                        'preferences': intaCookieConsents?.functionalCookies === "checked",
+                    },
+                    () => console.log("Consent captured")
+                );
+            }
+        },
+    );
+    return true;
+}
+
+if (!intaShopifyLoadConsentTrackingApi()) {
+    // Shopify core (loadFeatures) often loads after this script — retry briefly on storefronts
+    let intaShopifyRetries = 0;
+    const intaShopifyRetryId = setInterval(() => {
+        if (intaShopifyLoadConsentTrackingApi() || ++intaShopifyRetries > 50) {
+            clearInterval(intaShopifyRetryId);
+        }
+    }, 100);
+}
 
 function optOutCCPA() {
     // Google Tag Manager / gtag
@@ -2955,7 +2989,7 @@ if (intaCookieConsents?.advertisementCookies) {
         analytics_Storage: "denied"
     });
 
-    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
         {
             'analytics': false,
             'marketing': true,
@@ -2986,7 +3020,7 @@ if (intaCookieConsents?.staticsticCookies) {
 
     _paq.push(['setConsentGiven']);
 
-    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
         {
             'analytics': true,
             'marketing': false,
@@ -3004,7 +3038,7 @@ if (intaCookieConsents?.functionalCookies) {
         'functionality_storage': 'granted'
     });
 
-    window.Shopify ?? window.Shopify.customerPrivacy.setTrackingConsent(
+    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
         {
             'analytics': false,
             'marketing': false,
