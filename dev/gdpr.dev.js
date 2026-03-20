@@ -166,7 +166,7 @@ window.addEventListener('message', (event) => {
     if (event.data.type === 'consentState') {
         // Integrate with your banner logic
         window.intaCookieConsents = event.data.consents;
-        intaShopifySetTrackingConsentFromIntastellar();
+        intaShopifySetTrackingConsentFromConsentsObject(event.data.consents);
         // Optionally, update checkboxes or UI elements
         if (typeof updateConsentUI === 'function') {
             updateConsentUI(event.data.consents);
@@ -218,10 +218,39 @@ function intaShopifyConsentFlag(v) {
     return v === "checked" || v === true;
 }
 
+/**
+ * Build Shopify payload from current Intastellar cookie only (not stale window.intaCookieConsents).
+ * If IntastellarConsentSolution is missing / invalid → deny all so Shopify does not keep old "yes".
+ */
 function intaShopifyBuildSetTrackingConsentPayload() {
-    const c = window.intaCookieConsents;
+    const denyAll = { analytics: false, marketing: false, preferences: false };
+    try {
+        const name = (typeof window !== "undefined" && window.int_hideCookieBannerName) || "IntastellarConsentSolution";
+        const raw = typeof getCookie === "function" && name ? getCookie(name) : "";
+        if (!raw || String(raw).indexOf("__inta") === -1) {
+            return denyAll;
+        }
+        if (typeof decodeIntaConsentsObject !== "function") {
+            return denyAll;
+        }
+        const parsed = JSON.parse(decodeIntaConsentsObject(String(raw).split(".")[2]));
+        const c = parsed && parsed.consents;
+        if (!c || typeof c !== "object") {
+            return denyAll;
+        }
+        return {
+            analytics: intaShopifyConsentFlag(c.staticsticCookies),
+            marketing: intaShopifyConsentFlag(c.advertisementCookies),
+            preferences: intaShopifyConsentFlag(c.functionalCookies),
+        };
+    } catch (e) {
+        return denyAll;
+    }
+}
+
+function intaShopifyPayloadFromConsentsObject(c) {
     if (!c || typeof c !== "object") {
-        return null;
+        return { analytics: false, marketing: false, preferences: false };
     }
     return {
         analytics: intaShopifyConsentFlag(c.staticsticCookies),
@@ -230,8 +259,7 @@ function intaShopifyBuildSetTrackingConsentPayload() {
     };
 }
 
-function intaShopifySetTrackingConsentFromIntastellar(done) {
-    const payload = intaShopifyBuildSetTrackingConsentPayload();
+function intaShopifyApplyTrackingConsentPayload(payload, done) {
     const api = window.Shopify && window.Shopify.customerPrivacy;
     if (!payload || typeof api?.setTrackingConsent !== "function") {
         if (typeof done === "function") {
@@ -246,7 +274,17 @@ function intaShopifySetTrackingConsentFromIntastellar(done) {
     });
 }
 
+function intaShopifySetTrackingConsentFromIntastellar(done) {
+    intaShopifyApplyTrackingConsentPayload(intaShopifyBuildSetTrackingConsentPayload(), done);
+}
+
+/** When consents come from postMessage before cookie is written, pass the object explicitly. */
+function intaShopifySetTrackingConsentFromConsentsObject(consents, done) {
+    intaShopifyApplyTrackingConsentPayload(intaShopifyPayloadFromConsentsObject(consents), done);
+}
+
 window.intaShopifySetTrackingConsentFromIntastellar = intaShopifySetTrackingConsentFromIntastellar;
+window.intaShopifySetTrackingConsentFromConsentsObject = intaShopifySetTrackingConsentFromConsentsObject;
 
 // --- Helper function to detect Vendors of Cookies (lazy-loaded; stub until uc-vendors loads) ---
 function detectCookieVendor(cookie) {
@@ -3042,10 +3080,8 @@ if (intaCookieConsents?.functionalCookies) {
 
 }
 
-// Shopify: one setTrackingConsent with analytics + marketing + preferences together (partial updates clear the rest)
-if (intaShopifyBuildSetTrackingConsentPayload()) {
-    intaShopifySetTrackingConsentFromIntastellar();
-}
+// Shopify: sync from Intastellar cookie (or deny all if cookie cleared so currentVisitorConsent is not stale)
+intaShopifySetTrackingConsentFromIntastellar();
 
 /* --- Segment Consent Integration (classic analytics.js) --- */
 (function initSegmentConsent() {
