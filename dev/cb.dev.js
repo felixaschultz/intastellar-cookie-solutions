@@ -238,6 +238,85 @@ function dispatchTCFConsentChangedIfAvailable(wasUserInteraction) {
     }
 }
 
+/**
+ * Disable Shopify’s native Customer Privacy / cookie banner while Intastellar is active.
+ * Shopify checks customerPrivacy.shouldShowBanner(); we also hide known DOM + inject CSS.
+ */
+function intaHideShopifyNativeConsentBanner() {
+    try {
+        window.Shopify = window.Shopify || {};
+        window.Shopify.customerPrivacy = window.Shopify.customerPrivacy || {};
+        window.Shopify.customerPrivacy.shouldShowBanner = function () {
+            return false;
+        };
+
+        if (!document.getElementById('inta-shopify-native-banner-hide')) {
+            var st = document.createElement('style');
+            st.id = 'inta-shopify-native-banner-hide';
+            st.textContent =
+                '#shopify-pc__banner, #shopify-pc__prefs, .shopify-pc__banner, .shopify-pc__prefs, ' +
+                '[data-shopify-pc-banner], [id^="shopify-pc"] { display: none !important; ' +
+                'visibility: hidden !important; pointer-events: none !important; opacity: 0 !important; }';
+            (document.head || document.documentElement).appendChild(st);
+        }
+
+        var shopifyPcSelectors = [
+            '#shopify-pc__banner',
+            '#shopify-pc__prefs',
+            '.shopify-pc__banner',
+            '.shopify-pc__prefs',
+            '[data-shopify-pc-banner]',
+        ];
+        for (var si = 0; si < shopifyPcSelectors.length; si++) {
+            try {
+                document.querySelectorAll(shopifyPcSelectors[si]).forEach(function (el) {
+                    el.style.setProperty('display', 'none', 'important');
+                    el.setAttribute('hidden', '');
+                    el.setAttribute('aria-hidden', 'true');
+                });
+            } catch (e) { /* ignore */ }
+        }
+    } catch (e) { /* ignore */ }
+}
+
+var intaShopifyHideBannerRaf = null;
+function intaScheduleHideShopifyNativeBanner() {
+    if (intaShopifyHideBannerRaf != null) {
+        return;
+    }
+    intaShopifyHideBannerRaf = requestAnimationFrame(function () {
+        intaShopifyHideBannerRaf = null;
+        intaHideShopifyNativeConsentBanner();
+    });
+}
+
+/** Watch for late-injected Shopify banners (e.g. after loadFeatures) for a short window */
+(function intaObserveShopifyBannerSuppression() {
+    intaHideShopifyNativeConsentBanner();
+    if (typeof MutationObserver === 'undefined') {
+        return;
+    }
+    var mo = new MutationObserver(function () {
+        intaScheduleHideShopifyNativeBanner();
+    });
+    function attach() {
+        if (!document.body) {
+            return;
+        }
+        mo.observe(document.body, { childList: true, subtree: true });
+    }
+    if (document.body) {
+        attach();
+    } else {
+        document.addEventListener('DOMContentLoaded', attach);
+    }
+    setTimeout(function () {
+        try {
+            mo.disconnect();
+        } catch (e) { /* ignore */ }
+    }, 60000);
+})();
+
 const IntastellarCookieConsent = {
     // Store reference to the banner element
     _banner: null,
@@ -253,6 +332,7 @@ const IntastellarCookieConsent = {
         if (window.dataLayer) {
             window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
         }
+        intaHideShopifyNativeConsentBanner();
     },
     remove: function (template) {
         // Use direct reference if available
@@ -296,6 +376,7 @@ const IntastellarCookieConsent = {
                     window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
                 }
             }
+            intaHideShopifyNativeConsentBanner();
         }
 
         function loadRemoteConfig() {
@@ -3381,6 +3462,25 @@ function onWindowLoad(callback) {
     }
 }
 
+/** Shopify: one setTrackingConsent with full analytics + marketing + preferences (partial calls zero the rest). */
+function intaCbShopifySyncFromBannerCheckboxes() {
+    const api = window.Shopify && window.Shopify.customerPrivacy;
+    if (!api || typeof api.setTrackingConsent !== "function") {
+        return;
+    }
+    const fn = document.querySelector("#functional");
+    const st = document.querySelector("#statics");
+    const mk = document.querySelector("#marketing");
+    const payload = {
+        analytics: !!(st && st.checked),
+        marketing: !!(mk && mk.checked),
+        preferences: !!(fn && fn.checked),
+    };
+    api.setTrackingConsent(payload, function () {
+        console.log("Shopify Customer Privacy synced from banner", payload);
+    });
+}
+
 function IntaSaveSettings() {
     recordTimeToDecision('save_settings');
     const accepted = [];
@@ -3390,28 +3490,10 @@ function IntaSaveSettings() {
         })
         accepted.push("functionalCookies");
 
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': true,
-            },
-            () => console.log("Consent captured")
-        );
-        
     } else if (!FunctionalCheckbox?.checked) {
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
         });
-
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
 
         const index = accepted.indexOf("functionalCookies");
         if (index > -1) { // only splice array when item is found
@@ -3431,14 +3513,6 @@ function IntaSaveSettings() {
         });
         accepted.push("staticsticCookies");
         _paq.push(['setConsentGiven']);
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': true,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
     } else if (!StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
@@ -3450,15 +3524,6 @@ function IntaSaveSettings() {
             ad_Storage: "denied",
             analytics_Storage: "denied"
         });
-
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
 
         const index = accepted.indexOf("staticsticCookies");
         if (index > -1) { // only splice array when item is found
@@ -3483,14 +3548,6 @@ function IntaSaveSettings() {
         });
         accepted.push("advertisementCookies");
 
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': true,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         // Pintrk
         if (typeof pintrk === 'function') {
             try {
@@ -3518,14 +3575,6 @@ function IntaSaveSettings() {
                 pintrk('setconsent', false);
             } catch (e) { /* ignore */ }
         }
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
 
         window.clarity && window.clarity('consent', false);
 
@@ -3593,7 +3642,7 @@ function IntaAcceptAll() {
         ad_Storage: "granted",
         analytics_Storage: "granted"
     });
-    window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
         {
             'analytics': true,
             'marketing': true,
@@ -3690,7 +3739,7 @@ function IntaSaveNeccessary() {
         advertisement: false,
         functionality: false,
     }]);
-    window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
         {
             'analytics': false,
             'marketing': false,
@@ -4041,7 +4090,7 @@ onWindowLoad(function () {
                     functionality: true,
                 }]);
 
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+                window.Shopify?.customerPrivacy?.setTrackingConsent?.(
                     {
                         'analytics': true,
                         'marketing': true,
@@ -4144,7 +4193,7 @@ onWindowLoad(function () {
                     "isOptOut": false
                 });
 
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+                window.Shopify?.customerPrivacy?.setTrackingConsent?.(
                     {
                         'analytics': true,
                         'marketing': true,
@@ -4225,7 +4274,7 @@ onWindowLoad(function () {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
                 });
-                window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
+                window.Shopify?.customerPrivacy?.setTrackingConsent?.(
                     {
                         'analytics': false,
                         'marketing': false,
@@ -5718,15 +5767,6 @@ function saveINTCookieSettings(consent, type = null) {
         });
         window._hsp.push(['doNotTrack', false]);
 
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': true,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
-
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -5754,14 +5794,6 @@ function saveINTCookieSettings(consent, type = null) {
         });
         window.clarity && window.clarity('consent', false);
 
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -5787,14 +5819,6 @@ function saveINTCookieSettings(consent, type = null) {
 
         window._hsp.push(['doNotTrack', false]);
 
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': true,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "functional") {
                 script.scripts.forEach((src) => {
@@ -5816,14 +5840,6 @@ function saveINTCookieSettings(consent, type = null) {
             'functionality_storage': 'denied',
         })
 
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "functional") {
                 script.scripts.forEach((src) => {
@@ -5856,14 +5872,6 @@ function saveINTCookieSettings(consent, type = null) {
             ad_Storage: "denied",
             analytics_Storage: "granted"
         });
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': true,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
@@ -5896,14 +5904,6 @@ function saveINTCookieSettings(consent, type = null) {
         });
         window.clarity && window.clarity('consent', false);
 
-        window.Shopify ?? window?.Shopify?.customerPrivacy?.setTrackingConsent(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
@@ -5923,6 +5923,7 @@ function saveINTCookieSettings(consent, type = null) {
         advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
     };
     window.intaCookieConsents = intaConsentsObjectVariable.consents;
+    intaCbShopifySyncFromBannerCheckboxes();
     dataLayer.push({
         'event': 'cookie_consent_update',
         'cookie_consent': intaConsentsObjectVariable.consents,

@@ -166,6 +166,7 @@ window.addEventListener('message', (event) => {
     if (event.data.type === 'consentState') {
         // Integrate with your banner logic
         window.intaCookieConsents = event.data.consents;
+        intaShopifySetTrackingConsentFromIntastellar();
         // Optionally, update checkboxes or UI elements
         if (typeof updateConsentUI === 'function') {
             updateConsentUI(event.data.consents);
@@ -208,6 +209,44 @@ function updateVwoConsent(consents) {
     window.VWO.init(state);
 }
 // --- End VWO Cookie Consent Integration ---
+
+/**
+ * Shopify Customer Privacy: map Intastellar consent values to booleans.
+ * Partial setTrackingConsent calls overwrite other purposes — always send the full matrix once.
+ */
+function intaShopifyConsentFlag(v) {
+    return v === "checked" || v === true;
+}
+
+function intaShopifyBuildSetTrackingConsentPayload() {
+    const c = window.intaCookieConsents;
+    if (!c || typeof c !== "object") {
+        return null;
+    }
+    return {
+        analytics: intaShopifyConsentFlag(c.staticsticCookies),
+        marketing: intaShopifyConsentFlag(c.advertisementCookies),
+        preferences: intaShopifyConsentFlag(c.functionalCookies),
+    };
+}
+
+function intaShopifySetTrackingConsentFromIntastellar(done) {
+    const payload = intaShopifyBuildSetTrackingConsentPayload();
+    const api = window.Shopify && window.Shopify.customerPrivacy;
+    if (!payload || typeof api?.setTrackingConsent !== "function") {
+        if (typeof done === "function") {
+            done();
+        }
+        return;
+    }
+    api.setTrackingConsent(payload, function () {
+        if (typeof done === "function") {
+            done();
+        }
+    });
+}
+
+window.intaShopifySetTrackingConsentFromIntastellar = intaShopifySetTrackingConsentFromIntastellar;
 
 // --- Helper function to detect Vendors of Cookies (lazy-loaded; stub until uc-vendors loads) ---
 function detectCookieVendor(cookie) {
@@ -548,30 +587,12 @@ function intaShopifyLoadConsentTrackingApi() {
                 console.error("Shopify consent tracking API error:", error);
                 return;
             }
-            // error is falsy when the API loaded successfully
-            if (typeof window.Shopify.customerPrivacy.preferencesProcessingAllowed === 'function') {
-                window.Shopify.customerPrivacy.preferencesProcessingAllowed();
-            }
-            if (typeof window.Shopify.customerPrivacy.analyticsProcessingAllowed === 'function') {
-                window.Shopify.customerPrivacy.analyticsProcessingAllowed();
-            }
-            if (typeof window.Shopify.customerPrivacy.marketingAllowed === 'function') {
-                window.Shopify.customerPrivacy.marketingAllowed();
-            }
-            if (typeof window.Shopify.customerPrivacy.saleOfDataAllowed === 'function') {
-                window.Shopify.customerPrivacy.saleOfDataAllowed();
-            }
-
-            if (typeof window.Shopify.customerPrivacy.setTrackingConsent === 'function') {
-                window.Shopify.customerPrivacy.setTrackingConsent(
-                    {
-                        'analytics': intaCookieConsents?.staticsticCookies === "checked",
-                        'marketing': intaCookieConsents?.advertisementCookies === "checked",
-                        'preferences': intaCookieConsents?.functionalCookies === "checked",
-                    },
-                    () => console.log("Consent captured")
-                );
-            }
+            // error is falsy when the API loaded successfully — do not call *Allowed(); those only read state.
+            intaShopifySetTrackingConsentFromIntastellar(() => console.log("Shopify Customer Privacy synced from Intastellar"));
+            // consent-tracking-api may replace customerPrivacy; keep Shopify’s banner off while Intastellar runs
+            window.Shopify.customerPrivacy.shouldShowBanner = function () {
+                return false;
+            };
         },
     );
     return true;
@@ -641,17 +662,15 @@ function optOutCCPA() {
     }
 
     // Shopify
-    if (window.Shopify && window.Shopify.customerPrivacy) {
-        try {
-            window.Shopify.customerPrivacy.setTrackingConsent({
-                analytics: false,
-                marketing: false,
-                preferences: false
-            }, function () {
-                console.log("Shopify CCPA opt-out set");
-            });
-        } catch (e) { /* ignore */ }
-    }
+    try {
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.({
+            analytics: false,
+            marketing: false,
+            preferences: false,
+        }, function () {
+            console.log("Shopify CCPA opt-out set");
+        });
+    } catch (e) { /* ignore */ }
 
     // Store the choice locally
     localStorage.setItem('ccpa_opt_out', 'true');
@@ -2989,15 +3008,6 @@ if (intaCookieConsents?.advertisementCookies) {
         analytics_Storage: "denied"
     });
 
-    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
-        {
-            'analytics': false,
-            'marketing': true,
-            'preferences': false,
-        },
-        () => console.log("Consent captured")
-    );
-
     fbq('consent', 'grant');
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
@@ -3020,14 +3030,6 @@ if (intaCookieConsents?.staticsticCookies) {
 
     _paq.push(['setConsentGiven']);
 
-    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
-        {
-            'analytics': true,
-            'marketing': false,
-            'preferences': false,
-        },
-        () => console.log("Consent captured")
-    );
 }
 
 if (intaCookieConsents?.functionalCookies) {
@@ -3038,15 +3040,11 @@ if (intaCookieConsents?.functionalCookies) {
         'functionality_storage': 'granted'
     });
 
-    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
-        {
-            'analytics': false,
-            'marketing': false,
-            'preferences': true,
-        },
-        () => console.log("Consent captured")
-    );
+}
 
+// Shopify: one setTrackingConsent with analytics + marketing + preferences together (partial updates clear the rest)
+if (intaShopifyBuildSetTrackingConsentPayload()) {
+    intaShopifySetTrackingConsentFromIntastellar();
 }
 
 /* --- Segment Consent Integration (classic analytics.js) --- */
