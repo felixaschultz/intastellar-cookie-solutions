@@ -534,14 +534,14 @@ window.Shopify ?? window?.Shopify?.loadFeatures(
     error => {
         if (error) {
             // Rescue error
-            console.error(error);
+            console.error("Shopify consent tracking API error:", error);
         }
         // If error is false, the API has loaded and ready to use!
         window.Shopify.customerPrivacy.preferencesProcessingAllowed();
         window.Shopify.customerPrivacy.analyticsProcessingAllowed();
         window.Shopify.customerPrivacy.marketingAllowed();
         window.Shopify.customerPrivacy.saleOfDataAllowed();
-        
+
         window.Shopify.customerPrivacy.setTrackingConsent(
             {
                 'analytics': intaCookieConsents?.staticsticCookies === "checked",
