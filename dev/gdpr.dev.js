@@ -3811,10 +3811,14 @@ window.addEventListener('message', (event) => {
         IntastellarFormConsentState.domain = window.INTA?.settings?.rootDomain || window.location.host;
         IntastellarFormConsentState.path = window.location.pathname;
 
-        navigator.sendBeacon(
-            'https://analytics.intastellarsolutions.com/form/collect',
-            JSON.stringify(IntastellarFormConsentState)
-        );
+        fetch('https://analytics.intastellarsolutions.com/form/collect', {
+            method: 'POST',
+            body: JSON.stringify(IntastellarFormConsentState)
+        }).then(response => response.json()).then(data => {
+            console.log('Form consent state collected:', data);
+        }).catch(error => {
+            console.error('Error collecting form consent state:', error);
+        });
     }
 });
 
@@ -3842,6 +3846,10 @@ function inastellarFormConsentState(event) {
     fetch('https://analytics.intastellarsolutions.com/form/collect', {
         method: 'POST',
         body: JSON.stringify(IntastellarFormConsentState)
+    }).then(response => response.json()).then(data => {
+        console.log('Form consent state collected:', data);
+    }).catch(error => {
+        console.error('Error collecting form consent state:', error);
     });
 }
 
