@@ -242,6 +242,7 @@ function intaShopifyBuildSetTrackingConsentPayload() {
             analytics: intaShopifyConsentFlag(c.staticsticCookies),
             marketing: intaShopifyConsentFlag(c.advertisementCookies),
             preferences: intaShopifyConsentFlag(c.functionalCookies),
+            sale_of_data: intaShopifyConsentFlag(c.advertisementCookies),
         };
     } catch (e) {
         return denyAll;
@@ -256,6 +257,7 @@ function intaShopifyPayloadFromConsentsObject(c) {
         analytics: intaShopifyConsentFlag(c.staticsticCookies),
         marketing: intaShopifyConsentFlag(c.advertisementCookies),
         preferences: intaShopifyConsentFlag(c.functionalCookies),
+        sale_of_data: intaShopifyConsentFlag(c.advertisementCookies),
     };
 }
 
@@ -705,6 +707,7 @@ function optOutCCPA() {
             analytics: false,
             marketing: false,
             preferences: false,
+            sale_of_data: false,
         }, function () {
             console.log("Shopify CCPA opt-out set");
         });
