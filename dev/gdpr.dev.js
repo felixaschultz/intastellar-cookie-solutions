@@ -196,13 +196,31 @@ window.INTA.observedCookieSource = 'unknown';
 // --- VWO Cookie Consent Integration (latest, per docs) ---
 function updateVwoConsent(consents) {
     // VWO expects: 1 = accepted, 2 = pending, 3 = rejected
-    let state = 2; // default to pending
-    if (consents) {
-        if (consents.advertisementCookies === true || consents.advertisementCookies === "checked" || consents.marketing === true) {
-            state = 1; // accepted
-        } else if (consents.advertisementCookies === false || consents.advertisementCookies === "unchecked" || consents.marketing === false) {
-            state = 3; // rejected
-        }
+    // VWO runs when marketing OR statistical (analytics) cookies are accepted — not only marketing.
+    var state = 2;
+    if (!consents) {
+        window.VWO = window.VWO || [];
+        window.VWO.init = window.VWO.init || function (s) { window.VWO.consentState = s; };
+        window.VWO.init(state);
+        return;
+    }
+    function granted(v) {
+        return v === true || v === "checked";
+    }
+    function denied(v) {
+        return v === false || v === "unchecked";
+    }
+    var marketingOn = granted(consents.advertisementCookies) || consents.marketing === true;
+    var statsOn = granted(consents.staticsticCookies) || consents.analytics === true;
+    var marketingOff = denied(consents.advertisementCookies) || consents.marketing === false;
+    var statsOff = denied(consents.staticsticCookies) || consents.analytics === false;
+
+    if (marketingOn || statsOn) {
+        state = 1;
+    } else if (marketingOff && statsOff) {
+        state = 3;
+    } else {
+        state = 2;
     }
     window.VWO = window.VWO || [];
     window.VWO.init = window.VWO.init || function (s) { window.VWO.consentState = s; };
