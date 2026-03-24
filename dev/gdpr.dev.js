@@ -225,6 +225,9 @@ function updateVwoConsent(consents) {
     window.VWO = window.VWO || [];
     window.VWO.init = window.VWO.init || function (s) { window.VWO.consentState = s; };
     window.VWO.init(state);
+    if (typeof window.VWO.onVariationApplied === 'function') {
+        window.location.reload();
+    }
 }
 // --- End VWO Cookie Consent Integration ---
 

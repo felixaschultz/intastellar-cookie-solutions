@@ -4143,10 +4143,10 @@ onWindowLoad(function () {
                     analytics_Storage: "granted"
                 });
                 dataLayer.push({
-        'event': 'cookie_consent_update',
-        'cookie_consent': intaConsentsObjectVariable.consents,
-        'time_to_decision_ms': intaConsentsObjectVariable.time_to_decision
-    });
+                    'event': 'cookie_consent_update',
+                    'cookie_consent': intaConsentsObjectVariable.consents,
+                    'time_to_decision_ms': intaConsentsObjectVariable.time_to_decision
+                });
 
                 window._hsp.push(['setHubSpotConsent', {
                     analytics: true,
@@ -4269,10 +4269,10 @@ onWindowLoad(function () {
                 );
 
                 dataLayer.push({
-        'event': 'cookie_consent_update',
-        'cookie_consent': intaConsentsObjectVariable.consents,
-        'time_to_decision_ms': intaConsentsObjectVariable.time_to_decision
-    });
+                    'event': 'cookie_consent_update',
+                    'cookie_consent': intaConsentsObjectVariable.consents,
+                    'time_to_decision_ms': intaConsentsObjectVariable.time_to_decision
+                });
                 updateConsents("all");
                 /*window.location.reload();*/
             });
