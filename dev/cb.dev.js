@@ -1057,7 +1057,7 @@ const settingsMessagesLanguages = {
     Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i ${(window?.INTA?.settings.arrange == "ltr") ? "venstre" : "højre"} hjørne af hjemmesiden.</p>
     <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på nedenstående links.</p>
     ${generatePolicyUrl('Vores privat og cookie politik')}
-    <button onClick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>
+    ${window.INTA.settings.lgpd?.on ? `<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>` : "" }
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privat politik</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")}`,
     german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
@@ -1096,7 +1096,7 @@ const settingsMessagesLanguages = {
     <p>Al hacer clic en "Aceptar", usted da su consentimiento para todos estos fines. También puede decidir a qué fines dar su consentimiento marcando la casilla junto al fin y haciendo clic en "Guardar configuración".</p>
     <p>Puede retirar su consentimiento en cualquier momento haciendo clic en el pequeño icono en la esquina inferior ${(window?.INTA?.settings.arrange == "ltr") ? "izquierda" : "derecha"} del sitio web.</p>
     ${generatePolicyUrl('Nuestra política de privacidad y cookies')}
-    <button onClick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>
+    ${window.INTA.settings.lgpd?.on ? `<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>` : "" }
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidad</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
@@ -1189,7 +1189,7 @@ const settingsMessagesLanguages = {
     <p>Ao clicar em "Aceitar", você dá seu consentimento para todos esses fins. Você também pode optar por especificar os fins aos quais consente marcando a caixa ao lado do fim e clicando em "Salvar configurações".</p>
     <p>Você pode retirar seu consentimento a qualquer momento clicando no pequeno ícone na parte inferior ${(window?.INTA?.settings.arrange == "ltr") ? "esquerda" : "direita"} do site.</p>
     ${generatePolicyUrl('Nossa política de privacidade e cookies')}
-    <button onClick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>
+    ${window.INTA.settings.lgpd?.on ? `<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>` : "" }
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidade</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,

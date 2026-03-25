@@ -516,7 +516,17 @@ fetch('https://ipapi.co/json/')
             // Optionally disable CCPA for non-CA users
             if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa.on = false;
         }
-        // Now continue with your banner initialization
+
+        // For Brazil only:
+        if (data.country === "BR" && data.region_code === "BR") {
+            window.INTA = window.INTA || {};
+            window.INTA.settings = window.INTA.settings || {};
+            window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
+            window.INTA.settings.lgpd.on = true;
+        } else {
+            // Optionally disable LGPD for non-BR users
+            if (window.INTA?.settings?.lgpd) window.INTA.settings.lgpd.on = false;
+        }
     });
 
 if (window._intaConsentInitialized) {

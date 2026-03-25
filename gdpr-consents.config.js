@@ -49,6 +49,9 @@ window.INTA = {
         ccpa: {
             on: true
         },
+        lgpd: {
+            on: true
+        },
         gtagId: "G-XDDJRGFS76",
         arrange: "rtl",
         styleSheets: [
