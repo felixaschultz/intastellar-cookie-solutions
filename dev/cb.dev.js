@@ -239,6 +239,126 @@ function dispatchTCFConsentChangedIfAvailable(wasUserInteraction) {
     }
 }
 
+/* LGPD Modal */
+function showLGPDModal() {
+    
+}
+
+function createLGPDModal() {
+    const modal = document.createElement('inta-lgpd-modal');
+    modal.innerHTML = `
+    <div id="lgpd-modal" class="inta-lgpd-active" role="dialog" aria-modal="true" aria-labelledby="lgpd-title">
+        <div class="inta-lgpd-modal-box">
+
+        <!-- Header -->
+        <div class="inta-lgpd-modal-header">
+            <div class="inta-lgpd-modal-header-left">
+            <div class="inta-lgpd-modal-header-icon">⚖</div>
+            <div>
+                <div class="inta-lgpd-modal-title" id="lgpd-title">Seus Direitos de Privacidade</div>
+                <div class="inta-lgpd-modal-subtitle">Lei Geral de Proteção de Dados · Art. 18</div>
+            </div>
+            </div>
+            <button class="inta-lgpd-modal-close" onclick="closeLGPDModal()" aria-label="Fechar">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div class="inta-lgpd-modal-body">
+            <p class="inta-lgpd-modal-intro">
+            Nos termos da <strong>LGPD (Lei nº 13.709/2018)</strong>, você possui os seguintes direitos em relação aos seus dados pessoais. Para exercê-los, entre em contato com o nosso Encarregado de Dados (DPO).
+            </p>
+
+            <ul class="inta-lgpd-rights-list">
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">1</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Confirmação</strong> do Tratamento</div>
+                <div class="inta-lgpd-right-desc">Você tem o direito de saber se tratamos seus dados pessoais.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">2</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Acesso</strong> aos Dados</div>
+                <div class="inta-lgpd-right-desc">Você pode solicitar uma cópia completa dos dados pessoais que possuímos sobre você.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">3</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Correção</strong> de Dados Inexatos</div>
+                <div class="inta-lgpd-right-desc">Você pode solicitar a correção de dados incompletos, inexatos ou desatualizados.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">4</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Anonimização, Bloqueio ou Eliminação</strong></div>
+                <div class="inta-lgpd-right-desc">Você pode pedir a anonimização, bloqueio ou eliminação de dados desnecessários ou tratados em desconformidade com a LGPD.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">5</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Portabilidade</strong> dos Dados</div>
+                <div class="inta-lgpd-right-desc">Você tem o direito de solicitar a transferência dos seus dados a outro fornecedor de serviço ou produto.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">6</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Eliminação</strong> dos Dados Tratados com Consentimento</div>
+                <div class="inta-lgpd-right-desc">Você pode solicitar a eliminação dos dados tratados com base no seu consentimento, a qualquer momento.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">7</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Informação</strong> sobre Compartilhamento</div>
+                <div class="inta-lgpd-right-desc">Você tem o direito de saber com quais entidades públicas e privadas seus dados foram compartilhados.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">8</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Revogação</strong> do Consentimento</div>
+                <div class="inta-lgpd-right-desc">Você pode retirar seu consentimento a qualquer momento, sem prejuízo da licitude do tratamento realizado anteriormente.</div>
+                </div>
+            </li>
+            </ul>
+
+            <!-- DPO Contact -->
+            <div class="inta-lgpd-dpo-section">
+            <div class="inta-lgpd-dpo-label">Encarregado de Dados (DPO)</div>
+            <div class="inta-lgpd-dpo-text">
+                Para exercer qualquer um dos direitos acima, entre em contato com o responsável pelo tratamento de dados deste site:<br><br>
+                📧 <a href="mailto:dpo@exemplo.com.br">dpo@exemplo.com.br</a>
+            </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="inta-lgpd-modal-footer">
+            <span class="inta-lgpd-footer-note">Lei nº 13.709/2018 · ANPD</span>
+            <button class="inta-lgpd-btn-close-modal" onclick="closeLGPDModal()">Entendi</button>
+        </div>
+
+        </div>
+    </div>
+    `;
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function closeLGPDModal() {
+    const modal = document.querySelector('inta-lgpd-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+createLGPDModal();
+
 /**
  * True only when this looks like a Shopify storefront (not a random script setting window.Shopify = {}).
  * Prevents creating fake Shopify globals on non-Shopify sites — those caused setTrackingConsent to be missing → TypeError.
