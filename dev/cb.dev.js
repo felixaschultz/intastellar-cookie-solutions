@@ -241,13 +241,19 @@ function dispatchTCFConsentChangedIfAvailable(wasUserInteraction) {
 
 /* LGPD Modal */
 function showLGPDModal() {
-    
+    const lgpdModal = document.querySelector('#lgpd-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (lgpdModal) {
+
+        intastellarConsents.style.display = 'none';
+        lgpdModal.classList.add('inta-lgpd-active');
+    }
 }
 
 function createLGPDModal() {
     const modal = document.createElement('inta-lgpd-modal');
     modal.innerHTML = `
-    <div id="lgpd-modal" class="inta-lgpd-active" role="dialog" aria-modal="true" aria-labelledby="lgpd-title">
+    <div id="lgpd-modal" role="dialog" aria-modal="true" aria-labelledby="lgpd-title">
         <div class="inta-lgpd-modal-box">
 
         <!-- Header -->
@@ -351,9 +357,12 @@ function createLGPDModal() {
 }
 
 function closeLGPDModal() {
-    const modal = document.querySelector('inta-lgpd-modal');
-    if (modal) {
-        modal.remove();
+    const lgpdModal = document.querySelector('#lgpd-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (lgpdModal) {
+        intastellarConsents.style.display = 'grid';
+        lgpdModal.classList.remove('inta-lgpd-active');
+
     }
 }
 
@@ -1048,6 +1057,7 @@ const settingsMessagesLanguages = {
     Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i ${(window?.INTA?.settings.arrange == "ltr") ? "venstre" : "højre"} hjørne af hjemmesiden.</p>
     <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på nedenstående links.</p>
     ${generatePolicyUrl('Vores privat og cookie politik')}
+    <button onClick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privat politik</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")}`,
     german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
@@ -1086,6 +1096,7 @@ const settingsMessagesLanguages = {
     <p>Al hacer clic en "Aceptar", usted da su consentimiento para todos estos fines. También puede decidir a qué fines dar su consentimiento marcando la casilla junto al fin y haciendo clic en "Guardar configuración".</p>
     <p>Puede retirar su consentimiento en cualquier momento haciendo clic en el pequeño icono en la esquina inferior ${(window?.INTA?.settings.arrange == "ltr") ? "izquierda" : "derecha"} del sitio web.</p>
     ${generatePolicyUrl('Nuestra política de privacidad y cookies')}
+    <button onClick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidad</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
@@ -1178,6 +1189,7 @@ const settingsMessagesLanguages = {
     <p>Ao clicar em "Aceitar", você dá seu consentimento para todos esses fins. Você também pode optar por especificar os fins aos quais consente marcando a caixa ao lado do fim e clicando em "Salvar configurações".</p>
     <p>Você pode retirar seu consentimento a qualquer momento clicando no pequeno ícone na parte inferior ${(window?.INTA?.settings.arrange == "ltr") ? "esquerda" : "direita"} do site.</p>
     ${generatePolicyUrl('Nossa política de privacidade e cookies')}
+    <button onClick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidade</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
@@ -3223,6 +3235,102 @@ if (intastellarCookieLanguage != null) {
                 </section>
             </article>
     `;
+    } else if(intastellarCookieLanguage == "pt" || intastellarCookieLanguage == "pt-BR" || window.INTA.settings.language == "pt" || window.INTA.settings.language == "portuguese") {
+        // Portuguese
+        settingsMessage = settingsMessagesLanguages.portuguese;
+        intastellarShowHideDetailsText = "Ver detalhes";
+        message =
+            messageWrapStart
+            + messages.portuguese
+            + messageWrapEnd + generatePolicyUrl('Nossa política de privacidade e cookies');
+        intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
+    ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo != "" || window.INTA.settings.design == "banner" && window.INTA.settings.logo) ? `
+       <img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">`
+                : ""}
+        ${generateCookieSettingsButton(intastellarSupportedLanguages.portuguese.saveSettings, 'Aceitar')}
+        <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
+        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
+    </section>`;
+        cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
+        ${window.INTA.settings.logo && window.INTA.settings.logo != "" ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
+    ` + generateCookieButtons('Aceitar', 'Recusar', 'Configurações');
+        moreFooter.innerHTML =
+            `
+        <section class="intastellar_privacyPolicy"></section>
+        <article class="intReadMore">
+            <section class="required">
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.portuguese.necessary.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.portuguese.necessary.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_requiredCookieList)
+            }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.portuguese.functional.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.portuguese.functional.description}</p>
+                <article class="intaCookieListOverview">
+                    ${listAllCookies(inta_functionalCookieList)
+            }
+                </article>  
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.portuguese.statisic.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.portuguese.statisic.description}</p> 
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_statisticCookieList)
+            }
+                </article>
+            </section>
+            <section>
+                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.portuguese.marketing.title} <i class="intastellar__arrow"></i></h3>
+                <p>${intastellarSupportedLanguages.portuguese.marketing.description}</p>
+                <article class="intaCookieListOverview">
+                ${listAllCookies(inta_marketingCookieList)
+            }
+                </article>
+            </section>
+            </article>
+            <article class="intCookieSetting__form">
+                <section class="intastellarSettings__control">
+                    <label class="intSettingDisabled checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.portuguese.necessary.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.portuguese.functional.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.portuguese.statisic.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+                <section class="intastellarSettings__control">
+                    <label class="checkMarkContainer">
+                        <span class="intSettingsTitle">${intastellarSupportedLanguages.portuguese.marketing.title}</span>
+                        <span class="intCheckmarkSliderContainer">
+                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                            <span class="checkmark round"></span>
+                        </span>
+                    </label>
+                </section>
+            </article>
+            `;
     } else {
         settingsMessage = settingsMessagesLanguages.danish;
         intastellarShowHideDetailsText = "Vis detaljer";
