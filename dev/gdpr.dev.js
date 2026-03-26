@@ -511,10 +511,10 @@ fetch('https://ipapi.co/json/')
             window.INTA = window.INTA || {};
             window.INTA.settings = window.INTA.settings || {};
             window.INTA.settings.ccpa = window.INTA.settings.ccpa || {};
-            window.INTA.settings.ccpa.on = true;
+            window.INTA.settings.ccpa = true;
         } else {
             // Optionally disable CCPA for non-CA users
-            if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa.on = false;
+            if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa = false;
         }
 
         // For Brazil only:
@@ -522,10 +522,10 @@ fetch('https://ipapi.co/json/')
             window.INTA = window.INTA || {};
             window.INTA.settings = window.INTA.settings || {};
             window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
-            window.INTA.settings.lgpd.on = true;
+            window.INTA.settings.lgpd = true;
         } else {
             // Optionally disable LGPD for non-BR users
-            if (window.INTA?.settings?.lgpd) window.INTA.settings.lgpd.on = false;
+            if (window.INTA?.settings?.lgpd) window.INTA.settings.lgpd = false;
         }
     });
 
@@ -2019,6 +2019,24 @@ const inta_requiredCookieList = [{
     domains: [
         window.location.host
     ]
+},
+{
+    vendor: "VWO",
+    cookies: [
+        {
+            cookie: "_vwo*",
+            purpose: "Visual Website Optimizer sets this cookie to calculate unique traffic on a website."
+        }
+    ],
+    domains: [
+        window.location.host,
+        "vwo.com",
+        "visualwebsiteoptimizer.com",
+        "vwo.eu",
+        "vwo.fr",
+        "vwo.de",
+    ],
+    vendor_privacy: "https://vwo.com/privacy-policy/"
 }
 ];
 /* - - - List of Analytics / Statistics cookie names - - - */
