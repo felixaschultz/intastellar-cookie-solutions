@@ -511,22 +511,12 @@ fetch('https://ipapi.co/json/')
             window.INTA = window.INTA || {};
             window.INTA.settings = window.INTA.settings || {};
             window.INTA.settings.ccpa = window.INTA.settings.ccpa || {};
-            window.INTA.settings.ccpa = true;
+            window.INTA.settings.ccpa.on = true;
         } else {
             // Optionally disable CCPA for non-CA users
-            if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa = false;
+            if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa.on = false;
         }
-
-        // For Brazil only:
-        if (data.country === "BR" && data.region_code === "BR") {
-            window.INTA = window.INTA || {};
-            window.INTA.settings = window.INTA.settings || {};
-            window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
-            window.INTA.settings.lgpd = true;
-        } else {
-            // Optionally disable LGPD for non-BR users
-            if (window.INTA?.settings?.lgpd) window.INTA.settings.lgpd = false;
-        }
+        // Now continue with your banner initialization
     });
 
 if (window._intaConsentInitialized) {
@@ -2019,24 +2009,6 @@ const inta_requiredCookieList = [{
     domains: [
         window.location.host
     ]
-},
-{
-    vendor: "VWO",
-    cookies: [
-        {
-            cookie: "_vwo*",
-            purpose: "Visual Website Optimizer sets this cookie to calculate unique traffic on a website."
-        }
-    ],
-    domains: [
-        window.location.host,
-        "vwo.com",
-        "visualwebsiteoptimizer.com",
-        "vwo.eu",
-        "vwo.fr",
-        "vwo.de",
-    ],
-    vendor_privacy: "https://vwo.com/privacy-policy/"
 }
 ];
 /* - - - List of Analytics / Statistics cookie names - - - */
@@ -3403,32 +3375,76 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
 }
 window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
 
+/** Debounced + deduped POST to cookie-events API (interceptor fires very often). */
+var __intaCookieEventFlushTimer = null;
+var __intaCookieEventPendingByKey = new Map();
+var INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
+var INTA_COOKIE_EVENT_MAX_BATCH = 50;
+var INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
+
+function __intaBuildCookieEventsPayload(batch) {
+    return JSON.stringify({
+        events: batch,
+        website: window.location.href,
+        timestamp: new Date().toISOString()
+    });
+}
+
+function flushCookieEventsToApi(options) {
+    options = options || {};
+    if (__intaCookieEventFlushTimer !== null) {
+        clearTimeout(__intaCookieEventFlushTimer);
+        __intaCookieEventFlushTimer = null;
+    }
+    if (!__intaCookieEventPendingByKey.size) return;
+    var batch = Array.from(__intaCookieEventPendingByKey.values());
+    __intaCookieEventPendingByKey.clear();
+    var body = __intaBuildCookieEventsPayload(batch);
+    try {
+        if (options.keepalive && typeof fetch === 'function') {
+            fetch(INTA_COOKIE_EVENTS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: body,
+                keepalive: true
+            }).catch(function () {});
+            return;
+        }
+        fetch(INTA_COOKIE_EVENTS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body
+        }).then(function (r) { return r.json().catch(function () { return null; }); }).catch(function () {});
+    } catch (e) { /* ignore */ }
+}
+
+window.addEventListener('pagehide', function () {
+    flushCookieEventsToApi({ keepalive: true });
+});
+
 function recordCookie(value) {
     window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
     window.__INTA__COOKIE_EVENTS__.push(value);
 
-    try {
-        // Save the collected cookies in the DB
+    if (window.INTA?.settings?.recordCookieEvents === false) {
+        return;
+    }
 
-        // Fetch call saving the data
-        const IntastellarCookieSave = fetch('https://consents.intastellarsolutions.com/api/v1/cookie-events', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                event: value,
-                website: window.location.href,
-                timestamp: new Date().toISOString()
-            })
-        });
+    var key = (value.source || 'unknown') + '\0' + (value.name || '');
+    __intaCookieEventPendingByKey.set(key, value);
 
-        IntastellarCookieSave.then(response => {
-            return response.json();
-        })
+    if (__intaCookieEventPendingByKey.size >= INTA_COOKIE_EVENT_MAX_BATCH) {
+        flushCookieEventsToApi();
+        return;
+    }
 
-    } catch (e) { }
-
+    if (__intaCookieEventFlushTimer !== null) {
+        clearTimeout(__intaCookieEventFlushTimer);
+    }
+    __intaCookieEventFlushTimer = setTimeout(function () {
+        __intaCookieEventFlushTimer = null;
+        flushCookieEventsToApi();
+    }, INTA_COOKIE_EVENT_DEBOUNCE_MS);
 }
 
 /* Helper function to create Consents Block message for iframes etc.*/
