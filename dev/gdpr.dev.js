@@ -3916,45 +3916,106 @@ function handleInputChange(event) {
 
 document.addEventListener('change', handleInputChange);
 
-/* - - - Function to handle HubSpot Form submit events - - - */
-window.addEventListener('message', (event) => {
-    // Check if the event is from HubSpot
-    if (event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormSubmit') {
-        // Get form data
-        const IntastellarFormConsentState = event.data;
-        IntastellarFormConsentState.type = 'hsFormCallback';
-        IntastellarFormConsentState.eventName = 'onFormSubmit';
-        IntastellarFormConsentState.formId = event.data.formId;
-        IntastellarFormConsentState.formName = event.data.formName;
-        IntastellarFormConsentState.formSubmittedAt = event.data.submittedAt;
-        IntastellarFormConsentState.formSubmittedBy = event.data.submittedBy;
-        IntastellarFormConsentState.formSubmittedByEmail = event.data.submittedByEmail;
-        IntastellarFormConsentState.formSubmittedByFirstName = event.data.submittedByFirstName;
-        IntastellarFormConsentState.formSubmittedByLastName = event.data.submittedByLastName;
-        IntastellarFormConsentState.formSubmittedByPhone = event.data.submittedByPhone;
-        IntastellarFormConsentState.formSubmittedByCompany = event.data.submittedByCompany;
-        IntastellarFormConsentState.formSubmittedByCountry = event.data.submittedByCountry;
-        IntastellarFormConsentState.formSubmittedByState = event.data.submittedByState;
-        IntastellarFormConsentState.formSubmittedByCity = event.data.submittedByCity;
-        IntastellarFormConsentState.formSubmittedByZip = event.data.submittedByZip;
-        IntastellarFormConsentState.formSubmittedByIp = event.data.submittedByIp;
-        IntastellarFormConsentState.formSubmittedByUserAgent = event.data.submittedByUserAgent;
-        IntastellarFormConsentState.provider = "hubspot";
-        IntastellarFormConsentState.timestamp = new Date().toISOString();
-
-        IntastellarFormConsentState.uid = intaCookieConsentsUserId;
-        IntastellarFormConsentState.domain = window.INTA?.settings?.rootDomain || window.location.host;
-        IntastellarFormConsentState.path = window.location.pathname;
-
-        fetch('https://analytics.intastellarsolutions.com/form/collect', {
-            method: 'POST',
-            body: JSON.stringify(IntastellarFormConsentState)
-        }).then(response => response.json()).then(data => {
-            console.log('Form consent state collected:', data);
-        }).catch(error => {
-            console.error('Error collecting form consent state:', error);
-        });
+/* - - - HubSpot forms: legacy postMessage + Forms v4 global events (landing pages often use v4 only) - - - */
+function intaNormalizePostMessageData(raw) {
+    if (raw == null) return null;
+    if (typeof raw === 'string') {
+        try {
+            return JSON.parse(raw);
+        } catch (e) {
+            return null;
+        }
     }
+    if (typeof raw === 'object') return raw;
+    return null;
+}
+
+function intaIsLegacyHubspotFormSubmitPostMessage(data) {
+    if (!data || data.type !== 'hsFormCallback') return false;
+    var en = data.eventName;
+    return en === 'onFormSubmit' || en === 'onFormSubmitted' || en === 'onFormSubmitSuccessful' || en === 'onFormSubmissionSuccessful';
+}
+
+function intaCollectHubSpotFormToIntastellar(data) {
+    if (!data || typeof data !== 'object') return;
+    var IntastellarFormConsentState = Object.assign({}, data);
+    IntastellarFormConsentState.type = 'hsFormCallback';
+    IntastellarFormConsentState.eventName = data.eventName || 'onFormSubmit';
+    IntastellarFormConsentState.formId = data.formId;
+    IntastellarFormConsentState.formName = data.formName;
+    IntastellarFormConsentState.formSubmittedAt = data.submittedAt || data.formSubmittedAt;
+    IntastellarFormConsentState.formSubmittedBy = data.submittedBy;
+    IntastellarFormConsentState.formSubmittedByEmail = data.submittedByEmail;
+    IntastellarFormConsentState.formSubmittedByFirstName = data.submittedByFirstName;
+    IntastellarFormConsentState.formSubmittedByLastName = data.submittedByLastName;
+    IntastellarFormConsentState.formSubmittedByPhone = data.submittedByPhone;
+    IntastellarFormConsentState.formSubmittedByCompany = data.submittedByCompany;
+    IntastellarFormConsentState.formSubmittedByCountry = data.submittedByCountry;
+    IntastellarFormConsentState.formSubmittedByState = data.submittedByState;
+    IntastellarFormConsentState.formSubmittedByCity = data.submittedByCity;
+    IntastellarFormConsentState.formSubmittedByZip = data.submittedByZip;
+    IntastellarFormConsentState.formSubmittedByIp = data.submittedByIp;
+    IntastellarFormConsentState.formSubmittedByUserAgent = data.submittedByUserAgent;
+    IntastellarFormConsentState.provider = 'hubspot';
+    IntastellarFormConsentState.timestamp = new Date().toISOString();
+    IntastellarFormConsentState.uid = intaCookieConsentsUserId;
+    IntastellarFormConsentState.domain = window.INTA?.settings?.rootDomain || window.location.host;
+    IntastellarFormConsentState.path = window.location.pathname;
+    IntastellarFormConsentState.cookieConsentState = window.intaCookieConsents;
+
+    fetch('https://analytics.intastellarsolutions.com/form/collect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(IntastellarFormConsentState)
+    }).then(function (response) { return response.json(); }).then(function (res) {
+        if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+            console.log('Form consent state collected:', res);
+        }
+    }).catch(function (error) {
+        console.error('Error collecting form consent state:', error);
+    });
+}
+
+window.addEventListener('message', function (event) {
+    var data = intaNormalizePostMessageData(event.data);
+    if (!intaIsLegacyHubspotFormSubmitPostMessage(data)) return;
+    intaCollectHubSpotFormToIntastellar(data);
+});
+
+/* HubSpot updated forms editor (v4): no postMessage — use global CustomEvents on window */
+window.addEventListener('hs-form-event:on-submission:success', function (event) {
+    var detail = event.detail || {};
+    (async function () {
+        var extra = { formEditor: 'hubspot-v4', formId: detail.formId, instanceId: detail.instanceId };
+        try {
+            if (window.HubSpotFormsV4 && typeof window.HubSpotFormsV4.getFormFromEvent === 'function') {
+                var form = window.HubSpotFormsV4.getFormFromEvent(event);
+                if (form) {
+                    if (typeof form.getFormFieldValues === 'function') {
+                        extra.formFieldValues = await form.getFormFieldValues();
+                    }
+                    if (typeof form.getConversionId === 'function') {
+                        try { extra.conversionId = form.getConversionId(); } catch (e) { /* ignore */ }
+                    }
+                    if (typeof form.getRedirectUrl === 'function') {
+                        try { extra.redirectUrl = form.getRedirectUrl(); } catch (e) { /* ignore */ }
+                    }
+                }
+            }
+        } catch (e) { /* ignore */ }
+        intaCollectHubSpotFormToIntastellar(Object.assign({ eventName: 'onFormSubmit' }, extra));
+    })();
+});
+
+window.addEventListener('hs-form-event:on-submission:failed', function (event) {
+    var detail = event.detail || {};
+    intaCollectHubSpotFormToIntastellar({
+        formEditor: 'hubspot-v4',
+        formId: detail.formId,
+        instanceId: detail.instanceId,
+        eventName: 'onFormSubmissionFailed',
+        submissionFailed: true
+    });
 });
 
 /* - - - Listen for Form submit events to capture form consent state - - - */
