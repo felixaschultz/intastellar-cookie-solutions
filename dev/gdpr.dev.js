@@ -1030,8 +1030,8 @@ function hasConsent(type) {
     // type: 'functional', 'statistics', 'marketing'
     if (!window.intaCookieConsents) return false;
     if (type === 'functional') return window.intaCookieConsents.functionalCookies === 'checked';
-    if (type === 'statistics') return window.intaCookieConsents.staticsticCookies === 'checked';
-    if (type === 'marketing') return window.intaCookieConsents.advertisementCookies === 'checked';
+    if (type === 'statistics' || type === 'analytics') return window.intaCookieConsents.staticsticCookies === 'checked';
+    if (type === 'advertisement' || type === 'marketing') return window.intaCookieConsents.advertisementCookies === 'checked';
     return false;
 }
 
