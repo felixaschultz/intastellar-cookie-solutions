@@ -505,6 +505,21 @@ let intaConsentsObjectVariable = {
     tcString: null,
 }
 
+window._paq = window._paq || [];
+_paq.push(['requireConsent']);
+
+
+window.clarity && window.clarity('consentv2', {
+    ad_Storage: "denied",
+    analytics_Storage: "denied"
+});
+
+window.uetq.push('consent', 'default', {
+    'ad_storage': 'denied'
+});
+window.disableHubSpotCookieBanner = true;
+var _hsp = (window._hsp = window._hsp || []);
+
 function gtag() {
     dataLayer.push(arguments);
 }
@@ -628,6 +643,15 @@ if (hasConsent("advertisement")) {
     });
 
     fbq('consent', 'grant');
+    intaShopifySetTrackingConsentSafe(
+        {
+            analytics: false,
+            marketing: true,
+            preferences: false,
+            sale_of_data: true,
+        },
+        function () { console.log("Consent captured"); }
+    );
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 0;
@@ -646,8 +670,17 @@ if (hasConsent("analytics")) {
     window.uetq.push('consent', 'update', {
         'analytics_storage': 'granted'
     });
-
+    
     _paq.push(['setConsentGiven']);
+    intaShopifySetTrackingConsentSafe(
+        {
+            analytics: true,
+            marketing: false,
+            preferences: false,
+            sale_of_data: false,
+        },
+        function () { console.log("Consent captured"); }
+    );
 
 }
 
@@ -658,23 +691,17 @@ if (hasConsent("functional")) {
     window.uetq.push('consent', 'update', {
         'functionality_storage': 'granted'
     });
+    intaShopifySetTrackingConsentSafe(
+        {
+            analytics: false,
+            marketing: false,
+            preferences: true,
+            sale_of_data: false,
+        },
+        function () { console.log("Consent captured"); }
+    );
 
 }
-
-window._paq = window._paq || [];
-_paq.push(['requireConsent']);
-
-
-window.clarity && window.clarity('consentv2', {
-    ad_Storage: "denied",
-    analytics_Storage: "denied"
-});
-
-window.uetq.push('consent', 'default', {
-    'ad_storage': 'denied'
-});
-window.disableHubSpotCookieBanner = true;
-var _hsp = (window._hsp = window._hsp || []);
 /* _hsp.push(['doNotTrack']);
 _hsp.push(['revokeCookieConsent']); */
 window._hsp.push([
