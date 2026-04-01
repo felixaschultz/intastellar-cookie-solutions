@@ -3705,19 +3705,6 @@ function onWindowLoad(callback) {
     }
 }
 
-/**
- * Shopify Customer Privacy: call setTrackingConsent only when it is a real function.
- * Keeps full branch-by-branch behavior on Shopify; no-ops on non-Shopify (no TypeError).
- */
-function intaShopifySetTrackingConsentSafe(consents, onDone) {
-    try {
-        var api = window.Shopify && window.Shopify.customerPrivacy;
-        var fn = api && api.setTrackingConsent;
-        if (typeof fn !== "function") return;
-        fn.call(api, consents, onDone || function () {});
-    } catch (e) { /* non-Shopify or API not ready */ }
-}
-
 /** Shopify: one setTrackingConsent with full analytics + marketing + preferences (partial calls zero the rest). */
 function intaCbShopifySyncFromBannerCheckboxes() {
     const fn = document.querySelector("#functional");
