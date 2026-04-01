@@ -159,6 +159,11 @@ const allScripts = window.allScripts = [
         ]
     }
 ];
+const __intaCookieEventFlushTimer = null;
+const __intaCookieEventPendingByKey = new Map();
+const INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
+const INTA_COOKIE_EVENT_MAX_BATCH = 50;
+const INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
 
 // Listen for consent state response
 window.addEventListener('message', (event) => {
@@ -472,6 +477,7 @@ let adsbygoogle = window.adsbygoogle || [];
 const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
 const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
+window.uetq = window.uetq || [];
 // On page load, update VWO consent if consent object exists
 if (intaCookieConsents) {
     updateVwoConsent(intaCookieConsents);
@@ -664,7 +670,6 @@ window.clarity && window.clarity('consentv2', {
     analytics_Storage: "denied"
 });
 
-window.uetq = window.uetq || [];
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
@@ -3370,11 +3375,6 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
 window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
 
 /** Debounced + deduped POST to cookie-events API (interceptor fires very often). */
-const __intaCookieEventFlushTimer = null;
-const __intaCookieEventPendingByKey = new Map();
-const INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
-const INTA_COOKIE_EVENT_MAX_BATCH = 50;
-const INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
 
 function __intaBuildCookieEventsPayload(batch) {
     return JSON.stringify({
