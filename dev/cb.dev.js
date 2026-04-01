@@ -366,8 +366,6 @@ function closeLGPDModal() {
     }
 }
 
-createLGPDModal();
-
 /**
  * True only when this looks like a Shopify storefront (not a random script setting window.Shopify = {}).
  * Prevents creating fake Shopify globals on non-Shopify sites — those caused setTrackingConsent to be missing → TypeError.
@@ -496,6 +494,7 @@ const IntastellarCookieConsent = {
             function tryAppend() {
                 if (document.body) {
                     document.body.append(self._banner);
+                    createLGPDModal();
                 } else {
                     requestAnimationFrame(tryAppend);
                 }
