@@ -366,6 +366,117 @@ function closeLGPDModal() {
     }
 }
 
+/* POPIA Modal (South Africa) */
+function showPOPIAModal() {
+    const popiaModal = document.querySelector('#popia-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (popiaModal) {
+        intastellarConsents.style.display = 'none';
+        popiaModal.classList.add('inta-lgpd-active');
+    }
+}
+
+function createPOPIAModal() {
+    const modal = document.createElement('inta-popia-modal');
+    modal.innerHTML = `
+    <div id="popia-modal" role="dialog" aria-modal="true" aria-labelledby="popia-title">
+        <div class="inta-lgpd-modal-box">
+
+        <!-- Header -->
+        <div class="inta-lgpd-modal-header">
+            <div class="inta-lgpd-modal-header-left">
+            <div class="inta-lgpd-modal-header-icon">⚖</div>
+            <div>
+                <div class="inta-lgpd-modal-title" id="popia-title">Your Privacy Rights</div>
+                <div class="inta-lgpd-modal-subtitle">Protection of Personal Information Act (POPIA) · South Africa</div>
+            </div>
+            </div>
+            <button class="inta-lgpd-modal-close" onclick="closePOPIAModal()" aria-label="Close">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div class="inta-lgpd-modal-body">
+            <p class="inta-lgpd-modal-intro">
+            Under the <strong>Protection of Personal Information Act, 2013 (POPIA)</strong>, you have a number of rights in relation to your personal information. To exercise these rights, please contact our Information Officer / Data Protection contact.
+            </p>
+
+            <ul class="inta-lgpd-rights-list">
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">1</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right of Access</strong></div>
+                <div class="inta-lgpd-right-desc">You may request confirmation of whether we hold personal information about you, and request access to that information.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">2</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Correction</strong></div>
+                <div class="inta-lgpd-right-desc">You may request that we correct or update personal information that is inaccurate, incomplete, or outdated.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">3</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Deletion or Destruction</strong></div>
+                <div class="inta-lgpd-right-desc">In certain circumstances, you may ask us to delete, destroy, or de‑identify personal information that we no longer have a lawful basis to keep.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">4</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Object or Restrict Processing</strong></div>
+                <div class="inta-lgpd-right-desc">You may object to certain types of processing, including for direct marketing, or request that we restrict processing in specific cases.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">5</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Withdraw Consent</strong></div>
+                <div class="inta-lgpd-right-desc">Where processing is based on your consent, you may withdraw that consent at any time. This will not affect prior lawful processing.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">6</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Lodge a Complaint</strong></div>
+                <div class="inta-lgpd-right-desc">You may lodge a complaint with the Information Regulator of South Africa if you believe your POPIA rights have been infringed.</div>
+                </div>
+            </li>
+            </ul>
+
+            <!-- Contact -->
+            <div class="inta-lgpd-dpo-section">
+            <div class="inta-lgpd-dpo-label">Information Officer / Data Protection Contact</div>
+            <div class="inta-lgpd-dpo-text">
+                To exercise your POPIA rights, please contact the responsible party for this site:<br><br>
+                📧 <a href="mailto:privacy@yourcompany.co.za">privacy@yourcompany.co.za</a>
+            </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="inta-lgpd-modal-footer">
+            <span class="inta-lgpd-footer-note">POPIA · Act 4 of 2013 · South Africa</span>
+            <button class="inta-lgpd-btn-close-modal" onclick="closePOPIAModal()">I understand</button>
+        </div>
+
+        </div>
+    </div>
+    `;
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function closePOPIAModal() {
+    const popiaModal = document.querySelector('#popia-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (popiaModal) {
+        intastellarConsents.style.display = 'grid';
+        popiaModal.classList.remove('inta-lgpd-active');
+    }
+}
+
 /**
  * True only when this looks like a Shopify storefront (not a random script setting window.Shopify = {}).
  * Prevents creating fake Shopify globals on non-Shopify sites — those caused setTrackingConsent to be missing → TypeError.
@@ -508,7 +619,12 @@ const IntastellarCookieConsent = {
             if (!self._banner && template !== false) {
                 self._banner = template;
                 appendBannerWhenBodyReady();
-                createLGPDModal();
+                if (window.INTA && window.INTA.settings && window.INTA.settings.lgpd) {
+                    createLGPDModal();
+                }
+                if (window.INTA && window.INTA.settings && window.INTA.settings.popia) {
+                    createPOPIAModal();
+                }
             }
             if (!getCookie(int_hideCookieBannerName)) {
                 if (self._banner) window._IntastellarConsentsBanner.classList.add("--active");
@@ -1228,6 +1344,7 @@ const settingsMessagesLanguages = {
     <p>Deur op 'Aanvaar' te klik, gee jy toestemming vir al hierdie doeleindes. Jy kan ook die spesifieke doeleindes waarvoor jy toestemming gee, kies deur die keuselys langs die doelwit aan te dui en op 'Stoor instellings' te klik.</p>
     <p>Jy kan jou toestemming te eniger tyd intrek deur op die klein ikoon in die onderkant ${(window?.INTA?.settings.arrange == "ltr") ? "linker" : "regter"} hoek van die webwerf te klik.</p>
     ${generatePolicyUrl('Ons Privaatheids- en koekiebeleid')}
+    ${window.INTA.settings.popia ? `<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Jou POPIA-privaatheidsregte</button>` : "" }
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privaatheidsbeleid</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
