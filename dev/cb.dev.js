@@ -4131,13 +4131,18 @@ function updateSaveButtonText() {
     if (
         (FunctionalCheckbox && FunctionalCheckbox.checked) ||
         (StaticsCheckBox && StaticsCheckBox.checked) ||
-        (MarketingCheckBox && MarketingCheckBox.checked) ||
-        vendorChecksChecked || vendorLegitChecksChecked
+        (MarketingCheckBox && MarketingCheckBox.checked)
     ) {
         saveBtn.innerText = settingsSaveLang.saveSettingsText;
     } else {
         saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
     }
+
+    console.log((FunctionalCheckbox && FunctionalCheckbox.checked) ||
+        (StaticsCheckBox && StaticsCheckBox.checked) ||
+        (MarketingCheckBox && MarketingCheckBox.checked));
+
+    console.log("Update save button text", saveBtn.innerText);
 }
 
 onWindowLoad(function () {
