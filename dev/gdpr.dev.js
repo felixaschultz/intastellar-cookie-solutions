@@ -3370,11 +3370,11 @@ function updateCookiePreferenceOfBlockedIframes(dataType) {
 window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
 
 /** Debounced + deduped POST to cookie-events API (interceptor fires very often). */
-var __intaCookieEventFlushTimer = null;
-var __intaCookieEventPendingByKey = new Map();
-var INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
-var INTA_COOKIE_EVENT_MAX_BATCH = 50;
-var INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
+const __intaCookieEventFlushTimer = null;
+const __intaCookieEventPendingByKey = new Map();
+const INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
+const INTA_COOKIE_EVENT_MAX_BATCH = 50;
+const INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
 
 function __intaBuildCookieEventsPayload(batch) {
     return JSON.stringify({
@@ -3391,9 +3391,9 @@ function flushCookieEventsToApi(options) {
         __intaCookieEventFlushTimer = null;
     }
     if (!__intaCookieEventPendingByKey.size) return;
-    var batch = Array.from(__intaCookieEventPendingByKey.values());
+    const batch = Array.from(__intaCookieEventPendingByKey.values());
     __intaCookieEventPendingByKey.clear();
-    var body = __intaBuildCookieEventsPayload(batch);
+    const body = __intaBuildCookieEventsPayload(batch);
     try {
         if (options.keepalive && typeof fetch === 'function') {
             fetch(INTA_COOKIE_EVENTS_URL, {
