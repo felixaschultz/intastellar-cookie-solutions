@@ -494,7 +494,6 @@ const IntastellarCookieConsent = {
             function tryAppend() {
                 if (document.body) {
                     document.body.append(self._banner);
-                    createLGPDModal();
                 } else {
                     requestAnimationFrame(tryAppend);
                 }
@@ -509,6 +508,7 @@ const IntastellarCookieConsent = {
             if (!self._banner && template !== false) {
                 self._banner = template;
                 appendBannerWhenBodyReady();
+                createLGPDModal();
             }
             if (!getCookie(int_hideCookieBannerName)) {
                 if (self._banner) window._IntastellarConsentsBanner.classList.add("--active");
