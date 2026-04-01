@@ -159,7 +159,7 @@ const allScripts = window.allScripts = [
         ]
     }
 ];
-const __intaCookieEventFlushTimer = null;
+let __intaCookieEventFlushTimer = null;
 const __intaCookieEventPendingByKey = new Map();
 const INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
 const INTA_COOKIE_EVENT_MAX_BATCH = 50;
