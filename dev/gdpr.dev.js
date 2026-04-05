@@ -40,20 +40,135 @@ function intaShopifyMergePayloadWithCcpaSaleOptOut(payload) {
     return out;
 }
 
+/* --- Shopify setTrackingConsent coalescing (one network write per burst + skip identical payload) --- */
+let intaShopifyCoalesceTimer = null;
+let intaShopifyCoalescePending = null;
+const intaShopifyCoalesceCallbacks = [];
+let intaShopifyLastSetTrackingConsentJson = null;
+let intaShopifyFlushApiMisses = 0;
+
+function intaShopifyStableConsentPayloadJson(p) {
+    if (!p || typeof p !== "object") {
+        return "";
+    }
+    const keys = ["analytics", "marketing", "preferences", "sale_of_data"].filter(function (k) {
+        return Object.prototype.hasOwnProperty.call(p, k);
+    });
+    const o = {};
+    for (let i = 0; i < keys.length; i++) {
+        o[keys[i]] = p[keys[i]];
+    }
+    return JSON.stringify(o);
+}
+
+function intaShopifyShallowMergeConsentPatch(target, patch) {
+    const base = target && typeof target === "object" ? Object.assign({}, target) : {};
+    if (!patch || typeof patch !== "object") {
+        return base;
+    }
+    if ("analytics" in patch) {
+        base.analytics = patch.analytics;
+    }
+    if ("marketing" in patch) {
+        base.marketing = patch.marketing;
+    }
+    if ("preferences" in patch) {
+        base.preferences = patch.preferences;
+    }
+    if ("sale_of_data" in patch) {
+        base.sale_of_data = patch.sale_of_data;
+    }
+    return base;
+}
+
+function intaShopifyRunCoalescedCallbacks(arr) {
+    const list = arr || [];
+    for (let i = 0; i < list.length; i++) {
+        try {
+            if (typeof list[i] === "function") {
+                list[i]();
+            }
+        } catch (e) {
+            /* ignore */
+        }
+    }
+}
+
+function intaShopifyFlushQueuedSetTrackingConsent() {
+    intaShopifyCoalesceTimer = null;
+    if (intaShopifyCoalescePending == null || typeof intaShopifyCoalescePending !== "object") {
+        intaShopifyRunCoalescedCallbacks(intaShopifyCoalesceCallbacks.splice(0));
+        return;
+    }
+
+    const merged = intaShopifyMergePayloadWithCcpaSaleOptOut(Object.assign({}, intaShopifyCoalescePending));
+    const api = window.Shopify && window.Shopify.customerPrivacy;
+
+    if (typeof api?.setTrackingConsent !== "function") {
+        const canRetry = typeof window.Shopify?.loadFeatures === "function";
+        if (!canRetry || intaShopifyFlushApiMisses > 80) {
+            intaShopifyCoalescePending = null;
+            intaShopifyFlushApiMisses = 0;
+            intaShopifyRunCoalescedCallbacks(intaShopifyCoalesceCallbacks.splice(0));
+            return;
+        }
+        intaShopifyFlushApiMisses++;
+        intaShopifyCoalesceTimer = setTimeout(intaShopifyFlushQueuedSetTrackingConsent, 100);
+        return;
+    }
+    intaShopifyFlushApiMisses = 0;
+
+    const json = intaShopifyStableConsentPayloadJson(merged);
+    if (json === intaShopifyLastSetTrackingConsentJson) {
+        intaShopifyCoalescePending = null;
+        intaShopifyRunCoalescedCallbacks(intaShopifyCoalesceCallbacks.splice(0));
+        return;
+    }
+
+    intaShopifyCoalescePending = null;
+    const cbs = intaShopifyCoalesceCallbacks.splice(0);
+
+    try {
+        api.setTrackingConsent(merged, function () {
+            intaShopifyLastSetTrackingConsentJson = json;
+            intaShopifyRefreshCustomerPrivacyState(null);
+            intaShopifyRunCoalescedCallbacks(cbs);
+        });
+    } catch (e) {
+        intaShopifyRunCoalescedCallbacks(cbs);
+    }
+}
+
+function intaShopifyEnqueueSetTrackingConsent(payload, onDone) {
+    try {
+        intaShopifyCoalescePending = intaShopifyShallowMergeConsentPatch(intaShopifyCoalescePending, payload);
+        if (typeof onDone === "function") {
+            intaShopifyCoalesceCallbacks.push(onDone);
+        }
+        if (intaShopifyCoalesceTimer != null) {
+            clearTimeout(intaShopifyCoalesceTimer);
+        }
+        intaShopifyCoalesceTimer = setTimeout(intaShopifyFlushQueuedSetTrackingConsent, 0);
+    } catch (e) {
+        /* ignore */
+    }
+}
+
 /**
- * Shopify Customer Privacy: call setTrackingConsent only when it is a real function.
- * Keeps full branch-by-branch behavior on Shopify; no-ops on non-Shopify (no TypeError).
+ * Shopify Customer Privacy: all writes go through the coalescing queue (one setTrackingConsent per tick / deduped).
  */
 function intaShopifySetTrackingConsentSafe(consents, onDone) {
     try {
-        var api = window.Shopify && window.Shopify.customerPrivacy;
-        var fn = api && api.setTrackingConsent;
-        if (typeof fn !== "function") return;
-        var payload = consents && typeof consents === "object"
-            ? intaShopifyMergePayloadWithCcpaSaleOptOut(Object.assign({}, consents))
-            : consents;
-        fn.call(api, payload, onDone || function () { });
-    } catch (e) { /* non-Shopify or API not ready */ }
+        if (!consents || typeof consents !== "object") {
+            if (typeof onDone === "function") {
+                onDone();
+            }
+            return;
+        }
+        intaShopifyEnqueueSetTrackingConsent(Object.assign({}, consents), onDone);
+    } catch (e) {
+        /* non-Shopify or API not ready */
+    }
 }
 
 const allScripts = window.allScripts = [
@@ -324,20 +439,13 @@ function intaShopifyPayloadFromConsentsObject(c) {
 }
 
 function intaShopifyApplyTrackingConsentPayload(payload, done) {
-    const api = window.Shopify && window.Shopify.customerPrivacy;
-    if (!payload || typeof api?.setTrackingConsent !== "function") {
+    if (!payload || typeof payload !== "object") {
         if (typeof done === "function") {
             done();
         }
         return;
     }
-    const merged = intaShopifyMergePayloadWithCcpaSaleOptOut(payload);
-    api.setTrackingConsent(merged, function () {
-        intaShopifyRefreshCustomerPrivacyState(null);
-        if (typeof done === "function") {
-            done();
-        }
-    });
+    intaShopifyEnqueueSetTrackingConsent(Object.assign({}, payload), done);
 }
 
 function intaShopifySetTrackingConsentFromIntastellar(done) {
