@@ -20,6 +20,27 @@ function setConsentState(userId, consents, rootDomain, partnerDomains = []) {
 }
 
 /**
+ * Shopify: `sale_of_data` is separate from marketing/analytics/preferences (CCPA-style opt-out).
+ * Only send `sale_of_data: false` when the visitor used the dedicated opt-out flow (`ccpa_opt_out`).
+ * Do not map marketing cookies to sale_of_data — see Shopify Customer Privacy docs.
+ * @see https://shopify.dev/docs/api/customer-privacy#collect-and-register-data-sale--sharing-opt-out
+ */
+function intaShopifyMergePayloadWithCcpaSaleOptOut(payload) {
+    if (!payload || typeof payload !== "object") {
+        return payload;
+    }
+    const out = Object.assign({}, payload);
+    try {
+        if (localStorage.getItem("ccpa_opt_out") === "true") {
+            out.sale_of_data = false;
+        }
+    } catch (e) {
+        /* ignore */
+    }
+    return out;
+}
+
+/**
  * Shopify Customer Privacy: call setTrackingConsent only when it is a real function.
  * Keeps full branch-by-branch behavior on Shopify; no-ops on non-Shopify (no TypeError).
  */
@@ -28,7 +49,10 @@ function intaShopifySetTrackingConsentSafe(consents, onDone) {
         var api = window.Shopify && window.Shopify.customerPrivacy;
         var fn = api && api.setTrackingConsent;
         if (typeof fn !== "function") return;
-        fn.call(api, consents, onDone || function () { });
+        var payload = consents && typeof consents === "object"
+            ? intaShopifyMergePayloadWithCcpaSaleOptOut(Object.assign({}, consents))
+            : consents;
+        fn.call(api, payload, onDone || function () { });
     } catch (e) { /* non-Shopify or API not ready */ }
 }
 
@@ -251,7 +275,7 @@ function updateVwoConsent(consents) {
 
 /**
  * Shopify Customer Privacy: map Intastellar consent values to booleans.
- * Partial setTrackingConsent calls overwrite other purposes — always send the full matrix once.
+ * Send analytics + marketing + preferences together; omit `sale_of_data` unless CCPA opt-out is stored.
  */
 function intaShopifyConsentFlag(v) {
     return v === "checked" || v === true;
@@ -267,37 +291,36 @@ function intaShopifyBuildSetTrackingConsentPayload() {
         const name = (typeof window !== "undefined" && window.int_hideCookieBannerName) || "IntastellarConsentSolution";
         const raw = typeof getCookie === "function" && name ? getCookie(name) : "";
         if (!raw || String(raw).indexOf("__inta") === -1) {
-            return denyAll;
+            return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
         }
         if (typeof decodeIntaConsentsObject !== "function") {
-            return denyAll;
+            return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
         }
         const parsed = JSON.parse(decodeIntaConsentsObject(String(raw).split(".")[2]));
         const c = parsed && parsed.consents;
         if (!c || typeof c !== "object") {
-            return denyAll;
+            return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
         }
-        return {
+        return intaShopifyMergePayloadWithCcpaSaleOptOut({
             analytics: intaShopifyConsentFlag(c.staticsticCookies),
             marketing: intaShopifyConsentFlag(c.advertisementCookies),
             preferences: intaShopifyConsentFlag(c.functionalCookies),
-            sale_of_data: intaShopifyConsentFlag(c.advertisementCookies),
-        };
+        });
     } catch (e) {
-        return denyAll;
+        return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
     }
 }
 
 function intaShopifyPayloadFromConsentsObject(c) {
+    const denyAll = { analytics: false, marketing: false, preferences: false };
     if (!c || typeof c !== "object") {
-        return { analytics: false, marketing: false, preferences: false };
+        return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
     }
-    return {
+    return intaShopifyMergePayloadWithCcpaSaleOptOut({
         analytics: intaShopifyConsentFlag(c.staticsticCookies),
         marketing: intaShopifyConsentFlag(c.advertisementCookies),
         preferences: intaShopifyConsentFlag(c.functionalCookies),
-        sale_of_data: intaShopifyConsentFlag(c.advertisementCookies),
-    };
+    });
 }
 
 function intaShopifyApplyTrackingConsentPayload(payload, done) {
@@ -308,7 +331,8 @@ function intaShopifyApplyTrackingConsentPayload(payload, done) {
         }
         return;
     }
-    api.setTrackingConsent(payload, function () {
+    const merged = intaShopifyMergePayloadWithCcpaSaleOptOut(payload);
+    api.setTrackingConsent(merged, function () {
         intaShopifyRefreshCustomerPrivacyState(null);
         if (typeof done === "function") {
             done();
@@ -746,7 +770,6 @@ if (hasConsent("advertisement")) {
             analytics: false,
             marketing: true,
             preferences: false,
-            sale_of_data: true,
         },
         function () { console.log("Consent captured"); }
     );
@@ -775,7 +798,6 @@ if (hasConsent("analytics")) {
             analytics: true,
             marketing: false,
             preferences: false,
-            sale_of_data: false,
         },
         function () { console.log("Consent captured"); }
     );
@@ -794,7 +816,6 @@ if (hasConsent("functional")) {
             analytics: false,
             marketing: false,
             preferences: true,
-            sale_of_data: false,
         },
         function () { console.log("Consent captured"); }
     );
@@ -915,20 +936,13 @@ function optOutCCPA() {
         } catch (e) { /* ignore */ }
     }
 
-    // Shopify
+    // Shopify: data sale/sharing opt-out only — does not change analytics/marketing/preferences (Shopify docs).
     try {
-        window.Shopify?.customerPrivacy?.setTrackingConsent?.({
-            analytics: false,
-            marketing: false,
-            preferences: false,
-            sale_of_data: false,
-        }, function () {
+        localStorage.setItem("ccpa_opt_out", "true");
+        intaShopifySetTrackingConsentSafe({ sale_of_data: false }, function () {
             console.log("Shopify CCPA opt-out set");
         });
     } catch (e) { /* ignore */ }
-
-    // Store the choice locally
-    localStorage.setItem('ccpa_opt_out', 'true');
 
     alert("Your opt-out has been saved. We won’t sell or share your personal information.");
 }
