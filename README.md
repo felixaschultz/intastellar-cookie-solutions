@@ -25,8 +25,26 @@
 
 ## Who is it for
 
+This project is for developers and businesses who want to implement a cookie banner on their website.
 ## How to use it
 
+You can implement the cookie banner by loading the following script into your website:
+
+```html
+<script>
+  window.INTA = {
+    policy_link: "[Link to your privacy policy]",
+    settings: {
+      color: "Your brand color",
+      logo: "Link to your logo",
+      rootDomain: "example.com",
+      arrange: "ltr or rtl",
+      design: "banner | bannerV2 | overlay"
+    }
+  }
+</script>
+<script src="https://consents.cdn.intastellarsolutions.com/uc.js"></script>
+```
 
 ## General Info
 
