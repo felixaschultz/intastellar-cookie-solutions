@@ -3832,7 +3832,9 @@ function intaCbShopifySyncFromBannerCheckboxes() {
         preferences: !!(fn && fn.checked),
     };
     intaShopifySetTrackingConsentSafe(payload, function () {
-        console.log("Shopify Customer Privacy synced from banner", payload);
+        if (typeof window !== "undefined" && window.INTA_DEBUG) {
+            console.log("Shopify Customer Privacy synced from banner", payload);
+        }
     });
 }
 
@@ -3868,14 +3870,6 @@ function IntaSaveSettings() {
         });
         accepted.push("staticsticCookies");
         _paq.push(['setConsentGiven']);
-        intaShopifySetTrackingConsentSafe(
-            {
-                analytics: true,
-                marketing: false,
-                preferences: false,
-            },
-            function () { console.log("Consent captured"); }
-        );
     } else if (!StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
@@ -3887,15 +3881,6 @@ function IntaSaveSettings() {
             ad_Storage: "denied",
             analytics_Storage: "denied"
         });
-
-        intaShopifySetTrackingConsentSafe(
-            {
-                analytics: false,
-                marketing: false,
-                preferences: false,
-            },
-            function () { console.log("Consent captured"); }
-        );
 
         const index = accepted.indexOf("staticsticCookies");
         if (index > -1) { // only splice array when item is found
@@ -3919,14 +3904,6 @@ function IntaSaveSettings() {
             analytics_Storage: "denied"
         });
         accepted.push("advertisementCookies");
-        intaShopifySetTrackingConsentSafe(
-            {
-                analytics: false,
-                marketing: true,
-                preferences: false,
-            },
-            function () { console.log("Consent captured"); }
-        );
 
         // Pintrk
         if (typeof pintrk === 'function') {
@@ -3957,15 +3934,6 @@ function IntaSaveSettings() {
         }
 
         window.clarity && window.clarity('consent', false);
-
-        intaShopifySetTrackingConsentSafe(
-            {
-                analytics: false,
-                marketing: false,
-                preferences: false,
-            },
-            function () { console.log("Consent captured"); }
-        );
 
         const index = accepted.indexOf("advertisementCookies");
         if (index > -1) { // only splice array when item is found
@@ -6161,15 +6129,6 @@ function saveINTCookieSettings(consent, type = null) {
         });
         window._hsp.push(['doNotTrack', false]);
 
-        intaShopifySetTrackingConsentSafe(
-            {
-                'analytics': false,
-                'marketing': true,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
-
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -6197,14 +6156,6 @@ function saveINTCookieSettings(consent, type = null) {
         });
         window.clarity && window.clarity('consent', false);
 
-        intaShopifySetTrackingConsentSafe(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "marketing") {
                 script.scripts.forEach((src) => {
@@ -6229,14 +6180,6 @@ function saveINTCookieSettings(consent, type = null) {
         window.clarity && window.clarity('consent', false);
 
         window._hsp.push(['doNotTrack', false]);
-        intaShopifySetTrackingConsentSafe(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': true,
-            },
-            () => console.log("Consent captured")
-        );
 
         /* window.allScripts.map((script) => {
             if (script.type == "functional") {
@@ -6259,14 +6202,6 @@ function saveINTCookieSettings(consent, type = null) {
             'functionality_storage': 'denied',
         })
 
-        intaShopifySetTrackingConsentSafe(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "functional") {
                 script.scripts.forEach((src) => {
@@ -6299,14 +6234,6 @@ function saveINTCookieSettings(consent, type = null) {
             ad_Storage: "denied",
             analytics_Storage: "granted"
         });
-        intaShopifySetTrackingConsentSafe(
-            {
-                'analytics': true,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
@@ -6338,14 +6265,6 @@ function saveINTCookieSettings(consent, type = null) {
             'ad_storage': 'denied'
         });
         window.clarity && window.clarity('consent', false);
-        intaShopifySetTrackingConsentSafe(
-            {
-                'analytics': false,
-                'marketing': false,
-                'preferences': false,
-            },
-            () => console.log("Consent captured")
-        );
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
                 script.scripts.forEach((src) => {
@@ -6365,6 +6284,7 @@ function saveINTCookieSettings(consent, type = null) {
         advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
     };
     window.intaCookieConsents = intaConsentsObjectVariable.consents;
+    /* One full-matrix Shopify sync (per-category calls removed — they caused multiple consent log entries). */
     intaCbShopifySyncFromBannerCheckboxes();
     dataLayer.push({
         'event': 'cookie_consent_update',

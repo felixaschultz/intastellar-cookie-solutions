@@ -765,14 +765,6 @@ if (hasConsent("advertisement")) {
     });
 
     fbq('consent', 'grant');
-    intaShopifySetTrackingConsentSafe(
-        {
-            analytics: false,
-            marketing: true,
-            preferences: false,
-        },
-        function () { console.log("Consent captured"); }
-    );
     // Enable ads
     (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 0;
     (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 0;
@@ -793,14 +785,6 @@ if (hasConsent("analytics")) {
     });
     
     _paq.push(['setConsentGiven']);
-    intaShopifySetTrackingConsentSafe(
-        {
-            analytics: true,
-            marketing: false,
-            preferences: false,
-        },
-        function () { console.log("Consent captured"); }
-    );
 
 }
 
@@ -811,14 +795,6 @@ if (hasConsent("functional")) {
     window.uetq.push('consent', 'update', {
         'functionality_storage': 'granted'
     });
-    intaShopifySetTrackingConsentSafe(
-        {
-            analytics: false,
-            marketing: false,
-            preferences: true,
-        },
-        function () { console.log("Consent captured"); }
-    );
 
 }
 /* _hsp.push(['doNotTrack']);
