@@ -3,9 +3,9 @@
 # Intastellar Consents Solutions
 ![version](https://img.shields.io/github/v/tag/felixaschultz/intastellar-cookie-solutions?label=version)
 ![license](https://img.shields.io/github/license/felixaschultz/intastellar-cookie-solutions)
-![CI](https://github.com/felixaschultz/intastellar-cookie-solutions/actions/workflows/build.yml/badge.svg)
 ![Bundle Size](https://img.shields.io/badge/size-12kb-green)
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-blue)
+
 
 ## Table of contents
 
@@ -66,6 +66,7 @@ Available languages:
 - Italian
 - Russian
 - Dutch
+- Portuguese
 
 You can read more about the cookie banner under: https://www.intastellarsolutions.com/solutions/cookie-consents.
 This banner is free to use as long as the powered by logo is not removed. We are glad if you want to contribuate to this project so we can develop it further and we can make it secure.
@@ -117,13 +118,15 @@ We support the following trackers and consents mode:
 | Facebook Pixel | The Facebook pixel is a piece of code that you place on your website to track conversions from Facebook ads, optimize ads based on collected data, and retarget website visitors. | [Facebook Consent Mode](https://developers.facebook.com/docs/facebook-pixel/) |
 | Google Tag Manager | Google Tag Manager is a tag management system that allows you to quickly and easily update tags and code snippets on your website or mobile app. | [Google Consent Mode](https://developers.google.com/tag-platform/devguides/consent) |
 | HubSpot | HubSpot is a marketing, sales, and service software that helps businesses grow by providing tools for email marketing, social media marketing, content management, web analytics, and landing pages. | [HubSpot Cookie Banner API](https://developers.hubspot.com/docs/reference/api/analytics-and-events/cookie-banner/cookie-banner-api) |
-| LinkedIn Insight Tag | The LinkedIn Insight Tag is a piece of JavaScript code that you can add to your website to enable conversion tracking, retargeting, and web analytics for LinkedIn ads. | [LinkedIn Consent Mode](https://www.linkedin.com/help/linkedin/answer/67587/linkedin-insight-tag?lang=en) |
+| Shopify | Shopify is an e-commerce platform that allows you to create an online store and sell products. | [Shopify Customer Privacy API](https://shopify.dev/docs/api/customer-privacy) |
+| VWO | VWO is a conversion rate optimization platform that allows you to test and optimize your website. | [VWO Cookie Consent API](https://vwo.com/docs/api/cookie-consent/) |
+| Pintrk | Pintrk is a platform that allows you to track your website visitors and retarget them with ads. | [Pintrk Consent Mode](https://www.pintrk.com/docs/consent-mode/) |
+| Microsoft Clarity | Microsoft Clarity is a web analytics service that helps you understand your website visitors and improve your website. | [Microsoft Clarity Consent Mode](https://clarity.microsoft.com/docs/consent-mode/) |
 
 ## Support
 
 - [Intastellar Solutions](https://www.intastellarsolutions.com)
 - [Intastellar Consents](https://www.intastellar-consents.com)
-- [Intastellar Consents Solutions](https://www.intastellar-consents.com/solutions)
 - [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
 
 ## License
@@ -138,3 +141,5 @@ If you want to contribute to this project, please fork the repository and create
 
 - [Intastellar Solutions](https://www.intastellarsolutions.com)
 - [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
+- [Intastellar Consents Platform](https://www.intastellarconsents.com)
+
