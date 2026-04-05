@@ -309,6 +309,7 @@ function intaShopifyApplyTrackingConsentPayload(payload, done) {
         return;
     }
     api.setTrackingConsent(payload, function () {
+        intaShopifyRefreshCustomerPrivacyState(null);
         if (typeof done === "function") {
             done();
         }
@@ -326,6 +327,90 @@ function intaShopifySetTrackingConsentFromConsentsObject(consents, done) {
 
 window.intaShopifySetTrackingConsentFromIntastellar = intaShopifySetTrackingConsentFromIntastellar;
 window.intaShopifySetTrackingConsentFromConsentsObject = intaShopifySetTrackingConsentFromConsentsObject;
+
+/**
+ * Shopify Customer Privacy: *Allowed() methods combine merchant settings, visitor region, and consent.
+ * @see https://shopify.dev/docs/api/customer-privacy
+ */
+function intaShopifyGetProcessingAllowedSnapshot() {
+    const api = window.Shopify && window.Shopify.customerPrivacy;
+    const snap = {
+        preferencesProcessingAllowed: null,
+        analyticsProcessingAllowed: null,
+        marketingAllowed: null,
+        saleOfDataAllowed: null,
+        region: null,
+        currentVisitorConsent: null,
+    };
+    if (!api) {
+        return snap;
+    }
+    try {
+        if (typeof api.preferencesProcessingAllowed === "function") {
+            snap.preferencesProcessingAllowed = !!api.preferencesProcessingAllowed();
+        }
+        if (typeof api.analyticsProcessingAllowed === "function") {
+            snap.analyticsProcessingAllowed = !!api.analyticsProcessingAllowed();
+        }
+        if (typeof api.marketingAllowed === "function") {
+            snap.marketingAllowed = !!api.marketingAllowed();
+        }
+        if (typeof api.saleOfDataAllowed === "function") {
+            snap.saleOfDataAllowed = !!api.saleOfDataAllowed();
+        }
+        if (typeof api.getRegion === "function") {
+            snap.region = api.getRegion();
+        }
+        if (typeof api.currentVisitorConsent === "function") {
+            snap.currentVisitorConsent = api.currentVisitorConsent();
+        }
+    } catch (e) {
+        /* ignore */
+    }
+    return snap;
+}
+
+let intaShopifyVisitorConsentListenerInstalled = false;
+
+function intaShopifyRefreshCustomerPrivacyState(visitorDetail) {
+    const allowed = intaShopifyGetProcessingAllowedSnapshot();
+    window.__intaShopifyCustomerPrivacy = {
+        allowed: allowed,
+        lastVisitorConsentEventDetail: visitorDetail != null ? visitorDetail : null,
+        updatedAt: new Date().toISOString(),
+    };
+    if (window.dataLayer && Array.isArray(window.dataLayer)) {
+        try {
+            window.dataLayer.push({
+                event: "inta_shopify_customer_privacy_updated",
+                intaShopifyAllowed: {
+                    preferencesProcessingAllowed: allowed.preferencesProcessingAllowed,
+                    analyticsProcessingAllowed: allowed.analyticsProcessingAllowed,
+                    marketingAllowed: allowed.marketingAllowed,
+                    saleOfDataAllowed: allowed.saleOfDataAllowed,
+                },
+                intaShopifyVisitorDetail: visitorDetail != null ? visitorDetail : undefined,
+            });
+        } catch (e) {
+            /* ignore */
+        }
+    }
+}
+
+function intaShopifyOnVisitorConsentCollected(ev) {
+    intaShopifyRefreshCustomerPrivacyState(ev && ev.detail);
+}
+
+function intaShopifyInstallCustomerPrivacyListeners() {
+    if (intaShopifyVisitorConsentListenerInstalled) {
+        return;
+    }
+    intaShopifyVisitorConsentListenerInstalled = true;
+    document.addEventListener("visitorConsentCollected", intaShopifyOnVisitorConsentCollected, false);
+}
+
+window.intaShopifyGetProcessingAllowedSnapshot = intaShopifyGetProcessingAllowedSnapshot;
+window.intaShopifyRefreshCustomerPrivacyState = intaShopifyRefreshCustomerPrivacyState;
 
 // --- Helper function to detect Vendors of Cookies (lazy-loaded; stub until uc-vendors loads) ---
 function detectCookieVendor(cookie) {
@@ -731,6 +816,8 @@ window.Shopify.customerPrivacy = window.Shopify.customerPrivacy || {};
 // Hide Shopify’s own banner when using Intastellar; real API methods come from loadFeatures below.
 window.Shopify.customerPrivacy.shouldShowBanner = function () { return false; };
 
+intaShopifyInstallCustomerPrivacyListeners();
+
 // BUGFIX: was `window.Shopify ?? loadFeatures(...)` — after assigning `window.Shopify = {}` above,
 // Shopify is always truthy so `??` never ran loadFeatures and customerPrivacy stayed a stub.
 let intaShopifyConsentApiLoadStarted = false;
@@ -754,7 +841,7 @@ function intaShopifyLoadConsentTrackingApi() {
                 console.error("Shopify consent tracking API error:", error);
                 return;
             }
-            // error is falsy when the API loaded successfully — do not call *Allowed(); those only read state.
+            // Sync Intastellar cookie → Shopify (done callback refreshes *Allowed snapshot via intaShopifyApplyTrackingConsentPayload)
             intaShopifySetTrackingConsentFromIntastellar(() => console.log("Shopify Customer Privacy synced from Intastellar"));
             // consent-tracking-api may replace customerPrivacy; keep Shopify’s banner off while Intastellar runs
             window.Shopify.customerPrivacy.shouldShowBanner = function () {
