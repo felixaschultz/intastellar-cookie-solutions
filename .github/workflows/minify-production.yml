@@ -1,0 +1,49 @@
+# Minify dev sources into production bundles on push to `production`.
+# dev/gdpr.dev.js → uc.js (repo root)
+# dev/cb.dev.js   → cb.js (repo root)
+
+name: Minify to uc.js and cb.js
+
+on:
+  push:
+    branches:
+      - production
+
+permissions:
+  contents: write
+
+concurrency:
+  group: minify-production-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  minify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Minify gdpr.dev.js → uc.js
+        run: npx --yes terser@5 dev/gdpr.dev.js -c -m -o uc.js
+
+      - name: Minify cb.dev.js → cb.js
+        run: npx --yes terser@5 dev/cb.dev.js -c -m -o cb.js
+
+      - name: Commit minified files if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add uc.js cb.js
+          if git diff --staged --quiet; then
+            echo "No changes to uc.js or cb.js."
+          else
+            git commit -m "chore: minify gdpr.dev.js → uc.js, cb.dev.js → cb.js [skip ci]"
+            git push
+          fi

@@ -3821,7 +3821,7 @@ function onWindowLoad(callback) {
     }
 }
 
-/** Shopify: one setTrackingConsent with full analytics + marketing + preferences (partial calls zero the rest). */
+/** Shopify: one setTrackingConsent with analytics + marketing + preferences (`sale_of_data` is CCPA-only; see gdpr.dev.js). */
 function intaCbShopifySyncFromBannerCheckboxes() {
     const fn = document.querySelector("#functional");
     const st = document.querySelector("#statics");
@@ -3830,7 +3830,6 @@ function intaCbShopifySyncFromBannerCheckboxes() {
         analytics: !!(st && st.checked),
         marketing: !!(mk && mk.checked),
         preferences: !!(fn && fn.checked),
-        sale_of_data: !!(mk && mk.checked),
     };
     intaShopifySetTrackingConsentSafe(payload, function () {
         console.log("Shopify Customer Privacy synced from banner", payload);
@@ -3874,7 +3873,6 @@ function IntaSaveSettings() {
                 analytics: true,
                 marketing: false,
                 preferences: false,
-                sale_of_data: false,
             },
             function () { console.log("Consent captured"); }
         );
@@ -3895,7 +3893,6 @@ function IntaSaveSettings() {
                 analytics: false,
                 marketing: false,
                 preferences: false,
-                sale_of_data: false,
             },
             function () { console.log("Consent captured"); }
         );
@@ -3927,7 +3924,6 @@ function IntaSaveSettings() {
                 analytics: false,
                 marketing: true,
                 preferences: false,
-                sale_of_data: true,
             },
             function () { console.log("Consent captured"); }
         );
@@ -3967,7 +3963,6 @@ function IntaSaveSettings() {
                 analytics: false,
                 marketing: false,
                 preferences: false,
-                sale_of_data: false,
             },
             function () { console.log("Consent captured"); }
         );
@@ -4041,7 +4036,6 @@ function IntaAcceptAll() {
             'analytics': true,
             'marketing': true,
             'preferences': true,
-            'sale_of_data': true,
         },
         () => console.log("Consent captured")
     );
@@ -4139,7 +4133,6 @@ function IntaSaveNeccessary() {
             'analytics': false,
             'marketing': false,
             'preferences': false,
-            'sale_of_data': false,
         },
         () => console.log("Consent captured")
     );
@@ -4496,7 +4489,6 @@ onWindowLoad(function () {
                         'analytics': true,
                         'marketing': true,
                         'preferences': true,
-                        'sale_of_data': true,
                     },
                     () => console.log("Consent captured")
                 );
@@ -4600,7 +4592,6 @@ onWindowLoad(function () {
                         'analytics': true,
                         'marketing': true,
                         'preferences': true,
-                        'sale_of_data': true,
                     },
                     () => console.log("Consent captured")
                 );
@@ -4682,7 +4673,6 @@ onWindowLoad(function () {
                         'analytics': false,
                         'marketing': false,
                         'preferences': false,
-                        'sale_of_data': false,
                     },
                     () => console.log("Consent captured")
                 );
@@ -6176,7 +6166,6 @@ function saveINTCookieSettings(consent, type = null) {
                 'analytics': false,
                 'marketing': true,
                 'preferences': false,
-                'sale_of_data': true,
             },
             () => console.log("Consent captured")
         );
@@ -6213,7 +6202,6 @@ function saveINTCookieSettings(consent, type = null) {
                 'analytics': false,
                 'marketing': false,
                 'preferences': false,
-                'sale_of_data': false,
             },
             () => console.log("Consent captured")
         );
@@ -6245,9 +6233,7 @@ function saveINTCookieSettings(consent, type = null) {
             {
                 'analytics': false,
                 'marketing': false,
-                'sale_of_data': false,
                 'preferences': true,
-                'sale_of_data': false,
             },
             () => console.log("Consent captured")
         );
@@ -6278,7 +6264,6 @@ function saveINTCookieSettings(consent, type = null) {
                 'analytics': false,
                 'marketing': false,
                 'preferences': false,
-                'sale_of_data': false,
             },
             () => console.log("Consent captured")
         );
@@ -6318,7 +6303,6 @@ function saveINTCookieSettings(consent, type = null) {
             {
                 'analytics': true,
                 'marketing': false,
-                'sale_of_data': false,
                 'preferences': false,
             },
             () => console.log("Consent captured")
@@ -6358,7 +6342,6 @@ function saveINTCookieSettings(consent, type = null) {
             {
                 'analytics': false,
                 'marketing': false,
-                'sale_of_data': false,
                 'preferences': false,
             },
             () => console.log("Consent captured")
