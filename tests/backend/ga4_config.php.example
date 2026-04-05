@@ -1,0 +1,13 @@
+<?php
+/**
+ * GA4 Measurement Protocol configuration
+ * Copy to ga4_config.php and fill in your API secret.
+ *
+ * measurement_id: from client (window.INTA.settings.gtagId) - safe to expose
+ * api_secret: server-side only - get from GA4 Admin > Data Streams > Measurement Protocol
+ *
+ * Data is consent-driven: accepted = full (user_id, IP, user_agent); not accepted = minimal
+ */
+return [
+    'api_secret' => 'your_api_secret_here',
+];

@@ -1,0 +1,1 @@
+// Paste the contents of Fields.js/ts here from the iab-tcf-es repo

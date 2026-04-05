@@ -170,7 +170,6 @@ const moreContentText = document.createElement("section");
 const moreFooter = document.createElement("div");
 const intaconsents = window.intaconsents = document.createElement("intastellarconsents");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
-dataLayer.push({ event: 'intastellar_consents_widget_visible', platform: window.platform });
 
 // --- IAB TCF encoder bundle must be loaded above this script ---
 // Paste the browser-ready bundle here or load it before this script.
@@ -239,337 +238,6 @@ function dispatchTCFConsentChangedIfAvailable(wasUserInteraction) {
     }
 }
 
-/* LGPD Modal */
-function showLGPDModal() {
-    const lgpdModal = document.querySelector('#lgpd-modal');
-    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
-    if (lgpdModal) {
-
-        intastellarConsents.style.display = 'none';
-        lgpdModal.classList.add('inta-lgpd-active');
-    }
-}
-
-function createLGPDModal() {
-    const modal = document.createElement('inta-lgpd-modal');
-    modal.innerHTML = `
-    <div id="lgpd-modal" role="dialog" aria-modal="true" aria-labelledby="lgpd-title">
-        <div class="inta-lgpd-modal-box">
-
-        <!-- Header -->
-        <div class="inta-lgpd-modal-header">
-            <div class="inta-lgpd-modal-header-left">
-            <div class="inta-lgpd-modal-header-icon">⚖</div>
-            <div>
-                <div class="inta-lgpd-modal-title" id="lgpd-title">Seus Direitos de Privacidade</div>
-                <div class="inta-lgpd-modal-subtitle">Lei Geral de Proteção de Dados · Art. 18</div>
-            </div>
-            </div>
-            <button class="inta-lgpd-modal-close" onclick="closeLGPDModal()" aria-label="Fechar">✕</button>
-        </div>
-
-        <!-- Body -->
-        <div class="inta-lgpd-modal-body">
-            <p class="inta-lgpd-modal-intro">
-            Nos termos da <strong>LGPD (Lei nº 13.709/2018)</strong>, você possui os seguintes direitos em relação aos seus dados pessoais. Para exercê-los, entre em contato com o nosso Encarregado de Dados (DPO).
-            </p>
-
-            <ul class="inta-lgpd-rights-list">
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">1</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Confirmação</strong> do Tratamento</div>
-                <div class="inta-lgpd-right-desc">Você tem o direito de saber se tratamos seus dados pessoais.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">2</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Acesso</strong> aos Dados</div>
-                <div class="inta-lgpd-right-desc">Você pode solicitar uma cópia completa dos dados pessoais que possuímos sobre você.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">3</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Correção</strong> de Dados Inexatos</div>
-                <div class="inta-lgpd-right-desc">Você pode solicitar a correção de dados incompletos, inexatos ou desatualizados.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">4</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Anonimização, Bloqueio ou Eliminação</strong></div>
-                <div class="inta-lgpd-right-desc">Você pode pedir a anonimização, bloqueio ou eliminação de dados desnecessários ou tratados em desconformidade com a LGPD.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">5</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Portabilidade</strong> dos Dados</div>
-                <div class="inta-lgpd-right-desc">Você tem o direito de solicitar a transferência dos seus dados a outro fornecedor de serviço ou produto.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">6</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Eliminação</strong> dos Dados Tratados com Consentimento</div>
-                <div class="inta-lgpd-right-desc">Você pode solicitar a eliminação dos dados tratados com base no seu consentimento, a qualquer momento.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">7</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Informação</strong> sobre Compartilhamento</div>
-                <div class="inta-lgpd-right-desc">Você tem o direito de saber com quais entidades públicas e privadas seus dados foram compartilhados.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">8</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Revogação</strong> do Consentimento</div>
-                <div class="inta-lgpd-right-desc">Você pode retirar seu consentimento a qualquer momento, sem prejuízo da licitude do tratamento realizado anteriormente.</div>
-                </div>
-            </li>
-            </ul>
-
-            <!-- DPO Contact -->
-            <div class="inta-lgpd-dpo-section">
-            <div class="inta-lgpd-dpo-label">Encarregado de Dados (DPO)</div>
-            <div class="inta-lgpd-dpo-text">
-                Para exercer qualquer um dos direitos acima, entre em contato com o responsável pelo tratamento de dados deste site:<br><br>
-                📧 <a href="mailto:dpo@exemplo.com.br">dpo@exemplo.com.br</a>
-            </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="inta-lgpd-modal-footer">
-            <span class="inta-lgpd-footer-note">Lei nº 13.709/2018 · ANPD</span>
-            <button class="inta-lgpd-btn-close-modal" onclick="closeLGPDModal()">Entendi</button>
-        </div>
-
-        </div>
-    </div>
-    `;
-    document.body.appendChild(modal);
-    return modal;
-}
-
-function closeLGPDModal() {
-    const lgpdModal = document.querySelector('#lgpd-modal');
-    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
-    if (lgpdModal) {
-        intastellarConsents.style.display = 'grid';
-        lgpdModal.classList.remove('inta-lgpd-active');
-
-    }
-}
-
-/* POPIA Modal (South Africa) */
-function showPOPIAModal() {
-    const popiaModal = document.querySelector('#popia-modal');
-    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
-    if (popiaModal) {
-        intastellarConsents.style.display = 'none';
-        popiaModal.classList.add('inta-lgpd-active');
-    }
-}
-
-function createPOPIAModal() {
-    const modal = document.createElement('inta-popia-modal');
-    modal.innerHTML = `
-    <div id="popia-modal" role="dialog" aria-modal="true" aria-labelledby="popia-title">
-        <div class="inta-lgpd-modal-box">
-
-        <!-- Header -->
-        <div class="inta-lgpd-modal-header">
-            <div class="inta-lgpd-modal-header-left">
-            <div class="inta-lgpd-modal-header-icon">⚖</div>
-            <div>
-                <div class="inta-lgpd-modal-title" id="popia-title">Your Privacy Rights</div>
-                <div class="inta-lgpd-modal-subtitle">Protection of Personal Information Act (POPIA) · South Africa</div>
-            </div>
-            </div>
-            <button class="inta-lgpd-modal-close" onclick="closePOPIAModal()" aria-label="Close">✕</button>
-        </div>
-
-        <!-- Body -->
-        <div class="inta-lgpd-modal-body">
-            <p class="inta-lgpd-modal-intro">
-            Under the <strong>Protection of Personal Information Act, 2013 (POPIA)</strong>, you have a number of rights in relation to your personal information. To exercise these rights, please contact our Information Officer / Data Protection contact.
-            </p>
-
-            <ul class="inta-lgpd-rights-list">
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">1</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Right of Access</strong></div>
-                <div class="inta-lgpd-right-desc">You may request confirmation of whether we hold personal information about you, and request access to that information.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">2</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Right to Correction</strong></div>
-                <div class="inta-lgpd-right-desc">You may request that we correct or update personal information that is inaccurate, incomplete, or outdated.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">3</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Right to Deletion or Destruction</strong></div>
-                <div class="inta-lgpd-right-desc">In certain circumstances, you may ask us to delete, destroy, or de‑identify personal information that we no longer have a lawful basis to keep.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">4</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Right to Object or Restrict Processing</strong></div>
-                <div class="inta-lgpd-right-desc">You may object to certain types of processing, including for direct marketing, or request that we restrict processing in specific cases.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">5</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Right to Withdraw Consent</strong></div>
-                <div class="inta-lgpd-right-desc">Where processing is based on your consent, you may withdraw that consent at any time. This will not affect prior lawful processing.</div>
-                </div>
-            </li>
-            <li class="inta-lgpd-right-item">
-                <span class="inta-lgpd-right-number">6</span>
-                <div class="inta-lgpd-right-content">
-                <div class="inta-lgpd-right-title"><strong>Right to Lodge a Complaint</strong></div>
-                <div class="inta-lgpd-right-desc">You may lodge a complaint with the Information Regulator of South Africa if you believe your POPIA rights have been infringed.</div>
-                </div>
-            </li>
-            </ul>
-
-            <!-- Contact -->
-            <div class="inta-lgpd-dpo-section">
-            <div class="inta-lgpd-dpo-label">Information Officer / Data Protection Contact</div>
-            <div class="inta-lgpd-dpo-text">
-                To exercise your POPIA rights, please contact the responsible party for this site:<br><br>
-                📧 <a href="mailto:privacy@yourcompany.co.za">privacy@yourcompany.co.za</a>
-            </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="inta-lgpd-modal-footer">
-            <span class="inta-lgpd-footer-note">POPIA · Act 4 of 2013 · South Africa</span>
-            <button class="inta-lgpd-btn-close-modal" onclick="closePOPIAModal()">I understand</button>
-        </div>
-
-        </div>
-    </div>
-    `;
-    document.body.appendChild(modal);
-    return modal;
-}
-
-function closePOPIAModal() {
-    const popiaModal = document.querySelector('#popia-modal');
-    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
-    if (popiaModal) {
-        intastellarConsents.style.display = 'grid';
-        popiaModal.classList.remove('inta-lgpd-active');
-    }
-}
-
-/**
- * True only when this looks like a Shopify storefront (not a random script setting window.Shopify = {}).
- * Prevents creating fake Shopify globals on non-Shopify sites — those caused setTrackingConsent to be missing → TypeError.
- */
-function intaIsShopifyStorefrontContext() {
-    var s = window.Shopify;
-    if (!s || typeof s !== "object") return false;
-    return typeof s.loadFeatures === "function" || typeof s.shop === "string" || typeof s.theme === "object";
-}
-
-/**
- * Disable Shopify’s native Customer Privacy / cookie banner while Intastellar is active.
- * Shopify checks customerPrivacy.shouldShowBanner(); we also hide known DOM + inject CSS.
- * Does NOT create window.Shopify on non-Shopify sites (avoids empty customerPrivacy without setTrackingConsent).
- */
-function intaHideShopifyNativeConsentBanner() {
-    try {
-        if (!intaIsShopifyStorefrontContext()) {
-            return;
-        }
-        window.Shopify.customerPrivacy = window.Shopify.customerPrivacy || {};
-        // Do not stub setTrackingConsent — Shopify's consent-tracking-api provides it; a no-op breaks sync and can cause "not a function" if the object is replaced later.
-        window.Shopify.customerPrivacy.shouldShowBanner = function () {
-            return false;
-        };
-
-        if (!document.getElementById('inta-shopify-native-banner-hide')) {
-            var st = document.createElement('style');
-            st.id = 'inta-shopify-native-banner-hide';
-            st.textContent =
-                '#shopify-pc__banner, #shopify-pc__prefs, .shopify-pc__banner, .shopify-pc__prefs, ' +
-                '[data-shopify-pc-banner], [id^="shopify-pc"] { display: none !important; ' +
-                'visibility: hidden !important; pointer-events: none !important; opacity: 0 !important; }';
-            (document.head || document.documentElement).appendChild(st);
-        }
-
-        var shopifyPcSelectors = [
-            '#shopify-pc__banner',
-            '#shopify-pc__prefs',
-            '.shopify-pc__banner',
-            '.shopify-pc__prefs',
-            '[data-shopify-pc-banner]',
-        ];
-        for (var si = 0; si < shopifyPcSelectors.length; si++) {
-            try {
-                document.querySelectorAll(shopifyPcSelectors[si]).forEach(function (el) {
-                    el.style.setProperty('display', 'none', 'important');
-                    el.setAttribute('hidden', '');
-                    el.setAttribute('aria-hidden', 'true');
-                });
-            } catch (e) { /* ignore */ }
-        }
-    } catch (e) { /* ignore */ }
-}
-
-var intaShopifyHideBannerRaf = null;
-function intaScheduleHideShopifyNativeBanner() {
-    if (intaShopifyHideBannerRaf != null) {
-        return;
-    }
-    intaShopifyHideBannerRaf = requestAnimationFrame(function () {
-        intaShopifyHideBannerRaf = null;
-        intaHideShopifyNativeConsentBanner();
-    });
-}
-
-/** Watch for late-injected Shopify banners (e.g. after loadFeatures) for a short window */
-(function intaObserveShopifyBannerSuppression() {
-    intaHideShopifyNativeConsentBanner();
-    if (typeof MutationObserver === 'undefined') {
-        return;
-    }
-    var mo = new MutationObserver(function () {
-        intaScheduleHideShopifyNativeBanner();
-    });
-    function attach() {
-        if (!document.body) {
-            return;
-        }
-        mo.observe(document.body, { childList: true, subtree: true });
-    }
-    if (document.body) {
-        attach();
-    } else {
-        document.addEventListener('DOMContentLoaded', attach);
-    }
-    setTimeout(function () {
-        try {
-            mo.disconnect();
-        } catch (e) { /* ignore */ }
-    }, 60000);
-})();
-
 const IntastellarCookieConsent = {
     // Store reference to the banner element
     _banner: null,
@@ -585,7 +253,6 @@ const IntastellarCookieConsent = {
         if (window.dataLayer) {
             window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
         }
-        intaHideShopifyNativeConsentBanner();
     },
     remove: function (template) {
         // Use direct reference if available
@@ -619,12 +286,6 @@ const IntastellarCookieConsent = {
             if (!self._banner && template !== false) {
                 self._banner = template;
                 appendBannerWhenBodyReady();
-                if (window.INTA && window.INTA.settings && window.INTA.settings.lgpd) {
-                    createLGPDModal();
-                }
-                if (window.INTA && window.INTA.settings && window.INTA.settings.popia) {
-                    createPOPIAModal();
-                }
             }
             if (!getCookie(int_hideCookieBannerName)) {
                 if (self._banner) window._IntastellarConsentsBanner.classList.add("--active");
@@ -635,7 +296,6 @@ const IntastellarCookieConsent = {
                     window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
                 }
             }
-            intaHideShopifyNativeConsentBanner();
         }
 
         function loadRemoteConfig() {
@@ -1172,7 +832,6 @@ const settingsMessagesLanguages = {
     Du kan til enhver tid trække dit samtykke tilbage ved at trykke på det lille ikon nederst i ${(window?.INTA?.settings.arrange == "ltr") ? "venstre" : "højre"} hjørne af hjemmesiden.</p>
     <p>Du kan læse mere om vores brug af cookies og andre teknologier, samt om vores indsamling og behandling af personoplysninger ved at trykke på nedenstående links.</p>
     ${generatePolicyUrl('Vores privat og cookie politik')}
-    ${window.INTA.settings.lgpd ? `<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>` : "" }
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privat politik</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")}`,
     german: `<h3 style="    font-size: 25px;">Sie haben die Kontrolle über Ihre Daten</h3>
@@ -1211,7 +870,6 @@ const settingsMessagesLanguages = {
     <p>Al hacer clic en "Aceptar", usted da su consentimiento para todos estos fines. También puede decidir a qué fines dar su consentimiento marcando la casilla junto al fin y haciendo clic en "Guardar configuración".</p>
     <p>Puede retirar su consentimiento en cualquier momento haciendo clic en el pequeño icono en la esquina inferior ${(window?.INTA?.settings.arrange == "ltr") ? "izquierda" : "derecha"} del sitio web.</p>
     ${generatePolicyUrl('Nuestra política de privacidad y cookies')}
-    ${window.INTA.settings.lgpd ? `<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>` : "" }
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidad</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
@@ -1304,7 +962,6 @@ const settingsMessagesLanguages = {
     <p>Ao clicar em "Aceitar", você dá seu consentimento para todos esses fins. Você também pode optar por especificar os fins aos quais consente marcando a caixa ao lado do fim e clicando em "Salvar configurações".</p>
     <p>Você pode retirar seu consentimento a qualquer momento clicando no pequeno ícone na parte inferior ${(window?.INTA?.settings.arrange == "ltr") ? "esquerda" : "direita"} do site.</p>
     ${generatePolicyUrl('Nossa política de privacidade e cookies')}
-    ${window.INTA.settings.lgpd ? `<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Seus Direitos de Privacidade</button>` : "" }
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidade</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
@@ -1344,7 +1001,6 @@ const settingsMessagesLanguages = {
     <p>Deur op 'Aanvaar' te klik, gee jy toestemming vir al hierdie doeleindes. Jy kan ook die spesifieke doeleindes waarvoor jy toestemming gee, kies deur die keuselys langs die doelwit aan te dui en op 'Stoor instellings' te klik.</p>
     <p>Jy kan jou toestemming te eniger tyd intrek deur op die klein ikoon in die onderkant ${(window?.INTA?.settings.arrange == "ltr") ? "linker" : "regter"} hoek van die webwerf te klik.</p>
     ${generatePolicyUrl('Ons Privaatheids- en koekiebeleid')}
-    ${window.INTA.settings.popia ? `<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Jou POPIA-privaatheidsregte</button>` : "" }
     <button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privaatheidsbeleid</button>
     ${(window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "")
         }`,
@@ -3277,176 +2933,44 @@ if (intastellarCookieLanguage != null) {
     ` + generateCookieButtons('承認', '拒否', '設定');
         moreFooter.innerHTML =
             `
-        <section class="intastellar_privacyPolicy"></section>
-        <article class="intReadMore">
-            <section class="required">
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.japanese.necessary.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.japanese.necessary.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_requiredCookieList)
-            }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.japanese.functional.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.japanese.functional.description}</p>
-                <article class="intaCookieListOverview">
-                    ${listAllCookies(inta_functionalCookieList)
-            }
-                </article>  
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.japanese.statisic.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.japanese.statisic.description}</p> 
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_statisticCookieList)
-            }
-                </article>
-            </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.japanese.marketing.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.japanese.marketing.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_marketingCookieList)
-            }
-                </article>
-            </section>
-        </article>
         <article class="intCookieSetting__form">
-                <section class="intastellarSettings__control">
-                    <label class="intSettingDisabled checkMarkContainer">
-                        <span class="intSettingsTitle">${intastellarSupportedLanguages.japanese.necessary.title}</span>
-                        <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                            <span class="checkmark round"></span>
-                        </span>
-                    </label>
-                </section>
-                <section class="intastellarSettings__control">
-                    <label class="checkMarkContainer">
-                        <span class="intSettingsTitle">${intastellarSupportedLanguages.japanese.functional.title}</span>
-                        <span class="intCheckmarkSliderContainer">
-                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
-                            <span class="checkmark round"></span>
-                        </span>
-                    </label>
-                </section>
-                <section class="intastellarSettings__control">
-                    <label class="checkMarkContainer">
-                        <span class="intSettingsTitle">${intastellarSupportedLanguages.japanese.statisic.title}</span>
-                        <span class="intCheckmarkSliderContainer">
-                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
-                            <span class="checkmark round"></span>
-                        </span>
-                    </label>
-                </section>
-                <section class="intastellarSettings__control">
-                    <label class="checkMarkContainer">
-                        <span class="intSettingsTitle">${intastellarSupportedLanguages.japanese.marketing.title}</span>
-                        <span class="intCheckmarkSliderContainer">
-                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
-                            <span class="checkmark round"></span>
-                        </span>
-                    </label>
-                </section>
-            </article>
-    `;
-    } else if(intastellarCookieLanguage == "pt" || intastellarCookieLanguage == "pt-BR" || window.INTA.settings.language == "pt" || window.INTA.settings.language == "portuguese") {
-        // Portuguese
-        settingsMessage = settingsMessagesLanguages.portuguese;
-        intastellarShowHideDetailsText = "Ver detalhes";
-        message =
-            messageWrapStart
-            + messages.portuguese
-            + messageWrapEnd + generatePolicyUrl('Nossa política de privacidade e cookies');
-        intastellarCookieButtons.innerHTML = `<section class="intCookieSaveSettingsContainer">
-    ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo != "" || window.INTA.settings.design == "banner" && window.INTA.settings.logo) ? `
-       <img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">`
-                : ""}
-        ${generateCookieSettingsButton(intastellarSupportedLanguages.portuguese.saveSettings, 'Aceitar')}
-        <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
-        ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
-    </section>`;
-        cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
-        ${window.INTA.settings.logo && window.INTA.settings.logo != "" ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
-    ` + generateCookieButtons('Aceitar', 'Recusar', 'Configurações');
-        moreFooter.innerHTML =
-            `
-        <section class="intastellar_privacyPolicy"></section>
-        <article class="intReadMore">
-            <section class="required">
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.portuguese.necessary.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.portuguese.necessary.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_requiredCookieList)
-            }
-                </article>
+            <section class="intastellarSettings__control">
+                <label class="intSettingDisabled checkMarkContainer">
+                <span class="intSettingsTitle">${intastellarSupportedLanguages.japanese.necessary.title}</span>
+                <span class="intCheckmarkSliderContainer">
+                    <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
+                    <span class="checkmark round"></span>
+                </span>
+                </label>
             </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.portuguese.functional.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.portuguese.functional.description}</p>
-                <article class="intaCookieListOverview">
-                    ${listAllCookies(inta_functionalCookieList)
-            }
-                </article>  
+            <section class="intastellarSettings__control">
+                <label class="checkMarkContainer">
+                    <span class="intSettingsTitle">${intastellarSupportedLanguages.japanese.functional.title}</span>
+                    <span class="intCheckmarkSliderContainer">
+                        <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
+                        <span class="checkmark round"></span>
+                    </span>
+                </label>
             </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.portuguese.statisic.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.portuguese.statisic.description}</p> 
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_statisticCookieList)
-            }
-                </article>
+            <section class="intastellarSettings__control">
+                <label class="checkMarkContainer">
+                    <span class="intSettingsTitle">${intastellarSupportedLanguages.japanese.statisic.title}</span>
+                    <span class="intCheckmarkSliderContainer">
+                        <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
+                        <span class="checkmark round"></span>
+                    </span>
+                </label>
             </section>
-            <section>
-                <h3 class="intaExpandCookieList">${intastellarSupportedLanguages.portuguese.marketing.title} <i class="intastellar__arrow"></i></h3>
-                <p>${intastellarSupportedLanguages.portuguese.marketing.description}</p>
-                <article class="intaCookieListOverview">
-                ${listAllCookies(inta_marketingCookieList)
-            }
-                </article>
+            <section class="intastellarSettings__control">
+                <label class="checkMarkContainer">
+                    <span class="intSettingsTitle">${intastellarSupportedLanguages.japanese.marketing.title}</span>
+                    <span class="intCheckmarkSliderContainer">
+                        <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
+                        <span class="checkmark round"></span>
+                    </span>
+                </label>
             </section>
-            </article>
-            <article class="intCookieSetting__form">
-                <section class="intastellarSettings__control">
-                    <label class="intSettingDisabled checkMarkContainer">
-                        <span class="intSettingsTitle">${intastellarSupportedLanguages.portuguese.necessary.title}</span>
-                        <span class="intCheckmarkSliderContainer">
-                            <input class="intCookieSetting__checkbox" type="checkbox" disabled checked>
-                            <span class="checkmark round"></span>
-                        </span>
-                    </label>
-                </section>
-                <section class="intastellarSettings__control">
-                    <label class="checkMarkContainer">
-                        <span class="intSettingsTitle">${intastellarSupportedLanguages.portuguese.functional.title}</span>
-                        <span class="intCheckmarkSliderContainer">
-                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="functional" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.functionalCookies : false}>
-                            <span class="checkmark round"></span>
-                        </span>
-                    </label>
-                </section>
-                <section class="intastellarSettings__control">
-                    <label class="checkMarkContainer">
-                        <span class="intSettingsTitle">${intastellarSupportedLanguages.portuguese.statisic.title}</span>
-                        <span class="intCheckmarkSliderContainer">
-                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="statics" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.staticsticCookies : false}>
-                            <span class="checkmark round"></span>
-                        </span>
-                    </label>
-                </section>
-                <section class="intastellarSettings__control">
-                    <label class="checkMarkContainer">
-                        <span class="intSettingsTitle">${intastellarSupportedLanguages.portuguese.marketing.title}</span>
-                        <span class="intCheckmarkSliderContainer">
-                            <input onchange="updateSaveButtonText()" class="intCookieSetting__checkbox" id="marketing" type="checkbox" ${(getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents?.advertisementCookies : false}>
-                            <span class="checkmark round"></span>
-                        </span>
-                    </label>
-                </section>
-            </article>
-            `;
+        </article>`;
     } else {
         settingsMessage = settingsMessagesLanguages.danish;
         intastellarShowHideDetailsText = "Vis detaljer";
@@ -3550,7 +3074,7 @@ if (intastellarCookieLanguage != null) {
 moreContentText.innerHTML = settingsMessage;
 moreFooter.appendChild(vendorListContainer);
 
-let ccpa = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa;
+let ccpa = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.on;
 let ccpaUrl = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa.url;
 let cookieColor = window?.INTA?.settings === undefined || window?.INTA?.settings.color === undefined || window?.INTA?.settings.color === false || window?.INTA?.settings.color.indexOf("[") > -1 || window?.INTA?.settings.color === "" ? "rgba(0, 51, 153, 1)" : window?.INTA?.settings.color;
 let cookieLogo = window?.INTA?.settings === undefined || window?.INTA?.settings.logo === undefined || window?.INTA?.settings.logo === "" || window?.INTA?.settings.logo.indexOf("[") > -1 ? null : window?.INTA?.settings.logo;
@@ -3821,22 +3345,6 @@ function onWindowLoad(callback) {
     }
 }
 
-/** Shopify: one setTrackingConsent with full analytics + marketing + preferences (partial calls zero the rest). */
-function intaCbShopifySyncFromBannerCheckboxes() {
-    const fn = document.querySelector("#functional");
-    const st = document.querySelector("#statics");
-    const mk = document.querySelector("#marketing");
-    const payload = {
-        analytics: !!(st && st.checked),
-        marketing: !!(mk && mk.checked),
-        preferences: !!(fn && fn.checked),
-        sale_of_data: !!(mk && mk.checked),
-    };
-    intaShopifySetTrackingConsentSafe(payload, function () {
-        console.log("Shopify Customer Privacy synced from banner", payload);
-    });
-}
-
 function IntaSaveSettings() {
     recordTimeToDecision('save_settings');
     const accepted = [];
@@ -3846,10 +3354,28 @@ function IntaSaveSettings() {
         })
         accepted.push("functionalCookies");
 
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
+            {
+                'analytics': false,
+                'marketing': false,
+                'preferences': true,
+            },
+            () => console.log("Consent captured")
+        );
+        
     } else if (!FunctionalCheckbox?.checked) {
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
         });
+
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
+            {
+                'analytics': false,
+                'marketing': false,
+                'preferences': false,
+            },
+            () => console.log("Consent captured")
+        );
 
         const index = accepted.indexOf("functionalCookies");
         if (index > -1) { // only splice array when item is found
@@ -3869,14 +3395,13 @@ function IntaSaveSettings() {
         });
         accepted.push("staticsticCookies");
         _paq.push(['setConsentGiven']);
-        intaShopifySetTrackingConsentSafe(
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
             {
-                analytics: true,
-                marketing: false,
-                preferences: false,
-                sale_of_data: false,
+                'analytics': true,
+                'marketing': false,
+                'preferences': false,
             },
-            function () { console.log("Consent captured"); }
+            () => console.log("Consent captured")
         );
     } else if (!StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
@@ -3890,14 +3415,13 @@ function IntaSaveSettings() {
             analytics_Storage: "denied"
         });
 
-        intaShopifySetTrackingConsentSafe(
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
             {
-                analytics: false,
-                marketing: false,
-                preferences: false,
-                sale_of_data: false,
+                'analytics': false,
+                'marketing': false,
+                'preferences': false,
             },
-            function () { console.log("Consent captured"); }
+            () => console.log("Consent captured")
         );
 
         const index = accepted.indexOf("staticsticCookies");
@@ -3922,16 +3446,15 @@ function IntaSaveSettings() {
             analytics_Storage: "denied"
         });
         accepted.push("advertisementCookies");
-        intaShopifySetTrackingConsentSafe(
-            {
-                analytics: false,
-                marketing: true,
-                preferences: false,
-                sale_of_data: true,
-            },
-            function () { console.log("Consent captured"); }
-        );
 
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
+            {
+                'analytics': false,
+                'marketing': true,
+                'preferences': false,
+            },
+            () => console.log("Consent captured")
+        );
         // Pintrk
         if (typeof pintrk === 'function') {
             try {
@@ -3959,18 +3482,16 @@ function IntaSaveSettings() {
                 pintrk('setconsent', false);
             } catch (e) { /* ignore */ }
         }
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
+            {
+                'analytics': false,
+                'marketing': false,
+                'preferences': false,
+            },
+            () => console.log("Consent captured")
+        );
 
         window.clarity && window.clarity('consent', false);
-
-        intaShopifySetTrackingConsentSafe(
-            {
-                analytics: false,
-                marketing: false,
-                preferences: false,
-                sale_of_data: false,
-            },
-            function () { console.log("Consent captured"); }
-        );
 
         const index = accepted.indexOf("advertisementCookies");
         if (index > -1) { // only splice array when item is found
@@ -4036,12 +3557,11 @@ function IntaAcceptAll() {
         ad_Storage: "granted",
         analytics_Storage: "granted"
     });
-    intaShopifySetTrackingConsentSafe(
+    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
         {
             'analytics': true,
             'marketing': true,
             'preferences': true,
-            'sale_of_data': true,
         },
         () => console.log("Consent captured")
     );
@@ -4134,12 +3654,11 @@ function IntaSaveNeccessary() {
         advertisement: false,
         functionality: false,
     }]);
-    intaShopifySetTrackingConsentSafe(
+    window.Shopify?.customerPrivacy?.setTrackingConsent?.(
         {
             'analytics': false,
             'marketing': false,
             'preferences': false,
-            'sale_of_data': false,
         },
         () => console.log("Consent captured")
     );
@@ -4225,9 +3744,6 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || i
 } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "et" || intastellarCookieLanguage === "et-EE") {
     settingsSaveLang.necessaryCookiesText = "Keeldu";
     settingsSaveLang.saveSettingsText = "Salvesta seaded";
-} else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ja" || intastellarCookieLanguage === "ja-JP") {
-    settingsSaveLang.necessaryCookiesText = "拒否";
-    settingsSaveLang.saveSettingsText = "保存";
 } else {
     settingsSaveLang.necessaryCookiesText = "Afvis";
     settingsSaveLang.saveSettingsText = "Gem";
@@ -4248,18 +3764,13 @@ function updateSaveButtonText() {
     if (
         (FunctionalCheckbox && FunctionalCheckbox.checked) ||
         (StaticsCheckBox && StaticsCheckBox.checked) ||
-        (MarketingCheckBox && MarketingCheckBox.checked)
+        (MarketingCheckBox && MarketingCheckBox.checked) ||
+        vendorChecksChecked || vendorLegitChecksChecked
     ) {
         saveBtn.innerText = settingsSaveLang.saveSettingsText;
     } else {
         saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
     }
-
-    console.log((FunctionalCheckbox && FunctionalCheckbox.checked) ||
-        (StaticsCheckBox && StaticsCheckBox.checked) ||
-        (MarketingCheckBox && MarketingCheckBox.checked));
-
-    console.log("Update save button text", saveBtn.innerText);
 }
 
 onWindowLoad(function () {
@@ -4309,6 +3820,7 @@ onWindowLoad(function () {
     /* (intaCookieConsents?.advertisementCookies == "false") ? '"denied"': '"granted"' */
 
     if (isValidPolicyLink()) {
+        console.log("Hello Loaded");
         document.querySelectorAll(".intaCookieListOverview-vendor").forEach((vendor, i) => {
             if (window?.INTA?.settings.company != "" && window?.INTA?.settings.company != undefined && vendor.innerText == window.location.host) {
                 vendor.innerText = window?.INTA?.settings.company;
@@ -4418,7 +3930,7 @@ onWindowLoad(function () {
         }
 
 
-        if (window?.INTA?.settings.ccpa !== undefined && window?.INTA?.settings.ccpa) {
+        if (window?.INTA?.settings.ccpa !== undefined && window?.INTA?.settings.ccpa.on) {
             /* const closeCCPAButton = document.querySelector(".intastellarCCPA__popupClose");
 
             closeCCPAButton.addEventListener("click", () => {
@@ -4480,10 +3992,10 @@ onWindowLoad(function () {
                     analytics_Storage: "granted"
                 });
                 dataLayer.push({
-                    'event': 'cookie_consent_update',
-                    'cookie_consent': intaConsentsObjectVariable.consents,
-                    'time_to_decision_ms': intaConsentsObjectVariable.time_to_decision
-                });
+        'event': 'cookie_consent_update',
+        'cookie_consent': intaConsentsObjectVariable.consents,
+        'time_to_decision_ms': intaConsentsObjectVariable.time_to_decision
+    });
 
                 window._hsp.push(['setHubSpotConsent', {
                     analytics: true,
@@ -4491,12 +4003,11 @@ onWindowLoad(function () {
                     functionality: true,
                 }]);
 
-                intaShopifySetTrackingConsentSafe(
+                window.Shopify?.customerPrivacy?.setTrackingConsent?.(
                     {
                         'analytics': true,
                         'marketing': true,
                         'preferences': true,
-                        'sale_of_data': true,
                     },
                     () => console.log("Consent captured")
                 );
@@ -4595,21 +4106,20 @@ onWindowLoad(function () {
                     "isOptOut": false
                 });
 
-                intaShopifySetTrackingConsentSafe(
+                window.Shopify?.customerPrivacy?.setTrackingConsent?.(
                     {
                         'analytics': true,
                         'marketing': true,
                         'preferences': true,
-                        'sale_of_data': true,
                     },
                     () => console.log("Consent captured")
                 );
 
                 dataLayer.push({
-                    'event': 'cookie_consent_update',
-                    'cookie_consent': intaConsentsObjectVariable.consents,
-                    'time_to_decision_ms': intaConsentsObjectVariable.time_to_decision
-                });
+        'event': 'cookie_consent_update',
+        'cookie_consent': intaConsentsObjectVariable.consents,
+        'time_to_decision_ms': intaConsentsObjectVariable.time_to_decision
+    });
                 updateConsents("all");
                 /*window.location.reload();*/
             });
@@ -4677,12 +4187,11 @@ onWindowLoad(function () {
                     ad_Storage: "granted",
                     analytics_Storage: "granted"
                 });
-                intaShopifySetTrackingConsentSafe(
+                window.Shopify?.customerPrivacy?.setTrackingConsent?.(
                     {
                         'analytics': false,
                         'marketing': false,
                         'preferences': false,
-                        'sale_of_data': false,
                     },
                     () => console.log("Consent captured")
                 );
@@ -5559,44 +5068,6 @@ function listAllCookies(cookieList) {
             </section>
             `;
 
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ja" || intastellarCookieLanguage === "ja-JP") {
-            // Japanese
-            return `
-                <section class="intaCookieListOverview-grid">
-                <section class="intaCookieList-left">
-                    <h3 class="intaCookieListOverview-heading">提供者</h3>
-                    <p class="intaCookieListOverview-vendor">${vendor}</p>
-                    <p class="intaCookieListOverview-heading">プライバシーポリシー</p>
-                    ${(cookie.vendor_privacy === null || cookie.vendor_privacy == undefined) ? generatePolicyUrl(`プライバシーポリシー`) : `<a href="${cookie.vendor_privacy}" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>`}
-                    <h4 class="intaCookieList-CookieName">ドメイン</h4>
-                    ${cookie.domains.map((cookie) => {
-                if (cookie == undefined) return;
-                if (cookie.indexOf("intastellar") > -1 || cookie.indexOf("intastellarconsents") > -1) {
-                    return `
-                                            <a href="https://${cookie}" target="_blank" rel="noopener">${cookie}</a>
-                                        `
-                } else {
-                    return `
-                                            <p>${cookie}</p>
-                                        `;
-                }
-            }).join(" ")}
-                </section>
-                <section>
-                    <h3 class="intaCookieListOverview-heading">クッキー</h3>
-                    <section>
-                        ${cookie.cookies.map((cookie) => {
-                return `
-                                <article class="intaCookieList-cookie">
-                                    <h4 class="intaCookieList-CookieName">${cookie.cookie}</h4>
-                                    <p>${cookie.purpose}</p>
-                                </article>
-                            `
-            }).join(" ")}
-                    </section>
-                </section>
-            </section>
-                `
         } else {
             return `
                 <section class="intaCookieListOverview-grid">
@@ -5632,7 +5103,7 @@ function listAllCookies(cookieList) {
             }).join(" ")}
                     </section>
                 </section>
-            </section>
+            </ >
                 `
         }
     }).join(" ")
@@ -6171,12 +5642,11 @@ function saveINTCookieSettings(consent, type = null) {
         });
         window._hsp.push(['doNotTrack', false]);
 
-        intaShopifySetTrackingConsentSafe(
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
             {
                 'analytics': false,
                 'marketing': true,
                 'preferences': false,
-                'sale_of_data': true,
             },
             () => console.log("Consent captured")
         );
@@ -6208,12 +5678,11 @@ function saveINTCookieSettings(consent, type = null) {
         });
         window.clarity && window.clarity('consent', false);
 
-        intaShopifySetTrackingConsentSafe(
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
             {
                 'analytics': false,
                 'marketing': false,
                 'preferences': false,
-                'sale_of_data': false,
             },
             () => console.log("Consent captured")
         );
@@ -6241,17 +5710,15 @@ function saveINTCookieSettings(consent, type = null) {
         window.clarity && window.clarity('consent', false);
 
         window._hsp.push(['doNotTrack', false]);
-        intaShopifySetTrackingConsentSafe(
+
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
             {
                 'analytics': false,
                 'marketing': false,
-                'sale_of_data': false,
                 'preferences': true,
-                'sale_of_data': false,
             },
             () => console.log("Consent captured")
         );
-
         /* window.allScripts.map((script) => {
             if (script.type == "functional") {
                 script.scripts.forEach((src) => {
@@ -6273,12 +5740,11 @@ function saveINTCookieSettings(consent, type = null) {
             'functionality_storage': 'denied',
         })
 
-        intaShopifySetTrackingConsentSafe(
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
             {
                 'analytics': false,
                 'marketing': false,
                 'preferences': false,
-                'sale_of_data': false,
             },
             () => console.log("Consent captured")
         );
@@ -6314,11 +5780,10 @@ function saveINTCookieSettings(consent, type = null) {
             ad_Storage: "denied",
             analytics_Storage: "granted"
         });
-        intaShopifySetTrackingConsentSafe(
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
             {
                 'analytics': true,
                 'marketing': false,
-                'sale_of_data': false,
                 'preferences': false,
             },
             () => console.log("Consent captured")
@@ -6354,11 +5819,11 @@ function saveINTCookieSettings(consent, type = null) {
             'ad_storage': 'denied'
         });
         window.clarity && window.clarity('consent', false);
-        intaShopifySetTrackingConsentSafe(
+
+        window.Shopify?.customerPrivacy?.setTrackingConsent?.(
             {
                 'analytics': false,
                 'marketing': false,
-                'sale_of_data': false,
                 'preferences': false,
             },
             () => console.log("Consent captured")
@@ -6382,7 +5847,6 @@ function saveINTCookieSettings(consent, type = null) {
         advertisementCookies: (MarketingCheckBox?.checked) ? "checked" : false,
     };
     window.intaCookieConsents = intaConsentsObjectVariable.consents;
-    intaCbShopifySyncFromBannerCheckboxes();
     dataLayer.push({
         'event': 'cookie_consent_update',
         'cookie_consent': intaConsentsObjectVariable.consents,
