@@ -606,17 +606,25 @@ vendorListContainer.classList.add("vendor-container");
 vendorListContainer.innerHTML = '<h3>Vendors</h3>';
 
 function applyTcStringToVendorCheckboxes(tcString, vendors) {
-    console.log('[applyTcStringToVendorCheckboxes] called with tcString:', tcString ? 'present (' + tcString.length + ' chars)' : null, 'vendors:', vendors ? vendors.length : 0);
+    if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+        console.log('[applyTcStringToVendorCheckboxes] called with tcString:', tcString ? 'present (' + tcString.length + ' chars)' : null, 'vendors:', vendors ? vendors.length : 0);
+    }
     if (!tcString || !vendors || !vendors.length) {
-        console.log('[applyTcStringToVendorCheckboxes] early return: missing tcString or empty vendors');
+        if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+            console.log('[applyTcStringToVendorCheckboxes] early return: missing tcString or empty vendors');
+        }
         return;
     }
     try {
         var decoded = window.IABTCF && window.IABTCF.TCString && typeof window.IABTCF.TCString.decode === 'function'
             ? window.IABTCF.TCString.decode(tcString) : null;
-        console.log('[applyTcStringToVendorCheckboxes] decoded:', decoded);
+        if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+            console.log('[applyTcStringToVendorCheckboxes] decoded:', decoded);
+        }
         if (!decoded || !decoded.vendors) {
-            console.log('[applyTcStringToVendorCheckboxes] early return: no decoded vendors');
+            if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
+                console.log('[applyTcStringToVendorCheckboxes] early return: no decoded vendors');
+            }
             return;
         }
         vendors.forEach(function (vendor, i) {
@@ -672,7 +680,10 @@ function getTcStringFromCookie() {
             `;
         vendorListContainer.appendChild(vendorDiv);
     });
-    applyTcStringToVendorCheckboxes(getTcStringFromCookie(), vendors);
+    var __intaTcStrForVendors = getTcStringFromCookie();
+    if (__intaTcStrForVendors) {
+        applyTcStringToVendorCheckboxes(__intaTcStrForVendors, vendors);
+    }
 
     document.querySelectorAll('.intastellarCookie-settings__btn.--save').forEach(function (saveBtn) {
         if (saveBtn._vendorSaveListenerAttached) return;
