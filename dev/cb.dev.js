@@ -6302,7 +6302,9 @@ function saveINTCookieSettings(consent, type = null) {
     setTimeout(() => {
         restartObserver();
     }, 1000);
-    document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
-        .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    if (document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]") != null) {
+        document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
+            .postMessage(JSON.stringify(intaConsentsObjectVariable), "*");
+    }
     dispatchTCFConsentChangedIfAvailable(true);
 }
