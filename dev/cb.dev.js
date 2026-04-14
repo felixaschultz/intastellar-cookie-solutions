@@ -199,6 +199,7 @@ function generateTcString(consentObj) {
     // Add vendorLegitimateInterests if present
     if (Array.isArray(consentObj.vendorLegitimateInterests)) {
         model.vendorLegitimateInterests = consentObj.vendorLegitimateInterests.slice(0);
+        window.vendorLegitimateInterests = consentObj.vendorLegitimateInterests.slice(0);
     }
     return window.IABTCF.TCString.encode(model);
 }
@@ -1048,7 +1049,7 @@ function getTcStringFromCookie() {
                 purposes: purposes,
                 vendors: vendorConsentsById,
                 disclosedVendors: disclosedVendorsById,
-                vendorLegitimateInterests: vendorLegitInterests.length ? vendorLegitimateInterests : undefined
+                vendorLegitimateInterests: vendorLegitInterests.length ? vendorLegitInterests : undefined
             };
             const tcString = generateTcString(userConsent);
             intaConsentsObjectVariable.tcString = tcString;
