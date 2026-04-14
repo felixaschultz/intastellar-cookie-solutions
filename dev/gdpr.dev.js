@@ -2027,14 +2027,41 @@ class IntastellarSolutionsSDK extends Error {
     }
 };
 
+/* True if the browser accepts a first-party cookie with this Domain= value (rejects public-suffix / illegal parents). */
+function intaIsDocumentCookieDomainAccepted(domainAttr) {
+    "use strict";
+    var name = "__intaCdPrb_" + Math.random().toString(36).slice(2, 11);
+    var base = "path=/;max-age=5;SameSite=Lax";
+    document.cookie = name + "=1;" + base + ";domain=" + domainAttr;
+    var ok = document.cookie.indexOf(name + "=") !== -1;
+    document.cookie = name + "=;" + base + ";max-age=0;domain=" + domainAttr;
+    return ok;
+}
+
 const intCookieDomain = (function () {
     "use strict";
     var i = 0,
+        host = window.location.hostname,
         d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "" || window.location.host === "127.0.0.1" || window.location.host.indexOf("127.0.0.1") > -1) ? "127.0.0.1" : document.domain || window.location.host,
-        p = d.split(".")
+        p = d.split(".");
+
+    if (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "" || window.location.host === "127.0.0.1" || window.location.host.indexOf("127.0.0.1") > -1) {
+        return "domain=." + d + ";";
+    }
+
+    if (host.indexOf(":") !== -1 || /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(host)) {
+        return "";
+    }
+
+    if (p.length < 2) {
+        return "";
+    }
 
     d = p.slice(-1 - ++i).join(".");
-    d = d;
+
+    if (!intaIsDocumentCookieDomainAccepted("." + d)) {
+        return "";
+    }
 
     return "domain=." + d + ";";
 })();
@@ -2042,11 +2069,24 @@ const intCookieDomain = (function () {
 const intCookieDomainWithWWW = (function () {
     "use strict";
     var i = 0,
+        host = window.location.hostname,
         d = (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1") ? "" : document.domain || window.location.host,
-        p = d.split(".")
+        p = d.split(".");
+
+    if (document.domain === "localhost" || window.location.host === "localhost" || document.domain === "127.0.0.1" || window.location.host === "127.0.0.1") {
+        return "domain=www." + d + ";";
+    }
+
+    if (host.indexOf(":") !== -1 || /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(host) || p.length < 2) {
+        return "";
+    }
 
     d = p.slice(-1 - ++i).join(".");
-    d = d;
+    var wwwAttr = "www." + d;
+
+    if (!intaIsDocumentCookieDomainAccepted(wwwAttr)) {
+        return "";
+    }
 
     return "domain=www." + d + ";";
 })();
