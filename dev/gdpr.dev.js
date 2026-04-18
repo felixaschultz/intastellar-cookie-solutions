@@ -562,7 +562,7 @@ function loadUcVendors() {
     var s = document.createElement('script');
     s.src = base;
     s.async = true;
-    document.head.appendChild(s);
+    intaAppendToDocumentHead(s);
     s.onload = function () {
         COOKIE_CONSENT_TYPE_MAP = window.__intaCookieConsentTypeMap || null;
     };
@@ -713,6 +713,43 @@ if (intaCookieConsents) {
     updateVwoConsent(intaCookieConsents);
 }
 let intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
+
+/** Intastellar script URL when `document.currentScript` is null (Remix, Vite, Webpack, ES modules). */
+function intaGuessIntastellarScriptSrc() {
+    try {
+        if (document.currentScript && document.currentScript.src) {
+            return document.currentScript.src;
+        }
+    } catch (e) {
+        /* ignore */
+    }
+    const scripts = document.getElementsByTagName("script");
+    for (let i = scripts.length - 1; i >= 0; i--) {
+        const s = scripts[i];
+        const src = s && s.src;
+        if (!src) {
+            continue;
+        }
+        if (/uc\.js|\/uc\.js|consents\.cdn|intastellar-consents|gdpr\.dev|\/cb\.js|\/cb\.dev|floating\.js/i.test(src)) {
+            return src;
+        }
+    }
+    return "";
+}
+
+function findScriptParameter(value) {
+    const currentURL = intaGuessIntastellarScriptSrc();
+    if (!currentURL || currentURL.indexOf(value) === -1) {
+        return undefined;
+    }
+    try {
+        const url = new URL(currentURL, window.location.href);
+        return url.searchParams.get(value);
+    } catch (e) {
+        return undefined;
+    }
+}
+
 let isGtmMode = findScriptParameter("ref") === "gtm";
 let isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
 let FunctionalCheckbox = document.querySelector("#functional");
@@ -766,6 +803,26 @@ fetch('https://ipapi.co/json/')
         } else {
             // Optionally disable CCPA for non-CA users
             if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa.on = false;
+        }
+
+        if (data.country === "BR") {
+            window.INTA = window.INTA || {};
+            window.INTA.settings = window.INTA.settings || {};
+            window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
+            window.INTA.settings.lgpd = true;
+        } else {
+            // Optionally disable LGPD for non-BR users
+            if (window.INTA?.settings?.lgpd) window.INTA.settings.lgpd = false;
+        }
+
+        if (data.country === "ZA") {
+            window.INTA = window.INTA || {};
+            window.INTA.settings = window.INTA.settings || {};
+            window.INTA.settings.popia = window.INTA.settings.popin || {};
+            window.INTA.settings.popia = true;
+        } else {
+            // Optionally disable CCPA for non-ZA users
+            if (window.INTA?.settings?.popin) window.INTA.settings.popin.on = false;
         }
         // Now continue with your banner initialization
     });
@@ -1452,19 +1509,6 @@ function getCookie(cname) {
     return "";
 }
 
-function findScriptParameter(value) {
-    let currentURL = document.currentScript.src;
-
-    if (currentURL.indexOf(value) > -1) {
-        let url = new URL(currentURL);
-        let param = url.searchParams;
-        return param.get(value);
-    }
-
-    return undefined;
-
-}
-
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -2091,26 +2135,37 @@ let intCookieDomainWithWWW = (function () {
     return "domain=www." + d + ";";
 })();
 
-/* Find specific parameter on current Script */
-
-function findScriptParameter(value) {
-    let currentURL = document.currentScript.src;
-
-    if (currentURL.indexOf(value) > -1) {
-        let url = new URL(currentURL);
-        let param = url.searchParams;
-        return param.get(value);
-    }
-
-    return undefined;
-
-}
-
 let allowAllCookieName = "__all__cookies";
 let essentialsCookieName = "__essential__cookies";
 let blockTrackingCookies = "__hideTrackingCookies";
 let blockAdvertismentCookies = "__hideAdvertisementCookies";
-let intHead = document.querySelector("head");
+let intHead = document.head || document.querySelector("head") || document.getElementsByTagName("head")[0];
+
+/** Append dynamically created scripts/styles; head may be missing briefly (SSR / Remix). */
+function intaAppendToDocumentHead(node) {
+    if (!node) {
+        return;
+    }
+    const head = document.head
+        || document.querySelector("head")
+        || document.getElementsByTagName("head")[0];
+    try {
+        if (head) {
+            head.appendChild(node);
+            return;
+        }
+    } catch (e) {
+        /* ignore */
+    }
+    try {
+        const fallback = document.body || document.documentElement;
+        if (fallback) {
+            fallback.appendChild(node);
+        }
+    } catch (e2) {
+        /* ignore */
+    }
+}
 
 let cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
@@ -3547,7 +3602,7 @@ analyticsScript.async = true;
 analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
 
 
-intHead.appendChild(analyticsScript);
+intaAppendToDocumentHead(analyticsScript);
 
 // --- A/B experiment: resolve variant and apply overrides from window.INTA.experiment ---
 (function applyIntaExperiment() {
@@ -3619,7 +3674,7 @@ intastellarCreateBanner.defer = true;
 
 setTimeout(() => {
     if (window.INTA.settings) {
-        intHead.appendChild(intastellarCreateBanner);
+        intaAppendToDocumentHead(intastellarCreateBanner);
     }
 }, 800);
 
