@@ -29,7 +29,7 @@ function intaShopifyMergePayloadWithCcpaSaleOptOut(payload) {
     if (!payload || typeof payload !== "object") {
         return payload;
     }
-    const out = Object.assign({}, payload);
+    let out = Object.assign({}, payload);
     try {
         if (localStorage.getItem("ccpa_opt_out") === "true") {
             out.sale_of_data = false;
@@ -43,7 +43,7 @@ function intaShopifyMergePayloadWithCcpaSaleOptOut(payload) {
 /* --- Shopify setTrackingConsent coalescing (one network write per burst + skip identical payload) --- */
 let intaShopifyCoalesceTimer = null;
 let intaShopifyCoalescePending = null;
-const intaShopifyCoalesceCallbacks = [];
+let intaShopifyCoalesceCallbacks = [];
 let intaShopifyLastSetTrackingConsentJson = null;
 let intaShopifyFlushApiMisses = 0;
 
@@ -51,10 +51,10 @@ function intaShopifyStableConsentPayloadJson(p) {
     if (!p || typeof p !== "object") {
         return "";
     }
-    const keys = ["analytics", "marketing", "preferences", "sale_of_data"].filter(function (k) {
+    let keys = ["analytics", "marketing", "preferences", "sale_of_data"].filter(function (k) {
         return Object.prototype.hasOwnProperty.call(p, k);
     });
-    const o = {};
+    let o = {};
     for (let i = 0; i < keys.length; i++) {
         o[keys[i]] = p[keys[i]];
     }
@@ -62,7 +62,7 @@ function intaShopifyStableConsentPayloadJson(p) {
 }
 
 function intaShopifyShallowMergeConsentPatch(target, patch) {
-    const base = target && typeof target === "object" ? Object.assign({}, target) : {};
+    let base = target && typeof target === "object" ? Object.assign({}, target) : {};
     if (!patch || typeof patch !== "object") {
         return base;
     }
@@ -82,7 +82,7 @@ function intaShopifyShallowMergeConsentPatch(target, patch) {
 }
 
 function intaShopifyRunCoalescedCallbacks(arr) {
-    const list = arr || [];
+    let list = arr || [];
     for (let i = 0; i < list.length; i++) {
         try {
             if (typeof list[i] === "function") {
@@ -101,11 +101,11 @@ function intaShopifyFlushQueuedSetTrackingConsent() {
         return;
     }
 
-    const merged = intaShopifyMergePayloadWithCcpaSaleOptOut(Object.assign({}, intaShopifyCoalescePending));
-    const api = window.Shopify && window.Shopify.customerPrivacy;
+    let merged = intaShopifyMergePayloadWithCcpaSaleOptOut(Object.assign({}, intaShopifyCoalescePending));
+    let api = window.Shopify && window.Shopify.customerPrivacy;
 
     if (typeof api?.setTrackingConsent !== "function") {
-        const canRetry = typeof window.Shopify?.loadFeatures === "function";
+        let canRetry = typeof window.Shopify?.loadFeatures === "function";
         if (!canRetry || intaShopifyFlushApiMisses > 80) {
             intaShopifyCoalescePending = null;
             intaShopifyFlushApiMisses = 0;
@@ -118,7 +118,7 @@ function intaShopifyFlushQueuedSetTrackingConsent() {
     }
     intaShopifyFlushApiMisses = 0;
 
-    const json = intaShopifyStableConsentPayloadJson(merged);
+    let json = intaShopifyStableConsentPayloadJson(merged);
     if (json === intaShopifyLastSetTrackingConsentJson) {
         intaShopifyCoalescePending = null;
         intaShopifyRunCoalescedCallbacks(intaShopifyCoalesceCallbacks.splice(0));
@@ -126,7 +126,7 @@ function intaShopifyFlushQueuedSetTrackingConsent() {
     }
 
     intaShopifyCoalescePending = null;
-    const cbs = intaShopifyCoalesceCallbacks.splice(0);
+    let cbs = intaShopifyCoalesceCallbacks.splice(0);
 
     try {
         api.setTrackingConsent(merged, function () {
@@ -171,7 +171,7 @@ function intaShopifySetTrackingConsentSafe(consents, onDone) {
     }
 }
 
-const allScripts = window.allScripts = [
+let allScripts = window.allScripts = [
     {
         /* Analytics Scripts which are beeing blocked */
         /* "([\-\.]clarity+)", */
@@ -312,10 +312,10 @@ const allScripts = window.allScripts = [
     }
 ];
 let __intaCookieEventFlushTimer = null;
-const __intaCookieEventPendingByKey = new Map();
-const INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
-const INTA_COOKIE_EVENT_MAX_BATCH = 50;
-const INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
+let __intaCookieEventPendingByKey = new Map();
+let INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
+let INTA_COOKIE_EVENT_MAX_BATCH = 50;
+let INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
 
 // Listen for consent state response
 window.addEventListener('message', (event) => {
@@ -401,18 +401,18 @@ function intaShopifyConsentFlag(v) {
  * If IntastellarConsentSolution is missing / invalid → deny all so Shopify does not keep old "yes".
  */
 function intaShopifyBuildSetTrackingConsentPayload() {
-    const denyAll = { analytics: false, marketing: false, preferences: false };
+    let denyAll = { analytics: false, marketing: false, preferences: false };
     try {
-        const name = (typeof window !== "undefined" && window.int_hideCookieBannerName) || "IntastellarConsentSolution";
-        const raw = typeof getCookie === "function" && name ? getCookie(name) : "";
+        let name = (typeof window !== "undefined" && window.int_hideCookieBannerName) || "IntastellarConsentSolution";
+        let raw = typeof getCookie === "function" && name ? getCookie(name) : "";
         if (!raw || String(raw).indexOf("__inta") === -1) {
             return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
         }
         if (typeof decodeIntaConsentsObject !== "function") {
             return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
         }
-        const parsed = JSON.parse(decodeIntaConsentsObject(String(raw).split(".")[2]));
-        const c = parsed && parsed.consents;
+        let parsed = JSON.parse(decodeIntaConsentsObject(String(raw).split(".")[2]));
+        let c = parsed && parsed.consents;
         if (!c || typeof c !== "object") {
             return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
         }
@@ -427,7 +427,7 @@ function intaShopifyBuildSetTrackingConsentPayload() {
 }
 
 function intaShopifyPayloadFromConsentsObject(c) {
-    const denyAll = { analytics: false, marketing: false, preferences: false };
+    let denyAll = { analytics: false, marketing: false, preferences: false };
     if (!c || typeof c !== "object") {
         return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
     }
@@ -465,8 +465,8 @@ window.intaShopifySetTrackingConsentFromConsentsObject = intaShopifySetTrackingC
  * @see https://shopify.dev/docs/api/customer-privacy
  */
 function intaShopifyGetProcessingAllowedSnapshot() {
-    const api = window.Shopify && window.Shopify.customerPrivacy;
-    const snap = {
+    let api = window.Shopify && window.Shopify.customerPrivacy;
+    let snap = {
         preferencesProcessingAllowed: null,
         analyticsProcessingAllowed: null,
         marketingAllowed: null,
@@ -505,7 +505,7 @@ function intaShopifyGetProcessingAllowedSnapshot() {
 let intaShopifyVisitorConsentListenerInstalled = false;
 
 function intaShopifyRefreshCustomerPrivacyState(visitorDetail) {
-    const allowed = intaShopifyGetProcessingAllowedSnapshot();
+    let allowed = intaShopifyGetProcessingAllowedSnapshot();
     window.__intaShopifyCustomerPrivacy = {
         allowed: allowed,
         lastVisitorConsentEventDetail: visitorDetail != null ? visitorDetail : null,
@@ -576,7 +576,7 @@ function getConsentTypeForCookie(cookieName) {
     // Fallback until uc-vendors loads
     if (COOKIE_CONSENT_TYPE_MAP && COOKIE_CONSENT_TYPE_MAP[cookieName]) return COOKIE_CONSENT_TYPE_MAP[cookieName];
     if (COOKIE_CONSENT_TYPE_MAP) {
-        for (const key in COOKIE_CONSENT_TYPE_MAP) {
+        for (let key in COOKIE_CONSENT_TYPE_MAP) {
             if (cookieName.startsWith(key)) return COOKIE_CONSENT_TYPE_MAP[key];
         }
     }
@@ -585,7 +585,7 @@ function getConsentTypeForCookie(cookieName) {
 
 // --- Start Cookie Interception ---
 (function () {
-    const desc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
+    let desc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
     Object.defineProperty(document, 'cookie', {
         configurable: true,
         enumerable: true,
@@ -595,11 +595,11 @@ function getConsentTypeForCookie(cookieName) {
         set: function (cookieString) {
             window.INTA.observedCookieSource = 'cookie';
             try {
-                const cookieName = cookieString.split('=')[0].trim();
-                const rawValue = cookieString.split('=')[1]?.split(';')[0];
-                const cookieDomain = cookieString.split(';').find(part => part.trim().toLowerCase().startsWith('domain='))?.split('=')[1]?.trim() || window.location.hostname;
+                let cookieName = cookieString.split('=')[0].trim();
+                let rawValue = cookieString.split('=')[1]?.split(';')[0];
+                let cookieDomain = cookieString.split(';').find(part => part.trim().toLowerCase().startsWith('domain='))?.split('=')[1]?.trim() || window.location.hostname;
                 // Use cookie name to determine consent type
-                const consentType = getConsentTypeForCookie(cookieName);
+                let consentType = getConsentTypeForCookie(cookieName);
                 recordCookie({
                     name: cookieName,
                     source: window.INTA.observedCookieSource || 'unknown',
@@ -623,7 +623,7 @@ if ("cookieStore" in window) {
     cookieStore.addEventListener("change", (event) => {
         event.changed.forEach(cookie => {
             window.INTA.observedCookieSource = 'cookieStore';
-            const consentType = getConsentTypeForCookie(cookie.name);
+            let consentType = getConsentTypeForCookie(cookie.name);
             recordCookie({
                 name: cookie.name,
                 source: 'cookieStore',
@@ -642,10 +642,10 @@ if ("cookieStore" in window) {
 
 // --- Start localStorage Interception ---
 (function () {
-    const originalSetItem = localStorage.setItem;
+    let originalSetItem = localStorage.setItem;
     localStorage.setItem = function (key, value) {
         window.INTA.observedCookieSource = 'localStorage';
-        const consentType = getConsentTypeForCookie(key);
+        let consentType = getConsentTypeForCookie(key);
         recordCookie({
             name: key,
             source: 'localStorage',
@@ -664,7 +664,7 @@ if ("cookieStore" in window) {
 // --- Start memory Interception (example) ---
 window.INTA.memorySet = function (key, value) {
     window.INTA.observedCookieSource = 'memory';
-    const consentType = getConsentTypeForCookie(key);
+    let consentType = getConsentTypeForCookie(key);
     recordCookie({
         name: key,
         value: value,
@@ -686,39 +686,39 @@ function IntastellarSnapShot(stage) {
 }
 
 // Example usage:
-// const rootDomain = "group1.com";
-// const partnerDomains = ["domain-a.com", "domain-b.com"];
+// let rootDomain = "group1.com";
+// let partnerDomains = ["domain-a.com", "domain-b.com"];
 // requestConsentState('user-123', rootDomain, partnerDomains);
 // setConsentState('user-123', { marketing: true, statistics: false, functional: true }, rootDomain, partnerDomains);
 // --- End Cross-site Consent Tracking ---
 
 /* - - - Setup - - - */
 
-const intaCookiePref = "IntastellarConsentSolution";
-const int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
-const int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
-const int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
-const int_staticsticCookies = intaCookiePref + ":Statistics-cookies";
-const int_visitorCheck = intaCookiePref + "visitorCheck";
-const button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
-const button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
+let intaCookiePref = "IntastellarConsentSolution";
+let int_hideCookieBannerName = window.int_hideCookieBannerName = intaCookiePref;
+let int_FunctionalCookies = intaCookiePref + ":Functional-cookies";
+let int_marketingCookies = intaCookiePref + ":Advertisment-cookies";
+let int_staticsticCookies = intaCookiePref + ":Statistics-cookies";
+let int_visitorCheck = intaCookiePref + "visitorCheck";
+let button__acceptAll = document.querySelector(".intastellarCookieBanner__acceptAll");
+let button__acceptAllNecessary = document.querySelector(".intastellarCookieBanner__acceptNecessary");
 let intastellarShowHideDetailsText = "Show details";
 let adsbygoogle = window.adsbygoogle || [];
-const intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
-const intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
-const intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
+let intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutions.com";
+let intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
+let intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 window.uetq = window.uetq || [];
 // On page load, update VWO consent if consent object exists
 if (intaCookieConsents) {
     updateVwoConsent(intaCookieConsents);
 }
-const intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
-const isGtmMode = findScriptParameter("ref") === "gtm";
-const isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
-const FunctionalCheckbox = document.querySelector("#functional");
-const StaticsCheckBox = document.querySelector("#statics");
-const MarketingCheckBox = document.querySelector("#marketing");
-const pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
+let intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
+let isGtmMode = findScriptParameter("ref") === "gtm";
+let isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
+let FunctionalCheckbox = document.querySelector("#functional");
+let StaticsCheckBox = document.querySelector("#statics");
+let MarketingCheckBox = document.querySelector("#marketing");
+let pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 let poweredBy = "";
 window.dataLayer = window.dataLayer || [];
@@ -960,7 +960,7 @@ function intaShopifyLoadConsentTrackingApi() {
 if (!intaShopifyLoadConsentTrackingApi()) {
     // Shopify core (loadFeatures) often loads after this script — retry briefly on storefronts
     let intaShopifyRetries = 0;
-    const intaShopifyRetryId = setInterval(() => {
+    let intaShopifyRetryId = setInterval(() => {
         if (intaShopifyLoadConsentTrackingApi() || ++intaShopifyRetries > 50) {
             clearInterval(intaShopifyRetryId);
         }
@@ -1036,11 +1036,11 @@ function optOutCCPA() {
 function getConsentTypeForUrl(url) {
     if (!url) return 'marketing';
     for (let i = 0; i < window.allScripts.length; i++) {
-        const scriptType = window.allScripts[i].type;
-        const patterns = window.allScripts[i].scripts;
+        let scriptType = window.allScripts[i].type;
+        let patterns = window.allScripts[i].scripts;
         for (let j = 0; j < patterns.length; j++) {
             try {
-                const regex = new RegExp(patterns[j], 'i');
+                let regex = new RegExp(patterns[j], 'i');
                 if (regex.test(url)) {
                     // statics => statistics
                     if (scriptType === 'statics') return 'statistics';
@@ -1056,7 +1056,7 @@ function getConsentTypeForUrl(url) {
 // Helper: Send intercepted data to backend for storage/categorization
 async function sendToBackend(data) {
     try {
-        const base = (typeof window.INTA?.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
+        let base = (typeof window.INTA?.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
         await fetch(base, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1071,9 +1071,9 @@ async function sendToBackend(data) {
 // Helper: Server-side tagging - send GA4 events via backend (consent-aware)
 // Server checks consents: accepted = full data (user_id, IP, etc); not accepted = minimal
 window.sendEventToServerSideTagging = function (eventName, params, opts) {
-    const measurementId = (opts && opts.measurement_id) || (window.INTA && window.INTA.settings && window.INTA.settings.gtagId) || '';
+    let measurementId = (opts && opts.measurement_id) || (window.INTA && window.INTA.settings && window.INTA.settings.gtagId) || '';
     if (!measurementId || !/^G-[A-Z0-9]+$/i.test(measurementId)) return;
-    const consents = window.intaCookieConsents || {};
+    let consents = window.intaCookieConsents || {};
     var consentAcceptedAt = null;
     try {
         if (typeof getCookie === 'function' && typeof decodeIntaConsentsObject === 'function' && typeof int_hideCookieBannerName !== 'undefined') {
@@ -1085,8 +1085,8 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
             }
         }
     } catch (e) { }
-    const uid = (window.intaConsentsObjectVariable && window.intaConsentsObjectVariable.uid) || '';
-    const base = (typeof window.INTA !== 'undefined' && typeof window.INTA.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
+    let uid = (window.intaConsentsObjectVariable && window.intaConsentsObjectVariable.uid) || '';
+    let base = (typeof window.INTA !== 'undefined' && typeof window.INTA.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
     fetch(base, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1192,8 +1192,8 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
             return disclosedSegment ? coreString + "." + disclosedSegment : coreString;
         },
         decode: function (tcString) {
-            const coreOnly = (tcString || '').split('.')[0];
-            const binary = base64UrlDecode(coreOnly);
+            let coreOnly = (tcString || '').split('.')[0];
+            let binary = base64UrlDecode(coreOnly);
             let bits = '';
             for (let i = 0; i < binary.length; i++) {
                 bits += ('00000000' + binary.charCodeAt(i).toString(2)).slice(-8);
@@ -1201,29 +1201,29 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
             // Parse fields (see encoder for bit lengths)
             let offset = 0;
             function read(len) {
-                const val = bits.substr(offset, len);
+                let val = bits.substr(offset, len);
                 offset += len;
                 return val;
             }
-            const version = parseInt(read(6), 2);
-            const created = parseInt(read(36), 2);
-            const lastUpdated = parseInt(read(36), 2);
-            const cmpId = parseInt(read(12), 2);
-            const cmpVersion = parseInt(read(12), 2);
-            const consentScreen = parseInt(read(6), 2);
-            const consentLanguage = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
-            const vendorListVersion = parseInt(read(12), 2);
-            const tcfPolicyVersion = parseInt(read(6), 2);
-            const isServiceSpecific = !!parseInt(read(1), 2);
-            const useNonStandardStacks = !!parseInt(read(1), 2);
-            const specialFeatureOptIns = read(12);
-            const purposes = read(24).split('').map(b => b === '1');
-            const purposeLegitInterests = read(24);
-            const purposeOneTreatment = !!parseInt(read(1), 2);
-            const publisherCC = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
-            const maxVendorId = parseInt(read(16), 2);
-            const vendorBits = maxVendorId > 0 ? read(maxVendorId) : '';
-            const vendors = vendorBits.split('').map(b => b === '1');
+            let version = parseInt(read(6), 2);
+            let created = parseInt(read(36), 2);
+            let lastUpdated = parseInt(read(36), 2);
+            let cmpId = parseInt(read(12), 2);
+            let cmpVersion = parseInt(read(12), 2);
+            let consentScreen = parseInt(read(6), 2);
+            let consentLanguage = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
+            let vendorListVersion = parseInt(read(12), 2);
+            let tcfPolicyVersion = parseInt(read(6), 2);
+            let isServiceSpecific = !!parseInt(read(1), 2);
+            let useNonStandardStacks = !!parseInt(read(1), 2);
+            let specialFeatureOptIns = read(12);
+            let purposes = read(24).split('').map(b => b === '1');
+            let purposeLegitInterests = read(24);
+            let purposeOneTreatment = !!parseInt(read(1), 2);
+            let publisherCC = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
+            let maxVendorId = parseInt(read(16), 2);
+            let vendorBits = maxVendorId > 0 ? read(maxVendorId) : '';
+            let vendors = vendorBits.split('').map(b => b === '1');
             return {
                 version,
                 created,
@@ -1260,13 +1260,13 @@ function hasConsent(type) {
     return false;
 }
 
-const ALLOWLIST = [
+let ALLOWLIST = [
     location.origin,
     // Add all subdomains of the current host
     ...(() => {
-        const host = location.host;
-        const parts = host.split('.');
-        const subdomains = [];
+        let host = location.host;
+        let parts = host.split('.');
+        let subdomains = [];
         for (let i = 0; i < parts.length - 1; i++) {
             subdomains.push(parts.slice(i).join('.'));
         }
@@ -1298,7 +1298,7 @@ const ALLOWLIST = [
 
 function isAllowed(url) {
     try {
-        const parsedUrl = new URL(url, window.location.origin);
+        let parsedUrl = new URL(url, window.location.origin);
         // Allow all requests to the same origin
         if (parsedUrl.origin === window.location.origin) return true;
 
@@ -1312,8 +1312,8 @@ function isAllowed(url) {
         if (ALLOWLIST.some(domain => parsedUrl.origin === domain)) return true;
 
         // Allow all subdomains of the current host/root domain
-        const rootHost = window.location.hostname.replace(/^www\./, "");
-        const parsedHost = parsedUrl.hostname.replace(/^www\./, "");
+        let rootHost = window.location.hostname.replace(/^www\./, "");
+        let parsedHost = parsedUrl.hostname.replace(/^www\./, "");
         if (parsedHost === rootHost || parsedHost.endsWith('.' + rootHost)) return true;
 
         // Optionally allow other trusted domains here
@@ -1325,16 +1325,16 @@ function isAllowed(url) {
 
 
 // Intercept fetch with consent check
-const originalFetch = window.fetch;
+let originalFetch = window.fetch;
 window.fetch = function (resource, config) {
-    const url = (typeof resource === 'string') ? resource : resource.url;
+    let url = (typeof resource === 'string') ? resource : resource.url;
     // Prevent recursion for backend endpoint
     if (isAllowed(url)) {
         return originalFetch.apply(this, arguments);
     }
-    const isExternal = !url.startsWith(window.location.origin);
+    let isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
-        const consentType = getConsentTypeForUrl(url);
+        let consentType = getConsentTypeForUrl(url);
         if (!hasConsent(consentType)) {
             if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
                 console.log('[GDPR] Blocked fetch:', url, 'type:', consentType);
@@ -1347,17 +1347,17 @@ window.fetch = function (resource, config) {
 };
 
 // Intercept XMLHttpRequest with consent check
-const OriginalXHR = window.XMLHttpRequest;
+let OriginalXHR = window.XMLHttpRequest;
 function CustomXHR() {
-    const xhr = new OriginalXHR();
-    const open = xhr.open;
+    let xhr = new OriginalXHR();
+    let open = xhr.open;
     xhr.open = function (method, url, ...args) {
         if (isAllowed(url)) {
             return open.apply(this, arguments);
         }
-        const isExternal = !url.startsWith(window.location.origin);
+        let isExternal = !url.startsWith(window.location.origin);
         if (isExternal) {
-            const consentType = getConsentTypeForUrl(url);
+            let consentType = getConsentTypeForUrl(url);
             if (!hasConsent(consentType)) {
                 if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
                     console.log('[GDPR] Blocked XHR:', url, 'type:', consentType);
@@ -1372,15 +1372,15 @@ function CustomXHR() {
 }
 window.XMLHttpRequest = CustomXHR;
 // Intercept navigator.sendBeacon with consent check
-const originalSendBeacon = navigator.sendBeacon;
+let originalSendBeacon = navigator.sendBeacon;
 navigator.sendBeacon = function (url, data) {
     // Prevent recursion for backend endpoint
     if (isAllowed(url)) {
         return originalSendBeacon.apply(this, arguments);
     }
-    const isExternal = !url.startsWith(window.location.origin);
+    let isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
-        const consentType = getConsentTypeForUrl(url);
+        let consentType = getConsentTypeForUrl(url);
         if (!hasConsent(consentType)) {
             if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
                 console.log('[GDPR] Blocked beacon:', url, 'type:', consentType);
@@ -1407,8 +1407,8 @@ if (!hasConsent("advertisement")) {
 
 let scriptTypelang = {};
 let settingsMessage;
-const foundScripts = window.foundScripts = [];
-const intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
+let foundScripts = window.foundScripts = [];
+let intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
 window.dataLayer = window.dataLayer || [];
 (adsbygoogle = window.adsbygoogle || []).pauseAdRequests = 1;
 (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
@@ -1453,7 +1453,7 @@ function getCookie(cname) {
 }
 
 function findScriptParameter(value) {
-    const currentURL = document.currentScript.src;
+    let currentURL = document.currentScript.src;
 
     if (currentURL.indexOf(value) > -1) {
         let url = new URL(currentURL);
@@ -1489,7 +1489,7 @@ function decodeIntaConsentsObject(number) {
     return string;
 }
 
-const intastellarDevMode = (function () {
+let intastellarDevMode = (function () {
     return window.location.host === "localhost"
         || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
         || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
@@ -1499,7 +1499,7 @@ const intastellarDevMode = (function () {
 })();
 
 /* Object for supported languages */
-const intastellarSupportedLanguages = {
+let intastellarSupportedLanguages = {
     english: {
         saveSettings: "Decline All",
         necessary: { // Object for cookie info
@@ -1569,7 +1569,7 @@ const intastellarSupportedLanguages = {
         },
         statisic: {
             title: "Estadísticas",
-            description: "Queremos mejorar constantemente la facilidad de uso y el rendimiento de nuestros sitios web. Por esta razón, utilizamos tecnologías de análisis (incluidas las cookies) que miden y evalúan de forma seudónima qué funciones y contenidos de nuestros sitios web se utilizan, cómo y con qué frecuencia. Sobre esta base, podemos mejorar nuestros sitios web para los usuarios."
+            description: "Queremos mejorar letantemente la facilidad de uso y el rendimiento de nuestros sitios web. Por esta razón, utilizamos tecnologías de análisis (incluidas las cookies) que miden y evalúan de forma seudónima qué funciones y contenidos de nuestros sitios web se utilizan, cómo y con qué frecuencia. Sobre esta base, podemos mejorar nuestros sitios web para los usuarios."
         },
         marketing: {
             title: "Marketing",
@@ -1588,7 +1588,7 @@ const intastellarSupportedLanguages = {
         },
         statisic: {
             title: "Statistiques",
-            description: "Nous voulons constamment améliorer la convivialité et les performances de nos sites web. Pour cette raison, nous utilisons des technologies d'analyse (y compris des cookies) qui mesurent et évaluent de manière pseudonyme quelles fonctions et quels contenus de nos sites web sont utilisés, comment et à quelle fréquence. Sur cette base, nous pouvons améliorer nos sites web pour les utilisateurs."
+            description: "Nous voulons letamment améliorer la convivialité et les performances de nos sites web. Pour cette raison, nous utilisons des technologies d'analyse (y compris des cookies) qui mesurent et évaluent de manière pseudonyme quelles fonctions et quels contenus de nos sites web sont utilisés, comment et à quelle fréquence. Sur cette base, nous pouvons améliorer nos sites web pour les utilisateurs."
         },
         marketing: {
             title: "Marketing",
@@ -1645,7 +1645,7 @@ const intastellarSupportedLanguages = {
         },
         statisic: {
             title: "Estatísticas",
-            description: "Queremos melhorar constantemente a usabilidade e o desempenho dos nossos sites. Para isso, utilizamos tecnologias de análise (incluindo cookies) que medem e avaliam de forma pseudónima quais as funções e conteúdos dos nossos sites que são utilizados, como e com que frequência. Com base nisso, podemos melhorar os nossos sites para os utilizadores."
+            description: "Queremos melhorar letantemente a usabilidade e o desempenho dos nossos sites. Para isso, utilizamos tecnologias de análise (incluindo cookies) que medem e avaliam de forma pseudónima quais as funções e conteúdos dos nossos sites que são utilizados, como e com que frequência. Com base nisso, podemos melhorar os nossos sites para os utilizadores."
         },
         marketing: {
             title: "Marketing",
@@ -1891,9 +1891,9 @@ tmpl.innerHTML = `
 
 /* - - - Function to get Cookie Settings from url and set the cookie - - - */
 function intaSetCookieSettings() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const cookieSettings = urlParams.get('intaCookieSettings');
-    const reload = urlParams.get('reload');
+    let urlParams = new URLSearchParams(window.location.search);
+    let cookieSettings = urlParams.get('intaCookieSettings');
+    let reload = urlParams.get('reload');
 
     /*  console.log("Cookie Settings from URL", window.location.host); */
     if (cookieSettings && !reload) {
@@ -1917,7 +1917,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         analytics_Storage: "denied"
     });
 
-    const optedOut = localStorage.getItem('ccpa_opt_out');
+    let optedOut = localStorage.getItem('ccpa_opt_out');
     if (optedOut === 'true') {
         gtag('consent', 'update', {
             'ad_storage': 'denied',
@@ -1937,8 +1937,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
         https://www.intastellarsolutions.com/cookie-solutions/downloads`);
     }
     customElements.define('inta-consents-content', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
+        letructor() {
+            super(); // always call super() first in the letructor.
             let templ = document.createElement("template");
             templ.innerHTML = `
                 <style>
@@ -1964,8 +1964,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     customElements.define('intastellar-consents', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
+        letructor() {
+            super(); // always call super() first in the letructor.
             let templ = document.createElement("template");
             templ.innerHTML = `
                 <style>
@@ -1982,8 +1982,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     })
 
     customElements.define('inta-consents-section', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
+        letructor() {
+            super(); // always call super() first in the letructor.
 
             // Attach a shadow root to the element.
             let shadowRoot = this.attachShadow({ mode: 'open' });
@@ -1993,8 +1993,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     customElements.define('inta-consents-logo', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
+        letructor() {
+            super(); // always call super() first in the letructor.
 
             // Attach a shadow root to the element.
             let tmplStyle = document.createElement("template");
@@ -2006,8 +2006,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     customElements.define('inta-consents-bg', class extends HTMLElement {
-        constructor() {
-            super(); // always call super() first in the constructor.
+        letructor() {
+            super(); // always call super() first in the letructor.
             // Attach a shadow root to the element.
             let tmplStyle = document.createElement("style");
             tmplStyle.innerHTML = `:host{display:block; width: auto;background-image: url(${this.getAttribute("inta-bg-img")}); background-size: cover;}`;
@@ -2021,7 +2021,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 /* Custom error message */
 
 class IntastellarSolutionsSDK extends Error {
-    constructor(message) {
+    letructor(message) {
         super(message);
         this.name = 'IntastellarSolutionsSDKError';
     }
@@ -2038,7 +2038,7 @@ function intaIsDocumentCookieDomainAccepted(domainAttr) {
     return ok;
 }
 
-const intCookieDomain = (function () {
+let intCookieDomain = (function () {
     "use strict";
     var i = 0,
         host = window.location.hostname,
@@ -2066,7 +2066,7 @@ const intCookieDomain = (function () {
     return "domain=." + d + ";";
 })();
 
-const intCookieDomainWithWWW = (function () {
+let intCookieDomainWithWWW = (function () {
     "use strict";
     var i = 0,
         host = window.location.hostname,
@@ -2094,7 +2094,7 @@ const intCookieDomainWithWWW = (function () {
 /* Find specific parameter on current Script */
 
 function findScriptParameter(value) {
-    const currentURL = document.currentScript.src;
+    let currentURL = document.currentScript.src;
 
     if (currentURL.indexOf(value) > -1) {
         let url = new URL(currentURL);
@@ -2106,16 +2106,16 @@ function findScriptParameter(value) {
 
 }
 
-const allowAllCookieName = "__all__cookies";
-const essentialsCookieName = "__essential__cookies";
-const blockTrackingCookies = "__hideTrackingCookies";
-const blockAdvertismentCookies = "__hideAdvertisementCookies";
-const intHead = document.querySelector("head");
+let allowAllCookieName = "__all__cookies";
+let essentialsCookieName = "__essential__cookies";
+let blockTrackingCookies = "__hideTrackingCookies";
+let blockAdvertismentCookies = "__hideAdvertisementCookies";
+let intHead = document.querySelector("head");
 
-const cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
+let cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
 
-const inta_requiredCookieList = [{
+let inta_requiredCookieList = [{
     vendor: (window.INTA?.settings?.company) ? window.INTA?.settings?.company : window.location.host,
     cookies: [
         {
@@ -2282,7 +2282,7 @@ const inta_requiredCookieList = [{
 }
 ];
 /* - - - List of Analytics / Statistics cookie names - - - */
-const inta_statisticCookieList = [];
+let inta_statisticCookieList = [];
 inta_statisticCookieList.push({
     vendor: "Microsoft Inc",
     cookies: [
@@ -2648,7 +2648,7 @@ inta_statisticCookieList.push({
 });
 
 /* - - - List of Marketing cookies - - - */
-const inta_marketingCookieList = [];
+let inta_marketingCookieList = [];
 inta_marketingCookieList.push(
     {
         vendor: "Meta Inc",
@@ -3064,7 +3064,7 @@ inta_marketingCookieList.push({
 });
 
 /* - - - List of functional cookies - - - */
-const inta_functionalCookieList = [];
+let inta_functionalCookieList = [];
 inta_functionalCookieList.push({
     vendor: (window.INTA?.settings?.company) ? window.INTA?.settings?.company : window.location.host,
     cookies: [
@@ -3275,7 +3275,7 @@ window.INTA?.settings?.requiredCookies?.forEach((cookie) => {
         });
     }
 });
-const int__cookiesToKeep = [...requiredToKeep.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
+let int__cookiesToKeep = [...requiredToKeep.map((cookie) => cookie.cookies.map((c) => (c.cookie != undefined) ? c.cookie : ""))].flat(1);
 /* - - - Helper function to get cookie type*/
 function intaCookieType(type) {
     if (getCookie(type) === "checked") return true;
@@ -3311,9 +3311,9 @@ if (getCookie(int_hideCookieBannerName) != ""
     int__cookiesToKeep.push.apply(int__cookiesToKeep, newArray)
 }
 
-const int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function (entry) { return entry.trim() != ''; }).join("|"), "i");
+let int__cookiesToKeepRegx = new RegExp(int__cookiesToKeep.filter(function (entry) { return entry.trim() != ''; }).join("|"), "i");
 
-const cookieBannerStyles = {
+let cookieBannerStyles = {
     banner: "banner.css",
     bannerV2: "bannerV2.css",
     overlay: "overlay.css",
@@ -3380,7 +3380,7 @@ intaShopifySetTrackingConsentFromIntastellar();
 /* --- Segment Consent Integration (classic analytics.js) --- */
 (function initSegmentConsent() {
     function hasAnalyticsConsent() {
-        const c = window.intaCookieConsents;
+        let c = window.intaCookieConsents;
         return c?.staticsticCookies === "checked" ||
             c?.functionalCookies === "checked";
     }
@@ -3503,7 +3503,7 @@ if (window.INTA?.settings?.gtagId) {
 let notRequired;
 let m;
 /* Helper function to merge arrays */
-const merge = (first, second, third) => {
+let merge = (first, second, third) => {
     /* first.splice(1, 0, "^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+"); */
     for (let i = 0; i < second.length; i++) {
         first.push(second[i]);
@@ -3601,7 +3601,7 @@ intHead.appendChild(analyticsScript);
     }
 })();
 
-const intastellarCreateBanner = document.createElement("script");
+let intastellarCreateBanner = document.createElement("script");
 intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/cb.js";
 if (window.INTA.settings.design === "floating") {
     intastellarCreateBanner.src = "https://consents.cdn.intastellarsolutions.com/floating.js";
@@ -3656,9 +3656,9 @@ function flushCookieEventsToApi(options) {
         __intaCookieEventFlushTimer = null;
     }
     if (!__intaCookieEventPendingByKey.size) return;
-    const batch = Array.from(__intaCookieEventPendingByKey.values());
+    let batch = Array.from(__intaCookieEventPendingByKey.values());
     __intaCookieEventPendingByKey.clear();
-    const body = __intaBuildCookieEventsPayload(batch);
+    let body = __intaBuildCookieEventsPayload(batch);
     try {
         if (options.keepalive && typeof fetch === 'function') {
             fetch(INTA_COOKIE_EVENTS_URL, {
@@ -4112,7 +4112,7 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
 }
 
 /* - - - Helper function for message on the content block - - - */
-const bannerContentMessage = (domain, node) => {
+let bannerContentMessage = (domain, node) => {
     if (node?.classList?.contains("trustpilot-widget")) {
         domain = "www.trustpilot.com";
     }
@@ -4160,7 +4160,7 @@ const bannerContentMessage = (domain, node) => {
 };
 
 function handleInputChange(event) {
-    const target = event.target;
+    let target = event.target;
     if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') {
 
         // Update consent tracker object for checkbox inputs
@@ -4285,7 +4285,7 @@ window.addEventListener('hs-form-event:on-submission:failed', function (event) {
 
 /* - - - Listen for Form submit events to capture form consent state - - - */
 // One fetch per real DOM submit: capture may run + preventDefault hook may run on same event.
-const intaSeenSubmitEvents = new WeakSet();
+let intaSeenSubmitEvents = new WeakSet();
 
 // Capture on window + document (as early as possible). preventDefault() does not stop other
 // listeners; stopImmediatePropagation on an earlier capture listener can — see preventDefault patch.
@@ -4302,7 +4302,7 @@ document.addEventListener('submit', inastellarFormConsentState, true);
         return;
     }
     Event.prototype.__intaPreventDefaultPatched = true;
-    const nativePreventDefault = Event.prototype.preventDefault;
+    let nativePreventDefault = Event.prototype.preventDefault;
     Event.prototype.preventDefault = function intastellarWrappedPreventDefault() {
         try {
             if (this.type === 'submit' && this.target && this.target.nodeName === 'FORM' && typeof inastellarFormConsentState === 'function') {
@@ -4319,7 +4319,7 @@ document.addEventListener('submit', inastellarFormConsentState, true);
         return;
     }
     HTMLFormElement.prototype.__intaNativeSubmitPatched = true;
-    const nativeSubmit = HTMLFormElement.prototype.submit;
+    let nativeSubmit = HTMLFormElement.prototype.submit;
     HTMLFormElement.prototype.submit = function intastellarWrappedNativeSubmit() {
         try {
             if (typeof inastellarFormConsentState === 'function') {
@@ -4340,7 +4340,7 @@ document.addEventListener('submit', inastellarFormConsentState, true);
 
 /* - - - Function to send form data to Intastellar Consents API - - - */
 function inastellarFormConsentState(event) {
-    const form = event.target;
+    let form = event.target;
     if (!form || form.nodeName !== 'FORM') {
         return;
     }
@@ -4353,8 +4353,8 @@ function inastellarFormConsentState(event) {
     }
 
     // Collect form data without event prevent default
-    const formData = new FormData(form);
-    const IntastellarFormConsentState = Object.fromEntries(formData.entries());
+    let formData = new FormData(form);
+    let IntastellarFormConsentState = Object.fromEntries(formData.entries());
     IntastellarFormConsentState.type = 'formConsentState';
     IntastellarFormConsentState.formId = form.id || form.getAttribute('data-form-id');
     IntastellarFormConsentState.formName = form.name || form.getAttribute('data-form-name');
@@ -4435,10 +4435,10 @@ function updateNotRequiredRegexp() {
 function processExistingScripts() {
     // Process blocked scripts that should now be allowed
     document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
-        const src = script.src || '';
+        let src = script.src || '';
         if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
             // This script should now be allowed - replace it
-            const newScript = document.createElement('script');
+            let newScript = document.createElement('script');
             newScript.type = 'text/javascript';
             if (script.src) newScript.src = script.src;
             if (script.innerText) newScript.text = script.innerText;
@@ -4448,12 +4448,12 @@ function processExistingScripts() {
 
     // Process blocked iframes that should now be allowed
     document.querySelectorAll('inta-consents-iframe[data-src], inta-consents[data-src]').forEach(blocked => {
-        const type = blocked.querySelector('.--changePermission')?.dataset?.type;
+        let type = blocked.querySelector('.--changePermission')?.dataset?.type;
         if ((type === 'intMarketingCookies' && intaCookieConsents?.advertisementCookies === "checked") ||
             (type === 'intFunctionalCookies' && intaCookieConsents?.functionalCookies === "checked") ||
             (type === 'intStaticsCookies' && intaCookieConsents?.staticsticCookies === "checked")) {
 
-            const iframe = document.createElement('iframe');
+            let iframe = document.createElement('iframe');
             iframe.src = blocked.getAttribute('data-src');
             iframe.border = '0';
             iframe.frameBorder = '0';
@@ -4485,7 +4485,7 @@ function restartObserver() {
 
 }
 
-const beforeScriptExecuteListener = function (event, node) {
+let beforeScriptExecuteListener = function (event, node) {
     let src = node.src || "";
 
     if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
@@ -4557,7 +4557,7 @@ function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     /* - - - Observer - - - */
 
-    const observer = new MutationObserver((mutations) => {
+    let observer = new MutationObserver((mutations) => {
         requestAnimationFrame(() => {
             mutations.forEach(({ addedNodes }) => {
                 addedNodes.forEach((node) => {
@@ -4565,7 +4565,7 @@ function checkCookieStatus() {
                     if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
                         allScripts.map((script) => {
 
-                            const buttonText = () => {
+                            let buttonText = () => {
                                 if (script.type == "marketing") {
                                     scriptTypelang = {
                                         danish: "marketing",
@@ -4695,7 +4695,7 @@ function checkCookieStatus() {
                     if (node.nodeType === 1 && node.tagName === "IFRAME") {
                         allScripts.map((script) => {
 
-                            const buttonText = () => {
+                            let buttonText = () => {
                                 if (script.type == "marketing") {
                                     scriptTypelang = {
                                         danish: "marketing",
@@ -4827,7 +4827,7 @@ function checkCookieStatus() {
                         allScripts.map((script) => {
                             addedNodes.forEach((tweet) => {
 
-                                const buttonText = () => {
+                                let buttonText = () => {
                                     if (script.type == "marketing") {
                                         scriptTypelang = {
                                             danish: "marketing",
@@ -4960,7 +4960,7 @@ function checkCookieStatus() {
                         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
                         if (node.nodeType === 1 && node.tagName === "LINK") {
                             addedNodes.forEach((link) => {
-                                const linkSrc = link.href;
+                                let linkSrc = link.href;
                                 if (notRequired.test(linkSrc)) {
                                     link.disabled = true;
                                 }
