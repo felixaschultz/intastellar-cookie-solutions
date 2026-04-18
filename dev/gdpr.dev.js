@@ -1937,8 +1937,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
         https://www.intastellarsolutions.com/cookie-solutions/downloads`);
     }
     customElements.define('inta-consents-content', class extends HTMLElement {
-        letructor() {
-            super(); // always call super() first in the letructor.
+        constructor() {
+            super(); // always call super() first in the constructor.
             let templ = document.createElement("template");
             templ.innerHTML = `
                 <style>
@@ -1964,8 +1964,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     customElements.define('intastellar-consents', class extends HTMLElement {
-        letructor() {
-            super(); // always call super() first in the letructor.
+        constructor() {
+            super(); // always call super() first in the constructor.
             let templ = document.createElement("template");
             templ.innerHTML = `
                 <style>
@@ -1982,8 +1982,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     })
 
     customElements.define('inta-consents-section', class extends HTMLElement {
-        letructor() {
-            super(); // always call super() first in the letructor.
+        constructor() {
+            super(); // always call super() first in the constructor.
 
             // Attach a shadow root to the element.
             let shadowRoot = this.attachShadow({ mode: 'open' });
@@ -1993,8 +1993,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     customElements.define('inta-consents-logo', class extends HTMLElement {
-        letructor() {
-            super(); // always call super() first in the letructor.
+        constructor() {
+            super(); // always call super() first in the constructor.
 
             // Attach a shadow root to the element.
             let tmplStyle = document.createElement("template");
@@ -2006,8 +2006,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     customElements.define('inta-consents-bg', class extends HTMLElement {
-        letructor() {
-            super(); // always call super() first in the letructor.
+        constructor() {
+            super(); // always call super() first in the constructor.
             // Attach a shadow root to the element.
             let tmplStyle = document.createElement("style");
             tmplStyle.innerHTML = `:host{display:block; width: auto;background-image: url(${this.getAttribute("inta-bg-img")}); background-size: cover;}`;
@@ -2021,7 +2021,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 /* Custom error message */
 
 class IntastellarSolutionsSDK extends Error {
-    letructor(message) {
+    constructor(message) {
         super(message);
         this.name = 'IntastellarSolutionsSDKError';
     }
