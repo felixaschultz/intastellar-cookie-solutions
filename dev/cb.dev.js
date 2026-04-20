@@ -158,6 +158,228 @@ function darkLightCheck(color) {
 
 let message = "";
 let cookieBtn = "";
+function intaGetTextOverrides() {
+    let settings = window.INTA && window.INTA.settings;
+    if (settings && typeof settings.textOverrides === "object" && settings.textOverrides !== null) {
+        return settings.textOverrides;
+    }
+    return {};
+}
+
+function intaGetRawTextOverride(key) {
+    let overrides = intaGetTextOverrides();
+    let value = overrides[key];
+    if (typeof value === "string" && value.trim().length > 0) {
+        return value;
+    }
+    return null;
+}
+
+function intaGetTextOverride(key, fallbackText) {
+    let override = intaGetRawTextOverride(key);
+    return override !== null ? override : fallbackText;
+}
+
+/** Decline / necessary-only label: `necessaryButton`, aliases `declineButton`, `declineAllButton`. */
+function intaGetNecessaryButtonText(fallbackText) {
+    let o = intaGetRawTextOverride("necessaryButton");
+    if (o !== null) return o;
+    o = intaGetRawTextOverride("declineButton");
+    if (o !== null) return o;
+    o = intaGetRawTextOverride("declineAllButton");
+    if (o !== null) return o;
+    return fallbackText;
+}
+
+/** Merge server / experiment text override keys into `window.INTA.settings.textOverrides`. */
+function intaMergeTextOverridesIntoSettings(incomingTO) {
+    if (!incomingTO || typeof incomingTO !== "object" || incomingTO === null || Array.isArray(incomingTO)) {
+        return;
+    }
+    if (!window.INTA || !window.INTA.settings) {
+        return;
+    }
+    let existingTO = window.INTA.settings.textOverrides;
+    let mergedTO = {};
+    if (existingTO && typeof existingTO === "object" && existingTO !== null && !Array.isArray(existingTO)) {
+        for (let bk in existingTO) {
+            if (existingTO.hasOwnProperty(bk)) {
+                mergedTO[bk] = existingTO[bk];
+            }
+        }
+    }
+    for (let ik in incomingTO) {
+        if (incomingTO.hasOwnProperty(ik)) {
+            mergedTO[ik] = incomingTO[ik];
+        }
+    }
+    window.INTA.settings.textOverrides = mergedTO;
+}
+
+function intaCbResolveExperimentVariantId(exp) {
+    if (!exp || !exp.id || !exp.variants || !Object.keys(exp.variants).length) {
+        return null;
+    }
+    if (window.INTA && window.INTA.experimentVariant && exp.variants[window.INTA.experimentVariant]) {
+        return window.INTA.experimentVariant;
+    }
+    let expKey = "inta_exp_" + exp.id;
+    let stored = null;
+    try {
+        stored = sessionStorage.getItem(expKey);
+    } catch (e) { }
+    let variantId = stored;
+    if (!variantId) {
+        let variants = exp.variants;
+        let total = 0;
+        let ids = [];
+        for (let k in variants) {
+            if (variants.hasOwnProperty(k)) {
+                let w = Math.max(0, parseInt(variants[k].weight, 10) || 50);
+                total += w;
+                ids.push({ id: k, weight: w });
+            }
+        }
+        if (total <= 0) {
+            return null;
+        }
+        let r = (function simpleHash() {
+            let s = exp.id + (navigator.userAgent || "") + (document.referrer || "") + (new Date().getDate());
+            let h = 0;
+            for (let i = 0; i < s.length; i++) {
+                h = ((h << 5) - h) + s.charCodeAt(i) | 0;
+            }
+            return Math.abs(h) % 10000 / 10000;
+        })();
+        let bucket = r * total;
+        for (let j = 0; j < ids.length; j++) {
+            bucket -= ids[j].weight;
+            if (bucket <= 0) {
+                variantId = ids[j].id;
+                break;
+            }
+        }
+        variantId = variantId || (ids[0] && ids[0].id);
+        try {
+            sessionStorage.setItem(expKey, variantId);
+        } catch (e2) { }
+    }
+    return variantId;
+}
+
+/** Preset slug from gdpr `__intaTextOverridePresetId`, `INTA.settings`, or active experiment variant. */
+function intaCbResolveTextOverridePresetSlug() {
+    if (typeof window.__intaTextOverridePresetId === "string" && window.__intaTextOverridePresetId.trim()) {
+        return window.__intaTextOverridePresetId.trim();
+    }
+    let s = window.INTA && window.INTA.settings;
+    if (s) {
+        if (s.textOverridePresetId != null && String(s.textOverridePresetId).trim() !== "") {
+            return String(s.textOverridePresetId).trim();
+        }
+        if (s.textOverridesPresetId != null && String(s.textOverridesPresetId).trim() !== "") {
+            return String(s.textOverridesPresetId).trim();
+        }
+    }
+    let exp = window.INTA && window.INTA.experiment;
+    let variantId = intaCbResolveExperimentVariantId(exp);
+    if (!exp || !variantId || !exp.variants || !exp.variants[variantId]) {
+        return null;
+    }
+    let v = exp.variants[variantId];
+    let overrides = (v && v.settings) || (exp.overrides && exp.overrides[variantId]) || {};
+    if (overrides.textOverridePresetId != null && String(overrides.textOverridePresetId).trim() !== "") {
+        return String(overrides.textOverridePresetId).trim();
+    }
+    if (overrides.textOverridesPresetId != null && String(overrides.textOverridesPresetId).trim() !== "") {
+        return String(overrides.textOverridesPresetId).trim();
+    }
+    return null;
+}
+
+const intaCbTextOverridePresetApiUrl = "https://apis.intastellarsolutions.com/cmp/presets";
+
+/**
+ * Normalizes preset API JSON: either a flat textOverrides map or `{ textOverrides: { ... } }`.
+ * Rejects non-objects; coerces a JSON string body once.
+ */
+function intaCbNormalizePresetApiBody(data) {
+    if (data == null) {
+        return null;
+    }
+    if (typeof data === "string") {
+        try {
+            data = JSON.parse(data);
+        } catch (e) {
+            return null;
+        }
+    }
+    if (typeof data !== "object" || data === null || Array.isArray(data)) {
+        return null;
+    }
+    const nested = data.textOverrides;
+    if (nested && typeof nested === "object" && nested !== null && !Array.isArray(nested) && Object.keys(nested).length > 0) {
+        return nested;
+    }
+    const flat = {};
+    for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key) && key !== "textOverrides") {
+            flat[key] = data[key];
+        }
+    }
+    return Object.keys(flat).length ? flat : null;
+}
+
+/** After preset merge, refresh button labels that were built before fetch (cookieBtn + more-settings strip). */
+function intaCbSyncTextOverrideLabelsInScope(scope) {
+    if (!scope || typeof scope.querySelectorAll !== "function") {
+        return;
+    }
+    scope.querySelectorAll(".intastellarCookieSettings--acceptAll").forEach(function (el) {
+        const cur = el.textContent || "";
+        el.textContent = intaGetTextOverride("acceptAllButton", cur);
+    });
+    scope.querySelectorAll(".intastellarCookieBanner__accpetNecssery").forEach(function (el) {
+        const cur = el.textContent || "";
+        el.textContent = intaGetNecessaryButtonText(cur);
+    });
+    scope.querySelectorAll(".intastellarCookieBanner__settings").forEach(function (el) {
+        const cur = el.textContent || "";
+        if (el.classList && el.classList.contains("--save")) {
+            el.textContent = intaGetTextOverride("saveSettingsButton", cur);
+        } else {
+            el.textContent = intaGetTextOverride("settingsButton", cur);
+        }
+    });
+}
+
+/** Fetches published preset JSON when a text-override preset id exists; merges into `textOverrides`. */
+function intaCbFetchTextOverridePresetFromApiIfNeeded() {
+    let slug = intaCbResolveTextOverridePresetSlug();
+    if (!slug || typeof fetch !== "function") {
+        return Promise.resolve();
+    }
+    let url = intaCbTextOverridePresetApiUrl + "?slug=" + encodeURIComponent(slug);
+    return fetch(url, { credentials: "omit", cache: "no-store" })
+        .then(function (res) {
+            if (!res.ok) {
+                throw new Error("HTTP " + res.status);
+            }
+            return res.json();
+        })
+        .then(function (data) {
+            const payload = intaCbNormalizePresetApiBody(data);
+            if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+                intaMergeTextOverridesIntoSettings(payload);
+            }
+            try {
+                window.dispatchEvent(new CustomEvent("inta:text-override-preset-loaded", { detail: { presetId: slug, source: "presets.php" } }));
+            } catch (evErr) { }
+        })
+        .catch(function (err) {
+            console.warn("[Intastellar] CMP preset fetch failed:", slug, err && err.message ? err.message : err);
+        });
+}
 /* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
 const banner = document.createElement("inta-consents-settings-btn");
 const bannerContent = document.createElement("button");
@@ -187,7 +409,7 @@ function generateTcString(consentObj) {
     if (!window.IABTCF || !window.IABTCF.TCModel || !window.IABTCF.TCString) {
         throw new Error('IAB TCF encoder bundle not loaded.');
     }
-    var model = new window.IABTCF.TCModel();
+    let model = new window.IABTCF.TCModel();
     model.cmpId = 1;
     // Set purposes and vendors as boolean arrays (first 24)
     model.purposeConsents = (consentObj.purposes || []).slice(0, 24);
@@ -218,9 +440,9 @@ const tcString = generateTcString(exampleConsent);
 
 // Time-to-decision: compute and attach to consent object for analytics/backend
 function recordTimeToDecision(decisionType) {
-    var shownAt = window._intaBannerShownAt;
+    let shownAt = window._intaBannerShownAt;
     if (typeof shownAt !== 'number') return;
-    var elapsed = Math.round(Date.now() - shownAt);
+    let elapsed = Math.round(Date.now() - shownAt);
     window._intaBannerShownAt = undefined;
     if (typeof intaConsentsObjectVariable !== 'undefined') {
         intaConsentsObjectVariable.time_to_decision = elapsed;
@@ -235,7 +457,7 @@ function recordTimeToDecision(decisionType) {
 // Pass true/ 'useractioncomplete' when user clicked; false/'tcloaded' when consent loaded/restored without user interaction
 function dispatchTCFConsentChangedIfAvailable(wasUserInteraction) {
     if (typeof window.__tcfapiDispatchConsentChanged === 'function') {
-        var eventStatus = (wasUserInteraction === false || wasUserInteraction === 'tcloaded') ? 'tcloaded' : 'useractioncomplete';
+        let eventStatus = (wasUserInteraction === false || wasUserInteraction === 'tcloaded') ? 'tcloaded' : 'useractioncomplete';
         window.__tcfapiDispatchConsentChanged(eventStatus);
     }
 }
@@ -483,7 +705,7 @@ function closePOPIAModal() {
  * Prevents creating fake Shopify globals on non-Shopify sites — those caused setTrackingConsent to be missing → TypeError.
  */
 function intaIsShopifyStorefrontContext() {
-    var s = window.Shopify;
+    let s = window.Shopify;
     if (!s || typeof s !== "object") return false;
     return typeof s.loadFeatures === "function" || typeof s.shop === "string" || typeof s.theme === "object";
 }
@@ -505,7 +727,7 @@ function intaHideShopifyNativeConsentBanner() {
         };
 
         if (!document.getElementById('inta-shopify-native-banner-hide')) {
-            var st = document.createElement('style');
+            let st = document.createElement('style');
             st.id = 'inta-shopify-native-banner-hide';
             st.textContent =
                 '#shopify-pc__banner, #shopify-pc__prefs, .shopify-pc__banner, .shopify-pc__prefs, ' +
@@ -514,14 +736,14 @@ function intaHideShopifyNativeConsentBanner() {
             (document.head || document.documentElement).appendChild(st);
         }
 
-        var shopifyPcSelectors = [
+        let shopifyPcSelectors = [
             '#shopify-pc__banner',
             '#shopify-pc__prefs',
             '.shopify-pc__banner',
             '.shopify-pc__prefs',
             '[data-shopify-pc-banner]',
         ];
-        for (var si = 0; si < shopifyPcSelectors.length; si++) {
+        for (let si = 0; si < shopifyPcSelectors.length; si++) {
             try {
                 document.querySelectorAll(shopifyPcSelectors[si]).forEach(function (el) {
                     el.style.setProperty('display', 'none', 'important');
@@ -533,7 +755,7 @@ function intaHideShopifyNativeConsentBanner() {
     } catch (e) { /* ignore */ }
 }
 
-var intaShopifyHideBannerRaf = null;
+let intaShopifyHideBannerRaf = null;
 function intaScheduleHideShopifyNativeBanner() {
     if (intaShopifyHideBannerRaf != null) {
         return;
@@ -550,7 +772,7 @@ function intaScheduleHideShopifyNativeBanner() {
     if (typeof MutationObserver === 'undefined') {
         return;
     }
-    var mo = new MutationObserver(function () {
+    let mo = new MutationObserver(function () {
         intaScheduleHideShopifyNativeBanner();
     });
     function attach() {
@@ -745,24 +967,24 @@ if (typeof window.denyAllCookies === 'function') {
 // --- TCF 2.2 API stub with event listener registry and dynamic dispatch ---
 (function () {
     // TCF event listener registry
-    var tcfListeners = {};
-    var tcfListenerId = 1;
-    var lastUserActionAt = 0;  // timestamp when useractioncomplete was last dispatched
-    var USER_ACTION_WINDOW_MS = 30000;  // getTCData returns useractioncomplete for this long after dispatch
+    let tcfListeners = {};
+    let tcfListenerId = 1;
+    let lastUserActionAt = 0;  // timestamp when useractioncomplete was last dispatched
+    const USER_ACTION_WINDOW_MS = 30000;  // getTCData returns useractioncomplete for this long after dispatch
 
     function getCurrentConsentForTCF() {
         try {
-            var consentCookie = typeof getCookie === 'function' ? getCookie(int_hideCookieBannerName) : null;
+            let consentCookie = typeof getCookie === 'function' ? getCookie(int_hideCookieBannerName) : null;
             if (consentCookie && consentCookie.indexOf('__inta') > -1) {
-                var consentsObj = JSON.parse(decodeIntaConsentsObject(consentCookie.split('.')[2]));
-                var purposes = [
+                let consentsObj = JSON.parse(decodeIntaConsentsObject(consentCookie.split('.')[2]));
+                let purposes = [
                     true, // 1: Always necessary
                     !!consentsObj.consents?.functionalCookies, // 2: functional
                     !!consentsObj.consents?.staticsticCookies, // 3: statistic
                     !!consentsObj.consents?.advertisementCookies // 4: marketing
                 ];
                 while (purposes.length < 24) purposes.push(false);
-                var vendors = Array(24).fill(true);
+                let vendors = Array(24).fill(true);
                 return { purposes, vendors };
             }
         } catch (e) { }
@@ -773,8 +995,8 @@ if (typeof window.denyAllCookies === 'function') {
     }
 
     function buildTCData(eventStatus, listenerIdOverride) {
-        var consentObj = getCurrentConsentForTCF();
-        var tcString = generateTcString(consentObj);
+        let consentObj = getCurrentConsentForTCF();
+        let tcString = generateTcString(consentObj);
         return {
             tcString: tcString,
             eventStatus: eventStatus || 'tcloaded',
@@ -785,12 +1007,12 @@ if (typeof window.denyAllCookies === 'function') {
     }
 
     function dispatchTCFEvent(eventStatus) {
-        var status = (eventStatus === 'tcloaded' || eventStatus === 'cmpuishown') ? eventStatus : 'useractioncomplete';
+        let status = (eventStatus === 'tcloaded' || eventStatus === 'cmpuishown') ? eventStatus : 'useractioncomplete';
         if (status === 'useractioncomplete') lastUserActionAt = Date.now();
         Object.keys(tcfListeners).forEach(function (id) {
-            var cb = tcfListeners[id];
+            let cb = tcfListeners[id];
             if (typeof cb === 'function') {
-                var tcData = buildTCData(status, parseInt(id));
+                let tcData = buildTCData(status, parseInt(id));
                 cb(tcData, true);
             }
         });
@@ -798,15 +1020,15 @@ if (typeof window.denyAllCookies === 'function') {
 
     window.__tcfapi = function (command, version, callback, parameter) {
         if (command === 'getTCData') {
-            var getStatus = (lastUserActionAt && (Date.now() - lastUserActionAt) < USER_ACTION_WINDOW_MS)
+            let getStatus = (lastUserActionAt && (Date.now() - lastUserActionAt) < USER_ACTION_WINDOW_MS)
                 ? 'useractioncomplete' : 'tcloaded';
-            var tcData = buildTCData(getStatus);
+            let tcData = buildTCData(getStatus);
             callback(tcData, true);
         } else if (command === 'addEventListener') {
-            var id = tcfListenerId++;
+            let id = tcfListenerId++;
             tcfListeners[id] = callback;
             // Initial eventStatus is 'tcloaded' per spec
-            var tcData = buildTCData('tcloaded', id);
+            let tcData = buildTCData('tcloaded', id);
             callback(tcData, true);
         } else if (command === 'removeEventListener') {
             // parameter is the listenerId
@@ -957,7 +1179,7 @@ function applyTcStringToVendorCheckboxes(tcString, vendors) {
         return;
     }
     try {
-        var decoded = window.IABTCF && window.IABTCF.TCString && typeof window.IABTCF.TCString.decode === 'function'
+        let decoded = window.IABTCF && window.IABTCF.TCString && typeof window.IABTCF.TCString.decode === 'function'
             ? window.IABTCF.TCString.decode(tcString) : null;
         if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
             console.log('[applyTcStringToVendorCheckboxes] decoded:', decoded);
@@ -969,10 +1191,10 @@ function applyTcStringToVendorCheckboxes(tcString, vendors) {
             return;
         }
         vendors.forEach(function (vendor, i) {
-            var idx = parseInt(vendor.id, 10) - 1;
+            let idx = parseInt(vendor.id, 10) - 1;
             if (idx < 0 || idx >= decoded.vendors.length) return;
-            var cb = document.getElementById('vendor' + vendor.id);
-            var legitCb = document.getElementById('vendor' + vendor.id + '-legit');
+            let cb = document.getElementById('vendor' + vendor.id);
+            let legitCb = document.getElementById('vendor' + vendor.id + '-legit');
             if (cb) cb.checked = !!decoded.vendors[idx];
             if (legitCb && decoded.vendorLegitimateInterests && decoded.vendorLegitimateInterests[idx] !== undefined) {
                 legitCb.checked = !!decoded.vendorLegitimateInterests[idx];
@@ -985,10 +1207,10 @@ function applyTcStringToVendorCheckboxes(tcString, vendors) {
 
 function getTcStringFromCookie() {
     try {
-        var c = typeof getCookie === 'function' ? getCookie(int_hideCookieBannerName) : null;
+        let c = typeof getCookie === 'function' ? getCookie(int_hideCookieBannerName) : null;
         if (c && c.indexOf && c.indexOf('__inta') > -1) {
-            var parts = c.split('.');
-            var decoded = parts[2] ? JSON.parse(decodeIntaConsentsObject(parts[2]) || '{}') : {};
+            let parts = c.split('.');
+            let decoded = parts[2] ? JSON.parse(decodeIntaConsentsObject(parts[2]) || '{}') : {};
             return decoded.tcString || null;
         }
     } catch (e) {}
@@ -1021,7 +1243,7 @@ function getTcStringFromCookie() {
             `;
             vendorListContainer.appendChild(vendorDiv);
     });
-    var __intaTcStrForVendors = getTcStringFromCookie();
+    let __intaTcStrForVendors = getTcStringFromCookie();
     if (__intaTcStrForVendors) {
         applyTcStringToVendorCheckboxes(__intaTcStrForVendors, vendors);
     }
@@ -1031,32 +1253,32 @@ function getTcStringFromCookie() {
         saveBtn._vendorSaveListenerAttached = true;
         saveBtn.addEventListener('click', function handleVendorSave() {
             // Build consent and disclosed arrays by GVL vendor ID (required for TCF 2.3)
-            var maxVendorId = vendors.length ? Math.max.apply(null, vendors.map(function (v) { return parseInt(v.id, 10) || 0; })) : 0;
-            var vendorConsentsById = [];
-            var disclosedVendorsById = [];
-            for (var i = 0; i < maxVendorId; i++) {
+            let maxVendorId = vendors.length ? Math.max.apply(null, vendors.map(function (v) { return parseInt(v.id, 10) || 0; })) : 0;
+            let vendorConsentsById = [];
+            let disclosedVendorsById = [];
+            for (let i = 0; i < maxVendorId; i++) {
                 vendorConsentsById[i] = false;
                 disclosedVendorsById[i] = false;
             }
             vendors.forEach(function (vendor) {
-                var id = parseInt(vendor.id, 10);
+                let id = parseInt(vendor.id, 10);
                 if (id > 0) {
                     disclosedVendorsById[id - 1] = true;
-                    var cb = document.getElementById('vendor' + vendor.id);
+                    let cb = document.getElementById('vendor' + vendor.id);
                     vendorConsentsById[id - 1] = !!(cb && cb.checked);
                 }
             });
-            var vendorLegitInterests = [];
+            let vendorLegitInterests = [];
             vendors.forEach(function (vendor) {
-                var id = parseInt(vendor.id, 10);
+                let id = parseInt(vendor.id, 10);
                 if (id > 0) {
-                    var legitCb = document.getElementById('vendor' + vendor.id + '-legit');
+                    let legitCb = document.getElementById('vendor' + vendor.id + '-legit');
                     while (vendorLegitInterests.length < id) vendorLegitInterests.push(false);
                     vendorLegitInterests[id - 1] = !!(legitCb && legitCb.checked);
                 }
             });
-            var purposes = Array(24).fill(true);
-            var userConsent = {
+            let purposes = Array(24).fill(true);
+            let userConsent = {
                 purposes: purposes,
                 vendors: vendorConsentsById,
                 disclosedVendors: disclosedVendorsById,
@@ -1704,6 +1926,11 @@ if (intastellarCookieLanguage != null) {
     } else if (intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
         settingsMessage = settingsMessagesLanguages.english;
         intastellarShowHideDetailsText = "Show details";
+        if (window.INTA.settings.textOverrides) {
+            settingsMessage = window.INTA.settings.textOverrides.bannerMessageHtml;
+            intastellarShowHideDetailsText = window.INTA.settings.textOverrides.showDetailsText;
+            messages.english = window.INTA.settings.textOverrides.bannerMessageHtml;
+        }
         message =
             messageWrapStart
             + messages.english
@@ -1716,7 +1943,7 @@ if (intastellarCookieLanguage != null) {
     ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `
        <img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">`
                 : ""}
-        ${generateCookieSettingsButton(intastellarSupportedLanguages.english.saveSettings, 'Accept')}
+        ${generateCookieSettingsButton(window.INTA.settings?.textOverrides?.necessaryButton || intastellarSupportedLanguages.english.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
         <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
@@ -3849,39 +4076,58 @@ if (ccpa) {
 } */
 
 cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
+const intaCbBannerMessageBaseHtml = message;
+/** Snapshot before async preset: `moreContentText` was filled earlier and would otherwise stay stale. */
+const intaCbSettingsMessageBaseHtml = settingsMessage;
 
-let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
-let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
+function intaCbApplyMainBannerDomAndInitialize() {
+    message = intaGetTextOverride("bannerMessageHtml", intaCbBannerMessageBaseHtml);
+    moreContentText.innerHTML = intaGetTextOverride("bannerMessageHtml", intaCbSettingsMessageBaseHtml);
 
-moreintHeader.innerHTML = `
+    let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
+    let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
+
+    moreintHeader.innerHTML = `
     ${typeof window?.INTA?.settings.logo != "undefined" ? '<img onerror="this.onerror=null; this.style.display:none;" class="intSettingsCompanyLogo" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '">' : ``}
     ${(window.INTA.settings.design == "overlay" || window.INTA.settings.design == undefined || window.innerWidth < 900) ? `<section class="intSettingsPoweredBy">${poweredBy}</section>` : ""}
     `;
 
-cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img onerror="this.onerror=null; this.style.display:none;" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';" aria-label="Close cookie banner"></button></intHeader>' +
-    message + cookieBtn + "" + (window.INTA.settings.design !== "overlay" || window.INTA.settings.design != undefined) ? poweredBy : (window.innerWidth < 768) ? null : poweredBy + "";
+    cookieSettingsContent.innerHTML = '<intHeader class="intastellarCookie-settings__intHeader"><img onerror="this.onerror=null; this.style.display:none;" src="' + window?.INTA?.settings.logo + '" alt="' + CompanyLogoName + '" title="' + CompanyLogoName + '" style="width: 100%;float: left; max-width: 50px;max-height: 50px;object-fit:contain;"><h2>Cookie</h2><button class="intastellarCookie-settings__close" style="background: ' + cookieColor + ';" aria-label="Close cookie banner"></button></intHeader>' +
+        message + cookieBtn + "" + (window.INTA.settings.design !== "overlay" || window.INTA.settings.design != undefined) ? poweredBy : (window.innerWidth < 768) ? null : poweredBy + "";
 
-cookieSettings.appendChild(cookieSettingsContent);
+    intaCbSyncTextOverrideLabelsInScope(cookieSettingsContent);
+    intaCbSyncTextOverrideLabelsInScope(moreSettingsContent);
 
-if (window?.INTA?.settings.advanced) {
-    //banner.appendChild(cookieSettings);
+    cookieSettings.appendChild(cookieSettingsContent);
+
+    if (window?.INTA?.settings.advanced) {
+        //banner.appendChild(cookieSettings);
+    }
+
+    banner.setAttribute("class", "intastellarCookie-settings");
+
+    bannerContent.innerHTML = '<img class="intCookieIcon-openSettings" style="filter: brightness(' + (darkLightCheck(window.INTA.settings.color) === "light" ? "0" : "100") + ') !important" src="' + intCookieIcon + '" alt="Cookie Icon">' + IntastellarToolTip + ' ' + text;
+
+    banner.appendChild(bannerContent);
+    moreSettings.appendChild(moreSettingsContent);
+    intaconsents.appendChild(banner);
+    intaconsents.appendChild(moreSettings);
+    window._intaCookieConstents = intaconsents;
+    IntastellarCookieConsent.initialize(intaconsents);
+
+    if (document.querySelector(".intastellarCCPAContainer") != null) {
+        document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
+            document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
+        });
+    }
 }
 
-banner.setAttribute("class", "intastellarCookie-settings");
-
-bannerContent.innerHTML = '<img class="intCookieIcon-openSettings" style="filter: brightness(' + (darkLightCheck(window.INTA.settings.color) === "light" ? "0" : "100") + ') !important" src="' + intCookieIcon + '" alt="Cookie Icon">' + IntastellarToolTip + ' ' + text;
-
-banner.appendChild(bannerContent);
-moreSettings.appendChild(moreSettingsContent);
-intaconsents.appendChild(banner);
-intaconsents.appendChild(moreSettings);
-window._intaCookieConstents = intaconsents;
-IntastellarCookieConsent.initialize(intaconsents);
-
-if (document.querySelector(".intastellarCCPAContainer") != null) {
-    document.querySelector(".intastellarCCPAContainer").addEventListener("click", function () {
-        document.querySelector(".intastellarCCPApopup").classList.toggle("--active");
-    })
+if (intaCbResolveTextOverridePresetSlug()) {
+    intaCbFetchTextOverridePresetFromApiIfNeeded().then(function () {
+        intaCbApplyMainBannerDomAndInitialize();
+    });
+} else {
+    intaCbApplyMainBannerDomAndInitialize();
 }
 
 function onWindowLoad(callback) {
@@ -4027,7 +4273,7 @@ function IntaAcceptAll() {
     };
     window.intaCookieConsents = intaConsentsObjectVariable.consents;
     intaConsentsObjectVariable.time = new Date().getTime()
-    var cV = 1;
+    let cV = 1;
     document.cookie =
         int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
         "; path=/; " +
@@ -4041,8 +4287,8 @@ function IntaAcceptAll() {
         intCookieDomain +
         "";
 
-    var addedNodes = document.getElementsByTagName("script");
-    for (var i = 0; i < addedNodes.length; i++) {
+    let addedNodes = document.getElementsByTagName("script");
+    for (let i = 0; i < addedNodes.length; i++) {
         addedNodes.type = "";
     }
 
@@ -4116,7 +4362,7 @@ function IntaSaveNeccessary() {
     };
     window.intaCookieConsents = intaConsentsObjectVariable.consents;
     intaConsentsObjectVariable.time = new Date().getTime()
-    var cV = 1;
+    let cV = 1;
     document.cookie =
         int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
         "; path=/; " +
@@ -4266,6 +4512,7 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || i
     settingsSaveLang.necessaryCookiesText = "Afvis";
     settingsSaveLang.saveSettingsText = "Gem";
 }
+settingsSaveLang.necessaryCookiesText = intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText);
 
 function updateSaveButtonText() {
     const FunctionalCheckbox = document.querySelector("#functional");
@@ -4275,18 +4522,19 @@ function updateSaveButtonText() {
 
     const vendorChecks = document.querySelectorAll('.intCookieSetting__checkbox');
     const vendorLegitChecks = document.querySelectorAll('.intCookieSetting__checkbox-legit');
-    const vendorChecksChecked = Array.from(vendorChecks).every(check => check.checked);
-    const vendorLegitChecksChecked = Array.from(vendorLegitChecks).every(check => check.checked);
+    const vendorChecksChecked = vendorChecks.length > 0 && Array.from(vendorChecks).every(function (check) { return check.checked; });
+    const vendorLegitChecksChecked = vendorLegitChecks.length > 0 && Array.from(vendorLegitChecks).every(function (check) { return check.checked; });
 
     if (!saveBtn) return;
     if (
         (FunctionalCheckbox && FunctionalCheckbox.checked) ||
         (StaticsCheckBox && StaticsCheckBox.checked) ||
-        (MarketingCheckBox && MarketingCheckBox.checked)
+        (MarketingCheckBox && MarketingCheckBox.checked) ||
+        vendorChecksChecked || vendorLegitChecksChecked
     ) {
-        saveBtn.innerText = settingsSaveLang.saveSettingsText;
+        saveBtn.innerText = intaGetTextOverride("saveSettingsButton", settingsSaveLang.saveSettingsText);
     } else {
-        saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
+        saveBtn.innerText = intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText);
     }
 
     console.log((FunctionalCheckbox && FunctionalCheckbox.checked) ||
@@ -4300,7 +4548,7 @@ onWindowLoad(function () {
 
     // TCF API locator frame (required for cross-frame communication)
     if (!window.frames['__tcfapiLocator']) {
-        var tcfApiLocator = document.createElement('iframe');
+        let tcfApiLocator = document.createElement('iframe');
         tcfApiLocator.style.display = 'none';
         tcfApiLocator.name = '__tcfapiLocator';
         document.body.appendChild(tcfApiLocator);
@@ -4463,7 +4711,7 @@ onWindowLoad(function () {
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
 
-                var cV = 0;
+                let cV = 0;
                 intaConsentsObjectVariable.consents = {
                     staticsticCookies: "checked",
                     functionalCookies: "checked",
@@ -4554,7 +4802,7 @@ onWindowLoad(function () {
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
 
-                var cV = 1;
+                let cV = 1;
                 intaConsentsObjectVariable.consents = {
                     staticsticCookies: "checked",
                     functionalCookies: "checked",
@@ -4583,8 +4831,8 @@ onWindowLoad(function () {
                     "; path=/; " +
                     intCookieDomain +
                     "";
-                var addedNodes = document.getElementsByTagName("script");
-                for (var i = 0; i < addedNodes.length; i++) {
+                let addedNodes = document.getElementsByTagName("script");
+                for (let i = 0; i < addedNodes.length; i++) {
                     addedNodes.type = "";
                 }
                 document.querySelector("html").classList.toggle("noScroll");
@@ -4660,7 +4908,7 @@ onWindowLoad(function () {
                 intaCookieConsents.functionalCookies = false;
 
                 intaConsentsObjectVariable.time = new Date().getTime()
-                var cV = 1;
+                let cV = 1;
                 intaConsentsObjectVariable.time_to_decision = new Date().getTime() - window._intaBannerShownAt;
                 document.cookie =
                     int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime +
@@ -4860,8 +5108,8 @@ onWindowLoad(function () {
 
 /* --- Helper function to get Meta tags --- */
 function getMeta(name) {
-    var mtag = document.getElementsByTagName("meta");
-    for (var i = 0; i < mtag.length; i++) {
+    let mtag = document.getElementsByTagName("meta");
+    for (let i = 0; i < mtag.length; i++) {
         if (mtag[i].getAttribute('name') === name) {
             return mtag[i].getAttribute("content")
         }
@@ -4870,7 +5118,7 @@ function getMeta(name) {
 }
 
 function invertColor(color) {
-    var r, g, b, hsp;
+    let r, g, b, hsp;
 
     // Check the format of the color, HEX or RGB?
     if (color.match(/^rgb/)) {
@@ -4908,9 +5156,9 @@ function invertColor(color) {
 }
 
 function listCookies() {
-    var theCookies = document.cookie.split(";");
-    var aString = "";
-    for (var i = 1; i <= theCookies.length; i++) {
+    let theCookies = document.cookie.split(";");
+    let aString = "";
+    for (let i = 1; i <= theCookies.length; i++) {
         aString += i + " " + theCookies[i - 1] + "\n";
     }
     return aString;
@@ -4918,7 +5166,7 @@ function listCookies() {
 
 function allStorage() {
 
-    var values = [],
+    let values = [],
         keys = Object.keys(localStorage),
         i = keys.length;
 
@@ -5728,9 +5976,9 @@ function isCCPAURL(str) {
 /* Helper function to get list of cookies */
 
 function getCookies() {
-    var cookies = document.cookie.split(';');
-    var ret = '';
-    for (var i = 1; i <= cookies.length; i++) {
+    let cookies = document.cookie.split(';');
+    let ret = '';
+    for (let i = 1; i <= cookies.length; i++) {
         ret += i + ' - ' + cookies[i - 1] + "<br>";
     }
     return ret;
@@ -5788,14 +6036,14 @@ function hidePrivacy() {
 }
 
 function checkIfIncluded(file) {
-    var links = document.getElementsByTagName("link");
-    for (var i = 0; i < links.length; i++) {
+    let links = document.getElementsByTagName("link");
+    for (let i = 0; i < links.length; i++) {
         if (links[i].href.substr(-file.length) == file)
             return true;
     }
 
-    var scripts = document.getElementsByTagName("script");
-    for (var i = 0; i < scripts.length; i++) {
+    let scripts = document.getElementsByTagName("script");
+    for (let i = 0; i < scripts.length; i++) {
         if (scripts[i].src.substr(-file.length) == file)
             return true;
     }
@@ -5829,14 +6077,19 @@ function generatePolicyUrl(policy_link_text) {
     return url;
 }
 function generateCookieButtons(allCookiesText, necessaryCookiesText, cookieSettingsText) {
-    return '<button class="intastellarCookie-settings__btn --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + allCookiesText + '</button>'
-        + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__accpetNecssery" onclick="javascript:IntaSaveNeccessary();">' + necessaryCookiesText + '</button>'
-        + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__settings" onclick="javascript:IntaSaveSettings();">' + cookieSettingsText + '</button>';
+    let acceptAllText = intaGetTextOverride("acceptAllButton", allCookiesText);
+    let necessaryOnlyText = intaGetNecessaryButtonText(necessaryCookiesText);
+    let settingsText = intaGetTextOverride("settingsButton", cookieSettingsText);
+    return '<button class="intastellarCookie-settings__btn --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + acceptAllText + '</button>'
+        + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__accpetNecssery" onclick="javascript:IntaSaveNeccessary();">' + necessaryOnlyText + '</button>'
+        + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__settings" onclick="javascript:IntaSaveSettings();">' + settingsText + '</button>';
 }
 
 function generateCookieSettingsButton(settingsText, allCookiesText) {
-    return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save" onclick="javascript:IntaSaveSettings();">' + settingsText + '</button>'
-        + '<button class="intastellarCookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + allCookiesText + '</button></section>'
+    let saveSettingsText = intaGetTextOverride("saveSettingsButton", settingsText);
+    let acceptAllText = intaGetTextOverride("acceptAllButton", allCookiesText);
+    return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save" onclick="javascript:IntaSaveSettings();">' + saveSettingsText + '</button>'
+        + '<button class="intastellarCookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + acceptAllText + '</button></section>'
         ;
 }
 /* - - - Helper function for ccpa URL generator */

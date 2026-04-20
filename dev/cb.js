@@ -158,6 +158,38 @@ function darkLightCheck(color) {
 
 let message = "";
 let cookieBtn = "";
+function intaGetTextOverrides() {
+    var settings = window.INTA && window.INTA.settings;
+    if (settings && typeof settings.textOverrides === "object" && settings.textOverrides !== null) {
+        return settings.textOverrides;
+    }
+    return {};
+}
+
+function intaGetRawTextOverride(key) {
+    var overrides = intaGetTextOverrides();
+    var value = overrides[key];
+    if (typeof value === "string" && value.trim().length > 0) {
+        return value;
+    }
+    return null;
+}
+
+function intaGetTextOverride(key, fallbackText) {
+    var override = intaGetRawTextOverride(key);
+    return override !== null ? override : fallbackText;
+}
+
+/** Decline / necessary-only label: primary key `necessaryButton`, aliases `declineButton`, `declineAllButton`. */
+function intaGetNecessaryButtonText(fallbackText) {
+    var o = intaGetRawTextOverride("necessaryButton");
+    if (o !== null) return o;
+    o = intaGetRawTextOverride("declineButton");
+    if (o !== null) return o;
+    o = intaGetRawTextOverride("declineAllButton");
+    if (o !== null) return o;
+    return fallbackText;
+}
 /* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
 const banner = document.createElement("inta-consents-settings-btn");
 const bannerContent = document.createElement("button");
@@ -3351,6 +3383,7 @@ if (ccpa) {
 } */
 
 cookieSettingsContent.setAttribute("class", "intastellarCookie-settings__content");
+message = intaGetTextOverride("bannerMessageHtml", message);
 
 let intCookieIconSmallClass = cookieLogo == intCookieIcon ? " intastellarIcon" : "";
 let CompanyLogoName = cookieLogo == intCookieIcon ? "Cookie Icon" : `${document.domain} logo`;
@@ -3799,6 +3832,7 @@ if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || i
     settingsSaveLang.necessaryCookiesText = "Afvis";
     settingsSaveLang.saveSettingsText = "Gem";
 }
+settingsSaveLang.necessaryCookiesText = intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText);
 
 function updateSaveButtonText() {
     const FunctionalCheckbox = document.querySelector("#functional");
@@ -3808,8 +3842,8 @@ function updateSaveButtonText() {
 
     const vendorChecks = document.querySelectorAll('.intCookieSetting__checkbox');
     const vendorLegitChecks = document.querySelectorAll('.intCookieSetting__checkbox-legit');
-    const vendorChecksChecked = Array.from(vendorChecks).every(check => check.checked);
-    const vendorLegitChecksChecked = Array.from(vendorLegitChecks).every(check => check.checked);
+    const vendorChecksChecked = vendorChecks.length > 0 && Array.from(vendorChecks).every(function (check) { return check.checked; });
+    const vendorLegitChecksChecked = vendorLegitChecks.length > 0 && Array.from(vendorLegitChecks).every(function (check) { return check.checked; });
 
     if (!saveBtn) return;
     if (
@@ -3818,9 +3852,9 @@ function updateSaveButtonText() {
         (MarketingCheckBox && MarketingCheckBox.checked) ||
         vendorChecksChecked || vendorLegitChecksChecked
     ) {
-        saveBtn.innerText = settingsSaveLang.saveSettingsText;
+        saveBtn.innerText = intaGetTextOverride("saveSettingsButton", settingsSaveLang.saveSettingsText);
     } else {
-        saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
+        saveBtn.innerText = intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText);
     }
 }
 
@@ -5320,14 +5354,19 @@ function generatePolicyUrl(policy_link_text) {
     return url;
 }
 function generateCookieButtons(allCookiesText, necessaryCookiesText, cookieSettingsText) {
-    return '<button class="intastellarCookie-settings__btn --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + allCookiesText + '</button>'
-        + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__accpetNecssery" onclick="javascript:IntaSaveNeccessary();">' + necessaryCookiesText + '</button>'
-        + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__settings" onclick="javascript:IntaSaveSettings();">' + cookieSettingsText + '</button>';
+    var acceptAllText = intaGetTextOverride("acceptAllButton", allCookiesText);
+    var necessaryOnlyText = intaGetNecessaryButtonText(necessaryCookiesText);
+    var settingsText = intaGetTextOverride("settingsButton", cookieSettingsText);
+    return '<button class="intastellarCookie-settings__btn --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + acceptAllText + '</button>'
+        + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__accpetNecssery" onclick="javascript:IntaSaveNeccessary();">' + necessaryOnlyText + '</button>'
+        + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__settings" onclick="javascript:IntaSaveSettings();">' + settingsText + '</button>';
 }
 
 function generateCookieSettingsButton(settingsText, allCookiesText) {
-    return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save" onclick="javascript:IntaSaveSettings();">' + settingsText + '</button>'
-        + '<button class="intastellarCookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + allCookiesText + '</button></section>'
+    var saveSettingsText = intaGetTextOverride("saveSettingsButton", settingsText);
+    var acceptAllText = intaGetTextOverride("acceptAllButton", allCookiesText);
+    return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save" onclick="javascript:IntaSaveSettings();">' + saveSettingsText + '</button>'
+        + '<button class="intastellarCookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + acceptAllText + '</button></section>'
         ;
 }
 /* - - - Helper function for ccpa URL generator */
