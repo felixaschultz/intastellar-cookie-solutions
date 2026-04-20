@@ -4312,9 +4312,9 @@ function updateSaveButtonText() {
         (StaticsCheckBox && StaticsCheckBox.checked) ||
         (MarketingCheckBox && MarketingCheckBox.checked)
     ) {
-        saveBtn.innerText = settingsSaveLang.saveSettingsText;
+        saveBtn.innerText = intaGetTextOverride("saveSettingsButton", settingsSaveLang.saveSettingsText);
     } else {
-        saveBtn.innerText = settingsSaveLang.necessaryCookiesText;
+        saveBtn.innerText = intaGetTextOverride("necessaryButton", settingsSaveLang.necessaryCookiesText);
     }
 
     console.log((FunctionalCheckbox && FunctionalCheckbox.checked) ||
@@ -5866,8 +5866,8 @@ function generateCookieButtons(allCookiesText, necessaryCookiesText, cookieSetti
 }
 
 function generateCookieSettingsButton(settingsText, allCookiesText) {
-    var saveSettingsText = intaGetTextOverride("saveSettingsButton", settingsText);
-    var acceptAllText = intaGetTextOverride("acceptAllButton", allCookiesText);
+    const saveSettingsText = settingsText;
+    const acceptAllText = intaGetTextOverride("acceptAllButton", allCookiesText);
     return '<section class="intSettingsButton"><button class="intastellarCookie-settings__btn intastellarCookieBanner__settings --save" onclick="javascript:IntaSaveSettings();">' + saveSettingsText + '</button>'
         + '<button class="intastellarCookie-settings__btn --noBorderRadius --bg intastellarCookieSettings--acceptAll" onclick="javascript:IntaAcceptAll();">' + acceptAllText + '</button></section>'
         ;

@@ -17,7 +17,8 @@ window.INTA = {
                 settings: { 
                     textOverrides: {
                         bannerMessageHtml: "<p>We use cookies to ensure you get the best experience on our website.</p>",
-                        saveSettingsButton: "Necessary only",
+                        saveSettingsButton: "Save preferences",
+                        necessaryButton: "Necessary only",
                         acceptAllButton: "Accept & continue",
                         settingsButton: "Customize",
                     }

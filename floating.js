@@ -178,6 +178,17 @@ function intaGetTextOverride(key, fallbackText) {
     var override = intaGetRawTextOverride(key);
     return override !== null ? override : fallbackText;
 }
+
+/** Decline / necessary-only label: primary key `necessaryButton`, aliases `declineButton`, `declineAllButton`. */
+function intaGetNecessaryButtonText(fallbackText) {
+    var o = intaGetRawTextOverride("necessaryButton");
+    if (o !== null) return o;
+    o = intaGetRawTextOverride("declineButton");
+    if (o !== null) return o;
+    o = intaGetRawTextOverride("declineAllButton");
+    if (o !== null) return o;
+    return fallbackText;
+}
 /* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
 const banner = document.createElement("inta-consents-settings-btn");
 const bannerContent = document.createElement("button");
@@ -2733,27 +2744,27 @@ onWindowLoad(function () {
             settingsSaveLang.necessaryCookiesText = "Afvis";
             settingsSaveLang.saveSettingsText = "Gem";
         }
-        settingsSaveLang.necessaryCookiesText = intaGetTextOverride("necessaryButton", settingsSaveLang.necessaryCookiesText);
+        settingsSaveLang.necessaryCookiesText = intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText);
 
         FunctionalCheckbox?.addEventListener("change", () => {
             document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
                 && StaticsCheckBox?.checked === false
                 && MarketingCheckBox?.checked === false
-                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+                ? intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText) : intaGetTextOverride("saveSettingsButton", settingsSaveLang.saveSettingsText);
         })
 
         StaticsCheckBox?.addEventListener("change", () => {
             document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
                 && StaticsCheckBox?.checked === false
                 && MarketingCheckBox?.checked === false
-                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+                ? intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText) : intaGetTextOverride("saveSettingsButton", settingsSaveLang.saveSettingsText);
         })
 
         MarketingCheckBox?.addEventListener("change", () => {
             document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === false
                 && StaticsCheckBox?.checked === false
                 && MarketingCheckBox?.checked === false
-                ? settingsSaveLang.necessaryCookiesText : settingsSaveLang.saveSettingsText;
+                ? intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText) : intaGetTextOverride("saveSettingsButton", settingsSaveLang.saveSettingsText);
         })
 
         document.querySelector(".intastellarCookie-settings__btn.intastellarCookieBanner__settings.--save").innerText = FunctionalCheckbox?.checked === true
@@ -2762,7 +2773,7 @@ onWindowLoad(function () {
             || FunctionalCheckbox?.checked === true
             || StaticsCheckBox?.checked === true
             || MarketingCheckBox?.checked === true
-            ? settingsSaveLang.saveSettingsText : settingsSaveLang.necessaryCookiesText
+            ? intaGetTextOverride("saveSettingsButton", settingsSaveLang.saveSettingsText) : intaGetNecessaryButtonText(settingsSaveLang.necessaryCookiesText)
 
         const ness = document.getElementsByClassName("intastellarCookieBanner__accpetNecssery");
         const all = document.getElementsByClassName("intastellarCookieSettings--acceptAll");
@@ -4438,7 +4449,7 @@ function generatePolicyUrl(policy_link_text) {
 }
 function generateCookieButtons(allCookiesText, necessaryCookiesText, cookieSettingsText) {
     var acceptAllText = intaGetTextOverride("acceptAllButton", allCookiesText);
-    var necessaryOnlyText = intaGetTextOverride("necessaryButton", necessaryCookiesText);
+    var necessaryOnlyText = intaGetNecessaryButtonText(necessaryCookiesText);
     var settingsText = intaGetTextOverride("settingsButton", cookieSettingsText);
     return '<button class="intastellarCookie-settings__btn --bg intastellarCookieSettings--acceptAll">' + acceptAllText + '</button>'
         + '<button class="intastellarCookie-settings__btn intastellarCookieBanner__accpetNecssery">' + necessaryOnlyText + '</button>'
