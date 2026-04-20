@@ -297,7 +297,7 @@ function intaCbResolveTextOverridePresetSlug() {
     return null;
 }
 
-const intaCbTextOverridePresetApiUrl = "https://apis.intastellarsolutions.com/cmp/presets";
+const intaCbTextOverridePresetApiUrl = "https://apis.intastellarsolutions.com/public/presets";
 
 /**
  * Normalizes preset API JSON: either a flat textOverrides map or `{ textOverrides: { ... } }`.
