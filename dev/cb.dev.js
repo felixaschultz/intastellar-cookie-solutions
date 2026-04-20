@@ -1742,7 +1742,7 @@ if (intastellarCookieLanguage != null) {
     ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `
        <img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">`
                 : ""}
-        ${generateCookieSettingsButton(intastellarSupportedLanguages.english.saveSettings, 'Accept')}
+        ${generateCookieSettingsButton(window.INTA.settings.textOverrides.necessaryButton, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
         <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
