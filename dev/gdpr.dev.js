@@ -3645,7 +3645,21 @@ intaAppendToDocumentHead(analyticsScript);
     var overrides = (v && v.settings) || (exp.overrides && exp.overrides[variantId]) || {};
     if (overrides && typeof overrides === 'object' && window.INTA.settings) {
         for (var key in overrides) {
-            if (overrides.hasOwnProperty(key)) {
+            if (!overrides.hasOwnProperty(key)) continue;
+            if (key === 'textOverrides' && overrides[key] && typeof overrides[key] === 'object' && overrides[key] !== null && !Array.isArray(overrides[key])) {
+                var existingTO = window.INTA.settings.textOverrides;
+                var incomingTO = overrides[key];
+                var mergedTO = {};
+                if (existingTO && typeof existingTO === 'object' && existingTO !== null && !Array.isArray(existingTO)) {
+                    for (var bk in existingTO) {
+                        if (existingTO.hasOwnProperty(bk)) mergedTO[bk] = existingTO[bk];
+                    }
+                }
+                for (var ik in incomingTO) {
+                    if (incomingTO.hasOwnProperty(ik)) mergedTO[ik] = incomingTO[ik];
+                }
+                window.INTA.settings.textOverrides = mergedTO;
+            } else {
                 window.INTA.settings[key] = overrides[key];
             }
         }
