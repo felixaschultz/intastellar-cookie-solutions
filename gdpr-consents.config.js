@@ -10,18 +10,16 @@ window.INTA = {
     // },
     /* experiment: {
         id: 'floating-banner-test',
+        // Optional: URL template for server-stored text presets (default: downloads…/text-overrides/{id}.json)
+        // textOverridesPresetUrl: 'https://downloads.intastellarsolutions.com/cookieconsents/text-overrides/{id}.json',
         variants: {
             control: { weight: 10 },
-            variant_bannerV2: { 
+            variant_bannerV2: {
                 weight: 90,
-                settings: { 
-                    textOverrides: {
-                        bannerMessageHtml: "<p>We use cookies to ensure you get the best experience on our website.</p>",
-                        saveSettingsButton: "Save preferences",
-                        necessaryButton: "Necessary only",
-                        acceptAllButton: "Accept & continue",
-                        settingsButton: "Customize",
-                    }
+                settings: {
+                    // Either inline textOverrides, or a preset id that matches your CDN/DB-backed JSON file:
+                    textOverridePresetId: 'my-preset-slug',
+                    // textOverrides: { bannerMessageHtml: '<p>…</p>', … }
                 }
             }
         }
@@ -40,13 +38,7 @@ window.INTA = {
         text: false,
         language: "english",
         design: "bannerV2",
-        textOverrides: {
-            bannerMessageHtml: "<p>We use cookies to ensure you get the best experience on our website.</p>",
-            saveSettingsButton: "Save preferences",
-            necessaryButton: "Necessary only",
-            acceptAllButton: "Accept & continue",
-            settingsButton: "Customize",
-        },
+        textOverridePresetId: "copy-privacy-forward",
         requiredCookies: [
             {
                 cookie: "region",

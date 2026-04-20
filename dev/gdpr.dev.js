@@ -3604,8 +3604,107 @@ analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" 
 
 intaAppendToDocumentHead(analyticsScript);
 
+/** Merge experiment / server text override keys into `window.INTA.settings.textOverrides`. */
+function intaMergeTextOverridesIntoSettings(incomingTO) {
+    if (!incomingTO || typeof incomingTO !== "object" || incomingTO === null || Array.isArray(incomingTO)) {
+        return;
+    }
+    if (!window.INTA || !window.INTA.settings) {
+        return;
+    }
+    var existingTO = window.INTA.settings.textOverrides;
+    var mergedTO = {};
+    if (existingTO && typeof existingTO === "object" && existingTO !== null && !Array.isArray(existingTO)) {
+        for (var bk in existingTO) {
+            if (existingTO.hasOwnProperty(bk)) {
+                mergedTO[bk] = existingTO[bk];
+            }
+        }
+    }
+    for (var ik in incomingTO) {
+        if (incomingTO.hasOwnProperty(ik)) {
+            mergedTO[ik] = incomingTO[ik];
+        }
+    }
+    window.INTA.settings.textOverrides = mergedTO;
+}
+
+/** Coerce preset JSON to a flat textOverrides map (flat body or `{ textOverrides }`, optional JSON string). */
+function intaNormalizeTextOverridePresetBody(data) {
+    if (data == null) {
+        return null;
+    }
+    if (typeof data === "string") {
+        try {
+            data = JSON.parse(data);
+        } catch (e) {
+            return null;
+        }
+    }
+    if (typeof data !== "object" || data === null || Array.isArray(data)) {
+        return null;
+    }
+    var nested = data.textOverrides;
+    if (nested && typeof nested === "object" && nested !== null && !Array.isArray(nested) && Object.keys(nested).length > 0) {
+        return nested;
+    }
+    var flat = {};
+    for (var key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key) && key !== "textOverrides") {
+            flat[key] = data[key];
+        }
+    }
+    return Object.keys(flat).length ? flat : null;
+}
+
+/**
+ * Build URL for a preset text bundle. Optional `window.INTA.experiment.textOverridesPresetUrl`
+ * with `{id}` placeholder, or a directory base (trailing slash optional); otherwise CDN default.
+ */
+function intaBuildTextOverridePresetUrl(presetId) {
+    var exp = window.INTA && window.INTA.experiment;
+    var tmpl = exp && exp.textOverridesPresetUrl;
+    if (typeof tmpl === "string" && tmpl.indexOf("{id}") !== -1) {
+        return tmpl.split("{id}").join(encodeURIComponent(presetId));
+    }
+    if (typeof tmpl === "string" && tmpl.replace(/\s/g, "").length) {
+        return tmpl.replace(/\/?$/, "/") + encodeURIComponent(presetId) + ".json";
+    }
+    return "https://downloads.intastellarsolutions.com/cookieconsents/text-overrides/" + encodeURIComponent(presetId) + ".json";
+}
+
+/** Fetch JSON preset from server; body may be a flat textOverrides map or `{ textOverrides: { ... } }`. */
+function intaFetchTextOverridePresetPromise(presetId) {
+    if (!presetId || typeof fetch !== "function") {
+        return Promise.resolve();
+    }
+    var url = intaBuildTextOverridePresetUrl(presetId);
+    return fetch(url, { credentials: "omit", cache: "no-store" })
+        .then(function (res) {
+            if (!res.ok) {
+                throw new Error("HTTP " + res.status);
+            }
+            return res.json();
+        })
+        .then(function (data) {
+            var payload = intaNormalizeTextOverridePresetBody(data);
+            if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+                intaMergeTextOverridesIntoSettings(payload);
+            }
+            try {
+                window.dispatchEvent(new CustomEvent("inta:text-override-preset-loaded", { detail: { presetId: presetId } }));
+            } catch (e) {
+                /* ignore */
+            }
+        })
+        .catch(function (err) {
+            console.warn("[Intastellar] textOverride preset fetch failed:", presetId, err && err.message ? err.message : err);
+        });
+}
+
 // --- A/B experiment: resolve variant and apply overrides from window.INTA.experiment ---
 (function applyIntaExperiment() {
+    window.__intaTextOverridePresetId = null;
     var exp = window.INTA && window.INTA.experiment;
     if (!exp || !exp.id || !exp.variants || !Object.keys(exp.variants).length) return;
     var expKey = 'inta_exp_' + exp.id;
@@ -3646,24 +3745,25 @@ intaAppendToDocumentHead(analyticsScript);
     if (overrides && typeof overrides === 'object' && window.INTA.settings) {
         for (var key in overrides) {
             if (!overrides.hasOwnProperty(key)) continue;
+            if (key === "textOverridePresetId" || key === "textOverridesPresetId") {
+                continue;
+            }
             if (key === 'textOverrides' && overrides[key] && typeof overrides[key] === 'object' && overrides[key] !== null && !Array.isArray(overrides[key])) {
-                var existingTO = window.INTA.settings.textOverrides;
-                var incomingTO = overrides[key];
-                var mergedTO = {};
-                if (existingTO && typeof existingTO === 'object' && existingTO !== null && !Array.isArray(existingTO)) {
-                    for (var bk in existingTO) {
-                        if (existingTO.hasOwnProperty(bk)) mergedTO[bk] = existingTO[bk];
-                    }
-                }
-                for (var ik in incomingTO) {
-                    if (incomingTO.hasOwnProperty(ik)) mergedTO[ik] = incomingTO[ik];
-                }
-                window.INTA.settings.textOverrides = mergedTO;
+                intaMergeTextOverridesIntoSettings(overrides[key]);
             } else {
                 window.INTA.settings[key] = overrides[key];
             }
         }
     }
+    var presetIdToFetch = null;
+    if (overrides && typeof overrides === "object") {
+        if (overrides.textOverridePresetId != null && String(overrides.textOverridePresetId).trim() !== "") {
+            presetIdToFetch = String(overrides.textOverridePresetId).trim();
+        } else if (overrides.textOverridesPresetId != null && String(overrides.textOverridesPresetId).trim() !== "") {
+            presetIdToFetch = String(overrides.textOverridesPresetId).trim();
+        }
+    }
+    window.__intaTextOverridePresetId = presetIdToFetch;
     window.INTA.experimentVariant = variantId;
     if (window.dataLayer) {
         window.dataLayer.push({ event: 'intastellar_experiment_view', experiment_id: exp.id, variant: variantId });
@@ -3686,11 +3786,27 @@ if (intastellarDevMode) {
 intastellarCreateBanner.async = true;
 intastellarCreateBanner.defer = true;
 
-setTimeout(() => {
-    if (window.INTA.settings) {
-        intaAppendToDocumentHead(intastellarCreateBanner);
-    }
-}, 800);
+(function intaScheduleBannerScriptAfterExperimentText() {
+    var presetId = typeof window.__intaTextOverridePresetId === "string" && window.__intaTextOverridePresetId.length
+        ? window.__intaTextOverridePresetId
+        : null;
+    var fetchP = presetId ? intaFetchTextOverridePresetPromise(presetId) : Promise.resolve();
+    var delayMs = 800;
+    var delayP = new Promise(function (resolve) {
+        setTimeout(resolve, delayMs);
+    });
+    Promise.all([fetchP, delayP])
+        .then(function () {
+            if (window.INTA && window.INTA.settings) {
+                intaAppendToDocumentHead(intastellarCreateBanner);
+            }
+        })
+        .catch(function () {
+            if (window.INTA && window.INTA.settings) {
+                intaAppendToDocumentHead(intastellarCreateBanner);
+            }
+        });
+})();
 
 function updateCookiePreferenceOfBlockedIframes(dataType) {
     if (dataType == "intMarketingCookies") {
