@@ -8,7 +8,7 @@ window.INTA = {
     //         variant_bannerV2: { weight: 50, settings: { design: 'bannerV2' } }
     //     }
     // },
-    experiment: {
+    /* experiment: {
         id: 'floating-banner-test',
         variants: {
             control: { weight: 10 },
@@ -25,7 +25,7 @@ window.INTA = {
                 }
             }
         }
-    },
+    }, */
     policy_link: {
         target: "_blank",
         url: "https://www.intastellarsolutions.com/about/legal/privacy"
@@ -40,7 +40,13 @@ window.INTA = {
         text: false,
         language: "english",
         design: "bannerV2",
-        tcf: true,
+        textOverrides: {
+            bannerMessageHtml: "<p>We use cookies to ensure you get the best experience on our website.</p>",
+            saveSettingsButton: "Save preferences",
+            necessaryButton: "Necessary only",
+            acceptAllButton: "Accept & continue",
+            settingsButton: "Customize",
+        },
         requiredCookies: [
             {
                 cookie: "region",
