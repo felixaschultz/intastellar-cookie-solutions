@@ -836,7 +836,8 @@ window._intaConsentInitialized = true;
 if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
     // Only set defaults if GTM hasn't already done so
     if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
-        // Strict opt-in regions (GDPR-style)
+        // Strict opt-in regions (GDPR-style). ISO 3166: 'CA' = Canada, not California.
+        // California is handled separately below via region ['US-CA'] (CCPA / opt-out style).
         gtag('consent', 'default', {
             "ad_storage": 'denied',
             "personalization_storage": 'denied',
@@ -848,11 +849,11 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
             "security_storage": 'granted',
             "url_passthrough": true,
             "wait_for_update": 500,
-            "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL']
+            "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL', 'TH']
         });
         /* console.log("Intastellar Consents: Applied STRICT defaults (EU/UK/CA/BR/etc.)"); */
 
-        // California opt-out (Do Not Sell)
+        // California only: CCPA-style defaults (region US-CA). Rest of US uses global baseline below.
         gtag('consent', 'default', {
             "ad_storage": 'granted',
             "personalization_storage": 'granted',
@@ -868,20 +869,9 @@ if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
         });
         /* console.log("Intastellar Consents: Applied CALIFORNIA defaults (US-CA)"); */
 
-        // Rest of the world fallback
-        gtag('consent', 'default', {
-            "ad_storage": 'granted',
-            "personalization_storage": 'granted',
-            "analytics_storage": 'granted',
-            "functionality_storage": 'granted',
-            "ads_data_redaction": 'granted',
-            "ad_user_data": 'granted',
-            "ad_personalization": 'granted',
-            "security_storage": 'granted',
-            "url_passthrough": true,
-            "wait_for_update": 500
-        });
-        /* console.log("Intastellar Consents: Applied REST-OF-WORLD defaults"); */
+        // Global baseline: strict (denied) for every region not matched above.
+        // Regional rows above take precedence (strict list + TH, etc., and US-CA opt-out style).
+        // No separate "rest of world granted" row — that would opt non-listed countries in by default.
         gtag('consent', 'default', {
             'ad_storage': 'denied',
             'personalization_storage': 'denied',
@@ -1829,6 +1819,25 @@ let intastellarSupportedLanguages = {
             title: "マーケティング",
             description: "当社は、選択されたパートナーからのWeb技術（Cookieも含む）を使用して、Webサイトやソーシャルメディア上で特にあなた向けにカスタマイズされたコンテンツや広告を表示します。これらのコンテンツは、あなたの使用行動に基づいて選択および表示されます。広告またはマーケティングCookieは、訪問者に関連する広告やマーケティングキャンペーンを提供するために使用されます。これらのCookieは、異なるWebサイトで訪問者を追跡し、個別化された広告を提供するための情報を収集します。"
         }
+    },
+    thai: {
+        saveSettings: "ปฏิเสธทั้งหมด",
+        necessary: {
+            title: "จำเป็น",
+            description: "เทคโนโลยีเว็บและคุกกี้ที่จำเป็นทำให้เว็บไซต์ของเราเข้าถึงและใช้งานได้จากทางเทคนิคสำหรับคุณ ครอบคลุมฟังก์ชันพื้นฐาน เช่น การนำทางบนเว็บไซต์ การแสดงผลที่ถูกต้องในเบราว์เซอร์ของคุณ หรือการขอความยินยอมจากคุณ หากไม่มีเทคโนโลยีและคุกกี้เหล่านี้ เว็บไซต์ของเราจะทำงานไม่ได้ตามปกติ",
+        },
+        functional: {
+            title: "การทำงาน",
+            description: "คุกกี้เชิงฟังก์ชันช่วยให้เราจัดเก็บข้อมูลที่เปลี่ยนแปลงลักษณะหรือพฤติกรรมของเว็บไซต์ เช่น ภาษาหรือภูมิภาคที่คุณต้องการ",
+        },
+        statisic: {
+            title: "สถิติ",
+            description: "เราต้องการพัฒนาประสบการณ์การใช้งานและประสิทธิภาพของเว็บไซต์อย่างต่อเนื่อง จึงใช้เทคโนโลยีวิเคราะห์ (รวมถึงคุกกี้) เพื่อวัดและประเมินแบบไม่ระบุตัวตนว่าฟีเจอร์และเนื้อหาใดของเว็บไซต์ถูกใช้งานอย่างไรและบ่อยเพียงใด เพื่อนำไปปรับปรุงเว็บไซต์ให้เหมาะกับผู้ใช้",
+        },
+        marketing: {
+            title: "การตลาด",
+            description: "เราใช้เทคโนโลยีเว็บ (รวมถึงคุกกี้) จากพันธมิตรที่คัดสรร เพื่อแสดงเนื้อหาและโฆษณาที่ปรับให้เหมาะกับคุณบนเว็บไซต์และโซเชียลมีเดีย โดยเลือกและแสดงผลตามพฤติกรรมการใช้งานของคุณ คุกกี้โฆษณาหรือการตลาดใช้เพื่อแสดงโฆษณาและแคมเปญที่เกี่ยวข้อง ติดตามผู้เยี่ยมชมข้ามเว็บไซต์ และรวบรวมข้อมูลเพื่อนำเสนอโฆษณาเฉพาะบุคคล",
+        },
     },
     greek: {
         saveSettings: "Απόρριψη",
