@@ -110,6 +110,7 @@
         'HelloSign': ['__cf_bm', 'hellosign'],
         'Adobe Sign': ['adobe_sign'],
         'CookieYes': ['CookieYesConsent', 'cookieyes-consent', 'CookieYesAnalytics'],
+        'VWO': ['vwo_uuid', '_vwo_consent', '_vwo_id'],
     };
 
     const COOKIE_CONSENT_TYPE_MAP = {
@@ -187,6 +188,7 @@
         'zm_aid': 'functional', 'SSO_SESSION_ID': 'functional', 'GoToMeeting': 'functional',
         'BJSESSIONID': 'functional', 'TVSESSIONID': 'functional', 'docusign': 'functional', 'hellosign': 'functional',
         'adobe_sign': 'functional', 'MicrosoftApplicationsTelemetryFirstLaunchTime': 'functional', 'MicrosoftApplicationsTelemetryDeviceId': 'functional',
+        'vwo_uuid': 'marketing', '_vwo_consent': 'functional', '_vwo_id': 'functional',
     };
 
     function detectCookieVendor(cookie) {

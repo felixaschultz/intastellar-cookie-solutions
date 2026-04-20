@@ -3900,6 +3900,84 @@ function recordCookie(value) {
     }, INTA_COOKIE_EVENT_DEBOUNCE_MS);
 }
 
+/**
+ * True if hostname belongs to the publisher site or CMP allowlist (see isAllowed).
+ * Used to filter PerformanceResourceTiming noise from first-party and own infra.
+ */
+function isOwnInfra(hostname) {
+    if (!hostname || typeof hostname !== "string") return true;
+    try {
+        var h = hostname.replace(/:\d+$/, "");
+        return isAllowed("https://" + h + "/");
+    } catch (e) {
+        return true;
+    }
+}
+
+/**
+ * Observe resource loads to approximate third-party data transfer / vendor activity.
+ * Note: cross-origin transferSize is often 0 unless the resource exposes Timing-Allow-Origin.
+ * Disable: INTA.settings.recordResourceTransfers === false
+ */
+(function intaInitThirdPartyResourceTimingObserver() {
+    if (typeof PerformanceObserver === "undefined") return;
+    if (window.INTA && window.INTA.settings && window.INTA.settings.recordResourceTransfers === false) return;
+
+    window.__INTA_OBSERVED_THIRD_PARTY_RESOURCES__ = window.__INTA_OBSERVED_THIRD_PARTY_RESOURCES__ || [];
+    var MAX_LOCAL = 400;
+
+    var po = new PerformanceObserver(function (list) {
+        list.getEntries().forEach(function (entry) {
+            if (!entry || !entry.name || typeof entry.name !== "string") return;
+            var url;
+            try {
+                url = new URL(entry.name, window.location.href);
+            } catch (e) {
+                return;
+            }
+            if (!url.hostname || url.hostname === window.location.hostname) return;
+            if (isOwnInfra(url.hostname)) return;
+
+            var row = {
+                host: url.hostname,
+                initiatorType: entry.initiatorType,
+                startTime: entry.startTime,
+                transferSize: entry.transferSize,
+            };
+            window.__INTA_OBSERVED_THIRD_PARTY_RESOURCES__.push(row);
+            if (window.__INTA_OBSERVED_THIRD_PARTY_RESOURCES__.length > MAX_LOCAL) {
+                window.__INTA_OBSERVED_THIRD_PARTY_RESOURCES__.splice(0, MAX_LOCAL / 2);
+            }
+
+            var resourceUrl = entry.name.length > 500 ? entry.name.slice(0, 500) : entry.name;
+            var consentType = getConsentTypeForUrl(resourceUrl);
+            recordCookie({
+                source: "performance_resource",
+                name: url.hostname + "\0" + (entry.initiatorType || ""),
+                initiatorType: entry.initiatorType,
+                startTime: Math.round(entry.startTime),
+                transferSize: entry.transferSize,
+                resourceUrl: resourceUrl,
+                observedAt: Date.now(),
+                path: window.location.pathname,
+                domain: window.location.hostname,
+                cookieDomain: url.hostname,
+                rootDomain: window.INTA?.settings?.rootDomain || window.location.hostname,
+                hadValuePreConsent: !!entry.transferSize,
+                consentGiven: hasConsent(consentType),
+                vendor: detectCookieVendor({ name: url.hostname, value: resourceUrl }),
+            });
+        });
+    });
+    try {
+        po.observe({ type: "resource", buffered: true });
+    } catch (e) {
+        try {
+            po.observe({ type: "resource" });
+        } catch (e2) { /* ignore */ }
+    }
+})();
+
 /* Helper function to create Consents Block message for iframes etc.*/
 function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
     let p = "";
