@@ -398,6 +398,93 @@ function intaEscapeHtmlAttr(str) {
  * HTML for GVL `deviceStorageDisclosureUrl` (machine-readable disclosure JSON).
  * Override labels via textOverrides: deviceStorageDisclosureLink, deviceStorageDetailsShow, deviceStorageDetailsHide.
  */
+function intaFormatMaxAgeSecondsForDisclosure(sec) {
+    let n = Number(sec);
+    if (!isFinite(n) || n < 0) {
+        return "";
+    }
+    let days = Math.round(n / 86400);
+    if (days >= 1) {
+        return days + (days === 1 ? " day" : " days");
+    }
+    let hours = Math.round(n / 3600);
+    if (hours >= 1) {
+        return hours + (hours === 1 ? " hour" : " hours");
+    }
+    return String(Math.round(n)) + " s";
+}
+
+/** Human-readable HTML from IAB-style device storage disclosure JSON (no raw JSON dump). */
+function intaRenderDeviceStorageDisclosureHtml(data) {
+    if (data == null) {
+        return "<p>" + intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageNoEntries", "No disclosure data.")) + "</p>";
+    }
+    if (typeof data !== "object") {
+        return "<p>" + intaEscapeHtmlAttr(String(data)) + "</p>";
+    }
+    let parts = [];
+    let disclosures = Array.isArray(data.disclosures) ? data.disclosures : [];
+    let cookiesHeading = intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageCookiesHeading", "Cookies and storage"));
+    parts.push('<div class="inta-ds-section"><strong>' + cookiesHeading + "</strong>");
+    if (!disclosures.length) {
+        parts.push("<p style=\"margin:6px 0 0;\">" + intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageNoEntries", "No entries in this disclosure.")) + "</p>");
+    } else {
+        parts.push("<ul style=\"margin:6px 0 0 18px;padding:0;list-style:disc;\">");
+        disclosures.forEach(function (row) {
+            if (!row || typeof row !== "object") {
+                return;
+            }
+            let identifier = row.identifier != null ? String(row.identifier) : "";
+            let typ = row.type != null ? String(row.type) : "";
+            let doms = Array.isArray(row.domains) ? row.domains.map(function (d) {
+                return intaEscapeHtmlAttr(String(d));
+            }).join(", ") : "";
+            let maxAge = intaFormatMaxAgeSecondsForDisclosure(row.maxAgeSeconds);
+            let purposes = Array.isArray(row.purposes) ? row.purposes.map(function (p) {
+                return intaEscapeHtmlAttr(String(p));
+            }).join(", ") : "";
+            let title = intaEscapeHtmlAttr(identifier || typ || "—");
+            let typePart = typ ? " <span style=\"opacity:.85;\">(" + intaEscapeHtmlAttr(typ) + ")</span>" : "";
+            let meta = [];
+            if (doms) {
+                meta.push(intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageLabelDomains", "Domains")) + ": " + doms);
+            }
+            if (maxAge) {
+                meta.push(intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageLabelMaxAge", "Max age")) + ": " + intaEscapeHtmlAttr(maxAge));
+            }
+            if (purposes) {
+                meta.push(intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageLabelPurposes", "Purposes (IDs)")) + ": " + purposes);
+            }
+            if (row.cookieRefresh === true) {
+                meta.push(intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageLabelRefresh", "May refresh")));
+            }
+            parts.push("<li style=\"margin-bottom:8px;\"><span class=\"inta-ds-name\">" + title + "</span>" + typePart
+                + (meta.length ? "<div style=\"margin-top:3px;font-size:10px;line-height:1.35;opacity:.92;\">" + meta.join(" · ") + "</div>" : "")
+                + "</li>");
+        });
+        parts.push("</ul>");
+    }
+    parts.push("</div>");
+    let domainRows = Array.isArray(data.domains) ? data.domains : [];
+    if (domainRows.length) {
+        let dh = intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageDomainsHeading", "Domains in use"));
+        parts.push('<div class="inta-ds-section" style="margin-top:10px;"><strong>' + dh + "</strong>");
+        parts.push("<ul style=\"margin:6px 0 0 18px;padding:0;list-style:disc;\">");
+        domainRows.forEach(function (d) {
+            if (!d || typeof d !== "object") {
+                return;
+            }
+            let dom = intaEscapeHtmlAttr(String(d.domain || ""));
+            let use = d.use != null ? intaEscapeHtmlAttr(String(d.use)) : "";
+            parts.push("<li style=\"margin-bottom:6px;\"><span>" + dom + "</span>"
+                + (use ? "<div style=\"margin-top:2px;font-size:10px;opacity:.9;\">" + use + "</div>" : "")
+                + "</li>");
+        });
+        parts.push("</ul></div>");
+    }
+    return parts.join("");
+}
+
 function intaDeviceStorageDisclosureBlock(vendor) {
     let url = vendor && vendor.deviceStorageDisclosureUrl;
     if (!url || typeof url !== "string" || !/^https?:\/\//i.test(url.trim())) {
@@ -411,7 +498,7 @@ function intaDeviceStorageDisclosureBlock(vendor) {
     return '<div class="inta-gvl-device-storage" style="margin-top:6px;">'
         + '<a class="intSettingsTitleLink" style="display:block;padding:0;text-align:left;" href="' + intaEscapeHtmlAttr(url) + '" target="_blank" rel="noopener noreferrer">' + linkText + '</a>'
         + '<button type="button" class="inta-device-storage-toggle" style="margin-top:4px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;font:inherit;color:inherit;" data-device-storage-url="' + enc + '" data-inta-ds-show="' + btnShow + '" data-inta-ds-hide="' + btnHide + '" aria-expanded="false">' + btnShow + '</button>'
-        + '<pre class="inta-device-storage-details" style="display:none;margin:6px 0 0;padding:8px;background:#f5f5f5;border-radius:4px;font-size:11px;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:auto;"></pre>'
+        + '<div class="inta-device-storage-details" style="display:none;margin:6px 0 0;padding:8px;background:#f5f5f5;border-radius:4px;font-size:11px;word-break:break-word;max-height:240px;overflow:auto;line-height:1.35;"></div>'
         + "</div>";
 }
 
@@ -422,31 +509,27 @@ function intaDeviceStorageToggleClick(ev) {
     }
     ev.preventDefault();
     let wrap = btn.closest(".inta-gvl-device-storage");
-    let pre = wrap && wrap.querySelector(".inta-device-storage-details");
+    let panel = wrap && wrap.querySelector(".inta-device-storage-details");
     let enc = btn.getAttribute("data-device-storage-url");
-    if (!pre || !enc) {
+    if (!panel || !enc) {
         return;
     }
     let url = decodeURIComponent(enc);
     let showL = btn.getAttribute("data-inta-ds-show") || "Show storage details";
     let hideL = btn.getAttribute("data-inta-ds-hide") || "Hide storage details";
-    let open = pre.style.display !== "none" && pre.style.display !== "";
+    let open = panel.style.display !== "none" && panel.style.display !== "";
     if (open) {
-        pre.style.display = "none";
+        panel.style.display = "none";
         btn.textContent = showL;
         btn.setAttribute("aria-expanded", "false");
         return;
     }
-    function fillPre(json) {
-        try {
-            pre.textContent = JSON.stringify(json, null, 2);
-        } catch (e) {
-            pre.textContent = String(json);
-        }
+    function fillPanel(json) {
+        panel.innerHTML = intaRenderDeviceStorageDisclosureHtml(json);
     }
     if (window.__intaDeviceStorageJsonCache[url]) {
-        fillPre(window.__intaDeviceStorageJsonCache[url]);
-        pre.style.display = "block";
+        fillPanel(window.__intaDeviceStorageJsonCache[url]);
+        panel.style.display = "block";
         btn.textContent = hideL;
         btn.setAttribute("aria-expanded", "true");
         return;
@@ -455,14 +538,14 @@ function intaDeviceStorageToggleClick(ev) {
     intaFetchDeviceStorageDisclosureJson(url)
         .then(function (json) {
             window.__intaDeviceStorageJsonCache[url] = json;
-            fillPre(json);
-            pre.style.display = "block";
+            fillPanel(json);
+            panel.style.display = "block";
             btn.textContent = hideL;
             btn.setAttribute("aria-expanded", "true");
         })
         .catch(function () {
-            pre.textContent = intaGetTextOverride("deviceStorageDetailsLoadError", "Could not load disclosure JSON. Open the link above.");
-            pre.style.display = "block";
+            panel.textContent = intaGetTextOverride("deviceStorageDetailsLoadError", "Could not load disclosure JSON. Open the link above.");
+            panel.style.display = "block";
             btn.textContent = hideL;
             btn.setAttribute("aria-expanded", "true");
         })
