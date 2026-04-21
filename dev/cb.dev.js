@@ -5176,6 +5176,8 @@ onWindowLoad(function () {
             }); */
         }
 
+        console.log(button__acceptAll);
+
         if (button__acceptAll != null || button__acceptAll != undefined) {
             button__acceptAll.addEventListener("click", function () {
 

@@ -37,7 +37,7 @@ window.INTA = {
         color: "#197da1ff",
         text: false,
         language: "english",
-        design: "bannerV2",
+        design: "floating",
         requiredCookies: [
             {
                 cookie: "region",
