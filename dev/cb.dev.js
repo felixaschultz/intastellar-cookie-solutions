@@ -6,7 +6,7 @@
  *
 */
 // --- IAB Global Vendor List (GVL) fetch & cache utility ---
-const GVL_URL = "https://apis.intastellarsolutions.com/gvl.php";
+const GVL_URL = "https://apis.intastellarsolutions.com/gvl";
 let gvlCache = null;
 let gvlCacheTimestamp = 0;
 const GVL_CACHE_TTL = 60 * 60 * 1000; // 1 hour
@@ -189,6 +189,48 @@ function intaGetNecessaryButtonText(fallbackText) {
     o = intaGetRawTextOverride("declineAllButton");
     if (o !== null) return o;
     return fallbackText;
+}
+
+/** Vendor list CTA; override with `textOverrides.vendorListButton`. */
+function intaVendorListButtonLabel() {
+    let lang = (typeof intastellarCookieLanguage !== "undefined" && intastellarCookieLanguage !== null) ? String(intastellarCookieLanguage).toLowerCase() : "";
+    let sl = (window.INTA && window.INTA.settings && window.INTA.settings.language) ? String(window.INTA.settings.language).toLowerCase() : "";
+    let def = "Vendor list";
+
+    if (lang === "da-dk" || lang === "da" || lang === "dk" || sl === "danish" || sl === "da") def = "Leverandørliste";
+    else if (lang === "de" || lang === "de-de" || sl === "german" || sl === "de") def = "Anbieterliste";
+    else if (lang === "en" || lang === "en-gb" || lang === "en-us" || sl === "english" || sl === "en") def = "Vendor list";
+    else if (lang === "es" || lang === "es-es" || sl === "spanish" || sl === "es") def = "Lista de proveedores";
+    else if (lang === "fr" || lang === "fr-fr" || sl === "french" || sl === "fr") def = "Liste des fournisseurs";
+    else if (lang === "it" || lang === "it-it" || sl === "italian" || sl === "it") def = "Elenco fornitori";
+    else if (lang === "nl" || lang === "nl-nl" || sl === "dutch" || sl === "nl") def = "Leverancierslijst";
+    else if (lang === "sv" || lang === "sv-se" || sl === "swedish" || sl === "sv") def = "Leverantörslista";
+    else if (lang === "no" || lang === "no-no" || sl === "norwegian" || sl === "no") def = "Leverandørliste";
+    else if (lang === "pl" || lang === "pl-pl" || sl === "polish" || sl === "pl") def = "Lista dostawców";
+    else if (lang === "pt" || lang === "pt-pt" || sl === "portuguese" || sl === "pt") def = "Lista de fornecedores";
+    else if (lang === "ru" || lang === "ru-ru" || sl === "russian" || sl === "ru") def = "Список поставщиков";
+    else if (lang === "fi" || lang === "fi-fi" || sl === "finnish" || sl === "fi") def = "Toimittajaluettelo";
+    else if (lang === "cs" || lang === "cs-cz" || sl === "czech" || sl === "cs") def = "Seznam dodavatelů";
+    else if (lang === "hu" || lang === "hu-hu" || sl === "hungarian" || sl === "hu") def = "Szállítók listája";
+    else if (lang === "tr" || lang === "tr-tr" || sl === "turkish" || sl === "tr") def = "Satıcı listesi";
+    else if (lang === "zh" || lang === "zh-cn" || sl === "chinese" || sl === "zh") def = "供应商列表";
+    else if (lang === "ja" || lang === "ja-jp" || sl === "japanese" || sl === "ja") def = "ベンダー一覧";
+    else if (lang === "ko" || lang === "ko-kr" || sl === "korean" || sl === "ko") def = "공급업체 목록";
+    else if (lang === "ar" || lang === "ar-sa" || sl === "arabic" || sl === "ar") def = "قائمة البائعين";
+    else if (lang === "et" || lang === "et-ee") def = "Tarnijate loend";
+    else if (lang === "he" || lang === "he-il" || sl === "hebrew" || sl === "he") def = "רשימת ספקים";
+    else if (lang === "af" || lang === "af-za" || sl === "afrikaans" || sl === "af") def = "Verskafferlys";
+    else if (lang === "bg" || lang === "bg-bg" || sl === "bulgarian" || sl === "bg") def = "Списък на доставчици";
+    else if (lang === "ro" || lang === "ro-ro" || sl === "romanian" || sl === "ro") def = "Lista furnizorilor";
+    else if (lang === "uk" || lang === "uk-ua" || sl === "ukrainian" || sl === "uk") def = "Список постачальників";
+    else if (lang === "el" || lang === "el-gr" || sl === "greek" || sl === "el") def = "Λίστα προμηθευτών";
+    else if (lang === "hi" || lang === "hi-in" || sl === "hindi" || sl === "hi") def = "विक्रेता सूची";
+    else if (lang === "th" || lang === "th-th" || sl === "thai" || sl === "th") def = "รายชื่อผู้ขาย";
+    else if (lang === "id" || lang === "id-id") def = "Daftar vendor";
+    else if (lang === "ms" || lang === "ms-my") def = "Senarai vendor";
+    else if (lang === "vi" || lang === "vi-vn") def = "Danh sách nhà cung cấp";
+
+    return intaGetTextOverride("vendorListButton", def);
 }
 
 /** Merge server / experiment text override keys into `window.INTA.settings.textOverrides`. */
@@ -1196,7 +1238,10 @@ function getTcStringFromCookie() {
             const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
             vendorDiv.innerHTML = `
                 <label class="checkMarkContainer">
-                    <span class="intSettingsTitle">${vendor.name}</span>
+                    <span class="intSettingsTitle">
+                        ${vendor.name}</br>
+                        ${vendor.urls.map(url => `<a class="intSettingsTitleLink" style="display: inline-block; padding: 0;" href="${url.privacy}" target="_blank">${url.privacy}</a>`).join('<br>')}
+                    </span>
                     <span class="intCheckmarkSliderContainer">
                         <input onchange="updateSaveButtonText()" id="vendor${vendor.id}" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
                         <span class="checkmark round"></span>
@@ -1727,7 +1772,7 @@ if (intastellarCookieLanguage != null) {
         + `<section class="intCookieSaveSettingsContainer">
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = generateCookieButtons('Accepter', 'Afvis', 'Indstillinger');
@@ -1735,7 +1780,7 @@ if (intastellarCookieLanguage != null) {
         ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)">${intastellarShowHideDetailsText}</button>
-       <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+       <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         moreFooter.innerHTML =
@@ -1828,7 +1873,7 @@ if (intastellarCookieLanguage != null) {
         ${(window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "") ? `<img class="intSettingsCompanyLogo" src="${window.INTA.settings.logo}" alt="Intastellar Solutions, International">` : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.german.saveSettings, 'Akzeptieren')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -1933,7 +1978,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(window.INTA.settings?.textOverrides?.necessaryButton || intastellarSupportedLanguages.english.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2032,7 +2077,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.spanish.saveSettings, 'Aceptar')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-       <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+       <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2127,7 +2172,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.french.saveSettings, 'Accepter')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2225,7 +2270,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.swedish.saveSettings, 'Acceptera')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2324,7 +2369,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.norwegian.saveSettings, 'Godta')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2336,7 +2381,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
 
@@ -2434,7 +2479,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.dutch.saveSettings, 'Accepteren')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2531,7 +2576,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.italian.saveSettings, 'Accetta')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2628,7 +2673,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.finnish.saveSettings, 'Hyväksy')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2725,7 +2770,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.russian.saveSettings, 'Принять')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2822,7 +2867,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.polish.saveSettings, 'Zaakceptuj')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -2919,7 +2964,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.afrikaans.saveSettings, 'Aanvaar')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3016,7 +3061,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.korean.saveSettings, '동의')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3114,7 +3159,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.arabic.saveSettings, 'قبول')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3212,7 +3257,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.estonian.saveSettings, 'Nõustu')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3307,7 +3352,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.hebrew.saveSettings, 'אישור')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3402,7 +3447,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.ukrainian.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3497,7 +3542,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.hebrew.saveSettings, 'אישור')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">רשימת ספקים</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3557,7 +3602,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.japanese.saveSettings, '承認')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3652,7 +3697,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.thai.saveSettings, 'ยอมรับทั้งหมด')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3748,7 +3793,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.portuguese.saveSettings, 'Aceitar')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
         cookieBtn = (window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2") + `
@@ -3844,7 +3889,7 @@ if (intastellarCookieLanguage != null) {
                 : ""}
         ${generateCookieSettingsButton(intastellarSupportedLanguages.danish.saveSettings, 'Accept')}
         <button class="intLearnMoreBtn" onclick="learnMore(this)" >${intastellarShowHideDetailsText}</button>
-        <button class="openVendorList" onclick="openVendorList()">Vendor list</button>
+        <button class="openVendorList" onclick="openVendorList()">${intaVendorListButtonLabel()}</button>
         ${(window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")}
     </section>`;
 
