@@ -1100,6 +1100,41 @@ function getConsentTypeForUrl(url) {
     return 'marketing';
 }
 
+/**
+ * Machine-readable IAB device-storage disclosures and GVL-listed vendor URLs.
+ * cb.js sets `intaIsGvlVendorPassThroughUrl` / `__intaGvlPassThroughUrls` after vendors load; this also matches
+ * common disclosure JSON paths so XHR is not blocked before the GVL finishes loading.
+ */
+function intaIsGvlPassThroughRequest(url) {
+    if (!url || typeof url !== "string") {
+        return false;
+    }
+    if (typeof window.intaIsGvlVendorPassThroughUrl === "function") {
+        try {
+            if (window.intaIsGvlVendorPassThroughUrl(url)) {
+                return true;
+            }
+        } catch (eFn) { /* ignore */ }
+    }
+    let u = url.trim();
+    let list = window.__intaGvlPassThroughUrls;
+    if (Array.isArray(list) && list.indexOf(u) !== -1) {
+        return true;
+    }
+    try {
+        let parsed = new URL(u, window.location.origin);
+        let hosts = window.__intaGvlPassThroughHosts;
+        if (Array.isArray(hosts) && hosts.indexOf(parsed.hostname) !== -1) {
+            return true;
+        }
+        let p = (parsed.pathname || "").toLowerCase();
+        if (parsed.protocol === "https:" && p.endsWith(".json") && /devicestorage|device_storage|compliance_devicestorage/.test(p)) {
+            return true;
+        }
+    } catch (e0) { /* ignore */ }
+    return false;
+}
+
 // Helper: Send intercepted data to backend for storage/categorization
 async function sendToBackend(data) {
     try {
@@ -1379,6 +1414,9 @@ window.fetch = function (resource, config) {
     if (isAllowed(url)) {
         return originalFetch.apply(this, arguments);
     }
+    if (intaIsGvlPassThroughRequest(url)) {
+        return originalFetch.apply(this, arguments);
+    }
     let isExternal = !url.startsWith(window.location.origin);
     if (isExternal) {
         let consentType = getConsentTypeForUrl(url);
@@ -1402,6 +1440,9 @@ function CustomXHR() {
         if (isAllowed(url)) {
             return open.apply(this, arguments);
         }
+        if (intaIsGvlPassThroughRequest(url)) {
+            return open.apply(this, arguments);
+        }
         let isExternal = !url.startsWith(window.location.origin);
         if (isExternal) {
             let consentType = getConsentTypeForUrl(url);
@@ -1423,6 +1464,9 @@ let originalSendBeacon = navigator.sendBeacon;
 navigator.sendBeacon = function (url, data) {
     // Prevent recursion for backend endpoint
     if (isAllowed(url)) {
+        return originalSendBeacon.apply(this, arguments);
+    }
+    if (intaIsGvlPassThroughRequest(url)) {
         return originalSendBeacon.apply(this, arguments);
     }
     let isExternal = !url.startsWith(window.location.origin);

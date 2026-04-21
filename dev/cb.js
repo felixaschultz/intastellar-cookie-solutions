@@ -190,6 +190,244 @@ function intaGetNecessaryButtonText(fallbackText) {
     if (o !== null) return o;
     return fallbackText;
 }
+
+/** Cache for IAB device storage disclosure JSON (`deviceStorageDisclosureUrl`). */
+window.__intaDeviceStorageJsonCache = window.__intaDeviceStorageJsonCache || {};
+
+/**
+ * GET JSON via XMLHttpRequest (often not wrapped when only `fetch` is intercepted).
+ */
+function intaFetchJsonViaXhr(url) {
+    return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.timeout = 25000;
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    resolve(JSON.parse(xhr.responseText));
+                } catch (e) {
+                    reject(e);
+                }
+            } else {
+                reject(new Error(String(xhr.status)));
+            }
+        };
+        xhr.onerror = function () {
+            reject(new Error("network"));
+        };
+        xhr.ontimeout = function () {
+            reject(new Error("timeout"));
+        };
+        try {
+            xhr.send(null);
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+/**
+ * Load device-storage disclosure JSON without depending on a patched `fetch`.
+ * 1) `INTA.settings.fetchDisclosure(url)` if set
+ * 2) `window.__intaNativeFetch` (save `fetch` here before interceptors)
+ * 3) XMLHttpRequest, then `fetch` as last resort
+ */
+function intaFetchDeviceStorageDisclosureJson(url) {
+    var settings = window.INTA && window.INTA.settings;
+    if (settings && typeof settings.fetchDisclosure === "function") {
+        return Promise.resolve(settings.fetchDisclosure(url)).then(function (r) {
+            if (r && typeof r.json === "function") {
+                return r.json();
+            }
+            return r;
+        });
+    }
+    if (typeof window.__intaNativeFetch === "function") {
+        return window.__intaNativeFetch(url, { credentials: "omit", cache: "force-cache" }).then(function (resp) {
+            if (!resp || !resp.ok) {
+                throw new Error(resp ? String(resp.status) : "no response");
+            }
+            return resp.json();
+        });
+    }
+    return intaFetchJsonViaXhr(url).catch(function () {
+        if (typeof fetch !== "function") {
+            throw new Error("no fetch");
+        }
+        return fetch(url, { credentials: "omit", cache: "force-cache" }).then(function (r) {
+            if (!r.ok) {
+                throw new Error(String(r.status));
+            }
+            return r.json();
+        });
+    });
+}
+
+/**
+ * Collect vendor URLs your fetch/XHR interceptor may need to allow (GVL deviceStorage + policy links).
+ * Sets `window.__intaGvlPassThroughUrls` / `window.__intaGvlPassThroughHosts`, fires `intastellar:vendor-pass-through-urls`,
+ * and calls `INTA.settings.onVendorPassThroughUrlsReady(detail)` when defined.
+ *
+ * Interceptors: save the real fetch first (`window.__intaNativeFetch = fetch.bind(window)`), then patch `fetch`.
+ * In your wrapper, if `window.intaIsGvlVendorPassThroughUrl(requestUrl)` is true, delegate to `__intaNativeFetch`
+ * (and allow the same URL in XHR if you wrap `XMLHttpRequest.open`).
+ */
+function intaCollectVendorPassThroughUrls(vendors) {
+    var urlMap = {};
+    var hostMap = {};
+    function addUrl(u) {
+        if (!u || typeof u !== "string") {
+            return;
+        }
+        var t = u.trim();
+        if (!/^https?:\/\//i.test(t)) {
+            return;
+        }
+        urlMap[t] = true;
+        try {
+            var h = new URL(t).hostname;
+            if (h) {
+                hostMap[h] = true;
+            }
+        } catch (e1) { }
+    }
+    (vendors || []).forEach(function (v) {
+        if (!v) {
+            return;
+        }
+        addUrl(v.deviceStorageDisclosureUrl);
+        (v.urls || []).forEach(function (row) {
+            if (row && row.privacy) {
+                addUrl(row.privacy);
+            }
+        });
+    });
+    var urls = Object.keys(urlMap);
+    var hosts = Object.keys(hostMap);
+    window.__intaGvlPassThroughUrls = urls;
+    window.__intaGvlPassThroughHosts = hosts;
+    var detail = { urls: urls, hosts: hosts, vendors: vendors || [] };
+    var settings = window.INTA && window.INTA.settings;
+    if (settings && typeof settings.onVendorPassThroughUrlsReady === "function") {
+        try {
+            settings.onVendorPassThroughUrlsReady(detail);
+        } catch (e2) { }
+    }
+    try {
+        window.dispatchEvent(new CustomEvent("intastellar:vendor-pass-through-urls", { detail: detail }));
+    } catch (e3) { }
+}
+
+/**
+ * True when `url` is a full-string match in `__intaGvlPassThroughUrls`, or its hostname is in `__intaGvlPassThroughHosts`
+ * (populated after GVL vendors load). Use inside a blocking fetch/XHR shim to pass these requests through unchanged.
+ */
+function intaIsGvlVendorPassThroughUrl(url) {
+    if (!url || typeof url !== "string") {
+        return false;
+    }
+    var u = url.trim();
+    var list = window.__intaGvlPassThroughUrls;
+    if (Array.isArray(list) && list.indexOf(u) !== -1) {
+        return true;
+    }
+    try {
+        var h = new URL(u).hostname;
+        var hosts = window.__intaGvlPassThroughHosts;
+        if (Array.isArray(hosts) && hosts.indexOf(h) !== -1) {
+            return true;
+        }
+    } catch (e0) { }
+    return false;
+}
+
+window.intaIsGvlVendorPassThroughUrl = intaIsGvlVendorPassThroughUrl;
+
+function intaEscapeHtmlAttr(str) {
+    return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/'/g, "&#39;");
+}
+
+/**
+ * HTML for GVL `deviceStorageDisclosureUrl` (machine-readable disclosure JSON).
+ * Override labels via textOverrides: deviceStorageDisclosureLink, deviceStorageDetailsShow, deviceStorageDetailsHide.
+ */
+function intaDeviceStorageDisclosureBlock(vendor) {
+    var url = vendor && vendor.deviceStorageDisclosureUrl;
+    if (!url || typeof url !== "string" || !/^https?:\/\//i.test(url.trim())) {
+        return "";
+    }
+    url = url.trim();
+    var enc = encodeURIComponent(url);
+    var linkText = intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageDisclosureLink", "Device storage disclosure"));
+    var btnShow = intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageDetailsShow", "Show storage details"));
+    var btnHide = intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageDetailsHide", "Hide storage details"));
+    return '<div class="inta-gvl-device-storage" style="margin-top:6px;">'
+        + '<a class="intSettingsTitleLink" style="display:block;padding:0;text-align:left;" href="' + intaEscapeHtmlAttr(url) + '" target="_blank" rel="noopener noreferrer">' + linkText + '</a>'
+        + '<button type="button" class="inta-device-storage-toggle" style="margin-top:4px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;font:inherit;color:inherit;" data-device-storage-url="' + enc + '" data-inta-ds-show="' + btnShow + '" data-inta-ds-hide="' + btnHide + '" aria-expanded="false">' + btnShow + '</button>'
+        + '<pre class="inta-device-storage-details" style="display:none;margin:6px 0 0;padding:8px;background:#f5f5f5;border-radius:4px;font-size:11px;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:auto;"></pre>'
+        + "</div>";
+}
+
+function intaDeviceStorageToggleClick(ev) {
+    var btn = ev.target && ev.target.closest && ev.target.closest(".inta-device-storage-toggle");
+    if (!btn) {
+        return;
+    }
+    ev.preventDefault();
+    var wrap = btn.closest(".inta-gvl-device-storage");
+    var pre = wrap && wrap.querySelector(".inta-device-storage-details");
+    var enc = btn.getAttribute("data-device-storage-url");
+    if (!pre || !enc) {
+        return;
+    }
+    var url = decodeURIComponent(enc);
+    var showL = btn.getAttribute("data-inta-ds-show") || "Show storage details";
+    var hideL = btn.getAttribute("data-inta-ds-hide") || "Hide storage details";
+    var open = pre.style.display !== "none" && pre.style.display !== "";
+    if (open) {
+        pre.style.display = "none";
+        btn.textContent = showL;
+        btn.setAttribute("aria-expanded", "false");
+        return;
+    }
+    function fillPre(json) {
+        try {
+            pre.textContent = JSON.stringify(json, null, 2);
+        } catch (e) {
+            pre.textContent = String(json);
+        }
+    }
+    if (window.__intaDeviceStorageJsonCache[url]) {
+        fillPre(window.__intaDeviceStorageJsonCache[url]);
+        pre.style.display = "block";
+        btn.textContent = hideL;
+        btn.setAttribute("aria-expanded", "true");
+        return;
+    }
+    btn.disabled = true;
+    intaFetchDeviceStorageDisclosureJson(url)
+        .then(function (json) {
+            window.__intaDeviceStorageJsonCache[url] = json;
+            fillPre(json);
+            pre.style.display = "block";
+            btn.textContent = hideL;
+            btn.setAttribute("aria-expanded", "true");
+        })
+        .catch(function () {
+            pre.textContent = intaGetTextOverride("deviceStorageDetailsLoadError", "Could not load disclosure JSON. Open the link above.");
+            pre.style.display = "block";
+            btn.textContent = hideL;
+            btn.setAttribute("aria-expanded", "true");
+        })
+        .finally(function () {
+            btn.disabled = false;
+        });
+}
 /* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
 const banner = document.createElement("inta-consents-settings-btn");
 const bannerContent = document.createElement("button");
@@ -686,14 +924,30 @@ function getTcStringFromCookie() {
     return null;
 }
 
+    if (!vendorListContainer._intaDeviceStorageListener) {
+        vendorListContainer._intaDeviceStorageListener = true;
+        vendorListContainer.addEventListener("click", intaDeviceStorageToggleClick);
+    }
+
     getVendorsForUI().then(vendors => {
+        intaCollectVendorPassThroughUrls(vendors);
         vendors.forEach(vendor => {
             const vendorDiv = document.createElement('div');
             vendorDiv.classList.add('vendor-item');
             const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
             vendorDiv.innerHTML = `
-                <label class="checkMarkContainer">
-                    <span class="intSettingsTitle">${vendor.name}</span>
+                <label class="checkMarkContainer" style="height: auto; border-top: 1px solid #e0e0e0; align-items: flex-start;">
+                    <span class="intSettingsTitle">
+                        ${vendor.name}</br>
+                        ${(vendor.urls || []).map(url => {
+                            if(url.langId == intastellarCookieLanguage) {
+                                return `<a class="intSettingsTitleLink" style="display: block; padding: 0; text-align: left;" href="${url.privacy}" target="_blank">${url.privacy}</a>`;
+                            } else {
+                                return `<a class="intSettingsTitleLink" style="display: block; padding: 0; text-align: left;" href="${url.privacy}" target="_blank">${url.privacy}</a>`;
+                            }
+                        }).join('<br />')}
+                        ${intaDeviceStorageDisclosureBlock(vendor)}
+                    </span>
                     <span class="intCheckmarkSliderContainer">
                         <input onchange="updateSaveButtonText()" id="vendor${vendor.id}" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
                         <span class="checkmark round"></span>
@@ -769,6 +1023,9 @@ function getTcStringFromCookie() {
     });
 }).catch(function (err) {
     console.error('[VendorList] getVendorsForUI failed:', err);
+    try {
+        intaCollectVendorPassThroughUrls([]);
+    } catch (eClear) { }
 });
 
 function openVendorList() {

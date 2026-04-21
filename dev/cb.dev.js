@@ -236,6 +236,156 @@ function intaVendorListButtonLabel() {
 /** Cache for IAB device storage disclosure JSON (`deviceStorageDisclosureUrl`). */
 window.__intaDeviceStorageJsonCache = window.__intaDeviceStorageJsonCache || {};
 
+/**
+ * GET JSON via XMLHttpRequest (often not wrapped when only `fetch` is intercepted).
+ */
+function intaFetchJsonViaXhr(url) {
+    return new Promise(function (resolve, reject) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.timeout = 25000;
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    resolve(JSON.parse(xhr.responseText));
+                } catch (e) {
+                    reject(e);
+                }
+            } else {
+                reject(new Error(String(xhr.status)));
+            }
+        };
+        xhr.onerror = function () {
+            reject(new Error("network"));
+        };
+        xhr.ontimeout = function () {
+            reject(new Error("timeout"));
+        };
+        try {
+            xhr.send(null);
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+/**
+ * Load device-storage disclosure JSON without depending on a patched `fetch`.
+ * 1) `INTA.settings.fetchDisclosure(url)` if set
+ * 2) `window.__intaNativeFetch` (save `fetch` here before interceptors)
+ * 3) XMLHttpRequest, then `fetch` as last resort
+ */
+function intaFetchDeviceStorageDisclosureJson(url) {
+    let settings = window.INTA && window.INTA.settings;
+    if (settings && typeof settings.fetchDisclosure === "function") {
+        return Promise.resolve(settings.fetchDisclosure(url)).then(function (r) {
+            if (r && typeof r.json === "function") {
+                return r.json();
+            }
+            return r;
+        });
+    }
+    if (typeof window.__intaNativeFetch === "function") {
+        return window.__intaNativeFetch(url, { credentials: "omit", cache: "force-cache" }).then(function (resp) {
+            if (!resp || !resp.ok) {
+                throw new Error(resp ? String(resp.status) : "no response");
+            }
+            return resp.json();
+        });
+    }
+    return intaFetchJsonViaXhr(url).catch(function () {
+        if (typeof fetch !== "function") {
+            throw new Error("no fetch");
+        }
+        return fetch(url, { credentials: "omit", cache: "force-cache" }).then(function (r) {
+            if (!r.ok) {
+                throw new Error(String(r.status));
+            }
+            return r.json();
+        });
+    });
+}
+
+/**
+ * Collect vendor URLs your fetch/XHR interceptor may need to allow (GVL deviceStorage + policy links).
+ * Sets `window.__intaGvlPassThroughUrls` / `window.__intaGvlPassThroughHosts`, fires `intastellar:vendor-pass-through-urls`,
+ * and calls `INTA.settings.onVendorPassThroughUrlsReady(detail)` when defined.
+ *
+ * Interceptors: save the real fetch first (`window.__intaNativeFetch = fetch.bind(window)`), then patch `fetch`.
+ * In your wrapper, if `window.intaIsGvlVendorPassThroughUrl(requestUrl)` is true, delegate to `__intaNativeFetch`
+ * (and allow the same URL in XHR if you wrap `XMLHttpRequest.open`).
+ */
+function intaCollectVendorPassThroughUrls(vendors) {
+    let urlMap = {};
+    let hostMap = {};
+    function addUrl(u) {
+        if (!u || typeof u !== "string") {
+            return;
+        }
+        let t = u.trim();
+        if (!/^https?:\/\//i.test(t)) {
+            return;
+        }
+        urlMap[t] = true;
+        try {
+            let h = new URL(t).hostname;
+            if (h) {
+                hostMap[h] = true;
+            }
+        } catch (e1) { }
+    }
+    (vendors || []).forEach(function (v) {
+        if (!v) {
+            return;
+        }
+        addUrl(v.deviceStorageDisclosureUrl);
+        (v.urls || []).forEach(function (row) {
+            if (row && row.privacy) {
+                addUrl(row.privacy);
+            }
+        });
+    });
+    let urls = Object.keys(urlMap);
+    let hosts = Object.keys(hostMap);
+    window.__intaGvlPassThroughUrls = urls;
+    window.__intaGvlPassThroughHosts = hosts;
+    let detail = { urls: urls, hosts: hosts, vendors: vendors || [] };
+    let settings = window.INTA && window.INTA.settings;
+    if (settings && typeof settings.onVendorPassThroughUrlsReady === "function") {
+        try {
+            settings.onVendorPassThroughUrlsReady(detail);
+        } catch (e2) { }
+    }
+    try {
+        window.dispatchEvent(new CustomEvent("intastellar:vendor-pass-through-urls", { detail: detail }));
+    } catch (e3) { }
+}
+
+/**
+ * True when `url` is a full-string match in `__intaGvlPassThroughUrls`, or its hostname is in `__intaGvlPassThroughHosts`
+ * (populated after GVL vendors load). Use inside a blocking fetch/XHR shim to pass these requests through unchanged.
+ */
+function intaIsGvlVendorPassThroughUrl(url) {
+    if (!url || typeof url !== "string") {
+        return false;
+    }
+    let u = url.trim();
+    let list = window.__intaGvlPassThroughUrls;
+    if (Array.isArray(list) && list.indexOf(u) !== -1) {
+        return true;
+    }
+    try {
+        let h = new URL(u).hostname;
+        let hosts = window.__intaGvlPassThroughHosts;
+        if (Array.isArray(hosts) && hosts.indexOf(h) !== -1) {
+            return true;
+        }
+    } catch (e0) { }
+    return false;
+}
+
+window.intaIsGvlVendorPassThroughUrl = intaIsGvlVendorPassThroughUrl;
+
 function intaEscapeHtmlAttr(str) {
     return String(str == null ? "" : str)
         .replace(/&/g, "&amp;")
@@ -302,13 +452,7 @@ function intaDeviceStorageToggleClick(ev) {
         return;
     }
     btn.disabled = true;
-    fetch(url, { credentials: "omit", cache: "force-cache" })
-        .then(function (r) {
-            if (!r.ok) {
-                throw new Error(String(r.status));
-            }
-            return r.json();
-        })
+    intaFetchDeviceStorageDisclosureJson(url)
         .then(function (json) {
             window.__intaDeviceStorageJsonCache[url] = json;
             fillPre(json);
@@ -1331,6 +1475,7 @@ function getTcStringFromCookie() {
     }
 
     getVendorsForUI().then(vendors => {
+        intaCollectVendorPassThroughUrls(vendors);
         vendors.forEach(vendor => {
             const vendorDiv = document.createElement('div');
             vendorDiv.classList.add('vendor-item');
@@ -1423,6 +1568,9 @@ function getTcStringFromCookie() {
     });
 }).catch(function (err) {
     console.error('[VendorList] getVendorsForUI failed:', err);
+    try {
+        intaCollectVendorPassThroughUrls([]);
+    } catch (eClear) { }
 });
 
 function openVendorList() {
