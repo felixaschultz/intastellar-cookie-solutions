@@ -233,6 +233,100 @@ function intaVendorListButtonLabel() {
     return intaGetTextOverride("vendorListButton", def);
 }
 
+/** Cache for IAB device storage disclosure JSON (`deviceStorageDisclosureUrl`). */
+window.__intaDeviceStorageJsonCache = window.__intaDeviceStorageJsonCache || {};
+
+function intaEscapeHtmlAttr(str) {
+    return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/'/g, "&#39;");
+}
+
+/**
+ * HTML for GVL `deviceStorageDisclosureUrl` (machine-readable disclosure JSON).
+ * Override labels via textOverrides: deviceStorageDisclosureLink, deviceStorageDetailsShow, deviceStorageDetailsHide.
+ */
+function intaDeviceStorageDisclosureBlock(vendor) {
+    let url = vendor && vendor.deviceStorageDisclosureUrl;
+    if (!url || typeof url !== "string" || !/^https?:\/\//i.test(url.trim())) {
+        return "";
+    }
+    url = url.trim();
+    let enc = encodeURIComponent(url);
+    let linkText = intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageDisclosureLink", "Device storage disclosure"));
+    let btnShow = intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageDetailsShow", "Show storage details"));
+    let btnHide = intaEscapeHtmlAttr(intaGetTextOverride("deviceStorageDetailsHide", "Hide storage details"));
+    return '<div class="inta-gvl-device-storage" style="margin-top:6px;">'
+        + '<a class="intSettingsTitleLink" style="display:block;padding:0;text-align:left;" href="' + intaEscapeHtmlAttr(url) + '" target="_blank" rel="noopener noreferrer">' + linkText + '</a>'
+        + '<button type="button" class="inta-device-storage-toggle" style="margin-top:4px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;font:inherit;color:inherit;" data-device-storage-url="' + enc + '" data-inta-ds-show="' + btnShow + '" data-inta-ds-hide="' + btnHide + '" aria-expanded="false">' + btnShow + '</button>'
+        + '<pre class="inta-device-storage-details" style="display:none;margin:6px 0 0;padding:8px;background:#f5f5f5;border-radius:4px;font-size:11px;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:auto;"></pre>'
+        + "</div>";
+}
+
+function intaDeviceStorageToggleClick(ev) {
+    let btn = ev.target && ev.target.closest && ev.target.closest(".inta-device-storage-toggle");
+    if (!btn) {
+        return;
+    }
+    ev.preventDefault();
+    let wrap = btn.closest(".inta-gvl-device-storage");
+    let pre = wrap && wrap.querySelector(".inta-device-storage-details");
+    let enc = btn.getAttribute("data-device-storage-url");
+    if (!pre || !enc) {
+        return;
+    }
+    let url = decodeURIComponent(enc);
+    let showL = btn.getAttribute("data-inta-ds-show") || "Show storage details";
+    let hideL = btn.getAttribute("data-inta-ds-hide") || "Hide storage details";
+    let open = pre.style.display !== "none" && pre.style.display !== "";
+    if (open) {
+        pre.style.display = "none";
+        btn.textContent = showL;
+        btn.setAttribute("aria-expanded", "false");
+        return;
+    }
+    function fillPre(json) {
+        try {
+            pre.textContent = JSON.stringify(json, null, 2);
+        } catch (e) {
+            pre.textContent = String(json);
+        }
+    }
+    if (window.__intaDeviceStorageJsonCache[url]) {
+        fillPre(window.__intaDeviceStorageJsonCache[url]);
+        pre.style.display = "block";
+        btn.textContent = hideL;
+        btn.setAttribute("aria-expanded", "true");
+        return;
+    }
+    btn.disabled = true;
+    fetch(url, { credentials: "omit", cache: "force-cache" })
+        .then(function (r) {
+            if (!r.ok) {
+                throw new Error(String(r.status));
+            }
+            return r.json();
+        })
+        .then(function (json) {
+            window.__intaDeviceStorageJsonCache[url] = json;
+            fillPre(json);
+            pre.style.display = "block";
+            btn.textContent = hideL;
+            btn.setAttribute("aria-expanded", "true");
+        })
+        .catch(function () {
+            pre.textContent = intaGetTextOverride("deviceStorageDetailsLoadError", "Could not load disclosure JSON. Open the link above.");
+            pre.style.display = "block";
+            btn.textContent = hideL;
+            btn.setAttribute("aria-expanded", "true");
+        })
+        .finally(function () {
+            btn.disabled = false;
+        });
+}
+
 /** Merge server / experiment text override keys into `window.INTA.settings.textOverrides`. */
 function intaMergeTextOverridesIntoSettings(incomingTO) {
     if (!incomingTO || typeof incomingTO !== "object" || incomingTO === null || Array.isArray(incomingTO)) {
@@ -1231,16 +1325,28 @@ function getTcStringFromCookie() {
     return null;
 }
 
+    if (!vendorListContainer._intaDeviceStorageListener) {
+        vendorListContainer._intaDeviceStorageListener = true;
+        vendorListContainer.addEventListener("click", intaDeviceStorageToggleClick);
+    }
+
     getVendorsForUI().then(vendors => {
         vendors.forEach(vendor => {
             const vendorDiv = document.createElement('div');
             vendorDiv.classList.add('vendor-item');
             const hasLegit = Array.isArray(vendor.legitimateInterestPurposes) && vendor.legitimateInterestPurposes.length > 0;
             vendorDiv.innerHTML = `
-                <label class="checkMarkContainer">
+                <label class="checkMarkContainer" style="height: auto; border-top: 1px solid #e0e0e0; align-items: flex-start;">
                     <span class="intSettingsTitle">
                         ${vendor.name}</br>
-                        ${vendor.urls.map(url => `<a class="intSettingsTitleLink" style="display: inline-block; padding: 0;" href="${url.privacy}" target="_blank">${url.privacy}</a>`).join('<br>')}
+                        ${(vendor.urls || []).map(url => {
+                            if(url.langId == intastellarCookieLanguage) {
+                                return `<a class="intSettingsTitleLink" style="display: block; padding: 0; text-align: left;" href="${url.privacy}" target="_blank">${url.privacy}</a>`;
+                            } else {
+                                return `<a class="intSettingsTitleLink" style="display: block; padding: 0; text-align: left;" href="${url.privacy}" target="_blank">${url.privacy}</a>`;
+                            }
+                        }).join('<br />')}
+                        ${intaDeviceStorageDisclosureBlock(vendor)}
                     </span>
                     <span class="intCheckmarkSliderContainer">
                         <input onchange="updateSaveButtonText()" id="vendor${vendor.id}" value="${vendor.id}" class="intCookieSetting__checkbox" type="checkbox">
