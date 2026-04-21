@@ -498,7 +498,7 @@ function intaDeviceStorageDisclosureBlock(vendor) {
     return '<div class="inta-gvl-device-storage" style="margin-top:6px;">'
         + '<a class="intSettingsTitleLink" style="display:block;padding:0;text-align:left;" href="' + intaEscapeHtmlAttr(url) + '" target="_blank" rel="noopener noreferrer">' + linkText + '</a>'
         + '<button type="button" class="inta-device-storage-toggle" style="margin-top:4px;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;font:inherit;color:inherit;" data-device-storage-url="' + enc + '" data-inta-ds-show="' + btnShow + '" data-inta-ds-hide="' + btnHide + '" aria-expanded="false">' + btnShow + '</button>'
-        + '<div class="inta-device-storage-details" style="display:none;margin:6px 0 0;padding:8px;background:#f5f5f5;border-radius:4px;font-size:11px;word-break:break-word;max-height:240px;overflow:auto;line-height:1.35;"></div>'
+        + '<div class="inta-device-storage-details" style="display:none;margin:6px 0 0;padding:8px;background:#f5f5f5;border-radius:4px;font-size:14px;word-break:break-word;max-height:340px;width:100%;overflow:auto;line-height:1.35;"></div>'
         + "</div>";
 }
 
