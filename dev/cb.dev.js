@@ -1641,6 +1641,7 @@ function getTcStringFromCookie() {
                 staticsticCookies: document.querySelector('#statics')?.checked ? 'checked' : false,
                 functionalCookies: document.querySelector('#functional')?.checked ? 'checked' : false,
                 advertisementCookies: document.querySelector('#marketing')?.checked ? 'checked' : false,
+                
             };
             intaConsentsObjectVariable.time = new Date().getTime();
             window.intaCookieConsents = intaConsentsObjectVariable.consents;

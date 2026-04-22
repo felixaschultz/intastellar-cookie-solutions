@@ -794,6 +794,13 @@ function gtag() {
 fetch('https://ipapi.co/json/')
     .then(response => response.json())
     .then(data => {
+        try {
+            window._intaGeo = {
+                country: data && data.country,
+                region_code: data && data.region_code,
+            };
+        } catch (e) { /* ignore */ }
+
         // For California only:
         if (data.country === "US" && data.region_code === "CA") {
             window.INTA = window.INTA || {};
@@ -825,6 +832,9 @@ fetch('https://ipapi.co/json/')
             if (window.INTA?.settings?.popin) window.INTA.settings.popin.on = false;
         }
         // Now continue with your banner initialization
+    })
+    .catch(function () {
+        /* Geo optional; consent still works without window._intaGeo */
     });
 
 if (window._intaConsentInitialized) {
@@ -1547,7 +1557,64 @@ function randomIntFromInterval(min, max) { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+/**
+ * CCPA / CPRA: persist `salesOfDataAllowed` only for visitors in California (no extra banner checkbox).
+ * Region: `window._intaGeo` from ipapi (see fetch above), or override `INTA.settings.ccpa.inUsCalifornia` (boolean),
+ * or both `INTA.settings.ccpa.country === "US"` and `INTA.settings.ccpa.regionCode === "CA"` (e.g. server-injected).
+ * Value: false if `localStorage.ccpa_opt_out` ("Do not sell" flow); else mirrors marketing consent (`advertisementCookies === "checked"`).
+ * When region is still unknown, the field is left unchanged (not added, not removed) until geo or override is available.
+ */
+function intaCaliforniaRegionState() {
+    try {
+        var ccpa = window.INTA && window.INTA.settings && window.INTA.settings.ccpa;
+        if (ccpa && typeof ccpa.inUsCalifornia === "boolean") {
+            return ccpa.inUsCalifornia ? "yes" : "no";
+        }
+        if (ccpa && ccpa.country && ccpa.regionCode) {
+            return (ccpa.country === "US" && ccpa.regionCode === "CA") ? "yes" : "no";
+        }
+        var g = window._intaGeo;
+        if (g && g.country && g.region_code) {
+            return (g.country === "US" && g.region_code === "CA") ? "yes" : "no";
+        }
+    } catch (e) { /* ignore */ }
+    return "unknown";
+}
+
+function intaMarketingConsentImpliesSaleAllowed(consents) {
+    if (!consents || typeof consents !== "object") return false;
+    return consents.advertisementCookies === "checked" || consents.advertisementCookies === true;
+}
+
+function intaSyncSalesOfDataAllowedOnConsents(consents) {
+    if (!consents || typeof consents !== "object") return;
+    var region = intaCaliforniaRegionState();
+    if (region === "no") {
+        delete consents.salesOfDataAllowed;
+        return;
+    }
+    if (region === "unknown") {
+        return;
+    }
+    try {
+        if (typeof localStorage !== "undefined" && localStorage.getItem("ccpa_opt_out") === "true") {
+            consents.salesOfDataAllowed = false;
+            return;
+        }
+    } catch (e) { /* ignore */ }
+    consents.salesOfDataAllowed = intaMarketingConsentImpliesSaleAllowed(consents);
+}
+
 function encodeIntaConsentsObject(string, base) {
+    try {
+        var parsed = JSON.parse(string);
+        if (parsed && typeof parsed === "object" && parsed.consents && typeof parsed.consents === "object") {
+            intaSyncSalesOfDataAllowedOnConsents(parsed.consents);
+            string = JSON.stringify(parsed);
+        }
+    } catch (e) {
+        /* not a full consent JSON payload — encode as-is */
+    }
     var number = "0";
     var length = string.length;
     for (var i = 0; i < length; i++)
