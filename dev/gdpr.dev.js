@@ -389,7 +389,31 @@ function updateVwoConsent(consents) {
 // --- End VWO Cookie Consent Integration ---
 
 /**
- * WordPress Consent API: when gtag pushes consent updates, mirror the same payload into wp_set_consent (if present).
+ * WP Consent API: notify scripts that listen on document (e.detail = { category: 'allow'|'deny', ... }).
+ * @see https://wordpress.org/plugins/wp-consent-api/
+ */
+function intaWpDispatchListenForConsentChange(detail) {
+    if (!detail || typeof detail !== "object") {
+        return;
+    }
+    var keys = Object.keys(detail);
+    if (keys.length === 0) {
+        return;
+    }
+    try {
+        if (typeof document !== "undefined" && document.dispatchEvent) {
+            document.dispatchEvent(new CustomEvent("wp_listen_for_consent_change", {
+                bubbles: true,
+                cancelable: true,
+                detail: detail,
+            }));
+        }
+    } catch (e) { /* ignore */ }
+}
+
+/**
+ * WordPress Consent API: when gtag pushes consent updates, mirror the same payload into wp_set_consent (if present),
+ * then dispatch wp_listen_for_consent_change so other plugins react.
  * @see https://wordpress.org/plugins/wp-consent-api/
  */
 function intaWpSetConsentFromGtagUpdateParams(params) {
@@ -400,6 +424,7 @@ function intaWpSetConsentFromGtagUpdateParams(params) {
         window.wp_consent_type = "optin";
     } catch (e) { /* ignore */ }
     var p = params && typeof params === "object" ? params : {};
+    var detail = {};
     function lvl(key) {
         return p[key] === "granted" ? "allow" : "deny";
     }
@@ -407,18 +432,24 @@ function intaWpSetConsentFromGtagUpdateParams(params) {
         var fn = lvl("functionality_storage");
         wp_set_consent("functional", fn);
         wp_set_consent("preferences", fn);
+        detail.functional = fn;
+        detail.preferences = fn;
     }
     if ("analytics_storage" in p) {
         var st = lvl("analytics_storage");
         wp_set_consent("statistics", st);
         wp_set_consent("statistics-anonymous", st);
+        detail.statistics = st;
+        detail["statistics-anonymous"] = st;
     }
     if ("ad_storage" in p || "ad_user_data" in p || "ad_personalization" in p || "personalization_storage" in p) {
         var mk = (p.ad_storage === "granted" || p.ad_user_data === "granted" || p.ad_personalization === "granted" || p.personalization_storage === "granted")
             ? "allow"
             : "deny";
         wp_set_consent("marketing", mk);
+        detail.marketing = mk;
     }
+    intaWpDispatchListenForConsentChange(detail);
 }
 
 /**
