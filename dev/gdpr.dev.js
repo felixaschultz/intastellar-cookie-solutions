@@ -523,23 +523,79 @@ function intaWpTryConsentUpdateFromDataLayerPushArgs(pushArgs) {
 }
 
 /**
- * GTM and other tools often push consent updates straight to `dataLayer` without calling `window.gtag`.
- * Wrap `push` so WP Consent API stays in sync whenever `wp_set_consent` is available.
+ * Keep our wrapper as the outermost `dataLayer.push`: GTM often replaces `push` after this script runs.
+ * Mirroring runs inside the wrapper; `intaWpTryConsentUpdateFromDataLayerPushArgs` no-ops until `wp_set_consent` exists.
  */
-function intaWpInstallDataLayerConsentMirror() {
+function intaWpEnsureDataLayerPushMirrorBound() {
     const dl = window.dataLayer;
-    if (!dl || typeof dl.push !== "function" || dl._intaWpConsentMirrorInstalled) {
+    if (!dl || typeof dl.push !== "function") {
         return;
     }
-    dl._intaWpConsentMirrorInstalled = true;
-    const origPush = dl.push;
-    dl.push = function () {
-        const ret = origPush.apply(dl, arguments);
+    const wrapped = dl._intaWpMirrorWrappedPush;
+    if (wrapped && dl.push === wrapped) {
+        return;
+    }
+    const upstream = dl.push;
+    function intaWpMirrorWrappedPush() {
+        const ret = intaWpMirrorWrappedPush._upstream.apply(dl, arguments);
         try {
             intaWpTryConsentUpdateFromDataLayerPushArgs(Array.prototype.slice.call(arguments));
         } catch (e) { /* ignore */ }
         return ret;
-    };
+    }
+    intaWpMirrorWrappedPush._upstream = upstream;
+    dl._intaWpMirrorWrappedPush = intaWpMirrorWrappedPush;
+    dl.push = intaWpMirrorWrappedPush;
+}
+
+function intaWpInstallDataLayerConsentMirror() {
+    const dl = window.dataLayer;
+    if (!dl || typeof dl.push !== "function") {
+        return;
+    }
+    if (!dl._intaWpMirrorSchedule) {
+        dl._intaWpMirrorSchedule = true;
+        const rebind = function () {
+            intaWpEnsureDataLayerPushMirrorBound();
+        };
+        if (typeof window !== "undefined" && window.addEventListener) {
+            window.addEventListener("load", rebind);
+        }
+        let n = 0;
+        const id = setInterval(function () {
+            rebind();
+            if (++n >= 50) {
+                clearInterval(id);
+            }
+        }, 100);
+    }
+    intaWpEnsureDataLayerPushMirrorBound();
+}
+
+/**
+ * Apply WP Consent API cookies from Intastellar checkbox choices (works even when GTM owns `dataLayer.push` / `gtag`).
+ * functional → `functional` + `preferences`; statistics → `statistics` + `statistics-anonymous`; marketing → `marketing`.
+ */
+function intaWpApplyConsentFromIntastellarChoices(functionalChecked, statisticsChecked, marketingChecked) {
+    if (!intaWpConsentApiActive()) {
+        return;
+    }
+    intaWpEnsureConsentTypeOptinAnnouncedOnce();
+    const prefs = functionalChecked ? "allow" : "deny";
+    const stats = statisticsChecked ? "allow" : "deny";
+    const mkt = marketingChecked ? "allow" : "deny";
+    const detail = {};
+    wp_set_consent("functional", prefs);
+    wp_set_consent("preferences", prefs);
+    detail.functional = prefs;
+    detail.preferences = prefs;
+    wp_set_consent("statistics", stats);
+    wp_set_consent("statistics-anonymous", stats);
+    detail.statistics = stats;
+    detail["statistics-anonymous"] = stats;
+    wp_set_consent("marketing", mkt);
+    detail.marketing = mkt;
+    intaWpDispatchListenForConsentChange(detail);
 }
 
 /**

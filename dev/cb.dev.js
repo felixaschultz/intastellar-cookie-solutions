@@ -4631,18 +4631,11 @@ function IntaSaveSettings() {
             'functionality_storage': 'granted',
         })
         accepted.push("functionalCookies");
-        
-        if(typeof wp_set_consent === 'function') {
-            wp_set_consent('preferences', 'allow')
-        }
 
     } else if (!FunctionalCheckbox?.checked) {
         gtag('consent', 'update', {
             'functionality_storage': 'denied',
         });
-        if(typeof wp_set_consent === 'function') {
-            wp_set_consent('preferences', 'deny')
-        }
 
         const index = accepted.indexOf("functionalCookies");
         if (index > -1) { // only splice array when item is found
@@ -4656,9 +4649,6 @@ function IntaSaveSettings() {
             'ad_storage': 'granted',
             'ad_user_data': 'granted',
         })
-        if(typeof wp_set_consent === 'function') {
-            wp_set_consent('statistics', 'allow')
-        }
         window.clarity && window.clarity('consentv2', {
             ad_Storage: "denied",
             analytics_Storage: "granted"
@@ -4669,9 +4659,6 @@ function IntaSaveSettings() {
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
         })
-        if(typeof wp_set_consent === 'function') {
-            wp_set_consent('statistics', 'deny')
-        }
 
         _paq.push(['forgetConsentGiven']);
 
@@ -4702,9 +4689,6 @@ function IntaSaveSettings() {
             analytics_Storage: "denied"
         });
         accepted.push("advertisementCookies");
-        if(typeof wp_set_consent === 'function') {
-            wp_set_consent('marketing', 'allow')
-        }
         // Pintrk
         if (typeof pintrk === 'function') {
             try {
@@ -4725,9 +4709,6 @@ function IntaSaveSettings() {
             'ad_personalization': 'denied',
         });
 
-        if(typeof wp_set_consent === 'function') {
-            wp_set_consent('marketing', 'deny')
-        }
         updateVwoConsent(intaConsentsObjectVariable.consents);
         // Pintrk
         if (typeof pintrk === 'function') {
@@ -4742,6 +4723,13 @@ function IntaSaveSettings() {
         if (index > -1) { // only splice array when item is found
             accepted.splice(index, 1); // 2nd parameter means remove one item only
         }
+    }
+    if (typeof intaWpApplyConsentFromIntastellarChoices === "function") {
+        intaWpApplyConsentFromIntastellarChoices(
+            !!FunctionalCheckbox?.checked,
+            !!StaticsCheckBox?.checked,
+            !!MarketingCheckBox?.checked,
+        );
     }
     saveINTCookieSettings("changePermission", accepted);
     // Dispatch TCF event after user action
@@ -4795,6 +4783,9 @@ function IntaAcceptAll() {
         'ad_personalization': 'granted',
         'url_passthrough': true,
     });
+    if (typeof intaWpApplyConsentFromIntastellarChoices === "function") {
+        intaWpApplyConsentFromIntastellarChoices(true, true, true);
+    }
     window.uetq.push('consent', 'update', {
         'ad_storage': 'granted'
     });
@@ -4876,6 +4867,9 @@ function IntaSaveNeccessary() {
         'ad_personalization': 'denied',
         'url_passthrough': true,
     });
+    if (typeof intaWpApplyConsentFromIntastellarChoices === "function") {
+        intaWpApplyConsentFromIntastellarChoices(false, false, false);
+    }
     window.uetq.push('consent', 'update', {
         'ad_storage': 'denied'
     });
