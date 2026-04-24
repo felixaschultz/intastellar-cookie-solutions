@@ -396,7 +396,7 @@ function intaWpDispatchListenForConsentChange(detail) {
     if (!detail || typeof detail !== "object") {
         return;
     }
-    var keys = Object.keys(detail);
+    const keys = Object.keys(detail);
     if (keys.length === 0) {
         return;
     }
@@ -423,27 +423,27 @@ function intaWpSetConsentFromGtagUpdateParams(params) {
     try {
         window.wp_consent_type = "optin";
     } catch (e) { /* ignore */ }
-    var p = params && typeof params === "object" ? params : {};
-    var detail = {};
+    const p = params && typeof params === "object" ? params : {};
+    const detail = {};
     function lvl(key) {
         return p[key] === "granted" ? "allow" : "deny";
     }
     if ("functionality_storage" in p) {
-        var fn = lvl("functionality_storage");
+        const fn = lvl("functionality_storage");
         wp_set_consent("functional", fn);
         wp_set_consent("preferences", fn);
         detail.functional = fn;
         detail.preferences = fn;
     }
     if ("analytics_storage" in p) {
-        var st = lvl("analytics_storage");
+        const st = lvl("analytics_storage");
         wp_set_consent("statistics", st);
         wp_set_consent("statistics-anonymous", st);
         detail.statistics = st;
         detail["statistics-anonymous"] = st;
     }
     if ("ad_storage" in p || "ad_user_data" in p || "ad_personalization" in p || "personalization_storage" in p) {
-        var mk = (p.ad_storage === "granted" || p.ad_user_data === "granted" || p.ad_personalization === "granted" || p.personalization_storage === "granted")
+        const mk = (p.ad_storage === "granted" || p.ad_user_data === "granted" || p.ad_personalization === "granted" || p.personalization_storage === "granted")
             ? "allow"
             : "deny";
         wp_set_consent("marketing", mk);
