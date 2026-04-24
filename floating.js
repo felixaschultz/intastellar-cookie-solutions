@@ -4570,6 +4570,15 @@ function learnMore(e) {
 
 /* - - - END - - - */
 function updateConsents(consent, type = null) {
+    try {
+        if (typeof intaSyncWpConsentApiFromIntastellarConsents === "function") {
+            var wpConsents = window.intaCookieConsents
+                || (typeof intaConsentsObjectVariable !== "undefined" && intaConsentsObjectVariable && intaConsentsObjectVariable.consents);
+            if (wpConsents) {
+                intaSyncWpConsentApiFromIntastellarConsents(wpConsents);
+            }
+        }
+    } catch (e) { /* ignore */ }
 
     window.allScripts.map((script) => {
         if (script.type == "marketing") {
@@ -4605,7 +4614,7 @@ function updateConsents(consent, type = null) {
          (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
      } */
 
-    if (type.length > 0) {
+    if (type != null && type.length > 0) {
         type.forEach((t) => {
 
             if (t == "staticsticCookies") {

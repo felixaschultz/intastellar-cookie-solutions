@@ -55,7 +55,10 @@ window.INTA = {
             "intastellarsolutions.com"
         ],
         ccpa: {
-            on: true
+            on: true,
+            // Optional (when ipapi/geo is unavailable): force CA for `salesOfDataAllowed` in consent cookie
+            // inUsCalifornia: true,
+            // Or server-injected: country: "US", regionCode: "CA"
         },
         lgpd: {
             on: true

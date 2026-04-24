@@ -324,6 +324,9 @@ window.addEventListener('message', (event) => {
         // Integrate with your banner logic
         window.intaCookieConsents = event.data.consents;
         intaShopifySetTrackingConsentFromConsentsObject(event.data.consents);
+        try {
+            intaSyncWpConsentApiFromIntastellarConsents(event.data.consents);
+        } catch (e) { /* ignore */ }
         // Optionally, update checkboxes or UI elements
         if (typeof updateConsentUI === 'function') {
             updateConsentUI(event.data.consents);
@@ -387,6 +390,42 @@ function updateVwoConsent(consents) {
     }
 }
 // --- End VWO Cookie Consent Integration ---
+
+/**
+ * WordPress Consent API (WP Consent API plugin): sync category consent client-side.
+ * Uses wp_set_consent( category, 'allow' | 'deny' ) when available, and sets window.wp_consent_type = 'optin'.
+ * @see https://wordpress.org/plugins/wp-consent-api/
+ */
+function intaWpConsentApiSetOptInType() {
+    try {
+        window.wp_consent_type = "optin";
+    } catch (e) { /* ignore */ }
+}
+
+function intaSyncWpConsentApiFromIntastellarConsents(consents) {
+    if (typeof wp_set_consent !== "function") {
+        return;
+    }
+    intaWpConsentApiSetOptInType();
+    function allowLevel(v) {
+        return v === "checked" || v === true ? "allow" : "deny";
+    }
+    if (!consents || typeof consents !== "object") {
+        wp_set_consent("functional", "deny");
+        wp_set_consent("preferences", "deny");
+        wp_set_consent("statistics", "deny");
+        wp_set_consent("statistics-anonymous", "deny");
+        wp_set_consent("marketing", "deny");
+        return;
+    }
+    let functional = allowLevel(consents.functionalCookies);
+    wp_set_consent("functional", functional);
+    wp_set_consent("preferences", functional);
+    let stats = allowLevel(consents.staticsticCookies);
+    wp_set_consent("statistics", stats);
+    wp_set_consent("statistics-anonymous", stats);
+    wp_set_consent("marketing", allowLevel(consents.advertisementCookies));
+}
 
 /**
  * Shopify Customer Privacy: map Intastellar consent values to booleans.
@@ -711,6 +750,9 @@ window.uetq = window.uetq || [];
 // On page load, update VWO consent if consent object exists
 if (intaCookieConsents) {
     updateVwoConsent(intaCookieConsents);
+    try {
+        intaSyncWpConsentApiFromIntastellarConsents(intaCookieConsents);
+    } catch (e) { /* ignore */ }
 }
 let intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 

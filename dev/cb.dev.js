@@ -1645,6 +1645,11 @@ function getTcStringFromCookie() {
             };
             intaConsentsObjectVariable.time = new Date().getTime();
             window.intaCookieConsents = intaConsentsObjectVariable.consents;
+            try {
+                if (typeof intaSyncWpConsentApiFromIntastellarConsents === "function") {
+                    intaSyncWpConsentApiFromIntastellarConsents(intaConsentsObjectVariable.consents);
+                }
+            } catch (e) { /* ignore */ }
             document.cookie = int_hideCookieBannerName + "=__inta1." + encodeIntaConsentsObject(JSON.stringify(intaConsentsObjectVariable), randomIntFromInterval(20, 34)) + "; expires=" + cookieLifeTime + "; path=/; " + intCookieDomain + "";
             window._latestTcString = tcString;
             dispatchTCFConsentChangedIfAvailable(true);
@@ -6682,6 +6687,15 @@ function learnMore(e) {
 
 /* - - - END - - - */
 function updateConsents(consent, type = null) {
+    try {
+        if (typeof intaSyncWpConsentApiFromIntastellarConsents === "function") {
+            var wpConsents = window.intaCookieConsents
+                || (typeof intaConsentsObjectVariable !== "undefined" && intaConsentsObjectVariable && intaConsentsObjectVariable.consents);
+            if (wpConsents) {
+                intaSyncWpConsentApiFromIntastellarConsents(wpConsents);
+            }
+        }
+    } catch (e) { /* ignore */ }
 
     window.allScripts.map((script) => {
         if (script.type == "marketing") {
