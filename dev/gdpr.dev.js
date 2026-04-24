@@ -409,29 +409,6 @@ function intaWpConsentStorageIsGranted(value) {
 }
 
 /**
- * WP Consent API: `document` event; `e.detail` is an object of changed categories (`allow` / `deny`).
- * @see https://wpconsentapi.org
- */
-function intaWpDispatchListenForConsentChange(detail) {
-    if (!intaWpConsentApiActive() || !detail || typeof detail !== "object") {
-        return;
-    }
-    const keys = Object.keys(detail);
-    if (keys.length === 0) {
-        return;
-    }
-    try {
-        if (typeof document !== "undefined" && document.dispatchEvent) {
-            document.dispatchEvent(new CustomEvent("wp_listen_for_consent_change", {
-                bubbles: true,
-                cancelable: true,
-                detail: detail,
-            }));
-        }
-    } catch (e) { /* ignore */ }
-}
-
-/**
  * CMP: `window.wp_consent_type = 'optin'` and `wp_consent_type_defined` on document (once per page when API is active).
  * @see https://wpconsentapi.org
  */
@@ -451,7 +428,9 @@ function intaWpEnsureConsentTypeOptinAnnouncedOnce() {
 }
 
 /**
- * When gtag pushes `consent` / `update`, mirror storage keys into `wp_set_consent` and fire `wp_listen_for_consent_change`.
+ * When gtag pushes `consent` / `update`, mirror storage keys into `wp_set_consent`.
+ * Does not dispatch a separate batched `wp_listen_for_consent_change` — each `wp_set_consent`
+ * already fires the WP Consent API listener; an extra batched event can make Site Kit run a second gtag pass.
  * No-op unless `wp_set_consent` exists.
  * @see https://wpconsentapi.org
  */
@@ -461,30 +440,23 @@ function intaWpSetConsentFromGtagUpdateParams(params) {
     }
     intaWpEnsureConsentTypeOptinAnnouncedOnce();
     const p = params && typeof params === "object" ? params : {};
-    const detail = {};
     const lvl = (key) => (intaWpConsentStorageIsGranted(p[key]) ? "allow" : "deny");
     if ("functionality_storage" in p) {
         const fn = lvl("functionality_storage");
         wp_set_consent("functional", fn);
         wp_set_consent("preferences", fn);
-        detail.functional = fn;
-        detail.preferences = fn;
     }
     if ("analytics_storage" in p) {
         const st = lvl("analytics_storage");
         wp_set_consent("statistics", st);
         wp_set_consent("statistics-anonymous", st);
-        detail.statistics = st;
-        detail["statistics-anonymous"] = st;
     }
     if ("ad_storage" in p || "ad_user_data" in p || "ad_personalization" in p || "personalization_storage" in p) {
         const mk = (intaWpConsentStorageIsGranted(p.ad_storage) || intaWpConsentStorageIsGranted(p.ad_user_data) || intaWpConsentStorageIsGranted(p.ad_personalization) || intaWpConsentStorageIsGranted(p.personalization_storage))
             ? "allow"
             : "deny";
         wp_set_consent("marketing", mk);
-        detail.marketing = mk;
     }
-    intaWpDispatchListenForConsentChange(detail);
 }
 
 /**
@@ -594,18 +566,13 @@ function intaWpApplyConsentFromIntastellarChoices(functionalChecked, statisticsC
     const prefs = functionalChecked ? "allow" : "deny";
     const stats = statisticsChecked ? "allow" : "deny";
     const mkt = marketingChecked ? "allow" : "deny";
-    const detail = {};
     wp_set_consent("functional", prefs);
     wp_set_consent("preferences", prefs);
-    detail.functional = prefs;
-    detail.preferences = prefs;
     wp_set_consent("statistics", stats);
     wp_set_consent("statistics-anonymous", stats);
-    detail.statistics = stats;
-    detail["statistics-anonymous"] = stats;
     wp_set_consent("marketing", mkt);
-    detail.marketing = mkt;
-    intaWpDispatchListenForConsentChange(detail);
+    /* Rely on native `wp_listen_for_consent_change` from each `wp_set_consent` only — a batched
+     * duplicate dispatch here previously caused Site Kit to fire gtag consent twice (deny overwrite). */
 }
 
 /**
