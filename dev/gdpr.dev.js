@@ -324,9 +324,6 @@ window.addEventListener('message', (event) => {
         // Integrate with your banner logic
         window.intaCookieConsents = event.data.consents;
         intaShopifySetTrackingConsentFromConsentsObject(event.data.consents);
-        try {
-            intaSyncWpConsentApiFromIntastellarConsents(event.data.consents);
-        } catch (e) { /* ignore */ }
         // Optionally, update checkboxes or UI elements
         if (typeof updateConsentUI === 'function') {
             updateConsentUI(event.data.consents);
@@ -392,39 +389,36 @@ function updateVwoConsent(consents) {
 // --- End VWO Cookie Consent Integration ---
 
 /**
- * WordPress Consent API (WP Consent API plugin): sync category consent client-side.
- * Uses wp_set_consent( category, 'allow' | 'deny' ) when available, and sets window.wp_consent_type = 'optin'.
+ * WordPress Consent API: when gtag pushes consent updates, mirror the same payload into wp_set_consent (if present).
  * @see https://wordpress.org/plugins/wp-consent-api/
  */
-function intaWpConsentApiSetOptInType() {
-    try {
-        window.wp_consent_type = "optin";
-    } catch (e) { /* ignore */ }
-}
-
-function intaSyncWpConsentApiFromIntastellarConsents(consents) {
+function intaWpSetConsentFromGtagUpdateParams(params) {
     if (typeof wp_set_consent !== "function") {
         return;
     }
-    intaWpConsentApiSetOptInType();
-    function allowLevel(v) {
-        return v === "checked" || v === true ? "allow" : "deny";
+    try {
+        window.wp_consent_type = "optin";
+    } catch (e) { /* ignore */ }
+    var p = params && typeof params === "object" ? params : {};
+    function lvl(key) {
+        return p[key] === "granted" ? "allow" : "deny";
     }
-    if (!consents || typeof consents !== "object") {
-        wp_set_consent("functional", "deny");
-        wp_set_consent("preferences", "deny");
-        wp_set_consent("statistics", "deny");
-        wp_set_consent("statistics-anonymous", "deny");
-        wp_set_consent("marketing", "deny");
-        return;
+    if ("functionality_storage" in p) {
+        var fn = lvl("functionality_storage");
+        wp_set_consent("functional", fn);
+        wp_set_consent("preferences", fn);
     }
-    let functional = allowLevel(consents.functionalCookies);
-    wp_set_consent("functional", functional);
-    wp_set_consent("preferences", functional);
-    let stats = allowLevel(consents.staticsticCookies);
-    wp_set_consent("statistics", stats);
-    wp_set_consent("statistics-anonymous", stats);
-    wp_set_consent("marketing", allowLevel(consents.advertisementCookies));
+    if ("analytics_storage" in p) {
+        var st = lvl("analytics_storage");
+        wp_set_consent("statistics", st);
+        wp_set_consent("statistics-anonymous", st);
+    }
+    if ("ad_storage" in p || "ad_user_data" in p || "ad_personalization" in p || "personalization_storage" in p) {
+        var mk = (p.ad_storage === "granted" || p.ad_user_data === "granted" || p.ad_personalization === "granted" || p.personalization_storage === "granted")
+            ? "allow"
+            : "deny";
+        wp_set_consent("marketing", mk);
+    }
 }
 
 /**
@@ -750,9 +744,6 @@ window.uetq = window.uetq || [];
 // On page load, update VWO consent if consent object exists
 if (intaCookieConsents) {
     updateVwoConsent(intaCookieConsents);
-    try {
-        intaSyncWpConsentApiFromIntastellarConsents(intaCookieConsents);
-    } catch (e) { /* ignore */ }
 }
 let intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 
@@ -832,6 +823,22 @@ var _hsp = (window._hsp = window._hsp || []);
 function gtag() {
     dataLayer.push(arguments);
 }
+
+/* After each gtag push: if this is consent mode update, call wp_set_consent from the same payload (when WP exposes it). */
+try {
+    if (!window._intaGtagWpConsentBridgeInstalled && typeof window.gtag === "function") {
+        window._intaGtagWpConsentBridgeInstalled = true;
+        var _intaGtagOrigInline = window.gtag;
+        window.gtag = function () {
+            _intaGtagOrigInline.apply(this, arguments);
+            try {
+                if (arguments[0] === "consent" && arguments[1] === "update") {
+                    intaWpSetConsentFromGtagUpdateParams(arguments[2]);
+                }
+            } catch (e) { /* ignore */ }
+        };
+    }
+} catch (eBridge) { /* ignore */ }
 
 fetch('https://ipapi.co/json/')
     .then(response => response.json())
