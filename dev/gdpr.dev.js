@@ -537,11 +537,21 @@ function intaWpEnsureDataLayerPushMirrorBound() {
     }
     const upstream = dl.push;
     function intaWpMirrorWrappedPush() {
-        const ret = intaWpMirrorWrappedPush._upstream.apply(dl, arguments);
+        window._intaWpDlPushDepth = (window._intaWpDlPushDepth || 0) + 1;
+        const depthAtEntry = window._intaWpDlPushDepth;
         try {
-            intaWpTryConsentUpdateFromDataLayerPushArgs(Array.prototype.slice.call(arguments));
-        } catch (e) { /* ignore */ }
-        return ret;
+            const ret = intaWpMirrorWrappedPush._upstream.apply(dl, arguments);
+            // Site Kit (and others) listen to `wp_listen_for_consent_change` and call `gtag` → `dataLayer.push`
+            // again. Only mirror the outermost push so we do not recurse until stack overflow.
+            if (depthAtEntry === 1) {
+                try {
+                    intaWpTryConsentUpdateFromDataLayerPushArgs(Array.prototype.slice.call(arguments));
+                } catch (e2) { /* ignore */ }
+            }
+            return ret;
+        } finally {
+            window._intaWpDlPushDepth--;
+        }
     }
     intaWpMirrorWrappedPush._upstream = upstream;
     dl._intaWpMirrorWrappedPush = intaWpMirrorWrappedPush;
