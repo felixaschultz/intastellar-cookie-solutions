@@ -389,11 +389,19 @@ function updateVwoConsent(consents) {
 // --- End VWO Cookie Consent Integration ---
 
 /**
- * WP Consent API: notify scripts that listen on document (e.detail = { category: 'allow'|'deny', ... }).
- * @see https://wordpress.org/plugins/wp-consent-api/
+ * True when the WP Consent API script is present (`wp_set_consent`). If false, skip all WP Consent API integration.
+ * @see https://wpconsentapi.org
+ */
+function intaWpConsentApiActive() {
+    return typeof wp_set_consent === "function";
+}
+
+/**
+ * WP Consent API: `document` event; `e.detail` is an object of changed categories (`allow` / `deny`).
+ * @see https://wpconsentapi.org
  */
 function intaWpDispatchListenForConsentChange(detail) {
-    if (!detail || typeof detail !== "object") {
+    if (!intaWpConsentApiActive() || !detail || typeof detail !== "object") {
         return;
     }
     const keys = Object.keys(detail);
@@ -412,22 +420,37 @@ function intaWpDispatchListenForConsentChange(detail) {
 }
 
 /**
- * WordPress Consent API: when gtag pushes consent updates, mirror the same payload into wp_set_consent (if present),
- * then dispatch wp_listen_for_consent_change so other plugins react.
- * @see https://wordpress.org/plugins/wp-consent-api/
+ * CMP: `window.wp_consent_type = 'optin'` and `wp_consent_type_defined` on document (once per page when API is active).
+ * @see https://wpconsentapi.org
  */
-function intaWpSetConsentFromGtagUpdateParams(params) {
-    if (typeof wp_set_consent !== "function") {
+function intaWpEnsureConsentTypeOptinAnnouncedOnce() {
+    if (!intaWpConsentApiActive() || window._intaWpConsentTypeDefinedSent) {
         return;
     }
+    window._intaWpConsentTypeDefinedSent = true;
     try {
         window.wp_consent_type = "optin";
     } catch (e) { /* ignore */ }
+    try {
+        if (typeof document !== "undefined" && document.dispatchEvent) {
+            document.dispatchEvent(new CustomEvent("wp_consent_type_defined"));
+        }
+    } catch (e) { /* ignore */ }
+}
+
+/**
+ * When gtag pushes `consent` / `update`, mirror storage keys into `wp_set_consent` and fire `wp_listen_for_consent_change`.
+ * No-op unless `wp_set_consent` exists.
+ * @see https://wpconsentapi.org
+ */
+function intaWpSetConsentFromGtagUpdateParams(params) {
+    if (!intaWpConsentApiActive()) {
+        return;
+    }
+    intaWpEnsureConsentTypeOptinAnnouncedOnce();
     const p = params && typeof params === "object" ? params : {};
     const detail = {};
-    function lvl(key) {
-        return p[key] === "granted" ? "allow" : "deny";
-    }
+    const lvl = (key) => (p[key] === "granted" ? "allow" : "deny");
     if ("functionality_storage" in p) {
         const fn = lvl("functionality_storage");
         wp_set_consent("functional", fn);
@@ -848,28 +871,18 @@ window.clarity && window.clarity('consentv2', {
 window.uetq.push('consent', 'default', {
     'ad_storage': 'denied'
 });
+
+
+
 window.disableHubSpotCookieBanner = true;
 var _hsp = (window._hsp = window._hsp || []);
 
 function gtag() {
     dataLayer.push(arguments);
-}
-
-/* After each gtag push: if this is consent mode update, call wp_set_consent from the same payload (when WP exposes it). */
-try {
-    if (!window._intaGtagWpConsentBridgeInstalled && typeof window.gtag === "function") {
-        window._intaGtagWpConsentBridgeInstalled = true;
-        var _intaGtagOrigInline = window.gtag;
-        window.gtag = function () {
-            _intaGtagOrigInline.apply(this, arguments);
-            try {
-                if (arguments[0] === "consent" && arguments[1] === "update") {
-                    intaWpSetConsentFromGtagUpdateParams(arguments[2]);
-                }
-            } catch (e) { /* ignore */ }
-        };
+    if (intaWpConsentApiActive() && arguments[0] === "consent" && arguments[1] === "update" && arguments[2] != null && typeof arguments[2] === "object") {
+        intaWpSetConsentFromGtagUpdateParams(arguments[2]);
     }
-} catch (eBridge) { /* ignore */ }
+}
 
 fetch('https://ipapi.co/json/')
     .then(response => response.json())
@@ -922,6 +935,8 @@ if (window._intaConsentInitialized) {
 }
 
 window._intaConsentInitialized = true;
+
+intaWpEnsureConsentTypeOptinAnnouncedOnce();
 
 if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
     // Only set defaults if GTM hasn't already done so
@@ -992,7 +1007,6 @@ if (hasConsent("advertisement")) {
         'url_passthrough': true,
     });
 
-
     // Pintrk
     if (typeof pintrk === 'function') {
         try {
@@ -1030,7 +1044,6 @@ if (hasConsent("analytics")) {
     });
     
     _paq.push(['setConsentGiven']);
-
 }
 
 if (hasConsent("functional")) {
