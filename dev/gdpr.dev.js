@@ -396,6 +396,18 @@ function intaWpConsentApiActive() {
     return typeof wp_set_consent === "function";
 }
 
+/** Google Consent Mode / gtag values → treat as granted (case-insensitive; tolerate common aliases). */
+function intaWpConsentStorageIsGranted(value) {
+    if (value === true) {
+        return true;
+    }
+    if (value == null || value === false) {
+        return false;
+    }
+    const s = String(value).toLowerCase();
+    return s === "granted" || s === "grant" || s === "allow";
+}
+
 /**
  * WP Consent API: `document` event; `e.detail` is an object of changed categories (`allow` / `deny`).
  * @see https://wpconsentapi.org
@@ -450,7 +462,7 @@ function intaWpSetConsentFromGtagUpdateParams(params) {
     intaWpEnsureConsentTypeOptinAnnouncedOnce();
     const p = params && typeof params === "object" ? params : {};
     const detail = {};
-    const lvl = (key) => (p[key] === "granted" ? "allow" : "deny");
+    const lvl = (key) => (intaWpConsentStorageIsGranted(p[key]) ? "allow" : "deny");
     if ("functionality_storage" in p) {
         const fn = lvl("functionality_storage");
         wp_set_consent("functional", fn);
@@ -466,13 +478,68 @@ function intaWpSetConsentFromGtagUpdateParams(params) {
         detail["statistics-anonymous"] = st;
     }
     if ("ad_storage" in p || "ad_user_data" in p || "ad_personalization" in p || "personalization_storage" in p) {
-        const mk = (p.ad_storage === "granted" || p.ad_user_data === "granted" || p.ad_personalization === "granted" || p.personalization_storage === "granted")
+        const mk = (intaWpConsentStorageIsGranted(p.ad_storage) || intaWpConsentStorageIsGranted(p.ad_user_data) || intaWpConsentStorageIsGranted(p.ad_personalization) || intaWpConsentStorageIsGranted(p.personalization_storage))
             ? "allow"
             : "deny";
         wp_set_consent("marketing", mk);
         detail.marketing = mk;
     }
     intaWpDispatchListenForConsentChange(detail);
+}
+
+/**
+ * Mirror consent from a single dataLayer item (Arguments object, array, or spread push).
+ * Only handles `consent` / `update` (not `default`), so regional GTM defaults do not overwrite WP cookies incorrectly.
+ */
+function intaWpTryConsentUpdateFromDataLayerItem(item) {
+    if (item == null) {
+        return;
+    }
+    if (typeof item === "object" && !Array.isArray(item)) {
+        const t0 = item[0];
+        const t1 = item[1];
+        const t2 = item[2];
+        if (t0 === "consent" && t1 === "update" && t2 != null && typeof t2 === "object" && !Array.isArray(t2)) {
+            intaWpSetConsentFromGtagUpdateParams(t2);
+        }
+    }
+}
+
+function intaWpTryConsentUpdateFromDataLayerPushArgs(pushArgs) {
+    if (!intaWpConsentApiActive() || !pushArgs || pushArgs.length === 0) {
+        return;
+    }
+    for (let i = 0; i < pushArgs.length; i++) {
+        intaWpTryConsentUpdateFromDataLayerItem(pushArgs[i]);
+    }
+    if (pushArgs.length >= 3
+        && pushArgs[0] === "consent"
+        && pushArgs[1] === "update"
+        && pushArgs[2] != null
+        && typeof pushArgs[2] === "object"
+        && !Array.isArray(pushArgs[2])) {
+        intaWpSetConsentFromGtagUpdateParams(pushArgs[2]);
+    }
+}
+
+/**
+ * GTM and other tools often push consent updates straight to `dataLayer` without calling `window.gtag`.
+ * Wrap `push` so WP Consent API stays in sync whenever `wp_set_consent` is available.
+ */
+function intaWpInstallDataLayerConsentMirror() {
+    const dl = window.dataLayer;
+    if (!dl || typeof dl.push !== "function" || dl._intaWpConsentMirrorInstalled) {
+        return;
+    }
+    dl._intaWpConsentMirrorInstalled = true;
+    const origPush = dl.push;
+    dl.push = function () {
+        const ret = origPush.apply(dl, arguments);
+        try {
+            intaWpTryConsentUpdateFromDataLayerPushArgs(Array.prototype.slice.call(arguments));
+        } catch (e) { /* ignore */ }
+        return ret;
+    };
 }
 
 /**
@@ -846,6 +913,7 @@ let pluginSource = findScriptParameter("utm_source") === undefined ? "Intastella
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 let poweredBy = "";
 window.dataLayer = window.dataLayer || [];
+intaWpInstallDataLayerConsentMirror();
 let intaConsentsObjectVariable = {
     consents: {
         staticsticCookies: false,
@@ -879,9 +947,6 @@ var _hsp = (window._hsp = window._hsp || []);
 
 function gtag() {
     dataLayer.push(arguments);
-    if (intaWpConsentApiActive() && arguments[0] === "consent" && arguments[1] === "update" && arguments[2] != null && typeof arguments[2] === "object") {
-        intaWpSetConsentFromGtagUpdateParams(arguments[2]);
-    }
 }
 
 fetch('https://ipapi.co/json/')
