@@ -599,6 +599,65 @@ function intaWpApplyConsentFromIntastellarChoices(functionalChecked, statisticsC
 }
 
 /**
+ * Read Intastellar consent flags from `window.intaCookieConsents` (set from cookie on load).
+ * @returns {{ functional: boolean, statistics: boolean, marketing: boolean } | null} null if no consent object.
+ */
+function intaWpReadIntastellarConsentBooleansFromWindow() {
+    const c = window.intaCookieConsents;
+    if (!c || typeof c !== "object") {
+        return null;
+    }
+    return {
+        functional: c.functionalCookies === "checked" || c.functionalCookies === true,
+        statistics: c.staticsticCookies === "checked" || c.staticsticCookies === true,
+        marketing: c.advertisementCookies === "checked" || c.advertisementCookies === true,
+    };
+}
+
+/**
+ * Re-apply WP Consent API cookies from the stored Intastellar cookie (e.g. after reload).
+ * On first paint, `gtag('consent','update')` often runs before `wp_set_consent` exists — this runs once WP is ready.
+ */
+function intaWpTrySyncWpFromStoredIntastellarConsentOnce() {
+    if (!intaWpConsentApiActive() || window._intaWpStoredConsentSyncedToWp) {
+        return !!window._intaWpStoredConsentSyncedToWp;
+    }
+    const b = intaWpReadIntastellarConsentBooleansFromWindow();
+    if (!b) {
+        return false;
+    }
+    intaWpApplyConsentFromIntastellarChoices(b.functional, b.statistics, b.marketing);
+    window._intaWpStoredConsentSyncedToWp = true;
+    return true;
+}
+
+function intaWpScheduleSyncWpFromStoredIntastellarConsent() {
+    if (window._intaWpCookieSyncScheduled) {
+        return;
+    }
+    if (!intaWpReadIntastellarConsentBooleansFromWindow()) {
+        return;
+    }
+    window._intaWpCookieSyncScheduled = true;
+    const tick = function () {
+        return intaWpTrySyncWpFromStoredIntastellarConsentOnce();
+    };
+    if (tick()) {
+        return;
+    }
+    if (typeof window !== "undefined" && window.addEventListener) {
+        window.addEventListener("DOMContentLoaded", tick);
+        window.addEventListener("load", tick);
+    }
+    let n = 0;
+    const id = setInterval(function () {
+        if (tick() || ++n >= 80) {
+            clearInterval(id);
+        }
+    }, 100);
+}
+
+/**
  * Shopify Customer Privacy: map Intastellar consent values to booleans.
  * Send analytics + marketing + preferences together; omit `sale_of_data` unless CCPA opt-out is stored.
  */
@@ -1176,6 +1235,9 @@ if (hasConsent("functional")) {
     });
 
 }
+
+intaWpScheduleSyncWpFromStoredIntastellarConsent();
+
 /* _hsp.push(['doNotTrack']);
 _hsp.push(['revokeCookieConsent']); */
 window._hsp.push([
