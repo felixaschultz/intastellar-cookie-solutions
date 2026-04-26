@@ -579,14 +579,66 @@ function intaMergeTextOverridesIntoSettings(incomingTO) {
     window.INTA.settings.textOverrides = mergedTO;
 }
 
+function intaCbExperimentGetQueryParam(name) {
+    try {
+        const params = new URLSearchParams(window.location.search || "");
+        return params.get(name);
+    } catch (e) {
+        return null;
+    }
+}
+
+function intaCbExperimentNormalizeValue(value) {
+    return String(value == null ? "" : value).trim().toLowerCase();
+}
+
+function intaCbExperimentValueInList(value, list) {
+    if (!Array.isArray(list)) {
+        return false;
+    }
+    const normalized = intaCbExperimentNormalizeValue(value);
+    if (!normalized) {
+        return false;
+    }
+    for (let i = 0; i < list.length; i++) {
+        if (intaCbExperimentNormalizeValue(list[i]) === normalized) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function intaCbExperimentChannelMatches(exp, expKey) {
+    if (!exp || !exp.channel) {
+        return true;
+    }
+    const match = exp.channel.match || {};
+    const utmSource = intaCbExperimentGetQueryParam("utm_source") || intaCbExperimentGetQueryParam("utmSource");
+    const matched = intaCbExperimentValueInList(utmSource, match.utmSource);
+    const channelKey = expKey + "_channel";
+    if (matched) {
+        try {
+            sessionStorage.setItem(channelKey, "1");
+        } catch (e) { }
+        return true;
+    }
+    try {
+        return sessionStorage.getItem(channelKey) === "1";
+    } catch (e2) { }
+    return false;
+}
+
 function intaCbResolveExperimentVariantId(exp) {
     if (!exp || !exp.id || !exp.variants || !Object.keys(exp.variants).length) {
+        return null;
+    }
+    const expKey = "inta_exp_" + exp.id;
+    if (!intaCbExperimentChannelMatches(exp, expKey)) {
         return null;
     }
     if (window.INTA && window.INTA.experimentVariant && exp.variants[window.INTA.experimentVariant]) {
         return window.INTA.experimentVariant;
     }
-    let expKey = "inta_exp_" + exp.id;
     let stored = null;
     try {
         stored = sessionStorage.getItem(expKey);

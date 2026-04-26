@@ -389,11 +389,23 @@ function updateVwoConsent(consents) {
 // --- End VWO Cookie Consent Integration ---
 
 /**
- * True when the WP Consent API script is present (`wp_set_consent`). If false, skip all WP Consent API integration.
+ * True when we should run WP Consent API integration (`wp_set_consent`, dataLayer mirror, cookie sync).
+ * Requires `wp_set_consent` from WordPress. Set `INTA.settings.wpConsentApi = false` (before or early after
+ * the script) when Google Advanced Consent Mode must be authoritative via `gtag`/GTM only — bridges such as
+ * Site Kit that map WP cookies → Consent Mode can otherwise fight Intastellar’s updates.
  * @see https://wpconsentapi.org
  */
 function intaWpConsentApiActive() {
-    return typeof wp_set_consent === "function";
+    if (typeof wp_set_consent !== "function") {
+        return false;
+    }
+    try {
+        const s = window.INTA && window.INTA.settings;
+        if (s && s.wpConsentApi === false) {
+            return false;
+        }
+    } catch (e) { /* ignore */ }
+    return true;
 }
 
 /** Google Consent Mode / gtag values → treat as granted (case-insensitive; tolerate common aliases). */
@@ -4075,12 +4087,60 @@ function intaFetchTextOverridePresetPromise(presetId) {
         });
 }
 
+function intaExperimentGetQueryParam(name) {
+    try {
+        var params = new URLSearchParams(window.location.search || "");
+        return params.get(name);
+    } catch (e) {
+        return null;
+    }
+}
+
+function intaExperimentNormalizeValue(value) {
+    return String(value == null ? "" : value).replace(/^\s+|\s+$/g, "").toLowerCase();
+}
+
+function intaExperimentValueInList(value, list) {
+    if (!Array.isArray(list)) {
+        return false;
+    }
+    var normalized = intaExperimentNormalizeValue(value);
+    if (!normalized) {
+        return false;
+    }
+    for (var i = 0; i < list.length; i++) {
+        if (intaExperimentNormalizeValue(list[i]) === normalized) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function intaExperimentChannelMatches(exp, expKey) {
+    if (!exp || !exp.channel) {
+        return true;
+    }
+    var match = exp.channel.match || {};
+    var utmSource = intaExperimentGetQueryParam("utm_source") || intaExperimentGetQueryParam("utmSource");
+    var matched = intaExperimentValueInList(utmSource, match.utmSource);
+    var channelKey = expKey + "_channel";
+    if (matched) {
+        try { sessionStorage.setItem(channelKey, "1"); } catch (e) { }
+        return true;
+    }
+    try {
+        return sessionStorage.getItem(channelKey) === "1";
+    } catch (e2) { }
+    return false;
+}
+
 // --- A/B experiment: resolve variant and apply overrides from window.INTA.experiment ---
 (function applyIntaExperiment() {
     window.__intaTextOverridePresetId = null;
     var exp = window.INTA && window.INTA.experiment;
     if (!exp || !exp.id || !exp.variants || !Object.keys(exp.variants).length) return;
     var expKey = 'inta_exp_' + exp.id;
+    if (!intaExperimentChannelMatches(exp, expKey)) return;
     var stored = null;
     try { stored = sessionStorage.getItem(expKey); } catch (e) { }
     var variantId = stored;
