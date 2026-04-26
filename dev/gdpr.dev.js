@@ -4198,8 +4198,15 @@ function intaExperimentChannelMatches(exp, expKey) {
     }
     window.__intaTextOverridePresetId = presetIdToFetch;
     window.INTA.experimentVariant = variantId;
+    exp.currentVariant = variantId;
+    exp.currentChannel = exp.channel && exp.channel.id ? exp.channel.id : "";
     if (window.dataLayer) {
-        window.dataLayer.push({ event: 'intastellar_experiment_view', experiment_id: exp.id, variant: variantId });
+        window.dataLayer.push({
+            event: 'intastellar_experiment_view',
+            experiment_id: exp.id,
+            variant: variantId,
+            channel_id: exp.currentChannel
+        });
     }
 })();
 
