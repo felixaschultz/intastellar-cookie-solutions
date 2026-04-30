@@ -1266,6 +1266,7 @@ const IntastellarCookieConsent = {
             }
             if (!getCookie(int_hideCookieBannerName)) {
                 if (self._banner) window._IntastellarConsentsBanner.classList.add("--active");
+                document.querySelector("html").classList.add("noScroll");
                 if (typeof window._intaBannerShownAt === 'undefined') {
                     window._intaBannerShownAt = Date.now();
                 }
