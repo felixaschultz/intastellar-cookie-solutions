@@ -228,7 +228,7 @@ let allScripts = window.allScripts = [
         */
         type: "marketing",
         scripts: [
-            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data)",
+            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data|openai|oaiq)",
             "([\-\.]twitter+)",
             "([\-\.]ads-twitter+)",
             "([\-\.]casalemedia+)",
@@ -287,6 +287,7 @@ let allScripts = window.allScripts = [
             "([\-\.]tiktok+)",
             "([\-\.]taboola+)",
             "([\-\.]hubspot+)",
+            "([\-\.]openai+)",
             /* "([\-\.]hs-sites+)", */
             "([a-z]+){2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
@@ -5749,15 +5750,6 @@ function checkCookieStatus() {
                         ) {
                             node.type = "text/javascript";
                         }
-
-
-                        if (node.getAttribute("type") === "text/blocked") {
-                            node.addEventListener(
-                                "beforescriptexecute",
-                                (e) => beforeScriptExecuteListener(e, node)
-                            );
-                        }
-                        beforeScriptExecuteListener(null, node);
                     }
                 });
             });
