@@ -176,6 +176,27 @@
     <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=&fmt=gif" />
   </noscript>
   <!-- End of LinkedIn tracking -->
+   <!-- OpenAI Pixel Code -->
+   <script>
+    (function (w, d, s, u) {
+      if (w.oaiq) return;
+      var q = function () {
+        q.q.push(arguments);
+      };
+      q.q = [];
+      w.oaiq = q;
+      var js = d.createElement(s);
+      js.async = true;
+      js.src = u;
+      var f = d.getElementsByTagName(s)[0];
+      f.parentNode.insertBefore(js, f);
+    })(window, document, "script", "https://bzrcdn.openai.com/sdk/oaiq.min.js");
+
+    oaiq("init", {
+      pixelId: "<YOUR-PIXEL-ID>",
+    });
+  </script>
+  <!-- End of OpenAI Pixel Code -->
   <!-- Facebook Pixel Code -->
   <script>
     ! function (f, b, e, v, n, t, s) {

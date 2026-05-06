@@ -228,7 +228,7 @@ let allScripts = window.allScripts = [
         */
         type: "marketing",
         scripts: [
-            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data|openai|oaiq)",
+            "(_linkedin_partner_id|_linkedin_data_partner_ids|mailchimp|lntrk|twitter|instagram|trustpilot|chic_lite_data|openai|oaiq|bzrcdn\\.openai)",
             "([\-\.]twitter+)",
             "([\-\.]ads-twitter+)",
             "([\-\.]casalemedia+)",
@@ -3982,7 +3982,9 @@ if (intaCookieConsents?.functionalCookies === "checked" &&
 } else {
     m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
 }
-notRequired = window.notRequired = new RegExp(m.join("|"), "ig");
+/* No `g` flag: global regex makes `.test()` advance `lastIndex`, so later URLs (e.g. bzrcdn.openai.com)
+ * can spuriously fail to match even when patterns like `openai` / `oaiq` apply. */
+notRequired = window.notRequired = new RegExp(m.join("|"), "i");
 let analyticsScript = document.createElement("script");
 analyticsScript.async = true;
 analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
@@ -5050,7 +5052,7 @@ function updateNotRequiredRegexp() {
     }
 
     // Update the notRequired RegExp
-    notRequired = new RegExp(m.length ? m.join("|") : "^$", "ig");
+    notRequired = new RegExp(m.length ? m.join("|") : "^$", "i");
     window.notRequired = notRequired;
     console.log("Updated consent blocking patterns");
 
