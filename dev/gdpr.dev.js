@@ -1628,7 +1628,7 @@ let ALLOWLIST = [
         for (let i = 0; i < parts.length - 1; i++) {
             subdomains.push(parts.slice(i).join('.'));
         }
-        return subdomains;
+        return "https://" + subdomains.join('.') + "/";
     })(),
     ...(() => {
         // Add all root domains from current host, if its a subdomain
@@ -1638,7 +1638,7 @@ let ALLOWLIST = [
         for (let i = 0; i < parts.length - 1; i++) {
             rootDomains.push(parts.slice(i).join('.'));
         }
-        return rootDomains;
+        return "https://" + rootDomains.join('.') + "/";
     })(),
     "https://intastellar.app",
     "https://www.intastellarsolutions.com",
