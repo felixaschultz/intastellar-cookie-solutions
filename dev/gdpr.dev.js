@@ -1620,16 +1620,6 @@ function hasConsent(type) {
 
 let ALLOWLIST = [
     location.origin,
-    // Add all subdomains of the current host
-    ...(() => {
-        let host = location.host;
-        let parts = host.split('.');
-        let subdomains = [];
-        for (let i = 0; i < parts.length - 1; i++) {
-            subdomains.push(parts.slice(i).join('.'));
-        }
-        return "https://" + subdomains.join('.');
-    })(),
     "https://intastellar.app",
     "https://www.intastellarsolutions.com",
     "https://analytics.intastellarsolutions.com",
@@ -1654,6 +1644,77 @@ let ALLOWLIST = [
     "https://region1.google-analytics.com"
 ];
 
+function intaNormalizeHostname(host) {
+    if (!host) {
+        return "";
+    }
+    return String(host).split(":")[0].replace(/^www\./i, "").toLowerCase();
+}
+
+/** Best-effort registrable domain when `INTA.settings.rootDomain` is not set (e.g. `booking.example.com` → `example.com`). */
+function intaDeriveSiteRootFromHostname(hostname) {
+    let h = intaNormalizeHostname(hostname);
+    if (!h) {
+        return "";
+    }
+    let parts = h.split(".");
+    if (parts.length <= 2) {
+        return h;
+    }
+    return parts.slice(-2).join(".");
+}
+
+function intaGetSiteRootCandidates(pageHostname) {
+    let roots = [];
+    let configured = window.INTA && window.INTA.settings && window.INTA.settings.rootDomain;
+    if (configured) {
+        roots.push(intaNormalizeHostname(String(configured)));
+    }
+    let derived = intaDeriveSiteRootFromHostname(pageHostname);
+    if (derived) {
+        roots.push(derived);
+    }
+    let partners = window.INTA && window.INTA.settings && window.INTA.settings.partnerDomain;
+    if (Array.isArray(partners)) {
+        partners.forEach(function (d) {
+            if (d) {
+                roots.push(intaNormalizeHostname(String(d)));
+            }
+        });
+    }
+    return roots.filter(function (r, i, arr) {
+        return r && arr.indexOf(r) === i;
+    });
+}
+
+function intaIsHostUnderSiteRoot(host, root) {
+    let h = intaNormalizeHostname(host);
+    let r = intaNormalizeHostname(root);
+    if (!h || !r) {
+        return false;
+    }
+    return h === r || h.endsWith("." + r);
+}
+
+/** True when target and page share the same configured/derived root (root ↔ subdomain in either direction). */
+function intaIsSameSiteHost(targetHostname, pageHostname) {
+    let t = intaNormalizeHostname(targetHostname);
+    let p = intaNormalizeHostname(pageHostname);
+    if (!t || !p) {
+        return false;
+    }
+    if (t === p) {
+        return true;
+    }
+    let roots = intaGetSiteRootCandidates(p);
+    for (let i = 0; i < roots.length; i++) {
+        if (intaIsHostUnderSiteRoot(t, roots[i]) && intaIsHostUnderSiteRoot(p, roots[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function isAllowed(url) {
     try {
         let parsedUrl = new URL(url, window.location.origin);
@@ -1669,10 +1730,10 @@ function isAllowed(url) {
         // Allow if matches any allowlist origin
         if (ALLOWLIST.some(domain => parsedUrl.origin === domain)) return true;
 
-        // Allow all subdomains of the current host/root domain
-        let rootHost = window.location.hostname.replace(/^www\./, "");
-        let parsedHost = parsedUrl.hostname.replace(/^www\./, "");
-        if (parsedHost === rootHost || parsedHost.endsWith('.' + rootHost)) return true;
+        // Root domain ↔ subdomain (either direction), e.g. booking.asasoftware.aero → asasoftware.aero/collect
+        if (intaIsSameSiteHost(parsedUrl.hostname, window.location.hostname)) {
+            return true;
+        }
 
         // Optionally allow other trusted domains here
         return false;
