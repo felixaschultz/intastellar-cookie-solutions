@@ -1630,16 +1630,6 @@ let ALLOWLIST = [
         }
         return subdomains.join('.');
     })(),
-    ...(() => {
-        // Add all root domains from current host, if its a subdomain
-        let host = location.host;
-        let parts = host.split('.');
-        let rootDomains = [];
-        for (let i = 0; i < parts.length - 1; i++) {
-            rootDomains.push("https://" + parts.slice(i).join('.'));
-        }
-        return rootDomains.join('.');
-    })(),
     "https://intastellar.app",
     "https://www.intastellarsolutions.com",
     "https://analytics.intastellarsolutions.com",
