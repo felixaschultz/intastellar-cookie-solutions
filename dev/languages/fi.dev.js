@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.finnish;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "Hylätä",
+    necessary: {
+        title: "Välttämätön",
+        description: "Välttämättömät verkkoteknologiat ja evästeet tekevät verkkosivustostamme teknisesti saavutettavan ja käyttökelpoisen sinulle. Tämä koskee perustavanlaatuisia perustoimintoja, kuten sivuston navigointia, oikeaa näyttöä Internet-selaimessasi tai suostumuksesi pyytämistä. Ilman näitä verkkoteknologioita ja evästeitä verkkosivustomme ei toimi."
+    },
+    functional: {
+        title: "Toiminnallinen",
+        description: "Toiminnalliset evästeet mahdollistavat tietojen tallentamisen, jotka muuttavat sivuston ulkonäköä tai toimintaa. Esimerkiksi suosikkikieli tai alue."
+    },
+    statisic: {
+        title: "Tilastot",
+        description: "Haluamme jatkuvasti parantaa verkkosivustojemme käytettävyyttä ja suorituskykyä. Tätä varten käytämme analyysitekniikoita (mukaan lukien evästeet), jotka mittaavat ja arvioivat pseudonyymisti, mitä sivustojemme toimintoja ja sisältöjä käytetään, miten ja kuinka usein. Tällä perusteella voimme parantaa sivustoja käyttäjille."
+    },
+    marketing: {
+        title: "Markkinointi",
+        description: "Käytämme valittujen kumppaneiden web-tekniikoita (myös evästeitä) voidaksemme näyttää sinulle sisältöä ja mainoksia, jotka on räätälöity sinulle erityisesti verkkosivustoilla ja sosiaalisissa medioissa. Tämä sisältö valitaan ja näytetään käyttäytymisesi perusteella. Mainos- tai markkinointievästeitä käytetään tarjoamaan vierailijoille relevantteja mainoksia ja markkinointikampanjoita. Nämä evästeet seuraavat vierailijoita sivustoilla ja keräävät tietoja räätälöityjen mainosten tarjoamiseksi."
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "vasen" : "oikea";
     window.__intaCmpLocalePayload = {
         slug: "fi",
@@ -26,6 +41,6 @@
         settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights POPIA</button>' : "")
             + (window.INTA && window.INTA.settings && window.INTA.settings.lgpd ? '<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights LGPD</button>' : "")
             + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International tietosuojakäytäntö</button>',
-        categories: L
+        categories: categories
     };
 })();

@@ -5,10 +5,13 @@
  */
 import fs from "fs";
 import path from "path";
+import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import { CMP_LOCALE_CATALOG } from "./cmp-locale-catalog.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const LANG_CATEGORIES = require("./cmp-language-categories.source.js");
 const ROOT = path.resolve(__dirname, "..");
 const CB_PATH = path.join(ROOT, "dev/cb.dev.js");
 const OUT_DIR = path.join(ROOT, "dev/languages");
@@ -123,12 +126,14 @@ function parseExistingLocaleFile(content) {
     return { bannerExpr, settingsMessageExpr, settingsSuffixExpr };
 }
 
-function buildLocaleFile(meta, bannerExpr, settingsMessageExpr, settingsSuffixExpr) {
+function serializeCategoriesLiteral(categories) {
+    return JSON.stringify(categories, null, 4)
+        .replace(/"([^"]+)":/g, "$1:");
+}
+
+function buildLocaleFile(meta, bannerExpr, settingsMessageExpr, settingsSuffixExpr, categoriesLiteral) {
     return `(function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.${meta.langKey};
-    if (!L) {
-        return;
-    }
+    var categories = ${categoriesLiteral};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? ${jsString(meta.arrangeLtr)} : ${jsString(meta.arrangeRtl)};
     window.__intaCmpLocalePayload = {
         slug: ${jsString(meta.slug)},
@@ -142,7 +147,7 @@ function buildLocaleFile(meta, bannerExpr, settingsMessageExpr, settingsSuffixEx
         bannerMessage: ${bannerExpr},
         settingsMessage: ${settingsMessageExpr},
         settingsMessageSuffix: ${settingsSuffixExpr},
-        categories: L
+        categories: categories
     };
 })();
 `;
@@ -196,7 +201,18 @@ function main() {
             settingsSuffixExpr = parsed.settingsSuffixExpr;
         }
 
-        const content = buildLocaleFile(meta, bannerExpr, settingsMessageExpr, settingsSuffixExpr);
+        const categories = LANG_CATEGORIES[meta.langKey];
+        if (!categories) {
+            console.warn("Skip " + meta.slug + ": no categories for langKey " + meta.langKey);
+            continue;
+        }
+        const content = buildLocaleFile(
+            meta,
+            bannerExpr,
+            settingsMessageExpr,
+            settingsSuffixExpr,
+            serializeCategoriesLiteral(categories)
+        );
         const outPath = path.join(OUT_DIR, meta.slug + ".dev.js");
         fs.writeFileSync(outPath, content, "utf8");
         written++;

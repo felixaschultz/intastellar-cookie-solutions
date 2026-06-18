@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.portuguese;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "Recusar",
+    necessary: {
+        title: "Necessário",
+        description: "As tecnologias web e os cookies necessários tornam o nosso site tecnicamente acessível e utilizável para si. Isto aplica-se a funcionalidades básicas fundamentais como a navegação no site, a visualização correta no seu navegador de Internet ou o pedido do seu consentimento. Sem estas tecnologias web e cookies, o nosso site não funciona."
+    },
+    functional: {
+        title: "Funcional",
+        description: "Os cookies funcionais permitem guardar informações que alteram a forma como o site aparece ou se comporta. Por exemplo, o seu idioma ou região preferidos."
+    },
+    statisic: {
+        title: "Estatísticas",
+        description: "Queremos melhorar letantemente a usabilidade e o desempenho dos nossos sites. Para isso, utilizamos tecnologias de análise (incluindo cookies) que medem e avaliam de forma pseudónima quais as funções e conteúdos dos nossos sites que são utilizados, como e com que frequência. Com base nisso, podemos melhorar os nossos sites para os utilizadores."
+    },
+    marketing: {
+        title: "Marketing",
+        description: "Utilizamos tecnologias web (também cookies) de parceiros selecionados para lhe mostrar conteúdo e publicidade especialmente adaptados a si em sites web e redes sociais. Este conteúdo é selecionado e exibido com base no seu comportamento de utilização. Os cookies publicitários ou de marketing são utilizados para fornecer aos visitantes anúncios e campanhas de marketing relevantes. Estes cookies rastreiam visitantes em sites web e recolhem informações para fornecer anúncios personalizados."
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "esquerda" : "direita";
     window.__intaCmpLocalePayload = {
         slug: "pt",
@@ -26,6 +41,6 @@
         settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights POPIA</button>' : "")
             + (window.INTA && window.INTA.settings && window.INTA.settings.lgpd ? '<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights LGPD</button>' : "")
             + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidade</button>',
-        categories: L
+        categories: categories
     };
 })();

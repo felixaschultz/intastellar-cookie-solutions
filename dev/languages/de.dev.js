@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.german;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "Ablehnen",
+    necessary: {
+        title: "Erforderliche",
+        description: "Erforderliche Webtechnologien und Cookies sind notwendig, um unsere Website für Sie zugänglich und funktionsfähig zu machen. Sie gewährleisten grundlegende Funktionen wie die Navigation auf der Seite, die korrekte Anzeige im Browser und das Einholen Ihrer Einwilligung. Ohne diese Technologien und Cookies ist die Nutzung unserer Website nicht möglich."
+    },
+    functional: {
+        title: "Funktionel",
+        description: "Funktionale Cookies ermöglichen es, Informationen zu speichern, die das Erscheinungsbild oder Verhalten der Website anpassen, wie zum Beispiel Ihre bevorzugte Sprache oder Region."
+    },
+    statisic: {
+        title: "Statistik",
+        description: "Wir möchten die Benutzerfreundlichkeit und Leistung unserer Websites kontinuierlich verbessern. Daher setzen wir Analysetechnologien (einschließlich Cookies) ein, die pseudonym ermitteln und auswerten, welche Funktionen und Inhalte unserer Websites wie und wie oft genutzt werden. Auf dieser Basis können wir unsere Websites für die Nutzer optimieren."
+    },
+    marketing: {
+        title: "Werbung",
+        description: "Werbe- oder Marketing-Cookies werden eingesetzt, um Besuchern relevante Anzeigen und Marketingkampagnen anzuzeigen. Diese Cookies verfolgen Besucher über verschiedene Websites und sammeln Informationen, um personalisierte Werbung bereitzustellen."
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "linken" : "rechten";
     window.__intaCmpLocalePayload = {
         slug: "de",
@@ -26,6 +41,6 @@
         settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Ihre Privatsphäre Rechte POPIA</button>' : "")
             + (window.INTA && window.INTA.settings && window.INTA.settings.lgpd ? '<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Ihre Privatsphäre Rechte LGPD</button>' : "")
             + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International Datenschutz erklährung</button>',
-        categories: L
+        categories: categories
     };
 })();

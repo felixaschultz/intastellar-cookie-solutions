@@ -49,7 +49,9 @@ For production:
    - `intaBuildCmpUiFromLocale(payload)` – one generic settings/footer template
    - `intaTryApplyPreloadedCmpLocale()` – skips inline branches when a locale file loaded
 
-2. **`dev/languages/{slug}.dev.js`** – One file per locale (e.g. `en`, `da`). Sets `window.__intaCmpLocalePayload` using `intastellarSupportedLanguages` from `uc.js`.
+2. **`dev/languages/{slug}.dev.js`** – One file per locale (e.g. `en`, `da`). Sets `window.__intaCmpLocalePayload` with **inline category text** (no dependency on `uc.js`).
+
+3. **`scripts/cmp-language-categories.source.js`** – Build-time source for category labels/descriptions; used by `generate-cmp-locales.mjs` only (not loaded at runtime).
 
 3. **`uc.js` preload** – Before injecting `cb.js`, `intaPreloadCmpLocaleScript()` loads `languages/{slug}.js` during `requestIdleCallback` (not blocking LCP).
 
@@ -84,6 +86,8 @@ node scripts/generate-cmp-locales.mjs
 Sources: `messages` + `settingsMessagesLanguages` in `dev/cb.dev.js`, UI labels in `scripts/cmp-locale-catalog.mjs`. Production minify outputs `languages/*.js` on push to `production`.
 
 ### Other uc.js optimizations
+- **`intastellarSupportedLanguages` removed from `uc.js`** – ~35KB source / ~12KB minified saved; category copy lives in each `languages/{slug}.js` file instead
+- Intastellar analytics script deferred via `requestIdleCallback` (3s timeout)
 - Pre-compiled `allScripts` regexes for fetch/XHR consent checks
 - `requestIdleCallback` before loading `cb.js` (replaces fixed 800ms delay)
 - Debounced `MutationObserver` (80ms batch)

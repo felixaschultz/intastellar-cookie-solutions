@@ -76,7 +76,13 @@ We support your own cookiebanner design. Just use our technology to block thrid 
 ## Development
 
 If you want to develop on the banner you must do that in your own branch and in all \*.dev.js files. You create your branch from the "development" branch, and merge your also into
-that. The "cb(.dev).js" file is the function to create the banner via HTML and CSS and styling. The "gdpr(.dev).js" file is all the functionality of the banner
+that. The "cb(.dev).js" file is the function to create the banner via HTML and CSS and styling. The "gdpr(.dev).js" file is all the functionality of the banner.
+
+To generate locale files you can use the following command:
+```bash
+npm run generate-locale-files
+```
+This will generate the locale files in the "languages" folder.
 
 ## Beta testing
 

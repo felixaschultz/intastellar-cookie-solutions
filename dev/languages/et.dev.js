@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.estonian;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "Keeldu",
+    necessary: {
+        title: "Nõutav",
+        description: "Nõutavad veebitehnoloogiad ja küpsised muudavad meie veebisaidi tehniliselt kättesaadavaks ja kasutatavaks. See kehtib põhiliste funktsioonide kohta, nagu veebisaidil navigeerimine, õige kuvamine teie veebibrauseris või teie nõusoleku küsimine. Ilma nende veebitehnoloogiate ja küpsisteta meie veebisait ei tööta."
+    },
+    functional: {
+        title: "Funktsionaalne",
+        description: "Funktsionaalsed küpsised võimaldavad salvestada teavet, mis muudab veebisaidi välimust või käitumist. Näiteks teie eelistatud keel või piirkond."
+    },
+    statisic: {
+        title: "Statistika",
+        description: "Soovime pidevalt parandada meie veebisaitide kasutatavust ja jõudlust. Selleks kasutame analüüsitehnoloogiaid (sealhulgas küpsiseid), mis mõõdavad ja hindavad anonüümselt, milliseid funktsioone ja sisu meie veebisaitidel kasutatakse, kuidas ja kui sageli. Selle alusel saame oma veebisaite kasutajatele paremaks muuta."
+    },
+    marketing: {
+        title: "Turundus",
+        description: "Kasutame valitud partnerite veebitehnoloogiaid (ka küpsiseid), et näidata teile sisu ja reklaame, mis on spetsiaalselt teie jaoks kohandatud veebisaitidel ja sotsiaalmeedias. See sisu valitakse ja kuvatakse vastavalt teie kasutuskäitumisele. Reklaami- või turundusküpsiseid kasutatakse külastajatele asjakohaste reklaamide ja turunduskampaaniate pakkumiseks. Need küpsised jälgivad külastajaid erinevatel veebisaitidel ja koguvad teavet isikupärastatud reklaamide esitamiseks."
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "vasakus" : "paremas";
     window.__intaCmpLocalePayload = {
         slug: "et",
@@ -24,6 +39,6 @@
             + "<p>Klikkides \"Nõustu\", annate nõusoleku kõikidele nendele eesmärkidele. Samuti saate valida, millistele eesmärkidele te nõustute, märkides ruudud eesmärkide kõrval ja klõpsates \"Salvesta seaded\".</p>"
             + "<p>Te saate oma nõusoleku igal ajal tagasi võtta, klõpsates veebilehe alumises " + arrangeWord + " nurgas asuvale väikesele ikoonile.</p>",
         settingsMessageSuffix: '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privatsuspoliitika</button>',
-        categories: L
+        categories: categories
     };
 })();

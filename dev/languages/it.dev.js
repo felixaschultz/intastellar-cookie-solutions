@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.italian;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "Rifiuta",
+    necessary: {
+        title: "Necessario",
+        description: "Le tecnologie web e i cookie necessari rendono il nostro sito web tecnicamente accessibile e utilizzabile per te. Questo si applica a funzionalità di base fondamentali come la navigazione sul sito web, la visualizzazione corretta nel tuo browser Internet o la richiesta del tuo consenso. Senza queste tecnologie web e cookie, il nostro sito web non funziona."
+    },
+    functional: {
+        title: "Funzionale",
+        description: "I cookie funzionali consentono di salvare informazioni che modificano l'aspetto o il comportamento del sito web. Ad esempio, la tua lingua o regione preferita."
+    },
+    statisic: {
+        title: "Statistiche",
+        description: "Vogliamo migliorare costantemente l'usabilità e le prestazioni dei nostri siti web. Per questo motivo utilizziamo tecnologie di analisi (compresi i cookie) che misurano e valutano in modo pseudonimo quali funzioni e contenuti dei nostri siti web vengono utilizzati, come e con quale frequenza. Su questa base possiamo migliorare i nostri siti web per gli utenti."
+    },
+    marketing: {
+        title: "Marketing",
+        description: "Utilizziamo tecnologie web (anche cookie) da partner selezionati per poterti mostrare contenuti e pubblicità appositamente studiati per te su siti web e social media. Questi contenuti vengono selezionati e visualizzati in base al tuo comportamento d'uso. I cookie pubblicitari o di marketing vengono utilizzati per fornire ai visitatori annunci e campagne di marketing pertinenti. Questi cookie tracciano i visitatori tra i siti web e raccolgono informazioni per fornire annunci personalizzati."
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "sinistra" : "destra";
     window.__intaCmpLocalePayload = {
         slug: "it",
@@ -26,6 +41,6 @@
         settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights POPIA</button>' : "")
             + (window.INTA && window.INTA.settings && window.INTA.settings.lgpd ? '<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights LGPD</button>' : "")
             + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privacy policy</button>',
-        categories: L
+        categories: categories
     };
 })();

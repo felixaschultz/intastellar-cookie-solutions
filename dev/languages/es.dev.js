@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.spanish;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "Rechazar",
+    necessary: {
+        title: "Necesario",
+        description: "Las tecnologías web y las cookies necesarias hacen que nuestro sitio web sea técnicamente accesible y utilizable para usted. Esto se aplica a funcionalidades básicas fundamentales como la navegación en el sitio web, la visualización correcta en su navegador de Internet o la solicitud de su consentimiento. Sin estas tecnologías web y cookies, nuestro sitio web no funciona."
+    },
+    functional: {
+        title: "Funcional",
+        description: "Las cookies funcionales permiten guardar información que cambia la forma en que aparece o actúa el sitio web. Por ejemplo, su idioma o región preferidos."
+    },
+    statisic: {
+        title: "Estadísticas",
+        description: "Queremos mejorar letantemente la facilidad de uso y el rendimiento de nuestros sitios web. Por esta razón, utilizamos tecnologías de análisis (incluidas las cookies) que miden y evalúan de forma seudónima qué funciones y contenidos de nuestros sitios web se utilizan, cómo y con qué frecuencia. Sobre esta base, podemos mejorar nuestros sitios web para los usuarios."
+    },
+    marketing: {
+        title: "Marketing",
+        description: "Utilizamos tecnologías web (también cookies) de socios seleccionados para poder mostrarle contenido y publicidad especialmente adaptados a usted en sitios web y redes sociales. Este contenido se selecciona y muestra en función de su comportamiento de uso. Las cookies publicitarias o de marketing se utilizan para proporcionar a los visitantes anuncios y campañas de marketing relevantes. Estas cookies rastrean a los visitantes a través de sitios web y recopilan información para proporcionar anuncios personalizados."
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "izquierda" : "derecha";
     window.__intaCmpLocalePayload = {
         slug: "es",
@@ -26,6 +41,6 @@
         settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights POPIA</button>' : "")
             + (window.INTA && window.INTA.settings && window.INTA.settings.lgpd ? '<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights LGPD</button>' : "")
             + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidad</button>',
-        categories: L
+        categories: categories
     };
 })();

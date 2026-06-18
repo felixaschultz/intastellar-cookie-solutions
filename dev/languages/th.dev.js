@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.thai;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "ปฏิเสธทั้งหมด",
+    necessary: {
+        title: "จำเป็น",
+        description: "เทคโนโลยีเว็บและคุกกี้ที่จำเป็นทำให้เว็บไซต์ของเราเข้าถึงและใช้งานได้จากทางเทคนิคสำหรับคุณ ครอบคลุมฟังก์ชันพื้นฐาน เช่น การนำทางบนเว็บไซต์ การแสดงผลที่ถูกต้องในเบราว์เซอร์ของคุณ หรือการขอความยินยอมจากคุณ หากไม่มีเทคโนโลยีและคุกกี้เหล่านี้ เว็บไซต์ของเราจะทำงานไม่ได้ตามปกติ"
+    },
+    functional: {
+        title: "การทำงาน",
+        description: "คุกกี้เชิงฟังก์ชันช่วยให้เราจัดเก็บข้อมูลที่เปลี่ยนแปลงลักษณะหรือพฤติกรรมของเว็บไซต์ เช่น ภาษาหรือภูมิภาคที่คุณต้องการ"
+    },
+    statisic: {
+        title: "สถิติ",
+        description: "เราต้องการพัฒนาประสบการณ์การใช้งานและประสิทธิภาพของเว็บไซต์อย่างต่อเนื่อง จึงใช้เทคโนโลยีวิเคราะห์ (รวมถึงคุกกี้) เพื่อวัดและประเมินแบบไม่ระบุตัวตนว่าฟีเจอร์และเนื้อหาใดของเว็บไซต์ถูกใช้งานอย่างไรและบ่อยเพียงใด เพื่อนำไปปรับปรุงเว็บไซต์ให้เหมาะกับผู้ใช้"
+    },
+    marketing: {
+        title: "การตลาด",
+        description: "เราใช้เทคโนโลยีเว็บ (รวมถึงคุกกี้) จากพันธมิตรที่คัดสรร เพื่อแสดงเนื้อหาและโฆษณาที่ปรับให้เหมาะกับคุณบนเว็บไซต์และโซเชียลมีเดีย โดยเลือกและแสดงผลตามพฤติกรรมการใช้งานของคุณ คุกกี้โฆษณาหรือการตลาดใช้เพื่อแสดงโฆษณาและแคมเปญที่เกี่ยวข้อง ติดตามผู้เยี่ยมชมข้ามเว็บไซต์ และรวบรวมข้อมูลเพื่อนำเสนอโฆษณาเฉพาะบุคคล"
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "ล่างซ้าย" : "ล่างขวา";
     window.__intaCmpLocalePayload = {
         slug: "th",
@@ -26,6 +41,6 @@
         settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights POPIA</button>' : "")
             + (window.INTA && window.INTA.settings && window.INTA.settings.lgpd ? '<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights LGPD</button>' : "")
             + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International นโยบายความเป็นส่วนตัว</button>',
-        categories: L
+        categories: categories
     };
 })();

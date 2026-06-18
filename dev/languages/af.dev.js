@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.afrikaans;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "Weier",
+    necessary: {
+        title: "Noodsaaklik",
+        description: "Noodsaaklike webtegnologieë en koekies maak ons webwerf tegnies toeganklik en bruikbaar vir u. Dit geld vir fundamentele basiese funksies soos navigasie op die webwerf, korrekte vertoon in u internetblaaier of versoek om u toestemming. Sonder hierdie webtegnologieë en koekies werk ons webwerf nie."
+    },
+    functional: {
+        title: "Funksioneel",
+        description: "Funksionele koekies maak dit moontlik om inligting te stoor wat die voorkoms of gedrag van die webwerf verander. Byvoorbeeld, u voorkeurtaal of -streek."
+    },
+    statisic: {
+        title: "Statistiek",
+        description: "Ons wil die bruikbaarheid en prestasie van ons webwerwe voortdurend verbeter. Daarom gebruik ons analise tegnologieë (insluitend koekies) wat pseudoniem meet en evalueer watter funksies en inhoud van ons webwerwe gebruik word, hoe en hoe gereeld. Op hierdie basis kan ons ons webwerwe vir gebruikers verbeter."
+    },
+    marketing: {
+        title: "Bemarking",
+        description: "Ons gebruik webtegnologieë (ook koekies) van geselekte vennote om u inhoud en advertensies te wys wat spesifiek vir u opgestel is op webwerwe en sosiale media. Hierdie inhoud word gekies en vertoon op grond van u gebruiksgedrag. Advertensie- of bemarkingskoekies word gebruik om besoekers relevante advertensies en bemarkingsveldtogte te bied. Hierdie koekies volg besoekers oor verskillende webwerwe en versamel inligting om gepersonaliseerde advertensies te lewer."
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "linker" : "regter";
     window.__intaCmpLocalePayload = {
         slug: "af",
@@ -25,6 +40,6 @@
             + "<p>Jy kan jou toestemming te eniger tyd intrek deur op die klein ikoon in die onderkant " + arrangeWord + " hoek van die webwerf te klik.</p>",
         settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Jou POPIA-privaatheidsregte</button>' : "")
             + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privaatheidsbeleid</button>',
-        categories: L
+        categories: categories
     };
 })();

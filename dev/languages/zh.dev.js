@@ -1,8 +1,23 @@
 (function () {
-    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.chinese;
-    if (!L) {
-        return;
+    var categories = {
+    saveSettings: "拒绝",
+    necessary: {
+        title: "必要的",
+        description: "必要的网络技术和Cookie使我们的网站在技术上对您可访问和可用。这适用于基本的基本功能，例如网站导航、在您的互联网浏览器中的正确显示或请求您的同意。没有这些网络技术和Cookie，我们的网站无法正常工作。"
+    },
+    functional: {
+        title: "功能性",
+        description: "功能性Cookie允许我们存储更改网站外观或行为的信息。例如，您首选的语言或地区。"
+    },
+    statisic: {
+        title: "统计",
+        description: "我们希望不断改善我们网站的可用性和性能。因此，我们使用分析技术（包括Cookie），这些技术以假名方式测量和评估我们网站的哪些功能和内容被使用、如何使用以及使用频率。基于此，我们可以改善我们的网站以满足用户需求。"
+    },
+    marketing: {
+        title: "营销",
+        description: "我们使用来自精选合作伙伴的网络技术（包括Cookie），以便在网站和社交媒体上向您展示特别为您量身定制的内容和广告。这些内容根据您的使用行为进行选择和显示。广告或营销Cookie用于向访问者提供相关的广告和营销活动。这些Cookie在不同的网站上跟踪访问者，并收集信息以提供个性化的广告。"
     }
+};
     var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "左侧" : "右侧";
     window.__intaCmpLocalePayload = {
         slug: "zh",
@@ -24,6 +39,6 @@
             + "<p>点击“接受”即表示您同意所有这些目的。您也可以选择您同意的具体目的，通过勾选目的旁边的复选框并点击“保存设置”。</p>"
             + "<p>您可以随时通过点击网站底部 " + arrangeWord + " 角落的小图标来撤销您的同意。</p>",
         settingsMessageSuffix: '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International 隐私政策</button>',
-        categories: L
+        categories: categories
     };
 })();
