@@ -312,6 +312,25 @@ let allScripts = window.allScripts = [
         ]
     }
 ];
+let __intaCompiledScriptPatterns = null;
+function intaGetCompiledScriptPatterns() {
+    if (__intaCompiledScriptPatterns) {
+        return __intaCompiledScriptPatterns;
+    }
+    __intaCompiledScriptPatterns = [];
+    for (let i = 0; i < window.allScripts.length; i++) {
+        let scriptType = window.allScripts[i].type;
+        let patterns = window.allScripts[i].scripts;
+        let regexes = [];
+        for (let j = 0; j < patterns.length; j++) {
+            try {
+                regexes.push(new RegExp(patterns[j], "i"));
+            } catch (eCompile) { /* ignore invalid regex */ }
+        }
+        __intaCompiledScriptPatterns.push({ type: scriptType, regexes: regexes });
+    }
+    return __intaCompiledScriptPatterns;
+}
 let __intaCookieEventFlushTimer = null;
 let __intaCookieEventPendingByKey = new Map();
 let INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
@@ -1358,18 +1377,17 @@ function optOutCCPA() {
 // Helper: Determine consent type for a given URL using allScripts regex
 function getConsentTypeForUrl(url) {
     if (!url) return 'marketing';
-    for (let i = 0; i < window.allScripts.length; i++) {
-        let scriptType = window.allScripts[i].type;
-        let patterns = window.allScripts[i].scripts;
-        for (let j = 0; j < patterns.length; j++) {
+    let compiled = intaGetCompiledScriptPatterns();
+    for (let i = 0; i < compiled.length; i++) {
+        let scriptType = compiled[i].type;
+        let regexes = compiled[i].regexes;
+        for (let j = 0; j < regexes.length; j++) {
             try {
-                let regex = new RegExp(patterns[j], 'i');
-                if (regex.test(url)) {
-                    // statics => statistics
+                if (regexes[j].test(url)) {
                     if (scriptType === 'statics') return 'statistics';
                     return scriptType;
                 }
-            } catch (e) { /* ignore invalid regex */ }
+            } catch (e) { /* ignore */ }
         }
     }
     // Default fallback
@@ -4290,16 +4308,117 @@ if (intastellarDevMode) {
 intastellarCreateBanner.async = true;
 intastellarCreateBanner.defer = true;
 
+function intaScheduleWhenIdle(fn, timeoutMs) {
+    timeoutMs = timeoutMs == null ? 2000 : timeoutMs;
+    if (typeof requestIdleCallback === "function") {
+        return requestIdleCallback(fn, { timeout: timeoutMs });
+    }
+    return setTimeout(fn, Math.min(timeoutMs, 250));
+}
+
+/** Resolve CMP locale slug from INTA.settings / browser (used before cb.js). */
+function intaUcResolveCmpLocaleSlug() {
+    var settings = window.INTA && window.INTA.settings;
+    if (settings && settings.locale) {
+        return String(settings.locale).trim().toLowerCase().split("-")[0];
+    }
+    if (settings && settings.language) {
+        var lang = String(settings.language).trim().toLowerCase();
+        if (lang === "danish") return "da";
+        if (lang === "english") return "en";
+        if (lang === "german") return "de";
+        if (lang === "spanish") return "es";
+        if (lang === "french") return "fr";
+        if (lang === "swedish") return "sv";
+        if (lang === "norwegian") return "no";
+        if (lang === "dutch") return "nl";
+        if (lang === "italian") return "it";
+        if (lang === "finnish") return "fi";
+        if (lang === "russian") return "ru";
+        if (lang === "polish") return "pl";
+        if (lang === "portuguese") return "pt";
+        if (lang === "thai") return "th";
+        return lang.split("-")[0];
+    }
+    var browser = (typeof intastellarCookieLanguage !== "undefined" && intastellarCookieLanguage)
+        ? String(intastellarCookieLanguage).toLowerCase()
+        : String(navigator.language || "en").toLowerCase();
+    if (browser.indexOf("da") === 0) return "da";
+    if (browser.indexOf("de") === 0) return "de";
+    if (browser.indexOf("en") === 0) return "en";
+    return browser.split("-")[0];
+}
+
+function intaUcCmpLocaleScriptUrl(slug) {
+    var settings = window.INTA && window.INTA.settings;
+    if (settings && typeof settings.localeUrl === "string" && settings.localeUrl.indexOf("{locale}") !== -1) {
+        return settings.localeUrl.replace(/\{locale\}/g, slug);
+    }
+    if (typeof intastellarDevMode !== "undefined" && intastellarDevMode) {
+        return "../../dev/languages/" + slug + ".dev.js";
+    }
+    return "https://consents.cdn.intastellarsolutions.com/languages/" + slug + ".js";
+}
+
+/** Load one locale file before cb.js so cb can skip the inline language branches. */
+function intaPreloadCmpLocaleScript() {
+    var settings = window.INTA && window.INTA.settings;
+    if (settings && settings.localeSplit === false) {
+        return Promise.resolve();
+    }
+    var slug = intaUcResolveCmpLocaleSlug();
+    if (window.__intaCmpLocalePayload && window.__intaCmpLocalePayload.slug === slug) {
+        return Promise.resolve();
+    }
+    function loadSlug(targetSlug) {
+        return new Promise(function (resolve) {
+            var done = false;
+            function finish() {
+                if (done) {
+                    return;
+                }
+                done = true;
+                resolve(!!(window.__intaCmpLocalePayload && window.__intaCmpLocalePayload.slug === targetSlug));
+            }
+            var s = document.createElement("script");
+            s.async = true;
+            s.src = intaUcCmpLocaleScriptUrl(targetSlug);
+            s.onload = finish;
+            s.onerror = finish;
+            intaAppendToDocumentHead(s);
+            setTimeout(finish, 3500);
+        });
+    }
+    return loadSlug(slug).then(function (ok) {
+        if (ok || slug === "en") {
+            return;
+        }
+        return loadSlug("en");
+    });
+}
+
 (function intaScheduleBannerScriptAfterExperimentText() {
     var presetId = typeof window.__intaTextOverridePresetId === "string" && window.__intaTextOverridePresetId.length
         ? window.__intaTextOverridePresetId
         : null;
     var fetchP = presetId ? intaFetchTextOverridePresetPromise(presetId) : Promise.resolve();
-    var delayMs = 800;
-    var delayP = new Promise(function (resolve) {
-        setTimeout(resolve, delayMs);
+    var idleP = new Promise(function (resolve) {
+        intaScheduleWhenIdle(resolve, 2000);
     });
-    Promise.all([fetchP, delayP])
+    var localeP = intaPreloadCmpLocaleScript();
+    var loaderP = Promise.resolve();
+    if (typeof intastellarDevMode !== "undefined" && intastellarDevMode) {
+        loaderP = new Promise(function (resolve) {
+            var s = document.createElement("script");
+            s.async = true;
+            s.src = "../../dev/cb-locale-loader.dev.js";
+            s.onload = resolve;
+            s.onerror = resolve;
+            intaAppendToDocumentHead(s);
+            setTimeout(resolve, 1500);
+        });
+    }
+    Promise.all([fetchP, idleP, localeP, loaderP])
         .then(function () {
             if (window.INTA && window.INTA.settings) {
                 intaAppendToDocumentHead(intastellarCreateBanner);
@@ -5246,9 +5365,21 @@ function checkCookieStatus() {
     /* To get anonymous cookie banner usage */
     /* - - - Observer - - - */
 
+    let __intaObserverPendingMutations = [];
+    let __intaObserverDebounceTimer = null;
     let observer = new MutationObserver((mutations) => {
-        requestAnimationFrame(() => {
-            mutations.forEach(({ addedNodes }) => {
+        for (let mi = 0; mi < mutations.length; mi++) {
+            __intaObserverPendingMutations.push(mutations[mi]);
+        }
+        if (__intaObserverDebounceTimer !== null) {
+            clearTimeout(__intaObserverDebounceTimer);
+        }
+        __intaObserverDebounceTimer = setTimeout(function () {
+            __intaObserverDebounceTimer = null;
+            let batch = __intaObserverPendingMutations;
+            __intaObserverPendingMutations = [];
+            requestAnimationFrame(() => {
+                batch.forEach(({ addedNodes }) => {
                 addedNodes.forEach((node) => {
 
                     if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
@@ -5817,6 +5948,7 @@ function checkCookieStatus() {
                 });
             });
         });
+        }, 80);
     });
     startObserving(observer, document.documentElement);
     return observer;

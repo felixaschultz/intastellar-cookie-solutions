@@ -1,0 +1,30 @@
+(function () {
+    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.afrikaans;
+    if (!L) {
+        return;
+    }
+    var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "linker" : "regter";
+    window.__intaCmpLocalePayload = {
+        slug: "af",
+        cookieSettingsLabel: "Koekie Instellings",
+        showHideDetails: "Wys besonderhede",
+        acceptLabel: "Aanvaar",
+        acceptShortLabel: "Aanvaar",
+        declineLabel: "Weier",
+        settingsLabel: "Instellings",
+        policyLinkLabel: "Ons Privaatheids- en koekiebeleid",
+        bannerMessage: "Deur alle koekies te aanvaar, ondersteun u " + document.domain + " in die ontwikkeling van 'n beter oplossing vir u.</p><p>Kies of u slegs die nodige koekies wil toelaat of of u alle koekies wil toelaat.",
+        settingsMessage: "<h3 style=\"    font-size: 25px;\">Jy is in beheer</h3>"
+            + "<p>Ons en ons sakevennote gebruik tegnologieë, insluitend koekies, om inligting oor jou vir verskillende doeleindes in te samel, insluitend:</p>"
+            + "<ol>"
+            + "<li>Funksionaliteit</li>"
+            + "<li>Analise</li>"
+            + "<li>Advertering</li>"
+            + "</ol>"
+            + "<p>Deur op 'Aanvaar' te klik, gee jy toestemming vir al hierdie doeleindes. Jy kan ook die spesifieke doeleindes waarvoor jy toestemming gee, kies deur die keuselys langs die doelwit aan te dui en op 'Stoor instellings' te klik.</p>"
+            + "<p>Jy kan jou toestemming te eniger tyd intrek deur op die klein ikoon in die onderkant " + arrangeWord + " hoek van die webwerf te klik.</p>",
+        settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Jou POPIA-privaatheidsregte</button>' : "")
+            + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International privaatheidsbeleid</button>',
+        categories: L
+    };
+})();

@@ -1,0 +1,31 @@
+(function () {
+    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.swedish;
+    if (!L) {
+        return;
+    }
+    var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "vänster" : "höger";
+    window.__intaCmpLocalePayload = {
+        slug: "sv",
+        cookieSettingsLabel: "Kakinställningar",
+        showHideDetails: "Visa detaljer",
+        acceptLabel: "Acceptera",
+        acceptShortLabel: "Acceptera",
+        declineLabel: "Avvisa",
+        settingsLabel: "Inställningar",
+        policyLinkLabel: "Vår integritets- och cookiepolicy",
+        bannerMessage: "Genom att acceptera alla cookies stöder du " + document.domain + " i att utveckla en bättre lösning för dig.</p><p>Välj om du vill tillåta endast nödvändiga cookies eller om du vill tillåta alla cookies.",
+        settingsMessage: "<h3 style=\"    font-size: 25px;\">Du har kontrollen</h3>"
+            + "<p>Vi och våra affärspartners använder teknik, inklusive cookies, för att samla in information om dig för olika ändamål, inklusive:</p>"
+            + "<ol>"
+            + "<li>Funktionell</li>"
+            + "<li>Statistik</li>"
+            + "<li>Marknadsföring</li>"
+            + "</ol>"
+            + "<p>Genom att klicka på \"Acceptera\" ger du ditt samtycke till alla dessa ändamål. Du kan också välja att specificera de ändamål du samtycker till genom att markera rutan bredvid ändamålet och klicka på \"Spara inställningar\".</p>"
+            + "<p>Du kan återkalla ditt samtycke när som helst genom att klicka på den lilla ikonen längst ned " + arrangeWord + " hörn av webbplatsen.</p>",
+        settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights POPIA</button>' : "")
+            + (window.INTA && window.INTA.settings && window.INTA.settings.lgpd ? '<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights LGPD</button>' : "")
+            + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International integritetspolicy</button>',
+        categories: L
+    };
+})();

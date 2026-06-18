@@ -1,6 +1,7 @@
 # Minify dev sources into production bundles on push to `production`.
 # dev/gdpr.dev.js → uc.js (repo root)
-# dev/cb.dev.js   → cb.js (repo root)
+# dev/cb-locale-loader.dev.js + dev/cb.dev.js → cb.js (repo root)
+# dev/languages/*.dev.js → languages/*.js
 
 name: Minify to uc.js and cb.js
 
@@ -33,17 +34,31 @@ jobs:
       - name: Minify gdpr.dev.js → uc.js
         run: npx --yes terser@5 dev/gdpr.dev.js -c -m -o uc.js
 
-      - name: Minify cb.dev.js → cb.js
-        run: npx --yes terser@5 dev/cb.dev.js -c -m -o cb.js
+      - name: Minify cb locale loader + cb.dev.js → cb.js
+        run: |
+          cat dev/cb-locale-loader.dev.js dev/cb.dev.js > dev/cb.build.tmp.js
+          npx --yes terser@5 dev/cb.build.tmp.js -c -m -o cb.js
+          rm -f dev/cb.build.tmp.js
+
+      - name: Minify locale files → languages/
+        run: |
+          mkdir -p languages
+          for f in dev/languages/*.dev.js; do
+            base=$(basename "$f" .dev.js)
+            npx --yes terser@5 "$f" -c -m -o "languages/${base}.js"
+          done
+
+      - name: Minify uc-vendors.dev.js → uc-vendors.js
+        run: npx --yes terser@5 dev/uc-vendors.dev.js -c -m -o uc-vendors.js
 
       - name: Commit minified files if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add uc.js cb.js
+          git add uc.js cb.js languages/*.js uc-vendors.js
           if git diff --staged --quiet; then
-            echo "No changes to uc.js or cb.js."
+            echo "No changes to production bundles."
           else
-            git commit -m "chore: minify gdpr.dev.js → uc.js, cb.dev.js → cb.js [skip ci]"
+            git commit -m "chore: minify production CMP bundles and locale files [skip ci]"
             git push
           fi

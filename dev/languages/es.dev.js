@@ -1,0 +1,31 @@
+(function () {
+    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.spanish;
+    if (!L) {
+        return;
+    }
+    var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "izquierda" : "derecha";
+    window.__intaCmpLocalePayload = {
+        slug: "es",
+        cookieSettingsLabel: "Configuración de cookies",
+        showHideDetails: "Mostrar detalles",
+        acceptLabel: "Aceptar",
+        acceptShortLabel: "Aceptar",
+        declineLabel: "Rechazar",
+        settingsLabel: "Configuración",
+        policyLinkLabel: "Nuestra política de privacidad y cookies",
+        bannerMessage: "Al aceptar todas las cookies, apoyas a " + document.domain + " en el desarrollo de una mejor solución para ti.</p><p>Seleccione si desea permitir solo las cookies necesarias o si desea permitir todas las cookies.",
+        settingsMessage: "<h3 style=\"    font-size: 25px;\">Tienes el control</h3>"
+            + "<p>Nosotros y nuestros socios comerciales utilizamos tecnologías, incluidas las cookies, para recopilar información sobre usted con diversos fines, incluidos:</p>"
+            + "<ol>"
+            + "<li>Funcional</li>"
+            + "<li>Estadísticas</li>"
+            + "<li>Publicidad</li>"
+            + "</ol>"
+            + "<p>Al hacer clic en \"Aceptar\", usted da su consentimiento para todos estos fines. También puede decidir a qué fines dar su consentimiento marcando la casilla junto al fin y haciendo clic en \"Guardar configuración\".</p>"
+            + "<p>Puede retirar su consentimiento en cualquier momento haciendo clic en el pequeño icono en la esquina inferior " + arrangeWord + " del sitio web.</p>",
+        settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights POPIA</button>' : "")
+            + (window.INTA && window.INTA.settings && window.INTA.settings.lgpd ? '<button onclick="showLGPDModal()" class="intastellarCookie-settings__privacyLink">Your Privacy Rights LGPD</button>' : "")
+            + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International política de privacidad</button>',
+        categories: L
+    };
+})();

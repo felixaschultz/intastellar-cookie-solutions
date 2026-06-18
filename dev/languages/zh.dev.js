@@ -1,0 +1,29 @@
+(function () {
+    var L = window.intastellarSupportedLanguages && window.intastellarSupportedLanguages.chinese;
+    if (!L) {
+        return;
+    }
+    var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "左侧" : "右侧";
+    window.__intaCmpLocalePayload = {
+        slug: "zh",
+        cookieSettingsLabel: "Cookie 设置",
+        showHideDetails: "显示详情",
+        acceptLabel: "接受",
+        acceptShortLabel: "接受",
+        declineLabel: "拒绝",
+        settingsLabel: "设置",
+        policyLinkLabel: "我们的隐私和 Cookie 政策",
+        bannerMessage: "通过接受所有cookie，您支持" + document.domain + "为您开发更好的解决方案。</p><p>选择是否只允许必要的cookie或允许所有cookie。",
+        settingsMessage: "<h3 style=\"    font-size: 25px;\">你掌控一切</h3>"
+            + "<p>我们和我们的商业伙伴使用技术，包括 cookies，收集关于您的信息用于各种目的，包括：</p>"
+            + "<ol>"
+            + "<li>功能性</li>"
+            + "<li>统计</li>"
+            + "<li>广告</li>"
+            + "</ol>"
+            + "<p>点击“接受”即表示您同意所有这些目的。您也可以选择您同意的具体目的，通过勾选目的旁边的复选框并点击“保存设置”。</p>"
+            + "<p>您可以随时通过点击网站底部 " + arrangeWord + " 角落的小图标来撤销您的同意。</p>",
+        settingsMessageSuffix: '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International 隐私政策</button>',
+        categories: L
+    };
+})();
