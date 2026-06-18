@@ -233,6 +233,256 @@ function updateVwoConsent(consents) {
  * Site Kit that map WP cookies → Consent Mode can otherwise fight Intastellar’s updates.
  * @see https://wpconsentapi.org
  */
+function intaWpConsentApiActive() {
+    if (typeof wp_set_consent !== "function") {
+        return false;
+    }
+    try {
+        const s = window.INTA && window.INTA.settings;
+        if (s && s.wpConsentApi === false) {
+            return false;
+        }
+    } catch (e) { /* ignore */ }
+    return true;
+}
+
+/** Google Consent Mode / gtag values → treat as granted (case-insensitive; tolerate common aliases). */
+function intaWpConsentStorageIsGranted(value) {
+    if (value === true) {
+        return true;
+    }
+    if (value == null || value === false) {
+        return false;
+    }
+    const s = String(value).toLowerCase();
+    return s === "granted" || s === "grant" || s === "allow";
+}
+
+/**
+ * CMP: `window.wp_consent_type = 'optin'` and `wp_consent_type_defined` on document (once per page when API is active).
+ * @see https://wpconsentapi.org
+ */
+function intaWpEnsureConsentTypeOptinAnnouncedOnce() {
+    if (!intaWpConsentApiActive() || window._intaWpConsentTypeDefinedSent) {
+        return;
+    }
+    window._intaWpConsentTypeDefinedSent = true;
+    try {
+        window.wp_consent_type = "optin";
+    } catch (e) { /* ignore */ }
+    try {
+        if (typeof document !== "undefined" && document.dispatchEvent) {
+            document.dispatchEvent(new CustomEvent("wp_consent_type_defined"));
+        }
+    } catch (e) { /* ignore */ }
+}
+
+/**
+ * When gtag pushes `consent` / `update`, mirror storage keys into `wp_set_consent`.
+ * Does not dispatch a separate batched `wp_listen_for_consent_change` — each `wp_set_consent`
+ * already fires the WP Consent API listener; an extra batched event can make Site Kit run a second gtag pass.
+ * No-op unless `wp_set_consent` exists.
+ * @see https://wpconsentapi.org
+ */
+function intaWpSetConsentFromGtagUpdateParams(params) {
+    if (!intaWpConsentApiActive()) {
+        return;
+    }
+    intaWpEnsureConsentTypeOptinAnnouncedOnce();
+    const p = params && typeof params === "object" ? params : {};
+    const lvl = (key) => (intaWpConsentStorageIsGranted(p[key]) ? "allow" : "deny");
+    if ("functionality_storage" in p) {
+        const fn = lvl("functionality_storage");
+        wp_set_consent("functional", fn);
+        wp_set_consent("preferences", fn);
+    }
+    if ("analytics_storage" in p) {
+        const st = lvl("analytics_storage");
+        wp_set_consent("statistics", st);
+        wp_set_consent("statistics-anonymous", st);
+    }
+    if ("ad_storage" in p || "ad_user_data" in p || "ad_personalization" in p || "personalization_storage" in p) {
+        const mk = (intaWpConsentStorageIsGranted(p.ad_storage) || intaWpConsentStorageIsGranted(p.ad_user_data) || intaWpConsentStorageIsGranted(p.ad_personalization) || intaWpConsentStorageIsGranted(p.personalization_storage))
+            ? "allow"
+            : "deny";
+        wp_set_consent("marketing", mk);
+    }
+}
+
+/**
+ * Mirror consent from a single dataLayer item (Arguments object, array, or spread push).
+ * Only handles `consent` / `update` (not `default`), so regional GTM defaults do not overwrite WP cookies incorrectly.
+ */
+function intaWpTryConsentUpdateFromDataLayerItem(item) {
+    if (item == null) {
+        return;
+    }
+    if (typeof item === "object" && !Array.isArray(item)) {
+        const t0 = item[0];
+        const t1 = item[1];
+        const t2 = item[2];
+        if (t0 === "consent" && t1 === "update" && t2 != null && typeof t2 === "object" && !Array.isArray(t2)) {
+            intaWpSetConsentFromGtagUpdateParams(t2);
+        }
+    }
+}
+
+function intaWpTryConsentUpdateFromDataLayerPushArgs(pushArgs) {
+    if (!intaWpConsentApiActive() || !pushArgs || pushArgs.length === 0) {
+        return;
+    }
+    for (let i = 0; i < pushArgs.length; i++) {
+        intaWpTryConsentUpdateFromDataLayerItem(pushArgs[i]);
+    }
+    if (pushArgs.length >= 3
+        && pushArgs[0] === "consent"
+        && pushArgs[1] === "update"
+        && pushArgs[2] != null
+        && typeof pushArgs[2] === "object"
+        && !Array.isArray(pushArgs[2])) {
+        intaWpSetConsentFromGtagUpdateParams(pushArgs[2]);
+    }
+}
+
+/**
+ * Keep our wrapper as the outermost `dataLayer.push`: GTM often replaces `push` after this script runs.
+ * Mirroring runs inside the wrapper; `intaWpTryConsentUpdateFromDataLayerPushArgs` no-ops until `wp_set_consent` exists.
+ */
+function intaWpEnsureDataLayerPushMirrorBound() {
+    const dl = window.dataLayer;
+    if (!dl || typeof dl.push !== "function") {
+        return;
+    }
+    const wrapped = dl._intaWpMirrorWrappedPush;
+    if (wrapped && dl.push === wrapped) {
+        return;
+    }
+    const upstream = dl.push;
+    function intaWpMirrorWrappedPush() {
+        window._intaWpDlPushDepth = (window._intaWpDlPushDepth || 0) + 1;
+        const depthAtEntry = window._intaWpDlPushDepth;
+        try {
+            const ret = intaWpMirrorWrappedPush._upstream.apply(dl, arguments);
+            // Site Kit (and others) listen to `wp_listen_for_consent_change` and call `gtag` → `dataLayer.push`
+            // again. Only mirror the outermost push so we do not recurse until stack overflow.
+            if (depthAtEntry === 1) {
+                try {
+                    intaWpTryConsentUpdateFromDataLayerPushArgs(Array.prototype.slice.call(arguments));
+                } catch (e2) { /* ignore */ }
+            }
+            return ret;
+        } finally {
+            window._intaWpDlPushDepth--;
+        }
+    }
+    intaWpMirrorWrappedPush._upstream = upstream;
+    dl._intaWpMirrorWrappedPush = intaWpMirrorWrappedPush;
+    dl.push = intaWpMirrorWrappedPush;
+}
+
+function intaWpInstallDataLayerConsentMirror() {
+    const dl = window.dataLayer;
+    if (!dl || typeof dl.push !== "function") {
+        return;
+    }
+    if (!dl._intaWpMirrorSchedule) {
+        dl._intaWpMirrorSchedule = true;
+        const rebind = function () {
+            intaWpEnsureDataLayerPushMirrorBound();
+        };
+        if (typeof window !== "undefined" && window.addEventListener) {
+            window.addEventListener("load", rebind);
+        }
+        let n = 0;
+        const id = setInterval(function () {
+            rebind();
+            if (++n >= 50) {
+                clearInterval(id);
+            }
+        }, 100);
+    }
+    intaWpEnsureDataLayerPushMirrorBound();
+}
+
+/**
+ * Apply WP Consent API cookies from Intastellar checkbox choices (works even when GTM owns `dataLayer.push` / `gtag`).
+ * functional → `functional` + `preferences`; statistics → `statistics` + `statistics-anonymous`; marketing → `marketing`.
+ */
+function intaWpApplyConsentFromIntastellarChoices(functionalChecked, statisticsChecked, marketingChecked) {
+    if (!intaWpConsentApiActive()) {
+        return;
+    }
+    intaWpEnsureConsentTypeOptinAnnouncedOnce();
+    const prefs = functionalChecked ? "allow" : "deny";
+    const stats = statisticsChecked ? "allow" : "deny";
+    const mkt = marketingChecked ? "allow" : "deny";
+    wp_set_consent("functional", prefs);
+    wp_set_consent("preferences", prefs);
+    wp_set_consent("statistics", stats);
+    wp_set_consent("statistics-anonymous", stats);
+    wp_set_consent("marketing", mkt);
+    /* Rely on native `wp_listen_for_consent_change` from each `wp_set_consent` only — a batched
+     * duplicate dispatch here previously caused Site Kit to fire gtag consent twice (deny overwrite). */
+}
+
+/**
+ * Read Intastellar consent flags from `window.intaCookieConsents` (set from cookie on load).
+ * @returns {{ functional: boolean, statistics: boolean, marketing: boolean } | null} null if no consent object.
+ */
+function intaWpReadIntastellarConsentBooleansFromWindow() {
+    const c = window.intaCookieConsents;
+    if (!c || typeof c !== "object") {
+        return null;
+    }
+    return {
+        functional: c.functionalCookies === "checked" || c.functionalCookies === true,
+        statistics: c.staticsticCookies === "checked" || c.staticsticCookies === true,
+        marketing: c.advertisementCookies === "checked" || c.advertisementCookies === true,
+    };
+}
+
+/**
+ * Re-apply WP Consent API cookies from the stored Intastellar cookie (e.g. after reload).
+ * On first paint, `gtag('consent','update')` often runs before `wp_set_consent` exists — this runs once WP is ready.
+ */
+function intaWpTrySyncWpFromStoredIntastellarConsentOnce() {
+    if (!intaWpConsentApiActive() || window._intaWpStoredConsentSyncedToWp) {
+        return !!window._intaWpStoredConsentSyncedToWp;
+    }
+    const b = intaWpReadIntastellarConsentBooleansFromWindow();
+    if (!b) {
+        return false;
+    }
+    intaWpApplyConsentFromIntastellarChoices(b.functional, b.statistics, b.marketing);
+    window._intaWpStoredConsentSyncedToWp = true;
+    return true;
+}
+
+function intaWpScheduleSyncWpFromStoredIntastellarConsent() {
+    if (window._intaWpCookieSyncScheduled) {
+        return;
+    }
+    if (!intaWpReadIntastellarConsentBooleansFromWindow()) {
+        return;
+    }
+    window._intaWpCookieSyncScheduled = true;
+    const tick = function () {
+        return intaWpTrySyncWpFromStoredIntastellarConsentOnce();
+    };
+    if (tick()) {
+        return;
+    }
+    if (typeof window !== "undefined" && window.addEventListener) {
+        window.addEventListener("DOMContentLoaded", tick);
+        window.addEventListener("load", tick);
+    }
+    let n = 0;
+    const id = setInterval(function () {
+        if (tick() || ++n >= 80) {
+            clearInterval(id);
+        }
+    }, 100);
+}
 // --- Helper function to detect Vendors of Cookies (lazy-loaded; stub until uc-vendors loads) ---
 function detectCookieVendor(cookie) {
     if (typeof window.__intaDetectCookieVendor === 'function') {
@@ -1730,6 +1980,13 @@ function startObserving(observer) {
 
 window.inta_marketingCookieList = window.inta_marketingCookieList || [];
 window.inta_functionalCookieList = window.inta_functionalCookieList || [];
+
+function sendToBackend(data) {
+    if (typeof window.__intaSendToBackendImpl === "function") {
+        return window.__intaSendToBackendImpl(data);
+    }
+    return Promise.resolve();
+}
 
 function recordCookie(value) {
     window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
