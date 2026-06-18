@@ -2146,8 +2146,13 @@ function intaCbApplyMainBannerDomAndInitialize() {
 
     cookieSettings.appendChild(cookieSettingsContent);
 
-    if (window?.INTA?.settings.advanced) {
-        //banner.appendChild(cookieSettings);
+    var bannerDesign = window.INTA.settings.design;
+    if (bannerDesign === "banner" || bannerDesign === "bannerV2") {
+        if (!moreSettings.contains(cookieSettings)) {
+            moreSettings.appendChild(cookieSettings);
+        }
+    } else if (!intaconsents.contains(cookieSettings)) {
+        intaconsents.appendChild(cookieSettings);
     }
 
     banner.setAttribute("class", "intastellarCookie-settings");
