@@ -87,13 +87,32 @@ Sources: `messages` + `settingsMessagesLanguages` in `dev/cb.dev.js`, UI labels 
 
 ### Other uc.js optimizations
 - **`intastellarSupportedLanguages` removed from `uc.js`** – ~35KB source / ~12KB minified saved; category copy lives in each `languages/{slug}.js` file instead
+- **Blocked iframe / embed copy lazy-loaded** – multilingual placeholder messages and accept-button labels moved to `uc-blocked-iframe.js` (~8KB source); loaded on first iframe/embed block
 - Intastellar analytics script deferred via `requestIdleCallback` (3s timeout)
 - Pre-compiled `allScripts` regexes for fetch/XHR consent checks
 - `requestIdleCallback` before loading `cb.js` (replaces fixed 800ms delay)
 - Debounced `MutationObserver` (80ms batch)
 
+## Blocked iframe message split
+
+### Problem
+`loopBlock` / `blockBlockQuotes` inlined ~400 lines of per-locale HTML templates and button labels for blocked YouTube, Facebook, Twitter embeds, etc. Most pages never hit this path, but every visitor still parsed it.
+
+### Solution
+1. **`dev/uc-blocked-iframe.dev.js`** – `SCRIPT_TYPE_LABELS`, `CONTENT_TEMPLATES`, locale resolver, and button builders. Exposes `window.intaResolveBlockedIframeLocaleKey`, `window.intaBlockedIframeContentMessage`, `window.intaBlockedIframeButtonText`.
+
+2. **`dev/gdpr.dev.js`** – Stubs + `loadUcBlockedIframeMessages()`; `intaPickBlockedIframeStrings()` delegates to the lazy-loaded module. English fallbacks until the script loads.
+
+### Deploy
+| File | CDN path |
+|------|----------|
+| `uc-blocked-iframe.js` | `https://consents.cdn.intastellarsolutions.com/uc-blocked-iframe.js` |
+
+Optional: `window.INTA.settings.blockedIframeUrl` to override (dev mode loads `../../dev/uc-blocked-iframe.dev.js`).
+
 ## Files
 | File | Purpose |
 |------|---------|
 | `dev/uc-vendors.dev.js` | Lazy-loaded vendor/cookie maps |
+| `dev/uc-blocked-iframe.dev.js` | Lazy-loaded blocked iframe/embed copy |
 | `dev/gdpr.dev.js` | Main GDPR logic; stubs for detectCookieVendor/getConsentTypeForCookie; calls `loadUcVendors()` |

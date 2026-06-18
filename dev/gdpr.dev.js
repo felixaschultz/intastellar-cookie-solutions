@@ -861,6 +861,79 @@ function getConsentTypeForCookie(cookieName) {
     return 'marketing';
 }
 
+// --- Blocked iframe / embed consent copy (lazy-loaded uc-blocked-iframe.js) ---
+var __intaBlockedIframeLoadStarted = false;
+
+function loadUcBlockedIframeMessages() {
+    if (window.intaBlockedIframeContentMessage) {
+        return;
+    }
+    if (__intaBlockedIframeLoadStarted) {
+        return;
+    }
+    __intaBlockedIframeLoadStarted = true;
+    var base = (typeof window.INTA !== "undefined" && window.INTA.settings && window.INTA.settings.blockedIframeUrl)
+        || "https://consents.cdn.intastellarsolutions.com/uc-blocked-iframe.js";
+    if (typeof intastellarDevMode !== "undefined" && intastellarDevMode) {
+        base = "../../dev/uc-blocked-iframe.dev.js";
+    }
+    var s = document.createElement("script");
+    s.src = base;
+    s.async = true;
+    intaAppendToDocumentHead(s);
+}
+
+function intaEnsureBlockedIframeMessagesLoaded() {
+    loadUcBlockedIframeMessages();
+}
+
+function intaResolveBlockedIframeLocaleKey() {
+    if (typeof window.intaResolveBlockedIframeLocaleKey === "function") {
+        return window.intaResolveBlockedIframeLocaleKey();
+    }
+    return "english";
+}
+
+function intaBlockedIframeContentMessage(domain, localeKey) {
+    if (typeof window.intaBlockedIframeContentMessage === "function") {
+        return window.intaBlockedIframeContentMessage(domain, localeKey);
+    }
+    return "<p>This content is provided by " + domain + ".</p>";
+}
+
+function intaBlockedIframeButtonText(scriptType, localeKey) {
+    if (typeof window.intaBlockedIframeButtonText === "function") {
+        return window.intaBlockedIframeButtonText(scriptType, localeKey);
+    }
+    return "Accept cookies";
+}
+
+function intaNormalizeBlockedIframeDomain(domain, node, cookieList) {
+    if (node && node.classList && node.classList.contains("trustpilot-widget")) {
+        domain = "www.trustpilot.com";
+    }
+    var list = cookieList || (typeof inta_marketingCookieList !== "undefined" ? inta_marketingCookieList : []);
+    list.forEach(function (cookie) {
+        var i = 0, d = domain, p = d.split(".");
+        d = p.slice(-1 - ++i).join(".");
+        domain = d;
+        if (cookie && cookie.domains && cookie.domains.indexOf(domain) > -1) {
+            domain = cookie.vendor;
+        }
+    });
+    return domain;
+}
+
+function intaPickBlockedIframeStrings(domain, node, scriptType, cookieList) {
+    intaEnsureBlockedIframeMessagesLoaded();
+    var localeKey = intaResolveBlockedIframeLocaleKey();
+    var normalized = intaNormalizeBlockedIframeDomain(domain, node, cookieList);
+    return {
+        textLanguage: intaBlockedIframeContentMessage(normalized, localeKey),
+        btnText: intaBlockedIframeButtonText(scriptType, localeKey)
+    };
+}
+
 // --- Start Cookie Interception ---
 (function () {
     let desc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
@@ -1851,7 +1924,6 @@ if (!hasConsent("advertisement")) {
     fbq('consent', 'revoke');
 }
 
-let scriptTypelang = {};
 let settingsMessage = "";
 let foundScripts = window.foundScripts = [];
 let intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
@@ -4173,7 +4245,7 @@ function containsClass(element, searchString) {
     return element?.classList?.contains(searchString) || element?.className?.split(' ')?.some(cls => cls?.includes(searchString));
 }
 
-function loopBlock(addedNodes, message, script, buttonText, logo) {
+function loopBlock(addedNodes, script, logo) {
     addedNodes.forEach((frae) => {
         if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies === "checked"
             && intaCookieConsents?.functionalCookies === "checked" && intaCookieConsents?.staticsticCookies === "checked") {
@@ -4186,7 +4258,6 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
             }
         }
         if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
-            // Check if an element is from Facebook, check by looking at the class name if it contains "fb"
             if (containsClass(frae, "fb-") && frae.getAttribute("data-href")?.indexOf("facebook.com") > -1) {
                 frae?.parentElement?.replaceChild(settingsContent, frae);
             }
@@ -4213,7 +4284,6 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 a.href = frae.src;
                 let externalDomain = a.hostname;
 
-
                 inta_marketingCookieList.forEach((cookie) => {
                     var i = 0,
                         d = externalDomain,
@@ -4229,90 +4299,9 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 if (frae.src !== window.INTA?.settings?.partnerDomain) {
                     frae.src = "about:blank";
                 }
-                let textLanguage;
-                let btnText;
-
-                if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                    textLanguage = message(externalDomain, frae).danish;
-                    btnText = buttonText().danish;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                    textLanguage = message(externalDomain, frae).german;
-                    btnText = buttonText().german;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                    textLanguage = message(externalDomain, frae).english;
-                    btnText = buttonText().english;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
-                    textLanguage = message(externalDomain, frae).spanish;
-                    btnText = buttonText().spanish;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fr" || intastellarCookieLanguage === "fr-FR") {
-                    textLanguage = message(externalDomain, frae).french;
-                    btnText = buttonText().french;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "it" || intastellarCookieLanguage === "it-IT") {
-                    textLanguage = message(externalDomain, frae).italian;
-                    btnText = buttonText().italian;
-
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ru" || intastellarCookieLanguage === "ru-RU") {
-                    textLanguage = message(externalDomain, frae).russian;
-                    btnText = buttonText().russian;
-
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "sv" || intastellarCookieLanguage === "sv-SE") {
-                    textLanguage = message(externalDomain, frae).swedish;
-                    btnText = buttonText().swedish;
-
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no" || intastellarCookieLanguage === "no-NO") {
-                    textLanguage = message(externalDomain, frae).norwegian;
-                    btnText = buttonText().norwegian;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
-                    textLanguage = message(externalDomain, frae).dutch;
-                    btnText = buttonText().dutch;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
-                    textLanguage = message(externalDomain, frae).finish;
-                    btnText = buttonText().finish;
-                }
-                else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "he" || intastellarCookieLanguage === "he-IL") {
-                    textLanguage = message(externalDomain, frae).hebrew;
-                    btnText = buttonText().hebrew;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ar" || intastellarCookieLanguage === "ar-SA") {
-                    textLanguage = message(externalDomain, frae).arabic;
-                    btnText = buttonText().arabic;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "hi" || intastellarCookieLanguage === "hi-IN") {
-                    textLanguage = message(externalDomain, frae).hindi;
-                    btnText = buttonText().hindi;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "tr" || intastellarCookieLanguage === "tr-TR") {
-                    textLanguage = message(externalDomain, frae).turkish;
-                    btnText = buttonText().turkish;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ja" || intastellarCookieLanguage === "ja-JP") {
-                    textLanguage = message(externalDomain, frae).japanese;
-                    btnText = buttonText().japanese;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ko" || intastellarCookieLanguage === "ko-KR") {
-                    textLanguage = message(externalDomain, frae).korean;
-                    btnText = buttonText().korean;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "th" || intastellarCookieLanguage === "th-TH") {
-                    textLanguage = message(externalDomain, frae).thai;
-                    btnText = buttonText().thai;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "vi" || intastellarCookieLanguage === "vi-VN") {
-                    textLanguage = message(externalDomain, frae).vietnamese;
-                    btnText = buttonText().vietnamese;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "id" || intastellarCookieLanguage === "id-ID") {
-                    textLanguage = message(externalDomain, frae).indonesian;
-                    btnText = buttonText().indonesian;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "tl" || intastellarCookieLanguage === "tl-PH") {
-                    textLanguage = message(externalDomain, frae).filipino;
-                    btnText = buttonText().filipino;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ms" || intastellarCookieLanguage === "ms-MY") {
-                    textLanguage = message(externalDomain, frae).malay;
-                    btnText = buttonText().malay;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pl" || intastellarCookieLanguage === "pl-PL") {
-                    textLanguage = message(externalDomain, frae).polish;
-                    btnText = buttonText().polish;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "af" || intastellarCookieLanguage === "af-ZA") {
-                    textLanguage = message(externalDomain, frae).afrikaans;
-                    btnText = buttonText().afrikaans;
-                } 
-                else {
-                    textLanguage = message(externalDomain, frae).danish;
-                    btnText = buttonText().danish;
-                }
+                let copy = intaPickBlockedIframeStrings(externalDomain, frae, script.type, inta_marketingCookieList);
+                let textLanguage = copy.textLanguage;
+                let btnText = copy.btnText;
                 if (!frae.classList.contains("trustpilot-widget")) {
                     settingsContent.setAttribute("data-src", a?.href);
                 }
@@ -4336,8 +4325,6 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                 let a = document.createElement('a');
                 a.href = frae.src;
                 let externalDomain = a.hostname;
-                /* frae.src = "about:blank"; */
-
 
                 inta_functionalCookieList.forEach((cookie) => {
                     var i = 0,
@@ -4351,34 +4338,9 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                     }
                 })
 
-                let textLanguage;
-                let btnText;
-
-                if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                    textLanguage = bannerContentMessage(externalDomain).danish;
-                    btnText = buttonText().danish;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                    textLanguage = bannerContentMessage(externalDomain).german;
-                    btnText = buttonText().german;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                    textLanguage = bannerContentMessage(externalDomain).english;
-                    btnText = buttonText().english;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
-                    textLanguage = bannerContentMessage(externalDomain).spanish;
-                    btnText = buttonText().spanish;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no" || intastellarCookieLanguage === "no-NO") {
-                    textLanguage = bannerContentMessage(externalDomain).norwegian;
-                    btnText = buttonText().norwegian;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
-                    textLanguage = bannerContentMessage(externalDomain).dutch;
-                    btnText = buttonText().dutch;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
-                    textLanguage = bannerContentMessage(externalDomain).finish;
-                    btnText = buttonText().finish;
-                } else {
-                    textLanguage = bannerContentMessage(externalDomain).danish;
-                    btnText = buttonText().danish;
-                }
+                let copy = intaPickBlockedIframeStrings(externalDomain, frae, script.type, inta_functionalCookieList);
+                let textLanguage = copy.textLanguage;
+                let btnText = copy.btnText;
 
                 let settingsContent = document.createElement("inta-consents");
                 settingsContent.classList.add("intCookie_ConsentContainer");
@@ -4408,33 +4370,9 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
                     }
                 })
 
-                let textLanguage;
-                let btnText;
-                if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-                    textLanguage = bannerContentMessage(externalDomain).danish;
-                    btnText = buttonText().danish;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-                    textLanguage = bannerContentMessage(externalDomain).german;
-                    btnText = buttonText().german;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-                    textLanguage = bannerContentMessage(externalDomain).english;
-                    btnText = buttonText().english;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
-                    textLanguage = bannerContentMessage(externalDomain).spanish;
-                    btnText = buttonText().spanish;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
-                    textLanguage = bannerContentMessage(externalDomain).dutch;
-                    btnText = buttonText().dutch;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fr" || intastellarCookieLanguage === "fr-FR") {
-                    textLanguage = bannerContentMessage(externalDomain).french;
-                    btnText = buttonText().french;
-                } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
-                    textLanguage = bannerContentMessage(externalDomain).finish;
-                    btnText = buttonText().finish;
-                } else {
-                    textLanguage = bannerContentMessage(externalDomain).danish;
-                    btnText = buttonText().danish;
-                }
+                let copy = intaPickBlockedIframeStrings(externalDomain, frae, script.type, inta_functionalCookieList);
+                let textLanguage = copy.textLanguage;
+                let btnText = copy.btnText;
 
                 let settingsContent = document.createElement("inta-consents");
                 settingsContent.classList.add("intCookie_ConsentContainer");
@@ -4456,7 +4394,7 @@ function loopBlock(addedNodes, message, script, buttonText, logo) {
     })
 }
 
-function blockBlockQuotes(tweet, message, script, buttonText, logo) {
+function blockBlockQuotes(tweet, script, logo) {
     if (tweet != " " && getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
         let a = document.createElement('a');
         a.href = tweet.querySelector("a").href;
@@ -4475,52 +4413,9 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
             }
         })
 
-        let textLanguage;
-        let btnText;
-        if (intastellarCookieLanguage != null && intastellarCookieLanguage === "da" || intastellarCookieLanguage === "da-DK") {
-            textLanguage = message(externalDomain).danish;
-            btnText = buttonText().danish;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "de-DE" || intastellarCookieLanguage === "de") {
-            textLanguage = message(externalDomain).german;
-            btnText = buttonText().german;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "en" || intastellarCookieLanguage === "en-GB" || intastellarCookieLanguage === "en-US") {
-            textLanguage = message(externalDomain).english;
-            btnText = buttonText().english;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "es" || intastellarCookieLanguage === "es-ES") {
-            textLanguage = bannerContentMessage(externalDomain).spanish;
-            btnText = buttonText().spanish;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "sv" || intastellarCookieLanguage === "sv-SE") {
-            // Swedish
-            textLanguage = message(externalDomain).swedish;
-            btnText = buttonText().swedish;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fr" || intastellarCookieLanguage === "fr-FR") {
-            // French
-            textLanguage = message(externalDomain).french;
-            btnText = buttonText().french;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "pr" || intastellarCookieLanguage === "pr-PT") {
-            // Portuguese
-            textLanguage = message(externalDomain).portuguese;
-            btnText = buttonText().portuguese;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "it" || intastellarCookieLanguage === "it-IT") {
-            // Italian
-            textLanguage = message(externalDomain).italian;
-            btnText = buttonText().italian;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "ru" || intastellarCookieLanguage === "ru-RU") {
-            textLanguage = message(externalDomain, frae).russian;
-            btnText = buttonText().russian;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "no") {
-            textLanguage = message(externalDomain, frae).norwegian;
-            btnText = buttonText().norwegian;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "fi" || intastellarCookieLanguage === "fi-FI") {
-            textLanguage = message(externalDomain, frae).finish;
-            btnText = buttonText().finish;
-        } else if (intastellarCookieLanguage != null && intastellarCookieLanguage === "nl" || intastellarCookieLanguage === "nl-NL") {
-            textLanguage = message(externalDomain, frae).dutch;
-            btnText = buttonText().dutch;
-        } else {
-            textLanguage = message(externalDomain).danish;
-            btnText = buttonText().danish;
-        }
+        let copy = intaPickBlockedIframeStrings(externalDomain, tweet, script.type, inta_marketingCookieList);
+        let textLanguage = copy.textLanguage;
+        let btnText = copy.btnText;
         let settingsContent = document.createElement("inta-consents");
         settingsContent.classList.add("intCookie_ConsentContainer");
         settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
@@ -4538,53 +4433,6 @@ function blockBlockQuotes(tweet, message, script, buttonText, logo) {
 }
 
 /* - - - Helper function for message on the content block - - - */
-let bannerContentMessage = (domain, node) => {
-    if (node?.classList?.contains("trustpilot-widget")) {
-        domain = "www.trustpilot.com";
-    }
-    inta_marketingCookieList.forEach((cookie) => {
-        var i = 0,
-            d = domain,
-            p = d.split(".")
-
-        d = p.slice(-1 - ++i).join(".");
-        domain = d;
-
-        if (cookie?.domains?.includes(domain)) {
-            domain = cookie.vendor;
-        }
-    })
-    return {
-        danish: `<p>Dette indhold leveres af ${domain}.</p>`,
-        english: `<p>This content is provided by ${domain}.</p>`,
-        german: `<p>Dieser Inhalt wird von ${domain} bereitgestellt.</p>`,
-        spanish: `<p>Este contenido es proporcionado por ${domain}.</p>`,
-        swedish: `<p>Denna innehåll tillhandahålls av ${domain}.</p>`,
-        french: `<p>Ce contenu est fourni par ${domain}.</p>`,
-        portuguese: `<p>Este conteúdo é fornecido por ${domain}.</p>`,
-        italian: `<p>Questo contenuto è fornito da ${domain}.</p>`,
-        russian: `<p>Этот контент предоставлен ${domain}.</p>`,
-        norwegian: `<p>Dette innholdet leveres av ${domain}.</p>`,
-        finish: `<p>Tämä sisältö toimitetaan ${domain}.</p>`,
-        dutch: `<p>Deze inhoud wordt geleverd door ${domain}.</p>`,
-        polish: `<p>Ta zawartość jest dostarczana przez ${domain}.</p>`,
-        afrikaans: `<p>Hierdie inhoud word verskaf deur ${domain}.</p>`,
-        arabic: `<p>هذا المحتوى مقدم من ${domain}.</p>`,
-        hindi: `<p>यह सामग्री ${domain} द्वारा प्रदान की गई है।</p>`,
-        turkish: `<p>Bu içerik ${domain} tarafından sağlanmaktadır.</p>`,
-        japanese: `<p>このコンテンツは${domain}によって提供されています。</p>`,
-        korean: `<p>이 콘텐츠는 ${domain}에서 제공됩니다.</p>`,
-        thai: `<p>เนื้อหานี้จัดทำโดย ${domain}.</p>`,
-        vietnamese: `<p>Nội dung này được cung cấp bởi ${domain}.</p>`,
-        indonesian: `<p>Konten ini disediakan oleh ${domain}.</p>`,
-        filipino: `<p>Ang nilalamang ito ay ibinibigay ng ${domain}.</p>`,
-        malay: `<p>Kandungan ini disediakan oleh ${domain}.</p>`,
-        ukrainian: `<p>Цей контент надається ${domain}.</p>`,
-        hebrew: `<p>תוכן זה מסופק על ידי ${domain}.</p>`,
-        arabic: `<p>هذا المحتوى مقدم من ${domain}.</p>`,
-    }
-};
-
 function handleInputChange(event) {
     let target = event.target;
     if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') {
@@ -5002,395 +4850,19 @@ function checkCookieStatus() {
 
                     if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
                         allScripts.map((script) => {
-
-                            let buttonText = () => {
-                                if (script.type == "marketing") {
-                                    scriptTypelang = {
-                                        danish: "marketing",
-                                        english: "marketing",
-                                        german: "werbe",
-                                        spanish: "publicidad",
-                                        swedish: "marknadsföring",
-                                        french: "publicité",
-                                        portuguese: "publicidade",
-                                        italian: "pubblicità",
-                                        russian: "реклама",
-                                        norwegian: "markedsføring",
-                                        finish: "mainonta",
-                                        dutch: "reclame",
-                                        polish: "reklama",
-                                        afrikaans: "bemarking",
-                                        arabic: "تسويق",
-                                        hindi: "विपणन",
-                                        turkish: "pazarlama",
-                                        japanese: "マーケティング",
-                                        korean: "마케팅",
-                                        thai: "การตลาด",
-                                        vietnamese: "tiếp thị",
-                                        indonesian: "pemasaran",
-                                        filipino: "pagmemerkado",
-                                        malay: "pemasaran",
-                                        chinese: "营销",
-                                        ukrainian: "маркетинг",
-                                        hebrew: "שיווק",
-                                    }
-                                } else if (script.type == "functional") {
-                                    scriptTypelang = {
-                                        danish: "funktionelle",
-                                        english: "functional",
-                                        german: "funktionelle",
-                                        spanish: "funcional",
-                                        swedish: "funktionell",
-                                        french: "fonctionnel",
-                                        portuguese: "funcional",
-                                        italian: "funzionale",
-                                        russian: "функциональный",
-                                        norwegian: "funksjonelle",
-                                        finish: "toiminnallinen",
-                                        dutch: "functioneel",
-                                        polish: "funkcjonalne",
-                                        afrikaans: "funksionele",
-                                        arabic: "وظيفي",
-                                        hindi: "कार्यात्मक",
-                                        turkish: "fonksiyonel",
-                                        japanese: "機能的",
-                                        korean: "기능적",
-                                        thai: "ฟังก์ชัน",
-                                        vietnamese: "chức năng",
-                                        indonesian: "fungsional",
-                                        filipino: "pampagana",
-                                        chinese: "功能性",
-                                        malay: "fungsional",
-                                        ukrainian: "функціональний",
-                                        hebrew: "פונקציונלי",
-                                    }
-                                } else if (script.type == "statics") {
-                                    scriptTypelang = {
-                                        danish: "statistiske",
-                                        english: "statics",
-                                        german: "statistische",
-                                        spanish: "estadísticas",
-                                        swedish: "statistik",
-                                        french: "statistiques",
-                                        portuguese: "estatísticas",
-                                        italian: "statistico",
-                                        russian: "статистика",
-                                        norwegian: "statistiske",
-                                        finish: "tilastollinen",
-                                        dutch: "statistieken",
-                                        polish: "statystyczne",
-                                        afrikaans: "statistiese",
-                                        arabic: "إحصائية",
-                                        hindi: "सांख्यिकी",
-                                        turkish: "istatistik",
-                                        japanese: "統計",
-                                        korean: "통계",
-                                        thai: "สถิติ",
-                                        vietnamese: "thống kê",
-                                        indonesian: "statistik",
-                                        filipino: "istatiska",
-                                        malay: "statistik",
-                                        chinese: "统计",
-                                        ukrainian: "статистичний",
-                                        hebrew: "סטטיסטי",
-                                    }
-                                }
-
-                                return {
-                                    danish: `Accepter ${scriptTypelang.danish} cookies`,
-                                    english: `Accept ${scriptTypelang.english} cookies`,
-                                    german: `Akzeptiere ${scriptTypelang.german} cookies`,
-                                    spanish: `Aceptar cookies ${scriptTypelang.spanish}`,
-                                    swedish: `Acceptera ${scriptTypelang.swedish} cookies`,
-                                    french: `Accepter les cookies ${scriptTypelang.french}`,
-                                    portuguese: `Aceitar cookies ${scriptTypelang.portuguese}`,
-                                    italian: `Accetta i cookie ${scriptTypelang.italian}`,
-                                    russian: `Принять файлы cookie ${scriptTypelang.russian}`,
-                                    norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
-                                    finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`,
-                                    polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
-                                    afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
-                                    arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
-                                    hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
-                                    turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
-                                    japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
-                                    korean: `쿠키 수락 ${scriptTypelang.korean}`,
-                                    thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
-                                    vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
-                                    indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
-                                    filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
-                                    malay: `Terima kuki ${scriptTypelang.malay}`,
-                                    chinese: `接受 ${scriptTypelang.chinese} cookies`,
-                                    ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
-                                    hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
-                                }
-                            }
+                            intaEnsureBlockedIframeMessagesLoaded();
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
-                            loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
-                        })
-                    }
-                    if (node.nodeType === 1 && node.tagName === "IFRAME") {
-                        allScripts.map((script) => {
-
-                            let buttonText = () => {
-                                if (script.type == "marketing") {
-                                    scriptTypelang = {
-                                        danish: "marketing",
-                                        english: "marketing",
-                                        german: "werbe",
-                                        spanish: "publicidad",
-                                        swedish: "marknadsföring",
-                                        french: "publicité",
-                                        portuguese: "publicidade",
-                                        italian: "pubblicità",
-                                        russian: "реклама",
-                                        norwegian: "markedsføring",
-                                        finish: "mainonta",
-                                        dutch: "reclame",
-                                        polish: "reklama",
-                                        afrikaans: "bemarking",
-                                        arabic: "تسويق",
-                                        hindi: "विपणन",
-                                        turkish: "pazarlama",
-                                        japanese: "マーケティング",
-                                        korean: "마케팅",
-                                        thai: "การตลาด",
-                                        vietnamese: "tiếp thị",
-                                        indonesian: "pemasaran",
-                                        filipino: "pagmemerkado",
-                                        malay: "pemasaran",
-                                        chinese: "营销",
-                                        ukrainian: "маркетинг",
-                                        hebrew: "שיווק",
-                                    }
-                                } else if (script.type == "functional") {
-                                    scriptTypelang = {
-                                        danish: "funktionelle",
-                                        english: "functional",
-                                        german: "funktionelle",
-                                        spanish: "funcional",
-                                        swedish: "funktionell",
-                                        french: "fonctionnel",
-                                        portuguese: "funcional",
-                                        italian: "funzionale",
-                                        russian: "функциональный",
-                                        norwegian: "funksjonelle",
-                                        finish: "toiminnallinen",
-                                        dutch: "functioneel",
-                                        polish: "funkcjonalne",
-                                        afrikaans: "funksionele",
-                                        arabic: "وظيفي",
-                                        hindi: "कार्यात्मक",
-                                        turkish: "fonksiyonel",
-                                        japanese: "機能的",
-                                        korean: "기능적",
-                                        thai: "ฟังก์ชัน",
-                                        vietnamese: "chức năng",
-                                        indonesian: "fungsional",
-                                        filipino: "pampagana",
-                                        chinese: "功能性",
-                                        malay: "fungsional",
-                                        ukrainian: "функціональний",
-                                        hebrew: "פונקציונלי",
-                                    }
-                                } else if (script.type == "statics") {
-                                    scriptTypelang = {
-                                        danish: "statistiske",
-                                        english: "statics",
-                                        german: "statistische",
-                                        spanish: "estadísticas",
-                                        swedish: "statistik",
-                                        french: "statistiques",
-                                        portuguese: "estatísticas",
-                                        italian: "statistico",
-                                        russian: "статистика",
-                                        norwegian: "statistiske",
-                                        finish: "tilastollinen",
-                                        dutch: "statistieken",
-                                        polish: "statystyczne",
-                                        afrikaans: "statistiese",
-                                        arabic: "إحصائية",
-                                        hindi: "सांख्यिकी",
-                                        turkish: "istatistik",
-                                        japanese: "統計",
-                                        korean: "통계",
-                                        thai: "สถิติ",
-                                        vietnamese: "thống kê",
-                                        indonesian: "statistik",
-                                        filipino: "istatiska",
-                                        malay: "statistik",
-                                        chinese: "统计",
-                                        ukrainian: "статистичний",
-                                        hebrew: "סטטיסטי",
-                                    }
-                                }
-
-                                return {
-                                    danish: `Accepter ${scriptTypelang.danish} cookies`,
-                                    english: `Accept ${scriptTypelang.english} cookies`,
-                                    german: `Akzeptiere ${scriptTypelang.german} cookies`,
-                                    spanish: `Aceptar cookies ${scriptTypelang.spanish}`,
-                                    swedish: `Acceptera ${scriptTypelang.swedish} cookies`,
-                                    french: `Accepter les cookies ${scriptTypelang.french}`,
-                                    portuguese: `Aceitar cookies ${scriptTypelang.portuguese}`,
-                                    italian: `Accetta i cookie ${scriptTypelang.italian}`,
-                                    russian: `Принять файлы cookie ${scriptTypelang.russian}`,
-                                    norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
-                                    finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                    dutch: `Accepteer ${scriptTypelang.danish} cookies`,
-                                    polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
-                                    afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
-                                    arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
-                                    hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
-                                    turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
-                                    japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
-                                    korean: `쿠키 수락 ${scriptTypelang.korean}`,
-                                    thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
-                                    vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
-                                    indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
-                                    filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
-                                    malay: `Terima kuki ${scriptTypelang.malay}`,
-                                    chinese: `接受 ${scriptTypelang.chinese} cookies`,
-                                    ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
-                                    hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
-                                }
-                            }
-                            let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
-                            loopBlock(addedNodes, bannerContentMessage, script, buttonText, INTAlogo);
+                            loopBlock(addedNodes, script, INTAlogo);
                         })
                     }
 
                     if (node.nodeType === 1 && node.tagName === "BLOCKQUOTE") {
                         allScripts.map((script) => {
                             addedNodes.forEach((tweet) => {
-
-                                let buttonText = () => {
-                                    if (script.type == "marketing") {
-                                        scriptTypelang = {
-                                            danish: "marketing",
-                                            english: "marketing",
-                                            german: "werbe",
-                                            spanish: "publicidad",
-                                            swedish: "marknadsföring",
-                                            french: "publicité",
-                                            portuguese: "publicidade",
-                                            italian: "pubblicità",
-                                            russian: "реклама",
-                                            norwegian: "markedsføring",
-                                            finish: "mainonta",
-                                            dutch: "reclame",
-                                            polish: "reklama",
-                                            afrikaans: "bemarking",
-                                            arabic: "تسويق",
-                                            hindi: "विपणन",
-                                            turkish: "pazarlama",
-                                            japanese: "マーケティング",
-                                            korean: "마케팅",
-                                            thai: "การตลาด",
-                                            vietnamese: "tiếp thị",
-                                            indonesian: "pemasaran",
-                                            filipino: "pagmemerkado",
-                                            malay: "pemasaran",
-                                            chinese: "营销",
-                                            ukrainian: "маркетинг",
-                                            hebrew: "שיווק",
-                                        }
-                                    } else if (script.type == "functional") {
-                                        scriptTypelang = {
-                                            danish: "funktionelle",
-                                            english: "functional",
-                                            german: "funktionelle",
-                                            spanish: "funcional",
-                                            swedish: "funktionell",
-                                            french: "fonctionnel",
-                                            portuguese: "funcional",
-                                            italian: "funzionale",
-                                            russian: "функциональный",
-                                            norwegian: "funksjonelle",
-                                            finish: "toiminnallinen",
-                                            dutch: "functioneel",
-                                            polish: "funkcjonalne",
-                                            afrikaans: "funksionele",
-                                            arabic: "وظيفي",
-                                            hindi: "कार्यात्मक",
-                                            turkish: "fonksiyonel",
-                                            japanese: "機能的",
-                                            korean: "기능적",
-                                            thai: "ฟังก์ชัน",
-                                            vietnamese: "chức năng",
-                                            indonesian: "fungsional",
-                                            filipino: "pampagana",
-                                            chinese: "功能性",
-                                            malay: "fungsional",
-                                            ukrainian: "функціональний",
-                                            hebrew: "פונקציונלי",
-                                        }
-                                    } else if (script.type == "statics") {
-                                        scriptTypelang = {
-                                            danish: "statistiske",
-                                            english: "statics",
-                                            german: "statistische",
-                                            spanish: "estadísticas",
-                                            swedish: "statistik",
-                                            french: "statistiques",
-                                            portuguese: "estatísticas",
-                                            italian: "statistico",
-                                            russian: "статистика",
-                                            norwegian: "statistiske",
-                                            finish: "tilastollinen",
-                                            dutch: "statistieken",
-                                            polish: "statystyczne",
-                                            afrikaans: "statistiese",
-                                            arabic: "إحصائية",
-                                            hindi: "सांख्यिकी",
-                                            turkish: "istatistik",
-                                            japanese: "統計",
-                                            korean: "통계",
-                                            thai: "สถิติ",
-                                            vietnamese: "thống kê",
-                                            indonesian: "statistik",
-                                            filipino: "istatiska",
-                                            malay: "statistik",
-                                            chinese: "统计",
-                                            ukrainian: "статистичний",
-                                            hebrew: "סטטיסטי",
-                                        }
-                                    }
-
-                                    return {
-                                        danish: `Accepter ${scriptTypelang.danish} cookies`,
-                                        english: `Accept ${scriptTypelang.english} cookies`,
-                                        german: `Akzeptiere ${scriptTypelang.german} cookies`,
-                                        spanish: `Aceptar cookies ${scriptTypelang.spanish}`,
-                                        swedish: `Acceptera ${scriptTypelang.swedish} cookies`,
-                                        french: `Accepter les cookies ${scriptTypelang.french}`,
-                                        portuguese: `Aceitar cookies ${scriptTypelang.portuguese}`,
-                                        italian: `Accetta i cookie ${scriptTypelang.italian}`,
-                                        russian: `Принять файлы cookie ${scriptTypelang.russian}`,
-                                        norwegian: `Aksepter ${scriptTypelang.danish} cookies`,
-                                        finish: `Hyväksy ${scriptTypelang.danish} evästeet`,
-                                        dutch: `Accepteer ${scriptTypelang.danish} cookies`,
-                                        polish: `Akceptuj pliki cookie ${scriptTypelang.polish}`,
-                                        afrikaans: `Aanvaar ${scriptTypelang.afrikaans} koekies`,
-                                        arabic: `قبول ملفات تعريف الارتباط ${scriptTypelang.arabic}`,
-                                        hindi: `स्वीकार करें ${scriptTypelang.hindi} कुकीज़`,
-                                        turkish: `Kabul et ${scriptTypelang.turkish} çerezleri`,
-                                        japanese: `クッキーを受け入れる ${scriptTypelang.japanese}`,
-                                        korean: `쿠키 수락 ${scriptTypelang.korean}`,
-                                        thai: `ยอมรับคุกกี้ ${scriptTypelang.thai}`,
-                                        vietnamese: `Chấp nhận cookie ${scriptTypelang.vietnamese}`,
-                                        indonesian: `Terima cookie ${scriptTypelang.indonesian}`,
-                                        filipino: `Tanggapin ang cookies ${scriptTypelang.filipino}`,
-                                        malay: `Terima kuki ${scriptTypelang.malay}`,
-                                        chinese: `接受 ${scriptTypelang.chinese} cookies`,
-                                        ukrainian: `Прийняти файли cookie ${scriptTypelang.ukrainian}`,
-                                        hebrew: `קבל עוגיות ${scriptTypelang.hebrew}`,
-                                    }
-                                }
+                                intaEnsureBlockedIframeMessagesLoaded();
                                 let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;
-                                blockBlockQuotes(tweet, bannerContentMessage, script, buttonText, INTAlogo);
-                            })
+                                blockBlockQuotes(tweet, script, INTAlogo);
+                            });
                         });
                     }
 

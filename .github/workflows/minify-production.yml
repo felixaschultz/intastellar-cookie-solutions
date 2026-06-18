@@ -51,11 +51,14 @@ jobs:
       - name: Minify uc-vendors.dev.js → uc-vendors.js
         run: npx --yes terser@5 dev/uc-vendors.dev.js -c -m -o uc-vendors.js
 
+      - name: Minify uc-blocked-iframe.dev.js → uc-blocked-iframe.js
+        run: npx --yes terser@5 dev/uc-blocked-iframe.dev.js -c -m -o uc-blocked-iframe.js
+
       - name: Commit minified files if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add uc.js cb.js languages/*.js uc-vendors.js
+          git add uc.js cb.js languages/*.js uc-vendors.js uc-blocked-iframe.js
           if git diff --staged --quiet; then
             echo "No changes to production bundles."
           else
