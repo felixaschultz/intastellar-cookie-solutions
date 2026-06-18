@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Generate dev/languages/{slug}.dev.js from cb.dev.js messages + settingsMessagesLanguages.
+ * Generate dev/languages/{slug}.dev.js from catalog + optional cb.dev.js or existing locale files.
  * Run: node scripts/generate-cmp-locales.mjs
  */
 import fs from "fs";
@@ -16,12 +16,11 @@ const OUT_DIR = path.join(ROOT, "dev/languages");
 function parseObjectBlock(source, marker) {
     const start = source.indexOf(marker);
     if (start === -1) {
-        throw new Error("Could not find " + marker);
+        return null;
     }
     const braceStart = source.indexOf("{", start);
     let depth = 0;
-    let i = braceStart;
-    for (; i < source.length; i++) {
+    for (let i = braceStart; i < source.length; i++) {
         const ch = source[i];
         if (ch === "{") {
             depth++;
@@ -32,7 +31,7 @@ function parseObjectBlock(source, marker) {
             }
         }
     }
-    throw new Error("Unbalanced braces for " + marker);
+    return null;
 }
 
 function parseBannerEntries(block) {
@@ -48,10 +47,6 @@ function parseBannerEntries(block) {
     return entries;
 }
 
-function jsString(value) {
-    return JSON.stringify(value);
-}
-
 function parseTemplateEntries(block) {
     const entries = {};
     const parts = block.split(/(\w+):\s*`/);
@@ -65,6 +60,10 @@ function parseTemplateEntries(block) {
         entries[name] = rest.slice(0, close);
     }
     return entries;
+}
+
+function jsString(value) {
+    return JSON.stringify(value);
 }
 
 function lineToExpr(line) {
@@ -85,8 +84,7 @@ function transformSettingsTemplate(raw) {
     body = body.replace(/\$\{\s*\(window\.INTA\.settings\.design == "banner"[\s\S]*?\)\s*\}/g, "");
     body = body.replace(/\s+\n/g, "\n").trim();
     const lines = body.split("\n").map((line) => line.trim()).filter(Boolean);
-    const parts = lines.map((line) => lineToExpr(line));
-    return parts.join("\n            + ");
+    return lines.map((line) => lineToExpr(line)).join("\n            + ");
 }
 
 function buildSettingsSuffix(meta) {
@@ -112,7 +110,17 @@ function buildSettingsSuffix(meta) {
         + meta.privacyPolicyButton.replace(/'/g, "\\'")
         + "</button>'"
     );
-    return chunks.join('\n            + ');
+    return chunks.join("\n            + ");
+}
+
+function parseExistingLocaleFile(content) {
+    const bannerExpr = content.match(/bannerMessage:\s*([\s\S]*?),\s*\n\s*settingsMessage:/)?.[1]?.trim();
+    const settingsMessageExpr = content.match(/settingsMessage:\s*([\s\S]*?),\s*\n\s*settingsMessageSuffix:/)?.[1]?.trim();
+    const settingsSuffixExpr = content.match(/settingsMessageSuffix:\s*([\s\S]*?),\s*\n\s*categories:/)?.[1]?.trim();
+    if (!bannerExpr || !settingsMessageExpr || !settingsSuffixExpr) {
+        return null;
+    }
+    return { bannerExpr, settingsMessageExpr, settingsSuffixExpr };
 }
 
 function buildLocaleFile(meta, bannerExpr, settingsMessageExpr, settingsSuffixExpr) {
@@ -141,35 +149,53 @@ function buildLocaleFile(meta, bannerExpr, settingsMessageExpr, settingsSuffixEx
 }
 
 function main() {
-    const cbSource = fs.readFileSync(CB_PATH, "utf8");
-    const messagesBlock = parseObjectBlock(cbSource, "const messages = ");
-    const settingsBlock = parseObjectBlock(cbSource, "const settingsMessagesLanguages = ");
-    const messages = parseBannerEntries(messagesBlock);
-    const settingsTemplates = parseTemplateEntries(settingsBlock);
+    let messages = {};
+    let settingsTemplates = {};
+    if (fs.existsSync(CB_PATH)) {
+        const cbSource = fs.readFileSync(CB_PATH, "utf8");
+        const messagesBlock = parseObjectBlock(cbSource, "const messages = ");
+        const settingsBlock = parseObjectBlock(cbSource, "const settingsMessagesLanguages = ");
+        if (messagesBlock) {
+            messages = parseBannerEntries(messagesBlock);
+        }
+        if (settingsBlock) {
+            settingsTemplates = parseTemplateEntries(settingsBlock);
+        }
+    }
 
     fs.mkdirSync(OUT_DIR, { recursive: true });
 
     let written = 0;
     for (const meta of CMP_LOCALE_CATALOG) {
+        let bannerExpr;
+        let settingsMessageExpr;
+        let settingsSuffixExpr;
+
         const bannerParts = messages[meta.langKey] || (meta.bannerBefore && meta.bannerAfter
             ? { before: meta.bannerBefore, after: meta.bannerAfter }
             : null);
         const settingsRaw = settingsTemplates[meta.langKey];
-        if (!bannerParts) {
-            console.warn("Skip " + meta.slug + ": missing messages." + meta.langKey);
-            continue;
-        }
-        if (!settingsRaw) {
-            console.warn("Skip " + meta.slug + ": missing settingsMessagesLanguages." + meta.langKey);
-            continue;
+
+        if (bannerParts && settingsRaw) {
+            bannerExpr = jsString(bannerParts.before) + " + document.domain + " + jsString(bannerParts.after);
+            settingsMessageExpr = transformSettingsTemplate(settingsRaw);
+            settingsSuffixExpr = buildSettingsSuffix(meta);
+        } else {
+            const existingPath = path.join(OUT_DIR, meta.slug + ".dev.js");
+            if (!fs.existsSync(existingPath)) {
+                console.warn("Skip " + meta.slug + ": no cb.dev.js source and no existing locale file");
+                continue;
+            }
+            const parsed = parseExistingLocaleFile(fs.readFileSync(existingPath, "utf8"));
+            if (!parsed) {
+                console.warn("Skip " + meta.slug + ": could not parse existing locale file");
+                continue;
+            }
+            bannerExpr = parsed.bannerExpr;
+            settingsMessageExpr = parsed.settingsMessageExpr;
+            settingsSuffixExpr = parsed.settingsSuffixExpr;
         }
 
-        const bannerExpr = jsString(bannerParts.before)
-            + " + document.domain + "
-            + jsString(bannerParts.after);
-
-        const settingsMessageExpr = transformSettingsTemplate(settingsRaw);
-        const settingsSuffixExpr = buildSettingsSuffix(meta);
         const content = buildLocaleFile(meta, bannerExpr, settingsMessageExpr, settingsSuffixExpr);
         const outPath = path.join(OUT_DIR, meta.slug + ".dev.js");
         fs.writeFileSync(outPath, content, "utf8");

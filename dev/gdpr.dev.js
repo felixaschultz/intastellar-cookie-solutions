@@ -1852,7 +1852,7 @@ if (!hasConsent("advertisement")) {
 }
 
 let scriptTypelang = {};
-let settingsMessage;
+let settingsMessage = "";
 let foundScripts = window.foundScripts = [];
 let intCookieIcon = intastellarAssetsCDNdomain + "/assets/icons/cookie_settings.svg";
 window.dataLayer = window.dataLayer || [];
@@ -1980,11 +1980,12 @@ function decodeIntaConsentsObject(number) {
 }
 
 let intastellarDevMode = (function () {
-    return window.location.host === "localhost"
-        || window.location.host.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("192.168.") > -1 && window.INTA.dev === true
-        || window.location.host.indexOf("::1") > -1 && window.INTA.dev === true
+    var hostname = window.location.hostname;
+    return hostname === "localhost"
+        || hostname.indexOf("127.0.0.1") > -1 && window.INTA.dev === true
+        || hostname.indexOf("0.0.0.0") > -1 && window.INTA.dev === true
+        || hostname.indexOf("192.168.") > -1 && window.INTA.dev === true
+        || hostname.indexOf("::1") > -1 && window.INTA.dev === true
         ? true : false;
 })();
 
@@ -2391,6 +2392,8 @@ let intastellarSupportedLanguages = {
         }
     }
 }
+
+window.intastellarSupportedLanguages = intastellarSupportedLanguages;
 
 let tmpl = document.createElement('template');
 tmpl.innerHTML = `
@@ -4318,27 +4321,42 @@ function intaScheduleWhenIdle(fn, timeoutMs) {
 
 /** Resolve CMP locale slug from INTA.settings / browser (used before cb.js). */
 function intaUcResolveCmpLocaleSlug() {
+    if (typeof window.intaResolveCmpLocaleSlug === "function") {
+        return window.intaResolveCmpLocaleSlug();
+    }
     var settings = window.INTA && window.INTA.settings;
     if (settings && settings.locale) {
-        return String(settings.locale).trim().toLowerCase().split("-")[0];
+        var locale = String(settings.locale).trim().toLowerCase();
+        if (locale !== "auto" && locale !== "") {
+            return locale.split("-")[0];
+        }
     }
     if (settings && settings.language) {
         var lang = String(settings.language).trim().toLowerCase();
-        if (lang === "danish") return "da";
-        if (lang === "english") return "en";
-        if (lang === "german") return "de";
-        if (lang === "spanish") return "es";
-        if (lang === "french") return "fr";
-        if (lang === "swedish") return "sv";
-        if (lang === "norwegian") return "no";
-        if (lang === "dutch") return "nl";
-        if (lang === "italian") return "it";
-        if (lang === "finnish") return "fi";
-        if (lang === "russian") return "ru";
-        if (lang === "polish") return "pl";
-        if (lang === "portuguese") return "pt";
-        if (lang === "thai") return "th";
-        return lang.split("-")[0];
+        if (lang !== "auto" && lang !== "") {
+            if (lang === "danish") return "da";
+            if (lang === "english") return "en";
+            if (lang === "german") return "de";
+            if (lang === "spanish") return "es";
+            if (lang === "french") return "fr";
+            if (lang === "swedish") return "sv";
+            if (lang === "norwegian") return "no";
+            if (lang === "dutch") return "nl";
+            if (lang === "italian") return "it";
+            if (lang === "finnish") return "fi";
+            if (lang === "russian") return "ru";
+            if (lang === "polish") return "pl";
+            if (lang === "portuguese") return "pt";
+            if (lang === "thai") return "th";
+            if (lang === "chinese") return "zh";
+            if (lang === "japanese") return "ja";
+            if (lang === "korean") return "ko";
+            if (lang === "greek") return "el";
+            if (lang === "afrikaans") return "af";
+            if (lang === "arabic") return "ar";
+            if (lang === "estonian") return "et";
+            return lang.split("-")[0];
+        }
     }
     var browser = (typeof intastellarCookieLanguage !== "undefined" && intastellarCookieLanguage)
         ? String(intastellarCookieLanguage).toLowerCase()
@@ -4405,7 +4423,6 @@ function intaPreloadCmpLocaleScript() {
     var idleP = new Promise(function (resolve) {
         intaScheduleWhenIdle(resolve, 2000);
     });
-    var localeP = intaPreloadCmpLocaleScript();
     var loaderP = Promise.resolve();
     if (typeof intastellarDevMode !== "undefined" && intastellarDevMode) {
         loaderP = new Promise(function (resolve) {
@@ -4418,7 +4435,13 @@ function intaPreloadCmpLocaleScript() {
             setTimeout(resolve, 1500);
         });
     }
-    Promise.all([fetchP, idleP, localeP, loaderP])
+    Promise.all([fetchP, idleP])
+        .then(function () {
+            return loaderP;
+        })
+        .then(function () {
+            return intaPreloadCmpLocaleScript();
+        })
         .then(function () {
             if (window.INTA && window.INTA.settings) {
                 intaAppendToDocumentHead(intastellarCreateBanner);

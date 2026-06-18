@@ -53,12 +53,14 @@
                 return forced.split("-")[0];
             }
         }
-        if (settings && settings.language) {
-            var fromSetting = intaNormalizeLocaleToken(settings.language);
+    if (settings && settings.language) {
+        var fromSetting = intaNormalizeLocaleToken(settings.language);
+        if (fromSetting !== "auto" && fromSetting !== "") {
             if (LOCALE_SLUG_MAP[fromSetting]) {
                 return LOCALE_SLUG_MAP[fromSetting];
             }
         }
+    }
         var browser = intaNormalizeLocaleToken(
             (typeof intastellarCookieLanguage !== "undefined" && intastellarCookieLanguage)
                 ? intastellarCookieLanguage
@@ -123,15 +125,28 @@
 
     window.intaBuildCmpUiFromLocale = function intaBuildCmpUiFromLocale(P) {
         if (!P || !P.categories) {
+            if (typeof intastellarDevMode !== "undefined" && intastellarDevMode) {
+                console.warn("[intaCmpLocale] Missing locale payload or categories", P);
+            }
             return false;
         }
+        try {
         var C = P.categories;
         var policyLabel = P.policyLinkLabel || "Privacy and cookie policy";
         var acceptShort = P.acceptShortLabel || P.acceptLabel || "Accept";
-        settingsMessage = (P.settingsMessage || "")
+        var wrapStart = "<div class='intastellarCookie-settings__contentConatiner'><p>";
+        var wrapEnd = "</p></div>";
+        var builtSettingsMessage = (P.settingsMessage || "")
             + generatePolicyUrl(policyLabel)
             + (P.settingsMessageSuffix || "")
             + (window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "");
+        var builtMessage =
+            wrapStart
+            + (P.bannerMessage || "")
+            + wrapEnd
+            + generatePolicyUrl(policyLabel)
+            + (window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "");
+        var builtCookieBtn = generateCookieButtons(P.acceptLabel || "Accept", P.declineLabel || "Decline", P.settingsLabel || "Settings");
         intastellarShowHideDetailsText = P.showHideDetails || "Show details";
         if (P.cookieSettingsLabel) {
             intastellarCookieLanguageSettings = P.cookieSettingsLabel;
@@ -139,13 +154,6 @@
         if (typeof bannerContent !== "undefined" && bannerContent && P.cookieSettingsLabel) {
             bannerContent.setAttribute("title", P.cookieSettingsLabel);
         }
-        message =
-            messageWrapStart
-            + (P.bannerMessage || "")
-            + messageWrapEnd
-            + generatePolicyUrl(policyLabel)
-            + (window.INTA.settings.design == "banner" && window.innerWidth > 768 ? generatePoweredBy() : "");
-        cookieBtn = generateCookieButtons(P.acceptLabel || "Accept", P.declineLabel || "Decline", P.settingsLabel || "Settings");
         intastellarCookieButtons.innerHTML = '<section class="intCookieSaveSettingsContainer">'
             + ((window.INTA.settings.design == "banner" || window.INTA.settings.design == "bannerV2" && window.INTA.settings.logo && window.INTA.settings.logo != "")
                 ? '<img class="intSettingsCompanyLogo" src="' + window.INTA.settings.logo + '" alt="Intastellar Solutions, International">' : "")
@@ -155,8 +163,19 @@
             + (window.INTA.settings.design == "bannerV2" && window.innerWidth > 768 ? generatePoweredBy() : "")
             + "</section>";
         moreFooter.innerHTML = intaBuildCmpSettingsFooterHtml(C);
+        window.intaCmpUiState = {
+            message: builtMessage,
+            cookieBtn: builtCookieBtn,
+            settingsMessage: builtSettingsMessage
+        };
         window.__intaCmpLocaleApplied = true;
         return true;
+        } catch (err) {
+            if (typeof intastellarDevMode !== "undefined" && intastellarDevMode) {
+                console.error("[intaCmpLocale] Failed to build banner UI from locale", err);
+            }
+            return false;
+        }
     };
 
     window.intaBuildCmpSettingsFooterHtml = function intaBuildCmpSettingsFooterHtml(C) {
