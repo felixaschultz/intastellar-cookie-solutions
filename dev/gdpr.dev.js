@@ -865,7 +865,7 @@ function getConsentTypeForCookie(cookieName) {
 var __intaBlockedIframeLoadStarted = false;
 
 function loadUcBlockedIframeMessages() {
-    if (window.intaBlockedIframeContentMessage) {
+    if (window.__intaBlockedIframeContentMessage) {
         return;
     }
     if (__intaBlockedIframeLoadStarted) {
@@ -888,22 +888,22 @@ function intaEnsureBlockedIframeMessagesLoaded() {
 }
 
 function intaResolveBlockedIframeLocaleKey() {
-    if (typeof window.intaResolveBlockedIframeLocaleKey === "function") {
-        return window.intaResolveBlockedIframeLocaleKey();
+    if (typeof window.__intaResolveBlockedIframeLocaleKey === "function") {
+        return window.__intaResolveBlockedIframeLocaleKey();
     }
     return "english";
 }
 
 function intaBlockedIframeContentMessage(domain, localeKey) {
-    if (typeof window.intaBlockedIframeContentMessage === "function") {
-        return window.intaBlockedIframeContentMessage(domain, localeKey);
+    if (typeof window.__intaBlockedIframeContentMessage === "function") {
+        return window.__intaBlockedIframeContentMessage(domain, localeKey);
     }
     return "<p>This content is provided by " + domain + ".</p>";
 }
 
 function intaBlockedIframeButtonText(scriptType, localeKey) {
-    if (typeof window.intaBlockedIframeButtonText === "function") {
-        return window.intaBlockedIframeButtonText(scriptType, localeKey);
+    if (typeof window.__intaBlockedIframeButtonText === "function") {
+        return window.__intaBlockedIframeButtonText(scriptType, localeKey);
     }
     return "Accept cookies";
 }

@@ -99,7 +99,7 @@ Sources: `messages` + `settingsMessagesLanguages` in `dev/cb.dev.js`, UI labels 
 `loopBlock` / `blockBlockQuotes` inlined ~400 lines of per-locale HTML templates and button labels for blocked YouTube, Facebook, Twitter embeds, etc. Most pages never hit this path, but every visitor still parsed it.
 
 ### Solution
-1. **`dev/uc-blocked-iframe.dev.js`** – `SCRIPT_TYPE_LABELS`, `CONTENT_TEMPLATES`, locale resolver, and button builders. Exposes `window.intaResolveBlockedIframeLocaleKey`, `window.intaBlockedIframeContentMessage`, `window.intaBlockedIframeButtonText`.
+1. **`dev/uc-blocked-iframe.dev.js`** – `SCRIPT_TYPE_LABELS`, `CONTENT_TEMPLATES`, locale resolver, and button builders. Exposes `window.__intaResolveBlockedIframeLocaleKey`, `window.__intaBlockedIframeContentMessage`, `window.__intaBlockedIframeButtonText`.
 
 2. **`dev/gdpr.dev.js`** – Stubs + `loadUcBlockedIframeMessages()`; `intaPickBlockedIframeStrings()` delegates to the lazy-loaded module. English fallbacks until the script loads.
 

@@ -223,7 +223,7 @@
         norwegian: "norwegian", dutch: "dutch", finnish: "finish", finish: "finish"
     };
 
-    window.intaResolveBlockedIframeLocaleKey = function intaResolveBlockedIframeLocaleKey() {
+    window.__intaResolveBlockedIframeLocaleKey = function intaResolveBlockedIframeLocaleKey() {
         var raw = typeof intastellarCookieLanguage !== "undefined" && intastellarCookieLanguage
             ? String(intastellarCookieLanguage).trim().toLowerCase().replace(/_/g, "-")
             : "en";
@@ -237,14 +237,14 @@
         return "danish";
     };
 
-    window.intaBlockedIframeContentMessage = function intaBlockedIframeContentMessage(domain, localeKey) {
-        localeKey = localeKey || window.intaResolveBlockedIframeLocaleKey();
+    window.__intaBlockedIframeContentMessage = function intaBlockedIframeContentMessage(domain, localeKey) {
+        localeKey = localeKey || window.__intaResolveBlockedIframeLocaleKey();
         var tpl = CONTENT_TEMPLATES[localeKey] || CONTENT_TEMPLATES.danish;
         return tpl(domain);
     };
 
-    window.intaBlockedIframeButtonText = function intaBlockedIframeButtonText(scriptType, localeKey) {
-        localeKey = localeKey || window.intaResolveBlockedIframeLocaleKey();
+    window.__intaBlockedIframeButtonText = function intaBlockedIframeButtonText(scriptType, localeKey) {
+        localeKey = localeKey || window.__intaResolveBlockedIframeLocaleKey();
         return buildButtonText(scriptType, localeKey);
     };
 })();
