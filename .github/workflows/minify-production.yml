@@ -1,5 +1,5 @@
 # Minify dev sources into production bundles on push to `production`.
-# dev/gdpr.dev.js → uc.js (repo root)
+# dev/gdpr.dev.js → split → uc-boot.dev.js + uc-core.dev.js → uc.js + uc-core.js
 # dev/cb-locale-loader.dev.js + dev/cb.dev.js → cb.js (repo root)
 # dev/languages/*.dev.js → languages/*.js
 
@@ -31,8 +31,14 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Minify gdpr.dev.js → uc.js
-        run: npx --yes terser@5 dev/gdpr.dev.js -c -m -o uc.js
+      - name: Split gdpr.dev.js → uc-boot.dev.js + uc-core.dev.js
+        run: node scripts/build-uc-split.mjs
+
+      - name: Minify uc-boot.dev.js → uc.js
+        run: npx --yes terser@5 dev/uc-boot.dev.js -c -m -o uc.js
+
+      - name: Minify uc-core.dev.js → uc-core.js
+        run: npx --yes terser@5 dev/uc-core.dev.js -c -m -o uc-core.js
 
       - name: Minify cb locale loader + cb.dev.js → cb.js
         run: |
@@ -58,7 +64,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add uc.js cb.js languages/*.js uc-vendors.js uc-blocked-iframe.js
+          git add uc.js uc-core.js dev/uc-boot.dev.js dev/uc-core.dev.js cb.js languages/*.js uc-vendors.js uc-blocked-iframe.js
           if git diff --staged --quiet; then
             echo "No changes to production bundles."
           else

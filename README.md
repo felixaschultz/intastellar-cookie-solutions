@@ -84,6 +84,12 @@ npm run generate-locale-files
 ```
 This will generate the locale files in the "languages" folder.
 
+After editing `dev/gdpr.dev.js`, regenerate the boot/core split before testing or deploying:
+```bash
+node scripts/build-uc-split.mjs
+```
+Local test site loads `dev/uc-boot.dev.js` (which async-loads `dev/uc-core.dev.js`).
+
 ## Beta testing
 
 If you want to beta test the banner you can do that by loading the beta version of the banner. Just load the beta version of the banner via https://beta.intastellar-consents.com/uc.js.
@@ -100,6 +106,9 @@ Read our documentation under: https://developers.intastellarsolutions.com/cookie
 You can add and load it direct via loading https://consents.cdn.intastellarsolutions.com/uc.js into your website.
 
 ```html
+<link rel="preconnect" href="https://consents.cdn.intastellarsolutions.com" crossorigin>
+<link rel="preload" href="https://consents.cdn.intastellarsolutions.com/uc.js" as="script" crossorigin>
+<link rel="preload" href="https://consents.cdn.intastellarsolutions.com/uc-core.js" as="script" crossorigin>
 <script>
   window.INTA = {
     policy_link: "[Link to your privacy policy]",
