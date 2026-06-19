@@ -333,7 +333,8 @@ function intaGetCompiledScriptPatterns() {
 }
 let __intaCookieEventFlushTimer = null;
 let __intaCookieEventPendingByKey = new Map();
-let INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
+let INTA_COOKIE_EVENT_DEBOUNCE_MS = 5000;
+let INTA_COOKIE_EVENT_MIN_FLUSH_GAP_MS = 250;
 let INTA_COOKIE_EVENT_MAX_BATCH = 50;
 let INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
 
@@ -1146,51 +1147,76 @@ function gtag() {
     dataLayer.push(arguments);
 }
 
-fetch('https://ipapi.co/json/')
-    .then(response => response.json())
-    .then(data => {
-        try {
-            window._intaGeo = {
-                country: data && data.country,
-                region_code: data && data.region_code,
-            };
-        } catch (e) { /* ignore */ }
+function intaApplyGeoRegionalDefaults(data) {
+    try {
+        window._intaGeo = {
+            country: data && data.country,
+            region_code: data && data.region_code,
+        };
+    } catch (e) { /* ignore */ }
 
-        // For California only:
-        if (data.country === "US" && data.region_code === "CA") {
-            window.INTA = window.INTA || {};
-            window.INTA.settings = window.INTA.settings || {};
-            window.INTA.settings.ccpa = window.INTA.settings.ccpa || {};
-            window.INTA.settings.ccpa.on = true;
-        } else {
-            // Optionally disable CCPA for non-CA users
-            if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa.on = false;
-        }
+    if (data.country === "US" && data.region_code === "CA") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.ccpa = window.INTA.settings.ccpa || {};
+        window.INTA.settings.ccpa.on = true;
+    } else if (window.INTA?.settings?.ccpa) {
+        window.INTA.settings.ccpa.on = false;
+    }
 
-        if (data.country === "BR") {
-            window.INTA = window.INTA || {};
-            window.INTA.settings = window.INTA.settings || {};
-            window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
-            window.INTA.settings.lgpd = true;
-        } else {
-            // Optionally disable LGPD for non-BR users
-            if (window.INTA?.settings?.lgpd) window.INTA.settings.lgpd = false;
-        }
+    if (data.country === "BR") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
+        window.INTA.settings.lgpd = true;
+    } else if (window.INTA?.settings?.lgpd) {
+        window.INTA.settings.lgpd = false;
+    }
 
-        if (data.country === "ZA") {
-            window.INTA = window.INTA || {};
-            window.INTA.settings = window.INTA.settings || {};
-            window.INTA.settings.popia = window.INTA.settings.popin || {};
-            window.INTA.settings.popia = true;
-        } else {
-            // Optionally disable CCPA for non-ZA users
-            if (window.INTA?.settings?.popin) window.INTA.settings.popin.on = false;
-        }
-        // Now continue with your banner initialization
-    })
-    .catch(function () {
-        /* Geo optional; consent still works without window._intaGeo */
-    });
+    if (data.country === "ZA") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.popia = window.INTA.settings.popin || {};
+        window.INTA.settings.popia = true;
+    } else if (window.INTA?.settings?.popin) {
+        window.INTA.settings.popin.on = false;
+    }
+}
+
+function intaGeoAlreadyConfigured() {
+    var ccpa = window.INTA && window.INTA.settings && window.INTA.settings.ccpa;
+    if (ccpa && (typeof ccpa.inUsCalifornia === "boolean"
+        || (ccpa.country && ccpa.regionCode))) {
+        return true;
+    }
+    if (window._intaGeo && window._intaGeo.country) {
+        return true;
+    }
+    return false;
+}
+
+function intaFetchGeoForRegionalDefaults() {
+    if (intaGeoAlreadyConfigured()) {
+        return;
+    }
+    fetch('https://ipapi.co/json/')
+        .then(function (response) { return response.json(); })
+        .then(intaApplyGeoRegionalDefaults)
+        .catch(function () {
+            /* Geo optional; consent still works without window._intaGeo */
+        });
+}
+
+(function intaScheduleGeoLookup() {
+    if (intaGeoAlreadyConfigured()) {
+        return;
+    }
+    if (typeof requestIdleCallback === "function") {
+        requestIdleCallback(intaFetchGeoForRegionalDefaults, { timeout: 5000 });
+    } else {
+        setTimeout(intaFetchGeoForRegionalDefaults, 2000);
+    }
+})();
 
 if (window._intaConsentInitialized) {
     console.log('Intastellar consent already initialized, skipping...');
@@ -4156,23 +4182,44 @@ function flushCookieEventsToApi(options) {
     if (!__intaCookieEventPendingByKey.size) return;
     let batch = Array.from(__intaCookieEventPendingByKey.values());
     __intaCookieEventPendingByKey.clear();
+    window.__intaCookieEventLastFlushAt = now;
     let body = __intaBuildCookieEventsPayload(batch);
+    var eventsUrl = (typeof window.INTA !== "undefined" && window.INTA.settings && window.INTA.settings.cookieEventsUrl)
+        || INTA_COOKIE_EVENTS_URL;
     try {
-        if (options.keepalive && typeof fetch === 'function') {
-            fetch(INTA_COOKIE_EVENTS_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: body,
-                keepalive: true
-            }).catch(function () {});
-            return;
+        if (typeof navigator.sendBeacon === "function" && body.length < 60000) {
+            var sent = navigator.sendBeacon(eventsUrl, new Blob([body], { type: "application/json" }));
+            if (sent) {
+                return;
+            }
         }
-        fetch(INTA_COOKIE_EVENTS_URL, {
+        fetch(eventsUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: body
-        }).then(function (r) { return r.json().catch(function () { return null; }); }).catch(function () {});
+            body: body,
+            keepalive: !!options.keepalive,
+            priority: 'low',
+            mode: 'cors',
+            credentials: 'omit'
+        }).catch(function () {});
     } catch (e) { /* ignore */ }
+}
+
+function intaScheduleCookieEventFlush() {
+    if (__intaCookieEventFlushTimer !== null) {
+        clearTimeout(__intaCookieEventFlushTimer);
+    }
+    var debounceMs = (typeof window.INTA !== "undefined" && window.INTA.settings && window.INTA.settings.cookieEventDebounceMs)
+        || INTA_COOKIE_EVENT_DEBOUNCE_MS;
+    __intaCookieEventFlushTimer = setTimeout(function () {
+        __intaCookieEventFlushTimer = null;
+        var run = function () { flushCookieEventsToApi(); };
+        if (typeof requestIdleCallback === "function") {
+            requestIdleCallback(run, { timeout: 8000 });
+        } else {
+            run();
+        }
+    }, debounceMs);
 }
 
 window.addEventListener('pagehide', function () {
@@ -4195,13 +4242,7 @@ function recordCookie(value) {
         return;
     }
 
-    if (__intaCookieEventFlushTimer !== null) {
-        clearTimeout(__intaCookieEventFlushTimer);
-    }
-    __intaCookieEventFlushTimer = setTimeout(function () {
-        __intaCookieEventFlushTimer = null;
-        flushCookieEventsToApi();
-    }, INTA_COOKIE_EVENT_DEBOUNCE_MS);
+    intaScheduleCookieEventFlush();
 }
 
 /* Helper function to create Consents Block message for iframes etc.*/

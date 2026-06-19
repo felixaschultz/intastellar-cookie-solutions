@@ -7,721 +7,42 @@ if (window.__intaUcCoreExecuted) {
     console.warn("Intastellar uc-core: duplicate load.");
 }
 window.__intaUcCoreExecuted = true;
-// Request consent state for a user
-// Request consent state for a user
-function requestConsentState(userId, rootDomain, partnerDomains = []) {
-    consentIframe.contentWindow.postMessage({ type: 'getConsent', userId, rootDomain, partnerDomains }, 'https://consents.cdn.intastellarsolutions.com');
-}
 
-// Set consent state for a user
-function setConsentState(userId, consents, rootDomain, partnerDomains = []) {
-    consentIframe.contentWindow.postMessage({ type: 'setConsent', userId, consents, rootDomain, partnerDomains }, 'https://consents.cdn.intastellarsolutions.com');
-    // VWO consent update
-    updateVwoConsent(consents);
-}
-
-/**
- * Shopify: `sale_of_data` is separate from marketing/analytics/preferences (CCPA-style opt-out).
- * Only send `sale_of_data: false` when the visitor used the dedicated opt-out flow (`ccpa_opt_out`).
- * Do not map marketing cookies to sale_of_data — see Shopify Customer Privacy docs.
- * @see https://shopify.dev/docs/api/customer-privacy#collect-and-register-data-sale--sharing-opt-out
- */
-function intaShopifyMergePayloadWithCcpaSaleOptOut(payload) {
-    if (!payload || typeof payload !== "object") {
-        return payload;
-    }
-    let out = Object.assign({}, payload);
-    try {
-        if (localStorage.getItem("ccpa_opt_out") === "true") {
-            out.sale_of_data = false;
-        }
-    } catch (e) {
-        /* ignore */
-    }
-    return out;
-}
-
-/* --- Shopify setTrackingConsent coalescing (one network write per burst + skip identical payload) --- */
-let intaShopifyCoalesceTimer = null;
-let intaShopifyCoalescePending = null;
-let intaShopifyCoalesceCallbacks = [];
-let intaShopifyLastSetTrackingConsentJson = null;
-let intaShopifyFlushApiMisses = 0;
-
-function intaShopifyStableConsentPayloadJson(p) {
-    if (!p || typeof p !== "object") {
-        return "";
-    }
-    let keys = ["analytics", "marketing", "preferences", "sale_of_data"].filter(function (k) {
-        return Object.prototype.hasOwnProperty.call(p, k);
-    });
-    let o = {};
-    for (let i = 0; i < keys.length; i++) {
-        o[keys[i]] = p[keys[i]];
-    }
-    return JSON.stringify(o);
-}
-
-function intaShopifyShallowMergeConsentPatch(target, patch) {
-    let base = target && typeof target === "object" ? Object.assign({}, target) : {};
-    if (!patch || typeof patch !== "object") {
-        return base;
-    }
-    if ("analytics" in patch) {
-        base.analytics = patch.analytics;
-    }
-    if ("marketing" in patch) {
-        base.marketing = patch.marketing;
-    }
-    if ("preferences" in patch) {
-        base.preferences = patch.preferences;
-    }
-    if ("sale_of_data" in patch) {
-        base.sale_of_data = patch.sale_of_data;
-    }
-    return base;
-}
-
-function intaShopifyRunCoalescedCallbacks(arr) {
-    let list = arr || [];
-    for (let i = 0; i < list.length; i++) {
-        try {
-            if (typeof list[i] === "function") {
-                list[i]();
-            }
-        } catch (e) {
-            /* ignore */
-        }
-    }
-}
-
-function intaShopifyFlushQueuedSetTrackingConsent() {
-    intaShopifyCoalesceTimer = null;
-    if (intaShopifyCoalescePending == null || typeof intaShopifyCoalescePending !== "object") {
-        intaShopifyRunCoalescedCallbacks(intaShopifyCoalesceCallbacks.splice(0));
-        return;
-    }
-
-    let merged = intaShopifyMergePayloadWithCcpaSaleOptOut(Object.assign({}, intaShopifyCoalescePending));
-    let api = window.Shopify && window.Shopify.customerPrivacy;
-
-    if (typeof api?.setTrackingConsent !== "function") {
-        let canRetry = typeof window.Shopify?.loadFeatures === "function";
-        if (!canRetry || intaShopifyFlushApiMisses > 80) {
-            intaShopifyCoalescePending = null;
-            intaShopifyFlushApiMisses = 0;
-            intaShopifyRunCoalescedCallbacks(intaShopifyCoalesceCallbacks.splice(0));
-            return;
-        }
-        intaShopifyFlushApiMisses++;
-        intaShopifyCoalesceTimer = setTimeout(intaShopifyFlushQueuedSetTrackingConsent, 100);
-        return;
-    }
-    intaShopifyFlushApiMisses = 0;
-
-    let json = intaShopifyStableConsentPayloadJson(merged);
-    if (json === intaShopifyLastSetTrackingConsentJson) {
-        intaShopifyCoalescePending = null;
-        intaShopifyRunCoalescedCallbacks(intaShopifyCoalesceCallbacks.splice(0));
-        return;
-    }
-
-    intaShopifyCoalescePending = null;
-    let cbs = intaShopifyCoalesceCallbacks.splice(0);
-
-    try {
-        api.setTrackingConsent(merged, function () {
-            intaShopifyLastSetTrackingConsentJson = json;
-            intaShopifyRefreshCustomerPrivacyState(null);
-            intaShopifyRunCoalescedCallbacks(cbs);
-        });
-    } catch (e) {
-        intaShopifyRunCoalescedCallbacks(cbs);
-    }
-}
-
-function intaShopifyEnqueueSetTrackingConsent(payload, onDone) {
-    try {
-        intaShopifyCoalescePending = intaShopifyShallowMergeConsentPatch(intaShopifyCoalescePending, payload);
-        if (typeof onDone === "function") {
-            intaShopifyCoalesceCallbacks.push(onDone);
-        }
-        if (intaShopifyCoalesceTimer != null) {
-            clearTimeout(intaShopifyCoalesceTimer);
-        }
-        intaShopifyCoalesceTimer = setTimeout(intaShopifyFlushQueuedSetTrackingConsent, 0);
-    } catch (e) {
-        /* ignore */
-    }
-}
-
-/**
- * Shopify Customer Privacy: all writes go through the coalescing queue (one setTrackingConsent per tick / deduped).
- */
-function intaShopifySetTrackingConsentSafe(consents, onDone) {
-    try {
-        if (!consents || typeof consents !== "object") {
-            if (typeof onDone === "function") {
-                onDone();
-            }
-            return;
-        }
-        intaShopifyEnqueueSetTrackingConsent(Object.assign({}, consents), onDone);
-    } catch (e) {
-        /* non-Shopify or API not ready */
-    }
-}
-
-let __intaCookieEventFlushTimer = null;
-let __intaCookieEventPendingByKey = new Map();
-let INTA_COOKIE_EVENT_DEBOUNCE_MS = 2000;
-let INTA_COOKIE_EVENT_MAX_BATCH = 50;
-let INTA_COOKIE_EVENTS_URL = 'https://consents.intastellarsolutions.com/api/v1/cookie-events';
-
-// Listen for consent state response
-window.addEventListener('message', (event) => {
-    if (event.origin !== 'https://consents.cdn.intastellarsolutions.com') return;
-    if (event.data.type === 'consentState') {
-        // Integrate with your banner logic
-        window.intaCookieConsents = event.data.consents;
-        intaShopifySetTrackingConsentFromConsentsObject(event.data.consents);
-        // Optionally, update checkboxes or UI elements
-        if (typeof updateConsentUI === 'function') {
-            updateConsentUI(event.data.consents);
-        }
-        console.log('Received consent state:', event.data.consents);
-    }
-});
-
-
-/**
- * Shopify Customer Privacy: map Intastellar consent values to booleans.
- * Send analytics + marketing + preferences together; omit `sale_of_data` unless CCPA opt-out is stored.
- */
-function intaShopifyConsentFlag(v) {
-    return v === "checked" || v === true;
-}
-
-/**
- * Build Shopify payload from current Intastellar cookie only (not stale window.intaCookieConsents).
- * If IntastellarConsentSolution is missing / invalid → deny all so Shopify does not keep old "yes".
- */
-function intaShopifyBuildSetTrackingConsentPayload() {
-    let denyAll = { analytics: false, marketing: false, preferences: false };
-    try {
-        let name = (typeof window !== "undefined" && window.int_hideCookieBannerName) || "IntastellarConsentSolution";
-        let raw = typeof getCookie === "function" && name ? getCookie(name) : "";
-        if (!raw || String(raw).indexOf("__inta") === -1) {
-            return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
-        }
-        if (typeof decodeIntaConsentsObject !== "function") {
-            return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
-        }
-        let parsed = JSON.parse(decodeIntaConsentsObject(String(raw).split(".")[2]));
-        let c = parsed && parsed.consents;
-        if (!c || typeof c !== "object") {
-            return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
-        }
-        return intaShopifyMergePayloadWithCcpaSaleOptOut({
-            analytics: intaShopifyConsentFlag(c.staticsticCookies),
-            marketing: intaShopifyConsentFlag(c.advertisementCookies),
-            preferences: intaShopifyConsentFlag(c.functionalCookies),
-        });
-    } catch (e) {
-        return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
-    }
-}
-
-function intaShopifyPayloadFromConsentsObject(c) {
-    let denyAll = { analytics: false, marketing: false, preferences: false };
-    if (!c || typeof c !== "object") {
-        return intaShopifyMergePayloadWithCcpaSaleOptOut(denyAll);
-    }
-    return intaShopifyMergePayloadWithCcpaSaleOptOut({
-        analytics: intaShopifyConsentFlag(c.staticsticCookies),
-        marketing: intaShopifyConsentFlag(c.advertisementCookies),
-        preferences: intaShopifyConsentFlag(c.functionalCookies),
-    });
-}
-
-function intaShopifyApplyTrackingConsentPayload(payload, done) {
-    if (!payload || typeof payload !== "object") {
-        if (typeof done === "function") {
-            done();
-        }
-        return;
-    }
-    intaShopifyEnqueueSetTrackingConsent(Object.assign({}, payload), done);
-}
-
-function intaShopifySetTrackingConsentFromIntastellar(done) {
-    intaShopifyApplyTrackingConsentPayload(intaShopifyBuildSetTrackingConsentPayload(), done);
-}
-
-/** When consents come from postMessage before cookie is written, pass the object explicitly. */
-function intaShopifySetTrackingConsentFromConsentsObject(consents, done) {
-    intaShopifyApplyTrackingConsentPayload(intaShopifyPayloadFromConsentsObject(consents), done);
-}
-
-window.intaShopifySetTrackingConsentFromIntastellar = intaShopifySetTrackingConsentFromIntastellar;
-window.intaShopifySetTrackingConsentFromConsentsObject = intaShopifySetTrackingConsentFromConsentsObject;
-
-/**
- * Shopify Customer Privacy: *Allowed() methods combine merchant settings, visitor region, and consent.
- * @see https://shopify.dev/docs/api/customer-privacy
- */
-function intaShopifyGetProcessingAllowedSnapshot() {
-    let api = window.Shopify && window.Shopify.customerPrivacy;
-    let snap = {
-        preferencesProcessingAllowed: null,
-        analyticsProcessingAllowed: null,
-        marketingAllowed: null,
-        saleOfDataAllowed: null,
-        region: null,
-        currentVisitorConsent: null,
-    };
-    if (!api) {
-        return snap;
-    }
-    try {
-        if (typeof api.preferencesProcessingAllowed === "function") {
-            snap.preferencesProcessingAllowed = !!api.preferencesProcessingAllowed();
-        }
-        if (typeof api.analyticsProcessingAllowed === "function") {
-            snap.analyticsProcessingAllowed = !!api.analyticsProcessingAllowed();
-        }
-        if (typeof api.marketingAllowed === "function") {
-            snap.marketingAllowed = !!api.marketingAllowed();
-        }
-        if (typeof api.saleOfDataAllowed === "function") {
-            snap.saleOfDataAllowed = !!api.saleOfDataAllowed();
-        }
-        if (typeof api.getRegion === "function") {
-            snap.region = api.getRegion();
-        }
-        if (typeof api.currentVisitorConsent === "function") {
-            snap.currentVisitorConsent = api.currentVisitorConsent();
-        }
-    } catch (e) {
-        /* ignore */
-    }
-    return snap;
-}
-
-let intaShopifyVisitorConsentListenerInstalled = false;
-
-function intaShopifyRefreshCustomerPrivacyState(visitorDetail) {
-    let allowed = intaShopifyGetProcessingAllowedSnapshot();
-    window.__intaShopifyCustomerPrivacy = {
-        allowed: allowed,
-        lastVisitorConsentEventDetail: visitorDetail != null ? visitorDetail : null,
-        updatedAt: new Date().toISOString(),
-    };
-    if (window.dataLayer && Array.isArray(window.dataLayer)) {
-        try {
-            window.dataLayer.push({
-                event: "inta_shopify_customer_privacy_updated",
-                intaShopifyAllowed: {
-                    preferencesProcessingAllowed: allowed.preferencesProcessingAllowed,
-                    analyticsProcessingAllowed: allowed.analyticsProcessingAllowed,
-                    marketingAllowed: allowed.marketingAllowed,
-                    saleOfDataAllowed: allowed.saleOfDataAllowed,
-                },
-                intaShopifyVisitorDetail: visitorDetail != null ? visitorDetail : undefined,
-            });
-        } catch (e) {
-            /* ignore */
-        }
-    }
-}
-
-function intaShopifyOnVisitorConsentCollected(ev) {
-    intaShopifyRefreshCustomerPrivacyState(ev && ev.detail);
-}
-
-function intaShopifyInstallCustomerPrivacyListeners() {
-    if (intaShopifyVisitorConsentListenerInstalled) {
-        return;
-    }
-    intaShopifyVisitorConsentListenerInstalled = true;
-    document.addEventListener("visitorConsentCollected", intaShopifyOnVisitorConsentCollected, false);
-}
-
-window.intaShopifyGetProcessingAllowedSnapshot = intaShopifyGetProcessingAllowedSnapshot;
-window.intaShopifyRefreshCustomerPrivacyState = intaShopifyRefreshCustomerPrivacyState;
-
-
-
-/* - - - Setup - - - */
-
-fetch('https://ipapi.co/json/')
-    .then(response => response.json())
-    .then(data => {
-        try {
-            window._intaGeo = {
-                country: data && data.country,
-                region_code: data && data.region_code,
-            };
-        } catch (e) { /* ignore */ }
-
-        // For California only:
-        if (data.country === "US" && data.region_code === "CA") {
-            window.INTA = window.INTA || {};
-            window.INTA.settings = window.INTA.settings || {};
-            window.INTA.settings.ccpa = window.INTA.settings.ccpa || {};
-            window.INTA.settings.ccpa.on = true;
-        } else {
-            // Optionally disable CCPA for non-CA users
-            if (window.INTA?.settings?.ccpa) window.INTA.settings.ccpa.on = false;
-        }
-
-        if (data.country === "BR") {
-            window.INTA = window.INTA || {};
-            window.INTA.settings = window.INTA.settings || {};
-            window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
-            window.INTA.settings.lgpd = true;
-        } else {
-            // Optionally disable LGPD for non-BR users
-            if (window.INTA?.settings?.lgpd) window.INTA.settings.lgpd = false;
-        }
-
-        if (data.country === "ZA") {
-            window.INTA = window.INTA || {};
-            window.INTA.settings = window.INTA.settings || {};
-            window.INTA.settings.popia = window.INTA.settings.popin || {};
-            window.INTA.settings.popia = true;
-        } else {
-            // Optionally disable CCPA for non-ZA users
-            if (window.INTA?.settings?.popin) window.INTA.settings.popin.on = false;
-        }
-        // Now continue with your banner initialization
-    })
-    .catch(function () {
-        /* Geo optional; consent still works without window._intaGeo */
-    });
-intaWpScheduleSyncWpFromStoredIntastellarConsent();
-
-/* _hsp.push(['doNotTrack']);
-_hsp.push(['revokeCookieConsent']); */
-window._hsp.push([
-    'setHubSpotCookieConsent',
-    {
-        'analytics': intaCookieConsents?.staticsticCookies === "checked",
-        'advertisement': intaCookieConsents?.advertisementCookies === "checked",
-        'functional': intaCookieConsents?.functionalCookies === "checked",
-    }
-]);
-
-window.Shopify = window.Shopify || {};
-window.Shopify.customerPrivacy = window.Shopify.customerPrivacy || {};
-// Hide Shopify’s own banner when using Intastellar; real API methods come from loadFeatures below.
-window.Shopify.customerPrivacy.shouldShowBanner = function () { return false; };
-
-intaShopifyInstallCustomerPrivacyListeners();
-
-// BUGFIX: was `window.Shopify ?? loadFeatures(...)` — after assigning `window.Shopify = {}` above,
-// Shopify is always truthy so `??` never ran loadFeatures and customerPrivacy stayed a stub.
-let intaShopifyConsentApiLoadStarted = false;
-function intaShopifyLoadConsentTrackingApi() {
-    if (intaShopifyConsentApiLoadStarted) {
+function intaGeoAlreadyConfigured() {
+    var ccpa = window.INTA && window.INTA.settings && window.INTA.settings.ccpa;
+    if (ccpa && (typeof ccpa.inUsCalifornia === "boolean"
+        || (ccpa.country && ccpa.regionCode))) {
         return true;
     }
-    if (typeof window.Shopify.loadFeatures !== 'function') {
-        return false;
+    if (window._intaGeo && window._intaGeo.country) {
+        return true;
     }
-    intaShopifyConsentApiLoadStarted = true;
-    window.Shopify.loadFeatures(
-        [
-            {
-                name: 'consent-tracking-api',
-                version: '0.1',
-            },
-        ],
-        (error) => {
-            if (error) {
-                console.error("Shopify consent tracking API error:", error);
-                return;
-            }
-            // Sync Intastellar cookie → Shopify (done callback refreshes *Allowed snapshot via intaShopifyApplyTrackingConsentPayload)
-            intaShopifySetTrackingConsentFromIntastellar(() => console.log("Shopify Customer Privacy synced from Intastellar"));
-            // consent-tracking-api may replace customerPrivacy; keep Shopify’s banner off while Intastellar runs
-            window.Shopify.customerPrivacy.shouldShowBanner = function () {
-                return false;
-            };
-        },
-    );
-    return true;
+    return false;
 }
 
-if (!intaShopifyLoadConsentTrackingApi()) {
-    // Shopify core (loadFeatures) often loads after this script — retry briefly on storefronts
-    let intaShopifyRetries = 0;
-    let intaShopifyRetryId = setInterval(() => {
-        if (intaShopifyLoadConsentTrackingApi() || ++intaShopifyRetries > 50) {
-            clearInterval(intaShopifyRetryId);
-        }
-    }, 100);
-}
-
-function optOutCCPA() {
-    // Google Tag Manager / gtag
-    gtag('consent', 'update', {
-        'ad_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied'
-    });
-
-    // Microsoft Clarity
-    if (window.clarity) {
-        try {
-            window.clarity('consent', 'denied');
-            // For Clarity V2, if used:
-            window.clarity('consentv2', {
-                ad_Storage: "denied",
-                analytics_Storage: "denied"
-            });
-        } catch (e) { /* ignore */ }
+function intaFetchGeoForRegionalDefaults() {
+    if (intaGeoAlreadyConfigured()) {
+        return;
     }
-
-    // Matomo
-    if (window._paq) {
-        try {
-            window._paq.push(['requireConsent']);
-            window._paq.push(['forgetUserOptOut']);
-        } catch (e) { /* ignore */ }
-    }
-
-    // Pintrk
-    if (typeof pintrk === 'function') {
-        try {
-            pintrk('setconsent', false);
-        } catch (e) { /* ignore */ }
-    }
-
-    // Microsoft UET
-    if (window.uetq) {
-        try {
-            window.uetq.push('consent', 'update', { 'ad_storage': 'denied' });
-        } catch (e) { /* ignore */ }
-    }
-
-    // HubSpot
-    if (window._hsp) {
-        try {
-            window._hsp.push(['setHubSpotCookieConsent', {
-                analytics: false,
-                advertisement: false,
-                functional: false
-            }]);
-        } catch (e) { /* ignore */ }
-    }
-
-    // Shopify: data sale/sharing opt-out only — does not change analytics/marketing/preferences (Shopify docs).
-    try {
-        localStorage.setItem("ccpa_opt_out", "true");
-        intaShopifySetTrackingConsentSafe({ sale_of_data: false }, function () {
-            console.log("Shopify CCPA opt-out set");
+    fetch('https://ipapi.co/json/')
+        .then(function (response) { return response.json(); })
+        .then(intaApplyGeoRegionalDefaults)
+        .catch(function () {
+            /* Geo optional; consent still works without window._intaGeo */
         });
-    } catch (e) { /* ignore */ }
-
-    alert("Your opt-out has been saved. We won’t sell or share your personal information.");
 }
 
-async function sendToBackend(data) {
-    try {
-        let base = (typeof window.INTA?.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
-        await fetch(base, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-    } catch (e) {
-        console.log(e);
+(function intaScheduleGeoLookup() {
+    if (intaGeoAlreadyConfigured()) {
+        return;
     }
-    return;
-}
+    if (typeof requestIdleCallback === "function") {
+        requestIdleCallback(intaFetchGeoForRegionalDefaults, { timeout: 5000 });
+    } else {
+        setTimeout(intaFetchGeoForRegionalDefaults, 2000);
+    }
+})();
 
-// Helper: Server-side tagging - send GA4 events via backend (consent-aware)
-// Server checks consents: accepted = full data (user_id, IP, etc); not accepted = minimal
-window.sendEventToServerSideTagging = function (eventName, params, opts) {
-    let measurementId = (opts && opts.measurement_id) || (window.INTA && window.INTA.settings && window.INTA.settings.gtagId) || '';
-    if (!measurementId || !/^G-[A-Z0-9]+$/i.test(measurementId)) return;
-    let consents = window.intaCookieConsents || {};
-    var consentAcceptedAt = null;
-    try {
-        if (typeof getCookie === 'function' && typeof decodeIntaConsentsObject === 'function' && typeof int_hideCookieBannerName !== 'undefined') {
-            var c = getCookie(int_hideCookieBannerName);
-            if (c && c.indexOf && c.indexOf('__inta') > -1) {
-                var parts = c.split('.');
-                var decoded = parts[2] ? JSON.parse(decodeIntaConsentsObject(parts[2]) || '{}') : {};
-                consentAcceptedAt = decoded.time || null;
-            }
-        }
-    } catch (e) { }
-    let uid = (window.intaConsentsObjectVariable && window.intaConsentsObjectVariable.uid) || '';
-    let base = (typeof window.INTA !== 'undefined' && typeof window.INTA.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
-    fetch(base, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            action: 'ga4_event',
-            measurement_id: measurementId,
-            consents: consents,
-            consent_accepted_at: consentAcceptedAt,
-            client_id: (opts && opts.client_id) || ('cid_' + Date.now().toString(36) + Math.random().toString(36).slice(2)),
-            user_id: (opts && opts.user_id) || uid,
-            session_id: (opts && opts.session_id) || ('sess_' + Date.now()),
-            page_location: (opts && opts.page_location) || window.location.href,
-            page_title: (opts && opts.page_title) || (document.title || ''),
-            events: [{ name: eventName || 'page_view', params: params || {} }]
-        })
-    }).catch(function () { });
-};
-
-// IAB TC String generator
-(function (window) {
-    // Minimal IAB TCF encoder for browser use
-    function padBits(num, len) {
-        let s = num.toString(2);
-        return "0".repeat(len - s.length) + s;
-    }
-    function strToBits(str) {
-        // 2 chars, each 6 bits (A=0, Z=25, a=26, z=51)
-        return padBits(str.charCodeAt(0) - 65, 6) + padBits(str.charCodeAt(1) - 65, 6);
-    }
-    function base64UrlEncode(bytes) {
-        let binary = '';
-        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-        return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    }
-    function base64UrlDecode(str) {
-        str = (str || '').replace(/-/g, '+').replace(/_/g, '/');
-        while (str.length % 4) str += '=';
-        var binary = atob(str);
-        var out = '';
-        for (var i = 0; i < binary.length; i++) out += String.fromCharCode(binary.charCodeAt(i));
-        return out;
-    }
-
-    // Minimal TCModel
-    function TCModel() {
-        this.purposeConsents = [];
-        this.vendorConsents = [];
-        this.vendorLegitimateInterests = [];
-        this.disclosedVendors = []; // TCF 2.3: vendors disclosed to user in CMP
-    }
-
-    /** TCF 2.3: Encode Disclosed Vendors segment (segment type 1). */
-    function encodeDisclosedVendorsSegment(maxVendorId, disclosed) {
-        if (maxVendorId <= 0) return '';
-        let bits = '';
-        bits += padBits(1, 3);   // segment type 1 = vendorsDisclosed
-        bits += padBits(maxVendorId, 16);
-        for (let i = 0; i < maxVendorId; i++) bits += (disclosed && disclosed[i]) ? '1' : '0';
-        let bytes = [];
-        for (let i = 0; i < bits.length; i += 8) bytes.push(parseInt(bits.substr(i, 8).padEnd(8, '0'), 2));
-        return base64UrlEncode(bytes);
-    }
-
-    // Minimal TCString encoder
-    var TCString = {
-        encode: function (tcModel) {
-            // Support all vendors (not just first 24)
-            let bits = "";
-            bits += padBits(2, 6); // Version
-            let now = Math.floor(Date.now() / 100); // 0.1s increments
-            bits += padBits(now, 36); // Created
-            bits += padBits(now, 36); // LastUpdated
-            bits += padBits(1, 12); // CmpId
-            bits += padBits(1, 12); // CmpVersion
-            bits += padBits(0, 6); // ConsentScreen
-            bits += strToBits("EN"); // ConsentLanguage
-            bits += padBits(1, 12); // VendorListVersion
-            bits += padBits(3, 6); // TCFPolicyVersion 3 = TCF 2.3
-            bits += padBits(0, 1); // IsServiceSpecific
-            bits += padBits(0, 1); // UseNonStandardStacks
-            bits += padBits(0, 12); // SpecialFeatureOptIns
-            // PurposeConsents (24 bits)
-            for (let i = 0; i < 24; i++) bits += tcModel.purposeConsents && tcModel.purposeConsents[i] ? "1" : "0";
-            // PurposeLegitInterests (24 bits, all 0)
-            bits += "0".repeat(24);
-            bits += padBits(0, 1); // PurposeOneTreatment
-            bits += strToBits("EN"); // PublisherCC
-            // VendorConsents (maxVendorId, 16 bits for maxVendorId, then maxVendorId bits for consents)
-            let maxVendorId = (tcModel.vendorConsents && tcModel.vendorConsents.length) || 0;
-            bits += padBits(maxVendorId, 16);
-            for (let i = 0; i < maxVendorId; i++) bits += tcModel.vendorConsents && tcModel.vendorConsents[i] ? "1" : "0";
-            // Convert bits to bytes
-            let bytes = [];
-            for (let i = 0; i < bits.length; i += 8) {
-                bytes.push(parseInt(bits.substr(i, 8).padEnd(8, "0"), 2));
-            }
-            let coreString = base64UrlEncode(bytes);
-            // TCF 2.3: mandatory Disclosed Vendors segment (required for new/updated signals from Feb 28, 2026)
-            let disclosed = (tcModel.disclosedVendors && tcModel.disclosedVendors.length >= maxVendorId)
-                ? tcModel.disclosedVendors.slice(0, maxVendorId)
-                : (tcModel.vendorConsents || []).slice(0, maxVendorId).map(function () { return true; });
-            let disclosedSegment = encodeDisclosedVendorsSegment(maxVendorId, disclosed);
-            return disclosedSegment ? coreString + "." + disclosedSegment : coreString;
-        },
-        decode: function (tcString) {
-            let coreOnly = (tcString || '').split('.')[0];
-            let binary = base64UrlDecode(coreOnly);
-            let bits = '';
-            for (let i = 0; i < binary.length; i++) {
-                bits += ('00000000' + binary.charCodeAt(i).toString(2)).slice(-8);
-            }
-            // Parse fields (see encoder for bit lengths)
-            let offset = 0;
-            function read(len) {
-                let val = bits.substr(offset, len);
-                offset += len;
-                return val;
-            }
-            let version = parseInt(read(6), 2);
-            let created = parseInt(read(36), 2);
-            let lastUpdated = parseInt(read(36), 2);
-            let cmpId = parseInt(read(12), 2);
-            let cmpVersion = parseInt(read(12), 2);
-            let consentScreen = parseInt(read(6), 2);
-            let consentLanguage = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
-            let vendorListVersion = parseInt(read(12), 2);
-            let tcfPolicyVersion = parseInt(read(6), 2);
-            let isServiceSpecific = !!parseInt(read(1), 2);
-            let useNonStandardStacks = !!parseInt(read(1), 2);
-            let specialFeatureOptIns = read(12);
-            let purposes = read(24).split('').map(b => b === '1');
-            let purposeLegitInterests = read(24);
-            let purposeOneTreatment = !!parseInt(read(1), 2);
-            let publisherCC = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
-            let maxVendorId = parseInt(read(16), 2);
-            let vendorBits = maxVendorId > 0 ? read(maxVendorId) : '';
-            let vendors = vendorBits.split('').map(b => b === '1');
-            return {
-                version,
-                created,
-                lastUpdated,
-                cmpId,
-                cmpVersion,
-                consentScreen,
-                consentLanguage,
-                vendorListVersion,
-                tcfPolicyVersion,
-                isServiceSpecific,
-                useNonStandardStacks,
-                specialFeatureOptIns,
-                purposes,
-                maxVendorId,
-                vendors
-            };
-        }
-    };
-
-    window.IABTCF = {
-        TCModel: TCModel,
-        TCString: TCString
-    };
-})(window);
 window.addEventListener("DOMContentLoaded", (event) => {
     loadUcVendors(); // Lazy-load detectCookieVendor + COOKIE_CONSENT_TYPE_MAP to reduce initial parse
     window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments) };
@@ -912,6 +233,30 @@ let blockAdvertismentCookies = "__hideAdvertisementCookies";
 let intHead = document.head || document.querySelector("head") || document.getElementsByTagName("head")[0];
 
 /** Append dynamically created scripts/styles; head may be missing briefly (SSR / Remix). */
+function intaAppendToDocumentHead(node) {
+    if (!node) {
+        return;
+    }
+    const head = document.head
+        || document.querySelector("head")
+        || document.getElementsByTagName("head")[0];
+    try {
+        if (head) {
+            head.appendChild(node);
+            return;
+        }
+    } catch (e) {
+        /* ignore */
+    }
+    try {
+        const fallback = document.body || document.documentElement;
+        if (fallback) {
+            fallback.appendChild(node);
+        }
+    } catch (e2) {
+        /* ignore */
+    }
+}
 
 let cookieLifeTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 200).toGMTString();
 /* List of cookies that should not be deleted */
@@ -2301,6 +1646,50 @@ if (window.INTA?.settings?.gtagId) {
     });
 }
 
+let notRequired;
+let m;
+/* Helper function to merge arrays */
+let merge = (first, second, third) => {
+    /* first.splice(1, 0, "^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+"); */
+    for (let i = 0; i < second.length; i++) {
+        first.push(second[i]);
+    }
+    if (third !== undefined) {
+        for (let i = 0; i < third.length; i++) {
+            first.push(third[i])
+        }
+    }
+    return first;
+}
+/* autoads-preview.googleusercontent.com */
+/* Getting user prefrence settings from Local storage: checked means user has allowed. False means cookies needs to be blocked */
+if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies !== "checked" &&
+    intaCookieConsents?.advertisementCookies !== "checked") {
+    m = merge(allScripts[1].scripts, allScripts[0].scripts);
+} else if (intaCookieConsents?.advertisementCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies !== "checked" &&
+    intaCookieConsents?.functionalCookies !== "checked") {
+    m = merge(allScripts[2].scripts, allScripts[0].scripts);
+} else if (intaCookieConsents?.staticsticCookies === "checked" &&
+    intaCookieConsents?.functionalCookies !== "checked" &&
+    intaCookieConsents?.advertisementCookies !== "checked") {
+    m = merge(allScripts[1].scripts, allScripts[2].scripts);
+} else if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies === "checked") {
+    m = allScripts[1].scripts;
+} else if (intaCookieConsents?.functionalCookies === "checked" &&
+    intaCookieConsents?.advertisementCookies === "checked") {
+    m = allScripts[0].scripts;
+} else if (intaCookieConsents?.advertisementCookies === "checked" &&
+    intaCookieConsents?.staticsticCookies === "checked") {
+    m = allScripts[2].scripts;
+} else {
+    m = merge(allScripts[0].scripts, allScripts[1].scripts, allScripts[2].scripts);
+}
+/* No `g` flag: global regex makes `.test()` advance `lastIndex`, so later URLs (e.g. bzrcdn.openai.com)
+ * can spuriously fail to match even when patterns like `openai` / `oaiq` apply. */
+notRequired = window.notRequired = new RegExp(m.join("|"), "i");
 let analyticsScript = document.createElement("script");
 analyticsScript.async = true;
 analyticsScript.src = "https://www.intastellarsolutions.com/js/analytics.js?v=" + new Date().getTime();
@@ -2724,23 +2113,44 @@ function flushCookieEventsToApi(options) {
     if (!__intaCookieEventPendingByKey.size) return;
     let batch = Array.from(__intaCookieEventPendingByKey.values());
     __intaCookieEventPendingByKey.clear();
+    window.__intaCookieEventLastFlushAt = now;
     let body = __intaBuildCookieEventsPayload(batch);
+    var eventsUrl = (typeof window.INTA !== "undefined" && window.INTA.settings && window.INTA.settings.cookieEventsUrl)
+        || INTA_COOKIE_EVENTS_URL;
     try {
-        if (options.keepalive && typeof fetch === 'function') {
-            fetch(INTA_COOKIE_EVENTS_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: body,
-                keepalive: true
-            }).catch(function () {});
-            return;
+        if (typeof navigator.sendBeacon === "function" && body.length < 60000) {
+            var sent = navigator.sendBeacon(eventsUrl, new Blob([body], { type: "application/json" }));
+            if (sent) {
+                return;
+            }
         }
-        fetch(INTA_COOKIE_EVENTS_URL, {
+        fetch(eventsUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: body
-        }).then(function (r) { return r.json().catch(function () { return null; }); }).catch(function () {});
+            body: body,
+            keepalive: !!options.keepalive,
+            priority: 'low',
+            mode: 'cors',
+            credentials: 'omit'
+        }).catch(function () {});
     } catch (e) { /* ignore */ }
+}
+
+function intaScheduleCookieEventFlush() {
+    if (__intaCookieEventFlushTimer !== null) {
+        clearTimeout(__intaCookieEventFlushTimer);
+    }
+    var debounceMs = (typeof window.INTA !== "undefined" && window.INTA.settings && window.INTA.settings.cookieEventDebounceMs)
+        || INTA_COOKIE_EVENT_DEBOUNCE_MS;
+    __intaCookieEventFlushTimer = setTimeout(function () {
+        __intaCookieEventFlushTimer = null;
+        var run = function () { flushCookieEventsToApi(); };
+        if (typeof requestIdleCallback === "function") {
+            requestIdleCallback(run, { timeout: 8000 });
+        } else {
+            run();
+        }
+    }, debounceMs);
 }
 
 window.addEventListener('pagehide', function () {
@@ -2763,16 +2173,236 @@ function recordCookie(value) {
         return;
     }
 
-    if (__intaCookieEventFlushTimer !== null) {
-        clearTimeout(__intaCookieEventFlushTimer);
-    }
-    __intaCookieEventFlushTimer = setTimeout(function () {
-        __intaCookieEventFlushTimer = null;
-        flushCookieEventsToApi();
-    }, INTA_COOKIE_EVENT_DEBOUNCE_MS);
+    intaScheduleCookieEventFlush();
 }
 
 /* Helper function to create Consents Block message for iframes etc.*/
+function ConsentsBlock(logo, textLanguage, btnText, datatype, img) {
+    let p = "";
+    if (window.location.host.indexOf("intastellarsolutions.com") == -1) {
+        p = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="90px" height="40px" style="width: 170px !important; height: 40px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/logos/intastellar-consents-logo.svg" alt="Intastellar Consents"></a>`;
+    }
+    if (img !== undefined && img != "") {
+        return `
+        <inta-consents-content class="intCookie_ConsentContainer-content yt-frame">
+            <inta-consents-bg class="intCookie_ConsentContainer-bgIMG" inta-bg-img="${img}"></inta-consents-bg>
+            <inta-consents-section class="intCookie_ConsentContainer-info">
+                ${textLanguage}
+                <button class='intastellarCookie-settings__btn --changePermission' onClick='updateCookiePreferenceOfBlockedIframes("${datatype}")' data-type='${datatype}'>${btnText}</button>
+                ${p}
+            </inta-consents-section>
+        </inta-consents-content>
+        `
+    } else {
+        return `
+            <inta-consents-content class="intCookie_ConsentContainer-content">
+                ${logo === null ? "" : `
+                <inta-consents-logo class="intCookie_ConsentLogo-container">
+                    <img src="${logo}" class="intCookie_ConsentLogo" alt="Company logo">
+                </inta-consents-logo>
+                `}
+                
+                <inta-consents-section class="intCookie_ConsentContainer-info">
+                    ${textLanguage}
+                    <button class='intastellarCookie-settings__btn --changePermission' onClick='updateCookiePreferenceOfBlockedIframes("${datatype}")' data-type='${datatype}'>${btnText}</button>
+                    ${p}
+                </inta-consents-section>
+            </inta-consents-content>
+        `
+    }
+}
+
+/* Helper function to check class names */
+function containsClass(element, searchString) {
+    return element?.classList?.contains(searchString) || element?.className?.split(' ')?.some(cls => cls?.includes(searchString));
+}
+
+function loopBlock(addedNodes, script, logo) {
+    addedNodes.forEach((frae) => {
+        if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies === "checked"
+            && intaCookieConsents?.functionalCookies === "checked" && intaCookieConsents?.staticsticCookies === "checked") {
+            return;
+        }
+        let settingsContent = document.createElement("inta-consents-iframe");
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "statics") {
+            if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                frae?.parentElement?.replaceChild("", frae);
+            }
+        }
+        if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.advertisementCookies && script.type == "marketing") {
+            if (containsClass(frae, "fb-") && frae.getAttribute("data-href")?.indexOf("facebook.com") > -1) {
+                frae?.parentElement?.replaceChild(settingsContent, frae);
+            }
+            if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
+                frae.sandbox = "";
+                let ytIMG = "";
+                let video_id = "";
+
+                if (frae.src != undefined) {
+                    if (frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")) {
+                        video_id = frae?.src?.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
+                        if (video_id && !frae?.hasAttribute("inta-yt-placeholder-img")) {
+                            ytIMG = "https://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg";
+                        } else if (frae?.hasAttribute("inta-yt-placeholder-img")) {
+                            ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
+                        }
+                    } else {
+                        if (frae?.hasAttribute("inta-yt-placeholder-img")) {
+                            ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
+                        }
+                    }
+                }
+                let a = document.createElement('a');
+                a.href = frae.src;
+                let externalDomain = a.hostname;
+
+                inta_marketingCookieList.forEach((cookie) => {
+                    var i = 0,
+                        d = externalDomain,
+                        p = d.split(".")
+
+                    d = p.slice(-1 - ++i).join(".");
+                    externalDomain = d;
+
+                    if (cookie?.domains?.includes(externalDomain)) {
+                        externalDomain = cookie.vendor;
+                    }
+                })
+                if (frae.src !== window.INTA?.settings?.partnerDomain) {
+                    frae.src = "about:blank";
+                }
+                let copy = intaPickBlockedIframeStrings(externalDomain, frae, script.type, inta_marketingCookieList);
+                let textLanguage = copy.textLanguage;
+                let btnText = copy.btnText;
+                if (!frae.classList.contains("trustpilot-widget")) {
+                    settingsContent.setAttribute("data-src", a?.href);
+                }
+                settingsContent.classList.add("intCookie_ConsentContainer");
+                if (ytIMG !== undefined && ytIMG != "") {
+                    settingsContent.classList.add("yt-frame");
+                }
+                if (frae.classList.length > 0) {
+                    settingsContent.setAttribute("data-class", frae.className);
+                }
+                settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
+
+                if (frae.style.display != "none" && frae.src != undefined) {
+                    frae?.parentElement?.replaceChild(settingsContent, frae);
+                }
+
+            }
+        } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies && script.type == "functional") {
+            if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
+                frae.sandbox = "";
+                let a = document.createElement('a');
+                a.href = frae.src;
+                let externalDomain = a.hostname;
+
+                inta_functionalCookieList.forEach((cookie) => {
+                    var i = 0,
+                        d = externalDomain,
+                        p = d.split(".")
+
+                    d = p.slice(-1 - ++i).join(".");
+                    externalDomain = d;
+                    if (cookie?.domains?.includes(externalDomain)) {
+                        externalDomain = cookie.vendor;
+                    }
+                })
+
+                let copy = intaPickBlockedIframeStrings(externalDomain, frae, script.type, inta_functionalCookieList);
+                let textLanguage = copy.textLanguage;
+                let btnText = copy.btnText;
+
+                let settingsContent = document.createElement("inta-consents");
+                settingsContent.classList.add("intCookie_ConsentContainer");
+                settingsContent.setAttribute("data-src", a.href);
+                settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
+
+                if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                    frae?.parentElement?.replaceChild("", frae);
+                } else {
+                    if (frae.style.display != "none" && frae.src != undefined) {
+
+                        frae?.parentElement?.replaceChild(settingsContent, frae);
+                    }
+
+                }
+            } else if (frae?.id?.indexOf("map") > -1 || frae?.id?.indexOf("google") > -1 && frae?.id?.indexOf("google_translate_element2") == -1) {
+                let externalDomain = "www.google.com";
+                inta_functionalCookieList.forEach((cookie) => {
+                    var i = 0,
+                        d = externalDomain,
+                        p = d.split(".")
+
+                    d = p.slice(-1 - ++i).join(".");
+                    externalDomain = d;
+                    if (cookie?.domains?.includes(externalDomain)) {
+                        externalDomain = cookie.vendor;
+                    }
+                })
+
+                let copy = intaPickBlockedIframeStrings(externalDomain, frae, script.type, inta_functionalCookieList);
+                let textLanguage = copy.textLanguage;
+                let btnText = copy.btnText;
+
+                let settingsContent = document.createElement("inta-consents");
+                settingsContent.classList.add("intCookie_ConsentContainer");
+
+                settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
+
+                settingsContent.setAttribute("data-src", frae.src);
+                if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                    frae?.parentElement?.replaceChild("", frae);
+                } else {
+                    if (frae.style.display != "none" && frae.src != undefined) {
+                        frae.parentElement.replaceChild(settingsContent, frae);
+                    }
+                }
+            } else if (frae?.id?.indexOf("google_translate_element2") > -1) {
+                frae?.parentElement?.replaceChild("", frae);
+            }
+        }
+    })
+}
+
+function blockBlockQuotes(tweet, script, logo) {
+    if (tweet != " " && getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
+        let a = document.createElement('a');
+        a.href = tweet.querySelector("a").href;
+        let externalDomain = a.hostname;
+
+        inta_marketingCookieList.forEach((cookie) => {
+            var i = 0,
+                d = externalDomain,
+                p = d.split(".")
+
+            d = p.slice(-1 - ++i).join(".");
+            externalDomain = d;
+
+            if (cookie?.domains?.includes(externalDomain)) {
+                externalDomain = cookie.vendor;
+            }
+        })
+
+        let copy = intaPickBlockedIframeStrings(externalDomain, tweet, script.type, inta_marketingCookieList);
+        let textLanguage = copy.textLanguage;
+        let btnText = copy.btnText;
+        let settingsContent = document.createElement("inta-consents");
+        settingsContent.classList.add("intCookie_ConsentContainer");
+        settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
+
+        settingsContent.setAttribute("data-src", a.href);
+        if (tweet.src.indexOf("hs-sites.com") > -1) {
+            tweet.parentElement.replaceChild("", tweet);
+        } else {
+            if (tweet.style.display != "none" && tweet.src != undefined) {
+                tweet.parentElement.replaceChild(settingsContent, tweet);
+
+            }
+        }
+    }
+}
 
 /* - - - Helper function for message on the content block - - - */
 function handleInputChange(event) {
@@ -3087,12 +2717,12 @@ function processExistingScripts() {
 }
 
 
+function restartObserver() {
+    // Disconnect any existing observer
+    if (window.currentObserver) {
+        window.currentObserver.disconnect();
+    }
 
-function deleteAllCookies() {
-    var cookies = document.cookie.split(";");
-
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
         var eqPos = cookie.indexOf("=");
         var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
         if (!int__cookiesToKeepRegx.test(name)) {
@@ -3128,12 +2758,12 @@ function clearLocalStorage(ls) {
 }
 /* deleteAllCookies();
 clearLocalStorage(); */
+if (!isGtmMode) {
+    checkCookieStatus();
+}
 
 // Recommended approach for monitoring: use addEventListener to detect user consent actions (TCF)
 function registerTCFEventListener(retries) {
-    retries = retries || 0;
-    if (typeof window.__tcfapi === 'function') {
-        window.__tcfapi('addEventListener', 2, function (tcData, success) {
             if (success && tcData.eventStatus === 'useractioncomplete') {
                 if (window.dataLayer) window.dataLayer.push({ event: 'intastellar_tcf_useractioncomplete', tcData: tcData });
                 window.dispatchEvent(new CustomEvent('intastellar_consent_user_action', { detail: tcData }));
@@ -3148,6 +2778,7 @@ if (document.readyState === 'loading') {
 } else {
     registerTCFEventListener();
 }
+
 if (typeof recordCookie === "function") {
     window.__intaRecordCookieImpl = recordCookie;
     var __intaPending = window.__intaPendingCookieRecords;
