@@ -1307,15 +1307,10 @@ function intaHasStoredConsentCookie() {
     return false;
 }
 
-function intaIsAdvancedCmp() {
-    return !!(window.INTA && window.INTA.settings && window.INTA.settings.advanced);
-}
-
 function intaApplyCmpVisibilityFromCookie() {
     var overlay = window._IntastellarConsentsBanner;
     var root = window.intaconsents;
     var hasConsent = intaHasStoredConsentCookie();
-    var advanced = intaIsAdvancedCmp();
     var isFloating = window.INTA && window.INTA.settings && window.INTA.settings.design === 'floating';
     var design = window.INTA && window.INTA.settings && window.INTA.settings.design;
 
@@ -1326,7 +1321,7 @@ function intaApplyCmpVisibilityFromCookie() {
     }
 
     if (overlay) {
-        if (hasConsent || advanced) {
+        if (hasConsent) {
             overlay.classList.remove('--active');
         } else {
             overlay.classList.add('--active');
@@ -1339,12 +1334,12 @@ function intaApplyCmpVisibilityFromCookie() {
         }
     }
 
-    var advPanel = document.querySelector('.intastellarCookie-settings__container');
-    if (advPanel && hasConsent) {
-        advPanel.classList.remove('intastellarCookie-settings__container--expand');
+    var settingsPanel = document.querySelector('.intastellarCookie-settings__container');
+    if (settingsPanel && hasConsent) {
+        settingsPanel.classList.remove('intastellarCookie-settings__container--expand');
     }
 
-    if (hasConsent || advanced) {
+    if (hasConsent) {
         document.documentElement.classList.remove('noScroll');
     } else {
         document.documentElement.classList.add('noScroll');
@@ -1353,7 +1348,7 @@ function intaApplyCmpVisibilityFromCookie() {
     if (root) {
         var floatBtn = root.querySelector('.intastellarCookie-settings');
         if (floatBtn) {
-            if (isFloating || advanced || design === 'bannerV2' || hasConsent) {
+            if (isFloating || design === 'bannerV2' || hasConsent) {
                 floatBtn.style.display = '';
             } else {
                 floatBtn.style.display = 'none';
@@ -1370,16 +1365,7 @@ const IntastellarCookieConsent = {
     // Store reference to the banner element
     _banner: null,
     renew: function () {
-        if (intaIsAdvancedCmp()) {
-            var advPanel = document.querySelector('.intastellarCookie-settings__container');
-            if (advPanel) {
-                advPanel.classList.toggle('intastellarCookie-settings__container--expand');
-                document.documentElement.classList.toggle(
-                    'noScroll',
-                    advPanel.classList.contains('intastellarCookie-settings__container--expand')
-                );
-            }
-        } else if (typeof moreSettings !== 'undefined') {
+        if (typeof moreSettings !== 'undefined') {
             moreSettings.classList.add("--active");
             document.documentElement.classList.add("noScroll");
         }
@@ -3163,29 +3149,18 @@ onWindowLoad(function () {
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
 
-            if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) {
-                configBtn.forEach((configs) => {
-                    configs.addEventListener("click", function () {
-                        let settings = document.querySelector(".intastellarCookie-settings__container");
-                        document.querySelector("html").classList.toggle("noScroll");
-                        settings.classList.toggle("intastellarCookie-settings__container--expand");
-                    });
-                })
-            } else {
-                configBtn.forEach((configs) => {
-                    configs.addEventListener("click", function () {
-                        let settings = window._intaCookieConstents;
-                        /* document.querySelector("html").classList.toggle("noScroll"); */
-                        settings.classList.toggle("--active");
-                        dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
-                    });
-                })
-            }
-            if (window?.INTA?.settings.advanced) {
+            configBtn.forEach((configs) => {
+                configs.addEventListener("click", function () {
+                    let settings = document.querySelector(".intastellarCookie-settings__container");
+                    document.querySelector("html").classList.toggle("noScroll");
+                    settings.classList.toggle("intastellarCookie-settings__container--expand");
+                });
+            });
+            if (closeSettings) {
                 closeSettings.addEventListener("click", function () {
                     let settings = document.querySelector(".intastellarCookie-settings__container");
                     settings.classList.toggle("intastellarCookie-settings__container--expand");
-                })
+                });
             }
         } else {
             const configBtn = document.querySelectorAll(".intastellarCookie-settingsContainer");
@@ -3199,48 +3174,14 @@ onWindowLoad(function () {
             const analyticsBTN = document.querySelector(".analytics");
             const closeSettings = document.querySelector(".intastellarCookie-settings__close");
             let settings = document.querySelector(".intastellarCookie-settings__container");
-            /* Showing default banner when no custom banner is set */
-            /*  if (document.querySelector(".intastellarCookieBanner") == null || document.querySelector(".intastellarCookieBanner") == undefined) {
-                 if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) {
-                     debugger;
-                     document.querySelector("html").classList.toggle("noScroll");
-                     window._intaCookieConstents.classList.toggle("--active");
-                 } else {
-                     settings.classList.toggle("intastellarCookie-settings__container--expand");
-                 }
-             } */
-
-            if (window?.INTA?.settings.advanced) {
-                configBtn.forEach((configs) => {
-                    configs.addEventListener("click", function () {
-                        let settings = document.querySelector(".intastellarCookie-settings__container");
-                        document.querySelector("html").classList.toggle("noScroll");
-                        settings.classList.toggle("intastellarCookie-settings__container--expand");
-                    });
-                })
-
-                config.forEach((configs) => {
-                    configs.addEventListener("click", function () {
-                        let settings = document.querySelector(".intastellarCookie-settings__container");
-                        settings.classList.toggle("intastellarCookie-settings__container--expand");
-                    });
-                })
-            } else {
-                configBtn.forEach((configs) => {
-                    configs.addEventListener("click", function () {
-                        let settings = window._intaCookieConstents;
-                        document.querySelector("html").classList.toggle("noScroll");
-                        settings.classList.add("--active");
-                        dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
-                    });
-                })
-            }
-            if (window?.INTA?.settings.advanced) {
-                closeSettings.addEventListener("click", function () {
-                    let settings = document.querySelector(".intastellarCookie-settings__container");
-                    settings.classList.toggle("intastellarCookie-settings__container--expand");
-                })
-            }
+            configBtn.forEach((configs) => {
+                configs.addEventListener("click", function () {
+                    let settings = window._intaCookieConstents;
+                    document.querySelector("html").classList.toggle("noScroll");
+                    settings.classList.add("--active");
+                    dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
+                });
+            });
 
 
         }
