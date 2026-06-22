@@ -1274,7 +1274,7 @@ function intaInjectCmpCriticalStyles() {
     style.id = 'inta-cmp-critical-styles';
     style.textContent =
         'intastellarconsents.inta-cmp-not-ready{visibility:hidden!important;pointer-events:none!important;}' +
-        'html.inta-cmp-has-consent .intastellarCookieConstents,html.inta-cmp-has-consent .intastellarCookieConstents.--active{display:none!important;}' +
+        'html.inta-cmp-has-consent .intastellarCookieConstents:not(.--active){display:none!important;}' +
         '.intastellarCookieConstents{display:none!important;}' +
         '.intastellarCookieConstents.--active{display:grid!important;}' +
         '.intastellarCookie-settings__container{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:scale(0)!important;}' +
@@ -1340,7 +1340,7 @@ function intaApplyCmpVisibilityFromCookie() {
     }
 
     var advPanel = document.querySelector('.intastellarCookie-settings__container');
-    if (advPanel && (hasConsent || !advanced)) {
+    if (advPanel && hasConsent) {
         advPanel.classList.remove('intastellarCookie-settings__container--expand');
     }
 
@@ -1370,9 +1370,18 @@ const IntastellarCookieConsent = {
     // Store reference to the banner element
     _banner: null,
     renew: function () {
-        // Add --active to <inta-consents-banner> (referenced by moreSettings)
-        if (typeof moreSettings !== 'undefined') {
+        if (intaIsAdvancedCmp()) {
+            var advPanel = document.querySelector('.intastellarCookie-settings__container');
+            if (advPanel) {
+                advPanel.classList.toggle('intastellarCookie-settings__container--expand');
+                document.documentElement.classList.toggle(
+                    'noScroll',
+                    advPanel.classList.contains('intastellarCookie-settings__container--expand')
+                );
+            }
+        } else if (typeof moreSettings !== 'undefined') {
             moreSettings.classList.add("--active");
+            document.documentElement.classList.add("noScroll");
         }
         if (window.intaconsents) {
             var floatBtn = window.intaconsents.querySelector('.intastellarCookie-settings');
@@ -1380,7 +1389,6 @@ const IntastellarCookieConsent = {
                 floatBtn.style.display = '';
             }
         }
-        document.documentElement.classList.add("noScroll");
         if (typeof window._intaBannerShownAt === 'undefined') {
             window._intaBannerShownAt = Date.now();
         }
