@@ -7,6 +7,38 @@ if (window.__intaUcCoreExecuted) {
     console.warn("Intastellar uc-core: duplicate load.");
 }
 window.__intaUcCoreExecuted = true;
+function intaApplyGeoRegionalDefaults(data) {
+    try {
+        window._intaGeo = {
+            country: data && data.country,
+            region_code: data && data.region_code,
+        };
+    } catch (e) { /* ignore */ }
+
+    if (data.country === "US" && data.region_code === "CA") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.ccpa = window.INTA.settings.ccpa || {};
+        window.INTA.settings.ccpa.on = true;
+    } else if (window.INTA?.settings?.ccpa) {
+        window.INTA.settings.ccpa.on = false;
+    }
+
+    if (data.country === "BR") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
+        window.INTA.settings.lgpd = true;
+    } else if (window.INTA?.settings?.lgpd) {
+        window.INTA.settings.lgpd = false;
+    }
+
+    if (data.country === "ZA") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.popia = window.INTA.settings.popin || {};
+        window.INTA.settings.popia = true;
+    } else if (window.INTA?.settings?.popin) {
         window.INTA.settings.popin.on = false;
     }
 }
@@ -42,9 +74,9 @@ function intaFetchGeoForRegionalDefaults() {
     if (typeof requestIdleCallback === "function") {
         requestIdleCallback(intaFetchGeoForRegionalDefaults, { timeout: 5000 });
     } else {
-        window.location.href = window.location.href + "&reload=true";
+        setTimeout(intaFetchGeoForRegionalDefaults, 2000);
     }
-};
+})();
 
 window.addEventListener("DOMContentLoaded", (event) => {
     loadUcVendors(); // Lazy-load detectCookieVendor + COOKIE_CONSENT_TYPE_MAP to reduce initial parse
@@ -2678,9 +2710,9 @@ function updateNotRequiredRegexp() {
     console.log("Updated consent blocking patterns");
 
     // Process existing scripts that may need to be updated
-        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
-    })
+    processExistingScripts();
 }
+
 
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
@@ -2719,9 +2751,9 @@ function clearLocalStorage(ls) {
         localStorage.clear();
         sessionStorage.clear();
     }
-if (!isGtmMode) {
-    checkCookieStatus();
 }
+/* deleteAllCookies();
+clearLocalStorage(); */
 
 // Recommended approach for monitoring: use addEventListener to detect user consent actions (TCF)
 function registerTCFEventListener(retries) {

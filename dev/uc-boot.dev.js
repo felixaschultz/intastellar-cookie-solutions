@@ -1154,41 +1154,6 @@ function gtag() {
     dataLayer.push(arguments);
 }
 
-function intaApplyGeoRegionalDefaults(data) {
-    try {
-        window._intaGeo = {
-            country: data && data.country,
-            region_code: data && data.region_code,
-        };
-    } catch (e) { /* ignore */ }
-
-    if (data.country === "US" && data.region_code === "CA") {
-        window.INTA = window.INTA || {};
-        window.INTA.settings = window.INTA.settings || {};
-        window.INTA.settings.ccpa = window.INTA.settings.ccpa || {};
-        window.INTA.settings.ccpa.on = true;
-    } else if (window.INTA?.settings?.ccpa) {
-        window.INTA.settings.ccpa.on = false;
-    }
-
-    if (data.country === "BR") {
-        window.INTA = window.INTA || {};
-        window.INTA.settings = window.INTA.settings || {};
-        window.INTA.settings.lgpd = window.INTA.settings.lgpd || {};
-        window.INTA.settings.lgpd = true;
-    } else if (window.INTA?.settings?.lgpd) {
-        window.INTA.settings.lgpd = false;
-    }
-
-    if (data.country === "ZA") {
-        window.INTA = window.INTA || {};
-        window.INTA.settings = window.INTA.settings || {};
-        window.INTA.settings.popia = window.INTA.settings.popin || {};
-        window.INTA.settings.popia = true;
-    } else if (window.INTA?.settings?.popin) {
-        setTimeout(intaFetchGeoForRegionalDefaults, 2000);
-    }
-})();
 
 if (window._intaConsentInitialized) {
     console.log('Intastellar consent already initialized, skipping...');
@@ -2080,9 +2045,9 @@ function intaSetCookieSettings() {
             intCookieDomain +
             "SameSite=Lax";
         // Reload the page and append to exising query string the reload parameter
-    processExistingScripts();
-}
-
+        window.location.href = window.location.href + "&reload=true";
+    }
+};
 function processExistingScripts() {
     // Process blocked scripts that should now be allowed
     document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
@@ -2427,6 +2392,9 @@ function startObserving(observer) {
         childList: !0,
         subtree: !0,
         attributes: true,
+        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
+    })
+}
 
 window.inta_marketingCookieList = window.inta_marketingCookieList || [];
 window.inta_functionalCookieList = window.inta_functionalCookieList || [];
