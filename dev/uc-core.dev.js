@@ -2104,7 +2104,7 @@ function flushCookieEventsToApi(options) {
     if (!__intaCookieEventPendingByKey.size) return;
     let batch = Array.from(__intaCookieEventPendingByKey.values());
     __intaCookieEventPendingByKey.clear();
-    window.__intaCookieEventLastFlushAt = now;
+    window.__intaCookieEventLastFlushAt = Date.now();
     let body = __intaBuildCookieEventsPayload(batch);
     var eventsUrl = (typeof window.INTA !== "undefined" && window.INTA.settings && window.INTA.settings.cookieEventsUrl)
         || INTA_COOKIE_EVENTS_URL;

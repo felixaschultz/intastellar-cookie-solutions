@@ -141,12 +141,6 @@ function loadIntastellarCookieBanner()
         $logo = "";
     }
 
-    if (get_option("intastellarDisplayCookieAdvenced")) {
-        $advanced = filter_var(get_option('intastellarDisplayCookieAdvenced'), FILTER_VALIDATE_BOOLEAN);
-    } else {
-        $advanced = false;
-    }
-
     if (get_option("intastellarCookieBannerColor")) {
         $color = get_option("intastellarCookieBannerColor");
     } else {
@@ -192,7 +186,6 @@ function loadIntastellarCookieBanner()
                     "collection" => $collection
                 ),
                 'requiredCookies' => $requiredCookies,
-                'advanced' => $advanced,
                 'rootDomain' => $rootDomain
             ),
         )),
