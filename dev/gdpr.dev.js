@@ -214,7 +214,7 @@ let allScripts = window.allScripts = [
             "([\-\.]clearbitjs+)",
             "([\-\.]clearbitscripts+)",
             "([\-\.]optimizely+)",
-            "([\-\.]segment+)",
+            "(?:cdn\\.segment|api\\.segment|[\\-\\.]segment\\.(?:com|io))",
             "([\-\.]quantserve+)[a-z]{2,5}(:[0-9]{1,5})?(\\\\.*)"
         ]
     },
@@ -4129,8 +4129,33 @@ function containsClass(element, searchString) {
     return element?.classList?.contains(searchString) || element?.className?.split(' ')?.some(cls => cls?.includes(searchString));
 }
 
+/** Only real embeds (iframes / Facebook div widgets) — never generic DIV/IMG nodes. */
+function intaIsLoopBlockEmbedTarget(frae) {
+    if (!frae || frae.nodeType !== 1) {
+        return false;
+    }
+    if (frae.tagName === "IFRAME") {
+        return true;
+    }
+    if (frae.tagName === "DIV" && containsClass(frae, "fb-") && frae.getAttribute("data-href")) {
+        return true;
+    }
+    return false;
+}
+
+function intaLoopBlockEmbedSrc(frae) {
+    var src = frae.src || frae.getAttribute("src") || "";
+    if (src && src !== "about:blank") {
+        return src;
+    }
+    return "";
+}
+
 function loopBlock(addedNodes, script, logo) {
     addedNodes.forEach((frae) => {
+        if (!intaIsLoopBlockEmbedTarget(frae)) {
+            return;
+        }
         if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.advertisementCookies === "checked"
             && intaCookieConsents?.functionalCookies === "checked" && intaCookieConsents?.staticsticCookies === "checked") {
             return;
@@ -4145,27 +4170,24 @@ function loopBlock(addedNodes, script, logo) {
             if (containsClass(frae, "fb-") && frae.getAttribute("data-href")?.indexOf("facebook.com") > -1) {
                 frae?.parentElement?.replaceChild(settingsContent, frae);
             }
-            if (new RegExp(script.scripts.join("|"), "ig").test(frae.src) || frae?.className?.match(new RegExp(script.scripts.join("|"), "ig"))) {
+            var embedSrc = intaLoopBlockEmbedSrc(frae);
+            if (embedSrc && new RegExp(script.scripts.join("|"), "ig").test(embedSrc)) {
                 frae.sandbox = "";
                 let ytIMG = "";
                 let video_id = "";
 
-                if (frae.src != undefined) {
-                    if (frae.src.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")) {
-                        video_id = frae?.src?.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
-                        if (video_id && !frae?.hasAttribute("inta-yt-placeholder-img")) {
-                            ytIMG = "https://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg";
-                        } else if (frae?.hasAttribute("inta-yt-placeholder-img")) {
-                            ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
-                        }
-                    } else {
-                        if (frae?.hasAttribute("inta-yt-placeholder-img")) {
-                            ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
-                        }
+                if (embedSrc.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")) {
+                    video_id = embedSrc.match("^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)")?.pop();
+                    if (video_id && !frae?.hasAttribute("inta-yt-placeholder-img")) {
+                        ytIMG = "https://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg";
+                    } else if (frae?.hasAttribute("inta-yt-placeholder-img")) {
+                        ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
                     }
+                } else if (frae?.hasAttribute("inta-yt-placeholder-img")) {
+                    ytIMG = frae?.getAttribute("inta-yt-placeholder-img");
                 }
                 let a = document.createElement('a');
-                a.href = frae.src;
+                a.href = embedSrc;
                 let externalDomain = a.hostname;
 
                 inta_marketingCookieList.forEach((cookie) => {
@@ -4180,7 +4202,7 @@ function loopBlock(addedNodes, script, logo) {
                         externalDomain = cookie.vendor;
                     }
                 })
-                if (frae.src !== window.INTA?.settings?.partnerDomain) {
+                if (embedSrc !== window.INTA?.settings?.partnerDomain) {
                     frae.src = "about:blank";
                 }
                 let copy = intaPickBlockedIframeStrings(externalDomain, frae, script.type, inta_marketingCookieList);
@@ -4198,16 +4220,17 @@ function loopBlock(addedNodes, script, logo) {
                 }
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies", ytIMG);
 
-                if (frae.style.display != "none" && frae.src != undefined) {
+                if (frae.style.display != "none" && embedSrc) {
                     frae?.parentElement?.replaceChild(settingsContent, frae);
                 }
 
             }
         } else if (getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && !intaCookieConsents?.functionalCookies && script.type == "functional") {
-            if (new RegExp(script.scripts.join("|"), "ig").test(frae.src)) {
+            var functionalEmbedSrc = intaLoopBlockEmbedSrc(frae);
+            if (functionalEmbedSrc && new RegExp(script.scripts.join("|"), "ig").test(functionalEmbedSrc)) {
                 frae.sandbox = "";
                 let a = document.createElement('a');
-                a.href = frae.src;
+                a.href = functionalEmbedSrc;
                 let externalDomain = a.hostname;
 
                 inta_functionalCookieList.forEach((cookie) => {
@@ -4231,10 +4254,10 @@ function loopBlock(addedNodes, script, logo) {
                 settingsContent.setAttribute("data-src", a.href);
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
-                if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                if (functionalEmbedSrc.indexOf("hs-sites.com") > -1) {
                     frae?.parentElement?.replaceChild("", frae);
                 } else {
-                    if (frae.style.display != "none" && frae.src != undefined) {
+                    if (frae.style.display != "none" && functionalEmbedSrc) {
 
                         frae?.parentElement?.replaceChild(settingsContent, frae);
                     }
@@ -4263,11 +4286,12 @@ function loopBlock(addedNodes, script, logo) {
 
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
-                settingsContent.setAttribute("data-src", frae.src);
-                if (frae?.src?.indexOf("hs-sites.com") > -1) {
+                var mapEmbedSrc = intaLoopBlockEmbedSrc(frae);
+                settingsContent.setAttribute("data-src", mapEmbedSrc || frae.src || "");
+                if (mapEmbedSrc.indexOf("hs-sites.com") > -1) {
                     frae?.parentElement?.replaceChild("", frae);
                 } else {
-                    if (frae.style.display != "none" && frae.src != undefined) {
+                    if (frae.style.display != "none" && mapEmbedSrc) {
                         frae.parentElement.replaceChild(settingsContent, frae);
                     }
                 }
@@ -4685,7 +4709,7 @@ function checkCookieStatus() {
                 batch.forEach(({ addedNodes }) => {
                 addedNodes.forEach((node) => {
 
-                    if (node.nodeType === 1 && node.tagName === "DIV" || node.nodeType === 1 && node.tagName === "IFRAME") {
+                    if (node.nodeType === 1 && (node.tagName === "IFRAME" || (node.tagName === "DIV" && typeof node.className === "string" && node.className.indexOf("fb-") !== -1))) {
                         allScripts.map((script) => {
                             intaEnsureBlockedIframeMessagesLoaded();
                             let INTAlogo = (window.INT) ? window.INT.settings.logo : (window.INTA?.settings?.logo) ? window.INTA?.settings?.logo : null;

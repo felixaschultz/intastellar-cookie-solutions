@@ -2396,6 +2396,132 @@ function updateNotRequiredRegexp() {
     processExistingScripts();
 }
 
+function processExistingScripts() {
+    // Process blocked scripts that should now be allowed
+    document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
+        let src = script.src || '';
+        if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
+            // This script should now be allowed - replace it
+            let newScript = document.createElement('script');
+            newScript.type = 'text/javascript';
+            if (script.src) newScript.src = script.src;
+            if (script.innerText) newScript.text = script.innerText;
+            script.parentNode?.replaceChild(newScript, script);
+        }
+    });
+
+    // Process blocked iframes that should now be allowed
+    document.querySelectorAll('inta-consents-iframe[data-src], inta-consents[data-src]').forEach(blocked => {
+        let type = blocked.querySelector('.--changePermission')?.dataset?.type;
+        if ((type === 'intMarketingCookies' && intaCookieConsents?.advertisementCookies === "checked") ||
+            (type === 'intFunctionalCookies' && intaCookieConsents?.functionalCookies === "checked") ||
+            (type === 'intStaticsCookies' && intaCookieConsents?.staticsticCookies === "checked")) {
+
+            let iframe = document.createElement('iframe');
+            iframe.src = blocked.getAttribute('data-src');
+            iframe.border = '0';
+            iframe.frameBorder = '0';
+
+            if (blocked.getAttribute('data-class')) {
+                iframe.setAttribute('class', blocked.getAttribute('data-class'));
+            } else {
+                iframe.width = '560';
+                iframe.height = '315';
+            }
+
+            blocked.parentElement?.replaceChild(iframe, blocked);
+        }
+    });
+}
+
+
+function restartObserver() {
+    // Disconnect any existing observer
+    if (window.currentObserver) {
+        window.currentObserver.disconnect();
+    }
+
+    // Create a new observer with updated consent settings
+    window.currentObserver = checkCookieStatus();
+
+    // Process any existing blocked content that should now be allowed
+    processExistingScripts();
+
+}
+
+let beforeScriptExecuteListener = function (event, node) {
+    let src = node.src || "";
+
+    if (getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || intaCookieConsents?.advertisementCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.functionalCookies == "false" && getCookie(int_hideCookieBannerName) != "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") > -1 && intaCookieConsents?.staticsticCookies == "false" || intaCookieConsents?.advertisementCookies == "null" && intaCookieConsents?.functionalCookies == "null" && intaCookieConsents?.staticsticCookies == "null"
+        || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == ""
+        || !FunctionalCheckbox?.checked || !StaticsCheckBox?.checked || !MarketingCheckBox?.checked
+    ) {
+        if (
+            src.indexOf(window.location.hostname) == -1
+            && src.indexOf("jquery") == -1 && src.indexOf("elementor") == -1
+        ) {
+            if (
+                notRequired.test(src)
+            ) {
+                node.defer = true;
+                node.async = true;
+                node.type = "text/blocked";
+                /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+            }
+        } else if (src.indexOf(window.location.hostname) == -1
+            && src.indexOf("jquery") > -1) {
+            node.type = "text/javascript";
+            node.defer = false;
+            node.async = false;
+        } else {
+            node.type = "text/javascript";
+            /* if(document.querySelector(scriptTag) === null){
+                node.parentElement.appendChild(scriptTag);
+            } */
+        }
+
+        if (
+            notRequired.test(node.innerText)
+            && node.innerText.toLowerCase().indexOf("elementor") == -1
+        ) {
+            node.defer = true;
+            node.async = true;
+            node.type = "text/blocked";
+            /*if(node.parentElement !== null) node.parentElement.removeChild(node);*/
+        } else {
+            /* if(document.querySelector(scriptTag) === null){
+                node.parentElement.appendChild(scriptTag);
+            } */
+        }
+    } else if (intaCookieConsents?.functionalCookies === "checked" &&
+        intaCookieConsents?.advertisementCookies === "checked" &&
+        intaCookieConsents?.staticsticCookies === "checked"
+        || FunctionalCheckbox?.checked && StaticsCheckBox?.checked && MarketingCheckBox?.checked) {
+        node.type = "text/javascript";
+    }
+
+    if (node.getAttribute("type") === "text/blocked")
+        event.preventDefault();
+    node.removeEventListener(
+        "beforescriptexecute",
+        (e, node) => beforeScriptExecuteListener(e, node)
+    );
+
+    // Disconnect the observer if it exists
+    if (window.currentObserver) {
+        window.currentObserver.disconnect();
+    }
+};
+
+
+function startObserving(observer) {
+    observer.observe(document.documentElement, {
+        childList: !0,
+        subtree: !0,
+        attributes: true,
+        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
+    })
+}
 
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
@@ -2656,6 +2782,9 @@ if (document.readyState === 'loading') {
     registerTCFEventListener();
 }
 
+if (typeof intaLoadUcCore !== "function") {
+    intaRunUcCoreIntegrations();
+}
 
 if (typeof intaRunUcCoreIntegrations === "function") {
     intaRunUcCoreIntegrations();
