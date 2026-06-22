@@ -1274,31 +1274,59 @@ function intaInjectCmpCriticalStyles() {
     style.id = 'inta-cmp-critical-styles';
     style.textContent =
         'intastellarconsents.inta-cmp-not-ready{visibility:hidden!important;pointer-events:none!important;}' +
+        'html.inta-cmp-has-consent .intastellarCookieConstents,html.inta-cmp-has-consent .intastellarCookieConstents.--active{display:none!important;}' +
         '.intastellarCookieConstents{display:none!important;}' +
         '.intastellarCookieConstents.--active{display:grid!important;}' +
+        '.intastellarCookie-settings__container{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:scale(0)!important;}' +
+        '.intastellarCookie-settings__container.intastellarCookie-settings__container--expand{opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:scale(1)!important;}' +
         '.intastellarToolTip{opacity:0!important;visibility:hidden!important;}' +
         '.intastellarCookie-settingsContainer:hover .intastellarToolTip{opacity:1!important;visibility:visible!important;}';
     (document.head || document.documentElement).appendChild(style);
+    if (intaHasStoredConsentCookie()) {
+        document.documentElement.classList.add('inta-cmp-has-consent');
+    }
 }
 
 function intaHasStoredConsentCookie() {
     try {
-        var c = typeof getCookie === 'function' && typeof int_hideCookieBannerName !== 'undefined'
-            ? getCookie(int_hideCookieBannerName) : '';
-        return !!(c && c.indexOf && c.indexOf('__inta') > -1);
+        var cookieName = (typeof int_hideCookieBannerName !== 'undefined' && int_hideCookieBannerName)
+            || 'IntastellarConsentSolution';
+        var dc = document.cookie || '';
+        if (dc.indexOf(cookieName + '=') !== -1 && dc.indexOf('__inta') !== -1) {
+            return true;
+        }
+        if (typeof getCookie === 'function') {
+            var c = getCookie(cookieName);
+            if (c && c.indexOf && c.indexOf('__inta') > -1) {
+                return true;
+            }
+        }
     } catch (e) {
         return false;
     }
+    return false;
+}
+
+function intaIsAdvancedCmp() {
+    return !!(window.INTA && window.INTA.settings && window.INTA.settings.advanced);
 }
 
 function intaApplyCmpVisibilityFromCookie() {
     var overlay = window._IntastellarConsentsBanner;
     var root = window.intaconsents;
     var hasConsent = intaHasStoredConsentCookie();
+    var advanced = intaIsAdvancedCmp();
     var isFloating = window.INTA && window.INTA.settings && window.INTA.settings.design === 'floating';
+    var design = window.INTA && window.INTA.settings && window.INTA.settings.design;
+
+    if (hasConsent) {
+        document.documentElement.classList.add('inta-cmp-has-consent');
+    } else {
+        document.documentElement.classList.remove('inta-cmp-has-consent');
+    }
 
     if (overlay) {
-        if (hasConsent) {
+        if (hasConsent || advanced) {
             overlay.classList.remove('--active');
         } else {
             overlay.classList.add('--active');
@@ -1311,7 +1339,12 @@ function intaApplyCmpVisibilityFromCookie() {
         }
     }
 
-    if (hasConsent) {
+    var advPanel = document.querySelector('.intastellarCookie-settings__container');
+    if (advPanel && (hasConsent || !advanced)) {
+        advPanel.classList.remove('intastellarCookie-settings__container--expand');
+    }
+
+    if (hasConsent || advanced) {
         document.documentElement.classList.remove('noScroll');
     } else {
         document.documentElement.classList.add('noScroll');
@@ -1319,8 +1352,12 @@ function intaApplyCmpVisibilityFromCookie() {
 
     if (root) {
         var floatBtn = root.querySelector('.intastellarCookie-settings');
-        if (floatBtn && isFloating) {
-            floatBtn.style.display = hasConsent ? '' : 'none';
+        if (floatBtn) {
+            if (isFloating || advanced || design === 'bannerV2' || hasConsent) {
+                floatBtn.style.display = '';
+            } else {
+                floatBtn.style.display = 'none';
+            }
         }
         root.classList.remove('inta-cmp-not-ready');
     }
