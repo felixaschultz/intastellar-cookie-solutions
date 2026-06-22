@@ -349,6 +349,9 @@ window.addEventListener('message', (event) => {
         if (typeof updateConsentUI === 'function') {
             updateConsentUI(event.data.consents);
         }
+        if (typeof window.intaApplyCmpVisibilityFromCookie === 'function') {
+            window.intaApplyCmpVisibilityFromCookie();
+        }
         console.log('Received consent state:', event.data.consents);
     }
 });

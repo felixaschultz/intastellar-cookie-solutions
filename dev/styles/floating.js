@@ -72,9 +72,76 @@ function darkLightCheck(color) {
     }
 }
 
+/** Inline critical styles so CMP UI stays hidden until cookie state is applied (prevents CLS / flash). */
+function intaInjectCmpCriticalStyles() {
+    if (document.getElementById('inta-cmp-critical-styles')) {
+        return;
+    }
+    var style = document.createElement('style');
+    style.id = 'inta-cmp-critical-styles';
+    style.textContent =
+        'intastellarconsents.inta-cmp-not-ready{visibility:hidden!important;pointer-events:none!important;}' +
+        '.intastellarCookieConstents{display:none!important;}' +
+        '.intastellarCookieConstents.--active{display:grid!important;}' +
+        '.intastellarToolTip{opacity:0!important;visibility:hidden!important;}' +
+        '.intastellarCookie-settingsContainer:hover .intastellarToolTip{opacity:1!important;visibility:visible!important;}';
+    (document.head || document.documentElement).appendChild(style);
+}
+
+function intaHasStoredConsentCookie() {
+    try {
+        var c = typeof getCookie === 'function' && typeof int_hideCookieBannerName !== 'undefined'
+            ? getCookie(int_hideCookieBannerName) : '';
+        return !!(c && c.indexOf && c.indexOf('__inta') > -1);
+    } catch (e) {
+        return false;
+    }
+}
+
+function intaApplyCmpVisibilityFromCookie() {
+    var overlay = document.querySelector('.intastellarCookieConstents');
+    var root = document.querySelector('intastellarconsents');
+    var hasConsent = intaHasStoredConsentCookie();
+
+    if (overlay) {
+        if (hasConsent) {
+            overlay.classList.remove('--active');
+        } else {
+            overlay.classList.add('--active');
+            if (window.dataLayer) {
+                window.dataLayer.push({ event: 'intastellar_consents_widget_visible' });
+            }
+        }
+    }
+
+    if (hasConsent) {
+        document.documentElement.classList.remove('noScroll');
+    } else {
+        document.documentElement.classList.add('noScroll');
+    }
+
+    if (root) {
+        var floatBtn = root.querySelector('.intastellarCookie-settings');
+        if (floatBtn) {
+            floatBtn.style.display = hasConsent ? '' : 'none';
+        }
+        root.classList.remove('inta-cmp-not-ready');
+    }
+}
+
+window.intaApplyCmpVisibilityFromCookie = intaApplyCmpVisibilityFromCookie;
+intaInjectCmpCriticalStyles();
+
 const IntastellarCookieConsent = {
     renew: function () {
         document.querySelector(".intastellarCookieConstents").classList.add("--active");
+        var root = document.querySelector('intastellarconsents');
+        if (root) {
+            var floatBtn = root.querySelector('.intastellarCookie-settings');
+            if (floatBtn) {
+                floatBtn.style.display = '';
+            }
+        }
         document.querySelector("html").classList.add("noScroll");
         dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
     },
@@ -84,16 +151,10 @@ const IntastellarCookieConsent = {
     initialize: function (template) {
         function initTemplate() {
             if (!document.querySelector(".intastellarCookieConstents") && template !== false) {
+                template.classList.add('inta-cmp-not-ready');
                 document.body.append(template);
             }
-
-            if (!getCookie(int_hideCookieBannerName)) {
-                const el = document.querySelector(".intastellarCookieConstents");
-                if (el) el.classList.add("--active");
-                if (window.dataLayer) {
-                    window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
-                }
-            }
+            intaApplyCmpVisibilityFromCookie();
         }
 
         function loadRemoteConfig() {
@@ -2583,6 +2644,7 @@ bannerContent.innerHTML = '<img class="intCookieIcon-openSettings" style="filter
 
 banner.appendChild(bannerContent);
 moreSettings.appendChild(moreSettingsContent);
+intaconsents.classList.add('inta-cmp-not-ready');
 intaconsents.appendChild(banner);
 intaconsents.appendChild(moreSettings);
 
@@ -2666,10 +2728,7 @@ onWindowLoad(function () {
             });
         }
 
-        if (getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1) {
-            document.querySelector(".intastellarCookieConstents").classList.add("--active");
-            dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
-        }
+        intaApplyCmpVisibilityFromCookie();
 
         document.querySelectorAll(".intaExpandCookieList").forEach((btn, i) => {
 
@@ -2681,20 +2740,11 @@ onWindowLoad(function () {
 
         let settings = document.querySelector(".intastellarCookie-settings__container");
         if (document.querySelector(".intastellarCookieBanner") != null) {
-            if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
+            if (intaHasStoredConsentCookie()) {
                 document.querySelector(".intastellarCookieBanner").style.display = "none";
             } else {
                 document.querySelector(".intastellarCookieBanner").style.display = "";
             }
-        } else if (getCookie(int_hideCookieBannerName).split(".")[0].indexOf("1") > -1) {
-            /* if (window?.INTA?.settings.advanced === false || window?.INTA?.settings.advanced === "" || window?.INTA?.settings.advanced === undefined) { */
-            document.querySelector("html").classList.remove("noScroll");
-            if (document.querySelector(".intastellarCookieConstents") != null) {
-                document.querySelector(".intastellarCookieConstents").classList.remove("--active");
-            }
-            /* } else {
-                settings.classList.toggle("intastellarCookie-settings__container--expand");
-            } */
         }
 
         document.querySelectorAll(".intastellarCookieBanner__settings").forEach((setting) => {
@@ -4822,6 +4872,7 @@ function updateConsents(consent, type = null) {
 function saveINTCookieSettings(consent, type = null) {
     document.querySelector("html").classList.remove("noScroll");
     document.querySelector(".intastellarCookieConstents").classList.remove("--active");
+    intaApplyCmpVisibilityFromCookie();
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");

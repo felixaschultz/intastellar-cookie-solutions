@@ -1265,6 +1265,70 @@ function intaScheduleHideShopifyNativeBanner() {
     }, 60000);
 })();
 
+/** Inline critical styles so CMP UI stays hidden until cookie state is applied (prevents CLS / flash). */
+function intaInjectCmpCriticalStyles() {
+    if (document.getElementById('inta-cmp-critical-styles')) {
+        return;
+    }
+    var style = document.createElement('style');
+    style.id = 'inta-cmp-critical-styles';
+    style.textContent =
+        'intastellarconsents.inta-cmp-not-ready{visibility:hidden!important;pointer-events:none!important;}' +
+        '.intastellarCookieConstents{display:none!important;}' +
+        '.intastellarCookieConstents.--active{display:grid!important;}' +
+        '.intastellarToolTip{opacity:0!important;visibility:hidden!important;}' +
+        '.intastellarCookie-settingsContainer:hover .intastellarToolTip{opacity:1!important;visibility:visible!important;}';
+    (document.head || document.documentElement).appendChild(style);
+}
+
+function intaHasStoredConsentCookie() {
+    try {
+        var c = typeof getCookie === 'function' && typeof int_hideCookieBannerName !== 'undefined'
+            ? getCookie(int_hideCookieBannerName) : '';
+        return !!(c && c.indexOf && c.indexOf('__inta') > -1);
+    } catch (e) {
+        return false;
+    }
+}
+
+function intaApplyCmpVisibilityFromCookie() {
+    var overlay = window._IntastellarConsentsBanner;
+    var root = window.intaconsents;
+    var hasConsent = intaHasStoredConsentCookie();
+    var isFloating = window.INTA && window.INTA.settings && window.INTA.settings.design === 'floating';
+
+    if (overlay) {
+        if (hasConsent) {
+            overlay.classList.remove('--active');
+        } else {
+            overlay.classList.add('--active');
+            if (typeof window._intaBannerShownAt === 'undefined') {
+                window._intaBannerShownAt = Date.now();
+            }
+            if (window.dataLayer) {
+                window.dataLayer.push({ event: 'intastellar_consents_widget_visible' });
+            }
+        }
+    }
+
+    if (hasConsent) {
+        document.documentElement.classList.remove('noScroll');
+    } else {
+        document.documentElement.classList.add('noScroll');
+    }
+
+    if (root) {
+        var floatBtn = root.querySelector('.intastellarCookie-settings');
+        if (floatBtn && isFloating) {
+            floatBtn.style.display = hasConsent ? '' : 'none';
+        }
+        root.classList.remove('inta-cmp-not-ready');
+    }
+}
+
+window.intaApplyCmpVisibilityFromCookie = intaApplyCmpVisibilityFromCookie;
+intaInjectCmpCriticalStyles();
+
 const IntastellarCookieConsent = {
     // Store reference to the banner element
     _banner: null,
@@ -1272,6 +1336,12 @@ const IntastellarCookieConsent = {
         // Add --active to <inta-consents-banner> (referenced by moreSettings)
         if (typeof moreSettings !== 'undefined') {
             moreSettings.classList.add("--active");
+        }
+        if (window.intaconsents) {
+            var floatBtn = window.intaconsents.querySelector('.intastellarCookie-settings');
+            if (floatBtn) {
+                floatBtn.style.display = '';
+            }
         }
         document.documentElement.classList.add("noScroll");
         if (typeof window._intaBannerShownAt === 'undefined') {
@@ -1293,13 +1363,23 @@ const IntastellarCookieConsent = {
     initialize: function (template) {
         const self = this;
         function appendBannerWhenBodyReady() {
+            function doAppend() {
+                if (!document.body || !self._banner) {
+                    return;
+                }
+                if (!document.body.contains(self._banner)) {
+                    self._banner.classList.add('inta-cmp-not-ready');
+                    document.body.appendChild(self._banner);
+                }
+                intaApplyCmpVisibilityFromCookie();
+            }
             if (document.body) {
-                document.body.append(self._banner);
+                doAppend();
                 return;
             }
             function tryAppend() {
                 if (document.body) {
-                    document.body.append(self._banner);
+                    doAppend();
                 } else {
                     requestAnimationFrame(tryAppend);
                 }
@@ -1313,6 +1393,7 @@ const IntastellarCookieConsent = {
         function initTemplate() {
             if (!self._banner && template !== false) {
                 self._banner = template;
+                self._banner.classList.add('inta-cmp-not-ready');
                 appendBannerWhenBodyReady();
                 if (window.INTA && window.INTA.settings && window.INTA.settings.lgpd) {
                     createLGPDModal();
@@ -1320,16 +1401,8 @@ const IntastellarCookieConsent = {
                 if (window.INTA && window.INTA.settings && window.INTA.settings.popia) {
                     createPOPIAModal();
                 }
-            }
-            if (!getCookie(int_hideCookieBannerName)) {
-                if (self._banner) window._IntastellarConsentsBanner.classList.add("--active");
-                document.querySelector("html").classList.add("noScroll");
-                if (typeof window._intaBannerShownAt === 'undefined') {
-                    window._intaBannerShownAt = Date.now();
-                }
-                if (window.dataLayer) {
-                    window.dataLayer.push({ event: "intastellar_consents_widget_visible" });
-                }
+            } else {
+                intaApplyCmpVisibilityFromCookie();
             }
             intaHideShopifyNativeConsentBanner();
         }
@@ -2161,6 +2234,7 @@ function intaCbApplyMainBannerDomAndInitialize() {
 
     banner.appendChild(bannerContent);
     moreSettings.appendChild(moreSettingsContent);
+    intaconsents.classList.add('inta-cmp-not-ready');
     intaconsents.appendChild(banner);
     intaconsents.appendChild(moreSettings);
     window._intaCookieConstents = intaconsents;
@@ -2353,6 +2427,7 @@ function IntaAcceptAll() {
 
     document.querySelector("html").classList.toggle("noScroll");
     window._IntastellarConsentsBanner.classList.remove("--active");
+    intaApplyCmpVisibilityFromCookie();
     dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
 
     document.querySelector("[name=intastellar-solutions-sharinglibrary-iframe]").contentWindow
@@ -2690,10 +2765,7 @@ onWindowLoad(function () {
             });
         }
 
-        if (getCookie(int_hideCookieBannerName) == "" && getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1) {
-            window._intaCookieConstents.classList.add("--active");
-            dataLayer.push({ 'event': 'intastellar_consents_widget_visible' });
-        }
+        intaApplyCmpVisibilityFromCookie();
 
         document.querySelectorAll(".intaExpandCookieList").forEach((btn, i) => {
 
@@ -2715,22 +2787,8 @@ onWindowLoad(function () {
             window._intaCookieSettingsContainer.className = 'intastellarCookie-settings__container';
             document.body.appendChild(window._intaCookieSettingsContainer);
         }
-        const banner = window._intaCookieBanner;
         const settings = window._intaCookieSettingsContainer;
-        if (banner != null) {
-            if (getCookie(int_hideCookieBannerName)?.split(".")[0].indexOf("1") > -1) {
-                banner.style.display = "none";
-            } else {
-                banner.style.display = "";
-            }
-        } else if (getCookie(int_hideCookieBannerName)?.split(".")[0].indexOf("1") > -1) {
-            document.querySelector("html").classList.remove("noScroll");
-            if (window.IntastellarCookieConsent && window.IntastellarCookieConsent._banner) {
-                window.IntastellarCookieConsent._banner.classList.remove("--active");
-            }
-        }
 
-        console.log("Test");
         if (!window._intaCookieBannerSettings) {
             window._intaCookieBannerSettings = document.createElement('button');
             window._intaCookieBannerSettings.className = 'intastellarCookieBanner__settings';
@@ -4499,6 +4557,7 @@ function saveINTCookieSettings(consent, type = null) {
     recordTimeToDecision(type || 'save_settings');
     document.querySelector("html").classList.remove("noScroll");
     window._IntastellarConsentsBanner.classList.remove("--active");
+    intaApplyCmpVisibilityFromCookie();
     const FunctionalCheckbox = document.querySelector("#functional");
     const StaticsCheckBox = document.querySelector("#statics");
     const MarketingCheckBox = document.querySelector("#marketing");

@@ -353,6 +353,9 @@ window.addEventListener('message', (event) => {
         if (typeof updateConsentUI === 'function') {
             updateConsentUI(event.data.consents);
         }
+        if (typeof window.intaApplyCmpVisibilityFromCookie === 'function') {
+            window.intaApplyCmpVisibilityFromCookie();
+        }
         console.log('Received consent state:', event.data.consents);
     }
 });
@@ -1183,9 +1186,9 @@ function intaApplyGeoRegionalDefaults(data) {
         window.INTA.settings.popia = window.INTA.settings.popin || {};
         window.INTA.settings.popia = true;
     } else if (window.INTA?.settings?.popin) {
-        window.INTA.settings.popin.on = false;
+        setTimeout(intaFetchGeoForRegionalDefaults, 2000);
     }
-}
+})();
 
 if (window._intaConsentInitialized) {
     console.log('Intastellar consent already initialized, skipping...');
@@ -2077,9 +2080,9 @@ function intaSetCookieSettings() {
             intCookieDomain +
             "SameSite=Lax";
         // Reload the page and append to exising query string the reload parameter
-        window.location.href = window.location.href + "&reload=true";
-    }
-};
+    processExistingScripts();
+}
+
 function processExistingScripts() {
     // Process blocked scripts that should now be allowed
     document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
@@ -2424,9 +2427,6 @@ function startObserving(observer) {
         childList: !0,
         subtree: !0,
         attributes: true,
-        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
-    })
-}
 
 window.inta_marketingCookieList = window.inta_marketingCookieList || [];
 window.inta_functionalCookieList = window.inta_functionalCookieList || [];

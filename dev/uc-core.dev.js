@@ -7,6 +7,9 @@ if (window.__intaUcCoreExecuted) {
     console.warn("Intastellar uc-core: duplicate load.");
 }
 window.__intaUcCoreExecuted = true;
+        window.INTA.settings.popin.on = false;
+    }
+}
 
 function intaGeoAlreadyConfigured() {
     var ccpa = window.INTA && window.INTA.settings && window.INTA.settings.ccpa;
@@ -39,9 +42,9 @@ function intaFetchGeoForRegionalDefaults() {
     if (typeof requestIdleCallback === "function") {
         requestIdleCallback(intaFetchGeoForRegionalDefaults, { timeout: 5000 });
     } else {
-        setTimeout(intaFetchGeoForRegionalDefaults, 2000);
+        window.location.href = window.location.href + "&reload=true";
     }
-})();
+};
 
 window.addEventListener("DOMContentLoaded", (event) => {
     loadUcVendors(); // Lazy-load detectCookieVendor + COOKIE_CONSENT_TYPE_MAP to reduce initial parse
@@ -2675,9 +2678,9 @@ function updateNotRequiredRegexp() {
     console.log("Updated consent blocking patterns");
 
     // Process existing scripts that may need to be updated
-    processExistingScripts();
+        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
+    })
 }
-
 
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
@@ -2716,9 +2719,9 @@ function clearLocalStorage(ls) {
         localStorage.clear();
         sessionStorage.clear();
     }
+if (!isGtmMode) {
+    checkCookieStatus();
 }
-/* deleteAllCookies();
-clearLocalStorage(); */
 
 // Recommended approach for monitoring: use addEventListener to detect user consent actions (TCF)
 function registerTCFEventListener(retries) {
