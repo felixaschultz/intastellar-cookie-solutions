@@ -43,7 +43,7 @@ const BOOT_EXCLUDE_RANGES = [[1248, 1317]];
 const BOOT_BLOCK_HELPERS_START = 4092;
 const BOOT_BLOCK_HELPERS_END = 4341;
 const OBSERVER_START = 4687;
-const OBSERVER_END = 4907;
+const OBSERVER_END = 4916;
 const CORE_SKIP_LINES = new Set([5156, 5157, 5158]);
 
 function lineDepth(line) {

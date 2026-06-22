@@ -2414,6 +2414,15 @@ function checkCookieStatus() {
 
 }
 
+function startObserving(observer) {
+    observer.observe(document.documentElement, {
+        childList: !0,
+        subtree: !0,
+        attributes: true,
+        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
+    })
+}
+
 window.inta_marketingCookieList = window.inta_marketingCookieList || [];
 window.inta_functionalCookieList = window.inta_functionalCookieList || [];
 

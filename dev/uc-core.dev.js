@@ -2514,15 +2514,6 @@ let beforeScriptExecuteListener = function (event, node) {
 };
 
 
-function startObserving(observer) {
-    observer.observe(document.documentElement, {
-        childList: !0,
-        subtree: !0,
-        attributes: true,
-        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
-    })
-}
-
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
 
