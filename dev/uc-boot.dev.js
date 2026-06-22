@@ -2080,6 +2080,51 @@ function intaSetCookieSettings() {
         window.location.href = window.location.href + "&reload=true";
     }
 };
+function processExistingScripts() {
+    // Process blocked scripts that should now be allowed
+    document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
+        let src = script.src || '';
+        if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
+            // This script should now be allowed - replace it
+            let newScript = document.createElement('script');
+            newScript.type = 'text/javascript';
+            if (script.src) newScript.src = script.src;
+            if (script.innerText) newScript.text = script.innerText;
+            script.parentNode?.replaceChild(newScript, script);
+        }
+    });
+
+    // Process blocked iframes that should now be allowed
+    document.querySelectorAll('inta-consents-iframe[data-src], inta-consents[data-src]').forEach(blocked => {
+        let type = blocked.querySelector('.--changePermission')?.dataset?.type;
+        if ((type === 'intMarketingCookies' && intaCookieConsents?.advertisementCookies === "checked") ||
+            (type === 'intFunctionalCookies' && intaCookieConsents?.functionalCookies === "checked") ||
+            (type === 'intStaticsCookies' && intaCookieConsents?.staticsticCookies === "checked")) {
+
+            let iframe = document.createElement('iframe');
+            iframe.src = blocked.getAttribute('data-src');
+            iframe.border = '0';
+            iframe.frameBorder = '0';
+
+            if (blocked.getAttribute('data-class')) {
+                iframe.setAttribute('class', blocked.getAttribute('data-class'));
+            } else {
+                iframe.width = '560';
+                iframe.height = '315';
+            }
+
+            blocked.parentElement?.replaceChild(iframe, blocked);
+        }
+    });
+}
+
+
+function restartObserver() {
+    // Disconnect any existing observer
+    if (window.currentObserver) {
+        window.currentObserver.disconnect();
+    }
+
     // Create a new observer with updated consent settings
     window.currentObserver = checkCookieStatus();
 
@@ -2382,12 +2427,6 @@ function startObserving(observer) {
         attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
     })
 }
-
-function deleteAllCookies() {
-    var cookies = document.cookie.split(";");
-
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
 
 window.inta_marketingCookieList = window.inta_marketingCookieList || [];
 window.inta_functionalCookieList = window.inta_functionalCookieList || [];

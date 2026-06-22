@@ -2678,51 +2678,12 @@ function updateNotRequiredRegexp() {
     processExistingScripts();
 }
 
-function processExistingScripts() {
-    // Process blocked scripts that should now be allowed
-    document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
-        let src = script.src || '';
-        if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
-            // This script should now be allowed - replace it
-            let newScript = document.createElement('script');
-            newScript.type = 'text/javascript';
-            if (script.src) newScript.src = script.src;
-            if (script.innerText) newScript.text = script.innerText;
-            script.parentNode?.replaceChild(newScript, script);
-        }
-    });
 
-    // Process blocked iframes that should now be allowed
-    document.querySelectorAll('inta-consents-iframe[data-src], inta-consents[data-src]').forEach(blocked => {
-        let type = blocked.querySelector('.--changePermission')?.dataset?.type;
-        if ((type === 'intMarketingCookies' && intaCookieConsents?.advertisementCookies === "checked") ||
-            (type === 'intFunctionalCookies' && intaCookieConsents?.functionalCookies === "checked") ||
-            (type === 'intStaticsCookies' && intaCookieConsents?.staticsticCookies === "checked")) {
+function deleteAllCookies() {
+    var cookies = document.cookie.split(";");
 
-            let iframe = document.createElement('iframe');
-            iframe.src = blocked.getAttribute('data-src');
-            iframe.border = '0';
-            iframe.frameBorder = '0';
-
-            if (blocked.getAttribute('data-class')) {
-                iframe.setAttribute('class', blocked.getAttribute('data-class'));
-            } else {
-                iframe.width = '560';
-                iframe.height = '315';
-            }
-
-            blocked.parentElement?.replaceChild(iframe, blocked);
-        }
-    });
-}
-
-
-function restartObserver() {
-    // Disconnect any existing observer
-    if (window.currentObserver) {
-        window.currentObserver.disconnect();
-    }
-
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
         var eqPos = cookie.indexOf("=");
         var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
         if (!int__cookiesToKeepRegx.test(name)) {
@@ -2758,12 +2719,12 @@ function clearLocalStorage(ls) {
 }
 /* deleteAllCookies();
 clearLocalStorage(); */
-if (!isGtmMode) {
-    checkCookieStatus();
-}
 
 // Recommended approach for monitoring: use addEventListener to detect user consent actions (TCF)
 function registerTCFEventListener(retries) {
+    retries = retries || 0;
+    if (typeof window.__tcfapi === 'function') {
+        window.__tcfapi('addEventListener', 2, function (tcData, success) {
             if (success && tcData.eventStatus === 'useractioncomplete') {
                 if (window.dataLayer) window.dataLayer.push({ event: 'intastellar_tcf_useractioncomplete', tcData: tcData });
                 window.dispatchEvent(new CustomEvent('intastellar_consent_user_action', { detail: tcData }));

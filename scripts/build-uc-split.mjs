@@ -20,9 +20,9 @@ const lines = fs.readFileSync(srcPath, "utf8").split("\n");
  */
 const BOOT_CONTIGUOUS_END = 2113;
 const BOOT_EXCLUDE_RANGES = [[1185, 1219]];
-const OBSERVER_START = 4795;
-const OBSERVER_END = 5102;
-const CORE_SKIP_LINES = new Set([5144, 5145, 5146]);
+const OBSERVER_START = 4750;
+const OBSERVER_END = 5096;
+const CORE_SKIP_LINES = new Set([5138, 5139, 5140]);
 
 function lineDepth(line) {
     let d = 0;
