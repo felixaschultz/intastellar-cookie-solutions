@@ -38,6 +38,7 @@ window.INTA = {
         text: false,
         language: "auto",
         design: "bannerV2",
+        advanced: true,
         requiredCookies: [
             {
                 cookie: "region",
