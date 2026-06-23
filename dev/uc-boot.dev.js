@@ -2104,7 +2104,7 @@ function loopBlock(addedNodes, script, logo) {
 
                 let settingsContent = document.createElement("inta-consents");
                 settingsContent.classList.add("intCookie_ConsentContainer");
-                settingsContent.setAttribute("data-src", a.href);
+                settingsContent.setAttribute("data-src", a?.href);
                 settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intFunctionalCookies");
 
                 if (functionalEmbedSrc.indexOf("hs-sites.com") > -1) {
@@ -2158,7 +2158,7 @@ function loopBlock(addedNodes, script, logo) {
 function blockBlockQuotes(tweet, script, logo) {
     if (tweet != " " && getCookie(int_hideCookieBannerName) == "" || getCookie(int_hideCookieBannerName)?.indexOf("__inta") == -1 || !intaCookieConsents?.advertisementCookies && script.type == "marketing" && notRequired.test(tweet.className)) {
         let a = document.createElement('a');
-        a.href = tweet.querySelector("a").href;
+        a.href = tweet.querySelector("a")?.href;
         let externalDomain = a.hostname;
 
         inta_marketingCookieList.forEach((cookie) => {
@@ -2181,7 +2181,7 @@ function blockBlockQuotes(tweet, script, logo) {
         settingsContent.classList.add("intCookie_ConsentContainer");
         settingsContent.innerHTML = ConsentsBlock(logo, textLanguage, btnText, "intMarketingCookies");
 
-        settingsContent.setAttribute("data-src", a.href);
+        settingsContent.setAttribute("data-src", a?.href);
         if (tweet.src.indexOf("hs-sites.com") > -1) {
             tweet.parentElement.replaceChild("", tweet);
         } else {
@@ -2239,8 +2239,8 @@ function checkCookieStatus() {
                         || intaCookieConsents?.advertisementCookies == "" && intaCookieConsents?.functionalCookies == "" && intaCookieConsents?.staticsticCookies == "") {
                         if (node.nodeType === 1 && node.tagName === "LINK") {
                             addedNodes.forEach((link) => {
-                                let linkSrc = link.href;
-                                if (notRequired.test(linkSrc)) {
+                                let linkSrc = link?.href;
+                                if (notRequired.test(linkSrc) && linkSrc !== undefined) {
                                     link.disabled = true;
                                 }
                             })
