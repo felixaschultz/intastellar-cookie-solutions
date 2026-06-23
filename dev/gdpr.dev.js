@@ -1158,10 +1158,6 @@ let intastellarCookieBannerRootDomain = "https://consents.cdn.intastellarsolutio
 let intastellarAssetsCDNdomain = "https://www.intastellar-consents.com";
 let intaCookieConsents = window.intaCookieConsents = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.consents : null;
 window.uetq = window.uetq || [];
-// On page load, update VWO consent if consent object exists
-if (intaCookieConsents) {
-    updateVwoConsent(intaCookieConsents);
-}
 let intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.parse(decodeIntaConsentsObject(getCookie(int_hideCookieBannerName)?.split(".")[2]))?.uid : null;
 
 /** Intastellar script URL when `document.currentScript` is null (Remix, Vite, Webpack, ES modules). */
@@ -4970,9 +4966,7 @@ function intaRunUcCoreIntegrations() {
     window.pintrk.queue = window.pintrk.queue || [];
     pintrk('setconsent', false);
 
-    window.VWO = window.VWO || [];
-    window.VWO.init = window.VWO.init || function (s) { window.VWO.consentState = s; };
-    window.VWO.init(2);
+    updateVwoConsent(window.intaCookieConsents);
 
     intaWpEnsureConsentTypeOptinAnnouncedOnce();
 

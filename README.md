@@ -89,6 +89,12 @@ After editing `dev/gdpr.dev.js`, regenerate the boot/core split before testing o
 node scripts/build-uc-split.mjs
 ```
 Local test site loads `dev/uc-boot.dev.js` (which async-loads `dev/uc-core.dev.js`).
+```bash
+node scripts/build-not-required-patterns.mjs
+```
+This will generate the not required patterns in the "dev" folder.
+```bash
+node scripts/build-uc-split.mjs
 
 ## Beta testing
 
