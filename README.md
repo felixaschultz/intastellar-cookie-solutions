@@ -1,6 +1,6 @@
 ![Intastellar Consents Banner](/img/github__banner.jpg "Intastellar Consents Banner")
 
-# Intastellar Consents Solutions
+# Intastellar Consents Banner
 ![version](https://img.shields.io/github/v/tag/felixaschultz/intastellar-cookie-solutions?label=version)
 ![license](https://img.shields.io/github/license/felixaschultz/intastellar-cookie-solutions)
 ![Bundle Size](https://img.shields.io/badge/size-12kb-green)
@@ -19,17 +19,16 @@
 - [Contributing](#contributing)
 - [Acknowledgements](#acknowledgements)
 - [Intastellar Solutions](https://www.intastellarsolutions.com)
-- [Intastellar Consents](https://www.intastellar-consents.com)
-- [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
+- [Intastellar Consents Platform](https://www.intastellar-consents.com)
+- [Intastellar Consents Banner](https://www.intastellarsolutions.com/solutions/cookie-consents)
 - [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
 
 ## Who is it for
 
-This project is for developers and businesses who want to implement a cookie banner on their website.
+This project is for developers and businesses who want to implement a cookie banner on their website. It is a free to use banner that is easy to implement and customize. It is a GDPR compliant cookie banner that is easy to implement and customize.
 ## How to use it
 
 You can implement the cookie banner by loading the following script into your website:
-
 ```html
 <script>
   window.INTA = {
@@ -45,7 +44,6 @@ You can implement the cookie banner by loading the following script into your we
 </script>
 <script src="https://consents.cdn.intastellarsolutions.com/uc.js"></script>
 ```
-
 ## General Info
 
 With this project I wanted to build my own cookie banner witch is free to use. I was not always happy about all the cookie banners solutions I´ve found online, either the banner wasn´t all that good or you needed an account to get access to the banner for implementation.
@@ -108,7 +106,7 @@ Remember that the beta version is not stable and can have bugs. If you find a bu
 
 ## Implementation
 
-Read our documentation under: https://developers.intastellarsolutions.com/cookie-solutions/docs to implement our cookie banner on your website.
+Read our documentation under: https://inta.dev/docs/cookie-banner/v1/javascript/getting-started to implement our cookie banner on your website.
 You can add and load it direct via loading https://consents.cdn.intastellarsolutions.com/uc.js into your website.
 
 ```html
@@ -147,7 +145,7 @@ We support the following trackers and consents mode:
 ## Support
 
 - [Intastellar Solutions](https://www.intastellarsolutions.com)
-- [Intastellar Consents](https://www.intastellar-consents.com)
+- [Intastellar Consents Banner](https://www.intastellar-consents.com)
 - [Intastellar Consents Documentation](https://developers.intastellarsolutions.com/cookie-solutions/docs)
 
 ## License
