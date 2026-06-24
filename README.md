@@ -159,6 +159,6 @@ If you want to contribute to this project, please fork the repository and create
 ## Acknowledgements
 
 - [Intastellar Solutions](https://www.intastellarsolutions.com)
-- [Intastellar Consents Solutions](https://www.intastellarsolutions.com/solutions/cookie-consents)
+- [Intastellar Consents Banner](https://www.intastellarsolutions.com/solutions/cookie-consents)
 - [Intastellar Consents Platform](https://www.intastellarconsents.com)
 
