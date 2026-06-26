@@ -1914,6 +1914,7 @@ function intaGetDocumentHead() {
 function intaInsertStylesheetLinkInHead(stylesheetLink) {
     const head = intaGetDocumentHead();
     if (!head || !stylesheetLink) {
+        console.error('[intaInsertStylesheetLinkInHead] early return: missing head or stylesheetLink');
         return;
     }
     try {
@@ -1929,6 +1930,7 @@ function intaInsertStylesheetLinkInHead(stylesheetLink) {
         }
     } catch (e) {
         /* ignore */
+        console.error('[intaInsertStylesheetLinkInHead] error:', e);
     }
     try {
         if (head.firstChild) {
@@ -1938,6 +1940,7 @@ function intaInsertStylesheetLinkInHead(stylesheetLink) {
         }
     } catch (e2) {
         /* ignore */
+        console.error('[intaInsertStylesheetLinkInHead] error:', e2);
     }
 }
 
