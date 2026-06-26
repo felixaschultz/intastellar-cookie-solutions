@@ -1637,6 +1637,13 @@ if (typeof window.__tcfapi === 'function') {
     });
 }
 
+const intaStyleLink = document.createElement('link');
+intaStyleLink.rel = 'stylesheet';
+intaStyleLink.type = 'text/css';
+intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/' + cookieBannerStyles[window.INTA.settings.design || "overlay"] + '?v=' + new Date().getTime();
+intaStyleLink.media = 'all';
+intaInsertStylesheetLinkInHead(intaStyleLink);
+
 let intastellarCookieLanguageSettings = "Cookie Indstillinger";
 if (intastellarCookieLanguage == "de" || intastellarCookieLanguage == "de-DE" || window.INTA.settings.language == "de" || window.INTA.settings.language == "german") {
     intastellarCookieLanguageSettings = "Cookie Einstellungen";
@@ -1923,9 +1930,11 @@ function intaInsertStylesheetLinkInHead(stylesheetLink) {
             const prev = cs.previousSibling;
             if (prev && prev.parentNode === head) {
                 head.insertBefore(stylesheetLink, prev);
+                console.error('[intaInsertStylesheetLinkInHead] inserted before previous sibling');
                 return;
             }
             head.insertBefore(stylesheetLink, cs);
+            console.error('[intaInsertStylesheetLinkInHead] inserted before current script');
             return;
         }
     } catch (e) {
@@ -1935,21 +1944,16 @@ function intaInsertStylesheetLinkInHead(stylesheetLink) {
     try {
         if (head.firstChild) {
             head.insertBefore(stylesheetLink, head.firstChild);
+            console.error('[intaInsertStylesheetLinkInHead] inserted before first child');
         } else {
             head.appendChild(stylesheetLink);
+            console.error('[intaInsertStylesheetLinkInHead] appended to head');
         }
     } catch (e2) {
         /* ignore */
         console.error('[intaInsertStylesheetLinkInHead] error:', e2);
     }
 }
-
-const intaStyleLink = document.createElement('link');
-intaStyleLink.rel = 'stylesheet';
-intaStyleLink.type = 'text/css';
-intaStyleLink.href = 'https://downloads.intastellarsolutions.com/css/gdpr/' + cookieBannerStyles[window.INTA.settings.design || "overlay"] + '?v=' + new Date().getTime();
-intaStyleLink.media = 'all';
-intaInsertStylesheetLinkInHead(intaStyleLink);
 
 if (window.location.host.indexOf("intastellarsolutions") == -1) {
     poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Consents Solutions'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='" + intastellarLogo + "' alt='Intastellar Solutions, International'></a></span>";
