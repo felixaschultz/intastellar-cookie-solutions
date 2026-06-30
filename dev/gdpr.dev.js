@@ -1444,7 +1444,7 @@ function intaIsGvlPassThroughRequest(url) {
 // Helper: Send intercepted data to backend for storage/categorization
 async function sendToBackend(data) {
     try {
-        let base = (typeof window.INTA?.settings?.backendUrl === 'string') ? window.INTA.settings.backendUrl : 'https://consents.cdn.intastellarsolutions.com/tests/backend/test.php';
+        let base = 'https://www.consentsmanagement.com/api/beacon-collector.php';
         await fetch(base, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
