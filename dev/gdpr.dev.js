@@ -1800,6 +1800,14 @@ window.fetch = function (resource, config) {
             if (typeof intastellarDevMode !== 'undefined' && intastellarDevMode) {
                 console.log('[GDPR] Blocked fetch:', url, 'type:', consentType);
             }
+
+            sendToBackend({
+                type: 'fetch',
+                url,
+                data: typeof data === 'string' ? data : '[binary]',
+                consentType,
+                timestamp: Date.now()
+            });
             // Silently block: return a resolved Promise with undefined
             return Promise.resolve(undefined);
         }
@@ -1829,6 +1837,14 @@ function CustomXHR() {
                 // Silently block: do not send request
                 return; // open not called, so request never sent
             }
+
+            sendToBackend({
+                type: 'xhr',
+                url,
+                data: typeof data === 'string' ? data : '[binary]',
+                consentType,
+                timestamp: Date.now()
+            });
         }
         return open.apply(this, arguments);
     };
