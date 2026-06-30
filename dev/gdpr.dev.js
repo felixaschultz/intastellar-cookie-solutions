@@ -1451,7 +1451,7 @@ async function sendToBackend(data) {
             body: JSON.stringify(data)
         });
     } catch (e) {
-        console.log(e);
+        console.log("[Intastellar Consents] Error sending observer data: " + e);
     }
     return;
 }
