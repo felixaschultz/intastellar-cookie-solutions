@@ -893,7 +893,7 @@ async function sendToBackend(data) {
             body: JSON.stringify(data)
         });
     } catch (e) {
-        console.log(e);
+        console.log("[Intastellar Consents] Error sending observer data: " + e);
     }
     return;
 }
@@ -1082,8 +1082,6 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
 
 // Consent check helper
 
-
-
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -1137,22 +1135,22 @@ function intaSyncSalesOfDataAllowedOnConsents(consents) {
 }
 
 function encodeIntaConsentsObject(string, base) {
-    try {
-        var parsed = JSON.parse(string);
-        if (parsed && typeof parsed === "object" && parsed.consents && typeof parsed.consents === "object") {
-            intaSyncSalesOfDataAllowedOnConsents(parsed.consents);
-            string = JSON.stringify(parsed);
-        }
-    } catch (e) {
-        /* not a full consent JSON payload — encode as-is */
-    }
-    var number = "0";
-    var length = string.length;
     for (var i = 0; i < length; i++)
         number += string.charCodeAt(i).toString(base);
     return base + "." + number;
 }
 
+function decodeIntaConsentsObject(number) {
+    var string = "";
+    number = number?.slice(1);
+    var length = number?.length;
+    for (var i = 0; i < length;) {
+        var code = number?.slice(i, i += 2);
+        string += String.fromCharCode(parseInt(code, parseInt(getCookie(int_hideCookieBannerName)?.split(".")[1])));
+    }
+
+    return string;
+}
 
 let tmpl = document.createElement('template');
 tmpl.innerHTML = `
@@ -3228,22 +3226,7 @@ function recordCookie(value) {
     window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
     window.__INTA__COOKIE_EVENTS__.push(value);
 
-    if (window.INTA?.settings?.recordCookieEvents === false) {
-        return;
-    }
-
-    var key = (value.source || 'unknown') + '\0' + (value.name || '');
-    __intaCookieEventPendingByKey.set(key, value);
-
-    if (__intaCookieEventPendingByKey.size >= INTA_COOKIE_EVENT_MAX_BATCH) {
-        flushCookieEventsToApi();
-        return;
-    }
-
-    intaScheduleCookieEventFlush();
 }
-
-/* Helper function to create Consents Block message for iframes etc.*/
 
 /* - - - Helper function for message on the content block - - - */
 function handleInputChange(event) {
@@ -3510,19 +3493,13 @@ function processExistingScripts() {
     });
 }
 
-
-function restartObserver() {
-    // Disconnect any existing observer
-    if (window.currentObserver) {
-        window.currentObserver.disconnect();
-    }
-
-    // Create a new observer with updated consent settings
-    window.currentObserver = checkCookieStatus();
-
-    // Process any existing blocked content that should now be allowed
-    processExistingScripts();
-
+function startObserving(observer) {
+    observer.observe(document.documentElement, {
+        childList: !0,
+        subtree: !0,
+        attributes: true,
+        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
+    })
 }
 
 function deleteAllCookies() {
@@ -3745,9 +3722,6 @@ function intaRunUcCoreIntegrations() {
                         return false;
                     };
                 },
-            );
-            return true;
-        }
 
         if (!intaShopifyLoadConsentTrackingApi()) {
             var intaShopifyRetries = 0;
@@ -3761,6 +3735,9 @@ function intaRunUcCoreIntegrations() {
 }
 window.intaRunUcCoreIntegrations = intaRunUcCoreIntegrations;
 
+if (!isGtmMode) {
+    checkCookieStatus();
+}
 
 // Recommended approach for monitoring: use addEventListener to detect user consent actions (TCF)
 function registerTCFEventListener(retries) {
