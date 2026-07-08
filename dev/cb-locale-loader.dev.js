@@ -205,11 +205,11 @@
             + '<h3 class="intaExpandCookieList">' + C.necessary.title + ' <i class="intastellar__arrow"></i></h3><p>' + C.necessary.description + '</p>'
             + '<article class="intaCookieListOverview">' + listAllCookies(inta_requiredCookieList) + "</article></section>"
             + "<section><h3 class=\"intaExpandCookieList\">" + C.functional.title + ' <i class="intastellar__arrow"></i></h3><p>' + C.functional.description + '</p>'
-            + '<article class="intaCookieListOverview">' + listAllCookies(inta_functionalCookieList) + "</article></section>"
+            + '<article class="intaCookieListOverview" id="inta-cookie-list-functional"></article></section>'
             + "<section><h3 class=\"intaExpandCookieList\">" + C.statisic.title + ' <i class="intastellar__arrow"></i></h3><p>' + C.statisic.description + '</p>'
-            + '<article class="intaCookieListOverview">' + listAllCookies(inta_statisticCookieList) + "</article></section>"
+            + '<article class="intaCookieListOverview" id="inta-cookie-list-statistics"></article></section>'
             + "<section><h3 class=\"intaExpandCookieList\">" + C.marketing.title + ' <i class="intastellar__arrow"></i></h3><p>' + C.marketing.description + '</p>'
-            + '<article class="intaCookieListOverview">' + listAllCookies(inta_marketingCookieList) + "</article></section>"
+            + '<article class="intaCookieListOverview" id="inta-cookie-list-marketing"></article></section>'
             + "</article>";
     };
 
