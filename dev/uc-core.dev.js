@@ -1134,23 +1134,6 @@ function intaSyncSalesOfDataAllowedOnConsents(consents) {
     consents.salesOfDataAllowed = intaMarketingConsentImpliesSaleAllowed(consents);
 }
 
-function encodeIntaConsentsObject(string, base) {
-    for (var i = 0; i < length; i++)
-        number += string.charCodeAt(i).toString(base);
-    return base + "." + number;
-}
-
-function decodeIntaConsentsObject(number) {
-    var string = "";
-    number = number?.slice(1);
-    var length = number?.length;
-    for (var i = 0; i < length;) {
-        var code = number?.slice(i, i += 2);
-        string += String.fromCharCode(parseInt(code, parseInt(getCookie(int_hideCookieBannerName)?.split(".")[1])));
-    }
-
-    return string;
-}
 
 let tmpl = document.createElement('template');
 tmpl.innerHTML = `
@@ -3226,6 +3209,19 @@ function recordCookie(value) {
     window.__INTA__COOKIE_EVENTS__ = window.__INTA__COOKIE_EVENTS__ || [];
     window.__INTA__COOKIE_EVENTS__.push(value);
 
+    if (window.INTA?.settings?.recordCookieEvents === false) {
+        return;
+    }
+
+    var key = (value.source || 'unknown') + '\0' + (value.name || '');
+    __intaCookieEventPendingByKey.set(key, value);
+
+    if (__intaCookieEventPendingByKey.size >= INTA_COOKIE_EVENT_MAX_BATCH) {
+        flushCookieEventsToApi();
+        return;
+    }
+
+    intaScheduleCookieEventFlush();
 }
 
 /* - - - Helper function for message on the content block - - - */
@@ -3493,15 +3489,6 @@ function processExistingScripts() {
     });
 }
 
-function startObserving(observer) {
-    observer.observe(document.documentElement, {
-        childList: !0,
-        subtree: !0,
-        attributes: true,
-        attributeFilter: ["src", "href", "type", "value", "checked", "innerText"],
-    })
-}
-
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
 
@@ -3721,7 +3708,7 @@ function intaRunUcCoreIntegrations() {
                     window.Shopify.customerPrivacy.shouldShowBanner = function () {
                         return false;
                     };
-                },
+        }
 
         if (!intaShopifyLoadConsentTrackingApi()) {
             var intaShopifyRetries = 0;
