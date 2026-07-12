@@ -4244,6 +4244,9 @@ function intaFetchCookieBannerData() {
 
     fetch(apiUrl)
         .then(function (res) {
+
+
+            console.log(res.status);
             if (!res.ok) throw new Error('API returned ' + res.status);
             return res.json();
         })
