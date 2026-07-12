@@ -4241,6 +4241,8 @@ function intaFetchCookieBannerData() {
     if (_intaCookieBannerApiLoaded) return;
     _intaCookieBannerApiLoaded = true;
 
+    if (window.intaFoundCookieList?.categories) return;
+
     var domain = location.hostname;
     var apiUrl = 'https://www.intastellarconsents.com/api/cookie-banner.js?domain=' + encodeURIComponent(domain);
 

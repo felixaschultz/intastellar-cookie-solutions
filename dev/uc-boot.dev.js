@@ -245,7 +245,7 @@ function intaFormatCookieExpiry(c) {
 function intaBuildCategoryOverviewHTML(category) {
     const data = intaFoundCookieList?.categories?.[category];
     if (!data) return '';
-    const { cookies, vendors } = data;
+    const { cookies = [], vendors = [] } = data;
     const attributedNames = new Set(vendors.flatMap(v => (v.cookies || []).map(c => c.name)));
     const vendorRows = vendors.map(v => {
         const vendorCookieRows = (v.cookies || []).map(c => `
@@ -292,7 +292,7 @@ function intaInjectFoundCookieDetailList() {
 }
 
 (async () => {
-    intaFoundCookieList = await intaGetDomainFoundCookieList(document.domain);
+    window.intaFoundCookieList = intaFoundCookieList = await intaGetDomainFoundCookieList(document.domain);
     if (!intaInjectFoundCookieDetailList()) {
         const observer = new MutationObserver(() => {
             if (intaInjectFoundCookieDetailList()) observer.disconnect();
