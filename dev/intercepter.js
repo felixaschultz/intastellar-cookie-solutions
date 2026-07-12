@@ -80,7 +80,8 @@
                 location.origin,
                 "https://cdn.intastellar.app",
                 "https://intastellar.com",
-                "https://api.intastellarsolutions.com"
+                "https://api.intastellarsolutions.com",
+                "https://www.intastellarconsents.com"
             ];
 
             if (allowedDomains.some(d => url.startsWith(d))) {

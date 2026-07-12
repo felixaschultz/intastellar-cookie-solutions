@@ -388,23 +388,8 @@ let intaFoundCookieList;
 const intaGetDomainFoundCookieList = async (domain) => {
     try {
         const response = await fetch(`https://www.intastellarconsents.com/api/cookie-banner?domain=${domain}`);
-        if (response.status === 404) {
-            fetch('https://www.intastellarconsents.com/api/pre-consent-scan-public', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ domain }),
-            }).catch(() => {});
-            return null;
-        }
+        
         const data = await response.json();
-        if (data.error) {
-            fetch('https://www.intastellarconsents.com/api/pre-consent-scan-public', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ domain }),
-            }).catch(() => {});
-            return null;
-        }
         return data;
     } catch (error) {
         console.error('Error fetching domain found cookie list:', error);
@@ -1753,6 +1738,7 @@ let ALLOWLIST = [
     "https://api.intastellarsolutions.com",
     "https://apis.intastellarsolutions.com",
     "https://apis.intastellaraccounts.com",
+    'https://www.intastellarconsents.com',
     "https://consents.intastellarsolutions.com",
     "https://www.consentsmanagement.com",
     "https://vendor-list.consensu.org",
