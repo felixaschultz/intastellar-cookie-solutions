@@ -388,6 +388,14 @@ let intaFoundCookieList;
 const intaGetDomainFoundCookieList = async (domain) => {
     try {
         const response = await fetch(`https://www.intastellarconsents.com/api/cookie-banner?domain=${domain}`);
+        if (response.status === 404) {
+            fetch('https://www.intastellarconsents.com/api/pre-consent-scan-public', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ domain }),
+            }).catch(() => {});
+            return null;
+        }
         const data = await response.json();
         if (data.error) {
             fetch('https://www.intastellarconsents.com/api/pre-consent-scan-public', {
