@@ -2805,12 +2805,14 @@ onWindowLoad(function () {
 
         intaApplyCmpVisibilityFromCookie();
 
-        document.querySelectorAll(".intaExpandCookieList").forEach((btn, i) => {
-
-            btn.addEventListener("click", () => {
-                document.querySelectorAll(".intastellar__arrow")[i].classList.toggle("open");
-                document.querySelectorAll(".intaCookieListOverview")[i].classList.toggle("view");
-            })
+        document.addEventListener("click", (e) => {
+            const btn = e.target.closest(".intaExpandCookieList");
+            if (!btn) return;
+            const allBtns = Array.from(document.querySelectorAll(".intaExpandCookieList"));
+            const i = allBtns.indexOf(btn);
+            if (i === -1) return;
+            document.querySelectorAll(".intastellar__arrow")[i].classList.toggle("open");
+            document.querySelectorAll(".intaCookieListOverview")[i].classList.toggle("view");
         })
 
         // --- Banner and settings direct references ---
