@@ -3708,6 +3708,9 @@ function intaRunUcCoreIntegrations() {
                     window.Shopify.customerPrivacy.shouldShowBanner = function () {
                         return false;
                     };
+                },
+            );
+            return true;
         }
 
         if (!intaShopifyLoadConsentTrackingApi()) {
@@ -3722,9 +3725,6 @@ function intaRunUcCoreIntegrations() {
 }
 window.intaRunUcCoreIntegrations = intaRunUcCoreIntegrations;
 
-if (!isGtmMode) {
-    checkCookieStatus();
-}
 
 // Recommended approach for monitoring: use addEventListener to detect user consent actions (TCF)
 function registerTCFEventListener(retries) {

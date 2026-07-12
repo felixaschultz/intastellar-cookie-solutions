@@ -55,7 +55,7 @@ const BOOT_RANGES = [
     [4717, 5026],
 ];
 
-const CORE_SKIP_LINES = new Set([5247, 5248, 5249]);
+const CORE_SKIP_LINES = new Set([5264, 5265, 5266]);
 
 function lineDepth(line) {
     let d = 0;
