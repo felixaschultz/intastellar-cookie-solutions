@@ -246,11 +246,13 @@ function intaBuildCategoryOverviewHTML(category) {
     const data = intaFoundCookieList?.categories?.[category];
     if (!data) return '';
     const { cookies = [], vendors = [] } = data;
-    const attributedNames = new Set(vendors.flatMap(v => (v.cookies || []).map(c => c.name)));
-    const vendorRows = vendors.map(v => {
-        const vendorCookieRows = (v.cookies || []).map(c => `
+    const vendorsWithCookies = vendors.filter(v => (v.cookies || []).length > 0);
+    const attributedNames = new Set(vendorsWithCookies.flatMap(v => v.cookies.map(c => c.name)));
+    const vendorRows = vendorsWithCookies.map(v => {
+        const vendorCookieRows = v.cookies.map(c => `
             <article class="intaCookieList-cookie">
                 <h4 class="intaCookieList-CookieName">${c.name}</h4>
+                ${c.description ? `<p class="intaCookieList-description">${c.description}</p>` : ''}
                 <p>${c.domain} · ${intaFormatCookieExpiry(c)}</p>
             </article>`).join('');
         return `
@@ -258,10 +260,12 @@ function intaBuildCategoryOverviewHTML(category) {
             <section class="intaCookieList-left">
                 <h3 class="intaCookieListOverview-heading">Provider</h3>
                 <p class="intaCookieListOverview-vendor">${v.service}</p>
+                ${v.description ? `<p class="intaCookieListOverview-vendorDesc">${v.description}</p>` : ''}
+                ${v.privacyUrl ? `<a class="intaCookieListOverview-privacy" href="${v.privacyUrl}" target="_blank" rel="noopener">Privacy Policy</a>` : ''}
                 <h4 class="intaCookieList-CookieName">Host</h4>
                 ${[].concat(v.hosts).map(h => `<p>${h}</p>`).join('')}
             </section>
-            ${vendorCookieRows ? `<section>${vendorCookieRows}</section>` : ''}
+            <section>${vendorCookieRows}</section>
         </section>`;
     }).join('');
     const unattributed = cookies.filter(c => !attributedNames.has(c.name));
@@ -274,6 +278,7 @@ function intaBuildCategoryOverviewHTML(category) {
             <section>${unattributed.map(c => `
                 <article class="intaCookieList-cookie">
                     <h4 class="intaCookieList-CookieName">${c.name}</h4>
+                    ${c.description ? `<p class="intaCookieList-description">${c.description}</p>` : ''}
                     <p>${c.domain} · ${intaFormatCookieExpiry(c)}</p>
                 </article>`).join('')}
             </section>
