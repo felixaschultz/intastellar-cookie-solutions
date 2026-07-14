@@ -5,7 +5,7 @@
 ![license](https://img.shields.io/github/license/felixaschultz/intastellar-cookie-solutions)
 ![Bundle Size](https://img.shields.io/badge/size-12kb-green)
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-blue)
-
+[![Minify to uc.js and cb.js](https://github.com/felixaschultz/intastellar-cookie-solutions/actions/workflows/minify-production.yml/badge.svg)](https://github.com/felixaschultz/intastellar-cookie-solutions/actions/workflows/minify-production.yml)
 
 ## Table of contents
 
