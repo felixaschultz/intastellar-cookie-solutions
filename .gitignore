@@ -13,3 +13,6 @@ coverage/
 *.class
 *.swp
 Thumbs.db
+
+uc.js
+cb.js

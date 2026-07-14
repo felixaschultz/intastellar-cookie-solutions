@@ -10,9 +10,18 @@ window.INTA = {
     // },
     /* experiment: {
         id: 'floating-banner-test',
+        // Optional: URL template for server-stored text presets (default: downloads…/text-overrides/{id}.json)
+        // textOverridesPresetUrl: 'https://downloads.intastellarsolutions.com/cookieconsents/text-overrides/{id}.json',
         variants: {
-            control: { weight: 25 },
-            variant_bannerV2: { weight: 50, settings: { design: 'banner', color: '#c4c4c4' } }
+            control: { weight: 10 },
+            variant_bannerV2: {
+                weight: 90,
+                settings: {
+                    // Either inline textOverrides, or a preset id that matches your CDN/DB-backed JSON file:
+                    textOverridePresetId: 'my-preset-slug',
+                    // textOverrides: { bannerMessageHtml: '<p>…</p>', … }
+                }
+            }
         }
     }, */
     policy_link: {
@@ -27,9 +36,8 @@ window.INTA = {
         rootDomain: "example.com",
         color: "#197da1ff",
         text: false,
-        language: "portuguese",
+        language: "auto",
         design: "bannerV2",
-        tcf: true,
         requiredCookies: [
             {
                 cookie: "region",
@@ -47,7 +55,10 @@ window.INTA = {
             "intastellarsolutions.com"
         ],
         ccpa: {
-            on: true
+            on: true,
+            // Optional (when ipapi/geo is unavailable): force CA for `salesOfDataAllowed` in consent cookie
+            // inUsCalifornia: true,
+            // Or server-injected: country: "US", regionCode: "CA"
         },
         lgpd: {
             on: true

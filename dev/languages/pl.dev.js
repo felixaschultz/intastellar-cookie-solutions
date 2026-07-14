@@ -1,0 +1,45 @@
+(function () {
+    var categories = {
+    saveSettings: "Odrzuć",
+    necessary: {
+        title: "Niezbędne",
+        description: "Niezbędne technologie internetowe i pliki cookie sprawiają, że nasza strona internetowa jest technicznie dostępna i użyteczna dla Ciebie. Dotyczy to podstawowych funkcji, takich jak nawigacja po stronie, prawidłowe wyświetlanie w przeglądarce internetowej lub żądanie Twojej zgody. Bez tych technologii internetowych i plików cookie nasza strona nie działa."
+    },
+    functional: {
+        title: "Funkcjonalne",
+        description: "Pliki cookie funkcjonalne umożliwiają przechowywanie informacji, które zmieniają wygląd lub działanie strony. Na przykład preferowany język lub region."
+    },
+    statisic: {
+        title: "Statystyki",
+        description: "Stale dążymy do poprawy użyteczności i wydajności naszych stron internetowych. Dlatego korzystamy z technologii analitycznych (w tym plików cookie), które pseudonimizują pomiar i ocenę, które funkcje i treści naszych stron są używane, jak i jak często. Na tej podstawie możemy poprawić nasze strony dla użytkowników."
+    },
+    marketing: {
+        title: "Reklama",
+        description: "Korzystamy z technologii internetowych (w tym plików cookie) od wybranych partnerów, aby móc wyświetlać Ci treści i reklamy specjalnie dostosowane do Ciebie na stronach internetowych i w mediach społecznościowych. Treści te są wybierane i wyświetlane na podstawie Twojego zachowania podczas korzystania z sieci. Pliki cookie reklamowe lub marketingowe są używane do dostarczania odwiedzającym odpowiednich reklam i kampanii marketingowych. Te pliki cookie śledzą odwiedzających na różnych stronach internetowych i zbierają informacje w celu dostarczenia spersonalizowanych reklam."
+    }
+};
+    var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "lewy" : "prawy";
+    window.__intaCmpLocalePayload = {
+        slug: "pl",
+        cookieSettingsLabel: "Ustawienia plików cookie",
+        showHideDetails: "Pokaż szczegóły",
+        acceptLabel: "Zaakceptuj",
+        acceptShortLabel: "Zaakceptuj",
+        declineLabel: "Odrzuć",
+        settingsLabel: "Ustawienia",
+        policyLinkLabel: "Nasza polityka prywatności i plików cookie",
+        bannerMessage: "Akceptując wszystkie pliki cookie, wspierasz " + document.domain + " w opracowywaniu lepszego rozwiązania dla Ciebie.</p><p>Wybierz, czy chcesz zezwolić tylko na niezbędne pliki cookie, czy zezwolić na wszystkie pliki cookie.",
+        settingsMessage: "<h3 style=\"    font-size: 25px;\">Ty decydujesz o swoich danych</h3>"
+            + "<p>My i nasi partnerzy biznesowi wykorzystujemy technologie, w tym pliki cookie, do zbierania informacji o Tobie w różnych celach, w tym:</p>"
+            + "<ol>"
+            + "<li>Funkcjonalność</li>"
+            + "<li>Statystyki</li>"
+            + "<li>Reklama</li>"
+            + "</ol>"
+            + "<p>Klikając „Akceptuj”, wyrażasz zgodę na wszystkie te cele. Możesz także zdecydować, które cele chcesz zatwierdzić, zaznaczając pole wyboru obok celu i klikając „Zapisz ustawienia”.</p>"
+            + "<p>Możesz wycofać swoją zgodę w dowolnym momencie, klikając małą ikonę w dolnym " + arrangeWord + " rogu strony internetowej.</p>",
+        settingsMessageSuffix: (window.INTA && window.INTA.settings && window.INTA.settings.popia ? '<button onclick="showPOPIAModal()" class="intastellarCookie-settings__privacyLink">Jou POPIA-privaatheidsregte</button>' : "")
+            + '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International polityka prywatności</button>',
+        categories: categories
+    };
+})();

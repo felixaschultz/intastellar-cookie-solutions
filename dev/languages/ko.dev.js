@@ -1,0 +1,44 @@
+(function () {
+    var categories = {
+    saveSettings: "거부",
+    necessary: {
+        title: "필수",
+        description: "필수 웹 기술과 쿠키는 웹사이트를 기술적으로 접근 가능하고 사용 가능하게 만듭니다. 이는 웹사이트 탐색, 인터넷 브라우저에서 올바르게 표시 또는 동의 요청과 같은 기본 기능에 적용됩니다. 이러한 웹 기술과 쿠키가 없으면 웹사이트가 작동하지 않습니다."
+    },
+    functional: {
+        title: "기능적",
+        description: "기능적 쿠키는 웹사이트의 모양이나 동작을 변경하는 정보를 저장할 수 있습니다. 예를 들어, 선호하는 언어나 지역입니다."
+    },
+    statisic: {
+        title: "통계",
+        description: "우리는 웹사이트의 사용 편의성과 성능을 지속적으로 개선하고자 합니다. 이를 위해 분석 기술(쿠키 포함)을 사용하여 웹사이트의 어떤 기능과 콘텐츠가 어떻게, 얼마나 자주 사용되는지를 익명으로 측정하고 평가합니다. 이를 바탕으로 사용자에게 더 나은 웹사이트를 제공할 수 있습니다."
+    },
+    marketing: {
+        title: "마케팅",
+        description: "우리는 선택된 파트너의 웹 기술(쿠키 포함)을 사용하여 웹사이트와 소셜 미디어에서 귀하에게 맞춤형 콘텐츠와 광고를 표시합니다. 이 콘텐츠는 귀하의 사용 행동에 따라 선택되고 표시됩니다. 광고 또는 마케팅 쿠키는 방문자에게 관련 광고와 마케팅 캠페인을 제공하는 데 사용됩니다. 이러한 쿠키는 다양한 웹사이트에서 방문자를 추적하고 개인화된 광고를 제공하기 위해 정보를 수집합니다."
+    }
+};
+    var arrangeWord = (window.INTA && window.INTA.settings && window.INTA.settings.arrange == "ltr") ? "왼쪽" : "오른쪽";
+    window.__intaCmpLocalePayload = {
+        slug: "ko",
+        cookieSettingsLabel: "쿠키 설정",
+        showHideDetails: "세부정보 보기",
+        acceptLabel: "동의",
+        acceptShortLabel: "동의",
+        declineLabel: "거부",
+        settingsLabel: "설정",
+        policyLinkLabel: "우리의 개인정보 보호정책 및 쿠키 정책",
+        bannerMessage: "모든 쿠키를 수락함으로써 " + document.domain + "이(가) 더 나은 솔루션을 개발할 수 있도록 지원합니다.</p><p>필수 쿠키만 허용할지 아니면 모든 쿠키를 허용할지 선택하세요.",
+        settingsMessage: "<h3 style=\"    font-size: 25px;\">당신이 통제합니다</h3>"
+            + "<p>우리는 우리의 비즈니스 파트너와 함께 쿠키와 같은 기술을 사용하여 다양한 목적을 위해 귀하에 대한 정보를 수집합니다. 여기에는 다음이 포함됩니다:</p>"
+            + "<ol>"
+            + "<li>기능성</li>"
+            + "<li>통계</li>"
+            + "<li>광고</li>"
+            + "</ol>"
+            + "<p>'수락'을 클릭함으로써, 당신은 이 모든 목적에 동의합니다. 또한, 목적 옆의 체크박스를 선택하고 '설정 저장'을 클릭함으로써 동의할 특정 목적을 선택할 수 있습니다.</p>"
+            + "<p>웹사이트 하단 " + arrangeWord + " 모서리에 있는 작은 아이콘을 클릭하여 언제든지 동의를 철회할 수 있습니다.</p>",
+        settingsMessageSuffix: '<button onClick="showPrivacy()" class="intastellarCookie-settings__privacyLink">Intastellar Solutions, International 개인정보 보호정책</button>',
+        categories: categories
+    };
+})();

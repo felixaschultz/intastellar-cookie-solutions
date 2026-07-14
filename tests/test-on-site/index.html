@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="de">
 
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="/gdpr-consents.config.js"></script>
-  <script src="../../dev/gdpr.dev.js"></script>
+  <script src="../../dev/uc-boot.dev.js"></script>
   <!-- <script async>
         const newScript = document.createElement("script");
         newScript.src = "../../dev/gdpr.dev.js";
@@ -176,6 +176,27 @@
     <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=&fmt=gif" />
   </noscript>
   <!-- End of LinkedIn tracking -->
+   <!-- OpenAI Pixel Code -->
+   <script>
+    (function (w, d, s, u) {
+      if (w.oaiq) return;
+      var q = function () {
+        q.q.push(arguments);
+      };
+      q.q = [];
+      w.oaiq = q;
+      var js = d.createElement(s);
+      js.async = true;
+      js.src = u;
+      var f = d.getElementsByTagName(s)[0];
+      f.parentNode.insertBefore(js, f);
+    })(window, document, "script", "https://bzrcdn.openai.com/sdk/oaiq.min.js");
+
+    oaiq("init", {
+      pixelId: "<YOUR-PIXEL-ID>",
+    });
+  </script>
+  <!-- End of OpenAI Pixel Code -->
   <!-- Facebook Pixel Code -->
   <script>
     ! function (f, b, e, v, n, t, s) {
@@ -242,6 +263,11 @@
   <h2>Embedded Videos</h2>
   <p>Here we have embedded a YouTube and Facebook Videos, to perform some checks.</p>
   <section class="grid">
+    <iframe width="560" height="315" class="john" src="https://www.youtube.com/embed/TuAuJM9S6RY"
+    inta-yt-placeholder-img="https://images.noz-mhn.de/img/21906100/crop/cbase_16_9-w748-h420/2108828356/950910391/23-35671612.jpg"
+    title="YouTube video player" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
     <!-- <iframe width="560" height="315" class="john" src="https://www.youtube.com/embed/TuAuJM9S6RY"
       inta-yt-placeholder-img="https://images.noz-mhn.de/img/21906100/crop/cbase_16_9-w748-h420/2108828356/950910391/23-35671612.jpg"
       title="YouTube video player" frameborder="0"
