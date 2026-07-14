@@ -16,3 +16,9 @@ Thumbs.db
 
 uc.js
 cb.js
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
