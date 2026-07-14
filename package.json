@@ -1,0 +1,16 @@
+{
+  "name": "intastellar-cookie-solutions",
+  "private": true,
+  "scripts": {
+    "test": "jest --testPathPattern=tests/regulations"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/regulations/**/*.test.js"
+    ]
+  }
+}
