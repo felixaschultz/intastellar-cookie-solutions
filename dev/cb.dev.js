@@ -1172,6 +1172,456 @@ function closePOPIAModal() {
     }
 }
 
+/* PIPEDA Modal (Canada — federal) */
+function showPIPEDAModal() {
+    const modal = document.querySelector('#pipeda-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (modal) {
+        intastellarConsents.style.display = 'none';
+        modal.classList.add('inta-lgpd-active');
+    }
+}
+
+function createPIPEDAModal() {
+    const modal = document.createElement('inta-pipeda-modal');
+    modal.innerHTML = `
+    <div id="pipeda-modal" role="dialog" aria-modal="true" aria-labelledby="pipeda-title">
+        <div class="inta-lgpd-modal-box">
+
+        <!-- Header -->
+        <div class="inta-lgpd-modal-header">
+            <div class="inta-lgpd-modal-header-left">
+            <div class="inta-lgpd-modal-header-icon">⚖</div>
+            <div>
+                <div class="inta-lgpd-modal-title" id="pipeda-title">Your Privacy Rights / Vos droits en matière de vie privée</div>
+                <div class="inta-lgpd-modal-subtitle">Personal Information Protection and Electronic Documents Act (PIPEDA) · Canada</div>
+            </div>
+            </div>
+            <button class="inta-lgpd-modal-close" onclick="closePIPEDAModal()" aria-label="Close">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div class="inta-lgpd-modal-body">
+            <p class="inta-lgpd-modal-intro">
+            Under the <strong>Personal Information Protection and Electronic Documents Act (PIPEDA)</strong>, you have the following rights regarding your personal information collected and used by this website. To exercise them, contact our Privacy Officer.
+            </p>
+
+            <ul class="inta-lgpd-rights-list">
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">1</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right of Access</strong></div>
+                <div class="inta-lgpd-right-desc">You may request access to the personal information we hold about you and receive it in a generally understandable form.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">2</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Correction</strong></div>
+                <div class="inta-lgpd-right-desc">You may request that we correct personal information that is inaccurate or incomplete.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">3</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Know the Purpose</strong></div>
+                <div class="inta-lgpd-right-desc">You have the right to know why your personal information is collected and how it will be used before or at the time of collection.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">4</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Withdraw Consent</strong></div>
+                <div class="inta-lgpd-right-desc">You may withdraw consent at any time, subject to legal or contractual restrictions and reasonable notice. We will advise you of the implications.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">5</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Know Third-Party Disclosures</strong></div>
+                <div class="inta-lgpd-right-desc">You have the right to know to which third parties your personal information has been disclosed.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">6</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Lodge a Complaint</strong></div>
+                <div class="inta-lgpd-right-desc">You may file a complaint with the Office of the Privacy Commissioner of Canada (OPC) if you believe your PIPEDA rights have been violated.</div>
+                </div>
+            </li>
+            </ul>
+
+            <!-- Privacy Officer contact -->
+            <div class="inta-lgpd-dpo-section">
+            <div class="inta-lgpd-dpo-label">Privacy Officer / Responsable de la protection de la vie privée</div>
+            <div class="inta-lgpd-dpo-text">
+                To exercise your PIPEDA rights, contact the Privacy Officer for this website:<br><br>
+                📧 <a href="mailto:privacy@yourcompany.ca">privacy@yourcompany.ca</a>
+            </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="inta-lgpd-modal-footer">
+            <span class="inta-lgpd-footer-note">PIPEDA · S.C. 2000, c. 5 · Office of the Privacy Commissioner of Canada</span>
+            <button class="inta-lgpd-btn-close-modal" onclick="closePIPEDAModal()">I understand / Je comprends</button>
+        </div>
+
+        </div>
+    </div>
+    `;
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function closePIPEDAModal() {
+    const modal = document.querySelector('#pipeda-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (modal) {
+        intastellarConsents.style.display = 'grid';
+        modal.classList.remove('inta-lgpd-active');
+    }
+}
+
+/* Law 25 Modal (Quebec, Canada — stricter than PIPEDA, French primary) */
+function showLaw25Modal() {
+    const modal = document.querySelector('#law25-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (modal) {
+        intastellarConsents.style.display = 'none';
+        modal.classList.add('inta-lgpd-active');
+    }
+}
+
+function createLaw25Modal() {
+    const modal = document.createElement('inta-law25-modal');
+    modal.innerHTML = `
+    <div id="law25-modal" role="dialog" aria-modal="true" aria-labelledby="law25-title">
+        <div class="inta-lgpd-modal-box">
+
+        <!-- Header -->
+        <div class="inta-lgpd-modal-header">
+            <div class="inta-lgpd-modal-header-left">
+            <div class="inta-lgpd-modal-header-icon">⚖</div>
+            <div>
+                <div class="inta-lgpd-modal-title" id="law25-title">Vos droits en matière de vie privée / Your Privacy Rights</div>
+                <div class="inta-lgpd-modal-subtitle">Loi 25 — Loi modernisant des dispositions législatives en matière de protection des renseignements personnels · Québec</div>
+            </div>
+            </div>
+            <button class="inta-lgpd-modal-close" onclick="closeLaw25Modal()" aria-label="Fermer">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div class="inta-lgpd-modal-body">
+            <p class="inta-lgpd-modal-intro">
+            En vertu de la <strong>Loi 25</strong> (Loi modernisant des dispositions législatives en matière de protection des renseignements personnels), vous disposez des droits suivants concernant vos renseignements personnels.<br><br>
+            <em>Under Quebec's Law 25 modernising personal information protection legislation, you have the following rights regarding your personal information.</em>
+            </p>
+
+            <ul class="inta-lgpd-rights-list">
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">1</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Droit d'accès</strong> <em>/ Right of Access</em></div>
+                <div class="inta-lgpd-right-desc">Vous pouvez demander à consulter les renseignements personnels que nous détenons à votre sujet et en obtenir une copie. / You may request access to and a copy of the personal information we hold about you.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">2</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Droit de rectification</strong> <em>/ Right to Rectification</em></div>
+                <div class="inta-lgpd-right-desc">Vous pouvez demander la correction de renseignements inexacts, incomplets ou équivoques. / You may request correction of inaccurate, incomplete, or misleading information.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">3</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Droit de retrait du consentement</strong> <em>/ Right to Withdraw Consent</em></div>
+                <div class="inta-lgpd-right-desc">Vous pouvez retirer votre consentement au traitement de vos renseignements personnels à tout moment. / You may withdraw consent to the processing of your personal information at any time.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">4</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Droit à la portabilité</strong> <em>/ Right to Data Portability</em></div>
+                <div class="inta-lgpd-right-desc">Vous pouvez demander que vos renseignements personnels informatisés vous soient communiqués dans un format technologique couramment utilisé. / You may request your computerised personal information in a commonly used technological format.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">5</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Droit à la cessation de diffusion et à la désindexation</strong> <em>/ Right to Stop Dissemination and De-indexation</em></div>
+                <div class="inta-lgpd-right-desc">Dans certaines circonstances, vous pouvez demander la cessation de diffusion de renseignements vous concernant ou leur désindexation des moteurs de recherche. / In certain circumstances, you may request that information about you stop being disseminated or be de-indexed from search engines.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">6</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Droit de déposer une plainte</strong> <em>/ Right to Lodge a Complaint</em></div>
+                <div class="inta-lgpd-right-desc">Vous pouvez déposer une plainte auprès de la Commission d'accès à l'information (CAI) du Québec si vous estimez que vos droits n'ont pas été respectés. / You may lodge a complaint with Quebec's Commission d'accès à l'information (CAI).</div>
+                </div>
+            </li>
+            </ul>
+
+            <!-- Responsable de la protection des renseignements personnels -->
+            <div class="inta-lgpd-dpo-section">
+            <div class="inta-lgpd-dpo-label">Responsable de la protection des renseignements personnels / Privacy Officer</div>
+            <div class="inta-lgpd-dpo-text">
+                Pour exercer vos droits, communiquez avec le responsable de la protection des renseignements personnels de ce site :<br>
+                To exercise your rights, contact the Privacy Officer for this website:<br><br>
+                📧 <a href="mailto:confidentialite@votreentreprise.ca">confidentialite@votreentreprise.ca</a>
+            </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="inta-lgpd-modal-footer">
+            <span class="inta-lgpd-footer-note">Loi 25 · L.Q. 2021, c. 25 · Commission d'accès à l'information du Québec</span>
+            <button class="inta-lgpd-btn-close-modal" onclick="closeLaw25Modal()">Je comprends / I understand</button>
+        </div>
+
+        </div>
+    </div>
+    `;
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function closeLaw25Modal() {
+    const modal = document.querySelector('#law25-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (modal) {
+        intastellarConsents.style.display = 'grid';
+        modal.classList.remove('inta-lgpd-active');
+    }
+}
+
+/* Australian Privacy Act 1988 (Cth) — Australian Privacy Principles (APPs) */
+function showAustralianPrivacyModal() {
+    const modal = document.querySelector('#au-privacy-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (modal) {
+        intastellarConsents.style.display = 'none';
+        modal.classList.add('inta-lgpd-active');
+    }
+}
+
+function createAustralianPrivacyModal() {
+    const modal = document.createElement('inta-au-privacy-modal');
+    modal.innerHTML = `
+    <div id="au-privacy-modal" role="dialog" aria-modal="true" aria-labelledby="au-privacy-title">
+        <div class="inta-lgpd-modal-box">
+
+        <!-- Header -->
+        <div class="inta-lgpd-modal-header">
+            <div class="inta-lgpd-modal-header-left">
+            <div class="inta-lgpd-modal-header-icon">⚖</div>
+            <div>
+                <div class="inta-lgpd-modal-title" id="au-privacy-title">Your Privacy Rights</div>
+                <div class="inta-lgpd-modal-subtitle">Privacy Act 1988 (Cth) · Australian Privacy Principles · Australia</div>
+            </div>
+            </div>
+            <button class="inta-lgpd-modal-close" onclick="closeAustralianPrivacyModal()" aria-label="Close">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div class="inta-lgpd-modal-body">
+            <p class="inta-lgpd-modal-intro">
+            Under the <strong>Privacy Act 1988 (Cth)</strong> and the <strong>Australian Privacy Principles (APPs)</strong>, you have the following rights regarding personal information this website collects and holds about you. To exercise these rights, contact our Privacy Officer.
+            </p>
+
+            <ul class="inta-lgpd-rights-list">
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">1</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Anonymity / Pseudonymity (APP 2)</strong></div>
+                <div class="inta-lgpd-right-desc">Where lawful and practicable, you may interact with us anonymously or using a pseudonym.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">2</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right of Access (APP 12)</strong></div>
+                <div class="inta-lgpd-right-desc">You may request access to the personal information we hold about you. We must respond within 30 days.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">3</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Correction (APP 13)</strong></div>
+                <div class="inta-lgpd-right-desc">You may request that we correct personal information that is inaccurate, out-of-date, incomplete, irrelevant, or misleading.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">4</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Know the Purpose of Collection (APP 5)</strong></div>
+                <div class="inta-lgpd-right-desc">You have the right to know why we collect your personal information, how we will use and disclose it, and whether we are likely to disclose it to overseas recipients.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">5</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Opt-Out of Direct Marketing (APP 7)</strong></div>
+                <div class="inta-lgpd-right-desc">You may request at any time that we stop using your personal information for direct marketing purposes.</div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">6</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title"><strong>Right to Lodge a Complaint</strong></div>
+                <div class="inta-lgpd-right-desc">You may lodge a complaint with the Office of the Australian Information Commissioner (OAIC) if you believe we have not handled your personal information in accordance with the APPs.</div>
+                </div>
+            </li>
+            </ul>
+
+            <!-- Privacy Officer contact -->
+            <div class="inta-lgpd-dpo-section">
+            <div class="inta-lgpd-dpo-label">Privacy Officer</div>
+            <div class="inta-lgpd-dpo-text">
+                To exercise your rights under the Australian Privacy Act, contact our Privacy Officer:<br><br>
+                📧 <a href="mailto:privacy@yourcompany.com.au">privacy@yourcompany.com.au</a>
+            </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="inta-lgpd-modal-footer">
+            <span class="inta-lgpd-footer-note">Privacy Act 1988 (Cth) · Office of the Australian Information Commissioner (OAIC)</span>
+            <button class="inta-lgpd-btn-close-modal" onclick="closeAustralianPrivacyModal()">I understand</button>
+        </div>
+
+        </div>
+    </div>
+    `;
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function closeAustralianPrivacyModal() {
+    const modal = document.querySelector('#au-privacy-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (modal) {
+        intastellarConsents.style.display = 'grid';
+        modal.classList.remove('inta-lgpd-active');
+    }
+}
+
+/* Saudi Arabia Personal Data Protection Law (PDPL) — SDAIA / NDMO — Arabic primary */
+function showPDPLModal() {
+    const modal = document.querySelector('#pdpl-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (modal) {
+        intastellarConsents.style.display = 'none';
+        modal.classList.add('inta-lgpd-active');
+    }
+}
+
+function createPDPLModal() {
+    const modal = document.createElement('inta-pdpl-modal');
+    modal.innerHTML = `
+    <div id="pdpl-modal" role="dialog" aria-modal="true" aria-labelledby="pdpl-title">
+        <div class="inta-lgpd-modal-box">
+
+        <!-- Header -->
+        <div class="inta-lgpd-modal-header">
+            <div class="inta-lgpd-modal-header-left">
+            <div class="inta-lgpd-modal-header-icon">⚖</div>
+            <div>
+                <div class="inta-lgpd-modal-title" id="pdpl-title" dir="rtl" lang="ar">حقوقك في مجال حماية البيانات <span dir="ltr" lang="en">/ Your Data Protection Rights</span></div>
+                <div class="inta-lgpd-modal-subtitle" dir="rtl" lang="ar">نظام حماية البيانات الشخصية (PDPL) · المملكة العربية السعودية <span dir="ltr" lang="en">/ Personal Data Protection Law (PDPL) · Saudi Arabia</span></div>
+            </div>
+            </div>
+            <button class="inta-lgpd-modal-close" onclick="closePDPLModal()" aria-label="إغلاق / Close">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div class="inta-lgpd-modal-body">
+            <p class="inta-lgpd-modal-intro" dir="rtl" lang="ar">
+            بموجب <strong>نظام حماية البيانات الشخصية (PDPL)</strong> الصادر بالمرسوم الملكي رقم م/19، تتمتع بالحقوق التالية فيما يتعلق ببياناتك الشخصية. للممارسة هذه الحقوق، يرجى التواصل مع مسؤول حماية البيانات لدينا.
+            </p>
+            <p class="inta-lgpd-modal-intro">
+            <em>Under Saudi Arabia's <strong>Personal Data Protection Law (PDPL)</strong>, you have the following rights regarding your personal data processed by this website.</em>
+            </p>
+
+            <ul class="inta-lgpd-rights-list">
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">1</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title" dir="rtl" lang="ar"><strong>حق الاطلاع</strong> <span dir="ltr" lang="en">/ Right of Access</span></div>
+                <div class="inta-lgpd-right-desc" dir="rtl" lang="ar">يحق لك طلب الاطلاع على بياناتك الشخصية التي نعالجها، والحصول على نسخة منها. <span dir="ltr" lang="en">/ You may request access to and a copy of the personal data we process about you.</span></div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">2</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title" dir="rtl" lang="ar"><strong>حق التصحيح</strong> <span dir="ltr" lang="en">/ Right to Rectification</span></div>
+                <div class="inta-lgpd-right-desc" dir="rtl" lang="ar">يحق لك طلب تصحيح أي بيانات شخصية غير دقيقة أو غير مكتملة. <span dir="ltr" lang="en">/ You may request correction of any inaccurate or incomplete personal data we hold about you.</span></div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">3</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title" dir="rtl" lang="ar"><strong>حق الحذف</strong> <span dir="ltr" lang="en">/ Right to Erasure</span></div>
+                <div class="inta-lgpd-right-desc" dir="rtl" lang="ar">يحق لك طلب حذف بياناتك الشخصية عند انتفاء الغرض من معالجتها أو في الحالات التي يحددها النظام. <span dir="ltr" lang="en">/ You may request deletion of your personal data when it is no longer necessary for the purpose collected, or in circumstances defined by the PDPL.</span></div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">4</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title" dir="rtl" lang="ar"><strong>حق سحب الموافقة</strong> <span dir="ltr" lang="en">/ Right to Withdraw Consent</span></div>
+                <div class="inta-lgpd-right-desc" dir="rtl" lang="ar">يمكنك سحب موافقتك على معالجة بياناتك الشخصية في أي وقت، دون أن يؤثر ذلك على مشروعية المعالجة السابقة. <span dir="ltr" lang="en">/ You may withdraw consent at any time without affecting the lawfulness of prior processing based on that consent.</span></div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">5</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title" dir="rtl" lang="ar"><strong>حق الاعتراض</strong> <span dir="ltr" lang="en">/ Right to Object</span></div>
+                <div class="inta-lgpd-right-desc" dir="rtl" lang="ar">يحق لك الاعتراض على معالجة بياناتك الشخصية في حالات معينة، بما في ذلك التسويق المباشر. <span dir="ltr" lang="en">/ You may object to the processing of your personal data in certain circumstances, including for direct marketing.</span></div>
+                </div>
+            </li>
+            <li class="inta-lgpd-right-item">
+                <span class="inta-lgpd-right-number">6</span>
+                <div class="inta-lgpd-right-content">
+                <div class="inta-lgpd-right-title" dir="rtl" lang="ar"><strong>حق تقديم شكوى</strong> <span dir="ltr" lang="en">/ Right to Lodge a Complaint</span></div>
+                <div class="inta-lgpd-right-desc" dir="rtl" lang="ar">يحق لك تقديم شكوى إلى الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا) إذا رأيت أن حقوقك قد انتُهكت. <span dir="ltr" lang="en">/ You may lodge a complaint with the Saudi Data & AI Authority (SDAIA) if you believe your PDPL rights have been violated.</span></div>
+                </div>
+            </li>
+            </ul>
+
+            <!-- مسؤول حماية البيانات / Data Protection Officer -->
+            <div class="inta-lgpd-dpo-section">
+            <div class="inta-lgpd-dpo-label" dir="rtl" lang="ar">مسؤول حماية البيانات <span dir="ltr" lang="en">/ Data Protection Officer</span></div>
+            <div class="inta-lgpd-dpo-text" dir="rtl" lang="ar">
+                للتواصل بشأن حقوقك المتعلقة بحماية البيانات الشخصية، يرجى التواصل مع مسؤول حماية البيانات لدينا:<br>
+                <span dir="ltr" lang="en">To exercise your PDPL rights, contact our Data Protection Officer:</span><br><br>
+                📧 <a href="mailto:privacy@yourcompany.com.sa" dir="ltr">privacy@yourcompany.com.sa</a>
+            </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="inta-lgpd-modal-footer">
+            <span class="inta-lgpd-footer-note" dir="rtl" lang="ar">نظام حماية البيانات الشخصية · سدايا (SDAIA) · <span dir="ltr" lang="en">Personal Data Protection Law · Saudi Data &amp; AI Authority</span></span>
+            <button class="inta-lgpd-btn-close-modal" onclick="closePDPLModal()"><span lang="ar">فهمت</span> / I understand</button>
+        </div>
+
+        </div>
+    </div>
+    `;
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function closePDPLModal() {
+    const modal = document.querySelector('#pdpl-modal');
+    const intastellarConsents = document.querySelector('.intastellarCookieConstents');
+    if (modal) {
+        intastellarConsents.style.display = 'grid';
+        modal.classList.remove('inta-lgpd-active');
+    }
+}
+
 /**
  * True only when this looks like a Shopify storefront (not a random script setting window.Shopify = {}).
  * Prevents creating fake Shopify globals on non-Shopify sites — those caused setTrackingConsent to be missing → TypeError.
@@ -1431,6 +1881,17 @@ const IntastellarCookieConsent = {
                 }
                 if (window.INTA && window.INTA.settings && window.INTA.settings.popia) {
                     createPOPIAModal();
+                }
+                if (window.INTA && window.INTA.settings && window.INTA.settings.law25) {
+                    createLaw25Modal();
+                } else if (window.INTA && window.INTA.settings && window.INTA.settings.pipeda) {
+                    createPIPEDAModal();
+                }
+                if (window.INTA && window.INTA.settings && window.INTA.settings.australianPrivacy) {
+                    createAustralianPrivacyModal();
+                }
+                if (window.INTA && window.INTA.settings && window.INTA.settings.pdpl) {
+                    createPDPLModal();
                 }
             } else {
                 intaApplyCmpVisibilityFromCookie();

@@ -1380,6 +1380,39 @@ function intaApplyGeoRegionalDefaults(data) {
     } else if (window.INTA?.settings?.popin) {
         window.INTA.settings.popin.on = false;
     }
+
+    // Canada: PIPEDA (federal) applies to all provinces; Law 25 applies specifically to Quebec
+    if (data.country === "CA") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.pipeda = true;
+        if (data.region_code === "QC") {
+            window.INTA.settings.law25 = true;
+        } else if (window.INTA.settings.law25) {
+            window.INTA.settings.law25 = false;
+        }
+    } else if (window.INTA?.settings?.pipeda) {
+        window.INTA.settings.pipeda = false;
+        window.INTA.settings.law25 = false;
+    }
+
+    // Australian Privacy Act 1988 (Cth) — Australian Privacy Principles (APPs)
+    if (data.country === "AU") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.australianPrivacy = true;
+    } else if (window.INTA?.settings?.australianPrivacy) {
+        window.INTA.settings.australianPrivacy = false;
+    }
+
+    // Saudi Arabia Personal Data Protection Law (PDPL) — SDAIA / NDMO
+    if (data.country === "SA") {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.pdpl = true;
+    } else if (window.INTA?.settings?.pdpl) {
+        window.INTA.settings.pdpl = false;
+    }
 }
 
 function intaGeoAlreadyConfigured() {
@@ -5126,7 +5159,7 @@ function intaRunUcCoreIntegrations() {
                 "security_storage": 'granted',
                 "url_passthrough": true,
                 "wait_for_update": 500,
-                "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL', 'TH']
+                "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL', 'TH', 'AU', 'SA']
             });
             gtag('consent', 'default', {
                 "ad_storage": 'granted',
