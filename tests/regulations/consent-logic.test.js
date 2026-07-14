@@ -13,8 +13,8 @@ beforeEach(() => {
 // intaIsUsOptOutRegion
 // ---------------------------------------------------------------------------
 describe('intaIsUsOptOutRegion', () => {
-    test('returns "yes" when ccpa.on=true (California)', () => {
-        ctx.INTA.settings.ccpa = { on: true };
+    test('returns "yes" for a California visitor (inUsCalifornia=true)', () => {
+        ctx.INTA.settings.ccpa = { inUsCalifornia: true };
         expect(ctx.intaIsUsOptOutRegion()).toBe('yes');
     });
 
@@ -52,7 +52,7 @@ describe('intaIsUsOptOutRegion', () => {
 // ---------------------------------------------------------------------------
 describe('intaSyncSalesOfDataAllowedOnConsents', () => {
     function withCalifornia(consents) {
-        ctx.INTA.settings.ccpa = { on: true };
+        ctx._intaGeo = { country: 'US', region_code: 'CA' };
         ctx.intaSyncSalesOfDataAllowedOnConsents(consents);
     }
 
@@ -84,7 +84,7 @@ describe('intaSyncSalesOfDataAllowedOnConsents', () => {
 
     test('salesOfDataAllowed=false when ccpa_opt_out is set in localStorage', () => {
         ctx.localStorage.setItem('ccpa_opt_out', 'true');
-        ctx.INTA.settings.ccpa = { on: true };
+        ctx._intaGeo = { country: 'US', region_code: 'CA' };
         const consents = { advertisementCookies: 'checked' };
         ctx.intaSyncSalesOfDataAllowedOnConsents(consents);
         expect(consents.salesOfDataAllowed).toBe(false);

@@ -9,6 +9,7 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "roots": ["<rootDir>/tests"],
     "testMatch": [
       "**/tests/regulations/**/*.test.js"
     ]
