@@ -1345,6 +1345,24 @@ function intaApplyGeoRegionalDefaults(data) {
         window.INTA.settings.ccpa.on = false;
     }
 
+    // US state opt-out laws: CDPA (VA), CPA (CO), UCPA (UT), CTDPA (CT)
+    if (data.country === "US" && ["VA", "CO", "UT", "CT"].indexOf(data.region_code) !== -1) {
+        window.INTA = window.INTA || {};
+        window.INTA.settings = window.INTA.settings || {};
+        window.INTA.settings.usPrivacy = window.INTA.settings.usPrivacy || {};
+        window.INTA.settings.usPrivacy.on = true;
+        window.INTA.settings.usPrivacy.state = data.region_code;
+    } else if (window.INTA?.settings?.usPrivacy) {
+        window.INTA.settings.usPrivacy.on = false;
+    }
+
+    // GPC: Global Privacy Control — legally required in CO + CT, honored for all US opt-out states
+    try {
+        if (navigator.globalPrivacyControl === true && data.country === "US") {
+            localStorage.setItem("ccpa_opt_out", "true");
+        }
+    } catch (e) { /* ignore */ }
+
     if (data.country === "BR") {
         window.INTA = window.INTA || {};
         window.INTA.settings = window.INTA.settings || {};
@@ -1368,6 +1386,10 @@ function intaGeoAlreadyConfigured() {
     var ccpa = window.INTA && window.INTA.settings && window.INTA.settings.ccpa;
     if (ccpa && (typeof ccpa.inUsCalifornia === "boolean"
         || (ccpa.country && ccpa.regionCode))) {
+        return true;
+    }
+    var usPrivacy = window.INTA && window.INTA.settings && window.INTA.settings.usPrivacy;
+    if (usPrivacy && usPrivacy.state) {
         return true;
     }
     if (window._intaGeo && window._intaGeo.country) {
@@ -2047,6 +2069,22 @@ function intaCaliforniaRegionState() {
     return "unknown";
 }
 
+// Returns "yes" if the visitor is in any US opt-out jurisdiction (CA, VA, CO, UT, CT),
+// "no" if their location is known and outside all of them, or "unknown" if geo isn't resolved yet.
+function intaIsUsOptOutRegion() {
+    var caState = intaCaliforniaRegionState();
+    if (caState === "yes") return "yes";
+    try {
+        var usPrivacy = window.INTA && window.INTA.settings && window.INTA.settings.usPrivacy;
+        if (usPrivacy && usPrivacy.on === true) return "yes";
+        if (usPrivacy && usPrivacy.on === false) return "no";
+        var g = window._intaGeo;
+        if (g && g.country === "US" && ["VA", "CO", "UT", "CT"].indexOf(g.region_code) !== -1) return "yes";
+        if (g && g.country && g.region_code) return "no";
+    } catch (e) { /* ignore */ }
+    return caState;
+}
+
 function intaMarketingConsentImpliesSaleAllowed(consents) {
     if (!consents || typeof consents !== "object") return false;
     return consents.advertisementCookies === "checked" || consents.advertisementCookies === true;
@@ -2054,7 +2092,7 @@ function intaMarketingConsentImpliesSaleAllowed(consents) {
 
 function intaSyncSalesOfDataAllowedOnConsents(consents) {
     if (!consents || typeof consents !== "object") return;
-    var region = intaCaliforniaRegionState();
+    var region = intaIsUsOptOutRegion();
     if (region === "no") {
         delete consents.salesOfDataAllowed;
         return;
@@ -5101,7 +5139,7 @@ function intaRunUcCoreIntegrations() {
                 "security_storage": 'granted',
                 "url_passthrough": true,
                 "wait_for_update": 500,
-                "region": ['US-CA']
+                "region": ['US-CA', 'US-VA', 'US-CO', 'US-UT', 'US-CT']
             });
             gtag('consent', 'default', {
                 'ad_storage': 'denied',
