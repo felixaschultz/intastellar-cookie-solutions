@@ -2465,6 +2465,12 @@ if (window.intaCmpUiState) {
 }
 
 moreContentText.innerHTML = settingsMessage;
+moreContentText.querySelectorAll(".intaExpandCookieList").forEach((btn) => {
+    btn.onclick = () => {
+        btn.querySelector(".intastellar__arrow").classList.toggle("open");
+        btn.parentElement.querySelector(".intaCookieListOverview").classList.toggle("view");
+    };
+});
 moreFooter.appendChild(vendorListContainer);
 
 let ccpa = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa;
@@ -3271,15 +3277,6 @@ onWindowLoad(function () {
 
         intaApplyCmpVisibilityFromCookie();
 
-        document.addEventListener("click", (e) => {
-            const btn = e.target.closest(".intaExpandCookieList");
-            if (!btn) return;
-            const allBtns = Array.from(document.querySelectorAll(".intaExpandCookieList"));
-            const i = allBtns.indexOf(btn);
-            if (i === -1) return;
-            document.querySelectorAll(".intastellar__arrow")[i].classList.toggle("open");
-            document.querySelectorAll(".intaCookieListOverview")[i].classList.toggle("view");
-        })
 
         // --- Banner and settings direct references ---
         /* if (!window._intaCookieBanner) {
