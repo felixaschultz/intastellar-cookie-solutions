@@ -2465,6 +2465,12 @@ if (window.intaCmpUiState) {
 }
 
 moreContentText.innerHTML = settingsMessage;
+moreContentText.querySelectorAll(".intaExpandCookieList").forEach((btn) => {
+    btn.onclick = () => {
+        btn.querySelector(".intastellar__arrow").classList.toggle("open");
+        btn.parentElement.querySelector(".intaCookieListOverview").classList.toggle("view");
+    };
+});
 moreFooter.appendChild(vendorListContainer);
 
 let ccpa = window?.INTA?.settings === undefined || window?.INTA?.settings.ccpa === undefined ? false : window?.INTA?.settings.ccpa;
@@ -3271,12 +3277,6 @@ onWindowLoad(function () {
 
         intaApplyCmpVisibilityFromCookie();
 
-        document.addEventListener("click", (e) => {
-            const btn = e.target.closest(".intaExpandCookieList");
-            if (!btn) return;
-            btn.querySelector(".intastellar__arrow").classList.toggle("open");
-            btn.parentElement.querySelector(".intaCookieListOverview").classList.toggle("view");
-        })
 
         // --- Banner and settings direct references ---
         /* if (!window._intaCookieBanner) {
