@@ -173,6 +173,7 @@ function intaShopifySetTrackingConsentSafe(consents, onDone) {
     }
 }
 
+
 let __intaCookieEventFlushTimer = null;
 let __intaCookieEventPendingByKey = new Map();
 let INTA_COOKIE_EVENT_DEBOUNCE_MS = 5000;
@@ -3525,12 +3526,22 @@ function updateNotRequiredRegexp() {
 function processExistingScripts() {
     // Process blocked scripts that should now be allowed
     document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
-        let src = script.src || '';
-        if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
+        // Scripts neutralized by the sync guard's src-setter path never had a real
+        // src assigned — the intended URL lives in data-inta-pending-src instead.
+        let pendingSrc = script.getAttribute('data-inta-pending-src');
+        let src = pendingSrc || script.src || '';
+        let stillBlocked;
+        if (script.getAttribute('data-inta-blocked') === '1') {
+            let category = src ? intaClassifyScriptContent(src) : intaClassifyScriptContent(script.textContent || '');
+            stillBlocked = category ? !intaScriptCategoryConsented(category) : false;
+        } else {
+            stillBlocked = notRequired.test(src) || notRequired.test(script.innerText);
+        }
+        if (!stillBlocked) {
             // This script should now be allowed - replace it
             let newScript = document.createElement('script');
             newScript.type = 'text/javascript';
-            if (script.src) newScript.src = script.src;
+            if (src) newScript.src = src;
             if (script.innerText) newScript.text = script.innerText;
             script.parentNode?.replaceChild(newScript, script);
         }

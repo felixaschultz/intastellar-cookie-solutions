@@ -503,6 +503,120 @@ function intaGetCompiledScriptPatterns() {
     }
     return __intaCompiledScriptPatterns;
 }
+
+/* ── Synchronous script-injection guard ───────────────────────────────────
+   Patches the DOM insertion points third-party trackers actually use
+   (appendChild/insertBefore/src setter) so a script can be neutralized
+   *before* the browser fetches/executes it, instead of reacting to a
+   MutationObserver after the fact. Only catches scripts injected via JS
+   (GTM, GA, pixels, etc.) — scripts hardcoded directly in the page's HTML
+   are inserted by the parser, which bypasses these prototypes entirely;
+   those still need the type="text/plain" convention. */
+var INTA_SCRIPT_GUARD_ALLOWED_HOSTS = [
+    "intastellarsolutions.com",
+    "intastellarconsents.com",
+    "intastellar.app",
+    "intastellar.eu",
+    "intastellar.dk",
+    "intastellar.com"
+];
+
+function intaIsOwnScriptUrl(url) {
+    if (!url) return false;
+    try {
+        var host = new URL(url, location.href).hostname;
+        if (host === location.hostname) return true;
+        for (let i = 0; i < INTA_SCRIPT_GUARD_ALLOWED_HOSTS.length; i++) {
+            let d = INTA_SCRIPT_GUARD_ALLOWED_HOSTS[i];
+            if (host === d || host.endsWith("." + d)) return true;
+        }
+        return false;
+    } catch (eUrl) {
+        return false;
+    }
+}
+
+/** Classify a script src/inline body against the existing per-category patterns. */
+function intaClassifyScriptContent(text) {
+    if (!text) return null;
+    let compiled = intaGetCompiledScriptPatterns();
+    for (let i = 0; i < compiled.length; i++) {
+        let regexes = compiled[i].regexes;
+        for (let j = 0; j < regexes.length; j++) {
+            if (regexes[j].test(text)) return compiled[i].type;
+        }
+    }
+    return null;
+}
+
+function intaScriptCategoryConsented(type) {
+    let c = window.intaCookieConsents;
+    if (type === "statics") return c?.staticsticCookies === "checked";
+    if (type === "marketing") return c?.advertisementCookies === "checked";
+    if (type === "functional") return c?.functionalCookies === "checked";
+    return true; // unclassified: treat as necessary, don't block
+}
+
+/** Mark a not-yet-inserted script node so the browser never fetches/executes it. */
+function intaNeutralizeScriptNode(node, pendingSrc) {
+    if (node.getAttribute("data-inta-blocked") === "1") return;
+    node.setAttribute("data-inta-blocked", "1");
+    if (pendingSrc) node.setAttribute("data-inta-pending-src", pendingSrc);
+    node.type = "text/blocked";
+}
+
+/** Runs before a SCRIPT node is inserted; returns true if it neutralized the node. */
+function intaGuardScriptNode(node) {
+    if (!node || node.tagName !== "SCRIPT" || (typeof isGtmMode !== "undefined" && isGtmMode)) return false;
+    if (node.getAttribute("data-inta-blocked") === "1") return false;
+    let src = node.src || node.getAttribute("src") || "";
+    if (src && intaIsOwnScriptUrl(src)) return false;
+    let category = src ? intaClassifyScriptContent(src) : intaClassifyScriptContent(node.textContent || "");
+    if (!category || intaScriptCategoryConsented(category)) return false;
+    intaNeutralizeScriptNode(node);
+    return true;
+}
+
+(function intaInstallSyncScriptGuard() {
+    if (window.__intaScriptGuardInstalled) return;
+    window.__intaScriptGuardInstalled = true;
+
+    let nodeProto = Node.prototype;
+    let origAppendChild = nodeProto.appendChild;
+    let origInsertBefore = nodeProto.insertBefore;
+
+    nodeProto.appendChild = function (child) {
+        if (child && child.tagName === "SCRIPT") intaGuardScriptNode(child);
+        return origAppendChild.call(this, child);
+    };
+
+    nodeProto.insertBefore = function (child, ref) {
+        if (child && child.tagName === "SCRIPT") intaGuardScriptNode(child);
+        return origInsertBefore.call(this, child, ref);
+    };
+
+    // Defense in depth: catches `s.src = url` set *after* the node is already connected.
+    let scriptSrcDescriptor = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, "src");
+    if (scriptSrcDescriptor && scriptSrcDescriptor.set) {
+        Object.defineProperty(HTMLScriptElement.prototype, "src", {
+            configurable: true,
+            enumerable: scriptSrcDescriptor.enumerable,
+            get: scriptSrcDescriptor.get,
+            set: function (value) {
+                if (!this.isConnected || (typeof isGtmMode !== "undefined" && isGtmMode) || intaIsOwnScriptUrl(value)) {
+                    return scriptSrcDescriptor.set.call(this, value);
+                }
+                let category = intaClassifyScriptContent(value);
+                if (!category || intaScriptCategoryConsented(category)) {
+                    return scriptSrcDescriptor.set.call(this, value);
+                }
+                intaNeutralizeScriptNode(this, value);
+            }
+        });
+    }
+})();
+/* ── End synchronous script-injection guard ───────────────────────────── */
+
 let __intaCookieEventFlushTimer = null;
 let __intaCookieEventPendingByKey = new Map();
 let INTA_COOKIE_EVENT_DEBOUNCE_MS = 5000;
@@ -4742,12 +4856,22 @@ function updateNotRequiredRegexp() {
 function processExistingScripts() {
     // Process blocked scripts that should now be allowed
     document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
-        let src = script.src || '';
-        if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
+        // Scripts neutralized by the sync guard's src-setter path never had a real
+        // src assigned — the intended URL lives in data-inta-pending-src instead.
+        let pendingSrc = script.getAttribute('data-inta-pending-src');
+        let src = pendingSrc || script.src || '';
+        let stillBlocked;
+        if (script.getAttribute('data-inta-blocked') === '1') {
+            let category = src ? intaClassifyScriptContent(src) : intaClassifyScriptContent(script.textContent || '');
+            stillBlocked = category ? !intaScriptCategoryConsented(category) : false;
+        } else {
+            stillBlocked = notRequired.test(src) || notRequired.test(script.innerText);
+        }
+        if (!stillBlocked) {
             // This script should now be allowed - replace it
             let newScript = document.createElement('script');
             newScript.type = 'text/javascript';
-            if (script.src) newScript.src = script.src;
+            if (src) newScript.src = src;
             if (script.innerText) newScript.text = script.innerText;
             script.parentNode?.replaceChild(newScript, script);
         }
