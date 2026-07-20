@@ -2836,11 +2836,8 @@ function IntaSaveSettings() {
     if (StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
-            'ad_storage': 'granted',
-            'ad_user_data': 'granted',
         })
         window.clarity && window.clarity('consentv2', {
-            ad_Storage: "denied",
             analytics_Storage: "granted"
         });
         accepted.push("staticsticCookies");
@@ -2853,7 +2850,6 @@ function IntaSaveSettings() {
         _paq.push(['forgetConsentGiven']);
 
         window.clarity && window.clarity('consentv2', {
-            ad_Storage: "denied",
             analytics_Storage: "denied"
         });
 
@@ -5257,9 +5253,6 @@ function saveINTCookieSettings(consent, type = null) {
         });
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
-            'ad_storage': 'granted',
-            'ad_user_data': 'granted',
-            'ad_personalization': 'granted',
             'url_passthrough': true,
         })
         window._hsp.push(['doNotTrack', false]);
@@ -5289,14 +5282,9 @@ function saveINTCookieSettings(consent, type = null) {
         window._hsp.push(['revokeCookieConsent']);
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied',
             'url_passthrough': true,
         })
 
-        window.uetq.push('consent', 'update', {
-            'ad_storage': 'denied'
-        });
         window.clarity && window.clarity('consent', false);
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {
