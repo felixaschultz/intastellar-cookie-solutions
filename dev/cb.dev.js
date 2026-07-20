@@ -872,24 +872,34 @@ window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : f
 
 
 /**
+ * Single on/off switch for the whole TCF surface (window.__tcfapi, __tcfapiLocator,
+ * tcString generation). Intastellar Consents is not currently an IAB Europe-registered
+ * CMP, so there is no valid CmpId to issue — emitting a well-formed TC string anyway
+ * would misrepresent TCF participation to vendors and compliance scanners alike.
+ * Once registered, set window.INTA.settings.cmpId to the real registered ID; every
+ * TCF code path below keys off this one flag and turns on automatically.
+ */
+function intaTcfIsRegistered() {
+    return !!(window.INTA && window.INTA.settings && window.INTA.settings.cmpId > 0);
+}
+
+/**
  * Generates a valid TCF 2.x TC string using the minimal IAB encoder bundle.
  * TCF 2.3: includes the mandatory Disclosed Vendors segment (required for new/updated signals from Feb 28, 2026).
+ * Returns null while Intastellar isn't IAB-registered (see intaTcfIsRegistered).
  * @param {Object} consentObj - {purposes: [bool,...], vendors: [bool,...], disclosedVendors?: [bool,...]}
- * @returns {string} Encoded TC string (core.disclosedVendors)
+ * @returns {string|null} Encoded TC string (core.disclosedVendors), or null if TCF is not enabled
  */
 function generateTcString(consentObj) {
+    if (!intaTcfIsRegistered()) {
+        return null;
+    }
     if (!window.IABTCF || !window.IABTCF.TCModel || !window.IABTCF.TCString) {
         throw new Error('IAB TCF encoder bundle not loaded.');
     }
     let model = new window.IABTCF.TCModel();
-    // window.INTA.settings.cmpId must be your real IAB Europe-registered CMP ID.
-    // CMP ID 1 belongs to a different, already-registered CMP — do not ship that value.
-    let configuredCmpId = window.INTA && window.INTA.settings && window.INTA.settings.cmpId;
-    if (!configuredCmpId) {
-        console.error('[Intastellar Consents] window.INTA.settings.cmpId is not set — TC string will carry an invalid CmpId.');
-    }
-    model.cmpId = configuredCmpId || 0;
-    model.cmpVersion = (window.INTA && window.INTA.settings && window.INTA.settings.cmpVersion) || model.cmpVersion;
+    model.cmpId = window.INTA.settings.cmpId;
+    model.cmpVersion = window.INTA.settings.cmpVersion || model.cmpVersion;
     // Set purposes and vendors as boolean arrays (first 24)
     model.purposeConsents = (consentObj.purposes || []).slice(0, 24);
     model.vendorConsents = (consentObj.vendors || []).slice(0);
@@ -2010,6 +2020,9 @@ if (typeof window.denyAllCookies === 'function') {
 
 
 // --- TCF 2.2 API stub with event listener registry and dynamic dispatch ---
+// Not exposed at all until intaTcfIsRegistered() is true — a page with no window.__tcfapi
+// correctly signals "no CMP here" rather than a fake one with an unregistered CmpId.
+if (intaTcfIsRegistered()) {
 (function () {
     // TCF event listener registry
     let tcfListeners = {};
@@ -2094,6 +2107,7 @@ if (typeof window.denyAllCookies === 'function') {
         dispatchTCFEvent(eventStatus);
     };
 })();
+}
 
 // Recommended approach for monitoring: use addEventListener to detect user consent actions
 if (typeof window.__tcfapi === 'function') {
@@ -3204,8 +3218,9 @@ function updateSaveButtonText() {
 
 onWindowLoad(function () {
 
-    // TCF API locator frame (required for cross-frame communication)
-    if (!window.frames['__tcfapiLocator']) {
+    // TCF API locator frame (required for cross-frame communication).
+    // Only created once intaTcfIsRegistered() is true — see generateTcString().
+    if (intaTcfIsRegistered() && !window.frames['__tcfapiLocator']) {
         let tcfApiLocator = document.createElement('iframe');
         tcfApiLocator.style.display = 'none';
         tcfApiLocator.name = '__tcfapiLocator';
