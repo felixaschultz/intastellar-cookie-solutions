@@ -882,7 +882,14 @@ function generateTcString(consentObj) {
         throw new Error('IAB TCF encoder bundle not loaded.');
     }
     let model = new window.IABTCF.TCModel();
-    model.cmpId = 1;
+    // window.INTA.settings.cmpId must be your real IAB Europe-registered CMP ID.
+    // CMP ID 1 belongs to a different, already-registered CMP — do not ship that value.
+    let configuredCmpId = window.INTA && window.INTA.settings && window.INTA.settings.cmpId;
+    if (!configuredCmpId) {
+        console.error('[Intastellar Consents] window.INTA.settings.cmpId is not set — TC string will carry an invalid CmpId.');
+    }
+    model.cmpId = configuredCmpId || 0;
+    model.cmpVersion = (window.INTA && window.INTA.settings && window.INTA.settings.cmpVersion) || model.cmpVersion;
     // Set purposes and vendors as boolean arrays (first 24)
     model.purposeConsents = (consentObj.purposes || []).slice(0, 24);
     model.vendorConsents = (consentObj.vendors || []).slice(0);

@@ -49,13 +49,13 @@ const BOOT_RANGES = [
     [1400, 1404],
     [1645, 1663],
     [1670, 1698],
-    [1898, 2189],
-    [2259, 2286],
-    [4376, 4627],
-    [4903, 5212],
+    [1947, 2238], // +49 lines: TCF encoder rewrite (IsRangeEncoding, VLI section, PublisherRestrictions)
+    [2308, 2335],
+    [4425, 4676],
+    [4952, 5261],
 ];
 
-const CORE_SKIP_LINES = new Set([5379, 5380, 5381]);
+const CORE_SKIP_LINES = new Set([5428, 5429, 5430]);
 
 function lineDepth(line) {
     let d = 0;
