@@ -692,6 +692,10 @@ let intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.pars
 
 /** Intastellar script URL when `document.currentScript` is null (Remix, Vite, Webpack, ES modules). */
 
+let isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
+let FunctionalCheckbox = document.querySelector("#functional");
+let StaticsCheckBox = document.querySelector("#statics");
+let MarketingCheckBox = document.querySelector("#marketing");
 let pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 let poweredBy = "";
@@ -3679,48 +3683,10 @@ function intaRunUcCoreIntegrations() {
 
     intaWpEnsureConsentTypeOptinAnnouncedOnce();
 
-    if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
-        if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
-            gtag('consent', 'default', {
-                "ad_storage": 'denied',
-                "personalization_storage": 'denied',
-                "analytics_storage": 'denied',
-                "functionality_storage": 'denied',
-                "ads_data_redaction": 'granted',
-                "ad_user_data": 'denied',
-                "ad_personalization": 'denied',
-                "security_storage": 'granted',
-                "url_passthrough": true,
-                "wait_for_update": 500,
-                "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL', 'TH', 'AU', 'SA']
-            });
-            gtag('consent', 'default', {
-                "ad_storage": 'granted',
-                "personalization_storage": 'granted',
-                "analytics_storage": 'granted',
-                "functionality_storage": 'granted',
-                "ads_data_redaction": 'denied',
-                "ad_user_data": 'granted',
-                "ad_personalization": 'granted',
-                "security_storage": 'granted',
-                "url_passthrough": true,
-                "wait_for_update": 500,
-                "region": ['US-CA', 'US-VA', 'US-CO', 'US-UT', 'US-CT']
-            });
-            gtag('consent', 'default', {
-                'ad_storage': 'denied',
-                'personalization_storage': 'denied',
-                'analytics_storage': 'denied',
-                'functionality_storage': 'denied',
-                'ads_data_redaction': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'security_storage': 'granted',
-                'url_passthrough': true,
-                'wait_for_update': 500,
-            });
-            window._gtagDefaultFired = true;
-        }
+    // Already fired synchronously in uc-boot (see intaSetGtagConsentDefaults); this is a no-op
+    // safety net in case boot ran before isGtmMode/gtag were ready for some reason.
+    if (typeof intaSetGtagConsentDefaults === 'function') {
+        intaSetGtagConsentDefaults();
     }
 
     if (typeof fbq === "undefined" || typeof fbq === "null") {

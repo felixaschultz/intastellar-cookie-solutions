@@ -717,10 +717,62 @@ function findScriptParameter(value) {
     }
 }
 let isGtmMode = findScriptParameter("ref") === "gtm";
-let isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
-let FunctionalCheckbox = document.querySelector("#functional");
-let StaticsCheckBox = document.querySelector("#statics");
-let MarketingCheckBox = document.querySelector("#marketing");
+
+/** Google Consent Mode default — must fire before GTM/gtag.js can load and fire any tag,
+ *  so this runs synchronously here rather than waiting for uc-core. */
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+    dataLayer.push(arguments);
+}
+function intaSetGtagConsentDefaults() {
+    if (isGtmMode || window._gtagDefaultFired || typeof gtag !== 'function') {
+        return;
+    }
+    if (window.google_tag_manager && window.google_tag_manager['consent_default_set']) {
+        return;
+    }
+    gtag('consent', 'default', {
+        "ad_storage": 'denied',
+        "personalization_storage": 'denied',
+        "analytics_storage": 'denied',
+        "functionality_storage": 'denied',
+        "ads_data_redaction": 'granted',
+        "ad_user_data": 'denied',
+        "ad_personalization": 'denied',
+        "security_storage": 'granted',
+        "url_passthrough": true,
+        "wait_for_update": 500,
+        "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL', 'TH', 'AU', 'SA']
+    });
+    gtag('consent', 'default', {
+        "ad_storage": 'granted',
+        "personalization_storage": 'granted',
+        "analytics_storage": 'granted',
+        "functionality_storage": 'granted',
+        "ads_data_redaction": 'denied',
+        "ad_user_data": 'granted',
+        "ad_personalization": 'granted',
+        "security_storage": 'granted',
+        "url_passthrough": true,
+        "wait_for_update": 500,
+        "region": ['US-CA', 'US-VA', 'US-CO', 'US-UT', 'US-CT']
+    });
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'personalization_storage': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'denied',
+        'ads_data_redaction': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'security_storage': 'granted',
+        'url_passthrough': true,
+        'wait_for_update': 500,
+    });
+    window._gtagDefaultFired = true;
+}
+intaSetGtagConsentDefaults();
+
 function getConsentTypeForUrl(url) {
     if (!url) return 'marketing';
     for (let i = 0; i < window.allScripts.length; i++) {

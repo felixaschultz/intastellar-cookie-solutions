@@ -46,16 +46,16 @@ const BOOT_RANGES = [
     [1238, 1333],
     [1348, 1361],
     [1365, 1398],
-    [1400, 1404],
-    [1645, 1663],
-    [1670, 1698],
-    [1947, 2238], // +49 lines: TCF encoder rewrite (IsRangeEncoding, VLI section, PublisherRestrictions)
-    [2308, 2335],
-    [4425, 4676],
-    [4952, 5261],
+    [1400, 1456], // includes intaSetGtagConsentDefaults() — GCM default must fire sync, before uc-core
+    [1701, 1719],
+    [1726, 1754],
+    [2003, 2294], // +49 lines: TCF encoder rewrite (IsRangeEncoding, VLI section, PublisherRestrictions)
+    [2364, 2391],
+    [4481, 4732],
+    [5008, 5317],
 ];
 
-const CORE_SKIP_LINES = new Set([5428, 5429, 5430]);
+const CORE_SKIP_LINES = new Set([5446, 5447, 5448]);
 
 function lineDepth(line) {
     let d = 0;
