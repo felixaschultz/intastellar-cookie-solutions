@@ -1801,6 +1801,7 @@ let ALLOWLIST = [
     'https://www.intastellarconsents.com',
     "https://consents.intastellarsolutions.com",
     "https://www.consentsmanagement.com",
+    "https://analytics.consentsmanagement.com",
     "https://vendor-list.consensu.org",
     "/dev/gvl-local.json",
     "https://forms.hsforms.com",
