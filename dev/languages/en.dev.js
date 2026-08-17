@@ -29,7 +29,7 @@
         settingsLabel: "Settings",
         policyLinkLabel: "Our Privacy and cookie Policy",
         bannerMessage: "By accepting all cookies, you support " + document.domain + " in developing a better solution for you. </p><p> Select whether you want to allow only the necessary cookies or whether you want to allow all cookies.",
-        settingsMessage: "<h3 style=\"    font-size: 25px;\">You´re in control</h3>"
+        settingsMessage: "<h3 style=\"    font-size: 25px;\">You're in control</h3>"
             + "<p>We and our trusted partners use technologies, such as cookies, to collect information for various purposes, including:</p>"
             + "<ol>"
             + "<li>Functionality</li>"
