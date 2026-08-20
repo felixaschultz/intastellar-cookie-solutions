@@ -872,17 +872,34 @@ window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : f
 
 
 /**
+ * Single on/off switch for the whole TCF surface (window.__tcfapi, __tcfapiLocator,
+ * tcString generation). Intastellar Consents is not currently an IAB Europe-registered
+ * CMP, so there is no valid CmpId to issue — emitting a well-formed TC string anyway
+ * would misrepresent TCF participation to vendors and compliance scanners alike.
+ * Once registered, set window.INTA.settings.cmpId to the real registered ID; every
+ * TCF code path below keys off this one flag and turns on automatically.
+ */
+function intaTcfIsRegistered() {
+    return !!(window.INTA && window.INTA.settings && window.INTA.settings.cmpId > 0);
+}
+
+/**
  * Generates a valid TCF 2.x TC string using the minimal IAB encoder bundle.
  * TCF 2.3: includes the mandatory Disclosed Vendors segment (required for new/updated signals from Feb 28, 2026).
+ * Returns null while Intastellar isn't IAB-registered (see intaTcfIsRegistered).
  * @param {Object} consentObj - {purposes: [bool,...], vendors: [bool,...], disclosedVendors?: [bool,...]}
- * @returns {string} Encoded TC string (core.disclosedVendors)
+ * @returns {string|null} Encoded TC string (core.disclosedVendors), or null if TCF is not enabled
  */
 function generateTcString(consentObj) {
+    if (!intaTcfIsRegistered()) {
+        return null;
+    }
     if (!window.IABTCF || !window.IABTCF.TCModel || !window.IABTCF.TCString) {
         throw new Error('IAB TCF encoder bundle not loaded.');
     }
     let model = new window.IABTCF.TCModel();
-    model.cmpId = 1;
+    model.cmpId = window.INTA.settings.cmpId;
+    model.cmpVersion = window.INTA.settings.cmpVersion || model.cmpVersion;
     // Set purposes and vendors as boolean arrays (first 24)
     model.purposeConsents = (consentObj.purposes || []).slice(0, 24);
     model.vendorConsents = (consentObj.vendors || []).slice(0);
@@ -2003,6 +2020,9 @@ if (typeof window.denyAllCookies === 'function') {
 
 
 // --- TCF 2.2 API stub with event listener registry and dynamic dispatch ---
+// Not exposed at all until intaTcfIsRegistered() is true — a page with no window.__tcfapi
+// correctly signals "no CMP here" rather than a fake one with an unregistered CmpId.
+if (intaTcfIsRegistered()) {
 (function () {
     // TCF event listener registry
     let tcfListeners = {};
@@ -2087,6 +2107,7 @@ if (typeof window.denyAllCookies === 'function') {
         dispatchTCFEvent(eventStatus);
     };
 })();
+}
 
 // Recommended approach for monitoring: use addEventListener to detect user consent actions
 if (typeof window.__tcfapi === 'function') {
@@ -2815,11 +2836,8 @@ function IntaSaveSettings() {
     if (StaticsCheckBox?.checked) {
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
-            'ad_storage': 'granted',
-            'ad_user_data': 'granted',
         })
         window.clarity && window.clarity('consentv2', {
-            ad_Storage: "denied",
             analytics_Storage: "granted"
         });
         accepted.push("staticsticCookies");
@@ -2832,7 +2850,6 @@ function IntaSaveSettings() {
         _paq.push(['forgetConsentGiven']);
 
         window.clarity && window.clarity('consentv2', {
-            ad_Storage: "denied",
             analytics_Storage: "denied"
         });
 
@@ -2864,6 +2881,12 @@ function IntaSaveSettings() {
                 pintrk('setconsent', true);
             } catch (e) { /* ignore */ }
         }
+        // OpenAI Ads measurement consent mode
+        if (typeof oaiq === 'function') {
+            try {
+                oaiq('consent', true);
+            } catch (e) { /* ignore */ }
+        }
         updateVwoConsent(intaConsentsObjectVariable.consents);
 
     } else if (!MarketingCheckBox?.checked || intastellar) {
@@ -2883,6 +2906,12 @@ function IntaSaveSettings() {
         if (typeof pintrk === 'function') {
             try {
                 pintrk('setconsent', false);
+            } catch (e) { /* ignore */ }
+        }
+        // OpenAI Ads measurement consent mode
+        if (typeof oaiq === 'function') {
+            try {
+                oaiq('consent', false);
             } catch (e) { /* ignore */ }
         }
 
@@ -2983,6 +3012,12 @@ function IntaAcceptAll() {
             pintrk('setconsent', true);
         } catch (e) { /* ignore */ }
     }
+    // OpenAI Ads measurement consent mode
+    if (typeof oaiq === 'function') {
+        try {
+            oaiq('consent', true);
+        } catch (e) { /* ignore */ }
+    }
 
     window._hsp.push(['doNotTrack', false]);
     window._hsp.push(['setHubSpotCookieConsent', {
@@ -3047,6 +3082,12 @@ function IntaSaveNeccessary() {
     if (typeof pintrk === 'function') {
         try {
             pintrk('setconsent', false);
+        } catch (e) { /* ignore */ }
+    }
+    // OpenAI Ads measurement consent mode
+    if (typeof oaiq === 'function') {
+        try {
+            oaiq('consent', false);
         } catch (e) { /* ignore */ }
     }
     dataLayer.push({
@@ -3197,8 +3238,9 @@ function updateSaveButtonText() {
 
 onWindowLoad(function () {
 
-    // TCF API locator frame (required for cross-frame communication)
-    if (!window.frames['__tcfapiLocator']) {
+    // TCF API locator frame (required for cross-frame communication).
+    // Only created once intaTcfIsRegistered() is true — see generateTcString().
+    if (intaTcfIsRegistered() && !window.frames['__tcfapiLocator']) {
         let tcfApiLocator = document.createElement('iframe');
         tcfApiLocator.style.display = 'none';
         tcfApiLocator.name = '__tcfapiLocator';
@@ -5235,9 +5277,6 @@ function saveINTCookieSettings(consent, type = null) {
         });
         gtag('consent', 'update', {
             'analytics_storage': 'granted',
-            'ad_storage': 'granted',
-            'ad_user_data': 'granted',
-            'ad_personalization': 'granted',
             'url_passthrough': true,
         })
         window._hsp.push(['doNotTrack', false]);
@@ -5267,14 +5306,9 @@ function saveINTCookieSettings(consent, type = null) {
         window._hsp.push(['revokeCookieConsent']);
         gtag('consent', 'update', {
             'analytics_storage': 'denied',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied',
             'url_passthrough': true,
         })
 
-        window.uetq.push('consent', 'update', {
-            'ad_storage': 'denied'
-        });
         window.clarity && window.clarity('consent', false);
         /* window.allScripts.map((script) => {
             if (script.type == "statics") {

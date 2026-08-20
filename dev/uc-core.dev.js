@@ -173,6 +173,7 @@ function intaShopifySetTrackingConsentSafe(consents, onDone) {
     }
 }
 
+
 let __intaCookieEventFlushTimer = null;
 let __intaCookieEventPendingByKey = new Map();
 let INTA_COOKIE_EVENT_DEBOUNCE_MS = 5000;
@@ -691,6 +692,10 @@ let intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.pars
 
 /** Intastellar script URL when `document.currentScript` is null (Remix, Vite, Webpack, ES modules). */
 
+let isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
+let FunctionalCheckbox = document.querySelector("#functional");
+let StaticsCheckBox = document.querySelector("#statics");
+let MarketingCheckBox = document.querySelector("#marketing");
 let pluginSource = findScriptParameter("utm_source") === undefined ? "Intastellar+Solutions+Cookiebanner" : findScriptParameter("utm_source");
 window.platform = findScriptParameter("utm_source") === undefined ? "Manual" : findScriptParameter("utm_source");
 let poweredBy = "";
@@ -1017,52 +1022,77 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
 
     // Minimal TCModel
     function TCModel() {
+        this.cmpId = 0; // REQUIRED: set to your IAB Europe-registered CMP ID before encoding (0 is not a valid registered ID)
+        this.cmpVersion = 1;
+        this.consentScreen = 0;
+        // dev/gvl-local.json vendorListVersion as of its lastUpdated date. Keep in sync with
+        // whatever GVL version consent was actually collected against; a live GVL loader
+        // should override this at runtime once one exists.
+        this.vendorListVersion = 137;
+        this.isServiceSpecific = true; // this CMP issues one string per site, not a Global Consent string
         this.purposeConsents = [];
+        this.purposeLegitimateInterests = [];
         this.vendorConsents = [];
         this.vendorLegitimateInterests = [];
         this.disclosedVendors = []; // TCF 2.3: vendors disclosed to user in CMP
     }
 
+    /** MaxVendorId(16) + IsRangeEncoding(1, always 0/bitfield here) + one bit per vendor 1..maxVendorId. */
+    function encodeVendorBitfieldSection(maxVendorId, flags) {
+        let bits = padBits(maxVendorId, 16);
+        bits += padBits(0, 1); // IsRangeEncoding: 0 = bitfield
+        for (let i = 0; i < maxVendorId; i++) bits += (flags && flags[i]) ? "1" : "0";
+        return bits;
+    }
+
     /** TCF 2.3: Encode Disclosed Vendors segment (segment type 1). */
     function encodeDisclosedVendorsSegment(maxVendorId, disclosed) {
         if (maxVendorId <= 0) return '';
-        let bits = '';
-        bits += padBits(1, 3);   // segment type 1 = vendorsDisclosed
-        bits += padBits(maxVendorId, 16);
-        for (let i = 0; i < maxVendorId; i++) bits += (disclosed && disclosed[i]) ? '1' : '0';
+        let bits = padBits(1, 3); // segment type 1 = vendorsDisclosed
+        bits += encodeVendorBitfieldSection(maxVendorId, disclosed);
         let bytes = [];
         for (let i = 0; i < bits.length; i += 8) bytes.push(parseInt(bits.substr(i, 8).padEnd(8, '0'), 2));
         return base64UrlEncode(bytes);
     }
 
-    // Minimal TCString encoder
+    // TCF 2.2+: Purposes 3-6 may never carry a legitimate-interest legal basis.
+    var PURPOSES_WITHOUT_LEGITIMATE_INTEREST = [3, 4, 5, 6];
+
     var TCString = {
         encode: function (tcModel) {
-            // Support all vendors (not just first 24)
             let bits = "";
             bits += padBits(2, 6); // Version
             let now = Math.floor(Date.now() / 100); // 0.1s increments
             bits += padBits(now, 36); // Created
             bits += padBits(now, 36); // LastUpdated
-            bits += padBits(1, 12); // CmpId
-            bits += padBits(1, 12); // CmpVersion
-            bits += padBits(0, 6); // ConsentScreen
+            bits += padBits(tcModel.cmpId || 0, 12);
+            bits += padBits(tcModel.cmpVersion || 0, 12);
+            bits += padBits(tcModel.consentScreen || 0, 6);
             bits += strToBits("EN"); // ConsentLanguage
-            bits += padBits(1, 12); // VendorListVersion
-            bits += padBits(3, 6); // TCFPolicyVersion 3 = TCF 2.3
-            bits += padBits(0, 1); // IsServiceSpecific
-            bits += padBits(0, 1); // UseNonStandardStacks
+            bits += padBits(tcModel.vendorListVersion || 0, 12);
+            bits += padBits(5, 6); // TcfPolicyVersion: 5 = TCF v2.3 (GVL specification v3)
+            bits += padBits(tcModel.isServiceSpecific === false ? 0 : 1, 1);
+            bits += padBits(0, 1); // UseNonStandardStacks/Texts
             bits += padBits(0, 12); // SpecialFeatureOptIns
             // PurposeConsents (24 bits)
             for (let i = 0; i < 24; i++) bits += tcModel.purposeConsents && tcModel.purposeConsents[i] ? "1" : "0";
-            // PurposeLegitInterests (24 bits, all 0)
-            bits += "0".repeat(24);
+            // PurposesLITransparency (24 bits) — purposes 3-6 are forced to 0 regardless of input.
+            for (let i = 0; i < 24; i++) {
+                let purposeId = i + 1;
+                let isLi = tcModel.purposeLegitimateInterests && tcModel.purposeLegitimateInterests[i];
+                bits += (isLi && PURPOSES_WITHOUT_LEGITIMATE_INTEREST.indexOf(purposeId) === -1) ? "1" : "0";
+            }
             bits += padBits(0, 1); // PurposeOneTreatment
             bits += strToBits("EN"); // PublisherCC
-            // VendorConsents (maxVendorId, 16 bits for maxVendorId, then maxVendorId bits for consents)
+
             let maxVendorId = (tcModel.vendorConsents && tcModel.vendorConsents.length) || 0;
-            bits += padBits(maxVendorId, 16);
-            for (let i = 0; i < maxVendorId; i++) bits += tcModel.vendorConsents && tcModel.vendorConsents[i] ? "1" : "0";
+            bits += encodeVendorBitfieldSection(maxVendorId, tcModel.vendorConsents);
+
+            let maxVendorIdLI = (tcModel.vendorLegitimateInterests && tcModel.vendorLegitimateInterests.length) || 0;
+            bits += encodeVendorBitfieldSection(maxVendorIdLI, tcModel.vendorLegitimateInterests);
+
+            bits += padBits(0, 12); // NumPubRestrictions: this CMP doesn't set per-publisher vendor restrictions
+
             // Convert bits to bytes
             let bytes = [];
             for (let i = 0; i < bits.length; i += 8) {
@@ -1090,6 +1120,24 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
                 offset += len;
                 return val;
             }
+            /** MaxVendorId(16) + IsRangeEncoding(1); reads a bitfield or expands a range list either way. */
+            function readVendorSection() {
+                let maxVendorId = parseInt(read(16), 2);
+                let isRangeEncoding = parseInt(read(1), 2);
+                if (isRangeEncoding) {
+                    let numEntries = parseInt(read(12), 2);
+                    let vendors = [];
+                    for (let e = 0; e < numEntries; e++) {
+                        let isRange = parseInt(read(1), 2);
+                        let start = parseInt(read(16), 2);
+                        let end = isRange ? parseInt(read(16), 2) : start;
+                        for (let v = start; v <= end; v++) vendors[v - 1] = true;
+                    }
+                    return { maxVendorId: maxVendorId, vendors: vendors };
+                }
+                let vendorBits = maxVendorId > 0 ? read(maxVendorId) : '';
+                return { maxVendorId: maxVendorId, vendors: vendorBits.split('').map(function (b) { return b === '1'; }) };
+            }
             let version = parseInt(read(6), 2);
             let created = parseInt(read(36), 2);
             let lastUpdated = parseInt(read(36), 2);
@@ -1103,12 +1151,12 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
             let useNonStandardStacks = !!parseInt(read(1), 2);
             let specialFeatureOptIns = read(12);
             let purposes = read(24).split('').map(b => b === '1');
-            let purposeLegitInterests = read(24);
+            let purposeLegitInterests = read(24).split('').map(b => b === '1');
             let purposeOneTreatment = !!parseInt(read(1), 2);
             let publisherCC = String.fromCharCode(parseInt(read(6), 2) + 65, parseInt(read(6), 2) + 65);
-            let maxVendorId = parseInt(read(16), 2);
-            let vendorBits = maxVendorId > 0 ? read(maxVendorId) : '';
-            let vendors = vendorBits.split('').map(b => b === '1');
+            let vendorSection = readVendorSection();
+            let vendorLiSection = readVendorSection();
+            let numPubRestrictions = parseInt(read(12), 2);
             return {
                 version,
                 created,
@@ -1123,8 +1171,14 @@ window.sendEventToServerSideTagging = function (eventName, params, opts) {
                 useNonStandardStacks,
                 specialFeatureOptIns,
                 purposes,
-                maxVendorId,
-                vendors
+                purposeLegitInterests,
+                purposeOneTreatment,
+                publisherCC,
+                maxVendorId: vendorSection.maxVendorId,
+                vendors: vendorSection.vendors,
+                maxVendorIdLI: vendorLiSection.maxVendorId,
+                vendorsLI: vendorLiSection.vendors,
+                numPubRestrictions
             };
         }
     };
@@ -3525,12 +3579,22 @@ function updateNotRequiredRegexp() {
 function processExistingScripts() {
     // Process blocked scripts that should now be allowed
     document.querySelectorAll('script[type="text/blocked"]').forEach(script => {
-        let src = script.src || '';
-        if (!notRequired.test(src) && !notRequired.test(script.innerText)) {
+        // Scripts neutralized by the sync guard's src-setter path never had a real
+        // src assigned — the intended URL lives in data-inta-pending-src instead.
+        let pendingSrc = script.getAttribute('data-inta-pending-src');
+        let src = pendingSrc || script.src || '';
+        let stillBlocked;
+        if (script.getAttribute('data-inta-blocked') === '1') {
+            let category = src ? intaClassifyScriptContent(src) : intaClassifyScriptContent(script.textContent || '');
+            stillBlocked = category ? !intaScriptCategoryConsented(category) : false;
+        } else {
+            stillBlocked = notRequired.test(src) || notRequired.test(script.innerText);
+        }
+        if (!stillBlocked) {
             // This script should now be allowed - replace it
             let newScript = document.createElement('script');
             newScript.type = 'text/javascript';
-            if (script.src) newScript.src = script.src;
+            if (src) newScript.src = src;
             if (script.innerText) newScript.text = script.innerText;
             script.parentNode?.replaceChild(newScript, script);
         }
@@ -3615,52 +3679,21 @@ function intaRunUcCoreIntegrations() {
     window.pintrk.queue = window.pintrk.queue || [];
     pintrk('setconsent', false);
 
+    // OpenAI Ads measurement consent mode
+    window.oaiq = window.oaiq || function () {
+        window.oaiq.q = window.oaiq.q || [];
+        window.oaiq.q.push(arguments);
+    };
+    oaiq('consent', false);
+
     updateVwoConsent(window.intaCookieConsents);
 
     intaWpEnsureConsentTypeOptinAnnouncedOnce();
 
-    if (!isGtmMode && !window._gtagDefaultFired && typeof gtag === 'function') {
-        if (!window.google_tag_manager || !window.google_tag_manager['consent_default_set']) {
-            gtag('consent', 'default', {
-                "ad_storage": 'denied',
-                "personalization_storage": 'denied',
-                "analytics_storage": 'denied',
-                "functionality_storage": 'denied',
-                "ads_data_redaction": 'granted',
-                "ad_user_data": 'denied',
-                "ad_personalization": 'denied',
-                "security_storage": 'granted',
-                "url_passthrough": true,
-                "wait_for_update": 500,
-                "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL', 'TH', 'AU', 'SA']
-            });
-            gtag('consent', 'default', {
-                "ad_storage": 'granted',
-                "personalization_storage": 'granted',
-                "analytics_storage": 'granted',
-                "functionality_storage": 'granted',
-                "ads_data_redaction": 'denied',
-                "ad_user_data": 'granted',
-                "ad_personalization": 'granted',
-                "security_storage": 'granted',
-                "url_passthrough": true,
-                "wait_for_update": 500,
-                "region": ['US-CA', 'US-VA', 'US-CO', 'US-UT', 'US-CT']
-            });
-            gtag('consent', 'default', {
-                'ad_storage': 'denied',
-                'personalization_storage': 'denied',
-                'analytics_storage': 'denied',
-                'functionality_storage': 'denied',
-                'ads_data_redaction': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'security_storage': 'granted',
-                'url_passthrough': true,
-                'wait_for_update': 500,
-            });
-            window._gtagDefaultFired = true;
-        }
+    // Already fired synchronously in uc-boot (see intaSetGtagConsentDefaults); this is a no-op
+    // safety net in case boot ran before isGtmMode/gtag were ready for some reason.
+    if (typeof intaSetGtagConsentDefaults === 'function') {
+        intaSetGtagConsentDefaults();
     }
 
     if (typeof fbq === "undefined" || typeof fbq === "null") {
@@ -3683,6 +3716,11 @@ function intaRunUcCoreIntegrations() {
         if (typeof pintrk === 'function') {
             try {
                 pintrk('setconsent', true);
+            } catch (e) { /* ignore */ }
+        }
+        if (typeof oaiq === 'function') {
+            try {
+                oaiq('consent', true);
             } catch (e) { /* ignore */ }
         }
         window.uetq.push('consent', 'update', {
@@ -3713,9 +3751,6 @@ function intaRunUcCoreIntegrations() {
     }
 
     if (hasConsent("functional")) {
-        gtag('consent', 'update', {
-            'functionality_storage': 'granted',
-        });
         window.uetq.push('consent', 'update', {
             'functionality_storage': 'granted'
         });
@@ -3725,6 +3760,9 @@ function intaRunUcCoreIntegrations() {
 
     function intaIsShopifyStorefrontContext() {
         if (typeof window.Shopify !== "undefined" && typeof window.Shopify.loadFeatures === "function") {
+            return true;
+        }
+        if (document.querySelector('script[src*="cdn.shopify.com"], script[src*="shopifycdn.com"]')) {
             return true;
         }
         if (typeof window.ShopifyAnalytics !== "undefined" || typeof window.ShopifyPay !== "undefined") {

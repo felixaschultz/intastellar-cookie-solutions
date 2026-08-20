@@ -341,6 +341,119 @@ function intaGetCompiledScriptPatterns() {
     }
     return __intaCompiledScriptPatterns;
 }
+
+/* ── Synchronous script-injection guard ───────────────────────────────────
+   Patches the DOM insertion points third-party trackers actually use
+   (appendChild/insertBefore/src setter) so a script can be neutralized
+   *before* the browser fetches/executes it, instead of reacting to a
+   MutationObserver after the fact. Only catches scripts injected via JS
+   (GTM, GA, pixels, etc.) — scripts hardcoded directly in the page's HTML
+   are inserted by the parser, which bypasses these prototypes entirely;
+   those still need the type="text/plain" convention. */
+var INTA_SCRIPT_GUARD_ALLOWED_HOSTS = [
+    "intastellarsolutions.com",
+    "intastellarconsents.com",
+    "intastellar.app",
+    "intastellar.eu",
+    "intastellar.dk",
+    "intastellar.com"
+];
+
+function intaIsOwnScriptUrl(url) {
+    if (!url) return false;
+    try {
+        var host = new URL(url, location.href).hostname;
+        if (host === location.hostname) return true;
+        for (let i = 0; i < INTA_SCRIPT_GUARD_ALLOWED_HOSTS.length; i++) {
+            let d = INTA_SCRIPT_GUARD_ALLOWED_HOSTS[i];
+            if (host === d || host.endsWith("." + d)) return true;
+        }
+        return false;
+    } catch (eUrl) {
+        return false;
+    }
+}
+
+/** Classify a script src/inline body against the existing per-category patterns. */
+function intaClassifyScriptContent(text) {
+    if (!text) return null;
+    let compiled = intaGetCompiledScriptPatterns();
+    for (let i = 0; i < compiled.length; i++) {
+        let regexes = compiled[i].regexes;
+        for (let j = 0; j < regexes.length; j++) {
+            if (regexes[j].test(text)) return compiled[i].type;
+        }
+    }
+    return null;
+}
+
+function intaScriptCategoryConsented(type) {
+    let c = window.intaCookieConsents;
+    if (type === "statics") return c?.staticsticCookies === "checked";
+    if (type === "marketing") return c?.advertisementCookies === "checked";
+    if (type === "functional") return c?.functionalCookies === "checked";
+    return true; // unclassified: treat as necessary, don't block
+}
+
+/** Mark a not-yet-inserted script node so the browser never fetches/executes it. */
+function intaNeutralizeScriptNode(node, pendingSrc) {
+    if (node.getAttribute("data-inta-blocked") === "1") return;
+    node.setAttribute("data-inta-blocked", "1");
+    if (pendingSrc) node.setAttribute("data-inta-pending-src", pendingSrc);
+    node.type = "text/blocked";
+}
+
+/** Runs before a SCRIPT node is inserted; returns true if it neutralized the node. */
+function intaGuardScriptNode(node) {
+    if (!node || node.tagName !== "SCRIPT" || (typeof isGtmMode !== "undefined" && isGtmMode)) return false;
+    if (node.getAttribute("data-inta-blocked") === "1") return false;
+    let src = node.src || node.getAttribute("src") || "";
+    if (src && intaIsOwnScriptUrl(src)) return false;
+    let category = src ? intaClassifyScriptContent(src) : intaClassifyScriptContent(node.textContent || "");
+    if (!category || intaScriptCategoryConsented(category)) return false;
+    intaNeutralizeScriptNode(node);
+    return true;
+}
+
+(function intaInstallSyncScriptGuard() {
+    if (window.__intaScriptGuardInstalled) return;
+    window.__intaScriptGuardInstalled = true;
+
+    let nodeProto = Node.prototype;
+    let origAppendChild = nodeProto.appendChild;
+    let origInsertBefore = nodeProto.insertBefore;
+
+    nodeProto.appendChild = function (child) {
+        if (child && child.tagName === "SCRIPT") intaGuardScriptNode(child);
+        return origAppendChild.call(this, child);
+    };
+
+    nodeProto.insertBefore = function (child, ref) {
+        if (child && child.tagName === "SCRIPT") intaGuardScriptNode(child);
+        return origInsertBefore.call(this, child, ref);
+    };
+
+    // Defense in depth: catches `s.src = url` set *after* the node is already connected.
+    let scriptSrcDescriptor = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, "src");
+    if (scriptSrcDescriptor && scriptSrcDescriptor.set) {
+        Object.defineProperty(HTMLScriptElement.prototype, "src", {
+            configurable: true,
+            enumerable: scriptSrcDescriptor.enumerable,
+            get: scriptSrcDescriptor.get,
+            set: function (value) {
+                if (!this.isConnected || (typeof isGtmMode !== "undefined" && isGtmMode) || intaIsOwnScriptUrl(value)) {
+                    return scriptSrcDescriptor.set.call(this, value);
+                }
+                let category = intaClassifyScriptContent(value);
+                if (!category || intaScriptCategoryConsented(category)) {
+                    return scriptSrcDescriptor.set.call(this, value);
+                }
+                intaNeutralizeScriptNode(this, value);
+            }
+        });
+    }
+})();
+/* ── End synchronous script-injection guard ───────────────────────────── */
 window.INTA = window.INTA || {};
 window.INTA.observedCookieSource = 'unknown';
 function detectCookieVendor(cookie) {
@@ -604,10 +717,62 @@ function findScriptParameter(value) {
     }
 }
 let isGtmMode = findScriptParameter("ref") === "gtm";
-let isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
-let FunctionalCheckbox = document.querySelector("#functional");
-let StaticsCheckBox = document.querySelector("#statics");
-let MarketingCheckBox = document.querySelector("#marketing");
+
+/** Google Consent Mode default — must fire before GTM/gtag.js can load and fire any tag,
+ *  so this runs synchronously here rather than waiting for uc-core. */
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+    dataLayer.push(arguments);
+}
+function intaSetGtagConsentDefaults() {
+    if (isGtmMode || window._gtagDefaultFired || typeof gtag !== 'function') {
+        return;
+    }
+    if (window.google_tag_manager && window.google_tag_manager['consent_default_set']) {
+        return;
+    }
+    gtag('consent', 'default', {
+        "ad_storage": 'denied',
+        "personalization_storage": 'denied',
+        "analytics_storage": 'denied',
+        "functionality_storage": 'denied',
+        "ads_data_redaction": 'granted',
+        "ad_user_data": 'denied',
+        "ad_personalization": 'denied',
+        "security_storage": 'granted',
+        "url_passthrough": true,
+        "wait_for_update": 500,
+        "region": ['EU', 'UK', 'CH', 'NO', 'IS', 'LI', 'CA', 'BR', 'ZA', 'TR', 'AR', 'IL', 'TH', 'AU', 'SA']
+    });
+    gtag('consent', 'default', {
+        "ad_storage": 'granted',
+        "personalization_storage": 'granted',
+        "analytics_storage": 'granted',
+        "functionality_storage": 'granted',
+        "ads_data_redaction": 'denied',
+        "ad_user_data": 'granted',
+        "ad_personalization": 'granted',
+        "security_storage": 'granted',
+        "url_passthrough": true,
+        "wait_for_update": 500,
+        "region": ['US-CA', 'US-VA', 'US-CO', 'US-UT', 'US-CT']
+    });
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'personalization_storage': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'denied',
+        'ads_data_redaction': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'security_storage': 'granted',
+        'url_passthrough': true,
+        'wait_for_update': 500,
+    });
+    window._gtagDefaultFired = true;
+}
+intaSetGtagConsentDefaults();
+
 function getConsentTypeForUrl(url) {
     if (!url) return 'marketing';
     for (let i = 0; i < window.allScripts.length; i++) {

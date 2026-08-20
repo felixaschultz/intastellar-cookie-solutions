@@ -37,25 +37,25 @@ const lines = fs.readFileSync(srcPath, "utf8").split("\n");
  */
 const BOOT_RANGES = [
     [1, 7],
-    [174, 505],
-    [531, 532],
-    [986, 991],
-    [997, 1020],
-    [1035, 1048],
-    [1050, 1121],
-    [1124, 1219],
-    [1234, 1247],
-    [1251, 1284],
-    [1286, 1290],
-    [1531, 1549],
-    [1556, 1584],
-    [1784, 2075],
-    [2145, 2172],
-    [4262, 4513],
-    [4779, 5088],
+    [174, 618], // includes sync script-injection guard (was 174-505; guard inserted after 505, +114 lines)
+    [645, 646],
+    [1100, 1105],
+    [1111, 1134],
+    [1149, 1162],
+    [1164, 1235],
+    [1238, 1333],
+    [1348, 1361],
+    [1365, 1398],
+    [1400, 1456], // includes intaSetGtagConsentDefaults() — GCM default must fire sync, before uc-core
+    [1701, 1719],
+    [1726, 1754],
+    [2003, 2295], // +49 lines: TCF encoder rewrite (IsRangeEncoding, VLI section, PublisherRestrictions); +1 analytics allowlist entry
+    [2365, 2392],
+    [4482, 4733],
+    [5009, 5318],
 ];
 
-const CORE_SKIP_LINES = new Set([5255, 5256, 5257]);
+const CORE_SKIP_LINES = new Set([5447, 5448, 5449]);
 
 function lineDepth(line) {
     let d = 0;
