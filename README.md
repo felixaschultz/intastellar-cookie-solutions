@@ -141,6 +141,7 @@ We support the following trackers and consents mode:
 | VWO | VWO is a conversion rate optimization platform that allows you to test and optimize your website. | [VWO Cookie Consent API](https://vwo.com/docs/api/cookie-consent/) |
 | Pintrk | Pintrk is a platform that allows you to track your website visitors and retarget them with ads. | [Pintrk Consent Mode](https://www.pintrk.com/docs/consent-mode/) |
 | Microsoft Clarity | Microsoft Clarity is a web analytics service that helps you understand your website visitors and improve your website. | [Microsoft Clarity Consent Mode](https://clarity.microsoft.com/docs/consent-mode/) |
+| OpenAI Ads | OpenAI Ads measurement API used to track conversions and attribution for ads served via OpenAI surfaces. | OpenAI Ads Consent Mode (`oaiq("consent", true\|false)`) |
 
 ## Support
 

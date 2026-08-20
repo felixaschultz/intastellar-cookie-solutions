@@ -3679,6 +3679,13 @@ function intaRunUcCoreIntegrations() {
     window.pintrk.queue = window.pintrk.queue || [];
     pintrk('setconsent', false);
 
+    // OpenAI Ads measurement consent mode
+    window.oaiq = window.oaiq || function () {
+        window.oaiq.q = window.oaiq.q || [];
+        window.oaiq.q.push(arguments);
+    };
+    oaiq('consent', false);
+
     updateVwoConsent(window.intaCookieConsents);
 
     intaWpEnsureConsentTypeOptinAnnouncedOnce();
@@ -3711,6 +3718,11 @@ function intaRunUcCoreIntegrations() {
                 pintrk('setconsent', true);
             } catch (e) { /* ignore */ }
         }
+        if (typeof oaiq === 'function') {
+            try {
+                oaiq('consent', true);
+            } catch (e) { /* ignore */ }
+        }
         window.uetq.push('consent', 'update', {
             'ad_storage': 'granted'
         });
@@ -3739,9 +3751,6 @@ function intaRunUcCoreIntegrations() {
     }
 
     if (hasConsent("functional")) {
-        gtag('consent', 'update', {
-            'functionality_storage': 'granted',
-        });
         window.uetq.push('consent', 'update', {
             'functionality_storage': 'granted'
         });
@@ -3751,6 +3760,9 @@ function intaRunUcCoreIntegrations() {
 
     function intaIsShopifyStorefrontContext() {
         if (typeof window.Shopify !== "undefined" && typeof window.Shopify.loadFeatures === "function") {
+            return true;
+        }
+        if (document.querySelector('script[src*="cdn.shopify.com"], script[src*="shopifycdn.com"]')) {
             return true;
         }
         if (typeof window.ShopifyAnalytics !== "undefined" || typeof window.ShopifyPay !== "undefined") {

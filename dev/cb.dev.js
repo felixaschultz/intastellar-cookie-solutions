@@ -2881,6 +2881,12 @@ function IntaSaveSettings() {
                 pintrk('setconsent', true);
             } catch (e) { /* ignore */ }
         }
+        // OpenAI Ads measurement consent mode
+        if (typeof oaiq === 'function') {
+            try {
+                oaiq('consent', true);
+            } catch (e) { /* ignore */ }
+        }
         updateVwoConsent(intaConsentsObjectVariable.consents);
 
     } else if (!MarketingCheckBox?.checked || intastellar) {
@@ -2900,6 +2906,12 @@ function IntaSaveSettings() {
         if (typeof pintrk === 'function') {
             try {
                 pintrk('setconsent', false);
+            } catch (e) { /* ignore */ }
+        }
+        // OpenAI Ads measurement consent mode
+        if (typeof oaiq === 'function') {
+            try {
+                oaiq('consent', false);
             } catch (e) { /* ignore */ }
         }
 
@@ -3000,6 +3012,12 @@ function IntaAcceptAll() {
             pintrk('setconsent', true);
         } catch (e) { /* ignore */ }
     }
+    // OpenAI Ads measurement consent mode
+    if (typeof oaiq === 'function') {
+        try {
+            oaiq('consent', true);
+        } catch (e) { /* ignore */ }
+    }
 
     window._hsp.push(['doNotTrack', false]);
     window._hsp.push(['setHubSpotCookieConsent', {
@@ -3064,6 +3082,12 @@ function IntaSaveNeccessary() {
     if (typeof pintrk === 'function') {
         try {
             pintrk('setconsent', false);
+        } catch (e) { /* ignore */ }
+    }
+    // OpenAI Ads measurement consent mode
+    if (typeof oaiq === 'function') {
+        try {
+            oaiq('consent', false);
         } catch (e) { /* ignore */ }
     }
     dataLayer.push({

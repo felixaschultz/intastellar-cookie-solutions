@@ -5372,6 +5372,13 @@ function intaRunUcCoreIntegrations() {
     window.pintrk.queue = window.pintrk.queue || [];
     pintrk('setconsent', false);
 
+    // OpenAI Ads measurement consent mode
+    window.oaiq = window.oaiq || function () {
+        window.oaiq.q = window.oaiq.q || [];
+        window.oaiq.q.push(arguments);
+    };
+    oaiq('consent', false);
+
     updateVwoConsent(window.intaCookieConsents);
 
     intaWpEnsureConsentTypeOptinAnnouncedOnce();
@@ -5402,6 +5409,11 @@ function intaRunUcCoreIntegrations() {
         if (typeof pintrk === 'function') {
             try {
                 pintrk('setconsent', true);
+            } catch (e) { /* ignore */ }
+        }
+        if (typeof oaiq === 'function') {
+            try {
+                oaiq('consent', true);
             } catch (e) { /* ignore */ }
         }
         window.uetq.push('consent', 'update', {
