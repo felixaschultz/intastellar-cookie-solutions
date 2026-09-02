@@ -692,6 +692,7 @@ let intaCookieConsentsUserId = (getCookie(int_hideCookieBannerName)) ? JSON.pars
 
 /** Intastellar script URL when `document.currentScript` is null (Remix, Vite, Webpack, ES modules). */
 
+
 let isWordPress = document.getElementById('intastellar-gdpr-settings-js') !== null;
 let FunctionalCheckbox = document.querySelector("#functional");
 let StaticsCheckBox = document.querySelector("#statics");
