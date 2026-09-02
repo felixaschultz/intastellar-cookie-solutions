@@ -2815,6 +2815,9 @@ function intaCbShopifySyncFromBannerCheckboxes() {
 
 function IntaSaveSettings() {
     recordTimeToDecision('save_settings');
+    const FunctionalCheckbox = document.querySelector("#functional");
+    const StaticsCheckBox = document.querySelector("#statics");
+    const MarketingCheckBox = document.querySelector("#marketing");
     const accepted = [];
     if (FunctionalCheckbox?.checked) {
         gtag('consent', 'update', {
