@@ -773,6 +773,21 @@ function intaSetGtagConsentDefaults() {
 }
 intaSetGtagConsentDefaults();
 
+// OpenAI Ads consent default — runs sync in uc-boot (same reason as intaSetGtagConsentDefaults).
+// defineProperty getter returns falsy so the oaiq IIFE doesn't bail; setter prepends consent:false.
+(function () {
+    if (window.oaiq) return;
+    Object.defineProperty(window, 'oaiq', {
+        configurable: true,
+        get: function () { return undefined; },
+        set: function (stub) {
+            Object.defineProperty(window, 'oaiq', { configurable: true, writable: true, value: stub });
+            if (stub && Array.isArray(stub.q)) {
+                stub.q.unshift((function () { return arguments; })('consent', false));
+            }
+        }
+    });
+}());
 function getConsentTypeForUrl(url) {
     if (!url) return 'marketing';
     for (let i = 0; i < window.allScripts.length; i++) {
