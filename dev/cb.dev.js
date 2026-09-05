@@ -841,7 +841,7 @@ function intaCbFetchTextOverridePresetFromApiIfNeeded() {
             console.warn("[Intastellar] CMP preset fetch failed:", slug, err && err.message ? err.message : err);
         });
 }
-/* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellarsolutions.com?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
+/* const poweredBy = `<a class="inta-poweredBy" href='https://www.intastellar.eu?utm_source=${encodeURI(window.location.href)}&utm_content=powered_by&utm_medium=referral&utm_campaign=Consents+Block&utm_term=gdpr_banner_logo' target='_blank' rel='noopener' style="align-items: center; text-decoration: none;font-size: 11.5px; color: #000 !important; display: flex; justify-content: center;">powered by <img width="109px" height="20px" style="width: 109px !important; height: 20px !important;margin-left: 10px;" src="https://www.intastellarsolutions.com/assets/intastellar_solutions.svg" alt="Intastellar Solutions, International"></a>`; */
 const banner = document.createElement("inta-consents-settings-btn");
 const bannerContent = document.createElement("button");
 const intastellarLogoLight = "https://www.intastellarsolutions.com/assets/logos/intastellar-consents-logo-white.svg";
@@ -2437,7 +2437,7 @@ function intaInsertStylesheetLinkInHead(stylesheetLink) {
     }
 }
 
-if (window.location.host.indexOf("intastellarsolutions") == -1) {
+if (window.location.host.indexOf("intastellar") == -1) {
     poweredBy = "<span class='intastellarCookie-settings__poweredBy' alt='This cookie banner is powered by Intastellar Consents Solutions'>Powered by <a class='intastellarCookie-settings__poweredByLink' href='https://www.intastellarsolutions.com' target='_blank' rel='noopener'><img class='intastellarCookie-settings__poweredByImg' width='100px' height='100px' src='" + intastellarLogo + "' alt='Intastellar Solutions, International'></a></span>";
 }
 if (arrange == "ltr") {
@@ -2463,7 +2463,7 @@ function setIntastellarPartnerDomain() {
 }
 
 function generatePoweredBy() {
-    if (window.location.host.indexOf("intastellarsolutions") == -1) {
+    if (window.location.host.indexOf("intastellar") == -1) {
         let intastellarLogo = intastellarLogoLight;
         if (window.INTA.settings.design == "bannerV2") {
             intastellarLogo = intastellarLogoDark;
